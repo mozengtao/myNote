@@ -1,0 +1,16 @@
+[Awesome First PR Opportunities](https://github.com/MunGell/awesome-for-beginners)
+[GitHubDaily 项目列表](https://github.com/GitHubDaily/GitHubDaily)
+[system-design-primer](https://github.com/donnemartin/system-design-primer)
+[Awesome Python](https://github.com/vinta/awesome-python)
+[Python](https://github.com/TheAlgorithms/Python) All algorithms implemented in Python - for education
+[GitHub开源实战项目](https://blog.csdn.net/qappleh/article/details/103505654)
+[The Algorithms - Java](https://github.com/TheAlgorithms/Java/tree/master)
+[Design patterns implemented in Java](https://github.com/iluwatar/java-design-patterns)
+[Python Data Structures and Algorithms](https://github.com/prabhupant/python-ds)
+[Amazing-Python-Scripts](https://github.com/avinashkranjan/Amazing-Python-Scripts)
+[Pythonista](https://github.com/tdamdouni/Pythonista) Collection of Python Scripts
+[CS-Notes](https://github.com/CyC2018/CS-Notes/tree/master/notes)
+[leetcode](https://github.com/azl397985856/leetcode/tree/master/problems)
+[C-Plus-Plus](https://github.com/TheAlgorithms/C-Plus-Plus) a variety of algorithms implemented in C++
+[algorithms](https://github.com/keon/algorithms) Pythonic Data Structures and Algorithms
+[**The github.dev web-based editor**](https://docs.github.com/en/codespaces/the-githubdev-web-based-editor)
