@@ -5,7 +5,12 @@
 	- ![image_1669944951469_0.png](./assets/image_1669944951469_0_1674955859189_0.png)
 -
 - 参考文档
-	- [Guide to IP Layer Network Administration with Linux](http://linux-ip.net/html/index.html)
+	- [**Guide to IP Layer Network Administration with Linux**](http://linux-ip.net/html/index.html)
 	- [IP Command](https://www.techplayon.com/ip-command-for-red-hat-enterprise-linux/)
 	- [man ip](https://man7.org/linux/man-pages/man8/ip.8.html)
-	-
+	- [ip-vrf(8)](https://man7.org/linux/man-pages/man8/ip-vrf.8.html)
+	- [Working with Linux VRFs](https://www.dasblinkenlichten.com/working-with-linux-vrfs/)
+	-[MPLS Labs – VRFs and MP-BGP](https://www.dasblinkenlichten.com/mpls-labs-vrfs-and-mp-bgp/)
+	-[Virtual Routing and Forwarding (VRF)](https://www.kernel.org/doc/Documentation/networking/vrf.txt)
+	-[net: VRF support](https://lwn.net/Articles/632522/)
+	-[IP Route Management](http://linux-ip.net/html/tools-ip-rule.html)

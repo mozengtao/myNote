@@ -7,7 +7,7 @@
 		- 必须知道服务器的地址和端口
 		- 主动socket
 - socket通信过程
-	- ![image.png](../assets/image_1671534817690_0.png)
+	- ![image.png](assets/image_1671534817690_0.png)
 		- socket
 			- `int sockid = socket(family, type, protocol)`
 			- 创建通信的端点
