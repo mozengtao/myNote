@@ -1,0 +1,7 @@
+- Multi Processor Statistics，实时系统监控工具，用来报告CPU的一些统计信息，这些信息存放在linux下的/proc/stat文件中
+-
+- 命令语法
+	- mpstat [-P {cpu_list |ALL}] [internal [count]]
+-
+- 帮助文档
+	- [man mpstat](https://man7.org/linux/man-pages/man1/mpstat.1.html)

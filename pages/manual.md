@@ -1,0 +1,2 @@
+- [helpmanual](https://helpmanual.io/help/)
+- [NetBSD Manual Pages](https://www.daemon-systems.org/man/)

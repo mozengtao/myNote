@@ -1,0 +1,1 @@
+- [Minimal rootfs](https://docs.lkcamp.dev/unicamp_group/workflow/)

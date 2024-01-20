@@ -1,0 +1,51 @@
+- 非易失性存储器
+  collapsed:: true
+	- EPROM
+		- cell需要通过紫外线进行擦除，以便写入新的数据
+	- EEPROM
+		- 相比于EPROM，优点是可以进行电擦除，缺点是每个cell单元需要至少两个晶体管而不是一个，因此存储数据更少，数据密度更低
+	- FLASH
+		- 结合了EPROM和EEPROM的优点，每个cell只使用1个晶体管，同时可以进行电擦除，通过的方式是只允许多个cell单元进行擦除和写入数据而不是单个cell。
+		- NOR Flash
+			- 相比于NAND flash，读取速度更快，支持随机访问，但是写和擦除操作慢，主要用来存储可执行代码。
+			- > NOR also has a larger memory cell size than NAND, limiting scaling capabilities and therefore achievable bit density compared to NAND
+		- NAND Flash
+			- 相比于NOR flash，擦除和写入速度快，但是读取速度慢，主要用于存储数据。
+		- ![](https://www.edn.com/wp-content/uploads/media-1130295-269145-nandvnor01.jpg)
+- NAND Flash 是一种电擦除可编程的非易失性存储芯片，主要应用为数据存储。
+- NAND Flash 由块组成，每块包含32,64或者128个page，每个page包含1个main area和1个spare area。
+	- ![image.png](../assets/image_1674184682346_0.png)
+	- Block
+		- 块是nand flash最小的擦除单位
+	- Page
+		- 页是nand flash最小的读写单位
+		- 两种类型的页
+			- Small Page
+			- Large Page
+			- ![image.png](../assets/image_1674184851615_0.png)
+	- Main area
+		- 每个页的main area大小可以是512，2048或者4096个字节，main area 包含真正的代码和数据
+	- Spare area
+		- 每个页的spare area大小可以是16，32，64或者128字节，主要包含如下内容
+			- 坏块标识(Bad blocker marker)(必须)
+				- 如果一个块是坏块，数据既不能被擦除也不能读写，为了标识1个坏块，1个或者2个
+			- ECC码(ECC codes)(可选)
+			- 用户元数据(User-specific metadata)(可选)
+- nand flash相关命令
+	- nand info
+	- nand device
+	- nand read
+	- nand write
+	- nand erase
+	- nand bad
+	- nand dump
+- 参考文档
+	- [nand FAQs](http://www.linux-mtd.infradead.org/faq/nand.html)
+	- [关于 Flash 存储，你应该知道的一些事情](https://www.toradex.com/zh-cn/blog/what-you-should-know-about-flash-storage)
+	- [bootlin nand readme](https://elixir.bootlin.com/u-boot/latest/source/doc/README.nand)
+	- [Understanding NAND Flash Factory Programming](https://bpmmicro.com/understanding-nand-flash-factory-programming/)
+	- [Understanding Flash: Blocks, Pages and Program / Erases](https://www.cnblogs.com/erhu-67786482/p/8715600.html)
+	- [NAND FLASH Programming User's Guide](https://www2.lauterbach.com/pdf/nandflash.pdf)
+	- [Linux Storage](http://linux-training.be/storage/index.html)
+	- [NAND Flash 101](https://user.eng.umd.edu/~blj/CS-590.26/micron-tn2919.pdf)
+	- [NAND Flash Memory](https://static6.arrow.com/aropdfconversion/eafdc1f53ee650eee3505244aace2f5797ff67b9/m60a_4gb_8gb_16gb_ecc_nand.pdf)

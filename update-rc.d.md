@@ -1,0 +1,5 @@
+- update-rc.d 命令用来方便的安装和删除System-V格式的init脚本链接，即linux下的服务可以通过`/etc/init.d`目录下的脚本来启动和停止，不同运行级别下运行哪些服务通过查找`/etc/rcX.d/`目录下的链接文件来确定，`/etc/rcX.d/`目录下的链接文件指向`/etc/init.d`目录下的文件。
+- 参考文档
+	- [Managing services with update-rc.d](https://www.debuntu.org/how-to-managing-services-with-update-rc-d/)
+	- [man update-rc.d](https://manpages.ubuntu.com/manpages/trusty/man8/update-rc.d.8.html)
+	- [update-rc.d source code](https://github.com/philb/update-rc.d/blob/master/update-rc.d) #sourcecode

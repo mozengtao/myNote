@@ -1,0 +1,24 @@
+- `nohup` (No Hang Up) 是 Linux 系统命令，用于**运行进程，即便用户已经从 shell 或终端登出了也不会终止**
+> nohup - run a command immune to hangups, with output to a non-tty
+
+-
+- 使用场景
+	- **终端在关闭或退出**时，进程会收到一个 **SIGHUP**（挂起信号），代表**终止该进程**。`nohup` 命令会在关闭/退出 shell 或终端时==阻止==进程收到此信号。
+	- 任务使用 `nohup` 命令开始执行，那么对用户来说标准输入 ==**stdin** 将不可用==，标准输出 ==**stdout**== 和标准错误 ==**stderr**== 将默认输出到 ==**nohup.out**== 文件（在执行命令的目录生成）中。也可以把 `nohup` 命令的==输出重定==向到其他文件，这样的话 **nohup.out** 文件就不会有了。
+	- **==注意：==** `nohup` 命令只是阻止了挂起信号，但**==并不会让应用在后台执行==**
+-
+- nohup + &
+	- ### nohup
+		- 输出重定向，默认重定向到当前目录下 `nohup.out` 文件
+		- 使用 `Ctrl + C` 发送 `SIGINT` 信号，程序关闭
+		- 关闭 `Shell Session` 发送 `SIGHUP` 信号，程序免疫
+	- ### &
+		- 程序转入后台运行
+		- 结果会输出到终端
+		- 使用 `Ctrl + C` 发送 `SIGINT` 信号，程序免疫
+		- 关闭 `Shell session` 发送 `SIGHUP` 信号，程序关闭
+-
+- ## 应用举例
+	- `nohup ./mcp $sfile 2>&1 | logger -i -p local1.info -t mcp &`
+	- `nohup find / -print >filenames &`    // 后台中运行命令并将标准输出重定向到其他文件
+	- `nohup -p 161792`     // 使运行的进程忽略所有挂起信号

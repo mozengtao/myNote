@@ -1,0 +1,5 @@
+- # what is inode
+- > By definition, an inode is an **index node**. It serves as a unique identifier for a specific piece of metadata on a given filesystem. Each piece of metadata describes what we think of as a file. That's right, inodes operate on each filesystem, independent of the others. Where this gets confusing is when you realize that each inode is stored in a common table. In short, each filesystem mounted to your computer has its own inodes. An inode number may be used more than once but never by the same filesystem. The filesystem id combines with the inode number to create a unique identification label.
+- [Inodes and the Linux filesystem](https://www.redhat.com/sysadmin/inodes-linux-filesystem)
+- [Hard links and Unix file system nodes(inodes)](https://teaching.idallen.com/dat2330/04f/notes/links_and_inodes.html)
+- [Hard Links and Unix/Linux File System Index Nodes(Inodes)](http://teaching.idallen.com/cst8207/13w/notes/455_links_and_inodes.html)

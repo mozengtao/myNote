@@ -1,0 +1,65 @@
+- kernel module
+	- 内核模块是可以在内核运行时进行加载或卸载的代码片段，用来动态添加新功能到内核，之后不用的时候可以进行卸载，因此内核模块可以减小编译后内核镜像的大小
+	- 内核模块编译时，在文件`.config`中通过`CONFIG_<object> = m`进行指定，在Makefile中编译对象通过ojb-m进行指定，编译结果为`.ko`文件，格式为elf
+	  id:: 6415b27a-4d4a-4d27-aa7b-a373fa38fa48
+- insmod是如何工作的
+	- insmod是用来加载内核模块的程序，它会调用^^init_module()^^来告知内核有内核模块尝试被加载并把控制权转交给内核
+	- 在内核里，`sys_init_module()`被调用，用来完成以下操作
+		- 检查尝试加载内核模块的用户是否具有权限
+		- 如果用户权限满足要求，`load_module`函数被调用完成如下工作
+			- `load_module`函数分配临时内存并通过`copy_from_user`将elf模块从用户空间拷贝至内核空间
+			- elf文件完整性检查（sanity check）（是一个正确的ELF文件）
+			- 基于对elf文件的解析，在分配的临时内存空间中产生偏移（称为convenience variables）
+			- 用户传入的参数同样被拷贝至内核内存空间
+			- 模块的状态被更新为MODULE_STATE_COMING
+			- 使用SHF_ALLOC对内核内存的实际位置进行分配
+			- 完成符号解析
+			- `load_module `函数返回内核模块的引用
+		- 内核模块的引用被添加到双向链表，该双向链表记录了内核系统里加载的所有内核模块
+		- 内核模块代码中的`module_init`被调用
+		- 内核模块状态被更新为`MODULE_STATE_LIVE`
+	- 1) Insmod is a small program, which calls init_module() to intimate the kernel that a module is attempted to be loaded and transfers the control to the kernel.
+	- 2) In kernel, sys_init_module() is run. It does a sequence of operations as follows
+		- a) Verifies if the user who attempts to load the module has the permission to do so or not.
+		- b) After verification, load_module function is called.
+			- b.1) The load_module function assigns temporary memory and copies the elf module from user space to kernel memory using copy_from_user.
+			- b.2) It then checks the sanity of the ELF file (Verification if it is a proper ELF file etc)
+			- b.3) Then based on the ELF file interpretation, it generates offset in the temporary memory space allocated. This is called the convenience variables.
+			- b.4) User arguments to the module are also copied to the kernel memory
+			- b.5) The state of the module is updated to MODULE_STATE_COMING
+			- b.6) The actual location in the kernel memory is allocated using SHF_ALLOC
+			- b.7) Symbol resolution is done.
+			- b.8) The load_module function returns a reference to the kernel module.
+		- c) The reference to the module returned by load_module is added to a doubly linked list that has a list of all the modules loaded in the system.
+		- d) Then the module_init function in the module code is called.
+		- e) Module state is updated to MODULE_STATE_LIVE
+- rmmod是如何工作的
+	- rmmod调用^^delete_module^^ ，用来提示内核有rmmod请求，之后将控制权转交给内核
+	- 内核调用`sys_delete_module()`完成如下操作
+		- 检查尝试卸载内核模块的用户是否具有权限
+		- 检查是否有其他内核模块依赖当前模块，该信息看通过`modules_which_uses_me`链表来获得
+		- 检查模块是否真的被加载过，该信息通过验证模块的当前状态是否为`MODULE_STATE_LIVE`来实现
+		- 执行内核模块代码中的`module_exit`函数
+		- `free_module`函数被调用，用来完成如下操作
+			- 删除模块的任何sysfs引用
+			- 删除所有的内核模块对象引用
+			- 执行特定架构的cleanup操作，如果存在的话
+			- 从内核卸载模块
+			- 更新模块的状态为`MODULE_STATE_GOING`
+			- 释放模块用户空间参数所使用的内存
+	- 1) rmmod calls delete_module which hints the kernel that an rmmod request has come in and the control is transferred to kernel.
+	- 2) The sys_delete_module() is called in the kernel. This does following operations.
+		- a) Checks if the user who attempts to remove the module has the permission to do so or not.
+		- b) Checks if any other module that is loaded is dependent on the module attempted to be unloaded. This information can be obtained from the modules_which_uses_me list.
+		- c) Checks if the module is actually loaded or not in the kernel. This is done by verifying if the current state of the module is MODULE_STATE_LIVE.
+		- d) It executes the module_exit function written in the module code.
+		- e) Then free_module function is called, which does the following.
+			- e.1) Removes any sysfs references of the module
+			- e.2)Removes all the kernel module object references.
+			- e.3) Performs architecture specific clean up if any.
+			- e.4) Unloads the module from kernel
+			- e.5) Updates the state of module to MODULE_STATE_GOING
+			- e.6) Frees the memory used by user space arguments for the module.
+- 参考文档
+	- [init_module](https://elixir.bootlin.com/linux/v4.20.17/source/kernel/module.c#L3851)
+	- [delete_module](https://elixir.bootlin.com/linux/v4.20.17/source/kernel/module.c#L960)

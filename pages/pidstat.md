@@ -1,0 +1,4 @@
+- 参考文档
+	- [man pidstat](https://man7.org/linux/man-pages/man1/pidstat.1.html)
+	- [10 pidstat Examples to Debug Performance Issues of Linux Process](https://www.thegeekstuff.com/2014/11/pidstat-examples/)#performance
+	- [USE Method: Linux Performance Checklist](https://www.brendangregg.com/USEmethod/use-linux.html)#performance

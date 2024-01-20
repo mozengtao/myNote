@@ -1,0 +1,6 @@
+- [[makeself]]
+- [[dot]]
+- ScreenToGif (Microsoft Store)
+- [gnuplot](https://gnuplot.sourceforge.net/demo/)
+- [it-tools](https://it-tools.tech/) #online
+- **[it-tools](https://github.com/CorentinTh/it-tools)** #github

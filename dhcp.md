@@ -1,0 +1,3 @@
+- 参考文档
+	- [Dynamic Host Configuration Protocol](https://www.rfc-editor.org/rfc/rfc1541)
+	- [DHCP Lease Time – What is it and How does it work?](https://lazyadmin.nl/home-network/dhcp-lease-time/)

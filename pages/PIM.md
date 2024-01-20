@@ -1,0 +1,10 @@
+- PIM（Protocol Independent Multicast）
+	- 协议无关组播。^^作为组播路由解决方案，核心目的是为了指导组播流量的转发^^，这里的协议无关指的是与单播路由协议无关(即运行PIM的网络单播协议可以是任何协议，包括IS-IS，OSPF，甚至是静态路由等协议)，即PIM不需要维护专门的单播路由信息。，它直接^^利用单播路由表的路由信息，对组播报文执行RPF（Reverse Path Forwarding，逆向路径转发）检查，检查通过后创建组播路由表项，从而转发组播报文^^
+- 参考文档
+	- [协议无关组播-PIM](https://cshihong.github.io/2018/02/13/%E5%8D%8F%E8%AE%AE%E6%97%A0%E5%85%B3%E7%BB%84%E6%92%AD-PIM/)
+	- [IP组播基础](https://cshihong.github.io/2018/02/12/IP%E7%BB%84%E6%92%AD%E5%9F%BA%E7%A1%80/)
+	- [IGMP基础](https://cshihong.github.io/2018/02/12/IGMP%E5%9F%BA%E7%A1%80/)
+	- [IGMP Timers](http://www.bscottrandall.com/5.1.6.html)
+	- [Multicast](http://www.bscottrandall.com/5.1.1.html)
+	- [Internet Group Management Protocol, Version 2](https://www.rfc-editor.org/rfc/rfc2236.html)
+	- [IGMP Basics](https://mrncciew.com/2012/12/25/igmp-basics/)

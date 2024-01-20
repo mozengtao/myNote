@@ -1,0 +1,6 @@
+- > sar - Collect, report, or save system activity information
+- 参考文档
+	- [man sar](https://linux.die.net/man/1/sar)
+	- [Using sar to Show Current and Past System’s Statistics](https://www.baeldung.com/linux/sar-system-statistics)#performance
+	- [10 Useful Sar (Sysstat) Examples](https://www.thegeekstuff.com/2011/03/sar-examples/)#performance
+	- [Generate CPU, Memory and I/O Report using SAR command](https://www.linuxtechi.com/generate-cpu-memory-io-report-sar-command/)#performance

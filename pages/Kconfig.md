@@ -1,0 +1,2 @@
+- [Kconfig Language](https://www.kernel.org/doc/html/next/kbuild/kconfig-language.html)
+- [Kconfig Deep Dive](https://www.linux-magazine.com/Issues/2021/244/Kconfig-Deep-Dive)

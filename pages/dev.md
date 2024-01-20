@@ -1,0 +1,4 @@
+- `/dev/mem`
+	- [man 4 mem](https://man7.org/linux/man-pages/man4/mem.4.html)
+- `/dev/port`
+- `/dev/kmem`

@@ -1,0 +1,7 @@
+- 参考文档
+	- [链表](https://www.dotcpp.com/course/ds-link/)
+	- [力扣算法学习](https://leetcode-solution-leetcode-pp.gitbook.io/leetcode-solution/)
+	- [LeetCode 解题报告](https://tyzhang.top/article/leetcodesolu/)
+	- [LeetCode](https://github.com/mazhuowen/LeetCode/tree/master) #github
+	- [LeetCodeAnimation](https://github.com/MisterBooo/LeetCodeAnimation) #github
+	- [Algorithm Visualizer](https://algorithm-visualizer.org/)

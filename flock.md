@@ -1,0 +1,2 @@
+- [file locking](https://www.baeldung.com/linux/file-locking)
+-

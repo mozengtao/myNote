@@ -1,0 +1,14 @@
+- 文件内变量替换
+	- Ctrl + F2
+- 插件
+	- **C Snippets**
+	- **Markdown Preview Mermaid Support** (github.dev 可以work)
+- 参考文档
+	- [一个案例学会 VSCode Snippets，极大提高开发效率](https://zhuanlan.zhihu.com/p/457062272)
+	- [Snippets in Visual Studio Code](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
+- [VS Code Extension](https://github.com/topics/vscode-extension)
+- [awesome-vscode](https://github.com/viatsko/awesome-vscode)
+- [vscode-cpptools extention](https://github.com/microsoft/vscode-cpptools)
+	- [C/C++ for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) (点击**Version History**菜单下进行下载)
+- [How to Install Visual Studio Code on Debian 10](https://linuxize.com/post/how-to-install-visual-studio-code-on-debian-10/)
+- [How to Install Visual Studio Code on Ubuntu 20.04](https://linuxize.com/post/how-to-install-visual-studio-code-on-ubuntu-20-04/)

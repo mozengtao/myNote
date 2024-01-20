@@ -1,0 +1,1 @@
+- [What is an ONT & what is its role in fiber networks?](https://stl.tech/blog/a-quick-guide-to-ont-optical-network-terminal/)

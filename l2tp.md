@@ -1,0 +1,67 @@
+- l2tp 通过单独的或者中间3层网络(如Internet)建立二层隧道。
+- l2tp术语
+	- L2TP
+		- Layer 2 Tunneling Protocol
+	- LAC
+		- L2TP Access Concentrator
+	- LNS
+		- L2TP Network Server
+	- L2TP Tunnel
+		- 隧道是一条在LAC和LNS，或者端到端之间的逻辑连接，用来承载 PPP session。LAC-LNS 隧道可以承载多条 session，peer-to-peer 隧道只能承载1条PPP session。隧道一条控制连接以及0或多条 session，每条 session 承载一条加密的 PPP 链接。
+	- L2TP Session
+		- 当 client 和 LNS 之间建立端到端的PPP连接时，会建立一条LAC和LNS之间的L2TP session，同理， 在端到端之间会建立一条 L2TP session 用来承载 PPP连接。L2TP session 和 L2TP call 是一一对应的，一条 tunnelled PPP session对应一条 L2TP call。
+- l2tp 消息类型
+	- 控制消息
+		- 控制消息用来建立和维护 tunnel，以及 session 管理
+			- 控制消息用来建立LAC和LNS之间的通信，控制消息和数据消息使用同样的传输通道
+			- AVP(Attribute Value Pair)用来构建用于建立，维护和拆除L2TP 隧道的控制消息
+			- 部分控制消息不包含 AVP，被称为 ZLB(Zero Length Body)消息，这类控制消息只包含 L2TP  header，主要用来对某些控制消息就行ACK确认。
+		- 控制L2TP tunnel的消息
+			- Control Connection Management
+				- 1  (SCCRQ)    Start-Control-Connection-Request
+				- 2  (SCCRP)    Start-Control-Connection-Reply
+				- 3  (SCCCN)    Start-Control-Connection-Connected
+				- 4  (StopCCN)  Stop-Control-Connection-Notification
+				- 6  (HELLO)    Hello
+				- 20  (ACK)      Explicit Acknowledgement
+		- 控制L2TP session(call)的消息
+			- Call Management
+				- 7  (OCRQ)     Outgoing-Call-Request
+				- 8  (OCRP)     Outgoing-Call-Reply
+				- 9  (OCCN)     Outgoing-Call-Connected
+				- 10  (ICRQ)     Incoming-Call-Request
+				- 11  (ICRP)     Incoming-Call-Reply
+				- 12  (ICCN)     Incoming-Call-Connected
+				- 14  (CDN)      Call-Disconnect-Notify
+	- 数据消息
+		- 数据消息用来封装 PPP 帧
+- 两种类型的tunnel
+	- LAC-LNS 隧道
+		- ![image.png](../assets/image_1670483897484_0.png)
+		- ![image.png](../assets/image_1670487539447_0.png){:height 333, :width 716}
+		- LAC-LNS连接建立过程
+			- ![image.png](../assets/image_1670487767498_0.png)
+				- 建立tunnel
+					- LAC发送SCCRQ消息
+					- LNS发送SCCRP消息用来响应LAC发送的SCCRQ消息
+						- 如果LAC或者LNS的AVP设置有误，会发送StopCCN拆除tunnel
+					- LAC发送SCCCN消息
+					- LNS发送ZLB ACK消息来响应LAC发送的SCCCN消息
+				- 基于tunnel建立session
+					- LAC发送ICRQ消息
+					- LNS发送ICRP消息来响应LAC发送的ICRQ消息
+						- 如果LAC或者LNS的设置有误，会发送CDN拆除tunnel
+					- LAC发送ICCN消息
+					- LNS发送ZLB ACK来响应LAC发送的ICCN消息，ZLB ACK可能位于另一个消息当中。此时l2tp session建立完成。
+				- PPP协商在l2tp tunnel和l2tp session建立完成之后开始
+					- 通过tunnel建立PPP连接的过程
+						- ![image.png](../assets/image_1670491545134_0.png)
+				- tunnel建立之后，LAC会周期性的发送keepalive消息给LNS，LNS会做出回应，如果LAC在一定时间内没有收到LNS的回应，它会认为tunnel断连并尝试重新建立tunnel连接。
+	- peer-to-peer 隧道
+		- 通过中间的IP网络建立单独的3层端到端VPN，用来建立端到端的PPP链路
+- 参考文档
+	- [L2TP VPN基本原理](https://cshihong.github.io/2019/08/21/L2TP-VPN%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/)
+	- [L2TPv2 Feature Overview](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)
+	- [L2TPv2 RFC](https://www.rfc-editor.org/rfc/rfc2661.html)
+	- [L2TPv3 RFC](https://www.rfc-editor.org/rfc/rfc3931)
+	- [Cisco ISG Design and Deployment Guide: ATM to ISG LNS Aggregation](https://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/edge_ios/dd_3_6.html)

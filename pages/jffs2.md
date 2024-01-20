@@ -1,0 +1,5 @@
+- 参考链接
+	- [JFFS2 messages](http://www.linux-mtd.infradead.org/faq/jffs2.html)
+	- [**JFFS : The Journalling Flash File System**](https://www.sourceware.org/jffs2/jffs2-html/)
+- [[日志结构文件系统LFS]]
+- [JFFS2, UBIFS, and the growth of flash storage](https://lwn.net/Articles/528617/)

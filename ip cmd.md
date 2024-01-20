@@ -1,0 +1,11 @@
+- 命令语法
+	- ![image_1669944886167_0.png](./assets/image_1669944886167_0_1674955818182_0.png){:height 518, :width 710}
+-
+- 命令示例
+	- ![image_1669944951469_0.png](./assets/image_1669944951469_0_1674955859189_0.png)
+-
+- 参考文档
+	- [Guide to IP Layer Network Administration with Linux](http://linux-ip.net/html/index.html)
+	- [IP Command](https://www.techplayon.com/ip-command-for-red-hat-enterprise-linux/)
+	- [man ip](https://man7.org/linux/man-pages/man8/ip.8.html)
+	-

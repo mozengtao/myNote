@@ -1,0 +1,1 @@
+- [Awesome First PR Opportunities](https://github.com/MunGell/awesome-for-beginners)

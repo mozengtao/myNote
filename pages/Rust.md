@@ -1,0 +1,14 @@
+- [[rust笔记]]
+- [The Cargo Book](https://doc.rust-lang.org/stable/cargo/) #online
+- [The Rust community’s crate registry](https://crates.io/)
+- [The Rust Programming Language](https://doc.rust-lang.org/stable/book/)
+- [Rust 程序设计语言](https://rustwiki.org/zh-CN/book/title-page.html)
+- [Rust 程序设计语言](https://kaisery.github.io/trpl-zh-cn/title-page.html)
+- [Rust语言圣经](https://course.rs/about-book.html)
+- [通过例子学 Rust](https://www.rustwiki.org.cn/zh-CN/rust-by-example/)
+- [RustPrimer](https://rustcc.gitbooks.io/rustprimer/content/)
+- [How to Install Rust Programming Language on Debian 11](https://www.howtoforge.com/how-to-install-rust-programming-language-on-debian-11/)
+- [Writing Interpreters in Rust: a Guide](https://rust-hosted-langs.github.io/book/)
+- [Crafting Interpreters](https://craftinginterpreters.com/contents.html) #online
+- [crafting-interpreters-rs](https://github.com/tdp2110/crafting-interpreters-rs)#github
+-

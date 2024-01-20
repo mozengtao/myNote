@@ -1,0 +1,2 @@
+- [sysvinit wiki](https://wiki.gentoo.org/wiki/Sysvinit)
+- [[update-rc.d]]

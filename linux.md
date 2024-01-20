@@ -1,0 +1,26 @@
+- [Understanding mmap](https://unix.stackexchange.com/questions/389124/understanding-mmap)
+- [Memory mapping](https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html)
+- [More about   `mmap()`   file access](https://biriukov.dev/docs/page-cache/5-more-about-mmap-file-access/)
+- [The mmap Device Operation](http://www.makelinux.net/ldd3/chp-15-sect-2.shtml)
+- [In-depth understanding of mmap - kernel code analysis and driver demo examples](https://www.sobyte.net/post/2022-03/mmap/)
+- [Understanding the Memory Layout of Linux Executables](https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4)
+- [**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+	- [**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)
+- [**Operating System Concepts**](https://pc.woozooo.com/mydisk.php)
+	- [**操作系统导论**](https://github.com/gsZhiZunBao/e-books/blob/main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA.pdf)
+-
+- [嵌入式Linux学习目录](https://draapho.github.io/2017/11/23/1734-linux-content/)
+- [[linux内核设计与实现]]
+- [Memory mapping](https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html)
+- [[Linux Input Subsystem]]
+- [[dev]]
+- [Unix Programming Frequently Asked Questions](http://web.archive.org/web/20120418113033/http://www.steve.org.uk/Reference/Unix/faq_toc.html)
+- [**APUE**](https://notes.shichao.io/apue/)
+- [jz2440学习笔记](https://yifengyou.gitbooks.io/jz2440/content/docs/Linux%E9%A9%B1%E5%8A%A8/) 知识点目录
+- [**I.MX6U嵌入式Linux驱动开发指南**](https://github.com/alientek-openedv/imx6ull-document/blob/master/%E3%80%90%E6%AD%A3%E7%82%B9%E5%8E%9F%E5%AD%90%E3%80%91I.MX6U%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97V1.5.2.pdf) #pdf #github
+- [**Linux Storage**](http://linux-training.be/storage/index.html) #online
+- [Linux From Scratch HOWTO](https://www.linuxfromscratch.org/museum/lfs-museum/2.0-beta1/LFS-HOWTO-2.0-beta1-HTML/LFS-HOWTO-2.0-beta1.html#toc10) #online
+- [Linux System Administration](http://linux-training.be/sysadmin/index.html) #online
+- [**Linux Internals**](https://www.learnlinux.org.za/courses/build/internals/) #online
+- [linux online books](https://www.linuxtopia.org/online_books/) #online
+- [Huge Page Settings and Disabling Huge Pages in Linux](https://www.baeldung.com/linux/huge-pages-management)

@@ -1,0 +1,5 @@
+- 参考文档
+	- [Working with embedded MultiMediaCard (eMMC)](https://www.embeddedartists.com/wp-content/uploads/2020/04/Working_with_eMMC.pdf)
+	- [Introduction of eMMC](https://jaehyek.github.io/attach/ppt/2014-05-22-eMMC-UFS-About-eMMC-1/Introduction-to-eMMC.pdf)
+	- [Linux MMC 驱动子系统](https://www.cnblogs.com/hueyxu/p/13751636.html)
+	- [EMMC和Nand是不是还傻傻分不清楚](https://zhuanlan.zhihu.com/p/132387921)

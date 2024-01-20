@@ -1,0 +1,2 @@
+- 参考文档
+	- [Introduction to USB with STM32](https://wiki.stmicroelectronics.cn/stm32mcu/wiki/Introduction_to_USB_with_STM32)

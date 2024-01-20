@@ -1,0 +1,2 @@
+- [Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)
+- [Lists and Tuples in Python](https://realpython.com/python-lists-tuples/)

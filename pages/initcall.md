@@ -1,0 +1,8 @@
+- 参考文档
+	- [Linux 各种 initcall 的调用原理](https://www.byteisland.com/linux-%E5%90%84%E7%A7%8D-initcall-%E7%9A%84%E8%B0%83%E7%94%A8%E5%8E%9F%E7%90%86/)
+	- [Demystifying Linux Kernel initcalls](https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf)
+	- [An introduction to Linux kernel initcalls](https://www.collabora.com/news-and-blog/blog/2020/07/14/introduction-to-linux-kernel-initcalls/)
+	- [Initcalls, part 2: Digging into implementation](https://www.collabora.com/news-and-blog/blog/2020/09/25/initcalls-part-2-digging-into-implementation/)
+	- [The initcall mechanism](https://0xax.gitbooks.io/linux-insides/content/Concepts/linux-cpu-3.html)
+	- [InitcallMechanism](https://kernelnewbies.org/InitcallMechanism/HowItWorks)
+	- [利用__attribute__((section()))构建初始化函数表](https://mp.weixin.qq.com/s?__biz=Mzg2OTc0ODAzMw==&mid=2247501975&idx=1&sn=33b176a1e092b30322aabcbe1fc91743&source=41#wechat_redirect)

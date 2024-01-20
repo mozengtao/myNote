@@ -1,0 +1,2 @@
+- [Dictionaries in Python](https://realpython.com/python-dicts/)
+- [Python Dictionaries: A Comprehensive Tutorial](https://www.dataquest.io/blog/python-dictionaries/)

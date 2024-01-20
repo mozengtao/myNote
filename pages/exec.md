@@ -1,0 +1,10 @@
+- 使用指定命令替换当前shell执行环境，而不创建subshell，底层系统调用 [[execve]]
+- > The Linux **`exec`** command executes a Shell command without creating a new process. Instead, it replaces the currently open Shell operation. Depending on the command usage, **`exec`** has different behaviors and use cases.
+- Note
+	- 当使用exec执行command时，如果想在command中返回shell环境，可以在command的最后执行`sh -l`命令，达到返回shell环境的目的
+		- `sh -l`
+			- > Make **bash** act as if it had been invoked as a login shell (see **INVOCATION** below)
+- 参考文档
+	- [The Uses of the Exec Command](https://www.baeldung.com/linux/exec-command-in-shell-script)
+	- [Linux exec Command With Examples](https://phoenixnap.com/kb/linux-exec)
+	- [man sh](https://linux.die.net/man/1/sh)

@@ -1,0 +1,2 @@
+- execute a program periodically, showing output fullscreen
+- [man watch](https://www.man7.org/linux/man-pages/man1/watch.1.html)

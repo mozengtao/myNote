@@ -1,0 +1,3 @@
+- > Make self-extractable archives on Unix
+- 参考文档
+	- [makeself](https://makeself.io/)

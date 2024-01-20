@@ -1,0 +1,4 @@
+- 示例
+	- ` echo "1:2:3" | cut -d: -f1`
+- 参考文档
+	- [man 1 cut](https://man7.org/linux/man-pages/man1/cut.1.html)

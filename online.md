@@ -1,0 +1,11 @@
+- 在线资源汇总
+- [code2flow](https://app.code2flow.com/)
+	- 在线通过代码画流程图
+- [[dot]]
+- [xmind](https://xmind.works/) #mindmap  在线思维导图
+	- [Mindmap Gallery](https://xmind.app/share/)
+- [PlantUML](https://plantuml.com/)
+- [PlantUML zh](https://plantuml.com/zh/)
+- How to Send a Block of Code in Outlook
+	- [Online syntax highlighting for the masses](https://tohtml.com/)
+	- `From Menu bar navigate to "Plugins -> NppExport -> Copy RTF to clipboard"`

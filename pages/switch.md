@@ -1,0 +1,12 @@
+- 参考文档
+	- [OmniSwitch CLI Reference Guide](https://support.alcadis.nl/Support_files/Alcatel-Lucent/OmniSwitch//End%20of%20Sale%20products/OS6855%20-%20EOS/Manuals/OS6855%20AOS%206.4.4%20R01/OS6855%20AOS%206.4.4%20R01%20Command%20Line%20Reference%20Guide.pdf)
+	- [Routing and Switching Essentials Companion Guide](https://ptgmedia.pearsoncmg.com/images/9781587133183/samplepages/1587133180.pdf)
+	- [CCNA Routing and Switching Study Guide](https://github.com/priagungkhusumanegara/ccna_fast_track/blob/master/CCNA%20Routing%20and%20Switching%20Study%20Guide%20-%20Lammle%2C%20Todd.pdf)
+	- [TCP/IP Network Administration](https://www.gob.mx/cms/uploads/attachment/file/84434/02.-_TCPIP_Network_Administration.pdf)
+	- [Network Routing](https://doc.lagout.org/science/0_Computer%20Science/2_Algorithms/Network%20Routing_%20Algorithms%2C%20Protocols%2C%20and%20Architectures%20%5BMedhi%20%26%20Ramasamy%202007-04-12%5D.pdf)
+	- [Network Warrior](https://github.com/InspectorDidi/Hacking-Books/blob/master/Network%20Warrior%2C%202nd%20Edition.pdf)
+	- [Network Warrior](https://someplace-else.neocities.org/books/Network%20Warrior.pdf)
+	- books
+		- https://www.networkstraining.com/best-computer-networks-textbooks/
+		- https://bookauthority.org/books/best-network-routing-books
+		- https://www.rogerperkin.co.uk/ccie/ccie-training/ccie-routing-and-switching-books/

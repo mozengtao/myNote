@@ -1,0 +1,3 @@
+- free x/y/zmodem implementation
+- 参考
+	- [lrzsz: free x/y/zmodem implementation](https://www.ohse.de/uwe/software/lrzsz.html)

@@ -1,0 +1,9 @@
+- [LeetCode The Hard Way](https://leetcodethehardway.com/)
+	- [Basic Topics](https://leetcodethehardway.com/tutorials/category/basic-topics)
+	- [Solution Explanations](https://leetcodethehardway.com/solutions/category/0000---0099)
+- 参考
+	- [Leetcode All Problems Solutions](https://programs.programmingoneonone.com/p/leetcode-all-problems-solutions.html)
+	- [Leetcode problems](https://leetcode.ca/all/problems.html)
+	- [Solved all two pointers problems in 100 days](https://leetcode.com/discuss/study-guide/1688903/Solved-all-two-pointers-problems-in-100-days.)
+	- [Leetcode problem solving - double pointer](https://programming.vip/docs/leetcode-problem-solving-double-pointer.html)
+	- [Top 150 best practice LeetCode’s problems sorted by difficulties](https://learntocodetogether.com/top-150-leetcodes-best-practice-problems/)

@@ -1,0 +1,2 @@
+- [man install](https://www.man7.org/linux/man-pages/man1/install.1.html)
+-

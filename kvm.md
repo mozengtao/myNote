@@ -1,0 +1,11 @@
+- ![Image.png](../assets/Image_1670244075280_0.png){:height 314, :width 776}
+- [[virsh]]
+- 参考文档
+	- [[qemu]]
+	- [kvm--安装和基本管理以及命令行创建虚拟机](https://juejin.cn/post/7129516381753573390)
+	- [Build a network emulator using Libvirt and KVM](https://www.brianlinkletter.com/2019/02/build-a-network-emulator-using-libvirt/)
+	- [VirtualNetworking](https://wiki.libvirt.org/page/VirtualNetworking)
+	- [virt-install Man Page](https://www.mankier.com/1/virt-install)
+	- [KVM Atlas](https://cloud-atlas.readthedocs.io/zh_CN/latest/kvm/index.html)
+	- [FIXING KVM GUEST VIRSH CONSOLE HANGS AT ESCAPE CHARACTER](https://freelinuxtutorials.com/fixing-kvm-guest-virsh-console-hangs-at-escape-character/)
+	- [KVM虚拟化](https://github.com/tian197/project/blob/master/%E5%AE%9E%E8%AE%AD%E4%BA%8C/KVM%E8%99%9A%E6%8B%9F%E5%8C%96.md)

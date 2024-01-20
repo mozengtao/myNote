@@ -1,0 +1,23 @@
+- 系统调用
+	- 用户空间程序通过软中断向操作系统内核请求更高权限的服务，它实现了用户进程和硬件设备之间的接口。
+	- 常用系统调用
+		- [[fork]]
+		- [[execve]]
+- 库函数
+	- 用于提供用户态服务，它可以不包含任何系统调用，也可以封装一个或多个系统调用来提供用户态的服务。
+- 系统调用和库函数的区别
+	- 系统调用通常不可替换，库函数可替换
+	- 系统调用提供最小皆苦，库函数提供复杂功能
+	- 系统调用运行在内核空间，库函数运行在用户空间
+	- 系统调用返回一个整数，库函数返回值根据用户需要
+	- POSIX 标准针对库函数而不是系统调用
+		- 库函数的移植性比系统调用好
+	- 系统调用的运行时间属于系统时间，库函数运行时间属于用户时间
+	- 系统调用开销比库函数大
+		- 用户态和内核态都应用了[[缓冲技术]]，调用库函数可以大大减少系统调用的次数，而用户进程直接调用系统调用需要在用户空间和内核空间进行上下文切换，开销较大。因此库函数的开销比系统调用小，同时库函数可以在用户态对系统调用的性能进行优化。
+	-
+- 参考文档
+	- [linux system call table](https://chromium.googlesource.com/chromiumos/docs/+/HEAD/constants/syscalls.md#x86_64-64_bit)
+	- [system call table for x86](https://filippo.io/linux-syscall-table/)
+	- [man 2 syscall](https://man7.org/linux/man-pages/man2/syscall.2.html#NOTES)
+	- [User-space, Kernel-space, and System Calls](https://www.codeinsideout.com/blog/linux/system-call/)

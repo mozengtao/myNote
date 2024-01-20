@@ -1,0 +1,9 @@
+- 参考文档
+	- [Debugging the kernel using Ftrace](https://lwn.net/Articles/365835/)
+	- [Kernel Tracing with Ftrace](https://selectel.ru/blog/en/2017/04/04/kernel-tracing-ftrace/)
+	- [ftrace - Function Tracer](https://www.kernel.org/doc/html/next/trace/ftrace.html)
+	- [How ftrace works](https://alex.dzyoba.com/blog/ftrace/)
+	- [Linux Dynamic Function Instrumentation with ftrace](https://thenewstack.io/linux-dynamic-function-instrumentation-with-ftrace/)
+	- [使用 ftrace 实现一个跟踪任意命令内核函数的小工具](https://zhuanlan.zhihu.com/p/457795074)
+	- [Ftrace and Function Hooking](https://xcellerator.github.io/posts/linux_rootkits_02/)
+	- [深入浅出 eBPF](https://www.ebpf.top/)

@@ -1,0 +1,6 @@
+- [An introduction to GRUB2 configuration for your Linux machine](https://opensource.com/article/17/3/introduction-grub2-configuration-linux)
+- [**GRUB bootloader - Full tutorial**](https://www.dedoimedo.com/computers/grub.html)
+- [GNU GRUB Manual 2.12](https://www.gnu.org/software/grub/manual/grub/html_node/index.html)
+- [** Booting with GRUB**](https://www.novell.com/documentation/suse91/suselinux-adminguide/html/ch07s04.html)
+- [GRUB](https://wiki.gentoo.org/wiki/GRUB)
+-

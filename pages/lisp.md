@@ -1,0 +1,6 @@
+- [Common Lisp Books](https://lisp-lang.org/books/)
+- [ANSI Common Lisp](https://github.com/61--/weiyanmin/blob/master/BOOK/Lisp/Graham%2C%20Paul%20-%20ANSI%20Common%20Lisp.pdf) #pdf #github
+- [BuildYourOwnLispCn](https://github.com/NoahDragon/BuildYourOwnLispCn)
+- **[BuildYourOwnLisp](https://github.com/orangeduck/BuildYourOwnLisp)**
+- [Common Lisp 初学者快速入门指导](https://github.com/FreeBlues/PwML/blob/master/Common%20Lisp%20%E5%88%9D%E5%AD%A6%E8%80%85%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E6%8C%87%E5%AF%BC.md)
+- [ANSI Common Lisp 中文版](https://acl.readthedocs.io/en/latest/index.html)

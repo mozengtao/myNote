@@ -1,0 +1,2 @@
+- 参考文档
+	- [Getting started with socat, a multipurpose relay tool for Linux](https://www.redhat.com/sysadmin/getting-started-socat)

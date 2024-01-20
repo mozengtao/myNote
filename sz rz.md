@@ -1,0 +1,4 @@
+- 参考文档
+	- [man rz](https://linux.die.net/man/1/rz)
+	- [man sz](https://linux.die.net/man/1/sz)
+- 最好使用SecuCRT工具进行文件的收发操作

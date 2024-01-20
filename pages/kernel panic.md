@@ -1,0 +1,2 @@
+- [Understanding a Kernel Oops!](https://www.opensourceforu.com/2011/01/understanding-a-kernel-oops/)
+- [Chapter 10. Kernel Debugging](https://docs.freebsd.org/en/books/developers-handbook/kerneldebug/)

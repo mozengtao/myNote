@@ -1,0 +1,3 @@
+- 参考文档
+	- [PTP clock synchronization](https://infocenter.nokia.com/public/7750SR2110R1A/index.jsp?topic=%2Fcom.nokia.Basic_System_Configuration_Guide_21.10.R1%2Fptp_clock_synch-d321e3675.html)
+	- [PTP - Precision Time Protocol](https://www.perle.com/supportfiles/precision-time-protocol.shtml)

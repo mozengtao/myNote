@@ -1,0 +1,6 @@
+- [How is NeoVim Different From Vim?](https://www.baeldung.com/linux/vim-vs-neovim)
+- [从零开始配置 Neovim(Nvim)](https://martinlwx.github.io/zh-cn/config-neovim-from-scratch/)
+- [Learn X in Y minutes](https://learnxinyminutes.com/)
+- [在 neovim 中使用 Lua](https://github.com/glepnir/nvim-lua-guide-zh)
+- [nvim](https://github.com/yaocccc/nvim) #github
+- [Neovim Plugins](https://dotfyle.com/neovim/plugins/trending)

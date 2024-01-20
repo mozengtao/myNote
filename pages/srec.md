@@ -1,0 +1,3 @@
+- srec - Motorola S-record record and file format
+- 参考文档
+	- [man 5 srec](https://www.systutorials.com/docs/linux/man/5-srec/)

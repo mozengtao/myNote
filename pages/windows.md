@@ -1,0 +1,2 @@
+- winget
+	- windows下的命令行安装应用程序工具
