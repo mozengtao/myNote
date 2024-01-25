@@ -1,5 +1,42 @@
 - [[nvim]]
 - ```bash
+  # 读取外部命令的输出到当前编辑文件
+  :r!date
+  (查看帮助命令":help :r!")
+
+  # Incrementing selected numbers
+  my_array[0] = 0;
+  "Y6p" (copy the line and paste it six times)
+  my_array[0] = 0;
+  my_array[0] = 0;
+  my_array[0] = 0;
+  my_array[0] = 0;
+  my_array[0] = 0;
+  my_array[0] = 0;
+  my_array[0] = 0;
+  With the cursor on the first 0 in the first line, start a blockwise select by pressing "Ctrl-V" 
+  Move the cursor down(j) to select the first column of zeros,(Exclude first line by pressing "o") then   press "g Ctrl-A"
+  my_array[1] = 0;
+  my_array[2] = 0;
+  my_array[3] = 0;
+  my_array[4] = 0;
+  my_array[5] = 0;
+  my_array[6] = 0;
+  my_array[7] = 0;
+
+  # Repeat last change
+  The "." command repeats the last change made in normal mode
+  The "@:" command repeats the last command-line change (a command invoked with ":")
+
+  # 结合tmux把当前行的内容作为命令发送给指定的窗口
+  :.w !xargs -0ri tmux send -t4 {}
+  :silent .w !xargs -0ri tmux send -t4 {}
+  :nmap <enter> :silent .w !xargs -0ri tmux send -t4 {}<cr>j	// 使用回车键自动执行当前行命令并到下一行
+  :nmap <enter> :silent .w !awk '{print $NF}' \| xargs -i tmux neww git difftool -y {}<cr>
+  （tmux环境下 Ctrl + q 可以显示pane number）
+
+  :nmap <C-x> :silent .w !xargs -0ri tmux send -t1 {}<cr>
+  
   # enable paste mode
   :set paste
   ```
@@ -71,4 +108,8 @@
 - [cscope快速教程](https://yiwenshao.github.io/2016/12/25/cscope%E5%BF%AB%E9%80%9F%E6%95%99%E7%A8%8B/)
 - [The Vim/Cscope tutorial](https://cscope.sourceforge.net/cscope_vim_tutorial.html)
 - [vim-snippets](https://github.com/honza/vim-snippets)
--
+- [Making a list of numbers](https://vim.fandom.com/wiki/Making_a_list_of_numbers)
+- [Mapping keys in Vim](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1))
+- [Repeat last change](https://vim.fandom.com/wiki/Repeat_last_change)
+- [Vim Documentation](https://vim-jp.org/vimdoc-en/)
+- [NVIM - help](https://neovim.io/doc/user/)

@@ -79,6 +79,7 @@
   zmq_device(3)
   #+END_QUOTE
 - # 参考
+- [zmq(7)](https://libzmq.readthedocs.io/en/latest/zmq.html)
 - [zmq.h](https://travlr.github.io/libzmq/zmq_8h_source.html#l00225)
 - [A Brief Introduction to ZeroMQ](https://intelligentproduct.solutions/technical-software/introduction-to-zeromq/)
 - [ZMQ Frequently Asked Questions](http://wiki.zeromq.org/area:faq#toc5)
@@ -94,3 +95,13 @@
 	- [zmq_ipc(7)](http://api.zeromq.org/4-1:zmq-ipc)
 	- [unix(7)](https://man7.org/linux/man-pages/man7/unix.7.html)
 - [ZeroMQ: Diving into the Wire](https://www.codeproject.com/Articles/863889/ZeroMQ-Diving-into-the-Wire)
+- [ZMQ API reference](https://libzmq.readthedocs.io/en/latest/)
+- [Frequently Asked Questions](http://wiki.zeromq.org/area:faq)
+- [The ZeroMQ Guide - for Python Developers](https://zguide2.wdfiles.com/local--files/page:start/zguide-py.pdf)
+- [The ZeroMQ Guide - for C Developers](https://zguide2.wdfiles.com/local--files/page:start/zguide-c.pdf)
+- [ZeroMQ RFC](https://rfc.zeromq.org/)
+- [ØMQ - The Guide](https://zguide.zeromq.org/)
+- [ZMQ 指南](https://github.com/anjuke/zguide-cn/tree/master)
+- [zguide examples](https://github.com/booksbyus/zguide/tree/master/examples)
+- [ØMQ/2.2 - The Guide](http://zguide2.zeromq.org/)
+- [zmq_poll(3)](https://linux.die.net/man/3/zmq_poll)

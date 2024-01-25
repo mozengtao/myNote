@@ -40,7 +40,7 @@
 	- CTRL+b  &   ==Kill the current window==
 	- CTRL+b  %   ==Split horizontally==
 	- CTRL+b  "    ==Split vertically==
-	- CTRL+b  q   Show pane numbers
+	- **CTRL+b  q**   Show pane numbers
 	- CTRL+b  ?   Show key bindings
 	- CTRL+b  x   ==Close current pane==
 	- CTRL+b  z   ==Toggle current pane to full screen==
@@ -87,3 +87,5 @@
 - [Tmux 简介与使用](https://blog.donothing.site/2016/09/29/tmux/)
 - [配置 tmux](https://aquaregia.gitbooks.io/tmux-productive-mouse-free-development_zh/content/book-content/Chapter2.html)
 - [Tmux 入门教程](https://blog.twofei.com/807/)
+- [tao-of-tmux 中文版](https://tao-of-tmux.readthedocs.io/zh-cn/latest/index.html)
+- [Scripting tmux](https://toastdriven.com/blog/2009/oct/08/scripting-tmux/)

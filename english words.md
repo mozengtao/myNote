@@ -117,3 +117,5 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - lump   / lʌmp /    （不定形的）块；（单独的）大量；肿块；方糖；
 - postmortem   / ˌpoʊstˈmɔːrtəm /   验尸；检视；尸体检查
 - mandate    / ˈmændeɪt /    强制执行，颁布；授权，委任；命令，指示；（领土）（由国际联盟）授权托管
+- dabble  / ˈdæb(ə)l /  涉猎；涉足；玩水
+- caveat  / ˈkæviæt /   警告，限制性条款

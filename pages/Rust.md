@@ -1,4 +1,7 @@
 - [[rust笔记]]
+- [Rust By Example](https://doc.rust-lang.org/stable/rust-by-example/)
+- [The Rust Programming Language](https://doc.rust-lang.org/book/title-page.html)
+- [The Rust Programming Language](https://doc.rust-lang.org/stable/book/title-page.html)
 - [The Cargo Book](https://doc.rust-lang.org/stable/cargo/) #online
 - [The Rust community’s crate registry](https://crates.io/)
 - [The Rust Programming Language](https://doc.rust-lang.org/stable/book/)
@@ -11,4 +14,5 @@
 - [Writing Interpreters in Rust: a Guide](https://rust-hosted-langs.github.io/book/)
 - [Crafting Interpreters](https://craftinginterpreters.com/contents.html) #online
 - [crafting-interpreters-rs](https://github.com/tdp2110/crafting-interpreters-rs)#github
--
+- [rust-zmq](https://github.com/erickt/rust-zmq)
+- [ZMQ inside a standard poll loop](https://blog.louiz.org/zmq)

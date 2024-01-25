@@ -91,4 +91,7 @@
 - [**Advanced Sockets API for IPv6**](https://datatracker.ietf.org/doc/html/rfc2292)
 - [How to: Raw sockets in IPv6](https://blog.apnic.net/2017/10/24/raw-sockets-ipv6/)
 - [**Guide to IP Layer Network Administration with Linux**](http://linux-ip.net/html/index.html)
--
+- [RIB and FIB – Understanding the terminology](https://www.dasblinkenlichten.com/rib-and-fib-understanding-the-terminology/)
+- [计算机网络](https://kiprey.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/)
+- [CS144-Computer-Network](https://github.com/PKUFlyingPig/CS144-Computer-Network/tree/master)
+- [CS144: Introduction to Computer Networking](https://www.scs.stanford.edu/10au-cs144/)
