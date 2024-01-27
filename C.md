@@ -691,3 +691,4 @@
 		- [Reading C type declarations](http://unixwiz.net/techtips/reading-cdecl.html)
 - [Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) #github
 - [C](https://github.com/marcotrosi/C)
+- [**Programming in C**](https://users.cs.cf.ac.uk/dave/C/)

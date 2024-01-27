@@ -79,6 +79,7 @@
   zmq_device(3)
   #+END_QUOTE
 - # 参考
+- [Working with Messages](https://zguide.zeromq.org/docs/chapter2/#Working-with-Messages)
 - [zmq(7)](https://libzmq.readthedocs.io/en/latest/zmq.html)
 - [zmq.h](https://travlr.github.io/libzmq/zmq_8h_source.html#l00225)
 - [A Brief Introduction to ZeroMQ](https://intelligentproduct.solutions/technical-software/introduction-to-zeromq/)
@@ -105,3 +106,4 @@
 - [zguide examples](https://github.com/booksbyus/zguide/tree/master/examples)
 - [ØMQ/2.2 - The Guide](http://zguide2.zeromq.org/)
 - [zmq_poll(3)](https://linux.die.net/man/3/zmq_poll)
+- [CZMQ - High-level C Binding for ZeroMQ](http://czmq.zeromq.org/)

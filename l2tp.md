@@ -65,3 +65,5 @@
 	- [L2TPv2 RFC](https://www.rfc-editor.org/rfc/rfc2661.html)
 	- [L2TPv3 RFC](https://www.rfc-editor.org/rfc/rfc3931)
 	- [Cisco ISG Design and Deployment Guide: ATM to ISG LNS Aggregation](https://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/edge_ios/dd_3_6.html)
+	- [Layer Two Tunneling Protocol - Version 3 (L2TPv3)](https://www.tech-invite.com/y35/tinv-ietf-rfc-3931.html)
+	- [L2TPv2 Feature Overview and Configuration Guide](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)

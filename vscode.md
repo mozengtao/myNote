@@ -3,6 +3,7 @@
 - 插件
 	- **C Snippets**
 	- **Markdown Preview Mermaid Support** (github.dev 可以work)
+	- Increment Selection (Ctrl + Alt + i)
 - 参考文档
 	- [一个案例学会 VSCode Snippets，极大提高开发效率](https://zhuanlan.zhihu.com/p/457062272)
 	- [Snippets in Visual Studio Code](https://code.visualstudio.com/docs/editor/userdefinedsnippets)

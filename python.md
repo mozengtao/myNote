@@ -859,6 +859,7 @@
 	  ```
 	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
 - 参考文档
+	- [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online
 	- [Python args and kwargs: Demystified](https://realpython.com/python-kwargs-and-args/)
 	- [How to Use the Unpacking Operators (*, **) in Python?](https://geekflare.com/python-unpacking-operators/)
 	- [Python Code Examples](https://www.programcreek.com/python/)
@@ -897,3 +898,8 @@
 	- [Working With JSON Data in Python](https://realpython.com/python-json/)
 	- [How to Use the JSON Module in Python](https://www.freecodecamp.org/news/how-to-use-the-json-module-in-python/)
 - [Python mmap: Improved File I/O With Memory Mapping](https://realpython.com/python-mmap/)
+- [Understanding Python re(gex)?](https://learnbyexample.github.io/py_regular_expressions/cover.html)
+- [python projects](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/Python-Projects.pdf)
+- [The big book of small python projects](https://edu.anarcho-copy.org/Programming%20Languages/Python/BigBookSmallPythonProjects.pdf)
+- [learning Python](https://cfm.ehu.es/ricardo/docs/python/Learning_Python.pdf)
+- [practice_python_projects](https://github.com/learnbyexample/practice_python_projects)

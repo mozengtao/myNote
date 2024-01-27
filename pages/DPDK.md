@@ -18,6 +18,7 @@
 	- CPU Affinity
 		- 减少进程或线程在不同CPU core之间切换锁产生的开销，从而提高CPU的利用率
 - 参考文档
+	- [EAL parameters](https://doc.dpdk.org/guides/linux_gsg/linux_eal_parameters.html)
 	- [DPDK Tools User Guides](https://doc.dpdk.org/guides/tools/index.html)
 	- [DPDK系列](https://blog.csdn.net/fpcc/article/details/135179524)
 	- [Programmer’s Guide](https://doc.dpdk.org/guides/prog_guide/index.html)

@@ -1405,6 +1405,10 @@
 		- 友元类
 		- 友元成员函数
 - 参考文档
+	- [leveldb](https://github.com/google/leveldb/tree/main)
+	- [LevelDB 源码分析](https://sf-zhou.github.io/leveldb/leveldb_01_data_structure.html)
+	- [LevelDB 源码分析](https://github.com/balloonwj/CppGuide/tree/master/articles/leveldb%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90)
+	- [LevelDB 源码分析](https://hardcore.feishu.cn/mindnotes/bmncnzpUmXNQruVGOwRwisHyxoh)
 	- [The C++ Programming Language Fourth Edition](https://www.academia.edu/41763404/The_C_Programming_Language_Fourth_Edition_Bjarne_Stroustrup)
 	- [Essential C++](https://www.programming-books.io/essential/cpp/index.html) #online
 	- [C++ Templates](https://github.com/xiaoweiChen/Cpp-Templates-2nd) #pdf

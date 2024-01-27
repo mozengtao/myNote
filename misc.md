@@ -1,3 +1,6 @@
+- [learnbyexample](https://learnbyexample.github.io/tags/regular-expressions/)
+- [learnbyexample tips](https://learnbyexample.github.io/tips/)
+- [learnbyexample tags](https://learnbyexample.github.io/tags/)
 - [Structure and Interpretation of Computer Programs](https://web.mit.edu/6.001/6.037/sicp.pdf) #pdf #online
 - [snippet](https://github.com/xgfone/snippet) #online #github
 - eklitzke.org

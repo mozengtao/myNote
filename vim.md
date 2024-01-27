@@ -1,5 +1,17 @@
 - [[nvim]]
 - ```bash
+  #Executing External Programs from Vim
+  :!{cmd}
+  :read !{cmd}
+  :3read !curl --silent ifconfig.me
+  :[range]write !{cmd}
+  :'<,'>write !python
+  :{range}!{filter}
+  :%! sort -nrk 2 | column -t
+  :.,.+4!{filter}
+
+  :'<,'>!awk '{print $1+2}' (选中指定行执行外部命令)
+
   # 读取外部命令的输出到当前编辑文件
   :r!date
   (查看帮助命令":help :r!")
@@ -113,3 +125,9 @@
 - [Repeat last change](https://vim.fandom.com/wiki/Repeat_last_change)
 - [Vim Documentation](https://vim-jp.org/vimdoc-en/)
 - [NVIM - help](https://neovim.io/doc/user/)
+- [Vim: Keymapping Guide](https://www.meetgor.com/vim-keymaps/)
+- [vim tips and tricks](https://www.cs.swarthmore.edu/oldhelp/vim/home.html)
+- [learnbyexample](https://learnbyexample.github.io/tags/vim/)
+- [Vim Cheat Sheet](https://vim.rtorr.com/)
+- [vim-and-the-shell](https://vimways.org/2019/vim-and-the-shell/)
+- [External Commands](https://learnvim.irian.to/basics/external_commands)

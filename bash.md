@@ -1,3 +1,34 @@
+bash脚本中调用python返回的结果
+```bash
+#!/usr/bin/bash
+pc1()
+{
+	ip_expr="$1"
+	if [[ $# -eq 0 || $1 = '-' ]]; then
+		read -r ip_expr
+	fi
+
+	python -c 'print('"$ip_expr"')'
+}
+
+pc2()
+{
+	python -c 'import sys; print(eval(sys.argv[1]))' "$1" ;
+}
+
+pc2()
+{
+	python -c '\
+		import sys;\
+		print(eval(sys.argv[1]))\
+		' "$1" ;
+}
+
+echo '1+2*3' | pc1
+pc2 '1+2*3'
+```
+
+
 - `getopts`
 	- ```bash
 	  #!/bin/bash
