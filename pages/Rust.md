@@ -16,3 +16,4 @@
 - [crafting-interpreters-rs](https://github.com/tdp2110/crafting-interpreters-rs)#github
 - [rust-zmq](https://github.com/erickt/rust-zmq)
 - [ZMQ inside a standard poll loop](https://blog.louiz.org/zmq)
+- [The Rust Standard Library](https://doc.rust-lang.org/std/#primitives)

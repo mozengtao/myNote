@@ -6,3 +6,5 @@
 - [go pkg](https://pkg.go.dev/) #online
 - [project-layout](https://github.com/golang-standards/project-layout) #github
 - [go dev](https://pkg.go.dev/)
+- [Go by Example](https://gobyexample.com/)
+- [online compiler with examples](https://goplay.tools/)

@@ -50,6 +50,7 @@
 	  packet_socket = socket(AF_PACKET, int socket_type, int protocol);
 	  ```
 - 参考文档
+	- [**Internet Communications Engineering**](http://blake.erg.abdn.ac.uk/users/gorry/course/)
 	- [**H3C 网络互通配置指导**](https://www.h3c.com/cn/d_202203/1578744_30005_0.htm)
 	- [**Huawei Technical Guides**](https://support.huawei.com/enterprise/en/routers/ar100-200-pid-256863195?category=configuration-commissioning&subcategory=technical-guides)
 	- [**Keyword Search the Single UNIX Specification**](https://pubs.opengroup.org/onlinepubs/7908799/)
@@ -116,3 +117,6 @@
 - [L2TP VPN](https://support.huawei.com/enterprise/en/doc/EDOC1100176155)
 - [IP Routing Basics](https://support.huawei.com/enterprise/en/doc/EDOC1100086956?idPath=24030814%7C21782164%7C7923148%7C256863195)
 - [What Is LACP?](https://support.huawei.com/enterprise/en/doc/EDOC1100086560)
+- [Wireshark User’s Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)
+- [IPv4 and IPv6 Header Checksum Algorithm Explained](https://www.packetmania.net/en/2021/12/26/IPv4-IPv6-checksum/)
+- [IPv6 Dynamic Address Allocation Mechanism Illustrated](https://www.packetmania.net/en/2022/03/13/IPv6-Addressing/)

@@ -1,0 +1,3 @@
+- [Lua 5.2 Reference Manual](https://www.lua.org/manual/5.2/)
+- [Programming in Lua](https://www.lua.org/pil/contents.html)
+- [Lua online](https://www.lua.org/demo.html)

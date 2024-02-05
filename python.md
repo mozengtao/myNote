@@ -859,6 +859,9 @@
 	  ```
 	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
 - 参考文档
+	- [**Python 3 Trinkets(python3 online)**](https://trinket.io/features/python3)
+	- [online python](https://www.online-python.com/)
+	- [Online Compiler](https://www.programiz.com/python-programming/online-compiler/)
 	- [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online
 	- [Python args and kwargs: Demystified](https://realpython.com/python-kwargs-and-args/)
 	- [How to Use the Unpacking Operators (*, **) in Python?](https://geekflare.com/python-unpacking-operators/)
@@ -903,3 +906,13 @@
 - [The big book of small python projects](https://edu.anarcho-copy.org/Programming%20Languages/Python/BigBookSmallPythonProjects.pdf)
 - [learning Python](https://cfm.ehu.es/ricardo/docs/python/Learning_Python.pdf)
 - [practice_python_projects](https://github.com/learnbyexample/practice_python_projects)
+- [How to use decorators Part 2](https://pythonforthelab.com/blog/how-to-use-decorators-part-2/)
+- [How to Use Decorators to Validate Input](https://pythonforthelab.com/blog/how-to-use-decorators-to-validate-input/)
+- [A Primer on Classes in Python](https://pythonforthelab.com/blog/a-primer-on-classes-in-python/)
+- [Implementing Threads for Measurements](https://pythonforthelab.com/blog/implementing-threads-for-measurements/)
+- [Learning (not) to Handle Exceptions](https://pythonforthelab.com/blog/learning-not-to-handle-exceptions/)
+- [Storing Binary Data and Serializing](https://pythonforthelab.com/blog/storing-binary-data-and-serializing/)
+- [What are Hashable Objects](https://pythonforthelab.com/blog/what-are-hashable-objects/)
+- [The with command and custom classes](https://pythonforthelab.com/blog/the-with-command-and-custom-classes/)
+- [What are args and kwargs and when to use them](https://pythonforthelab.com/blog/what-are-args-and-kwargs-and-when-to-use-them/)
+- [Introduction to Python Lambda Functions](https://pythonforthelab.com/blog/intro-to-python-lambda-functions/)

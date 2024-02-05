@@ -33,3 +33,8 @@
 - [dumpcap(1)](https://www.wireshark.org/docs/man-pages/dumpcap.html)
 - [tshark(1)](https://www.wireshark.org/docs/man-pages/tshark.html)
 - [mergecap(1)](https://www.wireshark.org/docs/man-pages/mergecap.html)
+- [Hex Packet Decoder](https://hpd.gasmi.net/) #online
+- [Packetor](https://packetor.com/) #online
+- [Scapy](https://scapy.readthedocs.io/en/latest/index.html)
+- [Wireshark User's Guide](https://cse.sc.edu/~pokeefe/tutorials/wireshark/index.html)
+- [Wireshark User’s Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)

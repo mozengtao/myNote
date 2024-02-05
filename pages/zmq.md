@@ -79,6 +79,7 @@
   zmq_device(3)
   #+END_QUOTE
 - # 参考
+- [**zguide**](https://zguide.zeromq.org/)
 - [Working with Messages](https://zguide.zeromq.org/docs/chapter2/#Working-with-Messages)
 - [zmq(7)](https://libzmq.readthedocs.io/en/latest/zmq.html)
 - [zmq.h](https://travlr.github.io/libzmq/zmq_8h_source.html#l00225)
@@ -86,7 +87,6 @@
 - [ZMQ Frequently Asked Questions](http://wiki.zeromq.org/area:faq#toc5)
 - [ZMQ 指南](https://wizardforcel.gitbooks.io/zmq-guide/content/chapter1.html)
 	- **[zguide](https://github.com/booksbyus/zguide)**
-- [czmq](https://github.com/zeromq/czmq)
 - [zguide](http://zguide2.wikidot.com/)
 - [The ZeroMQ Guide - for C Developers](http://zguide2.wdfiles.com/local--files/page:start/zguide-c.pdf)
 - [**The ZeroMQ project**](https://github.com/zeromq)
@@ -106,4 +106,9 @@
 - [zguide examples](https://github.com/booksbyus/zguide/tree/master/examples)
 - [ØMQ/2.2 - The Guide](http://zguide2.zeromq.org/)
 - [zmq_poll(3)](https://linux.die.net/man/3/zmq_poll)
+- [czmq](https://github.com/zeromq/czmq) #github
 - [CZMQ - High-level C Binding for ZeroMQ](http://czmq.zeromq.org/)
+- [czmq zmsg.c](https://github.com/zeromq/czmq/blob/master/src/zmsg.c)
+- [The PyZMQ API](https://pyzmq.readthedocs.io/en/latest/)
+- [Using pyZMQ for inter-process communication: Part 1](https://pythonforthelab.com/blog/using-pyzmq-for-inter-process-communication-part-1/)
+- [Using pyZMQ for inter-process communication: Part 2](https://pythonforthelab.com/blog/using-pyzmq-for-inter-process-communication-part-2/)

@@ -669,7 +669,7 @@
 			  }
 			  ```
 - 参考文档
-	- [The GNU C Library](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
+	- [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
 	- [c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)
 	- [POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)
 	- [C standard](https://www.open-std.org/jtc1/sc22/wg14/www/standards.html)
@@ -692,3 +692,9 @@
 - [Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) #github
 - [C](https://github.com/marcotrosi/C)
 - [**Programming in C**](https://users.cs.cf.ac.uk/dave/C/)
+- [HOWTO: Use Address Sanitizer](https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer)
+- [Clang 19.0.0git documentation](https://clang.llvm.org/docs/index.html)
+- [Signal Handling](https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html)
+- [Introduction To Unix Signals Programming](https://www.cs.kent.edu/~ruttan/sysprog/lectures/signals.html)
+- [CS 43203 : System Programming](https://www.cs.kent.edu/~ruttan/sysprog/)
+ - [Unix Pthreads tutorial](https://www.cs.kent.edu/~ruttan/sysprog/)
