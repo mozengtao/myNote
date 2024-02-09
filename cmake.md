@@ -53,7 +53,13 @@
 	  collapsed:: true
 		-
 - 参考文档
+	- [An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
+	- [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
+	- [**More Modern CMake**](https://hsf-training.github.io/hsf-training-cmake-webpage/)
 	- [CMake Reference Documentation](https://cmake.org/cmake/help/latest/index.html)
+	- [CMake 3.26 Document 简体中文](https://runebook.dev/zh/docs/cmake/-index-)
+	- [cmake-properties(7)](https://hsf-training.github.io/hsf-training-cmake-webpage/05-variables/index.html)
+	- [CMake Fundamentals](https://jeremimucha.com/category/cmake/)
 	- [cmake-examples](https://github.com/ttroy50/cmake-examples)
 	- [通过例子学习CMake](https://sfumecjf.github.io/cmake-examples-Chinese/)
 	- [cmake-commands(7)](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id2)
@@ -63,3 +69,19 @@
 	- [cmake](https://cmake.org/cmake/help/latest/manual/cmake.1.html)
 	- [cmake-commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id2)
 	- [cmake cheet sheet](https://cppcheatsheet.com/notes/cmake_basic.html)
+	- [CMake debugging](https://cliutils.gitlab.io/modern-cmake/chapters/features/debug.html)
+	```bash
+	#1
+	include(CMakePrintHelpers)
+	cmake_print_variables(MY_VARIABLE)
+
+	#2
+	cmake -S . -B build --trace-source=CMakeLists.txt
+	cmake -S . -B build --trace-source=CMakeLists.txt --trace-expand
+
+	#3
+	cmake . -DCMAKE_BUILD_TYPE=Debug
+
+	Warning:
+	Never do an “in-source” build - that is, run cmake . from the source directory. It will pollute your source directory with build outputs, CMake configuration files, and will disable out-of-source builds. 
+	```

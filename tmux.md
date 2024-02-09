@@ -18,14 +18,47 @@
 	  tmux new-session -d 'vi ~/.tmux.conf' \; split-window -d \; attach
 	  
 	  Ex1:
-	  tmux new-session -d -s VCMTS
-	  tmux rename-window -t 0 vmcCode
-	  tmux send-keys -t 'vmcCode' 'ssh lxd' C-m
-	  tmux new-window -t VCMTS:1 -n 'metaVcoreCode'
-	  tmux send-keys -t 'metaVcoreCode' 'ssh lxd' C-m
-	  tmux new-window -t $SESSION:2 -n 'build'
-	  tmux send-keys -t 'build' 'ssh lxd' C-m
-	  tmux attach-session -t VCMTS:0
+		#!/usr/bin/bash
+
+		: <<COMMENT
+		if tmux has-session -t =VCMTS; then
+			tmux kill-session -t =VCMTS
+			echo "kill session VCMTS ..."
+		fi
+		COMMENT
+
+		if ! tmux has-session -t =VCMTS; then
+			# create session
+			tmux new-session -d -s VCMTS
+
+
+			# rename for the default window
+			tmux rename-window -t =VCMTS:0 code
+
+
+			# create new windows(build, vcoreserver)
+			tmux new-window -d -t =VCMTS -n build -c /tmp
+			tmux new-window -d -t =VCMTS -n vcoreserver -c /tmp
+
+
+			# split windows into panes
+			tmux split-window -v -t =VCMTS:=code.0
+			tmux split-window -v -t =VCMTS:=build.0
+			tmux split-window -v -t =VCMTS:=vcoreserver.0
+
+
+			# send commands for specific panes
+			tmux send-keys -t =VCMTS:=code.0 "cd /home/morrism/repos" Enter
+			tmux send-keys -t =VCMTS:=code.1 "cd /home/morrism/repos" Enter
+
+			tmux send-keys -t =VCMTS:=build.0 "cd /home/morrism/code/vcmos" Enter
+			tmux send-keys -t =VCMTS:=build.1 "cd /home/morrism/code/build" Enter
+
+			tmux send-keys -t =VCMTS:=vcoreserver.0 "ssh vcoreserver" Enter
+			tmux send-keys -t =VCMTS:=vcoreserver.1 "ssh vcoreserver" Enter
+		fi
+
+		tmux attach -t =VCMTS
 	  ```
 - Tmux **是一种终端复用器（terminal multiplexer）**
 - ![Image 4.png](./assets/Image_4_1670374694509_0.png)

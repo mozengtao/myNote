@@ -123,3 +123,5 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - bestow    / bɪˈstoʊ /   赠予，授予（财产、权力或荣誉）
 - prelude   / ˈpreljuːd /  前奏，序幕；前奏曲，序曲；  成为……的前奏，作为……的序幕
 - idiomatic  / ˌɪdiəˈmætɪk /   （语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的
+- formidable  / ˈfɔːrmɪdəb(ə)l /  可怕的，令人敬畏的；（形状、数量）巨大的；难对付的
+- intimidate  / ɪnˈtɪmɪdeɪt /  恫吓，威胁

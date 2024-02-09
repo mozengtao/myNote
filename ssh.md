@@ -266,6 +266,10 @@
 			  此时其他的开发者可以通过在浏览器上输入the_ssh_server_ip:8080来访问你本地主机的web应用
 			  ```
 - 参考文档
+```bash
+# 自动远程登陆 under windows terminal(PowerShell)
+type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
+```
 	- [SSH Again](https://eklitzke.org/ssh-again)
 	- [man ssh_config](https://linux.die.net/man/5/ssh_config)
 		- > **GatewayPorts**

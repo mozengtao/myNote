@@ -136,3 +136,4 @@
 Athame patches your shell to add full Vim support by routing your keystrokes through an actual Vim process. Athame can currently be used to patch readline (used by bash, gdb, python, etc) and/or zsh (which doesn't use readline).
 ```
 - [Use Vim Mode On The Command Line In Bash](https://dev.to/brandonwallace/how-to-use-vim-mode-on-the-command-line-in-bash-fnn)
+- [CSCOPE settings for vim](https://insidelinuxdev.net/~yuanjianpeng/config/cscope_maps.vim)
