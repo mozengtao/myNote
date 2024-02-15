@@ -88,7 +88,16 @@
 	  make # Use Makefile to build the program
 	  make install # Use Makefile to install the program
 	  ```
+
 - 参考文档
+	- [Variables Used by Implicit Rules](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)
+	```bash
+		LDFLAGS
+			Extra flags to give to compilers when they are supposed to invoke the linker, ‘ld’, such as -L. Libraries (-lfoo) should be added to the LDLIBS variable instead.
+
+		LDLIBS
+			Library flags or names given to compilers when they are supposed to invoke the linker, ‘ld’. LOADLIBES is a deprecated (but still supported) alternative to LDLIBS. Non-library linker flags, such as -L, should go in the LDFLAGS variable.
+	```
 	- [The magic behind configure, make, make install - How it works in Unix](https://thoughtbot.com/blog/the-magic-behind-configure-make-make-install)
 	- [Learn Makefiles With the tastiest examples](https://makefiletutorial.com/#top)
 	- [跟我一起写makefile](https://awesome-programming-books.github.io/linux/%E8%B7%9F%E6%88%91%E4%B8%80%E8%B5%B7%E5%86%99makefile.pdf) #pdf

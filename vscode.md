@@ -4,10 +4,39 @@
 	- **C Snippets**
 	- **Markdown Preview Mermaid Support** (github.dev 可以work)
 	- Increment Selection (Ctrl + Alt + i)
+	- Remote - SSH
+	```bash
+		# 选择ssh的配置文件
+		Remote - SSH: Open SSH Configuration File ...
+		# 之后在配置文件里面添加需要自动登陆的配置
+		Host lxd2
+        HostName 192.168.233.35
+        User morrism
+        #PreferredAuthentications publickey
+        IdentityFile ~/.ssh/id_rsa
+	```
 - 参考文档
 - [User Interface](https://code.visualstudio.com/docs/getstarted/userinterface)
-	- [一个案例学会 VSCode Snippets，极大提高开发效率](https://zhuanlan.zhihu.com/p/457062272)
-	- [Snippets in Visual Studio Code](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
+- [一个案例学会 VSCode Snippets，极大提高开发效率](https://zhuanlan.zhihu.com/p/457062272)
+- [vscode进阶：运用代码片段提高效率](https://zhuanlan.zhihu.com/p/357377511)
+- [VS Code 代码片段完全入门指南](https://www.freecodecamp.org/chinese/news/definitive-guide-to-snippets-visual-studio-code/)
+- [**Snippets** in Visual Studio Code](https://code.visualstudio.com/docs/editor/userdefinedsnippets)
+- [snippet-generator](https://snippet-generator.app/?description=&tabtrigger=&snippet=&mode=vscode) #online
+```bash
+	"Your Snippet Name": {
+		"prefix": "yoursnippet",
+		"body": [
+			"Your snippet code here",
+			"function ${1:funcName}(${2:params})",
+			"\t$0",
+			"}",
+		],
+		"description": "Your snippet description",
+		"scope": "c,c++",
+	}
+
+	编辑光标按 $1,$2,$3...$0 的顺序跳转，$0 是光标最后可切换位置
+```
 - [VS Code Extension](https://github.com/topics/vscode-extension)
 - [awesome-vscode](https://github.com/viatsko/awesome-vscode)
 - [vscode-cpptools extention](https://github.com/microsoft/vscode-cpptools)
