@@ -32,6 +32,9 @@
   
   # 删除远端分支
   git push origin -d  BRANCH_NAME
+
+  # pull remote branch
+  git pull origin sandbox/morrism/VCMTS-2777
   ```
 - [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
 - [Pro Git](https://git-scm.com/book/zh/v2/)

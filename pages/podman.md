@@ -95,11 +95,8 @@
 - [Getting Started with Podman](https://podman.io/docs#getting-help)
 - [podman-run](https://docs.podman.io/en/latest/markdown/podman-run.1.html)
 - [conmon](https://github.com/containers/conmon#conmon)
-	- #+BEGIN_QUOTE
-	  An OCI container runtime monitor.
-	  
+	> An OCI container runtime monitor.
 	  Conmon is a monitoring program and communication tool between a container manager (like Podman or CRI-O) and an OCI runtime (like runc or crun) for a single container.
-	  #+END_QUOTE
 - ((654cb239-caf4-4432-a388-d977ff7f17e1))
 - [Basic Networking Guide for Podman](https://github.com/containers/podman/blob/main/docs/tutorials/basic_networking.md)
 - [Understanding Bind Mounts](https://www.baeldung.com/linux/bind-mounts)

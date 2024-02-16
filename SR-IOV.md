@@ -1,0 +1,7 @@
+- [SR-IOV 基本概念](https://zdyxry.github.io/2020/03/12/SR-IOV-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/)
+- [SR-IOV 驱动程序](https://docs.oracle.com/cd/E37934_01/html/E36756/sriov.html#scrolltoc)
+- [IOMMU](https://cloud-atlas.readthedocs.io/zh-cn/latest/kvm/iommu/index.html)
+- [SR-IOV介绍](https://www.pcietech.com/413.html/)
+- [SR-IOV](https://www.h3c.com/cn/pub/Document_Center/2021/06/UIS_Manager_WebHelp/html/topic_m200221x0_3024.htm)
+- [Intel Virtual Function Driver](https://doc.dpdk.org/guides/nics/intel_vf.html)
+- [KVM虚拟化](http://www.yanjun.pro/categories/virtualization/page/1)

@@ -669,6 +669,7 @@
 			  }
 			  ```
 - 参考文档
+	- [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
 	- [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
 	- [c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)
 	- [POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)

@@ -1,0 +1,1 @@
+- [Ansible基础](http://www.yanjun.pro/tags/ansible)

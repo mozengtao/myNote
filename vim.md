@@ -116,8 +116,14 @@
 	  set runtimepath^=~/.vim/bundle/ctrlp.vim
 	  let g:ctrlp_map = '<c-p>'
 	  set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+
+    # 退出cscope
+    Ctrl + d
 	  ```
+- [vi/vim使用进阶](https://blog.easwy.com/archives/advanced-vim-skills-catalog/)
 - [cscope快速教程](https://yiwenshao.github.io/2016/12/25/cscope%E5%BF%AB%E9%80%9F%E6%95%99%E7%A8%8B/)
+- [Cscope Tutorial](https://courses.cs.washington.edu/courses/cse451/12sp/tutorials/tutorial_cscope.html)
+- [CSCOPE manpage](https://cscope.sourceforge.net/cscope_man_page.html)
 - [The Vim/Cscope tutorial](https://cscope.sourceforge.net/cscope_vim_tutorial.html)
 - [vim-snippets](https://github.com/honza/vim-snippets)
 - [Making a list of numbers](https://vim.fandom.com/wiki/Making_a_list_of_numbers)
