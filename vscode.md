@@ -1,3 +1,6 @@
+- tips
+	- toggleStickyScroll(鼠标滚动时顶上显示函数名称)
+
 - 文件内变量替换
 	- Ctrl + F2
 - 插件

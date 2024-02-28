@@ -1,3 +1,51 @@
+```bash
+# Permissions for .ssh folder and key files
+1. .ssh directory: 700 (drwx------)
+2. public key (.pub files): 644 (-rw-r--r--)
+3. private key (id_rsa): 600 (-rw-------)
+4. lastly your home directory should not be writeable by the group or others (at most 755 (drwxr-xr-x))
+
+# commands to change the permissions
+sudo chmod 700 ~/.ssh
+sudo chmod 644 ~/.ssh/id_example.pub
+sudo chmod 600 ~/.ssh/id_example
+
+# Summary
++------------------------+-------------------------------------+-------------+-------------+
+| Directory or File      | Man Page                            | Recommended | Mandatory   |
+|                        |                                     | Permissions | Permissions |
++------------------------+-------------------------------------+-------------+-------------+
+| ~/.ssh/                | There is no general requirement to  | 700         |             |
+|                        | keep the entire contents of this    |             |             |
+|                        | directory secret, but the           |             |             |
+|                        | recommended permissions are         |             |             |
+|                        | read/write/execute for the user,    |             |             |
+|                        | and not accessible by others.       |             |             |
++------------------------+-------------------------------------+-------------+-------------+
+| ~/.ssh/authorized_keys | This file is not highly sensitive,  | 600         |             |
+|                        | but the recommended permissions are |             |             |
+|                        | read/write for the user, and not    |             |             |
+|                        | accessible by others                |             |             |
++------------------------+-------------------------------------+-------------+-------------+
+| ~/.ssh/config          | Because of the potential for abuse, |             | 600         |
+|                        | this file must have strict          |             |             |
+|                        | permissions: read/write for the     |             |             |
+|                        | user, and not accessible by others. |             |             |
+|                        | It may be group-writable provided   |             |             |
+|                        | that the group in question contains |             |             |
+|                        | only the user.                      |             |             |
++------------------------+-------------------------------------+-------------+-------------+
+| ~/.ssh/identity        | These files contain sensitive data  |             | 600         |
+| ~/.ssh/id_dsa          | and should be readable by the user  |             |             |
+| ~/.ssh/id_rsa          | but not accessible by others        |             |             |
+|                        | (read/write/execute)                |             |             |
++------------------------+-------------------------------------+-------------+-------------+
+| ~/.ssh/identity.pub    | Contains the public key for         | 644         |             |
+| ~/.ssh/id_dsa.pub      | authentication.  These files are    |             |             |
+| ~/.ssh/id_rsa.pub      | not sensitive and can (but need     |             |             |
+|                        | not) be readable by anyone.         |             |             |
++------------------------+-------------------------------------+-------------+-------------+
+```
 - `client_loop: send disconnect: Broken pipe`
 	- [解决ssh连接长时间不操作断开连接的问题（client_loop/ send disconnect/ Broken pipe）](https://zhuanlan.zhihu.com/p/431249844)
 - list tunnels created by `ssh`
@@ -270,15 +318,17 @@
 # 自动远程登陆 under windows terminal(PowerShell)
 type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
 ```
-	- [SSH Again](https://eklitzke.org/ssh-again)
-	- [man ssh_config](https://linux.die.net/man/5/ssh_config)
-		- > **GatewayPorts**
-		  Specifies whether remote hosts are allowed to connect to local forwarded ports. By default, **[ssh](https://linux.die.net/man/1/ssh)**(1) binds local port forwardings to the loopback address. This prevents other remote hosts from connecting to forwarded ports. **GatewayPorts** can be used to specify that ssh should bind local port forwardings to the wildcard address, thus allowing remote hosts to connect to forwarded ports. The argument must be ''yes'' or ''no''. The default is ''no''.
-	- [man 5 sshd_config](https://linux.die.net/man/5/sshd_config)
-	- [SSH Tunneling Explained](https://goteleport.com/blog/ssh-tunneling-explained/)
-	- [How to Use SSH Port Forwarding](https://phoenixnap.com/kb/ssh-port-forwarding)
-	- [How to Set up SSH Tunneling](https://linuxize.com/post/how-to-setup-ssh-tunneling/)
-	- [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
-	- [Automating ssh-copy-id](https://www.baeldung.com/linux/ssh-copy-id-automate)
-	- [Authorized Keys File in SSH](https://www.ssh.com/academy/ssh/authorized-keys-file)
-	- [How To Configure SSH Key-Based Authentication on a Linux Server](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
+- [SSH(1)](http://linuxcommand.org/lc3_man_pages/ssh1.html)
+- [SSH Again](https://eklitzke.org/ssh-again)
+- [man ssh_config](https://linux.die.net/man/5/ssh_config)
+	- > **GatewayPorts**
+		Specifies whether remote hosts are allowed to connect to local forwarded ports. By default, **[ssh](https://linux.die.net/man/1/ssh)**(1) binds local port forwardings to the loopback address. This prevents other remote hosts from connecting to forwarded ports. **GatewayPorts** can be used to specify that ssh should bind local port forwardings to the wildcard address, thus allowing remote hosts to connect to forwarded ports. The argument must be ''yes'' or ''no''. The default is ''no''.
+- [man 5 sshd_config](https://linux.die.net/man/5/sshd_config)
+- [SSH Tunneling Explained](https://goteleport.com/blog/ssh-tunneling-explained/)
+- [How to Use SSH Port Forwarding](https://phoenixnap.com/kb/ssh-port-forwarding)
+- [How to Set up SSH Tunneling](https://linuxize.com/post/how-to-setup-ssh-tunneling/)
+- [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
+- [Automating ssh-copy-id](https://www.baeldung.com/linux/ssh-copy-id-automate)
+- [Authorized Keys File in SSH](https://www.ssh.com/academy/ssh/authorized-keys-file)
+- [How To Configure SSH Key-Based Authentication on a Linux Server](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
+- [Permissions for .ssh folder and key files](https://frankindev.com/2020/11/26/permissions-for-.ssh-folder-and-key-files/)

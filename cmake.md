@@ -70,6 +70,9 @@
 	- [cmake-commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html#id2)
 	- [cmake cheet sheet](https://cppcheatsheet.com/notes/cmake_basic.html)
 	- [CMake debugging](https://cliutils.gitlab.io/modern-cmake/chapters/features/debug.html)
+	- [Cmake常用指令](https://github.com/Liuyvjin/notebook/blob/master/Cmake/Cmake%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.md)
+	- [A typical Linux project using CMake](https://www.kaizou.org/2014/11/typical-cmake-project.html)
+	- [CMakeLists.txt 注释版](https://github.com/gongluck/CVIP/blob/master/code/cmake/CMakeLists.txt)
 	```bash
 	#1
 	include(CMakePrintHelpers)

@@ -1,5 +1,26 @@
 bash脚本中调用python返回的结果
 ```bash
+# 常用快捷键
+CTRL+A              # 移动到行首，同 <Home>
+CTRL+B              # 向后移动，同 <Left>
+CTRL+C              # 结束当前命令
+CTRL+D              # 删除光标前的字符，同 <Delete> ，或者没有内容时，退出会话
+CTRL+E              # 移动到行末，同 <End>
+CTRL+F              # 向前移动，同 <Right>
+CTRL+K              # 删除光标位置到行末的内容
+CTRL+R              # 历史命令反向搜索，使用 CTRL+G 退出搜索
+CTRL+T              # 交换前后两个字符
+CTRL+U              # 删除字符到行首
+CTRL+V              # 输入字符字面量，先按 CTRL+V 再按任意键
+CTRL+W              # 删除光标左边的一个单词
+
+ALT+b               # 向后（左边）移动一个单词
+ALT+d               # 删除光标后（右边）一个单词
+ALT+f               # 向前（右边）移动一个单词
+ALT+t               # 交换单词
+```
+
+```bash
 #!/usr/bin/bash
 pc1()
 {

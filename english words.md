@@ -125,3 +125,4 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - idiomatic  / ˌɪdiəˈmætɪk /   （语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的
 - formidable  / ˈfɔːrmɪdəb(ə)l /  可怕的，令人敬畏的；（形状、数量）巨大的；难对付的
 - intimidate  / ɪnˈtɪmɪdeɪt /  恫吓，威胁
+- forge	 / fɔːrdʒ /		缔造；伪造，假冒

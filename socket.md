@@ -132,4 +132,5 @@
 	- [TCP IP Sockets in C](https://github.com/bilalmohib/ProgrammingBooks/blob/crystal/TCP%20IP%20Sockets%20in%20C%2C%20Second%20Edition_%20Practical%20Guide%20for%20Programmers%20(The%20Morgan%20Kaufmann%20Practical%20Guides%20Series)%20(%20PDFDrive%20).pdf) #pdf
 	- [microtcp](https://github.com/cozis/microtcp/tree/main) #github
 	- [Hands-On-Network-Programming-with-C](https://github.com/codeplea/Hands-On-Network-Programming-with-C/tree/master) #github
-	
+	- [**thePacketGeek**](https://thepacketgeek.com/)
+	- [Socket Interface](https://0xbharath.github.io/art-of-packet-crafting-with-scapy/networking/socket_interface/index.html)

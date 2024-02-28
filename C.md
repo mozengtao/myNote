@@ -671,10 +671,11 @@
 - 参考文档
 	- [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
 	- [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
+	-[**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)
 	- [c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)
 	- [POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)
 	- [C standard](https://www.open-std.org/jtc1/sc22/wg14/www/standards.html)
-	- [glibc source code](https://elixir.bootlin.com/glibc/latest/source) #sourcecode
+	- [**glibc source code**](https://elixir.bootlin.com/glibc/latest/source) #sourcecode
 	- [The GNU C Library](https://www.gnu.org/software/libc/manual/html_mono/libc.html)
 	- [Memory Layout Of A C Program](https://hackthedeveloper.com/memory-layout-c-program/)
 	- [C Program Compilation Process](https://hackthedeveloper.com/c-program-compilation-process/)
@@ -699,3 +700,11 @@
 - [Introduction To Unix Signals Programming](https://www.cs.kent.edu/~ruttan/sysprog/lectures/signals.html)
 - [CS 43203 : System Programming](https://www.cs.kent.edu/~ruttan/sysprog/)
  - [Unix Pthreads tutorial](https://www.cs.kent.edu/~ruttan/sysprog/)
+ - [C program to implement linked list](https://www.programmingsimplified.com/c/data-structures)
+ - [Using Templates and Generics in C](https://levelup.gitconnected.com/using-templates-and-generics-in-c-968da223154d)
+ - [Tutorial: Generics in C](https://itnext.io/tutorial-generics-in-c-b3362b3376a3)
+ - [Generic Programming in C](https://cs.boisestate.edu/~amit/teaching/253/handouts/07-c-generic-coding-handout.pdf)
+ - [void * and Function Pointers](https://web.stanford.edu/class/archive/cs/cs107/cs107.1202/lab4/)
+ - [Functional Pointer and Callback in C++](https://primerpy.medium.com/functional-pointer-and-callback-in-c-86c208df6b2f)
+ - [C and C++ Language Syntax Reference](https://www.cprogramming.com/reference/)
+ - []()

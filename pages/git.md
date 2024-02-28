@@ -15,6 +15,8 @@
   # 基础配置
   git config --global user.name 'XXX'
   git config --global user.email 'XXX'
+  
+  # 显示配置列表
   git config --list
   
   #  设置别名
@@ -35,6 +37,9 @@
 
   # pull remote branch
   git pull origin sandbox/morrism/VCMTS-2777
+
+  # 恢复git rm删除的文件
+  git restore xxx
   ```
 - [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
 - [Pro Git](https://git-scm.com/book/zh/v2/)

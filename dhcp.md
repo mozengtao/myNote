@@ -1,3 +1,7 @@
 - 参考文档
 	- [Dynamic Host Configuration Protocol](https://www.rfc-editor.org/rfc/rfc1541)
 	- [DHCP Lease Time – What is it and How does it work?](https://lazyadmin.nl/home-network/dhcp-lease-time/)
+	- [Understanding DHCP Relay Agents](https://www.netmanias.com/en/?m=view&id=techdocs&no=6000&xtag=dhcp-network-protocol&xref=understanding-dhcp-relay-agents)
+	- [Network Address Translation (NAT) Overview](https://www.netmanias.com/en/?m=view&id=techdocs&no=6061&tag=4205&page=2)
+	- [NAT Behavioral Requirements](https://www.netmanias.com/en/?m=view&id=techdocs&no=6058&tag=4205)
+	- [Understanding of the Multicast Protocol: IGMP & PIM-SM](https://www.netmanias.com/en/?m=view&id=techdocs&no=5915&tag=4205&page=2)

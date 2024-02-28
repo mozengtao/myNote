@@ -5,3 +5,4 @@
 - [Tutorials](https://developer.hashicorp.com/nomad/tutorials)
 - [Consul](https://developer.hashicorp.com/consul)
 - [From Zero to WOW!](https://medium.com/hashicorp-engineering/hashicorp-nomad-from-zero-to-wow-1615345aa539)
+- [Nomad Commands (CLI)](https://developer.hashicorp.com/nomad/docs/commands)

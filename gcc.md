@@ -112,7 +112,7 @@
 		  ```
 	-
 - 参考文档
-	- [GCC online documentation](https://gcc.gnu.org/onlinedocs/)
+	- [**GCC online documentation**](https://gcc.gnu.org/onlinedocs/)
 		- ### Predefined Macros
 			- [Standard Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Standard-Predefined-Macros.html)
 			- [Common Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Common-Predefined-Macros.html)
@@ -123,5 +123,6 @@
 	- [Common-Function-Attributes](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes)
 	- [Attribute Syntax](https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html#Attribute-Syntax)
 	- [The GNU linker](https://sourceware.org/binutils/docs-2.37/ld.pdf)
+	- [**GCC online documentation**](https://gcc.gnu.org/onlinedocs/) #online
 -
 - 交叉编译时可以通过指定 [[sysroot]]目录来指定头文件和库文件的查找目录
