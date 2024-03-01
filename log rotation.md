@@ -1,12 +1,12 @@
-- log rotation 用来==压缩归档==过去的==日志文件==以==节省磁盘空间==，同时方便后续的 log 检查。
+- log rotation 用来**压缩归档**过去的**日志文件**以**节省磁盘空间**，同时方便后续的 log 检查。
 	- > The purpose of log rotation is to archive and compress old logs so that they consume less disk space, but are still available for inspection as needed.
 -
 - logrotate 命令
 	- 配置文件
 		- `/etc/logrotate.conf`
-			- ==全局==配置文件，可以使用 `include` 语句包含 `/etc/logrotate.d/` 目录下的配置文件
+			- 全局配置文件，可以使用 `include` 语句包含 `/etc/logrotate.d/` 目录下的配置文件
 		- `/etc/logrotate.d/`
-			- 不同业务的 `logrotate` 配置文件，这些文件中任何==未设置的选项==都默认==继承自== `/etc/logrotate.conf`
+			- 不同业务的 `logrotate` 配置文件，这些文件中任何未设置的选项都默认继承自 `/etc/logrotate.conf`
 	-
 	- 配置示例
 		- ```sh
@@ -34,4 +34,8 @@
 	-
 	- 帮助文档
 		- [man logrotate](https://linux.die.net/man/8/logrotate)
--
+		- logrotate test command
+		```bash
+			sudo logrotate --force /etc/logrotate.conf
+			sudo logrotate --force --verbose --debug /etc/logrotate.conf
+		```

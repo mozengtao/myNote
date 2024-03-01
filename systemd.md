@@ -28,9 +28,12 @@
 	  ```
 - [[sysvinit]]
 - 参考文档
+	- ![LinuxServiceManagementMadeEasyWithSystemd.pdf](./assets/LinuxServiceManagementMadeEasyWithSystemd.pdf)
 	- [systemd doc](http://0pointer.de/blog/projects/systemd-docs.html)
 	- [man systemd](https://man7.org/linux/man-pages/man1/init.1.html)
 	- [man systemctl](https://man7.org/linux/man-pages/man1/systemctl.1.html)
 	- [man systemd.unit](https://man7.org/linux/man-pages/man5/systemd.unit.5.html)
 	- [systemd blog series](https://www.freedesktop.org/wiki/Software/systemd/)
 	- [man journalctl](https://man7.org/linux/man-pages/man1/journalctl.1.html)
+	- [The systemd for Administrators Blog Series](https://www.freedesktop.org/wiki/Software/systemd/)
+	- [Working with systemd Timers](https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html)
