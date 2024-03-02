@@ -53,6 +53,8 @@
 	  collapsed:: true
 		-
 - 参考文档
+	- [**CMake-Best-Practices**](https://github.com/PacktPublishing/CMake-Best-Practices)
+	- [**CMake-Cookbook**](https://github.com/PacktPublishing/CMake-Cookbook/tree/master)
 	- [An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
 	- [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
 	- [**More Modern CMake**](https://hsf-training.github.io/hsf-training-cmake-webpage/)

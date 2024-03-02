@@ -27,6 +27,43 @@
 	  systemctl show httpd.service
 	  ```
 - [[sysvinit]]
+- 创建systemd timer
+	- ```bash
+		#1 创建 example.service
+		[Unit]
+		Description=An example oneshot service that runs a program
+
+		[Service]
+		Type=oneshot
+		ExecStart=/tmp/test/timer/mytimer.sh
+
+		[Install]
+		WantedBy=multi-user.target
+
+		#2 创建 example.timer
+		[Unit]
+		Description=A timer that runs our example service
+
+		[Timer]
+		OnCalendar=*-*-* *:00/3:00
+
+		[Install]
+		WantedBy=timers.target
+
+		#3 拷贝 example.service 和 example.timer到系统路径
+		sudo cp example.service /lib/systemd/system
+		sudo cp example.timer /lib/systemd/system
+
+		#4 相关命令
+		systemctl status example.timer
+		sudo systemctl start example.timer
+		sudo systemctl status example.timer
+		systemctl list-timers
+		systemctl status example.timer
+		systemd-analyze calendar '*-*-* *:00/3:00'  # success
+		systemd-analyze calendar '*-* zz*:00/3:00'  # fail
+		sudo systemd-analyze verify /lib/systemd/system/logrotate.timer
+	```
 - 参考文档
 	- ![LinuxServiceManagementMadeEasyWithSystemd.pdf](./assets/LinuxServiceManagementMadeEasyWithSystemd.pdf)
 	- [systemd doc](http://0pointer.de/blog/projects/systemd-docs.html)
