@@ -53,6 +53,7 @@
 	  collapsed:: true
 		-
 - 参考文档
+	- [Modern CMake](https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction)
 	- [**CMake-Best-Practices**](https://github.com/PacktPublishing/CMake-Best-Practices)
 	- [**CMake-Cookbook**](https://github.com/PacktPublishing/CMake-Cookbook/tree/master)
 	- [An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
