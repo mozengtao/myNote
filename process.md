@@ -82,3 +82,4 @@
 		- [Process Groups and Sessions](https://www.informit.com/articles/article.aspx?p=2249436&seqNum=8)
 		- [The TTY demystified](http://www.linusakesson.net/programming/tty/index.php)
 		- [Linux Process States](https://www.baeldung.com/linux/process-states)
+		- [Linux Process States](https://www.baeldung.com/linux/process-states)

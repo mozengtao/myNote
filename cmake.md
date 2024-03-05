@@ -53,6 +53,8 @@
 	  collapsed:: true
 		-
 - 参考文档
+	- [Tutorial: Easily supporting CMake install and find_package()](https://www.foonathan.net/2016/03/cmake-install/#content)
+	- [cmake 使用依赖项指南](https://runebook.dev/zh/docs/cmake/guide/using-dependencies/index#guide:Using%20Dependencies%20Guide)
 	- [Modern CMake](https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction)
 	- [**CMake-Best-Practices**](https://github.com/PacktPublishing/CMake-Best-Practices)
 	- [**CMake-Cookbook**](https://github.com/PacktPublishing/CMake-Cookbook/tree/master)
@@ -91,3 +93,4 @@
 	Warning:
 	Never do an “in-source” build - that is, run cmake . from the source directory. It will pollute your source directory with build outputs, CMake configuration files, and will disable out-of-source builds. 
 	```
+	- [CMake 是怎么工作的？](https://www.tisonkun.org/2022/04/15/how-cmake-works/)

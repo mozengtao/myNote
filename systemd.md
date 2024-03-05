@@ -70,6 +70,7 @@
 		sudo systemd-analyze verify /lib/systemd/system/logrotate.timer
 	```
 - 参考文档
+	- [archlinux systemd help](https://wiki.archlinux.org/title/Systemd)
 	- [How do I properly install a systemd timer and service]((https://askubuntu.com/questions/1083537/how-do-i-properly-install-a-systemd-timer-and-service)
 	- [**systemd Documentation**](https://0pointer.de/blog/projects/systemd-docs.html)
 	- [**systemd* help doc**](https://www.freedesktop.org/software/systemd/man/latest/)
@@ -81,7 +82,8 @@
 	- [systemd blog series](https://www.freedesktop.org/wiki/Software/systemd/)
 	- [man journalctl](https://man7.org/linux/man-pages/man1/journalctl.1.html)
 	- [The systemd for Administrators Blog Series](https://www.freedesktop.org/wiki/Software/systemd/)
-	- [Working with systemd Timers](https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html)
+	- [**Working with systemd Timers**](https://documentation.suse.com/smart/systems-management/html/systemd-working-with-timers/index.html)
+	- [Working with systemd Timers pdf](https://documentation.suse.com/smart/systems-management/pdf/systemd-working-with-timers_en.pdf)
 	- [Systemd timers onCalendar (cron) format explained](https://silentlad.com/systemd-timers-oncalendar-(cron)-format-explained)
 		- Systemd Timer OnCalendar Format
 			```bash
@@ -143,3 +145,4 @@
 				Every year					* *-01-01 00:00:00
 			```
 	- [systemd-analyze](https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html#)
+	- [How to use systemd timers (cronjob alternative)](https://silentlad.com/how-to-use-systemd-timers-(cronjob-alternative))

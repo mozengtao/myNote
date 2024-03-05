@@ -222,6 +222,8 @@
 		  ```
 -
 - 参考文档
+	- [Idiomatic awk](https://backreference.org/2010/02/10/idiomatic-awk/index.html)
+	- [#awk](http://awk.freeshell.org/)
 	- [Sed and Awk 101 Hacks](https://vds-admin.ru/sed-and-awk-101-hacks)
 	- [AWK实战](https://book.saubcy.com/AwkInAction/HOWTO.html)
 	- [The GNU Awk User's Guide](https://ftp.gnu.org/old-gnu/Manuals/gawk-3.1.1/html_node/)
@@ -229,5 +231,94 @@
 	- [awk reference](https://www3.physnet.uni-hamburg.de/physnet/Tru64-Unix/HTML/APS32DTE/WKXXXXXX.HTM)
 	- [awk learnbyexample](https://learnbyexample.github.io/learn_gnuawk/awk-introduction.html)
 	- [sed & awk](https://doc.lagout.org/operating%20system%20/linux/Sed%20%26%20Awk.pdf)
--
--
+	- [CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)
+	- [Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)
+		```bash
+		Metacharacter	Description
+		.				Matches any single character
+		[ ]				Matches any character within the brackets
+		^				Matches the beginning of a line
+		$				Matches the end of a line
+		*				Matches zero or more occurrences of the previous character
+		+				Matches one or more occurrences of the previous character
+		?				Matches zero or one occurrence of the previous character
+
+		# Matching a Regular Expression
+			awk '{
+			if (match($0, /\.com$/)) {
+				print $0
+			}
+			}' email.txt
+
+		# Replacing a Regular Expression
+			awk '{
+			sub(/555/, "666", $0)
+			print $0
+			}' phone.txt
+
+		# Grouping
+		we have a file containing a list of employee names and salaries, and we want to extract the names and salaries separately.
+			awk '{
+			if (match($0, /^(\w+)\s+(\d+)$/)) {
+				name = substr($0, RSTART, RLENGTH)
+				salary = substr($0, RSTART+length(name)+1, length($0)-RSTART-length(name))
+				print name
+				print salary
+			}
+			}' employees.txt
+
+		# Backreferences
+		You can use backreferences (i.e., \1, \2, etc.) to refer to parts of the regular expression that were matched by a group. This allows you to reuse matched substrings in the replacement string.
+		we have a file containing a list of phone numbers in the format (XXX) XXX-XXXX, and we want to change the format to XXX-XXX-XXXX.
+			awk '{
+			sub(/\((\d{3})\) (\d{3})-(\d{4})/, "\1-\2-\3", $0)
+			print $0
+			}' phone.txt
+
+		# Lookahead and Lookbehind
+		You can use lookahead (?=) and lookbehind (?<=) to match patterns only if they are followed by or preceded by another pattern, respectively.
+		we have a file containing a list of URLs, and we want to extract only the domain names (i.e., the text between “http://” and the next “/” character).
+			awk '{
+			if (match($0, /(?<=http:\/\/)[^\/]+/)) {
+				print substr($0, RSTART, RLENGTH)
+			}
+			}' urls.txt
+		Here, we use lookahead (?<=) to match the regular expression "/(?<=http://)[^/]+/" (which matches any characters that come after "http://" and before the next "/" character) and extract the domain name.
+
+		# Negated character classes
+		we have a file containing a list of email addresses, and we want to extract only the addresses that belong to a specific domain (e.g., example.com). 
+		awk '{
+			if (match($0, /^[^@]+@example\.com$/)) {
+				print $0
+			}
+			}' emails.txt
+		we use a negated character class ([^@]+) to match any characters that are not "@" and extract the username, and then match the literal string "@example.com" to ensure that the address belongs to the specified domain.
+
+		# Alternation
+		we have a file containing a list of phone numbers, and we want to extract only the numbers that are either in the format "(XXX) XXX-XXXX" or "XXX-XXX-XXXX". 
+			awk '{
+			if (match($0, /\((\d{3})\) (\d{3})-(\d{4})|(\d{3})-(\d{3})-(\d{4})/)) {
+				print substr($0, RSTART, RLENGTH)
+			}
+			}' phones.txt
+		we use alternation (|) to match either the regular expression "/(\d3)(\d3) (\d{3})-(\d{4})/" (which matches a phone number in the format (XXX) XXX-XXXX) or the regular expression "/(\d{3})-(\d{3})-(\d{4})/" (which matches a phone number in the format XXX-XXX-XXXX).
+		```
+	- [AWK: String functions](https://tecadmin.net/awk-string-functions/)
+		```bash
+		length(string): 
+			Returns the length of the specified string.
+		substr(string, start, length): 
+			Returns a substring of the specified string, starting at the specified position and with the specified length.
+		index(string, substring): 
+			Returns the position of the first occurrence of the specified substring in the specified string.
+		split(string, array, separator): 
+			Splits the specified string into an array of substrings, using the specified separator to determine where to split the string.
+		sub(regexp, replacement, string): 
+			This replaces the first occurring regular expression match from the string with “replacement”.
+		gsub(regexp, replacement, string): 
+			Replaces all occurrences of the specified regular expression in the specified string with the specified replacement string.
+		match(string, regexp): 
+			Searches the specified string for the first occurrence of the specified regular expression, and returns the position of the match and the length of the matched substring in an array.
+		tolower(string) and toupper(string): 
+			Converts all uppercase or lowercase characters in the specified string to lowercase or uppercase characters, respectively.
+	```

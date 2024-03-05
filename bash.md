@@ -979,3 +979,4 @@ pc2 '1+2*3'
 - [bash-utility](https://github.com/labbots/bash-utility) #online #github
 - [Google Style Guides](https://google.github.io/styleguide/) #online
 - [pure-sh-bible](https://github.com/dylanaraps/pure-sh-bible)
+- [Understanding 2>&1 in Bash: A Beginner’s Guide](https://tecadmin.net/io-redirection-operator-in-bash/)

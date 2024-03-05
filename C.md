@@ -707,4 +707,8 @@
  - [void * and Function Pointers](https://web.stanford.edu/class/archive/cs/cs107/cs107.1202/lab4/)
  - [Functional Pointer and Callback in C++](https://primerpy.medium.com/functional-pointer-and-callback-in-c-86c208df6b2f)
  - [C and C++ Language Syntax Reference](https://www.cprogramming.com/reference/)
+ - [Understanding the LD_LIBRARY_PATH Environment Variable](https://tecadmin.net/understanding-the-ld_library_path-environment-variable/)
+ - []()
+ - []()
+ - []()
  - []()
