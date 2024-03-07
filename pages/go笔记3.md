@@ -280,3 +280,359 @@
         fmt.Println(age > 18 && gender == "male")
         fmt.Println(age < 18 || gender == "male")
         ```
+    - 指针
+        > 出于某些需要，我们会将某个变量的内存地址赋值给另一个变量，而这个变量我们称为指针，即指针变量的值是指针，也就是内存地址
+        ```go
+        # 指针的创建
+        // 1
+        aint := 1
+        ptr := &aint
+
+        // 2
+        astr := new(string)
+        *astr = "hello"
+
+        // 3
+        aint := 1
+        var bint *int
+        bint = &aint
+
+        // 打印指针的内存地址
+        // 1
+        fmt.Printf("%p", ptr)
+        fmt.Println(ptr)
+
+        # 指针的类型
+        astr := "hello"
+        aint := 1
+        abool := false
+        arune := 'a'
+        afloat := 1.2
+
+        fmt.Printf("astr pointer type: %T\n", &astr)
+        fmt.Printf("aint pointer type: %T\n", &aint)
+        fmt.Printf("abool pointer type: %T\n", &abool)
+        fmt.Printf("arune pointer type: %T\n", &arune)
+        fmt.Printf("afloat pointer type: %T\n", &afloat)
+
+        # 指针的零值
+        // 指针声明后，没有进行初始化，其零值是 nil
+        var b *int
+        fmt.Println(b) // 输出为<nil>
+
+        # 指针与切片
+        // 切片与指针一样，都是引用类型
+        // 通过一个函数改变一个数组的值的两种方法
+        1.将这个数组的切片做为参数传给函数 （推荐做法，写出的代码更简洁，易读）
+        2.将这个数组的指针做为参数传给函数
+        // 数组的切片作为参数
+        func modify(sls []int) {
+            sls[0] = 90
+        }
+
+        a := [3]int{89, 90, 91}
+        modify(a[:])
+        fmt.Println(a)
+
+        // 数组的指针作为参数
+        func modify(arr *[3]int) {
+            (*arr)[0] = 90
+        }
+
+        a := [3]int{89, 90, 91}
+        modify(&a)
+        fmt.Println(a)
+        ```
+- 流程控制
+    ```go
+    # if (Go编译器，对于 { 和 } 的位置有严格的要求，它要求 else if （或 else）和 两边的花括号，必须在同一行)
+    if condition1 {
+        branch1
+    } else if condition2 {
+        branch2
+    } else if ... {
+        branchN
+    } else {
+        branchElse
+    }
+    // 简化写法
+    if age := 20; age > 18 {
+        fmt.Println("成年了")
+    }
+
+    # switch
+    switch expression {
+        case exp1:
+            branch1
+        case exp2:
+            branch2
+        ...
+        default:
+            branchElse;
+    }
+    // 只要有一个 case 满足条件，就会执行对应的代码块，然后直接退出 switch - case ，如果 一个都没有满足，才会执行 default 的代码块
+
+    // 一个case 多个条件
+    month := 2
+    switch month {
+        case 3, 4, 5:
+            fmt.Println("春天")
+        case 6, 7, 8:
+            fmt.Println("夏天")
+        case 9, 10, 11:
+            fmt.Println("秋天")
+        case 23, 1, 2:
+            fmt.Println("冬天")
+        default:
+            fmt.Println("输入有误...")
+    }
+    // 注意：case 条件常量不能重复
+    // switch 后可以接函数
+    func getResult(args ...int) bool {
+        for _, i := range args {
+            if i < 60 {
+                return false
+            }
+            return true
+        }
+    }
+
+    chinese := 80
+    english := 50
+    math := 100
+
+    switch getResult(chinese, english, math) {
+        case true:
+            fmt.Println("所有成绩都及格")
+        case false:
+            fmt.Println("有挂科记录")
+    }
+    // switch 后可以不接任何变量，表达式，函数，此时 switch-case 相当于 if-elseif-else
+    score := 30
+
+    switch {
+        case score >= 95 && score <= 100:
+            fmt.Println("优秀")
+        case score >= 80:
+            fmt.Println("良好")
+        case score >= 60:
+            fmt.Println("合格")
+        case score >= 0:
+            fmt.Println("不合格")
+        default:
+            fmt.Println("输入有误...")
+    }
+
+    # case 中 fallthrough 关键字的使用
+    s := "hello"
+
+    switch {
+        case s == "hello":
+            fmt.Println("hello")
+            fallthrough
+        case s != "world":
+            fmt.println("world")
+    }
+    // 注意：fallthrough 只能穿透一层，意思是它让你直接执行下一个case的语句，而且不需要判断条件
+
+    # for
+    // 语法
+    for [condition |  ( init; condition; increment ) | Range]
+    {
+    statement(s);
+    }
+
+    // 接1个条件表达式
+    a := 1
+    for a <= 5 {
+        fmt.Println(a)
+        a++
+    }
+
+    // 接3个条件表达式
+    for i := 1; i <= 5; i++ {
+        fmt.Println(i)
+    }
+
+    // 不接表达式，无限循环
+    for {
+        ...
+    }
+    等价于
+    for ;; {
+
+    }
+
+    // 示例
+    var i := 1
+    for {
+        if i > 5 {
+            break
+        }
+        fmt.Printf("hello, %d\n", i)
+        i++
+    }
+
+    // 遍历可迭代对象， range 后可接数组、切片，字符串等， range 会返回两个值：索引和数据
+    myarr := [...]string{"world", "python", "go"}
+    for _, item := range myarr {
+        fmt.Printf("hello, %s\n", item)
+    }
+
+    for i := range myarr {
+        fmt.Printf("hello, %v\n", i)
+    }
+
+    # goto 无条件跳转
+    // goto 语句通常与条件语句配合使用。可用来实现条件转移， 构成循环，跳出循环体等功能
+    // 1
+        i := 1
+    flag:
+        if i <= 5 {
+            fmt.Println(i)
+            i++
+            goto flag
+        }
+    // 使用goto实现break的效果
+        i := 1
+        for {
+            if i > 5 {
+                goto flag
+            }
+            fmt.Println(i)
+            i++
+        }
+    flag:
+
+    // 使用 goto 实现continue的效果
+        i := 1
+    flag:
+        for i <= 10 {
+            if i%2 == 1 {
+                i++
+                goto flag
+            }
+            fmt.Println(i)
+            i++
+        }
+    // 注意：goto语句与标签之间不能有变量声明，否则编译错误
+
+    # defer延迟语句
+    // defer xxx() 表示将xxx函数的调用延迟到当前函数执行完后再执行
+    func myfunc() {
+        fmt.Println("B")
+    }
+
+    func main() {
+        defer myfunc()
+        fmt.Println("A")
+    }
+
+    // 使用 defer 只是延时调用函数，此时传递给函数里的变量，不应该受到后续程序的影响
+    name := "go"
+    defer fmt.Println(name) // 输出 go
+
+    name = "python"
+    defer fmt.Println(name) // 输出 python
+
+    // 如果 defer 后面跟的是匿名函数，情况会有所不同， defer 会取到最后的变量值
+    func main() {
+        name := "go"
+        defer func() {
+            fmt.Println(name)   // 输出 python
+        }()
+            name = "python"
+            fmt.Println(name) // 输出 python
+    }
+
+    # 多个defer反序调用
+    name := "go"
+    defer fmt.Println(name) // 输出: go
+
+    name = "python"
+    defer fmt.Println(name) // 输出: python
+
+    name = "java"
+    fmt.Println(name)
+    输出：
+    java
+    python
+    go
+    //  多个defer 是反序调用的，有点类似栈一样，后进先出
+
+    # defer 与 return 孰先孰后
+    var name string = "go"
+
+    func myfunc() string {
+        defer func() {
+            name = "python"
+        }()
+
+        fmt.Printf("myfunc 函数里的name：%s\n", name)
+        return name
+    }
+
+    func main() {
+        myname := myfunc()
+        fmt.Printf("main 函数里的name: %s\n", name)
+        fmt.Println("main 函数里的myname: ", myname)
+    }
+    输出：
+    myfunc 函数里的name：go
+    main 函数里的name: python
+    main 函数里的myname:  go
+    // defer 是return 后才调用的, 在执行 defer 前，myname 已经被赋值成 go 了
+
+    # 为什么要有 defer
+    // 但是当一个函数里有多个 return 时，你得多调用好多次这个函数，代码就臃肿起来了
+    func f() {
+        r := getResource()  //0，获取资源
+        ......
+        if ... {
+            r.release()  //1，释放资源
+            return
+        }
+        ......
+        if ... {
+            r.release()  //2，释放资源
+            return
+        }
+        ......
+        if ... {
+            r.release()  //3，释放资源
+            return
+        }
+        ......
+        r.release()     //4，释放资源
+        return
+    }
+
+    使用 defer 简化后的代码
+
+    func f() {
+        r := getResource()  //0，获取资源
+
+        defer r.release()  //1，释放资源
+        ......
+        if ... {
+            ...
+            return
+        }
+        ......
+        if ... {
+            ...
+            return
+        }
+        ......
+        if ... {
+            ...
+            return
+        }
+        ......
+        return
+    }
+
+    # select-case
+    // select-case 用法比较单一，它仅能用于 信道/通道 的相关操作
+    ....待补充
+    ```
