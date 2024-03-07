@@ -28,3 +28,4 @@ by Florian octo Forster <octo@collectd.org>
 - [collectd.conf(5)](https://www.collectd.org/documentation/manpages/collectd.conf.html)
 - [types.db(5)](https://www.collectd.org/documentation/manpages/types.db.html)
 - [Plugin architecture](https://github.com/collectd/collectd/wiki/Plugin-architecture)
+- [Adding Labels to Collectd Metrics](https://github.com/collectd/collectd/issues/3094)

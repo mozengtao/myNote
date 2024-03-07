@@ -437,6 +437,7 @@
 		  end
 		  ```
 - 参考文档
+	- [Setting Breakpoints](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Set-Breaks.html)
 	- [How does gdb call functions?](https://jvns.ca/blog/2018/01/04/how-does-gdb-call-functions/)
 	- [GDB 入门笔记](https://imageslr.com/2023/gdb.html)
 	- **[Gdbinit](https://github.com/gdbinit/Gdbinit)**

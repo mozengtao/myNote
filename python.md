@@ -917,3 +917,4 @@
 - [What are args and kwargs and when to use them](https://pythonforthelab.com/blog/what-are-args-and-kwargs-and-when-to-use-them/)
 - [Introduction to Python Lambda Functions](https://pythonforthelab.com/blog/intro-to-python-lambda-functions/)
 - [Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)
+- [PEP](https://peps.python.org/)

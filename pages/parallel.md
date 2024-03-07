@@ -1,0 +1,6 @@
+- parallel - build and execute shell command lines from standard input in parallel
+- [parallel(1)](https://docs.oracle.com/cd/E86824_01/html/E54763/parallel-1.html)
+- [GNU Parallel](https://www.gnu.org/software/parallel/man.html)
+- [parallel_tutorial (1)](https://code.tools/man/1/parallel_tutorial/)
+ - [GNU Parallel Tutorial](https://www.gnu.org/software/parallel/parallel_tutorial.html)
+ - [PARALLELISING JOBS WITH GNU PARALLEL](https://blog.ronin.cloud/gnu-parallel/)
