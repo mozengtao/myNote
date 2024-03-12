@@ -126,3 +126,4 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - formidable  / ˈfɔːrmɪdəb(ə)l /  可怕的，令人敬畏的；（形状、数量）巨大的；难对付的
 - intimidate  / ɪnˈtɪmɪdeɪt /  恫吓，威胁
 - forge	 / fɔːrdʒ /		缔造；伪造，假冒
+- ephemeral / ɪˈfemərəl /  短暂的；（主指植物）短生的，短命的

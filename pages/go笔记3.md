@@ -1,3 +1,4 @@
+# 基础知识
 - 创建变量
     ```go
     1. 一行声明一个变量
@@ -634,5 +635,97 @@
 
     # select-case
     // select-case 用法比较单一，它仅能用于 信道/通道 的相关操作
-    ....待补充
+    select {
+        case exp1:
+            <code>
+        case exp2:
+            <code>
+        default:
+            <code>
+    }
+
+    // 示例
+    c1 := make(chan string, 1)  // 
+    c2 := make(chan string, 1)
+
+    c2 <- "hello"
+
+    select {
+    case msg1 := <-c1:
+        fmt.Println("c1 received: ", msg1)
+    case msg2 := <-c2:
+        fmt.Println("c2 received: ", msg2)
+    default:
+        fmt.Println("No data received")
+    }
+    //select 会遍历所有（如果有机会的话）的 case 表达式，只要有一个信道有接收到数据，那么 select 就结束
+    // select 在执行过程中，必须命中其中的某一分支，如果在遍历完所有的 case 后，若没有命中任何一个 case 表达式，就会进入 default 里的代码分支，如果没有 default 分支，select 就会阻塞，直到有某个 case 可以命中，而如果一直没有命中，select 就会抛出 deadlock 的错误
+    // switch 里的 case 是顺序执行的，但 select 却不是
+    // select 的超时设置
+    func makeTimeout(ch chan bool, t int) {
+        time.Sleep(time.Second * time.Duration(t))
+        ch <- true
+    }
+
+    c1 := make(chan string, 1)
+    c2 := make(chan string, 1)
+    timeout := make(chan bool, 1)
+
+    go makeTimeout(timeout, 2)
+
+    select {
+    case msg1 := <-c1:
+        fmt.Println("c1 received: ", msg1)
+    case msg2 := <-c2:
+        fmt.Println("c2 received: ", msg2)
+    case <-timeout:
+        fmt.Println("Timeout, exit.")
+    }
+
+    // select 里的 case 表达式只要求你是对信道的操作即可，不管你是往信道写入数据，还是从信道读出数据
+    // 当一个信道被 close 后，select 也能命中
+
+    # select 与 switch 的区别
+    select 只能用于 channel 的操作(写入/读出/关闭)，而 switch 则更通用一些；
+    select 的 case 是随机的，而 switch 里的 case 是顺序执行；
+    select 要注意避免出现死锁，同时也可以自行实现超时机制；
+    select 里没有类似 switch 里的 fallthrough 的用法；
+    select 不能像 switch 一样接函数或其他表达式。
     ```
+- 异常机制: panic 和 recover
+    - 触发 panic
+        ```go
+        panic("crash")
+        ```
+    - 捕获 panic
+        > recover 的使用，有一个条件，就是它必须在 defer 函数中才能生效，其他作用域下，它是不工作的
+        ```go
+        func set_data(x int) {
+            defer func() {
+                if err := recover; err != nil {
+                    fmt.Println(err)
+                }
+            }()
+
+            // 触发数组越界，产生panic
+            var arr[10]int
+            arr[x] = 88
+        }
+
+        func main() {
+            set_data(20)
+
+            fmt.Println("everything is ok"k)
+        }
+
+        // recover 无法跨协程
+        ```
+- 作用域
+    - 内置作用域：不需要自己声明，所有的关键字和内置类型、函数都拥有全局作用域
+    - 包级作用域：必須函数外声明，在该包内的所有文件都可以访问
+    - 文件级作用域：不需要声明，导入即可。一个文件中通过import导入的包名，只在该文件内可用
+    - 局部作用域：在自己的语句块内声明，包括函数，for、if 等语句块，或自定义的 {} 语句块形成的作用域，只在自己的局部作用域内可用
+    - 作用域的访问
+        - 低层作用域，可以访问高层作用域
+        - 同一层级的作用域，是相互隔离的
+        - 低层作用域里声明的变量，会覆盖高层作用域里声明的变量
