@@ -1152,3 +1152,170 @@
     // (在 $GOPATH/src 目录下创建 github.com/iswbm/demo 及 github.com/iswbm/util 两个空的 go 包) 但如果 demo 引用 util 项目的包，而 util 本身也还在自己的本地上开发，并没有上传到 github，那么 demo 包在调试过程中肯定是无法找到 util 包的
     // Go 1.18 提供的工作区模式，就可以优雅的解决如上出现的问题
     ```
+- 并发编程
+    ```go
+    # 函数
+    函数是基于功能或 逻辑进行封装的可复用的代码结构，主要是为了提高代码可读性和可维护性
+    Go语言是编译型语言，所以函数编写的顺序是无关紧要的
+    1.普通函数
+    2.匿名函数
+
+    # 函数声明
+    func 函数名称(形参列表) (返回值列表) {
+        函数体
+    }
+    // 形式参数列表描述了函数的参数名以及参数类型，这些参数作为局部变量，其值由函数调用者提供
+    // 返回值列表描述了函数返回值的变量名以及类型，如果函数返回一个无名变量或者没有返回值，返回值列表的括号是可以省略的
+    func sum(a int, b int) (int) {
+        return a + b
+    }
+    func main() {
+        fmt.Println(sum(1, 2))
+    }
+
+    # 可变参数
+    1.多个类型一致的参数
+    2.多个类型不一致的参数
+    // 使用 ...int 表示一个元素为 int 类型的切片，用来接收调用者传入的参数
+    func sum(args ...int) int {
+        var sum int
+        for _, v := range args {
+            sum += v
+        }
+        return sum
+    }
+
+    fmt.Println(sum(1, 2, 3))
+    // ... 是 Go 语言为了方便程序员写代码而实现的语法糖，如果该函数下有多个类型的参数，这个语法糖必须得是最后一个参数
+    // ... 只能在定义函数时使用
+
+    func MyPrintf(args ...interface{}) {
+        for _, arg := range args {
+            switch arg.(type) {
+                case int:
+                    fmt.Println("int")
+                case string:
+                    fmt.Println("string")
+                case int64:
+                    fmt.Println("int64")
+                default:
+                    fmt.Println("unknown")
+            }
+        }
+    }
+
+    var v1 int = 1
+    var v2 int64 = 12
+    var v3 string = "hello"
+    var v4 float32 = 1.23
+    MyPrintf(v1, v2, v3, v4)
+
+    # 多个可变参数函数传递参数
+    ... 除了用来接收多个参数，还可以用来解序列，将函数的可变参数(一个切片)一个一个的取出来，传递给另一个可变参数的函数，而不是传递可变参数变量本身，这个用法，也只能在给函数传递参数里使用
+    func sum(args ...int) int {
+        var result int
+        for _, v := range args {
+            result += v
+        }
+        return result
+    }
+
+    func Sum(args ...int) int {
+        //
+        result := sum(args...)
+        return result
+    }
+    
+    fmt.Println(Sum(1, 2, 3))
+
+    # 函数的返回值
+    当没有指明返回值的类型时, 函数体可以用 return 来结束函数的运行，但 return 后不能跟任何一个对象
+    Go 支持一个函数返回多个值
+    Go支持返回带有变量名的值
+    func double(a int) (b int) {
+        // 不能使用 := ，因为在返回值那里已经声明返回值的类型为int
+        b = a * 2
+        // 不需要指明返回哪个命令，因为返回值那里已经指定了变量名
+        return
+    }
+
+    # 方法与函数
+    方法，是一种特殊的函数。当你一个函数和对象/结构体进行绑定的时候，我们就称这个函数是一个方法
+
+    # 匿名函数
+    匿名函数，就是没有名字的函数，它只有函数逻辑体，而没有函数名
+    匿名函数只有拥有短暂的生命，一般都是定义后立即使用
+    func(data int) {
+        fmt.Println("hello", data)
+    }()
+
+    // 作为回调函数使用
+    // 第2个参数为函数
+    func visit(list []int, f func(int)) {
+        for _, v := range list {
+            // 执行回调函数
+            f(v)
+        }
+    }
+
+    // 使用匿名函数作为参数
+    visit([]int{1, 2, 3}, func(v int) {
+        fmt.Println(v)
+    })
+
+    # 函数类型
+    函数类型表示表示着所有拥有同样的入参类型和返回值类型的函数集合
+    // Greeting function type
+    type Greeting func(name string) string
+
+    func (g Greeting) say(n string) {
+        fmt.Println(g(n))
+    }
+
+    func english(name string) string {
+        return "Hello, " + name
+    }
+
+    greet := Greeting(english)
+    或者
+    var greet Greeting = english
+
+    // greet 作为 Greeting 类型的对象，因此也拥有 Greeting 类型的所有方法
+    greet.say("World")
+    ```
+- goroutine
+    在普通函数调用前加一个关键字 go, 就开启了一个 goroutine
+    ```go
+    // 开启一个协程执行函数
+    go func()
+
+    Go 程序的入口通常是 main 函数, main 函数最先运行，我们称之为 main goroutine
+    在 main 中或者其下调用的代码中才可以使用 go + func() 的方法来启动协程
+    main 函数作为main goroutine, 执行完成后，其下运行的所有协程会自动退出
+
+    # 信道 chan
+    chan 提供了 goroutine 之间传输信息的通道, chan 是一种队列式的数据结构，遵循先入先出的规则
+
+    // 每个 chan 只能传递一种数据类型的数据，声明时必须指定类型
+    var 信道实例 chan 信道类型
+    信道实例 = make(chan 信道类型) // 声明后的信道，其零值是nil，无法直接使用，必须配合make函进行初始化
+
+    或者
+
+    信道实例 := make(chan 信道类型)
+
+    # 信道的操作：发送数据和读取数据
+    pipeline := make(chan int)  // 定义 chan
+    pipeline<- 200              // 向信道发送数据
+    mydata := <-pipeline        // 从信道读取数据，并赋值给mydata
+
+    信道用完后，可以对其进行关闭，避免有人一直在等待
+    关闭信道后，接收方仍然可以从信道中读取到数据，只是读取的值是0
+    close(pipeline)
+    对一个已关闭的信道再关闭，会报错
+    x, ok := <-pipeline
+    // 第二个返回值 ok 表示信道是否被关闭，如果已经被关闭，ok 为 false，若还没被关闭，ok 为true
+
+    # 信道容量与长度
+    
+    ```
