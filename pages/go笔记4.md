@@ -752,4 +752,116 @@
     ```
 - 静态类型与动态类型
     - 静态类型，是变量声明时的类型
-    - 动态类型(concrete type)，是程序运行时变量的具体类型
+    - 具体类型(concrete type)，是程序运行时变量的具体类型
+    ```go
+    // 静态类型
+    var age int
+    var name string
+
+    // 具体类型 是 程序运行时的变量类型
+    var i interface{}   // i 的静态类型是 interface{}
+
+    i = 18              // i 的静态类型是 interface{}，i 的具体类型是 int
+    i := "hello"        // i 的静态类型是 interface{}，i 的具体类型是 string
+
+    // 接口变量 是由type和data的一个pair组合而成，pair中记录了变量的实际的值和类型
+    // 定义变量
+    age := (int)(25)
+    或者
+    age := (interface{})(25)
+
+    # 接口细分
+    1.iface
+        表示带有一组方法的接口
+    2.eface
+        表示不带有方法的接口
+    
+    // iface 源码
+    // runtime/runtime2.go
+    // 非空接口
+    type iface struct {
+        tab  *itab
+        data unsafe.Pointer
+    }
+
+    // 非空接口的类型信息
+    type itab struct {
+        inter  *interfacetype  // 接口定义的类型信息
+        _type  *_type      // 接口实际指向值的类型信息
+        link   *itab
+        bad    int32
+        inhash int32
+        fun    [1]uintptr   // 接口方法实现列表，即函数地址列表，按字典序排序
+    }
+
+    // runtime/type.go
+    // 非空接口类型，接口定义，包路径等。
+    type interfacetype struct {
+    typ     _type
+    pkgpath name
+    mhdr    []imethod      // 接口方法声明列表，按字典序排序
+    }
+    // 接口的方法声明
+    type imethod struct {
+    name nameOff          // 方法名
+    ityp typeOff                // 描述方法参数返回值等细节
+    }
+
+    // eface 源码
+    // src/runtime/runtime2.go
+    // 空接口
+    type eface struct {
+        _type *_type
+        data  unsafe.Pointer
+    }
+    ```
+- make 和 new
+    ```go
+    # new
+    // The new built-in function allocates memory. The first argument is a type,
+    // not a value, and the value returned is a pointer to a newly
+    // allocated zero value of that type.
+    func new(Type) *Type    // new 只能传递一个参数，该参数为一个任意类型（内件类型或者自定义类型）
+
+    // new 做的事情
+    1.分配内存
+    2.设置零值
+    3.返回指针
+
+    a := new(int)
+    *a = 1
+    等价于
+    a := 1
+
+    # make
+    //The make built-in function allocates and initializes an object
+    //of type slice, map, or chan (only). Like new, the first argument is
+    // a type, not a value. Unlike new, make's return type is the same as
+    // the type of its argument, not a pointer to it.
+
+    func make(t Type, size ...IntegerType) Type
+    // make 只能用来为 slice, map 或者 chan 这3中引用类型（注意：也只能用在这3中类型上）分配内存和初始化对象
+    // make 返回类型本身而不是指针，返回值依赖于具体传入的类型，因为这3中类型都是引用类型，因此没必要返回指针
+    注意：因为这3中类型是引用类型，所以必须得初始化（size和cap），但不是置为零值，这是和new是不一样的
+    // slice
+    a := make([]int, 2, 10)
+    // dictionary
+    b := make(map[string]int)
+    // chan
+    c := makek(chan int, 10)
+    ```
+- 空结构体
+    > 空结构体，和正常的结构体一样，可以接收方法函数，空结构体是一个不占用空间的对象
+    ```go
+    // 在一些特殊的场合之下，可以用做占位符使用，合理的使用空结构体，会减小程序的内存占用空间
+    // 比如在使用信道(channel)控制并发时，我们只是需要一个信号，但并不需要传递值，这个时候，也可以使用 struct{} 代替
+    func main() {
+        ch := make(chan struct{}, 1)
+        go func() {
+            <-ch
+            // do something
+        }()
+        ch <- struct{}{}
+        // ...
+    }
+    ```
