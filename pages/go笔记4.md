@@ -505,4 +505,251 @@
 
     v2.SetString("world")
     fmt.Println(name)
+
+    # 获取类别
+    // Type 对象和 Value 对象可以通过 Kind() 方法返回对应的接口变量的基础类型
+    reflect.TypeOf(m).Kind()
+    reflect.ValueOf(m).Kind()
+    // Kind 和 Type 是有区别的，Kind 表示的是 Go 原生的基本类型（共一下25种的合法类型）
+    type Kind uint
+
+    const {
+        Invalid Kind = itoa // 非法类型
+        Bool                // 布尔型
+        Int                 // 有符号整型
+        Int8                // 有符号8位整型
+        Int16               // 有符号16位整型
+        Int32               // 有符号32位整型
+        Int64               // 有符号64位整型
+        Uint                // 无符号整型
+        Uint8               // 无符号8位整型
+        Uint16              // 无符号16位整型
+        Uint32              // 无符号32位整型
+        Uint64              // 无符号64位整型
+        Uintptr             // 指针
+        Float32             // 单精度浮点数
+        Float64             // 双精度浮点数
+        Complex64           // 64位复数类型
+        Complex128          // 128位复数类型
+        Array               // 数组
+        Chan                // 通道
+        Func                // 函数
+        Interface           // 接口
+        Map                 // 映射
+        Ptr                 // 指针
+        Slice               // 切片
+        String              // 字符串
+        Struct              // 结构体
+        UnsafePointer       // 底层指针
+    }
+
+    # Kind 函数的使用
+    // 1
+    type Profile struct {
+
+    }
+
+    m := Profile{}
+
+    t := reflect.TypeOf(m)
+    fmt.Println("Type: ", t)
+    fmt.Println("Kind: ", t.Kind())
+
+    // 2
+    m := Profile()
+
+    t := reflect.TypeOf(&m)
+
+    fmt.Println("&m Type: ", t)
+    fmt.Println("&m Kind: ", t.Kind())
+
+    fmt.Println("m Type: ", t.Elem())
+    fmt.Println("m Kind: ", t.Elem().Kind())
+
+    // 使用 ValueOf 方法
+    m := Profile{}
+
+    v := reflect.ValueOf(&m)
+
+    fmt.Println("&m Type: ", v.Type())
+    fmt.Println("&m Kind: ", v.Kind())
+
+    fmt.Println("m Type: ", v.Elem().Type())
+    fmt.Println("m Kind: ", v.Elem().Kind())
+
+    # 类型转换
+    // 1
+    var age int = 25
+
+    v1 := reflect.ValueOf(age)
+    fmt.Println("before convert, type: %T, value: %v", v1, v1)
+    v2 := v1.Int()
+    fmt.Println("after convert, type: %T, value: %v", v2, v2)
+
+    // 2
+    var score float64 = 99.5
+
+    v1 := reflect.ValueOf(score)
+    fmt.Println("before convert, type: %T, value: %v", v1, v1)
+    v2 := v1.Float()
+    fmt.Println("after convert, type: %T, value: %v", v2, v2)
+
+    // 3
+    var name string = 99.5
+
+    v1 := reflect.ValueOf(name)
+    fmt.Println("before convert, type: %T, value: %v", v1, v1)
+    v2 := v1.String()
+    fmt.Println("after convert, type: %T, value: %v", v2, v2)
+
+    // ...
+    Bool()
+    Pointer()
+    Interface()
+
+    # 对切片的操作
+    Slice() 函数与 Int() 等类型转换函数**不一样**，它返回的还是 reflect.Value 发射对象，而不是我们所想的真实世界里的切片对象
+
+    var numList []int = []int{1, 2}
+
+    v1 := reflect.ValueOf(numList)
+    fmt.Println("before convert, type: %T, value: %v", v1, v1)
+
+    // Slice 函数接收两个参数
+    v2 := v1.Slice(0, 2)
+    fmt.Println("after convert, type: %T, value: %v", v2, v2)
+
+    // Slice3(): 对切片再切片
+    // Set() 和 Append(): 更新切片
+    func appendToSlice(arrPtr interface{}) {
+        valuePtr := reflect.ValueOf(arrPtr)
+        value := valuePtr.Elem()
+
+        value.Set(reflect.Append(value, reflect.ValueOf(3)))
+
+        fmt.Println(value)
+        fmt.Println(value.Len())
+    }
+
+    arr := []int{1, 2}
+
+    appendToSlice(&arr)
+
+    fmt.Println(arr)
+
+    # 对属性的操作
+    // NumField() 和 Field()
+    type Person struct {
+        name    string
+        age     int
+        gender  string
+    }
+
+    p := Person{"developer", 27, "male"}
+
+    v := reflect(ValueOf(p))
+
+    for i := 0; i < v.NumField(); i++ {
+        fmt.Println("The %d field: %v", i+1, v.Field(i))
+    }
+
+    # 对方法的操作
+    // NumMethod() 和 Method()  (要获取Name，使用Typeof)
+    type Person struct {
+        name    string
+        age     int
+        gender  string
+    }
+
+    func (p Person) SayBye() {
+        fmt.Println("bye")
+    }
+
+    func (p Person) SayHello() {
+        fmt.Println("hello")
+    }
+
+    p := Person{"developer", 27, "male"}
+
+    t := reflect.TypeOf(p)
+
+    for i := 0; i < v.NumMethod(); i++ {
+        fmt.Println("The %d field: %v", i+1, v.Method(i).Name)
+    }
+
+    # 动态调用函数（要调用Call，使用ValueOf）
+    // 1 (使用索引)
+    type Person struct {
+        name    string
+        age     int
+        gender  string
+    }
+
+    func (p Person) SayBye() {
+        fmt.Println("bye")
+    }
+
+    func (p Person) SayHello() {
+        fmt.Println("hello")
+    }
+
+    p := &Person{"developer", 27, "male"}
+
+    t := reflect.TypeOf(p)
+    v := reflect.ValueOf(p)
+
+    for i := 0; i < v.NumMethod(); i++ {
+        fmt.Println("The %d method: %v, call result: %v", i+1, t.Method(i).name, v.Elem().Method(i).call(nil))
+    }
+
+    
+    // 2 (使用函数名)
+    type Person struct {
+        name    string
+        age     int
+        gender  string
+    }
+
+    func (p Person) SayBye() {
+        fmt.Println("bye")
+    }
+
+    func (p Person) SayHello() {
+        fmt.Println("hello")
+    }
+
+    p := &Person{"developer", 27, "male"}
+
+    v := reflect.ValueOf(p)
+
+    v.MethodByName("SayHello").Call(nil)
+    v.MethodByName("SayBye").Call(nil)
+
+    // 3 (使用函数且有参数)
+    type Person struct {
+
+    }
+
+    func (p Person) SelfIntroduction(name string, age int) {
+        fmt.Printf("Hello, my name is %s and I'm %d years old.\n", name, age)
+    }
+
+    p := &Person{}
+
+    //t := reflect.TypeOf(p)
+    v := reflect.ValueOf(p)
+
+    name := reflect.ValueOf("xiaoming")
+    age := reflect.ValueOf(27)
+    intput := []reflect.Value{name, age}
+    v.MethodByName("SelfIntroduction").Call(intput)
+
+    注意：
+    1.有 reflect 的代码一般都较难理解，使用时请注意适当
+    2.Golang 的反射很慢，这个和它的 API 设计有关
+    3.反射是一个高级知识点，内容很多，不容易掌握，应该小心谨慎的使用它
+    4.不到不得不用的地步，能避免使用反射就不用
     ```
+- 静态类型与动态类型
+    - 静态类型，是变量声明时的类型
+    - 动态类型(concrete type)，是程序运行时变量的具体类型
