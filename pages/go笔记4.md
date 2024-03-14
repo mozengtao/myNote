@@ -1046,4 +1046,109 @@
 
     // 接口命名
     使用驼峰命名法，可以用 type alias 来定义大写开头的 type 给包外访问
+    type helloWorld interface {
+        func Hello()
+    }
+
+    type sayHello hellWorld
+
+    // 当接口只有一个函数时，接口名通常以er为后缀
+    type Reader interface {
+        Read(p []byte) (n int, err error)
+    }
+
+    // 注释规范
+    // 包注释
+    位于 package 之前，如果一个包有多个文件，只需要在一个文件中编写即可
+    如果你想在每个文件中的头部加上注释，需要在版权注释和 Package前面加一个空行，否则版权注释会作为Package的注释
+    如果是特别复杂的包，可单独创建 doc.go 文件说明
+    // Copyright 2009 The Go Authors. All rights reserved.
+    // Use of this source code is governed by a BSD-style
+    // license that can be found in the LICENSE file.
+    package net
+
+    // 代码注释
+    // 单行注释
+
+    /*
+    多
+    行
+    注
+    释
+    */
+
+    // 代码注释的一些更加苛刻的要求
+    所有导出对象都需要注释说明其用途；非导出对象根据情况进行注释。
+    如果对象可数且无明确指定数量的情况下，一律使用单数形式和一般进行时描述；否则使用复数形式。
+    包、函数、方法和类型的注释说明都是一个完整的句子。
+    句子类型的注释首字母均需大写；短语类型的注释首字母需小写。
+    注释的单行长度不能超过 80 个字符。
+    类型的定义一般都以单数形式描述：
+    // Request represents a request to run a command.  type Request struct { ...
+    如果为接口，则一般以以下形式描述：
+    // FileInfo is the interface that describes a file and is returned by Stat and Lstat.
+    type FileInfo interface { ...
+    函数与方法的注释需以函数或方法的名称作为开头：
+    // Post returns *BeegoHttpRequest with POST method.
+    如果一句话不足以说明全部问题，则可换行继续进行更加细致的描述：
+    // Copy copies file from source to target path.
+    // It returns false and error when error occurs in underlying function calls.
+    若函数或方法为判断类型（返回值主要为 bool 类型），则以 <name> returns true if 开头：
+    // HasPrefix returns true if name has any string in given slice as prefix.
+    func HasPrefix(name string, prefixes []string) bool { ...
+
+    # 特别注释
+    TODO：提醒维护人员此部分代码待完成
+    FIXME：提醒维护人员此处有BUG待修复
+    NOTE：维护人员要关注的一些问题说明
+
+    # 包的导入
+    标准库排最前面，第三方包次之、项目内的其它包和当前包的子包排最后，每种分类以一空行分隔
+    尽量不要使用相对路径来导入包
+    import (
+        "fmt"
+        "html/template"
+        "net/http"
+        "os"
+
+        "github.com/codegangsta/cli"
+        "gopkg.in/macaron.v1"
+
+        "github.com/gogits/git"
+        "github.com/gogits/gfm"
+
+        "github.com/gogits/gogs/routers"
+        "github.com/gogits/gogs/routers/repo"
+        "github.com/gogits/gogs/routers/user"
+    )
+
+    # 善用 gofmt
+    使用 tab 进行缩进
+    一行最长不要超过 80 个字符
+
+    # 结合 Makefile 简化编译过程
+    // 利用 -ldflags 动态往程序中注入信息
+    BINARY="demo"
+    VERSION=0.0.1
+    BUILD=`date +%F`
+    SHELL := /bin/bash
+
+    versionDir="github.com/iswbm/demo/utils"
+    gitTag=$(shell git log --pretty=format:'%h' -n 1)
+    gitBranch=$(shell git rev-parse --abbrev-ref HEAD)
+    buildDate=$(shell TZ=Asia/Shanghai date +%FT%T%z)
+    gitCommit=$(shell git rev-parse --short HEAD)
+
+    ldflags="-s -w -X ${versionDir}.version=${VERSION} -X ${versionDir}.gitBranch=${gitBranch} -X '${versionDir}.gitTag=${gitTag}' -X '${versionDir}.gitCommit=${gitCommit}' -X '${versionDir}.buildDate=${buildDate}'"
+
+    default:
+        @echo "build the ${BINARY}"
+        @GOOS=linux GOARCH=amd64 go build -ldflags ${ldflags} -o  build/${BINARY}.linux  -tags=jsoniter
+        @go build -ldflags ${ldflags} -o  build/${BINARY}.mac  -tags=jsoniter
+        @echo "build done."
+    
+    # 依赖管理：好用的工作区模式
+    // 正常 Go 项目中引用的包，都需要在对应代码托管网站上有该包，才能编译及运行
+    // (在 $GOPATH/src 目录下创建 github.com/iswbm/demo 及 github.com/iswbm/util 两个空的 go 包) 但如果 demo 引用 util 项目的包，而 util 本身也还在自己的本地上开发，并没有上传到 github，那么 demo 包在调试过程中肯定是无法找到 util 包的
+    // Go 1.18 提供的工作区模式，就可以优雅的解决如上出现的问题
     ```
