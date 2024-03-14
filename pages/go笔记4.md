@@ -865,3 +865,185 @@
         // ...
     }
     ```
+- 包管理
+    > Go 语言中，一个包可以包含多个 .go 文件（这些文件必须在同一级文件夹下），只要这些 .go 文件的头部都使用 package 关键字声明了同一个包
+    ```go
+    # 单行导入与多行导入
+    // 1
+    import "fmt"
+    import "sync"
+
+    // 2
+    import (
+        "fmt"
+        "sync"
+    )
+
+    # 使用别名
+    // 在一些场景下需要对导入的包进行重新命名
+    // 1
+    import (
+        "crypto/rand"
+        mrand "math/rand"   // 将名称替换为 mrand 避免冲突
+    )
+    // 2
+    import hw "helloworldtestmodule"    // 避免过长的包名
+    // 3
+    import pathpkg "path"               // 防止导入的包名和本地的变量发生冲突
+
+    # 使用 点 操作
+    import . "fmt"
+    Println("hello")
+    // 这种用法，会有一定的隐患，就是导入的包里可能有函数，会和我们自己的函数发生冲突
+
+    # 包的初始化
+        每个包都允许有一个 init 函数，当这个包被导入时，会执行该包的这个 init 函数，做一些初始化任务
+        1.init 函数优先于 main 函数执行
+        2.在一个包引用链中，包的初始化是深度优先的
+        3.同一个包甚至同一个源文件，可以有多个 init 函数
+        4.init 函数不能有入参和返回值
+        5.init 函数不能被其他函数调用
+        6.同一个包内的多个 init 顺序是不受保证的
+        7.在 init 之前，其实会先初始化包作用域的常量和变量（常量优先于变量）
+    # 包的匿名导入
+    // 当我们导入一个包时，如果这个包没有被使用到，在编译时，是会报错的
+    // 有些情况下，我们导入一个包，只想执行包里的 init 函数，来运行一些初始化任务，此时可以使用匿名导入
+    import _ "image/png"
+    // 由于导入时，会执行init函数，所以编译时，仍然会将这个包编译到可执行文件中
+
+    # 导入的是路径还是包
+    import "testmodule/foo"
+    // 导入时，是按照目录导入。导入目录后，可以使用这个目录下的所有包
+    // 出于习惯，包名和目录名通常会设置成一样，所以会让你有一种你导入的是包的错觉
+
+    # 相对导入和绝对导入
+    绝对导入：从 $GOPATH/src 或 $GOROOT 或者 $GOPATH/pkg/mod 目录下搜索包并导入
+        import "app/utilset"
+    相对导入：从当前目录中搜索包并开始导入
+        import "./utilset"
+    注意：
+    1.项目不要放在 $GOPATH/src 下，否则会报错
+    2.Go Modules 不支持相对导入，在你开启 GO111MODULE 后，无法使用相对导入
+    3.使用相对导入的方式，项目可读性会大打折扣，不利用开发者理清整个引用关系
+    4.一般更推荐使用绝对引用的方式。使用绝对引用的话，又要谈及优先级了
+
+    # 包导入路径优先级
+    // 如果使用 govendor
+    1.先从项目根目录的 vendor 目录中查找
+    2.最后从 $GOROOT/src 目录下查找
+    3.然后从 $GOPATH/src 目录下查找
+    4.都找不到的话，就报错
+
+    // 如果使用 go modules
+    1.导入的包如果有域名，都会先在 $GOPATH/pkg/mod 下查找，找不到就连网去该网站上寻找，找不到或者找到的不是一个包，则报错
+    2.如果导入的包没有域名（比如 “fmt”这种），就只会到 $GOROOT 里查找
+    3.当项目下有 vendor 目录时，不管包有没有域名，都只会在 vendor 目录中想找
+
+    # Go Modules 应用
+    Go 语言的的包依赖管理
+    1.GOPATH
+    2.go vendor 
+    3.go mod    // after v1.11
+    // cmds
+    go env
+    go mod init xxx
+    go install
+
+    go modules 的核心:
+    1.go.mod
+    2.go.sum
+
+    go mod 命令：
+    go mod init
+    go mod download
+    go mod graph
+    go mod tidy
+    go mod verify
+    go mod why
+    go mod vendor
+    go mod edit
+    go list -m -json all
+
+    如何给项目添加依赖（写进 go.mod）
+    1.只要在项目中有 import，然后 go build 就会 go module 就会自动下载并添加
+    2.自己手工使用 go get 下载安装后，会自动写入 go.mod
+
+    # 如何开源自己写的包给别人用
+    ......
+
+    # Go 编码规范
+    // 文件命名
+    文件名应一律使用小写
+    不同单词之间用下划线分词，不要使用驼峰式命名
+    如果是测试文件，可以以 _test.go 结尾
+    文件若具有平台特性，应以 文件名_平台.go 命名，如utils_ windows.go，utils_linux.go
+    一般情况下应用的主入口应为 main.go，或者以应用的全小写形式命名。比如MyBlog 的入口可以为 myblog.go
+
+    // 常量命名
+    1.驼峰命名法，比如 appVersion
+    2.使用全大写且用下划线分词，比如 APP_VERSION (推荐)
+    // 定义多个变量
+    const (
+        APP_VERSION = "0.10"
+        CONF_PATH   = "/etc/xxx.conf"
+    )
+
+    // 变量命名
+    统一使用 驼峰命名法
+    1.在相对简单的环境（对象数量少、针对性强）中，可以将完整单词简写为单个字母，例如：user写为u
+    2.若该变量为 bool 类型，则名称应以 Has, Is, Can 或 Allow 开头。例如：isExist ，hasConflict
+    3.其他一般情况下首单词全小写，其后各单词首字母大写。例如：numShips 和 startDate
+    4.若变量中有特有名词（以下列出），且变量为私有，则首单词还是使用全小写，如 apiClient
+    5.若变量中有特有名词（以下列出），但变量不是私有，那首单词就要变成全大写。例如：APIClient，URLString
+
+    常见的特有名词:
+    // A GonicMapper that contains a list of common initialisms taken from golang/lint
+    var LintGonicMapper = GonicMapper{
+        "API":   true,
+        "ASCII": true,
+        "CPU":   true,
+        "CSS":   true,
+        "DNS":   true,
+        "EOF":   true,
+        "GUID":  true,
+        "HTML":  true,
+        "HTTP":  true,
+        "HTTPS": true,
+        "ID":    true,
+        "IP":    true,
+        "JSON":  true,
+        "LHS":   true,
+        "QPS":   true,
+        "RAM":   true,
+        "RHS":   true,
+        "RPC":   true,
+        "SLA":   true,
+        "SMTP":  true,
+        "SSH":   true,
+        "TLS":   true,
+        "TTL":   true,
+        "UI":    true,
+        "UID":   true,
+        "UUID":  true,
+        "URI":   true,
+        "URL":   true,
+        "UTF8":  true,
+        "VM":    true,
+        "XML":   true,
+        "XSRF":  true,
+        "XSS":   true,
+    }
+
+    // 函数命名
+    1.函数名还是使用 驼峰命名法
+    2.在 Golang 中是用大小写来控制函数的可见性，因此当你需要在包外访问，需要使用 大写字母开头
+    3.当你不需要在包外访问，使用小写字母开头
+
+    // 函数内部的参数的排列顺序也有几点原则
+    1.参数的重要程度越高，应排在越前面
+    2.简单的类型应优先复杂类型
+    3.尽可能将同种类型的参数放在相邻位置，则只需写一次类型
+
+    // 接口命名
+    使用驼峰命名法，可以用 type alias 来定义大写开头的 type 给包外访问
+    ```
