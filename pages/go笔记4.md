@@ -2103,3 +2103,123 @@
     2.当有多个发送者，一个接收者时，应借助管理通道，由业务通道唯一接收者充当管理通道的发送者，其他业务通道的发送者充当接收者
     3.当有多个发送者，多个接收者时，这是最复杂的，不仅要管理通道，还要另起一个专门的媒介协程，新增一个媒介通道，但核心逻辑都是一样
     ```
+- fmt.Printf 函数
+    打印函数
+    ```go
+    1.fmt.Print: 正常打印字符串和变量，不会进行格式化，不会自动换行，需要手动添加 \n 进行换行，多个变量值之间不会添加空格
+    2.fmt.Println：正常打印字符串和变量，不会进行格式化，多个变量值之间会添加空格，并且在每个变量值后面会进行自动换行
+    3.fmt.Printf：可以按照自己需求对变量进行格式化打印。需要手动添加 \n 进行换行
+
+    fmt.Print("hello", "world\n")   // helloworld
+    fmt.Prntln("hello", "world")    // hello world
+    fmt.Printf("hello world\n")     // hello world
+
+    // fmt.Printf 函数
+    func Printf(format string, a ...interface{}) (n int, err error) {
+        return Fprintf(os.Stdout, format, a...)
+    }
+
+    # Printf 的占位符
+
+    %v：以值的默认格式打印
+    %+v：类似%v，但输出结构体时会添加字段名
+    %#v：值的Go语法表示
+    %T：打印值的类型
+    %%： 打印百分号本身
+    
+    // 整型值
+    %b：以二进制打印
+    %d：以十进制打印
+    %o：以八进制打印
+    %x：以十六进制打印，使用小写：a-f
+    %X：以十六进制打印，使用大写：A-F
+    %c：打印对应的的unicode码值
+    %q：该值对应的单引号括起来的go语法字符字面值，必要时会采用安全的转义表示
+    %U：该值对应的 Unicode格式：U+1234，等价于”U+%04X
+
+    // 字符串
+    %s：输出字符串表示（string类型或[]byte)
+    %q：双引号围绕的字符串，由Go语法安全地转义
+    %x：十六进制，小写字母，每字节两个字符
+    %X：十六进制，大写字母，每字节两个字符
+
+    // 浮点数
+    %e：科学计数法，如-1234.456e+78
+    %E：科学计数法，如-1234.456E+78
+    %f：有小数部分但无指数部分，如123.456
+    %F：等价于%f
+    %g：根据实际情况采用%e或%f格式（以获得更简洁、准确的输出）
+    %G：根据实际情况采用%E或%F格式（以获得更简洁、准确的输出）
+
+    type Profile struct {
+        name string
+        gender string
+        age int
+    }
+
+    func main() {
+        n := 1024
+        fmt.Printf("%b\n")      // 10000000000
+        fmt.Printf("%o\n")      // 2000
+        fmt.Printf("%d\n")      // 1024
+        fmt.Printf("%x\n")      // 400
+
+        // 根据 Unicode码值打印字符
+        fmt.Printf("%c\n", 65)  // A
+        // 根据 Unicode 编码打印字符
+        fmt.Printf("%c \n", 0x4E2D) // 中
+        // 打印 raw 字符时
+        fmt.Printf("%q \n", 0x4E2D) // '中'
+        // 打印 Unicode 编码
+        fmt.Printf("%U \n", '中') // U+4E2D
+
+        var person = Profile(name:"xiaoming", gender:"male", age:18)
+
+        fmt.Printf("%v \n", person)     // {xiaoming male 18}
+        fmt.Printf("%T \n", person)     // main.Profile
+        fmt.Printf("%#v \n", person)    // main.Profile{name:"xiaoming", gender:"male", age:18}
+        fmt.Printf("%+v \n", person)    // {name:"xiaoming", gender:"male", age:18}
+        fmt.Printf("%% \n", person)     // %%
+
+        // 指针打印
+        fmt.Printf("%p \n", &person)    // %%
+
+        // 布尔值
+        fmt.Printf("%t \n", true)       // true
+        fmt.Printf("%t \n", false)       // false
+
+        // 字符串
+        fmt.Printf("%s \n", []byte("hello world"))      // hello world
+        fmt.Printf("%s \n", "hello world")              // hello world
+
+        fmt.Printf("%q \n", []byte("hello world"))      // "hello world"
+        fmt.Printf("%q \n", "hello world")              // "hello world"
+        fmt.Printf("%q \n", `hello \r\n world`)         // "hello \\r\\n world"
+
+        fmt.Printf("%x \n", "hello world")              // 68656c6c6f20776f726c64
+        fmt.Printf("%X \n", "hello world")              // 68656c6c6F20776F726C64
+
+        f := 12.34
+        fmt.Printf("%b\n", f)       // 6946802425218990p-49
+        fmt.Printf("%e\n", f)       // 1.234000e+01
+        fmt.Printf("%E\n", f)       // 1.234000E+01
+        fmt.Printf("%f\n", f)       // 12.340000
+        fmt.Printf("%g\n", f)       // 12.34
+        fmt.Printf("%G\n", f)       // 12.34
+    }
+
+    # 宽度标识符
+    %[宽度.精度]标识符
+    如果未指定精度，会使用默认精度；如果点号后没有跟数字，表示精度为0
+	fmt.Printf("%f\n", f)    // 以默认精度打印
+	fmt.Printf("%9f\n", f)   // 宽度为9，默认精度
+	fmt.Printf("%.2f\n", f)  // 默认宽度，精度2
+	fmt.Printf("%9.2f\n", f) //宽度9，精度2
+	fmt.Printf("%9.f\n", f)  // 宽度9，精度0
+    Output:
+    10.240000
+    10.240000
+    10.24
+        10.24
+        10
+    ```
