@@ -859,6 +859,7 @@
 	  ```
 	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
 - 参考文档
+	- [**Python黑魔法手册**](https://magic.iswbm.com/index.html)
 	- [**Python 3 Trinkets(python3 online)**](https://trinket.io/features/python3)
 	- [online python](https://www.online-python.com/)
 	- [Online Compiler](https://www.programiz.com/python-programming/online-compiler/)
