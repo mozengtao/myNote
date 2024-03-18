@@ -1317,5 +1317,631 @@
     // 第二个返回值 ok 表示信道是否被关闭，如果已经被关闭，ok 为 false，若还没被关闭，ok 为true
 
     # 信道容量与长度
+    使用 make 创建信道，make 接收两个参数
+    1.信道类型
+    2.信道容量：默认为0，表示可以缓存的数据个数
+    // 容量为 0 时， 信道中不能存放数据，在发送数据时，必须要求立马被接收，否则会报错，此信道称为 无缓冲信道
+    // 容量为 1 时， 信道只能缓存一个数据，若信道中已有一个数据，此时再向信道发送数据，会造成程序阻塞，此信道可用来做锁
+    // 容量大于 1 时，信道中可以存放多个数据，可以用于多个协程之间的通信管道，共享资源
+    获取信道容量：cap
+    获取信道长度：len
+
+    pipeline := make(chan int, 10)
+    fmt.Printf("pipeline chan capacity: %d\n", cap(pipeline))
+    pipeline<- 1
+    fmt.Printf("pipeline current length: %d\n", len(pipeline))
+
+    # 缓冲信道 与 无缓冲信道
+    // 缓冲信道 允许信道里存储一个或多个数据，意味着，设置了缓冲区后，发送端和接收端可以处于异步状态
+    pipline := make(chan int, 10)
+    // 无缓冲信道
+    在信道里无法存储数据，意味着，接收端必须先于发送端准备好，以确保你发送完数据后，有人立马接收数据，否则发送端将造成阻塞，即发送端和接收端是同步运行的。
+    pipline := make(chan int)
     
+    // 或者
+    pipline := make(chat int, 0)
+
+    # 双向信道与单向信道
+    // 默认情况下信道都是双向的
+    单向信道分为：只读信道 和 只写信道
+    // 只读信道
+    var pipline = make(chan int)
+    type Receiver = <-chan int  // 关键代码：定义别名类型，<-chan 表示只能 chan 里发出数据，即对程序来说就是只读
+    var receiver Receiver = pipline
+    // 只写信道
+    var pipline := make(chan int)
+    type Sender = chan<- int    // 关键代码：定义别名类型，chan<- 表示只能 chan 里接收数据，即对程序来说就是只写
+    var sender Sender = pipline
+
+    // 示例
+    // 定义只写信道
+    type Sender = chan<- int
+    // 定义只读信道
+    type Receiver = <-chan int
+
+    func main() {
+        var pipline = make(chan int)
+
+        go func() {
+            var sender Sender = pipline
+            fmt.Println("Sending 100")
+            sender <- 100
+        }()
+
+        go func() {
+            var receiver Receiver = pipline
+            num := <-receiver
+            fmt.Println("Received %d", num)
+        }()
+
+        // main goroutine sleep to leave chance for goroutine to run
+        time.Sleep(time.Second)
+    }
+
+    // 遍历信道
+    注意：遍历信道时，需要确保信道处于关闭状态，否则循环会阻塞
+    func fibonacci(mychan chan int) {
+        n := cap(mychan)
+        x, y := 1, 1
+        for i := 0; i < n; i++ {
+            mychan <- x
+            x, y = y, x+y
+        }
+
+        // remember to close chan
+        close(mychan)
+    }
+
+    func main() {
+        pipline := make(chan int, 10)
+
+        go fibonacci(pipline)
+
+        for k := range pipline {
+            fmt.Println(k)
+        }
+    }
+
+    # 用信道来做锁
+    当信道里的数据量已经达到设定的的容量时，此时再往信道里发送数据会阻塞整个程序
+
+    // 示例
+    func increment(ch chan bool, x *int) {  // x=x+1不是原子操作，使用容量为1的信道达到锁的效果
+        ch <- true
+        *x = *x + 1
+        <- ch
+    }
+
+    func main() {
+        pipline := make(chan bool, 1)
+
+        var x int
+        for x := 0; i < 1000; i++ {
+            go increment(pipline, &x)
+        }
+
+        time.Sleep(time.Second)
+        fmt.Println("x value: ", x)
+    }
+
+    # 信道传递是深拷贝吗
+    值类型：String, Array, Int, Struct, Float, Bool     (深拷贝)
+    引用类型：Slice, Map                                (浅拷贝)
+    对于信道而言，是否是深拷贝，取决于你传入的值是值类型，还是引用类型
+
+    注意事项：
+    1.关闭一个未初始化的 channel 会产生 panic
+    2.重复关闭同一个 channel 会产生 panic
+    3.向一个已关闭的 channel 发送消息会产生 panic
+    4.从已关闭的 channel 读取消息不会产生 panic，且能读出 channel 中还未被读取的消息，若消息均已被读取，则会读取到该类型的零值。
+    5.从已关闭的 channel 读取消息永远不会阻塞，并且会返回一个为 false 的值，用以判断该 channel 是否已关闭（x,ok := <- ch）
+    6.关闭 channel 会产生一个广播机制，所有向 channel 读取消息的 goroutine 都会收到消息
+    7.chan 在 Golang 中是一等公民，它是线程安全的，面对并发问题，应首先想到 channel
+
+    # WaitGroup
+    Goroutine 之间的通信机制
+    1.使用信道来标记完成
+    // “不要通过共享内存来通信，要通过通信来共享内存”
+    func main() {
+        done := make(chan bool)
+        go func() {
+            for i:= 0; i < 5; i++ {
+                fmt.Println(i)
+            }
+            done <- true
+        }()
+
+        <-done
+    }
+
+    2.使用 WaitGroup
+    var 实例名 sync.WaitGroup   // 实例化 WaitGroup
+    实例化后 WaitGroup 的使用
+        Add: 初始值为0，你传入的值会往计数器上加，这里直接传入你子协程的数量
+        Done: 当某个子协程完成后，可调用此方法，会从计数器上减一，通常可以使用 defer 来调用
+        Wait: 阻塞当前协程，直到实例里的计数器归零
+    
+    func worker(x int, wg *sync.WaitGroup) {
+        defer wg.Done()
+        for i := 0; i < 5; i++ {
+            fmt.Printf("worker %d: %d\n", x, i)
+        }
+    }
+
+    func main() {
+        var wg sync.WaitGroup
+
+        wg.Add(2)
+        go worker(1, &wg)
+        go worker(2, &wg)
+
+        wg.Wait()
+    }
+    ```
+- 互斥锁和读写锁
+	Mutex 可以用来实现互斥锁
+	RWMutex	可用来实现读写锁
+    ```go
+	互斥锁 Mutex(Mutual Exclusion) 是为了保护一个资源不会因为并发操作而引起冲突导致数据不准确
+	Mutex 锁的两种定义方法
+	// 1
+	var lock *sync.Mutex
+	lock = new(sync.Mutex)
+	// 2
+	lock := &sync.Mutex{}
+
+	func add(count *int, wg *sync.WaitGroup, lock *sync.Mutex) {
+		defer wg.Done
+
+		for i := 0; i < 1000; i++ {
+			lock.Lock()
+			*count = *count + 1
+			lock.Unlock()
+		}
+	}
+
+	func main() {
+		var wg sync.WaitGroup
+		lock := &sync.Mutex()
+		count := 0
+
+		wg.Add(3)
+		go add(&count, &wg, lock)
+		go add(&count, &wg, lock)
+		go add(&count, &wg, lock)
+
+		wg.Wait()
+		fmt.Println(count)
+	}
+
+	注意：
+	1.同一协程里，不要在尚未解锁时再次使加锁
+	2.同一协程里，不要对已解锁的锁再次解锁
+	3.加了锁后，别忘了解锁，必要时使用 defer 语句
+
+	# RWMutex 将程序对资源的访问分为读操作和写操作
+	为了保证数据的安全，它规定了当有人还在读取数据（即读锁占用）时，不允计有人更新这个数据（即写锁会阻塞）
+	为了保证程序的效率，多个人（线程）读取数据（拥有读锁）时，互不影响不会造成阻塞，它不会像 Mutex 那样只允许有一个人（线程）读取同一个数据
+
+	实例化 RWMutex 锁
+	// 1
+	var lock *sync.RWMutex
+	lock = new(sync.RWMutex)
+
+	// 2
+	lock := &sync.RWMutex{}
+
+	RWMutex 里提供了两种锁，每种锁分别对应两个方法，为了避免死锁，两个方法应成对出现，必要时请使用 defer
+
+	读锁：调用 RLock 方法开启锁，调用 RUnlock 释放锁
+	写锁：调用 Lock 放开开启锁，调用 Unlock 释放锁
+
+	func main() {
+		lock := &sync.RWMutex{}
+		lock.Lock()
+
+		for i := 0; i < 4; i++ {
+			go func(i int) {
+				fmt.Printf("The %d goroute is going to run\n", i);
+				lock.RLock()
+				fmt.Printf("The %d goroutine gets the read lock, after 1s, it will release the read lock\n", i)
+				time.Sleep(time.Second)
+				lock.RUnlock()
+			}(i)
+		}
+
+		time.Sleep(time.Second * 2)
+
+		fmt.Println("The write lock will be released, the read lock will not be blocked")
+		lock.Unlock()
+
+		// 由于会等到读锁全部释放，才能获得写锁，因此这里一定会在上面 4 个协程全部完成才能往下走
+		lock.Lock()
+		fmt.Println("The program is going to exit")
+		lock.Unlock()
+	}
+    ```
+- Goroutine 信道死锁案例
+    ```go
+    // 1
+    func main() {
+        pipline := make(chan string)
+        pipline <- "hello"      // 对于无缓冲信道，在接收者未准备好之前，发送操作是阻塞的
+        fmt.Println(<-pipline)
+    }
+    // fatal error: all goroutines are asleep - deadlock!
+
+    // fix 1 method 1(not work)
+    func main() {
+        pipline := make(chan string)
+        fmt.Println(<-pipline)  // 虽然保证了接收代码在发送代码之前执行，但是接收者一直在等待数据而处于阻塞状态，所以无法执行到发送数据的语句，仍然会造成死锁
+        pipline <- "hello"
+    }
+    // fix 1， method 1
+    func hello(pipline chan string) {
+        <-pipline
+    }
+
+    func main() {
+        pipline := make(chan string)
+        go hello(pipline)   // 将接收者代码写在另一个协程里，并保证在发送者之前执行
+        pipline <- "hello"
+    }
+
+    // fix 1, method 2
+    pipline := make(chan string, 1) // 接收者代码必须在发送者代码之前 执行，这是针对无缓冲信道才有的约束，将其改为缓冲信道摆脱了该约束
+    pipline <- "hello"
+    fmt.Println(<-pipline)
+
+    // 2
+    func main() {
+        ch1 := make(chan string, 1)
+
+        ch1 <- "hello"
+        ch1 <- "world"  // 信道容量为1，却向信道中写入2条数据，会造成死锁
+
+        fmt.Println(<-ch1)
+    }
+
+    // 3
+    func main() {
+        pipline := make(chan string)
+        go func() {
+            pipline <- "hello"
+            pipline <- "world"
+            // close(pipline)
+        }()
+        for data := range pipline {
+            fmt.Println(data)   // for 接收了2条消息后，由于再也没有向信道发送数据，因此无法收到数据，陷入死循环，造成死锁
+        }
+    }
+
+    // fix 3
+    func main() {
+        pipline := make(chan string)
+        go func() {
+            pipline <- "hello"
+            pipline <- "world"
+            close(pipline)      // 发送完数据后，手动关闭信道，告诉 range 信道已经关闭，无需等待
+        }()
+        for data := range pipline {
+            fmt.Println(data)
+        }
+    }
+    ```
+- 如何实现一个协程池
+    goroutine 是一个轻量级的线程，他的创建、调度都是在用户态进行，并不需要进入内核，这意味着创建销毁协程带来的开销是非常小的，大多数情况下，开发人员是不太需要使用协程池的
+    ```go
+    // 定义协程池
+    type Pool struct {
+        work chan func()        // 用于接收 task 任务
+        sem  chan struct{}      // 用于设置协程池大小，即同时可执行的协程数量
+    }
+
+    // 创建协程池实例
+    func New(size int) *Pool {
+        return &Pool {
+            work: make(chan func()),
+            sem:  make(chan struct{}, size),
+        }
+    }
+
+    // 往协程池中添加任务
+    // 第一次调用 NewTask 添加任务的时候，由于 work 是无缓冲通道，所以会一定会走第二个 case 的分支：使用 go worker 开启一个协程
+    func (p *Pool) NewTask(task func()) {
+        select {
+            case p.work <- task:
+            case p.sem <- struct{}{}:
+                go p.worker(task)
+        }
+    }
+
+    // 执行任务
+    // 为了能够实现协程的复用，这个使用了 for 无限循环，使这个协程在执行完任务后，也不退出，而是一直在接收新的任务
+    func (p *pool) worker(task func()) {
+        defer func() { <-p.sem }()
+        for {
+            task()
+            task = <-p.work
+        }
+    }
+    // 如果设定的协程池数大于 2，此时第二次传入往 NewTask 传入task，select case 的时候，如果第一个协程还在运行中，就一定会走第二个case，重新创建一个协程执行task
+    // 如果传入的任务数大于设定的协程池数，并且此时所有的任务都还在运行中，那此时再调用 NewTask 传入 task ，这两个 case 都不会命中，会一直阻塞直到有任务执行完成，worker 函数里的 work 通道才能接收到新的任务，继续执行
+
+    // 协程池的使用
+    func main() {
+        pool := New(2)
+
+        for i := 1; i < 5; i++ {
+            pool.NewTask(func() {
+                time.Sleep(2 * time.Second)
+                fmt.Println(time.Now())
+            })
+        }
+
+        time.Sleep(5 * time.Second)
+    }
+    // 总共 4 个任务，由于协程池大小为 2，所以 4 个任务分两批执行（从打印的时间可以看出）
+    ```
+- Goroutine: Context
+    Context 用来更好的管理(关闭)协程
+    ```go
+    // Context的接口定义
+    type Context interface {
+        Deadline() (deadline time.Time, ok bool)
+        Done() <-chan struct{}
+        Err() error
+        Value(key interface{}) interface{}
+    }
+    // Deadline: 到截止时间deadline，Context 会自动触发 Cancel 动作。返回的第二个值是 一个布尔值，true 表示设置了截止时间，false 表示没有设置截止时间，如果没有设置截止时间，就要手动调用 cancel 函数取消 Context
+    // Done：返回一个只读的通道（只有在被cancel后才会返回），类型为 struct{}。当这个通道可读时，意味着parent context已经发起了取消请求，根据这个信号，开发者就可以做一些清理动作，退出goroutine
+    // Err：返回 context 被 cancel 的原因
+    // Value：返回被绑定到 Context 的值，是一个键值对，所以要通过一个Key才可以获取对应的值，这个值一般是线程安全的
+
+    // 为什么需要 Context
+    当一个协程（goroutine）开启后，我们是无法强制关闭它的
+    常见的关闭协程的原因：
+    1.goroutine 自己跑完结束退出            // 正常关闭
+    2.主进程crash退出，goroutine 被迫退出   // 异常关闭，需要fix
+    3.通过 chan 发送信号，引导协程的关闭       // 开发者可以手动控制协程的方法
+
+    // 不使用 Context
+    func monitor(ch chan bool, number int) {
+        for {
+            select {
+                case v := <-ch:
+                    // 仅当 ch 通道被 close，或者有数据发过来(无论是true还是false)才会走到这个分支
+                    fmt.Printf("监控器%v，接收到通道值为：%v，监控结束。\n", number,v)
+                    return
+                default:
+                    fmt.Printf("监控器%v，正在监控中...\n", number)
+                    time.Sleep(2 * time.Second)
+            }
+        }
+    }
+
+    func main() {
+        stopSignal := make(chan bool)
+
+        for i := 1; i <= 5; i++ {
+            go monitor(stopSignal, i)
+        }
+
+        time.Sleep(time.Second)
+        // 关闭所有 goroutine
+        close(stopSignal)
+
+        // 等待5s，若此时屏幕没有输出 <正在监控中> 就说明所有的goroutine都已经关闭
+        time.Sleep(5 * time.Second)
+
+        fmt.Println("主程序退出！")
+    }
+    // 当我们定义一个无缓冲通道时，如果要对所有的 goroutine 进行关闭
+    // 可以使用 close 关闭通道，然后在所有的 goroutine 里不断检查通道是否关闭(前提你得约定好
+    // ，该通道你只会进行 close 而不会发送其他数据，否则发送一次数据就会关闭一个goroutine
+    // 这样会不符合咱们的预期，所以最好你对这个通道再做一层封装做个限制)来决定是否结束 goroutine
+
+    // 使用 Context
+    func monitor(ctx context.Context, number int) {
+        for {
+            select {
+                // 其实可以写成 case <- ctx.Done()
+                // 这里仅是为了让你看到 Done 返回的内容
+                case v :=<- ctx.Done(): // 在所有的goroutine 里利用 for + select 搭配来不断检查 ctx.Done() 是否可读，可读就说明该 context 已经取消，你可以清理 goroutine 并退出了
+                    fmt.Printf("监控器%v，接收到通道值为：%v，监控结束。\n", number,v)
+                    return
+                default:
+                    fmt.Printf("监控器%v，正在监控中...\n", number)
+                    time.Sleep(2 * time.Second)
+            }
+        }
+    }
+
+    func main() {
+        ctx, cancel := context.WithCancel(context.Background()) // 以 context.Background() 为 parent context 定义一个可取消的 context
+
+        for i := 1; i <= 5; i++ {
+            go monitor(ctx, i)
+        }
+
+        time.Sleep(1 * time.Second)
+        // 关闭所有 goroutine
+        cancel()    // 当你想到取消 context 的时候，只要调用一下 cancel 方法即可。这个 cancel 就是我们在创建 ctx 的时候返回的第二个值
+
+        // 等待5s，若此时屏幕没有输出 <正在监控中> 就说明所有的goroutine都已经关闭
+        time.Sleep(5 * time.Second)
+
+        fmt.Println("主程序退出！！")
+    }
+
+    # 根 Context
+    Go 已经实现了2个，我们代码中最开始都是以这两个内置的context作为最顶层的parent context，衍生出更多的子Context
+    var (
+        background = new(emptyCtx)
+        todo       = new(emptyCtx)
+    )
+
+    func Background() Context {
+        return background
+    }
+
+    func TODO() Context {
+        return todo
+    }
+
+    // Background，主要用于main函数、初始化以及测试代码中，作为Context这个树结构的最顶层的Context，也就是根Context，它不能被取消
+    // TODO，如果我们不知道该使用什么Context的时候，可以使用这个，但是实际应用中，暂时还没有使用过这个TODO
+    // 它们两个本质上都是emptyCtx结构体类型，是一个不可取消，没有设置截止时间，没有携带任何值的Context
+
+    # Context 的继承衍生
+    context 包的几个 With 系列的函数
+    func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
+    func WithDeadline(parent Context, deadline time.Time) (Context, CancelFunc)
+    func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
+    func WithValue(parent Context, key, val interface{}) Context
+    // 第一个参是 父context
+    // 通过一次继承，就多实现了一个功能，比如使用 WithCancel 函数传入 根context ，就创建出了一个子 context，该子context 相比 父context，就多了一个 cancel context 的功能
+
+    // WithDeadline
+    func monitor(ctx context.Context, number int)  {
+        for {
+            select {
+            case <- ctx.Done():
+                fmt.Printf("监控器%v，监控结束。\n", number)
+                return
+            default:
+                fmt.Printf("监控器%v，正在监控中...\n", number)
+                time.Sleep(2 * time.Second)
+            }
+        }
+    }
+
+    func main() {
+        ctx01, cancel := context.WithCancel(context.Background())
+        ctx02, cancel := context.WithDeadline(ctx01, time.Now().Add(1 * time.Second))
+
+        defer cancel()
+
+        for i :=1 ; i <= 5; i++ {
+            go monitor(ctx02, i)
+        }
+
+        time.Sleep(5  * time.Second)
+        if ctx02.Err() != nil {
+            fmt.Println("监控器取消的原因: ", ctx02.Err())
+        }
+
+        fmt.Println("主程序退出！！")
+    }
+
+    // WithTimeout
+    func monitor(ctx context.Context, number int)  {
+        for {
+            select {
+            case <- ctx.Done():
+                fmt.Printf("监控器%v，监控结束。\n", number)
+                return
+            default:
+                fmt.Printf("监控器%v，正在监控中...\n", number)
+                time.Sleep(2 * time.Second)
+            }
+        }
+    }
+
+    func main() {
+        ctx01, cancel := context.WithCancel(context.Background())
+
+        // 相比例子1，仅有这一行改动
+        ctx02, cancel := context.WithTimeout(ctx01, 1* time.Second)
+
+        defer cancel()
+
+        for i :=1 ; i <= 5; i++ {
+            go monitor(ctx02, i)
+        }
+
+        time.Sleep(5  * time.Second)
+        if ctx02.Err() != nil {
+            fmt.Println("监控器取消的原因: ", ctx02.Err())
+        }
+
+        fmt.Println("主程序退出！！")
+    }
+
+    // WithValue
+    func monitor(ctx context.Context, number int)  {
+        for {
+            select {
+            case <- ctx.Done():
+                fmt.Printf("监控器%v，监控结束。\n", number)
+                return
+            default:
+                // 获取 item 的值
+                value := ctx.Value("item")
+                fmt.Printf("监控器%v，正在监控 %v \n", number, value)
+                time.Sleep(2 * time.Second)
+            }
+        }
+    }
+
+    func main() {
+        ctx01, cancel := context.WithCancel(context.Background())
+        ctx02, cancel := context.WithTimeout(ctx01, 1* time.Second)
+        ctx03 := context.WithValue(ctx02, "item", "CPU")
+
+        defer cancel()
+
+        for i :=1 ; i <= 5; i++ {
+            go monitor(ctx03, i)
+        }
+
+        time.Sleep(5  * time.Second)
+        if ctx02.Err() != nil {
+            fmt.Println("监控器取消的原因: ", ctx02.Err())
+        }
+
+        fmt.Println("主程序退出！！")
+    }
+
+    # Context 使用注意事项
+    1.通常 Context 都是做为函数的第一个参数进行传递（规范性做法），并且变量名建议统一叫 ctx
+    2.Context 是线程安全的，可以放心地在多个 goroutine 中使用。
+    3.当你把 Context 传递给多个 goroutine 使用时，只要执行一次 cancel 操作，所有的 goroutine 就可以收到 取消的信号
+    4.不要把原本可以由函数参数来传递的变量，交给 Context 的 Value 来传递。
+    5.当一个函数需要接收一个 Context 时，但是此时你还不知道要传递什么 Context 时，可以先用 context.TODO 来代替，而不要选择传递一个 nil。
+    6.当一个 Context 被 cancel 时，继承自该 Context 的所有 子 Context 都会被 cancel
+    ```
+- Go 协程：万能的通道模型
+    对于 chan，要极力避免下面两种情况：
+    1. 对一个已关闭的通道，进行关闭
+    2. 对一个已关闭的通道，写入数据
+    上述两种操作，都会异常程序触发 panic
+    Go 语言并没有提供一个内置的函数来判断一个通道是否关闭
+    ```go
+    # 通道编程模型
+    思路:
+    1.（发送者）对一个已关闭的通道，写入数据  Not OK
+    2.（接收者）对一个已关闭的通道，读取数据  OK
+    所以根本问题是如果保证发送者本身知道 chan 是关闭的
+
+    不同场景（无论哪种场景，都会有数据竞争的问题）
+    1.一个发送者，N 个接收者
+    2.多个发送者
+        一个接收者
+        多个接收者
+    
+    解决方案：
+    增加一个 “管理角色” 的通道
+    将通道分为两种
+    1.业务通道：承载数据，用于多个协程间共享数据
+    2.管理通道：仅为了标记业务通道是否关闭而存在
+
+    管理通道需要满足两个条件：
+    1.具备广播功能
+        只能是无缓冲通道（关闭后，所有 read 该通道的所有协程，都能明确的知道该通道已关闭）
+        当该管理通道关闭了，说明业务通道也关闭了
+        当该管理通道阻塞了，说明业务通道还没关闭
+    2.有唯一发送者
+        对于多个发送者，一个接收者的场景，业务通道的这个接收者，就可以充当管理通道的 唯一发送者
+        对于多个发送者，多个接收者的场景，就需要再单独开启一个媒介协程做 唯一发送者
     ```

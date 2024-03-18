@@ -96,7 +96,7 @@
 	- [zmq_ipc(7)](http://api.zeromq.org/4-1:zmq-ipc)
 	- [unix(7)](https://man7.org/linux/man-pages/man7/unix.7.html)
 - [ZeroMQ: Diving into the Wire](https://www.codeproject.com/Articles/863889/ZeroMQ-Diving-into-the-Wire)
-- [ZMQ API reference](https://libzmq.readthedocs.io/en/latest/)
+- [**ZMQ API reference**](https://libzmq.readthedocs.io/en/latest/)
 - [Frequently Asked Questions](http://wiki.zeromq.org/area:faq)
 - [The ZeroMQ Guide - for Python Developers](https://zguide2.wdfiles.com/local--files/page:start/zguide-py.pdf)
 - [The ZeroMQ Guide - for C Developers](https://zguide2.wdfiles.com/local--files/page:start/zguide-c.pdf)
