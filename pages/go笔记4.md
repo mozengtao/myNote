@@ -2151,6 +2151,10 @@
     %g：根据实际情况采用%e或%f格式（以获得更简洁、准确的输出）
     %G：根据实际情况采用%E或%F格式（以获得更简洁、准确的输出）
 
+    // 占位符
+    %+v：若值为结构体，则输出将包括结构体的字段名。
+    %+q：保证只输出ASCII编码的字符，非 ASCII 字符则以unicode编码表示
+
     type Profile struct {
         name string
         gender string
@@ -2222,4 +2226,458 @@
     10.24
         10.24
         10
+
+	var person = Profile{name:"xiaoming", gender:"male", age:18}
+
+	fmt.Printf("%v \n", person)     // {xiaoming male 18} 
+	fmt.Printf("%+v \n", person)    // {name:xiaoming gender:male age:18}
+
+	fmt.Printf("%q \n", "hello")    // "hello"
+	fmt.Printf("%+q \n", "hello")   // "hello"
+
+	fmt.Printf("%q \n", "中文")     // "中文"
+	fmt.Printf("%+q \n", "中文")    // "\u4e2d\u6587"
+
+    # 占位符 %
+    %#x：给打印出来的是 16 进制字符串加前缀 0x
+    %#q：用反引号包含，打印原始字符串
+    %#U：若是可打印的字符，则将其打印出来
+    %#p：若是打印指针的内存地址，则去掉前缀 0x
+
+	fmt.Printf("%x \n", "hello")        // 68656c6c6f
+	fmt.Printf("%#x \n", "hello")       // 0x68656c6c6f
+
+	// 用反引号包含，打印原始字符串
+	fmt.Printf("%q \n", "hello")        // "hello"
+	fmt.Printf("%#q \n", "hello")       // `hello`
+
+	// 若是可打印的字符，则将其打印出来
+	fmt.Printf("%U \n", '中')       // U+4E2D
+	fmt.Printf("%#U \n", '中')      // U+4E2D '中'
+
+	// 若是打印指针的内存地址，则去掉前缀 0x
+	a := 1024
+	fmt.Printf("%p \n", &a)          // 0xc000088018
+	fmt.Printf("%#p \n", &a)        // c000088018
+
+    # 对齐补全
+	fmt.Printf("a%5sc\n", "b")	    // a    bc
+	fmt.Printf("a%-5sc\n", "b")	    // ab    c
+
+	fmt.Printf("a%05sc\n", "b")	    // a0000bc
+	fmt.Printf("a%5sd\n", "bbbccc")	// abbbcccd
+
+	fmt.Printf("%6.2f,%6.2f\n", 12.3, 123.4567)	// 12.30,123.46
+	fmt.Printf("%-6.2f,%-6.2f\n", 12.2, 123.4567)	//12.20 ,123.46
+
+    # 正负号占位
+	fmt.Printf("1%d3\n", 22)	// 1223
+	fmt.Printf("1% d3\n", 22)	// 1 223
+	fmt.Printf("1%d3\n", -22)	// 1-223
+	fmt.Printf("1% d3\n", -22)	// 1-223
+    ```
+- os/exec 执行命令
+    ```go
+    1.只执行命令，不获取结果
+    2.执行命令，并获取结果
+    3.执行命令，并区分stdout 和 stderr
+    4.多条命令组合，请使用管道
+    5.设置命令级别的环境变量
+
+    // 1
+    cmd := exec.Command("ls", "-l", "/var/log")
+    err := cmd.Run()
+    if err != nil {
+        log.Fatalf("cmd.Run() failed with %s\n", err)
+    }
+
+    // 2
+    cmd := exec.Command("ls", "-l", "/var/log")
+    out, err := cmd.CombinedOutput()
+    if err != nil {
+        fmt.Printf("combined out:\n%s\n", string(out))
+        log.Fatalf("cmd.Run() failed with %s\n", err)
+    }
+    fmt.Printf("combined out:\n%s\n", string(out))
+
+    注意
+    `ls -l /var/log/*.log`
+    不等价于
+    exec.Command("ls", "-l", "/var/log/*.log")  // 通配符 * 会被忽略    // ls: cannot access '/var/log/*.log': No such file or directory
+
+    // 3
+    cmd := exec.Command("ls", "-l", "/var/log")
+    var stdout, stderr bytes.Buffer
+    cmd.Stdout = &stdout
+    cmd.Stderr = &stderr
+    err := cmd.Run()
+    outStr, errStr := string(stdout.Bytes()), string(stderr.Bytes())
+    fmt.Printf("out:\n%s\nerr:\n%s\n", outStr, errStr)
+    if err != nil {
+        log.Fatalf("cmd.Run() failed with %s\n", err)
+    }
+
+    // 4
+    // grep ERROR /var/log/messages | wc -l
+    c1 := exec.Command("grep", "error", "/var/log/messages")
+    c2 := exec.Command("wc", "-l")
+    c2.Stdin, _ = c1.StdoutPipe()
+    c2.Stdout = os.Stdout
+    _ = c2.Start()
+    _= c1.Run()
+    _ = c2.Wait()
+
+    // 5
+    使用 os 库的 Setenv 函数来设置的环境变量，是作用于整个进程的生命周期的
+    os.Setenv("NAME", "hello")
+    cmd := exec.Command("echo", os.ExpandEnv("$NAME"))
+    out, err := cmd.CombinedOutput()
+    if err != nil {
+        log.Fatalf("cmd.Run() failed with %s\n", err)
+    }
+    fmt.Printf("%s", out)
+
+    // 把环境变量的作用范围再缩小到命令级别
+    $ cat /home/wangbm/demo.sh
+    echo $NAME
+
+    func ChangeYourCmdEnvironment(cmd * exec.Cmd) error {
+        env := os.Environ()
+        cmdEnv := []string{}
+
+        for _, e := range env {
+            cmdEnv = append(cmdEnv, e)
+        }
+        cmdEnv = append(cmdEnv, "NAME=wangbm")
+        cmd.Env = cmdEnv
+
+        return nil
+    }
+
+    func main() {
+        cmd1 := exec.Command("bash", "/home/wangbm/demo.sh")
+    ChangeYourCmdEnvironment(cmd1) // 添加环境变量到 cmd1 命令: NAME=wangbm
+        out1, _ := cmd1.CombinedOutput()
+        fmt.Printf("output: %s", out1)
+
+        cmd2 := exec.Command("bash", "/home/wangbm/demo.sh")
+        out2, _ := cmd2.CombinedOutput()
+        fmt.Printf("output: %s", out2)
+    }
+    ```
+- 命令行参数解析
+    ```go
+    1.简单情况下可以使用 os.Args
+    func main() {
+        // os.Args type: []sting
+        if len(os.Args) > 0 {
+            for index, arg := range os.Args {
+                fmt.Printf("args[%d]: %v\n", index, arg)
+            }
+        }
+    }
+
+    参数种类
+    参数是否为布尔型
+    1.布尔型参数：如 --debug，后面不用再接具体的值，指定就为 True，不指定就为 False非布尔型参数
+    2.非布尔型参数：非布尔型，有可能是int，string 等其他类型，如 --name jack ，后面可以接具体的参数值
+
+    参数名的长短
+    1.长参数：比如 --name jack 就是一个长参数，参数名前有两个 -
+    2.短参数：通常为一个或两个字母（是对应长参数的简写），比如 -n ，参数名前只有一个 -
+
+    // 1
+    func main() {
+        var name string
+        flag.StringVar(&name, "name", "jack", "your name")
+
+        flag.Parse()
+        fmt.Println(name)
+    }
+
+    func (f *FlagSet) StringVar(p *string, name string, value string, usage string)
+    p: 用来存取 flag 的值
+    name: flag 名称
+    value: flag 的默认值
+    usage: flag 的使用说明
+
+    // 改进 1
+    // 参数数量多了以后，一大堆参数解析的代码堆积在 main 函数里，影响代码的可读性、美观性
+    var name string
+
+    func init() {
+        flag.StringVar(&name, "name", "jack", "your name")
+    }
+
+    func main() {
+        flag.Parse()
+        fmt.Println(name)
+    }
+
+    # 参数类型
+    // 布尔型
+    var debug bool
+
+    func init() {
+        flag.BoolVar(&debug, "debug", false, "enable or disable debug mode")
+    }
+    // 数值型
+    var age int
+
+    func init() {
+        flag.IntVar(&age, "age", 18, "your age")
+    }
+    // 字符串
+    var name string
+
+    func init() {
+        flag.StringVar(&name, "name", "jack", "your name")
+    }
+    // 时间类型
+    var interval time.Duration
+
+    func init() {
+        flag.DurationVar(&interval, "interval", 1 * time.Second, "your name")
+    }
+
+    # 自定义类型
+    flag 包支持的类型有 Bool、Duration、Float64、Int、Int64、String、Uint、Uint64
+    这些类型的参数被封装到其对应的后端类型中，比如 Int 类型的参数被封装为 intValue，String 类型的参数被封装为 stringValue
+    这些后端的类型都实现了 flag.Value 接口，因此可以把一个命令行参数抽象为一个 Flag 类型的实例
+    type Value interface {
+        String() string
+        Set(string) error
+    }
+
+    // Flag 类型
+    type Flag struct {
+        Name     string // name as it appears on command line
+        Usage    string // help message
+        Value    Value  // value as set 是个 interface，因此可以是不同类型的实例。
+        DefValue string // default value (as text); for usage message
+    }
+
+    func Var(value Value, name string, usage string) {
+        CommandLine.Var(value, name, usage)
+    }
+
+    // 实现自定义类型的参数，只要 Var 函数的第一个参数对象实现 flag.Value接口即可
+    type sliceValue []string
+
+    func newSliceValue(vals []string, p *[]string) *sliceValue {
+        *p = vals
+        return (*sliceValue)(p)
+    }
+
+    func (s *sliceValue) Set(val string) error {
+            // 如何解析参数值
+        *s = sliceValue(strings.Split(val, ","))
+        return nil
+    }
+
+    func (s *sliceValue) String() string {
+        return strings.Join([]string(*s), ",")
+    }
+
+    // 例如 实现传入的参数是一个字符串，以逗号分隔，flag 的解析时将其转成 slice
+    $ go run demo.go -members "Jack,Tom"
+    [Jack Tom]
+
+    var members []string
+    type sliceValue []string
+
+
+    func newSliceValue(vals []string, p *[]string) *sliceValue {
+        *p = vals
+        return (*sliceValue)(p)
+    }
+
+    func (s *sliceValue) Set(val string) error {
+            // 如何解析参数值
+        *s = sliceValue(strings.Split(val, ","))
+        return nil
+    }
+
+
+    func (s *sliceValue) String() string {
+        return strings.Join([]string(*s), ",")
+    }
+
+    func init()  {
+        flag.Var(newSliceValue([]string{}, &members), "members", "会员列表")
+    }
+
+    func main(){
+        flag.Parse()
+        fmt.Println(members)
+    }
+
+    # 长短选项
+    flag 包，在使用上，其实并没有没有长短选项之别
+    ```
+- 文件操作
+    ```go
+    // 1 使用 os.ReadFile
+    content, err := os.ReadFile("a.txt")
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(string(content))
+
+    // 2 使用 ioutil.ReadFile
+    content, err := ioutil.ReadFile("a.txt")
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(string(content))
+
+    // Go 1.16 开始，ioutil.ReadFile 就等价于 os.ReadFile，二者是完全一致的
+    func ReadFile(filename string) ([]byte, error) {
+        return os.ReadFile(filename)
+    }
+
+    // 创建句柄再读取
+    file, err := os.Open("a.txt")
+    if err != nil {
+        panic(err)
+    }
+    defer file.Close()
+    content, err := ioutil.ReadAll(file)
+    fmt.Println(string(content))
+
+    // os.Open 实际是只读模式的 os.OpenFile
+    func Open(name string) (*File, error) {
+        return OpenFile(name, O_RDONLY, 0)
+    }
+
+    // 使用 os.OpenFile
+    file, err := os.OpenFile("a.txt"， O_RDONLY, 0)
+    if err != nil {
+        panic(err)
+    }
+    defer file.Close()
+    content, err := ioutil.ReadAll(file)
+    fmt.Println(string(content))
+
+    // 每次读取一行
+    1.使用 bufio.ReadBytes
+    2.使用 bufio.ReadString
+    
+    // 1
+    func main() {
+        fi, err := os.Open("a.txt")
+        if err != nil {
+            panic(err)
+        }
+
+        r := bufio.NewReader(fi)
+
+        for {
+            lineBytes, err := r.ReadBytes('\n')
+            line := strings.TrimSpace(string(lineBytes))
+            if err != nil && err != io.EOF {
+                panic(err)
+            }
+            if err == io.EOF {
+                break
+            }
+            fmt.Println(line)
+        }
+    }
+
+    // 2
+    func main() {
+        fi, err := os.Open("a.txt")
+        if err != nil {
+            panic(err)
+        }
+
+        r := bufio.NewReader(fi)
+
+        for {
+            line, err := r.ReadString('\n')
+            line = strings.TrimSpace(string(line))
+            if err != nil && err != io.EOF {
+                panic(err)
+            }
+            if err == io.EOF {
+                break
+            }
+            fmt.Println(line)
+        }
+    }
+
+    # 每次只读取固定字节数
+    // 使用 os 库
+    通用的做法:
+    1.先创建一个文件句柄，可以使用 os.Open 或者 os.OpenFile
+    2.然后 bufio.NewReader 创建一个 Reader
+    3.然后在 for 循环里调用 Reader 的 Read 函数，每次仅读取固定字节数量的数据
+
+    func main() {
+        fi, err := os.Open("a.txt")
+        if err != nil {
+            panic(err)
+        }
+
+        r := bufio.NewReader(fi)
+
+        buf := make([]byte, 1024)
+        for {
+            n, err := r.Read(buf)
+            if err != nil && err != io.EOF {
+                panic(err)
+            }
+
+            if n == 0 {
+                break
+            }
+            fmt.Println(string(buf[:n]))
+        }
+    }
+
+    // 使用 syscall 库
+    os 库本质上也是调用 syscall 库，但由于 syscall 过于底层，如非特殊需要，一般不会使用 syscall
+
+    // 会每次读取 100 字节的数据，并发送到通道中，由另外一个协程进行读取并打印出来
+    func main() {
+        fd, err := syscall.Open("a.txt", syscall.O_RDONLY, 0)
+        if err != nil {
+            fmt.Println("Failed on open: ", err)
+        }
+        defer syscall.Close(fd)
+
+        var wg sync.WaitGroup
+        wg.Add(2)
+        dataChan := make(chan []byte)
+        go func() {
+            defer wg.Done()
+            for {
+                data := make([]byte, 100)
+                n, _ := syscall.Read(fd, data)
+                if n == 0 {
+                    break
+                }
+                dataChan <- data
+            }
+            close(dataChan)
+        }()
+
+        go func() {
+            defer wg.Done()
+            for {
+                select {
+                case data, ok := <-dataChan:
+                    if !ok {
+                        return
+                    }
+
+                    fmt.Printf(string(data))
+                default:
+
+                }
+            }
+        }()
+        wg.Wait()
+    }
     ```
