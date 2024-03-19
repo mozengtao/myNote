@@ -128,3 +128,4 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - forge	 / fɔːrdʒ /		缔造；伪造，假冒
 - ephemeral / ɪˈfemərəl /  短暂的；（主指植物）短生的，短命的
 - maternity / məˈtɜːrnəti / 怀孕的，产妇的
+- ellipsis	/ ɪˈlɪpsɪs /   省略；省略号
