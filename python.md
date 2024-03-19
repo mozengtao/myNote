@@ -857,6 +857,131 @@
 	              file_hash.update(chunk)
 	      return file_hash.hexdigest()
 	  ```
+- contextlib
+	```python
+	什么是context manager
+	在一个类里，实现了__enter__和__exit__的方法，这个类的实例就是一个上下文管理器
+	class Resource():
+		def __enter__(self):
+			print('===connect to resource===')
+			return self
+		def __exit__(self, exc_type, exc_val, exc_tb):
+			print('===close resource connection===')
+
+		def operate(self):
+			print('===in operation===')
+
+	with Resource() as res:
+		res.operate()
+
+	// 使用 contextlib 大大简化了上下文管理器的实现
+	import contextlib
+
+	@contextlib.contextmanager
+	def operate():
+		print("__enter__")
+		yield "yielded value"
+		print("__exit__")
+
+	with operate() as o:
+		print(o)
+
+	为什么需要context manager
+	1.可以以一种更加优雅的方式，操作（创建/获取/释放）资源，如文件操作、数据库连接；
+	2.可以以一种更加优雅的方式，处理异2
+	class Resource():
+		def __enter__(self):
+			print('===connect to resource===')
+			return self
+
+		def __exit__(self, exc_type, exc_val, exc_tb):
+			print('===close resource connection===')
+			return True	# 在__exit__ 里返回 True 相当于告诉 Python解释器，这个异常我们已经捕获了，不需要再往外抛了
+
+		def operate(self):
+			1/0
+
+	with Resource() as res:
+		res.operate()
+
+
+	写__exit__ 函数时，需要注意的事，它必须要有这三个参数：
+	exc_type：异常类型
+	exc_val：异常值
+	exc_tb：异常的错误栈信息
+	当主逻辑代码没有报异常时，这三个参数将都为None
+
+	什么是 contextlib
+	contextlib是一个装饰器，你只要按照它的代码协议来实现函数内容，就可以将这个函数对象变成一个上下文管理器
+	import contextlib
+
+	@contextlib.contextmanager
+	def open_func(file_name):
+		# __enter__方法
+		print('open file:', file_name, 'in __enter__')
+		file_handler = open(file_name, 'r')
+
+		# 【重点】：yield
+		yield file_handler
+
+		# __exit__方法
+		print('close file:', file_name, 'in __exit__')
+		file_handler.close()
+		return
+
+	with open_func('/Users/MING/mytest.txt') as file_in:
+		for line in file_in:
+			print(line)
+	被装饰函数里，必须是一个生成器（带有yield）
+	yield之前的代码，就相当于__enter__里的内容
+	yield 之后的代码，就相当于__exit__ 里的内容
+
+	处理异常
+	import contextlib
+
+	@contextlib.contextmanager
+	def open_func(file_name):
+		# __enter__方法
+		print('open file:', file_name, 'in __enter__')
+		file_handler = open(file_name, 'r')
+
+		try:
+			yield file_handler
+		except Exception as exc:
+			# deal with exception
+			print('the exception was thrown')
+		finally:
+			print('close file:', file_name, 'in __exit__')
+			file_handler.close()
+
+			return
+
+	with open_func('/Users/MING/mytest.txt') as file_in:
+		for line in file_in:
+			1/0
+			print(line)
+
+	// 示例
+	@contextlib.contextmanager
+	def tempdir(**kwargs):
+		argdict = kwargs.copy()
+		if 'dir' not in argdict:
+			argdict['dir'] = CONF.tempdir
+		tmpdir = tempfile.mkdtemp(**argdict)
+		try:
+			yield tmpdir
+		finally:
+			try:
+				shutil.rmtree(tmpdir)
+			except OSError as e:
+				LOG.error(LE('Cound not remove tmpdir: %s'), e)
+
+
+	使用上下文管理器有三个好处：
+	1.提高代码的复用率；
+	2.提高代码的优雅度；
+	3.提高代码的可读性；
+	```
 	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
 - 参考文档
 	- [**Python黑魔法手册**](https://magic.iswbm.com/index.html)
@@ -919,3 +1044,64 @@
 - [Introduction to Python Lambda Functions](https://pythonforthelab.com/blog/intro-to-python-lambda-functions/)
 - [Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)
 - [PEP](https://peps.python.org/)
+- [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)
+	```python
+	在python中，generator functions是一类特殊的函数，它返回一个 lazy iterator(delays the evaluation of an expression until its value is needed),lazy iterators不在内存中保存它们的内容
+	应用场景：
+	1.大文件读取
+	2.函数需要维护内部的状态，但是又不值得用一个单独的类来实现
+	
+	Generator 函数和普通函数的差异是 使用了 yield 关键字 而不是 return
+	yield 关键字表明 yield 后的 value 被发送给了调用者，但是之后函数并不退出，即函数的状态被记下来了
+
+
+	yield 会返回一个 generator object，generator 是一个特殊的 iterator，当对 generator 调用特殊的函数时，例如 next()，代码会执行到函数中的 yield 语句, yield 语句会挂起当前执行的函数并返回 yielded value 给调用者，当函数被挂起时，函数的状态被保存了下来，函数的状态包括 any variable bindings local to the generator, the instruction pointer, the internal stack, and any exception handling，这使得再次调用 generator 的方法时，函数可以继续执行
+
+	generator expression (also called a generator comprehension) 用于快速产生 generator object
+	nums_squared_gc = (num**2 for num in range(5))
+
+	def infinite_sequence():
+		num = 0
+		while True:
+			yield num
+			num += 1
+
+	next() 方法可以用来获取 generator 的下一个结果
+
+	gen = infinite_sequence()
+
+	next(gen)	// 0
+	next(gen)	// 1
+
+
+	import sys
+	nums_squared_lc = [i ** 2 for i in range(10000)]
+	print(sys.getsizeof(nums_squared_lc))	// 87624
+
+	nums_squared_gc = (i ** 2 for i in range(10000))
+	print(sys.getsizeof(nums_squared_gc))	// 120
+
+	需要注意的是
+	在有足够内存的情况下 list comprehension 比 generator expression 要快
+	>>> import cProfile
+	>>> cProfile.run('sum([i * 2 for i in range(10000)])')
+			5 function calls in 0.001 seconds
+	>>> cProfile.run('sum((i * 2 for i in range(10000)))')
+			10005 function calls in 0.003 seconds
+
+
+	letters = ["a", "b", "c", "y"]
+	it = iter(letters)
+	while True:
+		try:
+			letter = next(it)
+		except StopIteration:
+			break
+		print(letter)
+
+	Generator的方法
+	.next()
+	.send()
+	.throw()
+	.close()
+	```
