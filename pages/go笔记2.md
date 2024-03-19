@@ -1,18 +1,18 @@
 1.编译和运行程序
-```bash
+```go
 go build main.go
 go run main.go
 ```
 
 2.格式化打印
-```bash
+```go
 fmt.Println("go" + "lang")
 fmt.Println(true)
 fmt.Println(!true)
 ```
 
 3.变量声明与初始化
-```bash
+```go
 var b, c int = 1, 2
 := 用来简化同时进行变量的声明和初始化,例如：
 f := "apple"
@@ -22,13 +22,13 @@ var f string = "apple"
 ```
 
 4. 常量
-```bash
+```go
 const s string = "constant"
 常量语句可以在任何var语句出现的位置出现
 ```
 
 5. for语句
-```bash
+```go
 #1
 i := 1  // inside a function
 for i <= 3 {
@@ -58,7 +58,7 @@ for n := 0; n <= 5; n++ {
 
 
 6. if/else
-```bash
+```go
 if num := 9; num < 0 {
     fmt.Println(num, "is negative")
 } else if num < 10 {
@@ -69,7 +69,7 @@ if num := 9; num < 0 {
 ```
 
 7. switch
-```bash
+```go
 switch time.Now().Weekday() {
 case time.Saturday, time.Sunday:
     fmt.Println("It is the weekend")
@@ -90,7 +90,7 @@ whatAmI := func(i interface{}) {
 ```
 
 8. array
-```bash
+```go
 slices在go中更常用，array在某些特殊的场合比较有用
 var a [5]int
 a[4] = 100
@@ -103,7 +103,7 @@ twoD[1][1] = 2
 ```
 
 9. slices
-```bash
+```go
 slices是Go语言中非常重要的数据类型，相比于array它提供了更强大的操作序列的接口
 未初始化的slice为nil并且长度为0
 var s[]string
@@ -147,7 +147,7 @@ fmt.Println("2d:", twoD)
 ```
 
 10. map
-```bash
+```go
 m := make(map[string]int)
 m["k1"] = 1
 m["k2"] = 2
@@ -163,7 +163,7 @@ if maps.Equal(n1, n2) {
 ```
 
 11. range
-```bash
+```go
 nums := []int{1, 2, 3}
 sum := 0
 for _, num := range nums {
@@ -191,7 +191,7 @@ for i, c := range "go" {
 ```
 
 12. function
-```bash
+```go
 Go需要有明确的return语句，Go可以有多个返回值
 当函数有多个相同类型的参数时，参数的类型可以省略
 func plus(a, b, c int) int {
@@ -261,7 +261,7 @@ fib = func(n int) int {
 ```
 
 13. pointers
-```bash
+```go
 func zeroptr(iptr *int) {
     *iptr = 0
 }
@@ -273,7 +273,7 @@ fmt.Println("address of i:", &i)
 ```
 
 14. strings and runes
-```bash
+```go
 A Go string is a read-only slice of bytes. 
 In Go, the concept of a character is called a rune - it’s an integer that represents a Unicode code point. 
 Go string literals are UTF-8 encoded text.
@@ -299,7 +299,7 @@ func examineRune(r rune) {
 ```
 15. struct
 
-```bash
+```go
 type preson struct {
     name string
     age  int
@@ -338,7 +338,7 @@ fmt.Println(dog)
 ```
 
 16. methods
-```bash
+```go
 Go supports methods defined on struct types.
 type rect struct {
     width, height int
@@ -364,7 +364,7 @@ fmt.Println("perim: ", rp.perim())
 ```
 
 17. interfaces
-```bash
+```go
 Interfaces are named collections of method signatures.
 type geometry interface {
     area() float64
@@ -406,7 +406,7 @@ measure(c)
 ```
 
 18. struct embedding
-```bash
+```go
 Go supports embedding of structs and interfaces to express a more seamless composition of types.
 An embedding looks like a field without a name.
 When creating structs with literals, we have to initialize the embedding explicitly; 
@@ -449,7 +449,7 @@ var d describer = co
 fmt.Println("describer:", d.describe())
 ```
 19. generics
-```bash
+```go
 generics, also known as type parameters
 func MapKeys[K comparable, V any](m map[K]V) []K {
     r := make([]K, 0, len(m))
@@ -498,7 +498,7 @@ func main() {
 }
 ```
 20. erros
-```bash
+```go
 In Go it’s idiomatic to communicate errors via an explicit, separate return value.
 By convention, errors are the last return value and have type error, a built-in interface.
 A nil value in the error position indicates that there was no error.
@@ -556,7 +556,7 @@ if ae, ok := e.(*argError); ok {
 Channels are the pipes that connect concurrent goroutines.
 By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization
 
-```bash
+```go
 # goroutine
 # f为普通的函数
 go f("goroutine")

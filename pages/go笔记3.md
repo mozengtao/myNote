@@ -542,8 +542,8 @@
         defer func() {
             fmt.Println(name)   // 输出 python
         }()
-            name = "python"
-            fmt.Println(name) // 输出 python
+        name = "python"
+        fmt.Println(name) // 输出 python
     }
 
     # 多个defer反序调用
@@ -555,10 +555,11 @@
 
     name = "java"
     fmt.Println(name)
+
     输出：
-    java
-    python
-    go
+        java
+        python
+        go
     //  多个defer 是反序调用的，有点类似栈一样，后进先出
 
     # defer 与 return 孰先孰后
