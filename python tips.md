@@ -96,6 +96,294 @@
     >>> mydict
     {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
     ```
+- 哪些情况下不需要续行符
+    ```python
+    在这些符号中间的代码换行可以省略掉续行符：[],(),{}
+    my_list = [1, 2, 3
+               4, 5, 6]
+    my_tuple = (1, 2, 3
+               4, 5, 6)
+    
+    my_dict = {"name": "xiaoming"
+               "gender": "male"}
+
+    在多行文本注释中 ''' ，续行符也可以省略
+    text = '''talk is cheap,
+              show me the code'''
+    ```
+- 用户无感知的小整数池
+    ```python
+    为避免整数频繁申请和销毁内存空间，Python 定义了一个小整数池 [-5, 256] 这些整数对象是提前建立好的，不会被垃圾回收
+    a = -6
+    b = -6
+    a is b      // False
+
+    a = 256
+    b = 256
+    a is b      // True
+
+    a = 257
+    b = 257
+    a is b      // False
+
+    a = 257; b = 257    # 当在同一行同时给两个变量赋同一值时，解释器知道这个对象已经生成，那么它就会引用到同一个对象。如果分成两行的话，解释器并不知道这个对象已经存在了，就会重新申请内存存放这个对象
+    a is b      // True
+    ```
+- 字符串的 intern 机制
+    ```python
+    Python解释器中使用了 intern（字符串驻留）的技术来提高字符串效率，即同样的字符串对象仅仅会保存一份，放在一个字符串储蓄池中，是共用的(字符串是不可变对象)
+    s1 = "hello"
+    s2 = "hello"
+    s1 is s2        // True
+
+    # 如果字符串中包含空格，默认不启用 intern 机制
+    s1 = "hell o"
+    s2 = "hell o"
+    s1 is s2        // False
+    ```
+- site-packages和 dist-packages
+    ```python
+    一般情况下，而你所安装的包也将安装在 site-packages 这个目录下
+    dist-packages 其实是 debian 系的 Linux 系统（如 Ubuntu）才特有的目录，使用 apt 去安装的 Python 包会使用 dist-packages，而你使用 pip 或者 easy_install 安装的包还是照常安装在 site-packages 下
+
+    如何查找 package 安装目录
+    from distutils.sysconfig import get_python_li
+    print(get_python_lib())     # /usr/lib/python3.8/site-packages
+    ```
+- argument 和 parameter 
+    ```python
+    parameter：形参（formal parameter），体现在函数内部，作用域是这个函数体
+    argument ：实参（actual parameter），调用函数实际传递的参数
+
+    def output_msg(msg):    # msg 为 parameter
+            print(msg)
+    output_msg("error")     # "error" 为 argument
+    ```
+- `/usr/bin/env python` 有什么用
+    ```python
+    当执行 env python 时，自动进入了 python console 的模式
+    当执行 env python 时，它其实会去 env | grep PATH 里指定的路径里去依次查找名为python的可执行文件，找到一个就直接执行
+
+    # 如果在 PATH 路径下指定一个名为 python 的可执行文件，执行 env python 时会执行该文件
+    $ echo $PATH
+    /usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+
+    $ cat /usr/local/bin/python
+    #!/usr/bin/python
+
+    print("hello")
+
+    $ env python
+    hello
+
+    应该优先使用 #!/usr/bin/env python，因为不是所有的机器的 python 解释器都是 /usr/bin/python
+    ```
+- dict() 与 {} 生成空字典有什么区别
+    ```python
+    在运行效率上，{} 会比 dict() 快三倍左右
+
+    使用 timeit 模块，可以轻松测出这个结果
+    $ python -m timeit -n 1000000 -r 5 -v "dict()"
+    raw times: 0.0626 0.0605 0.0616 0.0604 0.0622
+    1000000 loops, best of 5: 0.0604 usec per loop
+    $ python -m timeit -n 1000000 -r 5 -v "{}"
+    raw times: 0.0202 0.0196 0.0194 0.0192 0.0191
+    1000000 loops, best of 5: 0.0191 usec per loop
+
+    探究这个过程，可以使用 dis 模块
+    $ cat demo.py
+    {}
+    $ python -m dis demo.py
+    1           0 BUILD_MAP                0
+                3 POP_TOP
+                4 LOAD_CONST               0 (None)
+                7 RETURN_VALUE
+
+    $ cat demo.py
+    dict()
+    $ python3 -m dis demo.py
+    1           0 LOAD_NAME                0 (dict)
+                2 CALL_FUNCTION            0
+                4 POP_TOP
+                6 LOAD_CONST               0 (None)
+                8 RETURN_VALUE
+    使用 dict()，会多了个调用函数的过程，而这个过程会有进出栈的操作，相对更加耗时
+    ```
+- 正负得负，负负得正
+    ```python
+    5--3	// 8
+    5+-3	// 2
+    5++3	// 8
+    5---3	// 2
+    ```
+- return不一定都是函数的终点
+    ```python
+    try ... finally ... 的用法是：不管try里面是正常执行还是有报异常，最终都能保证finally能够执行
+    def func():
+        try:
+            return 'try'
+        finally:
+            return 'finally'
+    
+    func()      // 'finally'
+    // try中的 return 会被直接忽视，因为要保证 finally 能够执行
+
+    def func():
+        try:
+            return 'try'
+        finally:
+            print('finally')
+    
+    func()      // finally\n'try'
+    // 当 finally 下没有 reutrn ，其实 try 里的 return 仍然还是有效的
+
+    如果 finally 里有显式的 return，那么这个 return 会直接覆盖 try 里的 return，而如果 finally 里没有 显式的 return，那么 try 里的 return 仍然有效
+    ```
+- 字符串里的缝隙
+    ```python
+    "aabb".count("a")       // 2
+    "aabb".count("ab")      // 1
+    "aabb".count("")        // 5
+    // 在 Python 看来，两个字符之间都是一个空字符，通俗的说就是缝隙
+    (" " * 10).count("")        // 11
+    "" in ""                    // True
+    "" in "M"                   // True
+    ```
+- 字母也玩起了障眼法
+    ```python
+    ord('e')	// 101      拉丁字母e
+    ord('е')	// 1077     西里尔字母
+    ```
+- 切片异常
+    ```python
+    alist = [0, 1, 2, 3, 4]
+    alist[5]            // IndexError: list index out of range
+
+    alist[5:]           // []
+    alist[100:]         // []
+    ```
+- x 与 +x 等价吗
+    ```python
+    n1 = 123
+    n2 = +123
+    n1 == n2        // True
+
+    from collections import Counter
+    ct = Counter('abcdefg')
+
+    ct          // Counter({'a': 1, 'b': 1, 'c': 1, 'd': 1, 'e': 1, 'f': 1, 'g': 1})
+
+    ct['c'] = 0
+    ct['d'] = -2
+
+    ct          // Counter({'a': 1, 'b': 1, 'e': 1, 'f': 1, 'g': 1, 'c': 0, 'd': -2})
+    +ct         // Counter({'a': 1, 'b': 1, 'e': 1, 'f': 1, 'g': 1})
+    ```
+- += 不等同于=+
+    ```python
+    对列表 进行+= 操作相当于 extend，而使用 =+ 操作是新增了一个列表
+    a = [1, 2, 3, 4]
+    b = a
+    a = a + [5, 6, 7, 8]
+    a       // [1, 2, 3, 4, 5, 6, 7, 8]
+    b       // [1, 2, 3, 4]
+
+
+    a = [1, 2, 3, 4]
+    b = a
+    a += [5, 6, 7, 8]
+    a       // [1, 2, 3, 4, 5, 6, 7, 8]
+    b       // [1, 2, 3, 4, 5, 6, 7, 8]
+    ```
+- 局部/全局变量
+    ```python
+    在非全局下定义声明的变量都是局部变量
+    a = 1
+
+    def add():
+        a += 1      // Python 解释器认为在函数内部要给 a 这个变量赋值，因此 a 是局部变量，但是此时 a 尚未定义，因此报错
+    
+    add()
+
+    def output():
+        print(a)
+    
+    output()        // 1
+    ```
+- break /continue 和 上下文管理器哪个优先级高
+    ```python
+    import  time
+    import contextlib
+
+    @contextlib.contextmanager
+    def runtime(value):
+        time.sleep(1)
+        print("start: a = " + str(value))
+        yield
+        print("end: a = " + str(value))
+
+    a = 0
+    while True:
+        a += 1
+        with runtime(a):
+            if a % 2 == 0:
+                break
+
+    output:
+    start: a = 1
+    end: a = 1
+    start: a = 2
+    end: a = 2
+    当 a = 2 时执行了 break ，此时的并不会直接跳出循环，依然要运行上下文管理器里清理释放资源的代码
+
+    continue 与 break 一样，如果先遇到上下文管理器会先进行资源的释放
+    for 循环也是同样的
+    ```
+- 如何像 awk一样分割字符串
+    ```python
+    msg='hello    world'
+    msg.split(' ')      // ['hello', '', '', '', 'world']
+
+    msg.split()         // ['hello', 'world']        必须是空字符（比如制表符、换行符），就可以使用
+
+    适用于所有的分隔符
+    msg='hello----world'
+    msg.split('-')      // ['hello', '', '', '', 'world']
+    list(filter(None, msg.split('-')))  // ['hello', 'world']
+    list(filter(lambda item: True if item else False, msg.split('-')))  // ['hello', 'world']
+    ```
+- 如何让大数变得更易于阅读
+    ```python
+    num = 123_456_789
+    num     // 123456789
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
+- 
+    ```python
+    ```
 - 
     ```python
     ```
