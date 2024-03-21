@@ -1,10 +1,7 @@
-- # what is zmq
-	- #+BEGIN_QUOTE
-	  ZeroMQ is an asynchronous network messaging library known for its high performance. It’s intended use is for distributed systems as well as concurrent systems. In summary, ZMQ allows you to send messages (binary data, serialized data, simple strings, etc.) over the network through various methods like TCP or multicast as well as between processes.  ZeroMQ provides a whole slew of language APIs which run on most operating systems and allows you to communicate seamlessly between all sorts of programs. It also provides a collection of patterns, such as request-reply and publish-subscribe which assist you in creating and structuring your network.
-	  #+END_QUOTE
-- # zmq基本概念
-- #+BEGIN_QUOTE
-  ZMQ是一种高速并发消息通信框架
+- what is zmq
+	> ZeroMQ is an asynchronous network messaging library known for its high performance. It’s intended use is for distributed systems as well as concurrent systems. In summary, ZMQ allows you to send messages (binary data, serialized data, simple strings, etc.) over the network through various methods like TCP or multicast as well as between processes.  ZeroMQ provides a whole slew of language APIs which run on most operating systems and allows you to communicate seamlessly between all sorts of programs. It also provides a collection of patterns, such as request-reply and publish-subscribe which assist you in creating and structuring your network.
+- zmq基本概念
+    ZMQ是一种高速并发消息通信框架
   
   **ZMQ context**
   在使用任何ZMQ的库函数之前，必须使用**zmq_init()**进行ZMQ context的初始化
@@ -77,7 +74,6 @@
   **Devices**
   ØMQ provides devices, which are building blocks that act as intermediate nodes in complex messaging topologies. Devices can act as brokers that other nodes connect to, proxies that connect through to other nodes, or any mix of these two models.
   zmq_device(3)
-  #+END_QUOTE
 - # 参考
 - [**zguide**](https://zguide.zeromq.org/)
 - [Working with Messages](https://zguide.zeromq.org/docs/chapter2/#Working-with-Messages)

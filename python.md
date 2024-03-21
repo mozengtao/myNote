@@ -1108,3 +1108,4 @@
 	.throw()
 	.close()
 	```
+- [Python's filter(): Extract Values From Iterables](https://realpython.com/python-filter-function/)

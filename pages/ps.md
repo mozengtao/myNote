@@ -25,7 +25,7 @@
 	- [man ps](https://man7.org/linux/man-pages/man1/ps.1.html)
 	- [How to Use the ps Command on Linux](https://pimylifeup.com/ps-command-linux/)
 	- [Getting a Process’ Child Processes](https://www.baeldung.com/linux/get-process-child-processes)
-		- #+BEGIN_QUOTE
+		```bash
 		  pgrep -P 6245
 		  6246
 		  6247
@@ -48,10 +48,8 @@
 		  6246  6245 /bin/bash ./child.sh
 		  6247  6245 sleep infinity
 		  
-		  
 		  ls /proc/6245/task
 		  6245
 		  cat /proc/6245/task/6245/children
 		  6246 6247
-		  
-		  #+END_QUOTE
+		```

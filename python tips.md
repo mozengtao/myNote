@@ -784,9 +784,16 @@
         traceback.print_stack(file=sys.stdout)
     hello
     ```
-- 
-    ```python
-    ```
+- `__name__`
+    `__name__` 是一个特殊的 Python 变量，它的值取决于使用者如果执行包含该变量的脚本
+    
+    1.当直接执行脚本 nameScript.py 时
+
+    ![alt text](image.png)
+
+    2.当 import nameScript 时
+
+    ![alt text](image-1.png)
 - 
     ```python
     ```
