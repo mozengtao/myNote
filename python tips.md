@@ -357,29 +357,432 @@
     num = 123_456_789
     num     // 123456789
     ```
-- 
+- 懒人必备技能：使用 _
     ```python
+    1. _ 可以用作占位符
+    2. 在交互式模式下，_ 可以用来返回上一次的运行结果
+    >>> 3+ 4
+    7
+    >>> _
+    7
+
+    class mytest():
+        def __str__(self):
+            return "hello"
+        
+        def __repr__(self):
+            return "world"
+    
+    >>> mt = mytest()
+    >>> mt
+    world
+    >>> print(mt)
+    hello
+    >>> _
+    world
+
+    // __repr__输出的内容可以被 _ 获取到的，print函数打印出来的不行
     ```
-- 
+- 查看包搜索路径的方式
     ```python
+    # 1
+    >>> import sys
+    >>> from pprint import pprint
+    >>> pprint(sys.path)
+    ['',
+    '/usr/lib/python37.zip',
+    '/usr/lib/python3.7',
+    '/usr/lib/python3.7/lib-dynload',
+    '/home/morrism/.local/lib/python3.7/site-packages',
+    '/usr/local/lib/python3.7/dist-packages',
+    '/usr/lib/python3/dist-packages']
+
+    # 2
+    $ python -c "print('\n'.join(__import__('sys').path))"
+
+    /usr/lib/python2.7
+    /usr/lib/python2.7/plat-x86_64-linux-gnu
+    /usr/lib/python2.7/lib-tk
+    /usr/lib/python2.7/lib-old
+    /usr/lib/python2.7/lib-dynload
+    /usr/local/lib/python2.7/dist-packages
+    /usr/lib/python2.7/dist-packages
+
+    # 3
+    $ python3 -m site
+    sys.path = [
+        '/mnt/c/Users/morrism/Downloads/go',
+        '/usr/lib/python37.zip',
+        '/usr/lib/python3.7',
+        '/usr/lib/python3.7/lib-dynload',
+        '/home/morrism/.local/lib/python3.7/site-packages',
+        '/usr/local/lib/python3.7/dist-packages',
+        '/usr/lib/python3/dist-packages',
+    ]
+    USER_BASE: '/home/morrism/.local' (exists)
+    USER_SITE: '/home/morrism/.local/lib/python3.7/site-packages' (exists)
+    ENABLE_USER_SITE: True
     ```
-- 
+- 使用 json.tool 来格式化 JSON
     ```python
+    $ cat demo.json
+    {"_id":"5f12d319624e57e27d1291fe","index":0,"guid":"4e482708-c6aa-4ef9-a45e-d5ce2c72c68d","isActive":false,"balance":"$2,954.93","picture":"http://placehold.it/32x32","age":36,"eyeColor":"green","name":"MasseySaunders","gender":"male","company":"TALAE","email":"masseysaunders@talae.com","phone":"+1(853)508-3237","address":"246IndianaPlace,Glenbrook,Iowa,3896","about":"Velitmagnanostrudexcepteurduisextemporirurefugiataliquasunt.Excepteurvelitquiseuinexinoccaecatoccaecatveliteuet.Commodonisialiquipirureminimconsequatminimconsecteturipsumsitex.\r\n","registered":"2017-02-06T06:42:20-08:00","latitude":-10.269827,"longitude":-103.12419,"tags":["laborum","excepteur","veniam","reprehenderit","voluptate","laborum","in"],"friends":[{"id":0,"name":"DorotheaShields"},{"id":1,"name":"AnnaRosales"},{"id":2,"name":"GravesBryant"}],"greeting":"Hello,MasseySaunders!Youhave8unreadmessages.","favoriteFruit":"apple"}
+
+    $ python3 -m json.tool demo.json
+    {
+        "_id": "5f12d319624e57e27d1291fe",
+        "index": 0,
+        "guid": "4e482708-c6aa-4ef9-a45e-d5ce2c72c68d",
+        "isActive": false,
+        "balance": "$2,954.93",
+        "picture": "http://placehold.it/32x32",
+        "age": 36,
+        "eyeColor": "green",
+        "name": "MasseySaunders",
+        "gender": "male",
+        "company": "TALAE",
+        "email": "masseysaunders@talae.com",
+        "phone": "+1(853)508-3237",
+        "address": "246IndianaPlace,Glenbrook,Iowa,3896",
+        "about": "Velitmagnanostrudexcepteurduisextemporirurefugiataliquasunt.Excepteurvelitquiseuinexinoccaecatoccaecatveliteuet.Commodonisialiquipirureminimconsequatminimconsecteturipsumsitex.\r\n",
+        "registered": "2017-02-06T06:42:20-08:00",
+        "latitude": -10.269827,
+        "longitude": -103.12419,
+        "tags": [
+            "laborum",
+            "excepteur",
+            "veniam",
+            "reprehenderit",
+            "voluptate",
+            "laborum",
+            "in"
+        ],
+        "friends": [
+            {
+                "id": 0,
+                "name": "DorotheaShields"
+            },
+            {
+                "id": 1,
+                "name": "AnnaRosales"
+            },
+            {
+                "id": 2,
+                "name": "GravesBryant"
+            }
+        ],
+        "greeting": "Hello,MasseySaunders!Youhave8unreadmessages.",
+        "favoriteFruit": "apple"
+    }
     ```
-- 
+- 命令行式执行 Python 代码
     ```python
+    $ python -c "import hashlib;print(hashlib.md5('hello').hexdigest())"
+    5d41402abc4b2a76b9719d911017c592
     ```
-- 
+- 用调试模式执行脚本
     ```python
+    python -m pdb demo.py
     ```
-- 
+- 快速搭建 HTTP 服务器
     ```python
+    默认端口是8000
+    # python2
+    python -m SimpleHTTPServer 8888
+
+    # python3
+    python3 -m http.server 8888
     ```
-- 
+- 快速构建 HTML 帮助文档
     ```python
+    # 开启一个 HTTP 服务，xxx 为端口
+    python -m pydoc -p xxx
+
+    $ python -m pydoc -p 5200
+    pydoc server ready at http://localhost:5200/
+
     ```
-- 
+- 最正确且优雅的装包方法
     ```python
+    使用 pip 来安装第三方的模块
+    pip intall xxx
+    如果环境中存在着多个版本的 Python时，到底把包安装在了哪里呢？
+
+    # 在 python2 中安装
+    $ python -m pip install requests
+
+    # 在 python3 中安装
+    $ python3 -m pip install requests
+
+    # 在 python3.8 中安装
+    $ python3.8 -m pip install requests
+
+    # 在 python3.9 中安装
+    $ python3.9 -m pip install requests
+    ```
+- 让脚本报错后立即进入调试模式
+    ```python
+    执行脚本时 带着 -i 参数
+    $ cat demo.py
+    msg = "hello"
+    raise Exception
+    $ python3 -i demo.py
+    Traceback (most recent call last):
+    File "demo.py", line 2, in <module>
+        raise Exception
+    Exception
+    ```
+- python shell quiet mode
+    ```python
+    $ python3 -q
+    >>>
+    ```
+- 在执行任意代码前添加定制的处理（类似.bash_profile的功能）
+    ```python
+    $ python3 -q
+    >>> import site
+    >>> site.getusersitepackages()
+    '/home/morrism/.local/lib/python3.7/site-packages'
+    >>>
+    $ vim /home/morrism/.local/lib/python3.7/site-packages/usercustomize.py     // 注意名字必须是usercustomize.py
+    $ cat /home/morrism/.local/lib/python3.7/site-packages/usercustomize.py
+    msg=r"""
+    This is a customized banner message ...
+    """
+    print(msg)
+    $ python3 -q
+
+    This is a customized banner message ...
+
+    >>>
+    ```
+- 启动 Python Shell 前自动执行某脚本
+    ```python
+    # 只适用于 Python Shell
+    $ export PYTHONSTARTUP=/mnt/c/Users/morrism/Downloads/go/demo.py
+    $ cat demo.py
+    msg = "hello"
+    print(msg)
+    $ python3 -q
+    hello
+    >>>
+
+    # 适用于 Python 执行脚本的方法: 手动加载执行
+    $ export PYTHONSTARTUP=/mnt/c/Users/morrism/Downloads/go/demo.py
+
+    cat startup.py:
+    import os
+    filename = os.environ.get('PYTHONSTARTUP')
+    if filename and os.path.isfile(filename):
+        with open(filename) as fobj:
+            startup_file = fobj.read()
+        exec(startup_file)
+    
+    print("everything is ok")
+
+    $ python3 -q startup.py
+    hello
+    everything is ok
+    ```
+- 把模块当做脚本来执行 7 种方法及原理
+    ```python
+    # 快速搭建一个 HTTP 服务
+    # python2
+    $ python -m SimpleHTTPServer 8888
+    # python3
+    $ python3 -m http.server 8888
+
+    #快速构建 HTML 帮助文档
+    $ python -m pydoc -p 5200
+
+    #快速进入 pdb 调试模式
+    $ python -m pdb demo.py
+
+    # 最优雅且正确的包安装方法
+    $ python3 -m pip install requests
+
+    # 快速美化 JSON 字符串
+    $ echo '{"name": "MING"}' | python -m json.tool
+
+    # 快速打印包的搜索路径
+    $ python -m site
+
+    # 用于快速计算程序执行时长
+    $ python3 -m timeit '"-".join(map(str, range(100)))'
+
+    # 原理剖析
+    最好的学习方式，莫过于模仿，直接以 pip 和 json 模块为学习对象，看看目录结构和代码都有什么特点
+
+    
+    使用 -m 的方式执行模块，有两种方式：
+    1.以 -m <package> 的方式执行，只要在 package 下写一个 __main__.py 的文件即可
+    2.以 -m <package.module> 的方式执行，只要在 module 的代码中，定义一个 main 函数，然后在最外层写入下面这段固定的代码
+    if __name__ == '__main__':
+        main()
+    -m 的使用情况分为两种，但是实际上，只有一种，对于第一种，你完全可以将 -m <package> 理解为 -m <package.__main__> 的简写形式
+
+    # 1
+    $ tree demo
+    demo
+    └── __main__.py
+
+    0 directories, 1 file
+    $ cat demo/__main__.py
+    print("hello")
+    $ export PATH=${PATH}:`pwd`
+    $ python3 -m demo
+    hello
+
+    # 2
+    $ tree demo
+    demo
+    ├── foobar.py
+    └── __main__.py
+
+    0 directories, 2 files
+
+    $ cat demo/foobar.py
+    # foobar.py
+    def main():
+        print("hello foobar")
+
+    if __name__ == "__main__":
+        main()
+
+    $ python3 -m demo.foobar
+    hello foobar
+    ```
+- 快速计算字符串 base64编码
+    ```python
+    # 对字符串编码和解码
+    $ echo "hello, world" | python3 -m base64
+    aGVsbG8sIHdvcmxkCg==
+    $ echo "aGVsbG8sIHdvcmxkCg==" | python3 -m base64 -d
+    hello, world
+
+    # 对文件进行编码和解码
+    $ python3 -m base64 demo.py
+    bXNnID0gImhlbGxvIgpwcmludChtc2cpCg==
+    $ echo "bXNnID0gImhlbGxvIgpwcmludChtc2cpCg==" | python3 -m base64 -d
+    msg = "hello"
+    print(msg)
+    $ echo "bXNnID0gImhlbGxvIgpwcmludChtc2cpCg==" | python3 -m base64 -d | python3
+    hello
+    ```
+- 指定文件的mime类型
+    ```python
+    # 可在线检测
+    $ python -m mimetypes https://docs.python.org/3/library/mimetypes.html
+    type: text/html encoding: None
+
+    # 也可离线检测
+    $ python -m mimetypes index.html
+    type: text/html encoding: None
+    ```
+- 查看 Python 的环境信息
+    ```python
+    python3 -m sysconfig
+    信息包括：
+    你当前的操作系统平台
+    Python 的具体版本
+    包的搜索路径
+    以及各种环境变量
+    ```
+- 快速解压和压缩文件
+    ```python
+    # 将 demo 文件夹压缩成 demo.tar
+    $ python3 -m tarfile -c demo.tar demo
+    # 解压 demo.tar 到 demo_new 文件夹下
+    $ python3 -m tarfile -e demo.tar demo_new
+    # 将 message.html 文件夹压缩成 message.gz   (gzip 的输入，只能是一个文件，而不能是一个目录)
+    $  python3 -m gzip message
+    # 解压 message.gz
+    $ python3 -m gzip -d message.gz
+    # 压缩  demo 文件夹为 demo.zip
+    $ python3 -m zipfile -c demo.zip demo
+    #解压一个 zip 格式的压缩包
+    $ python3 -m zipfile -e demo.zip demo
+    ```
+- pyc 文件
+    ```python
+    pyc是一种二进制文件，是由py文件经过编译后，生成的文件，是一种byte code，py文件变成pyc文件后，加载的速度会有所提高
+    $ ls demo
+    main.py
+    $ cat demo/main.py
+    print("hello")
+    $ python3 -O -m compileall demo             # 编译成 pyc 文件
+    Listing 'demo'...
+    Compiling 'demo/main.py'...
+    $ ls demo
+    main.py  __pycache__
+    $ ls demo/__pycache__/
+    main.cpython-37.opt-1.pyc
+    $ python3 demo/__pycache__/main.cpython-37.opt-1.pyc
+    hello
+    ```
+- 使用 telnet 端口检测工具
+    ```python
+    # 检查 135.242.60.169 上的 22 端口有没有开放
+    $ python3 -m telnetlib -d 135.242.60.169 22
+    Telnet(135.242.60.169,22): recv b'SSH-2.0-OpenSSH_8.0\r\n'
+    SSH-2.0-OpenSSH_8.0
+    ```
+- 快速将项目打包成应用程序
+    ```python
+    $ tree demo
+    demo
+    ├── main.py
+    └── utils.py
+
+    0 directories, 2 files
+    $ cat demo/main.py
+    import utils
+
+    def main():
+        utils.say_hello()
+
+    if __name__ == "__main__":
+        main()
+    $ cat demo/utils.py
+    def say_hello():
+        print("hello")
+    $ python3 -m zipapp demo -m "main:main"         # main:main 第一个main指的是 main.py ，第二个 main 指的是 main 函数
+    $ ls demo*
+    demo.json  demo.py  demo.pyz
+
+    demo:
+    main.py  utils.py
+    $ ls -l demo.py
+    demo.py   demo.pyz
+    $ ls -l demo.pyz
+    -rwxrwxrwx 1 morrism morrism 473 Mar 21 09:06 demo.pyz
+    $ python3 demo.pyz
+    hello
+    ```
+- 快速打印函数的调用栈
+    ```python
+    $ cat t1.py
+    import traceback        # import traceback module
+    import sys
+
+    def print_hello():
+        traceback.print_stack(file=sys.stdout)      # print stack
+        print("hello")
+
+    def main():
+        print_hello()
+
+    if __name__ == "__main__":
+        main()
+
+    $ python3 t1.py
+    File "t1.py", line 12, in <module>
+        main()
+    File "t1.py", line 9, in main
+        print_hello()
+    File "t1.py", line 5, in print_hello
+        traceback.print_stack(file=sys.stdout)
+    hello
     ```
 - 
     ```python

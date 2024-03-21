@@ -984,6 +984,7 @@
 	```
 	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
 - 参考文档
+	- [www.python.org](https://www.python.org/)
 	- [Python 标准库](https://docs.python.org/zh-cn/3/library/)
 	- [**The Python Standard Library**](https://docs.python.org/3/library/)
 	- [**Python黑魔法手册**](https://magic.iswbm.com/index.html)
