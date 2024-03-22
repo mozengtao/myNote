@@ -1109,3 +1109,4 @@
 	.close()
 	```
 - [Python's filter(): Extract Values From Iterables](https://realpython.com/python-filter-function/)
+- [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)
