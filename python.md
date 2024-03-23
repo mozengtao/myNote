@@ -1110,3 +1110,405 @@
 	```
 - [Python's filter(): Extract Values From Iterables](https://realpython.com/python-filter-function/)
 - [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)
+- [argparse](https://docs.python.org/3/library/argparse.html)
+- [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)
+	> Parser for command-line options, arguments and sub-commands
+	```python
+	# 1 最简单的 argparse 的例子
+	$ cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+
+	$ python t1.py
+	$ python t1.py --help
+	usage: t1.py [-h]
+
+	optional arguments:
+	-h, --help  show this help message and exit
+	$ python t1.py --verbose
+	usage: t1.py [-h]
+	t1.py: error: unrecognized arguments: --verbose
+	$ python t1.py xxx
+	usage: t1.py [-h]
+	t1.py: error: unrecognized arguments: xxx
+	# 没有任何选项的情况下运行脚本不会在标准输出显示任何内容
+	# --help 选项，也可缩写为 -h，是唯一一个可以直接使用的选项（即不需要指定该选项的内容）。指定任何内容都会导致错误
+
+	# 2 位置参数
+	cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("echo", help="echo the string you use here")
+	args = parser.parse_args()
+	print(args.echo)
+
+	$ python3 t1.py
+	usage: t1.py [-h] echo
+	t1.py: error: the following arguments are required: echo
+	$ python3 t1.py echo
+	echo
+	$ python3 t1.py echo1
+	echo1
+
+	# 3 argparse 会把我们传递给它的选项视作为字符串，除非我们告诉它别这样
+	cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("square", help="display a square of a given number", type=int)
+	args = parser.parse_args()
+	print(args.square ** 2)
+
+	$ python3 t1.py 4
+	16
+
+	# 可选参数
+	cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--verbose", help="increase output verbosity",
+						action="store_true")	# action 赋值为 "store_true"，意味着，如果指定了该选项，则将值 True 赋给 args.verbose
+	args = parser.parse_args()
+	if args.verbose:
+		print("verbosity turned on")
+
+	$ python3 t1.py
+	$ python3 t1.py  --verbose
+	verbosity turned on
+
+	# 短选项
+	parser.add_argument("-v", "--verbose", help="increase output verbosity",
+						action="store_true")	# 添加 "-v"，用来支持短选项
+	
+	# 结合位置参数和可选参数
+	cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("square", type=int, help="display a square of a given number")
+	parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+	args = parser.parse_args()
+	answer = args.square ** 2
+	if args.verbose:
+		print(f"the square of {args.square} equals {answer}")
+	else:
+		print(answer)
+	
+	$ python3 t1.py  4
+	16
+	$ python3 t1.py  4 --verbose
+	the square of 4 equals 16
+	$ python3 t1.py  --verbose 4
+	the square of 4 equals 16
+
+	# 改进 1, 给程序加上接受多个冗长度的值
+	parser.add_argument("-v", "--verbose", type=int, help="increase output verbosity")
+
+	if args.verbose == 2:
+		print(f"the square of {args.square} equals {answer}")
+	elif args.verbose == 1:
+		print(f"{args.square}^2 == {answer}")
+	else:
+		print(answer)
+
+	$ python3 t1.py  4
+	16
+	$ python3 t1.py  4 -v
+	usage: t1.py [-h] [-v VERBOSE] square
+	t1.py: error: argument -v/--verbose: expected one argument
+	$ python3 t1.py  4 -v 1
+	4^2 == 16
+	$ python3 t1.py  4 -v 2
+	the square of 4 equals 16
+	$ python3 t1.py  4 -v 3		# not as expected
+	16
+
+	# 改进 2， 限制 --verbosity 选项可以接受的值
+	parser.add_argument("-v", "--verbose", type=int, choices=[0, 1, 2],
+						help="increase output verbosity")
+	
+	$ python3 t1.py  4 -v 3
+	usage: t1.py [-h] [-v {0,1,2}] square
+	t1.py: error: argument -v/--verbose: invalid choice: 3 (choose from 0, 1, 2)
+
+	# 改进 3，改变冗长度
+	parser.add_argument("-v", "--verbose", action="count",		# "count" action 用来统计特定选项出现的次数
+						help="increase output verbosity")
+	
+	$ python3 t1.py  4 -v
+	4^2 == 16
+	$ python3 t1.py  4 -vv
+	the square of 4 equals 16
+	$ python3 t1.py  4 -vvv		# not as expected
+	16
+
+	# 改进 4
+	if args.verbose >= 2:		# == 改为 >=
+		print(f"the square of {args.square} equals {answer}")
+	elif args.verbose == 1:
+		print(f"{args.square}^2 == {answer}")
+	else:
+		print(answer)
+
+	$ python3 t1.py  4 -vvv
+	the square of 4 equals 16
+	$ python3 t1.py  4
+	Traceback (most recent call last):
+	File "t1.py", line 10, in <module>
+		if args.verbose >= 2:
+	TypeError: '>=' not supported between instances of 'NoneType' and 'int' # 默认情况下如果一个可选参数没有被指定，它的值会是 None，不能和整数值相比较
+
+	# 改进 5
+	parser.add_argument("-v", "--verbose", action="count", default=0,		# 关键字 default 设置为 0 来让它可以与其他整数值进行比较
+						help="increase output verbosity")
+	
+	# 扩展执行其他幂次的运算
+	cat t1.py
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("x", type=int, help="the base")
+	parser.add_argument("y", type=int, help="the exponent")
+	parser.add_argument("-v", "--verbosity", action="count", default=0)
+	args = parser.parse_args()
+	answer = args.x**args.y
+	if args.verbosity >= 2:
+		print(f"{args.x} to the power {args.y} equals {answer}")
+	elif args.verbosity >= 1:
+		print(f"{args.x}^{args.y} == {answer}")
+	else:
+		print(answer)
+	
+	$ python3 t1.py  4 2
+	16
+	$ python3 t1.py  4 2 -v
+	4^2 == 16
+	$ python3 t1.py  4 2 -vv
+	4 to the power 2 equals 16
+
+	# 使用详细级别来显示 更多的 文本
+	if args.verbosity >= 2:
+		print(f"Running '{__file__}'")
+	if args.verbosity >= 1:
+		print(f"{args.x}^{args.y} == ", end="")
+	print(answer)
+
+	$ python3 t1.py  4 2
+	16
+	$ python3 t1.py  4 2 -v
+	4^2 == 16
+	$ python3 t1.py  4 2 -vv
+	Running 't1.py'
+	4^2 == 16
+
+	# 处理 矛盾的选项 (--quiet 选项 与 --verbose 的作用相反)
+	import argparse
+
+	parser = argparse.ArgumentParser()
+	group = parser.add_mutually_exclusive_group()
+	group.add_argument("-v", "--verbose", action="store_true")
+	group.add_argument("-q", "--quiet", action="store_true")
+	parser.add_argument("x", type=int, help="the base")
+	parser.add_argument("y", type=int, help="the exponent")
+	args = parser.parse_args()
+	answer = args.x**args.y
+
+	if args.quiet:
+		print(answer)
+	elif args.verbose:
+		print(f"{args.x} to the power {args.y} equals {answer}")
+	else:
+		print(f"{args.x}^{args.y} == {answer}")
+	
+	$ python3 t1.py  4 2
+	4^2 == 16
+	$ python3 t1.py  4 2 -q
+	16
+	$ python3 t1.py  4 2 -v
+	4 to the power 2 equals 16
+	$ python3 t1.py  4 2 -vq
+	usage: t1.py [-h] [-v | -q] x y
+	t1.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
+	$ python3 t1.py  4 2 -v --quiet
+	usage: t1.py [-h] [-v | -q] x y
+	t1.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
+
+	# 描述程序的主要目标
+	parser = argparse.ArgumentParser(description="calculate X to the power of Y")
+	```
+- Python 面向对象
+	```python
+	面向对象编程 提供了一种组织程序的方法， 它把个体的属性和行为绑定在特定的对象上。
+
+	Class
+	Class 用来创建用户自定义的数据结构，在类中定义的函数称为方法 Method，Methods 定义了 Class 所定义的对象的行为，类只是用来定义对象的模板，不包含任何数据
+	instance 实例是Class所创建的对象，它包含真正的数据
+
+	Class 的定义
+	# dog.py
+
+	class Dog:
+		species = "Canis familiaris"	# species 是 class attributes
+
+		def __init__(self, name, age):
+			self.name = name		# name 和 age 是 instance attributes
+			self.age = age
+
+		def __str__(self):
+			return f"{self.name} is {self.age} years old"
+		
+		# Instance method
+		def description(self):
+			return f"{self.name} is {self.age} years old"
+
+		# Another instance method
+		def speak(self, sound):
+			return f"{self.name} says {sound}"
+
+	instance attributes ：在 __init__() 方法中定义的属性，称为实例属性，实例属性是类的特定实例的属性
+	class attributes：类属性所有类的实例所具有的相同的属性
+
+	Creating a new object from a class is called instantiating a class
+
+	Methods like .__init__() and .__str__() are called dunder methods because they begin and end with double underscores
+	__str__() 是一个特殊的实例方法， 用来自定义对象的print输出
+
+	__repr__() provides the official string representation of an object, aimed at the programmer.
+	__str__() provides the informal string representation of an object, aimed at the user.
+
+
+	import datetime
+	today = datetime.datetime.now()
+
+	today	# datetime.datetime(2023, 2, 18, 18, 40, 2, 160890)
+	print(today)	# 2023-02-18 18:40:02.160890
+
+
+	类的继承
+	# inheritance.py (attribute overridden)
+
+	class Parent:
+		hair_color = "brown"
+
+	class Child(Parent):
+		hair_color = "purple"
+
+
+	# inheritance.py (attribute extended)
+
+	class Parent:
+		speaks = ["English"]
+
+	class Child(Parent):
+		def __init__(self):
+			super().__init__()
+			self.speaks.append("German")
+
+	父类 与 子类
+	# dog.py
+
+	class Dog:
+		species = "Canis familiaris"
+
+		def __init__(self, name, age):
+			self.name = name
+			self.age = age
+
+		def __str__(self):
+			return f"{self.name} is {self.age} years old"
+
+		def speak(self, sound):
+			return f"{self.name} says {sound}"
+
+	class JackRussellTerrier(Dog):
+		pass
+
+	class Dachshund(Dog):
+		pass
+
+	class Bulldog(Dog):
+		pass
+
+	>>> miles = JackRussellTerrier("Miles", 4)
+	>>> buddy = Dachshund("Buddy", 9)
+	>>> jack = Bulldog("Jack", 3)
+	>>> jim = Bulldog("Jim", 5)
+
+	>>> miles.species
+	'Canis familiaris'
+
+	>>> buddy.name
+	'Buddy'
+
+	>>> print(jack)
+	Jack is 3 years old
+
+	>>> jim.speak("Woof")
+	'Jim says Woof'
+
+	object 所属的 class
+	>>> type(miles)
+	<class '__main__.JackRussellTerrier'>
+
+	某个具体对象 是否是 某个特定 类 的实例
+	>>> isinstance(miles, Dog)
+	True
+
+	扩展父类的功能
+	# dog.py
+
+	# ...
+
+	class JackRussellTerrier(Dog):
+		def speak(self, sound="Arf"):
+			return f"{self.name} says {sound}"
+
+	# ...
+
+	# dog.py
+
+	# ...
+	使用 super() 在子类的方法里访问父类的方法
+	class JackRussellTerrier(Dog):
+		def speak(self, sound="Arf"):
+			return super().speak(sound)
+
+	# ...
+	```
+- Executing Shell Commands with Python
+	- [Run Bash Commands in Python: Subprocess Module Guide](https://ioflood.com/blog/python-run-bash-command/)
+	- [The Right Way to Run Shell Commands From Python](https://martinheinz.dev/blog/98)
+	```python
+	Operating system programs are of two types, called shell and kernel programs.
+	Kernel programs are the ones who perform the actual tasks, like creating a file or sending interrupts. 
+	Shell is another program, whose job is to take input and decide and execute the required kernel program to do the job and show the output.
+	The shell is also called the command processor.
+
+	The terminal is the program that interacts with the shell and allows us to communicate with it via text-based commands. This is why it's also called the command line.
+
+	Calling Shell Commands from Python:
+	Option 1: OS.system (deprecated)
+	Option 2: subprocess.call (recommended for Python<3.5)
+	Option 3: subprocess.run (recommended since Python 3.5)
+
+
+	# 示例 1
+	#!/usr/bin/env python3                                                                            
+	import subprocess
+
+	command = "ls"
+	options = "-l"
+
+	args=[]
+	args.append(command)
+	args.append(options)
+
+	output = subprocess.run(args,capture_output=True)
+
+	print('Return code:', output.returncode)
+
+	print('Output:',output.stdout.decode("utf-8"))
+	```

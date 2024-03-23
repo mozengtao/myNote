@@ -1,3 +1,4 @@
+- [Python Tips and Trick, You Haven't Already Seen](https://martinheinz.dev/blog/1)
 - 省略号
     ```python
     在Python中，一切皆对象，省略号也不例外
@@ -786,7 +787,7 @@
     ```
 - `__name__`
     `__name__` 是一个特殊的 Python 变量，它的值取决于使用者如果执行包含该变量的脚本
-    
+
     1.当直接执行脚本 nameScript.py 时
 
     ![alt text](image.png)
