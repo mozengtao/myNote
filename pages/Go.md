@@ -1,7 +1,11 @@
+- [How to Write Go Code](https://go.dev/doc/code)
 - [**Go 学习路线**](https://github.com/rosedblabs/go-learning)
   - [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
 - [Go go-to guide](https://yourbasic.org/golang/)
 - [Tutorials](https://go.dev/doc/tutorial/)
+- [Tutorials](https://zetcode.com/all/#go)
+- [Tutorials](https://tutorialedge.net/course/golang/)
+- [Go examples](https://www.dotnetperls.com/s#go)
 - [**Documentation**](https://go.dev/doc/)
 - [**Command Documentation**](https://go.dev/doc/cmd)
 - [**Go入门指南**](https://go.timpaik.top/)
@@ -19,6 +23,8 @@
       > A Builder is used to efficiently build a string using Builder.Write methods. It minimizes memory copying. The zero value is ready to use. Do not copy a non-zero Builder.
   - [fmt](https://pkg.go.dev/fmt)
     > Package fmt implements formatted I/O with functions analogous to C's printf and scanf. The format 'verbs' are derived from C's but are simpler.
+  - [runtime](https://pkg.go.dev/runtime)
+    > Package runtime contains operations that interact with Go's runtime system, such as functions to control goroutines.
   - [os](https://pkg.go.dev/os)
     > Package os provides a platform-independent interface to operating system functionality. The design is Unix-like, although the error handling is Go-like; failing calls return values of type error rather than error numbers. Often, more information is available within the error. For example, if a call that takes a file name fails, such as Open or Stat, the error will include the failing file name when printed and will be of type *PathError, which may be unpacked for more information.
     - [exec](https://pkg.go.dev/os/exec)

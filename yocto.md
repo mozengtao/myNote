@@ -1,3 +1,19 @@
+- Tips
+```bitbake
+1.DEPENDS
+Lists a recipe’s build-time dependencies. These are dependencies on other recipes whose contents (e.g. headers and shared libraries) are needed by the recipe at build time.
+
+// build-time dependency
+DEPENDS = "bar"
+The practical effect of the previous assignment is that all files installed by bar will be available in the appropriate staging sysroot, given by the STAGING_DIR* variables, by the time the do_configure task for foo runs.
+
+ // build 过程需要用到(依赖于) 宿主机 的 utilities
+ DEPENDS = "codegen-native"
+ DEPENDS can also be used to add utilities that run on the build machine during the build. 
+
+ https://docs.yoctoproject.org/ref-manual/variables.html#term-DEPENDS
+ https://docs.yoctoproject.org/ref-manual/classes.html#ref-classes-native
+```
 - [Images](https://docs.yoctoproject.org/ref-manual/images.html#images)
 	- ```bash
 	  #1 bitbake 执行命令时出现 "Resource Temporarily Unavailable"
