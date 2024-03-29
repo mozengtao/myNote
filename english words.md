@@ -129,3 +129,4 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - ephemeral / ɪˈfemərəl /  短暂的；（主指植物）短生的，短命的
 - maternity / məˈtɜːrnəti / 怀孕的，产妇的
 - ellipsis	/ ɪˈlɪpsɪs /   省略；省略号
+- dissolve / dɪˈzɑːlv /    解散，解除；消失；（以化学手段）除去，分散；（使）溶解
