@@ -1,3 +1,24 @@
+- [typing — Support for type hints](https://docs.python.org/3/library/typing.html)
+	```python
+	def greeting(name: str) -> str:
+		return 'Hello ' + name
+
+	# Type aliases are useful for simplifying complex type signatures. For example:
+	from collections.abc import Sequence
+
+	type ConnectionOptions = dict[str, str]
+	type Address = tuple[str, int]
+	type Server = tuple[Address, ConnectionOptions]
+
+	def broadcast_message(message: str, servers: Sequence[Server]) -> None:
+		...
+
+	# The static type checker will treat the previous type signature as
+	# being exactly equivalent to this one.
+	def broadcast_message(
+			message: str,
+			servers: Sequence[tuple[tuple[str, int], dict[str, str]]]) -> None:
+	```
 - [Python Tips](https://book.pythontips.com/en/latest/index.html#) #online
 - [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)
 - [Python: Context Manager to Simplify Resource Handling](https://pravash-techie.medium.com/python-context-manager-to-simplify-resource-handling-5959a36a0f58)
