@@ -1,4 +1,6 @@
+- [The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)
 - [typing — Support for type hints](https://docs.python.org/3/library/typing.html)
+- [How to Use Type Hints for Multiple Return Types in Python](https://realpython.com/python-type-hints-multiple-types/)
 	```python
 	def greeting(name: str) -> str:
 		return 'Hello ' + name
