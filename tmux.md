@@ -1,3 +1,35 @@
+```tmux
+# ~/.tmux.conf
+
+bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced'
+
+
+# set -g prefix C-a
+# unbind C-b
+# bind C-a send-prefix
+
+
+# Remap window(pane?) navigation to vim
+# 用 vim 的方式在窗格间移动光标
+unbind-key j
+bind-key j select-pane -D
+unbind-key k
+bind-key k select-pane -U
+unbind-key h
+bind-key h select-pane -L
+unbind-key l
+bind-key l select-pane -R
+
+
+# 开启鼠标模式
+set-option -g mouse on
+
+
+# 允许鼠标选择窗格
+#set -g mouse-select-pane on
+
+setw -g mode-keys vi
+```
 - 常用命令
 	- ```bash
 	  #1
