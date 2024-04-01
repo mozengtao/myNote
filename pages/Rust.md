@@ -1,3 +1,4 @@
+- [Rust Lifetimes: A Complete Guide to Ownership and Borrowing](https://earthly.dev/blog/rust-lifetimes-ownership-burrowing/)
 - [[rust笔记]]
 - [Rust By Example](https://doc.rust-lang.org/stable/rust-by-example/)
 - [The Rust Programming Language](https://doc.rust-lang.org/book/title-page.html)
