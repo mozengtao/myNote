@@ -1,3 +1,6 @@
+- [Lua中文手册](https://www.dba.cn/book/lua/)
+- [Lua 5.3 参考手册](https://cloudwu.github.io/lua53doc/contents.html)
+- [Lua 5.3 Reference Manual](https://www.lua.org/manual/5.3/)
 - [Lua 5.2 Reference Manual](https://www.lua.org/manual/5.2/)
 - [Programming in Lua](https://www.lua.org/pil/contents.html)
 - [Lua online](https://www.lua.org/demo.html)
