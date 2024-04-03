@@ -1,4 +1,5 @@
 - [Lua中文手册](https://www.dba.cn/book/lua/)
+- [Lua Reference manuals](https://www.lua.org/manual/)
 - [Lua 5.3 参考手册](https://cloudwu.github.io/lua53doc/contents.html)
 - [Lua 5.3 Reference Manual](https://www.lua.org/manual/5.3/)
 - [Lua 5.2 Reference Manual](https://www.lua.org/manual/5.2/)

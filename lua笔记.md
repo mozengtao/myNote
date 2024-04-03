@@ -477,16 +477,190 @@ for row = 1, maxRows do
 end
 
 -- 15
+--[[
+    迭代器（iterator）是一种对象，它能够用来遍历标准模板库容器中的部分或全部元素，每个迭代器对象代表容器中的确定的地址
+]]
+-- 泛型 for 迭代器: 泛型 for 在自己内部保存迭代函数，实际上它保存三个值：迭代函数、状态常量、控制变量
+-- 泛型 for 迭代器提供了集合的 key/value 对，语法格式如下
+for k, v in pairs(t) do
+    print(k, v)
+end
+k, v为变量列表；pairs(t)为表达式列表
+
+泛型 for 的执行过程：
+1.初始化，计算in后面表达式的值，表达式应该返回范性for需要的三个值：迭代函数、状态常量、控制变量；与多值赋值一样，如果表达式返回的结果个数不足三个会自动用nil补足，多出部分会被忽略。
+2.将状态常量和控制变量作为参数调用迭代函数（注意：对于for结构来说，状态常量没有用处，仅仅在初始化时获取他的值并传递给迭代函数）。
+3.将迭代函数返回的值赋给变量列表。
+4.如果返回的第一个值为nil循环结束，否则执行循环体。
+5.回到第二步再次调用迭代函数
+
+无状态的迭代器
+每一次迭代，迭代函数都是用两个变量（状态常量和控制变量）的值作为参数被调用，一个无状态的迭代器只利用这两个值可以获取下一个元素
+
+一个简单的函数来实现迭代器，实现 数字 n 的平方
+function square(iteratorMaxCount,currentNumber)
+   if currentNumber<iteratorMaxCount
+   then
+      currentNumber = currentNumber+1
+   return currentNumber, currentNumber*currentNumber
+   end
+end
+
+for i,n in square,3,0
+do
+   print(i,n)
+end
+
+-- 示例 2
+function iter (a, i)
+    i = i + 1
+    local v = a[i]
+    if v then
+       return i, v
+    end
+end
+ 
+function ipairs (a)
+    return iter, a, 0
+end
+当Lua调用ipairs(a)开始循环时，他获取三个值：迭代函数iter、状态常量a、控制变量初始值0；然后Lua调用iter(a,0)返回1,a[1]（除非a[1]=nil）；第二次迭代调用iter(a,1)返回2,a[2]……直到第一个nil元素
+
+-- 多状态的迭代器
+很多情况下，迭代器需要保存多个状态信息而不是简单的状态常量和控制变量，最简单的方法是使用闭包，还有一种方法就是将所有的状态信息封装到table内，将table作为迭代器的状态常量，因为这种情况下可以将所有的信息存放在table内，所以迭代函数通常不需要第二个参数
+-- 示例
+array = {"Lua", "Tutorial"}
+
+function elementIterator (collection)
+   local index = 0
+   local count = #collection
+   -- 闭包函数
+   return function ()
+      index = index + 1
+      if index <= count
+      then
+         --  返回迭代器的当前元素
+         return collection[index]
+      end
+   end
+end
+
+for element in elementIterator(array)
+do
+   print(element)
+end
+
+elementIterator 内使用了闭包函数，实现计算集合大小并输出各个元素
+
+-- 16 table
+mytable = {}            -- 初始化 table
+mytable[1] = "Lua"      -- 设定值
+mytable = nil           -- 移除引用，Lua 垃圾回收器会释放内存
+
+-- 16.1
+mytable1 = {}
+mytable1[1] = "Lua1"
+for k, v in pairs(mytable1) do
+    print(k, v)
+end
+
+mytable2 = mytable1
+mytable2[1] = "Lua2"
+mytable2 = nil                  -- 此时只是移除了mytable2对内存的引用，mytable1对内存的引用仍然存在，即引用计数不为0，不会触发垃圾回收
+for k, v in pairs(mytable1) do
+    print(k, v)
+end
+
+-- Table methods
+fruits = {"banana", "orange", "apple"}
+
+print(table.concat(fruits))             -- 不指定连接字符
+print(table.concat(fruits, ", "))       -- 指定连接字符
+print(table.concat(fruits, ", ", 2, 3)) -- 指定索引连接
+
+table.insert(fruits, "mango")           -- 末尾插入
+table.insert(fruits, 2, "grapes")       -- 指定索引插入
+
+table.remove(fruits)                    -- 移除最后一个元素
+
+table.sort(fruits)                      -- 排序
+
+-- 17 模块 与 包
+Lua 的模块是由变量、函数等已知元素组成的 table，因此创建一个模块很简单，就是创建一个 table，然后把需要导出的常量、函数放入其中，最后返回这个 table 就行
+
+-- 文件名为 module.lua
+module = {}			               -- 定义一个名为 module 的模块
+
+module.constant = "这是一个常量"	-- 定义一个常量
+ 
+function module.func1()		       -- 定义一个公有函数
+    io.write("这是一个公有函数！\n")
+end
+ 
+local function func2()			   -- 定义一个私有函数
+    print("这是一个私有函数！")
+end
+ 
+function module.func3()
+    func2()
+end
+ 
+return module
+
+-- 文件名为 main.lua
+require("module")
+
+print(module.constant)
+module.func3()
+
+-- 给加载的模块定义一个别名变量，方便调用
+local m = require("module")
+
+print(m.constant)
+m.func3()
+
+-- 18  Metatable
+-- 可以访问table 对应的key来得到value值，但是却无法对两个 table 进行操作, 因此Lua 提供了元表(Metatable)，允许我们改变table的行为，每个行为关联了对应的元方法，例如，使用元表我们可以定义Lua如何计算两个table的相加操作a+b
+
+setmetatable(table,metatable)
+-- 对指定table设置元表(metatable)，如果元表(metatable)中存在__metatable键值，setmetatable会失败
+getmetatable(table)
+-- 返回对象的元表(metatable)
+
+-- 1
+mytable = {}                          -- 普通表 
+mymetatable = {}                      -- 元表
+setmetatable(mytable,mymetatable)     -- 把 mymetatable 设为 mytable 的元表 
+-- 等价于
+mytable = setmetatable({},{})
+
+print(mymetatable)
+print(getmetatable(mytable))
+
+-- 元方法
+__index
+-- 当通过键来访问 table 的时候，如果这个键没有值，那么Lua就会寻找该table的metatable（假定有metatable）中的__index 键。如果__index包含一个表格，Lua会在表格中查找相应的键
+
+-- __index 元方法查看表中元素是否存在，如果不存在，返回结果为 nil；如果存在则由 __index 返回结果
+mytable = setmetatable({key1 = "value1"}, {
+    __index = function(mytable, key)
+        if key == "key2" then
+        return "metatablevalue"
+        else
+        return nil
+        end
+    end
+})
+  
+print(mytable.key1,mytable.key2)        -- output: value1  metatablevalue
+
+-- 我们可以将以上代码简单写成：
+mytable = setmetatable({key1 = "value1"}, { __index = { key2 = "metatablevalue" } })
+print(mytable.key1,mytable.key2)
 
 
--- 16
-
-
--- 17
-
-
--- 18
-
+__newindex
+-- __newindex 元方法用来对表更新，__index则用来对表访问 。
+-- 当你给表的一个缺少的索引赋值，解释器就会查找__newindex 元方法：如果存在则调用这个函数而不进行赋值操作
 
 -- 19
 
