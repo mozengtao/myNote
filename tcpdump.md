@@ -15,7 +15,6 @@
 	  ```
 -
 - 帮助文档
-	- [wireshark-filter](https://www.wireshark.org/docs/man-pages/wireshark-filter.html)
 	- [20 Advanced Tcpdump Examples in Linux](https://www.howtouselinux.com/post/20-tcpdump-advanced-examples-on-linux)
 	- [Tcpdump Command in Linux](https://linuxize.com/post/tcpdump-command-in-linux/)
 	- [man tcpdump](https://www.tcpdump.org/manpages/tcpdump.1.html)
@@ -30,12 +29,7 @@
 	- [PCAP(3PCAP) MAN PAGE](https://www.tcpdump.org/manpages/pcap.3pcap.html)
 	- [libpcap man pages](https://www.tcpdump.org/manpages/)
 	- [WinPcap Documentation](https://www.winpcap.org/docs/docs_41b5/html/main.html)
-- [Using ethtool in Linux](https://www.baeldung.com/linux/using-ethtool)
-- [dumpcap(1)](https://www.wireshark.org/docs/man-pages/dumpcap.html)
-- [tshark(1)](https://www.wireshark.org/docs/man-pages/tshark.html)
-- [mergecap(1)](https://www.wireshark.org/docs/man-pages/mergecap.html)
-- [Hex Packet Decoder](https://hpd.gasmi.net/) #online
-- [Packetor](https://packetor.com/) #online
-- [Scapy](https://scapy.readthedocs.io/en/latest/index.html)
-- [Wireshark User's Guide](https://cse.sc.edu/~pokeefe/tutorials/wireshark/index.html)
-- [Wireshark User’s Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)
+	- [Using ethtool in Linux](https://www.baeldung.com/linux/using-ethtool)
+	- [Hex Packet Decoder](https://hpd.gasmi.net/) #online
+	- [Packetor](https://packetor.com/) #online
+	- [Scapy](https://scapy.readthedocs.io/en/latest/index.html)

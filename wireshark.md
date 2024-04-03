@@ -1,0 +1,7 @@
+- [Lua/Examples](https://wiki.wireshark.org/Lua/Examples)
+- [wireshark-filter](https://www.wireshark.org/docs/man-pages/wireshark-filter.html)
+- [dumpcap(1)](https://www.wireshark.org/docs/man-pages/dumpcap.html)
+- [tshark(1)](https://www.wireshark.org/docs/man-pages/tshark.html)
+- [mergecap(1)](https://www.wireshark.org/docs/man-pages/mergecap.html)
+- [Wireshark User's Guide](https://cse.sc.edu/~pokeefe/tutorials/wireshark/index.html)
+- [Wireshark User’s Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)
