@@ -575,6 +575,7 @@ The practical effect of the previous assignment is that all files installed by b
 	  PV = "${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[1] or '1.0'}"
 	  ```
 - 参考文档
+	- [Poky recipes](https://git.yoctoproject.org/poky/plain/meta/recipes-extended/) #online
 	- [Yocto: Part 1 – A Definitive Introduction](https://kickstartembedded.com/2021/12/19/yocto-part-1-a-definitive-introduction/)
 	- [Debugging Tools and Techniques](https://docs.yoctoproject.org/dev-manual/debugging.html)
 	- [build/tmp/work/](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-structure.html#build-tmp-work)

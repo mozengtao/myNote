@@ -17,3 +17,10 @@
 -
 - 帮助文档
 	- [librdkafka](https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html)
+	- [Kafka入门实战教程](https://www.cnblogs.com/edisonchou/p/kafka_study_notes_part1.html)
+	- [Kafka 开发快速入门](https://xie.infoq.cn/article/0d832da5558aff98529af397e)
+	- [Kafka基本原理](https://blog.csdn.net/weixin_45366499/article/details/106943229)
+	- []()
+	- []()
+	- []()
+	- []()
