@@ -1,3 +1,20 @@
+```lua
+-- 1
+Each table may store values with different types of indices and it grows as it needs to accommodate new entries
+To represent records, you use the field name as an index, a.name as syntactic sugar for a["name"]
+
+    a.x = 10                    -- same as a["x"] = 10
+    print(a.x)                  -- same as print(a["x"])
+    print(a.y)                  -- same as print(a["y"])
+
+    a = {}
+    x = "y"
+    a[x] = 10                 -- put 10 in field "y"
+    print(a[x])   --> 10      -- value of field "y"
+    print(a.x)    --> nil     -- value of field "x" (undefined)
+    print(a.y)    --> 10      -- value of field "y"
+```
+
 Lua 由 clean C（标准 C 和 C++ 间共通的子集） 实现
 
 Lua 是一门动态类型语言。 意味着变量没有类型；只有值才有类型。 语言中不设类型定义。 所有的值携带自己的类型。
