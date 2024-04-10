@@ -10,4 +10,5 @@
 	Win + x			// 快速打开windows诊断工具
 	Win + Tab		// 在一个屏幕下显示和切换所有打开的窗口
 	Alt + Tab		// 切换窗口
+	Ctrl+Shift+F	// 中文输入法 简体和繁体切换
 	```

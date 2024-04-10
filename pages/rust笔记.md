@@ -1,4 +1,16 @@
-- ```bash
+```rust
+// 打印变量类型
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+print_type_of(&32.90);          // prints "f64"
+
+
+```
+
+
+```rust
   fn main() {
       println!("Hello, world!");
   }

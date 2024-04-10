@@ -1,3 +1,5 @@
+- [**Playground**](https://play.rust-lang.org/)
+- [**Rust Documentation**](https://doc.rust-lang.org/stable/)
 - [Rust Lifetimes: A Complete Guide to Ownership and Borrowing](https://earthly.dev/blog/rust-lifetimes-ownership-burrowing/)
 - [[rust笔记]]
 - [Rust By Example](https://doc.rust-lang.org/stable/rust-by-example/)
