@@ -1220,3 +1220,305 @@ JavaScript 规定，如果使用严格模式，eval内部声明的变量，不�
 总之，eval的本质是在当前作用域之中，注入代码。由于安全风险和不利于 JavaScript 引擎优化执行速度，一般不推荐使用。通常情况下，eval最常见的场合是解析 JSON 数据的字符串，不过正确的做法应该是使用原生的JSON.parse方法
 
 ```
+
+- 数组
+```js
+// 1
+var arr = ['a', 'b', 'c'];
+
+// 2
+var arr = [];
+
+arr[0] = 'a';
+arr[1] = 'b';
+arr[2] = 'c';
+
+// 3
+var arr = [
+  {a: 1},
+  [1, 2, 3],
+  function() {return true;}
+];
+
+arr[0] // Object {a: 1}
+arr[1] // [1, 2, 3]
+arr[2] // function (){return true;}
+
+// 4
+var a = [[1, 2], [3, 4]];
+a[0][1] // 2
+a[1][1] // 4
+
+
+数组的本质:
+本质上，数组属于一种特殊的对象
+
+// 1
+typeof [1, 2, 3] // "object"
+
+数组的特殊性体现在，它的键名是按次序排列的一组整数（0，1，2...）
+var arr = ['a', 'b', 'c'];
+
+Object.keys(arr)
+// ["0", "1", "2"]
+
+
+对于数值的键名，不能使用点结构
+var arr = [1, 2, 3];
+arr.0 // SyntaxError
+
+只能使用arr[x]的方式（方括号是运算符，可以接受数值）
+
+
+数组的length 属性
+该属性是一个动态的值，等于键名中的最大整数加上1
+// 1
+['a', 'b', 'c'].length // 3
+
+// 2
+var arr = ['a', 'b'];
+arr.length // 2
+
+arr[2] = 'c';
+arr.length // 3
+
+arr[9] = 'd';
+arr.length // 10
+
+arr[1000] = 'e';
+arr.length // 1001
+
+
+length属性是可写的
+var arr = [ 'a', 'b', 'c' ];
+arr.length // 3
+
+arr.length = 2;
+arr // ["a", "b"]
+
+清空数组的一个有效方法，就是将length属性设为0
+var arr = [ 'a', 'b', 'c' ];
+
+arr.length = 0;
+arr // []
+
+// 2
+var a = ['a'];
+
+a.length = 3;
+a[1] // undefined
+
+由于数组本质上是一种对象，所以可以为数组添加属性，但是这不影响length属性的值
+var a = [];
+
+a['p'] = 'abc';
+a.length // 0
+
+a[2.1] = 'abc';
+a.length // 0
+
+如果数组的键名是添加超出范围的数值，该键名会自动转为字符串
+var arr = [];
+arr[-1] = 'a';
+arr[Math.pow(2, 32)] = 'b';
+
+arr.length // 0
+arr[-1] // "a"
+arr[4294967296] // "b"
+
+
+in 运算符
+// 1
+var arr = [ 'a', 'b', 'c' ];
+2 in arr  // true
+'2' in arr // true
+4 in arr // false
+
+注意，如果数组的某个位置是空位，in运算符返回false
+// 
+var arr = [];
+arr[100] = 'a';
+
+100 in arr // true
+1 in arr // false
+
+数组遍历
+// 1
+var a = [1, 2, 3];
+
+for (var i in a) {
+  console.log(a[i]);
+}
+
+
+for...in遍历数组也也遍历到了非整数键，所以，不推荐使用for...in遍历数组。
+数组的遍历可以考虑使用for循环或while循环
+// 1
+var a = [1, 2, 3];
+
+// for循环
+for(var i = 0; i < a.length; i++) {
+  console.log(a[i]);
+}
+
+// while循环
+var i = 0;
+while (i < a.length) {
+  console.log(a[i]);
+  i++;
+}
+
+var l = a.length;
+while (l--) {
+  console.log(a[l]);
+}
+
+// 2
+var colors = ['red', 'green', 'blue'];
+colors.forEach(function (color) {
+  console.log(color);
+});
+// red
+// green
+// blue
+
+数组的空位 (hole)
+// 1
+var a = [1, , 1];
+a.length // 3
+
+// 2
+var a = [1, 2, 3,];
+
+a.length // 3
+a // [1, 2, 3]
+
+// 3 数组的空位是可以读取的，返回undefined
+var a = [, , ,];
+a[1] // undefined
+
+// 4 使用delete命令删除一个数组成员，会形成空位，并且不会影响length属性
+var a = [1, 2, 3];
+delete a[1];
+
+a[1] // undefined
+a.length // 3
+
+数组的某个位置是空位，与某个位置是undefined，是不一样的。如果是空位，使用数组的forEach方法、for...in结构、以及Object.keys方法进行遍历，空位都会被跳过
+
+// 1
+var a = [, , ,];
+
+a.forEach(function (x, i) {
+  console.log(i + '. ' + x);
+})
+// 不产生任何输出
+
+for (var i in a) {
+  console.log(i);
+}
+// 不产生任何输出
+
+Object.keys(a)
+// []
+
+
+如果某个位置是undefined，遍历的时候就不会被跳过
+// 1
+var a = [undefined, undefined, undefined];
+
+a.forEach(function (x, i) {
+  console.log(i + '. ' + x);
+});
+// 0. undefined
+// 1. undefined
+// 2. undefined
+
+for (var i in a) {
+  console.log(i);
+}
+// 0
+// 1
+// 2
+
+Object.keys(a)
+// ['0', '1', '2']
+
+空位就是数组没有这个元素，所以不会被遍历到，而undefined则表示数组有这个元素，值是undefined，所以遍历不会跳过
+
+
+类似数组的对象
+如果一个对象的所有键名都是正整数或零，并且有length属性，那么这个对象就很像数组，语法上称为“类似数组的对象”（array-like object）
+
+“类似数组的对象”的根本特征，就是具有length属性。只要有length属性，就可以认为这个对象类似于数组。但是有一个问题，这种length属性不是动态值，不会随着成员的变化而变化
+
+// 1
+var obj = {
+  length: 0
+};
+obj[3] = 'd';
+obj.length // 0
+
+典型的“类似数组的对象”是函数的arguments对象，以及大多数 DOM 元素集，还有字符串
+// arguments对象
+function args() { return arguments }
+var arrayLike = args('a', 'b');
+
+arrayLike[0] // 'a'
+arrayLike.length // 2
+arrayLike instanceof Array // false
+
+// DOM元素集
+var elts = document.getElementsByTagName('h3');
+elts.length // 3
+elts instanceof Array // false
+
+// 字符串
+'abc'[1] // 'b'
+'abc'.length // 3
+'abc' instanceof Array // false
+
+数组的slice方法可以将“类似数组的对象”变成真正的数组
+var arr = Array.prototype.slice.call(arrayLike);
+
+除了转为真正的数组，“类似数组的对象”还有一个办法可以使用数组的方法，就是通过call()把数组的方法放到对象上面
+function print(value, index) {
+  console.log(index + ' : ' + value);
+}
+
+Array.prototype.forEach.call(arrayLike, print);
+
+
+// 2
+// forEach 方法
+function logArgs() {
+  Array.prototype.forEach.call(arguments, function (elem, i) {
+    console.log(i + '. ' + elem);
+  });
+}
+
+// 等同于 for 循环
+function logArgs() {
+  for (var i = 0; i < arguments.length; i++) {
+    console.log(i + '. ' + arguments[i]);
+  }
+}
+
+字符串也是类似数组的对象，所以也可以用Array.prototype.forEach.call遍历
+Array.prototype.forEach.call('abc', function (chr) {
+  console.log(chr);
+});
+// a
+// b
+// c
+
+这种方法比直接使用数组原生的forEach要慢，所以最好还是先将“类似数组的对象”转为真正的数组，然后再直接调用数组的forEach方法
+var arr = Array.prototype.slice.call('abc');
+arr.forEach(function (chr) {
+  console.log(chr);
+});
+// a
+// b
+// c
+
+```
