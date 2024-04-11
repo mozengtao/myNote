@@ -1,3 +1,4 @@
+- [Algorithms](https://algs4.cs.princeton.edu/home/)
 - 在线资源汇总
 - [code2flow](https://app.code2flow.com/)
 	- 在线通过代码画流程图

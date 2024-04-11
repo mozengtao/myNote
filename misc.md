@@ -1,3 +1,20 @@
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- [编译优化之—likely/unlikely](https://blog.yanjingang.com/?p=7074)
+- [CPU流水线和分支预测](https://juejin.cn/post/7022633338452049957)
+- [分支预测 (Branch Prediction)](https://xiangshan-doc.readthedocs.io/zh-cn/latest/frontend/bp/)
+- [浅谈 CPU 分支预测技术](https://matt33.com/2020/04/16/cpu-branch-predictor/)
 - [**OnlineGDB**](https://www.onlinegdb.com/) #online
 - [**Visualize code in Python, JavaScript, C, C++, and Java**](https://pythontutor.com/) #online
 - [tinyexpr](https://github.com/codeplea/tinyexpr) #github
