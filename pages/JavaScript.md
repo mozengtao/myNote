@@ -701,4 +701,522 @@ obj.foo = 'Hello';
 obj['bar'] = 'World';
 
 
+属性的查看:
+var obj = {
+  key1: 1,
+  key2: 2
+};
+
+Object.keys(obj);
+// ['key1', 'key2']
+
+
+属性的删除:
+delete命令用于删除对象的属性，删除成功后返回true
+var obj = { p: 1 };
+Object.keys(obj) // ["p"]
+
+delete obj.p // true
+obj.p // undefined
+Object.keys(obj) // []
+
+注意，删除一个不存在的属性，delete不报错，而且返回true
+var obj = {};
+delete obj.p // true
+
+
+只有一种情况，delete命令会返回false，那就是该属性存在，且不得删除
+var obj = Object.defineProperty({}, 'p', {
+  value: 123,
+  configurable: false
+});
+
+obj.p // 123
+delete obj.p // false
+
+需要注意的是，delete命令只能删除对象本身的属性，无法删除继承的属性
+var obj = {};
+delete obj.toString // true
+obj.toString // function toString() { [native code] }
+toString是对象obj继承的属性，虽然delete命令返回true，但该属性并没有被删除，依然存在
+这个例子还说明，即使delete返回true，该属性依然可能读取到值
+
+
+属性是否存在:
+in运算符用于检查对象是否包含某个属性（注意，检查的是键名，不是键值）
+var obj = { p: 1 };
+'p' in obj // true
+'toString' in obj // true
+in运算符的一个问题是，它不能识别哪些属性是对象自身的，哪些属性是继承的
+
+使用对象的hasOwnProperty方法判断一下，是否为对象自身的属性
+var obj = {};
+if ('toString' in obj) {
+  console.log(obj.hasOwnProperty('toString')) // false
+}
+
+属性的遍历:
+for...in循环用来遍历一个对象的全部属性
+var obj = {a: 1, b: 2, c: 3};
+
+for (var i in obj) {
+  console.log('键名：', i);
+  console.log('键值：', obj[i]);
+}
+
+for...in循环使用注意点:
+它遍历的是对象所有可遍历（enumerable）的属性，会跳过不可遍历的属性
+它不仅遍历对象自身的属性，还遍历继承的属性
+
+var person = { name: '老张' };
+
+for (var key in person) {
+  if (person.hasOwnProperty(key)) {
+    console.log(key);
+  }
+}
+
+with语句
+作用是操作同一个对象的多个属性时，提供一些书写的方便
+// 例一
+var obj = {
+  p1: 1,
+  p2: 2,
+};
+with (obj) {
+  p1 = 4;
+  p2 = 5;
+}
+// 等同于
+obj.p1 = 4;
+obj.p2 = 5;
+
+// 例二
+with (document.links[0]){
+  console.log(href);
+  console.log(title);
+  console.log(style);
+}
+// 等同于
+console.log(document.links[0].href);
+console.log(document.links[0].title);
+console.log(document.links[0].style);
+
+注意，如果with区块内部有变量的赋值操作，必须是当前对象已经存在的属性，否则会创造一个当前作用域的全局变量
+var obj = {};
+with (obj) {
+  p1 = 4;
+  p2 = 5;
+}
+
+obj.p1 // undefined
+p1 // 4
+
+因为with区块没有改变作用域，它的内部依然是当前作用域。这造成了with语句的一个很大的弊病，就是绑定对象不明确
+with (obj) {
+  console.log(x);
+}
+无法判断x到底是全局变量，还是对象obj的一个属性
+
+
+如下，建议不要使用with语句，可以考虑用一个临时变量代替wit
+with(obj1.obj2.obj3) {
+  console.log(p1 + p2);
+}
+
+// 可以写成
+var temp = obj1.obj2.obj3;
+console.log(temp.p1 + temp.p2);
+
+```
+
+- 函数
+```js
+函数声明
+// function 命令
+function print(s) {
+  console.log(s);
+}
+
+// 函数表达式 (匿名函数又称函数表达式（Function Expression）)
+var print = function(s) {
+  console.log(s);
+};
+
+var f = function f() {};
+
+// Function 构造函数 (非常不直观，几乎无人使用)
+var add = new Function(
+  'x',
+  'y',
+  'return x + y'
+);
+
+// 等同于
+function add(x, y) {
+  return x + y;
+}
+
+可以传递任意数量的参数给Function构造函数，只有最后一个参数会被当做函数体，如果只有一个参数，该参数就是函数体
+
+var foo = new Function(
+  'return "hello world";'
+);
+
+// 等同于
+function foo() {
+  return 'hello world';
+}
+Function构造函数可以不使用new命令，返回结果完全一样
+
+
+函数的重复声明:
+如果同一个函数被多次声明，后面的声明就会覆盖前面的声明
+
+function fib(num) {
+  if (num === 0) return 0;
+  if (num === 1) return 1;
+  return fib(num - 2) + fib(num - 1);
+}
+
+fib(6) // 8
+
+
+函数是第一等公民
+JavaScript 语言将函数看作一种值，与其它值（数值、字符串、布尔值等等）地位相同。凡是可以使用值的地方，就能使用函数
+函数只是一个可以执行的值，此外并无特殊之处
+function add(x, y) {
+  return x + y;
+}
+
+// 将函数赋值给一个变量
+var operator = add;
+
+// 将函数作为参数和返回值
+function a(op){
+  return op;
+}
+a(add)(1, 1)
+// 2
+
+
+函数的属性和方法：
+name 属性：
+函数的name属性返回函数的名字
+function f1() {}
+f1.name // "f1"
+
+var f2 = function () {};
+f2.name // "f2"
+只有在变量的值是一个匿名函数时才是如此
+
+var f3 = function myName() {};
+f3.name // 'myName'
+f3.name返回函数表达式的名字。注意，真正的函数名还是f3，而myName这个名字只在函数体内部可用
+
+name属性的一个用处，就是获取参数函数的名字
+var myFunc = function () {};
+
+function test(f) {
+  console.log(f.name);
+}
+
+test(myFunc) // myFunc
+
+
+
+length 属性：
+函数的length属性返回函数预期传入的参数个数，即函数定义之中的参数个数
+function f(a, b) {}
+f.length // 2
+不管调用时输入了多少个参数，length属性始终等于2
+
+
+length属性提供了一种机制，判断定义时和调用时参数的差异，以便实现面向对象编程的“方法重载”（overload）
+
+
+
+
+
+toString()：
+函数的toString()方法返回一个字符串，内容是函数的源码(函数内部的注释也可以返回)
+function f() {
+  a();
+  b();
+  c();
+}
+
+f.toString()
+
+
+对于那些原生的函数，toString()方法返回function (){[native code]}
+Math.sqrt.toString()
+// "function sqrt() { [native code] }"
+
+
+函数作用域
+
+函数参数不是必需的，JavaScript 允许省略参数
+function f(a, b) {
+  return a;
+}
+
+f(1, 2, 3) // 1
+f(1) // 1
+f() // undefined
+
+f.length // 2
+
+
+参数传递方式
+函数参数如果是原始类型的值（数值、字符串、布尔值），传递方式是传值传递（passes by value）
+如果函数参数是复合类型的值（数组、对象、其他函数），传递方式是传址传递（pass by reference）
+
+同名参数
+如果有同名的参数，则取最后出现的那个值
+// 1
+function f(a, a) {
+  console.log(a);
+}
+
+f(1, 2) // 2
+
+// 2
+function f(a, a) {
+  console.log(a);
+}
+
+f(1) // undefined
+
+// 3
+function f(a, a) {
+  console.log(arguments[0]);
+}
+
+f(1) // 1
+
+
+arguments 对象:
+用来在函数体内部读取所有参数
+// 1
+var f = function (one) {
+  console.log(arguments[0]);
+  console.log(arguments[1]);
+  console.log(arguments[2]);
+}
+
+f(1, 2, 3)
+// 1
+// 2
+// 3
+
+// 2 (arguments对象可以在运行时修改)
+var f = function(a, b) {
+  arguments[0] = 3;
+  arguments[1] = 2;
+  return a + b;
+}
+
+f(1, 1) // 5
+
+// 3
+严格模式下，arguments对象与函数参数不具有联动关系
+var f = function(a, b) {
+  'use strict'; // 开启严格模式
+  arguments[0] = 3;
+  arguments[1] = 2;
+  return a + b;
+}
+
+f(1, 1) // 2
+
+
+// 4
+通过arguments对象的length属性，可以判断函数调用时到底带几个参数
+function f() {
+  return arguments.length;
+}
+
+f(1, 2, 3) // 3
+f(1) // 1
+f() // 0
+
+虽然arguments很像数组，但它是一个对象。数组专有的方法（比如slice和forEach），不能在arguments对象上直接使用
+
+将arguments转为真正的数组的方法：
+1.slice方法
+2.逐一填入新数组
+var args = Array.prototype.slice.call(arguments);
+
+// 或者
+var args = [];
+for (var i = 0; i < arguments.length; i++) {
+  args.push(arguments[i]);
+}
+
+
+callee 属性：
+arguments对象带有一个callee属性，返回它所对应的原函数
+var f = function () {
+  console.log(arguments.callee === f);
+}
+
+f() // true
+可以通过arguments.callee，达到调用函数自身的目的。这个属性在严格模式里面是禁用的，因此不建议使用
+
+
+闭包
+起因：
+function f1() {
+  var n = 999;
+  function f2() {
+    console.log(n);
+  }
+  return f2;
+}
+
+var result = f1();
+result(); // 999
+
+函数f1的返回值就是函数f2，由于f2可以读取f1的内部变量，所以就可以在外部获得f1的内部变量
+闭包就是函数f2，即能够读取其他函数内部变量的函数
+可以把闭包简单理解成“定义在一个函数内部的函数”
+
+
+闭包就是将函数内部和函数外部连接起来的一座桥梁
+闭包的用处
+1.读取外层函数内部的变量
+2.让这些变量始终保持在内存中，即闭包可以使得它诞生环境一直存在
+3.封装对象的私有属性和私有方法
+
+闭包可以看作是函数内部作用域的一个接口
+
+// 1
+function createIncrementor(start) {
+  return function () {
+    return start++;
+  };
+}
+
+var inc = createIncrementor(5);
+
+inc() // 5
+inc() // 6
+inc() // 7
+
+为什么闭包能够返回外层函数的内部变量？
+闭包（上例的inc）用到了外层变量（start），导致外层函数（createIncrementor）不能从内存释放。只要闭包没有被垃圾回收机制清除，外层函数提供的运行环境也不会被清除，它的内部变量就始终保存着当前值，供闭包读取
+
+
+// 封装对象的私有属性和私有方法
+function Person(name) {
+  var _age;
+  function setAge(n) {
+    _age = n;
+  }
+  function getAge() {
+    return _age;
+  }
+
+  return {
+    name: name,
+    getAge: getAge,
+    setAge: setAge
+  };
+}
+
+var p1 = Person('张三');
+p1.setAge(25);
+p1.getAge() // 25
+
+函数Person的内部变量_age，通过闭包getAge和setAge，变成了返回对象p1的私有变量
+
+外层函数每次运行，都会生成一个新的闭包，而这个闭包又会保留外层函数的内部变量，所以内存消耗很大
+
+
+
+立即调用的函数表达式
+在定义函数之后，立即调用该函数
+
+function(){ /* code */ }();
+// SyntaxError: Unexpected token (
+产生这个错误的原因是，function这个关键字既可以当作语句，也可以当作表达式
+
+// 语句
+function f() {}
+
+// 表达式
+var f = function f() {}
+
+当作表达式时，函数可以定义后直接加圆括号调用
+var f = function f(){ return 1}();
+f // 1
+
+为了避免解析的歧义，JavaScript 规定，如果function关键字出现在行首，一律解释成语句
+
+
+函数定义后立即调用的解决方法
+(function(){ /* code */ }());
+// 或者
+(function(){ /* code */ })();
+
+以圆括号开头，引擎就会认为后面跟的是一个表达式，而不是函数定义语句，所以就避免了错误。这就叫做“立即调用的函数表达式”（Immediately-Invoked Function Expression），简称 IIFE
+
+
+任何让解释器以表达式来处理函数定义的方法，都能产生同样的效果
+
+var i = function(){ return 10; }();
+true && function(){ /* code */ }();
+0, function(){ /* code */ }();
+
+!function () { /* code */ }();
+~function () { /* code */ }();
+-function () { /* code */ }();
++function () { /* code */ }();
+
+通常情况下，只对匿名函数使用这种“立即执行的函数表达式”，目的如下
+1.不必为函数命名，避免了污染全局变量
+2.IIFE 内部形成了一个单独的作用域，可以封装一些外部无法读取的私有变量
+
+// 写法一
+var tmp = newData;
+processData(tmp);
+storeData(tmp);
+
+// 写法二 （更好，因为完全避免了污染全局变量）
+(function () {
+  var tmp = newData;
+  processData(tmp);
+  storeData(tmp);
+}());
+```
+
+- eval 命令
+```js
+eval命令接受一个字符串作为参数，并将这个字符串当作语句执行
+如果eval的参数不是字符串，那么会原样返回
+
+// 1
+eval('var a = 1;');
+a // 1
+
+// 2
+eval(123) // 123
+
+eval没有自己的作用域，都在当前作用域内执行，因此可能会修改当前作用域的变量的值，造成安全问题
+//
+var a = 1;
+eval('a = 2');
+
+a // 2
+
+JavaScript 规定，如果使用严格模式，eval内部声明的变量，不会影响到外部作用域
+(function f() {
+  'use strict';
+  eval('var foo = 123');
+  console.log(foo);  // ReferenceError: foo is not defined
+})()
+
+总之，eval的本质是在当前作用域之中，注入代码。由于安全风险和不利于 JavaScript 引擎优化执行速度，一般不推荐使用。通常情况下，eval最常见的场合是解析 JSON 数据的字符串，不过正确的做法应该是使用原生的JSON.parse方法
+
 ```
