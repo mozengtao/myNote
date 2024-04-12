@@ -2073,3 +2073,240 @@ result
 // false
 
 ```
+
+- 编程风格
+```js
+区块
+block {
+  // ...
+}
+
+圆括号
+表示函数调用时，函数名与左括号之间没有空格。
+表示函数定义时，函数名与左括号之间没有空格。
+其他情况时，前面位置的语法元素与左括号之间，都有一个空格。
+// 圆括号表示函数的调用
+console.log('abc');
+
+// 圆括号表示表达式的组合
+(1 + 2) * 3
+
+全局变量
+用大写字母表示变量名
+UPPER_CASE
+
+变量声明
+把变量声明都放在代码块的头部，避免自动将变量声明“提升”（hoist）到代码块（block）的头部
+
+不要使用with语句
+
+建议不要使用相等运算符（==），只使用严格相等运算符（===）
+
+建议不要将不同目的的语句，合并成一行
+
+建议自增（++）和自减（--）运算符尽量使用+=和-=代替
+
+switch...case不使用大括号，不利于代码形式的统一，建议改写成对象结构
+function doAction(action) {
+  switch (action) {
+    case 'hack':
+      return 'hack';
+    case 'slash':
+      return 'slash';
+    case 'run':
+      return 'run';
+    default:
+      throw new Error('Invalid action.');
+  }
+}
+
+改写为
+
+function doAction(action) {
+  var actions = {
+    'hack': function () {
+      return 'hack';
+    },
+    'slash': function () {
+      return 'slash';
+    },
+    'run': function () {
+      return 'run';
+    }
+  };
+
+  if (typeof actions[action] !== 'function') {
+    throw new Error('Invalid action.');
+  }
+
+  return actions[action]();
+}
+
+
+```
+
+- console 对象与控制台
+```js
+console对象是 JavaScript 的原生对象，它有点像 Unix 系统的标准输出stdout和标准错误stderr，可以输出各种信息到控制台，并且还提供了很多有用的辅助方法
+
+console.log()
+console.info()
+console.debug()
+
+console.warn()
+console.error()
+
+console.table()
+对于某些复合类型的数据，console.table方法可以将其转为表格显示
+  // 1
+  var languages = [
+    { name: "JavaScript", fileExtension: ".js" },
+    { name: "TypeScript", fileExtension: ".ts" },
+    { name: "CoffeeScript", fileExtension: ".coffee" }
+  ];
+
+  console.table(languages);
+
+  // 2
+  var languages = {
+    csharp: { name: "C#", paradigm: "object-oriented" },
+    fsharp: { name: "F#", paradigm: "functional" }
+  };
+
+  console.table(languages);
+
+console.count()
+count方法用于计数，输出它被调用了多少次
+该方法可以接受一个字符串作为参数，作为标签，对执行次数进行分类
+function greet(user) {
+  console.count(user);
+  return "hi " + user;
+}
+
+greet('bob')
+// bob: 1
+// "hi bob"
+
+greet('alice')
+// alice: 1
+// "hi alice"
+
+greet('bob')
+// bob: 2
+// "hi bob"
+
+
+console.dir()
+dir方法用来对一个对象进行检查（inspect），并以易于阅读和打印的格式显示
+console.log({f1: 'foo', f2: 'bar'})
+// Object {f1: "foo", f2: "bar"}
+
+console.dir({f1: 'foo', f2: 'bar'})
+// Object
+//   f1: "foo"
+//   f2: "bar"
+//   __proto__: Object
+
+
+console.dirxml()
+dirxml方法主要用于以目录树的形式，显示 DOM 节点
+
+
+console.assert()
+console.assert方法主要用于程序运行过程中，进行条件判断，如果不满足条件，就显示一个错误，但不会中断程序执行。这样就相当于提示用户，内部状态不正确
+
+它接受两个参数，第一个参数是表达式，第二个参数是字符串。只有当第一个参数为false，才会提示有错误，在控制台输出第二个参数，否则不会有任何结果
+
+console.assert(false, '判断条件不成立')
+// Assertion failed: 判断条件不成立
+
+// 相当于
+try {
+  if (!false) {
+    throw new Error('判断条件不成立');
+  }
+} catch(e) {
+  console.error(e);
+}
+
+
+console.time()
+console.timeEnd() 
+用于计时，可以算出一个操作所花费的准确时间
+console.time('Array initialize');
+
+var array= new Array(1000000);
+for (var i = array.length - 1; i >= 0; i--) {
+  array[i] = new Object();
+};
+
+console.timeEnd('Array initialize');
+// Array initialize: 1914.481ms
+
+console.group()
+console.groupEnd()
+console.groupCollapsed()
+console.group和console.groupEnd这两个方法用于将显示的信息分组。它只在输出大量信息时有用，分在一组的信息，可以用鼠标折叠/展开
+console.group('一级分组');
+console.log('一级分组的内容');
+
+console.group('二级分组');
+console.log('二级分组的内容');
+
+console.groupEnd(); // 二级分组结束
+console.groupEnd(); // 一级分组结束
+console.groupCollapsed方法与console.group方法很类似，唯一的区别是该组的内容，在第一次显示时是收起的（collapsed），而不是展开的
+console.groupCollapsed('Fetching Data');
+
+console.log('Request Sent');
+console.error('Error: Server not responding (500)');
+
+console.groupEnd();
+
+
+
+console.trace()
+console.clear()
+onsole.trace方法显示当前执行的代码在堆栈中的调用路径
+console.clear方法用于清除当前控制台的所有输出，将光标回置到第一行。如果用户选中了控制台的“Preserve log”选项，console.clear方法将不起作用
+console.trace()
+// console.trace()
+//   (anonymous function)
+//   InjectedScript._evaluateOn
+//   InjectedScript._evaluateAndWrap
+//   InjectedScript.evaluate
+
+
+
+console对象的所有方法，都可以被覆盖。因此，可以按照自己的需要，定义console.log方法
+['log', 'info', 'warn', 'error'].forEach(function(method) {
+  console[method] = console[method].bind(
+    console,
+    new Date().toISOString()
+  );
+});
+
+console.log("出错了！");
+// 2014-05-18T09:00.000Z 出错了！
+
+
+
+控制台命令行 API
+$_属性返回上一个表达式的值
+
+$0 - $4
+控制台保存了最近5个在 Elements 面板选中的 DOM 元素，$0代表倒数第一个（最近一个），$1代表倒数第二个，以此类推直到$4
+
+$(selector)
+$$(selector)
+$x(path)
+inspect(object)
+getEventListeners(object)
+keys(object)，values(object)
+monitorEvents(object[, events]) ，unmonitorEvents(object[, events])
+
+
+
+debugger 语句
+debugger语句主要用于除错，作用是设置断点。如果有正在运行的除错工具，程序运行到debugger语句时会自动停下。如果没有除错工具，debugger语句不会产生任何结果，JavaScript 引擎自动跳过这一句
+```
