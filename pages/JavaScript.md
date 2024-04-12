@@ -2585,3 +2585,1799 @@ obj.hasOwnProperty('toString') // false
 
 // toString属性是继承的，所以返回false
 ```
+
+- 属性描述对象
+```js
+JavaScript 提供了一个内部数据结构，用来描述对象的属性，控制它的行为，比如该属性是否可写、可遍历等等。这个内部数据结构称为“属性描述对象”（attributes object）
+每个属性都有自己对应的属性描述对象，保存该属性的一些元信息
+
+属性描述对象提供6个元属性:
+1 value
+value是该属性的属性值，默认为undefined。
+2 writable
+属性值 value 是否可改变（即是否可写），默认为true
+3 enumerable
+属性是否可遍历，默认为true
+4 configurable
+属性的可配置性，默认为true。如果设为false，将阻止某些操作改写属性描述对象，比如无法删除该属性，也不得改变各种元属性（value属性除外），即configurable属性控制了属性描述对象的可写性。
+5 get
+属性的取值函数 getter，默认为undefined。
+6 set
+属性的存值函数 setter ，默认为undefined
+
+
+Object.getOwnPropertyDescriptor()
+获取属性描述对象，参数为 目标对象 和 对应目标对象的某个属性名
+只能用于对象自身的属性，不能用于继承的属性
+
+Object.getOwnPropertyNames()
+返回一个数组，成员是参数对象自身的全部属性的属性名，不管该属性是否可遍历
+（Object.keys只返回对象自身的可遍历属性的全部属性名）
+
+Object.defineProperty()
+通过属性描述对象，定义或修改一个属性，然后返回修改后的对象
+Object.defineProperty(object, propertyName, attributesObject)
+// 1
+var obj = Object.defineProperty({}, 'p', {
+  value: 123,
+  writable: false,
+  enumerable: true,
+  configurable: false
+});
+
+obj.p // 123
+
+obj.p = 246;
+obj.p // 123
+
+
+
+Object.defineProperties()
+如果一次性定义或修改多个属性，可以使用Object.defineProperties()方法
+// 
+var obj = Object.defineProperties({}, {
+  p1: { value: 123, enumerable: true },
+  p2: { value: 'abc', enumerable: true },
+  p3: { get: function () { return this.p1 + this.p2 },
+    enumerable:true,
+    configurable:true
+  }
+});
+
+obj.p1 // 123
+obj.p2 // "abc"
+obj.p3 // "123abc"
+
+注意，一旦定义了取值函数get（或存值函数set），就不能将writable属性设为true，或者同时定义value属性，否则会报错
+
+
+Object.prototype.propertyIsEnumerable()
+返回一个布尔值，用来判断某个属性是否可遍历
+这个方法只能用于判断对象自身的属性，对于继承的属性一律返回false
+
+
+属性描述对象的各个属性称为“元属性”，因为它们可以看作是控制属性的属性
+value属性是目标属性的值
+writable属性是一个布尔值，决定了目标属性的值（value）是否可以被改变
+enumerable（可遍历性）返回一个布尔值，表示目标属性是否可遍历
+configurable(可配置性）返回一个布尔值，决定了是否可以修改属性描述对象
+
+
+除了直接定义以外，属性还可以用存取器（accessor）定义
+其中，存值函数称为setter，使用属性描述对象的set属性
+取值函数称为getter，使用属性描述对象的get属性
+
+// 1
+var obj = Object.defineProperty({}, 'p', {
+  get: function () {
+    return 'getter';
+  },
+  set: function (value) {
+    console.log('setter: ' + value);
+  }
+});
+
+obj.p // "getter"
+obj.p = 123 // "setter: 123"
+// obj.p定义了get和set属性。obj.p取值时，就会调用get；赋值时，就会调用set
+
+// 写法二 (更常用)
+var obj = {
+  get p() {
+    return 'getter';
+  },
+  set p(value) {
+    console.log('setter: ' + value);
+  }
+};
+
+注意，取值函数get不能接受参数，存值函数set只能接受一个参数（即属性的值）
+
+存取器往往用于，属性的值依赖对象内部数据的场合
+var obj ={
+  $n : 5,
+  get next() { return this.$n++ },
+  set next(n) {
+    if (n >= this.$n) this.$n = n;
+    else throw new Error('新的值必须大于当前值');
+  }
+};
+
+obj.next // 5
+
+obj.next = 10;
+obj.next // 10
+
+obj.next = 5;
+// Uncaught Error: 新的值必须大于当前值
+
+
+对象的拷贝
+将一个对象的所有属性，拷贝到另一个对象
+var extend = function (to, from) {
+  for (var property in from) {
+    if (!from.hasOwnProperty(property)) continue;
+    Object.defineProperty(
+      to,
+      property,
+      Object.getOwnPropertyDescriptor(from, property)
+    );
+  }
+
+  return to;
+}
+
+extend({}, { get a(){ return 1 } })
+// { get a(){ return 1 } })
+// hasOwnProperty那一行用来过滤掉继承的属性
+
+
+控制对象状态
+有时需要冻结对象的读写状态，防止对象被改变
+JavaScript 提供了三种冻结方法:
+Object.preventExtensions
+Object.seal
+Object.freeze
+
+Object.preventExtensions方法可以使得一个对象无法再添加新的属性
+var obj = new Object();
+Object.preventExtensions(obj);
+
+Object.defineProperty(obj, 'p', {
+  value: 'hello'
+});
+// TypeError: Cannot define property:p, object is not extensible.
+
+obj.p = 1;
+obj.p // undefined
+
+Object.isExtensible方法用于检查一个对象是否使用了Object.preventExtensions方法。也就是说，检查是否可以为一个对象添加属性
+var obj = new Object();
+
+Object.isExtensible(obj) // true
+Object.preventExtensions(obj);
+Object.isExtensible(obj) // false
+
+
+Object.seal方法使得一个对象既无法添加新属性，也无法删除旧属性
+var obj = { p: 'hello' };
+Object.seal(obj);
+
+delete obj.p;
+obj.p // "hello"
+
+obj.x = 'world';
+obj.x // undefined
+
+
+Object.isSealed方法用于检查一个对象是否使用了Object.seal方法
+var obj = { p: 'a' };
+
+Object.seal(obj);
+Object.isSealed(obj) // true
+
+
+Object.freeze方法可以使得一个对象无法添加新属性、无法删除旧属性、也无法改变属性的值，使得这个对象实际上变成了常量
+var obj = {
+  p: 'hello'
+};
+
+Object.freeze(obj);
+
+obj.p = 'world';
+obj.p // "hello"
+
+obj.t = 'hello';
+obj.t // undefined
+
+delete obj.p // false
+obj.p // "hello"
+
+
+Object.isFrozen方法用于检查一个对象是否使用了Object.freeze方法
+var obj = {
+  p: 'hello'
+};
+
+Object.freeze(obj);
+Object.isFrozen(obj) // true
+
+Object.isFrozen的一个用途是，确认某个对象没有被冻结后，再对它的属性赋值
+var obj = {
+  p: 'hello'
+};
+
+Object.freeze(obj);
+
+if (!Object.isFrozen(obj)) {
+  obj.p = 'world';
+}
+
+```
+
+- Array 对象
+```js
+Array是 JavaScript 的原生对象
+var arr = Array(2);
+// 等同于
+var arr = new Array(2);
+
+// good
+var arr = [1, 2];
+
+
+静态方法:
+Array.isArray()
+//
+var arr = [1, 2, 3];
+
+typeof arr // "object"
+Array.isArray(arr) // true
+
+实例方法:
+数组的valueOf方法返回数组本身
+var arr = [1, 2, 3];
+arr.valueOf() // [1, 2, 3]
+
+数组的toString方法返回数组的字符串形式
+var arr = [1, 2, 3];
+arr.toString() // "1,2,3"
+
+var arr = [1, 2, 3, [4, 5, 6]];
+arr.toString() // "1,2,3,4,5,6"
+
+push方法用于在数组的末端添加一个或多个元素，并返回添加新元素后的数组长度
+var arr = [];
+
+arr.push(1) // 1
+arr.push('a') // 2
+arr.push(true, {}) // 4
+arr // [1, 'a', true, {}]
+
+
+pop方法用于删除数组的最后一个元素，并返回该元素
+var arr = ['a', 'b', 'c'];
+
+arr.pop() // 'c'
+arr // ['a', 'b']
+
+[].pop() // undefined
+
+
+shift()方法用于删除数组的第一个元素，并返回该元素
+var a = ['a', 'b', 'c'];
+
+a.shift() // 'a'
+a // ['b', 'c']
+
+unshift()方法用于在数组的第一个位置添加元素，并返回添加新元素后的数组长度
+// 1
+var a = ['a', 'b', 'c'];
+
+a.unshift('x'); // 4
+a // ['x', 'a', 'b', 'c']
+
+// 2
+var arr = [ 'c', 'd' ];
+arr.unshift('a', 'b') // 4
+arr // [ 'a', 'b', 'c', 'd' ]
+
+
+join()方法以指定参数作为分隔符，将所有数组成员连接为一个字符串返回，默认用逗号分隔
+// 1
+var a = [1, 2, 3, 4];
+
+a.join(' ') // '1 2 3 4'
+a.join(' | ') // "1 | 2 | 3 | 4"
+a.join() // "1,2,3,4"
+
+// 2
+[undefined, null].join('#')
+// '#'
+
+['a',, 'b'].join('-')
+// 'a--b'
+
+// 3
+Array.prototype.join.call('hello', '-')
+// "h-e-l-l-o"
+
+var obj = { 0: 'a', 1: 'b', length: 2 };
+Array.prototype.join.call(obj, '-')
+// 'a-b'
+
+concat方法用于多个数组的合并，将新数组的成员，添加到原数组成员的后部，然后返回一个新数组，原数组不变
+// 1
+['hello'].concat(['world'])
+// ["hello", "world"]
+
+['hello'].concat(['world'], ['!'])
+// ["hello", "world", "!"]
+
+[].concat({a: 1}, {b: 2})
+// [{ a: 1 }, { b: 2 }]
+
+[2].concat({a: 1})
+// [2, {a: 1}]
+
+// 2
+[1, 2, 3].concat(4, 5, 6)
+// [1, 2, 3, 4, 5, 6]
+
+// 3 如果数组成员包括对象，concat方法返回当前数组的一个浅拷贝
+var obj = { a: 1 };
+var oldArray = [obj];
+
+var newArray = oldArray.concat();
+
+obj.a = 2;
+newArray[0].a // 2
+
+
+reverse方法用于颠倒排列数组元素，返回改变后的数组
+var a = ['a', 'b', 'c'];
+
+a.reverse() // ["c", "b", "a"]
+a // ["c", "b", "a"]
+
+
+slice()方法用于提取目标数组的一部分，返回一个新数组，原数组不变
+arr.slice(start, end);
+// 1
+var a = ['a', 'b', 'c'];
+
+a.slice(0) // ["a", "b", "c"]
+a.slice(1) // ["b", "c"]
+a.slice(1, 2) // ["b"]
+a.slice(2, 6) // ["c"]
+a.slice() // ["a", "b", "c"]
+
+
+// 2
+var a = ['a', 'b', 'c'];
+a.slice(-2) // ["b", "c"]
+a.slice(-2, -1) // ["b"]
+
+// 3
+var a = ['a', 'b', 'c'];
+a.slice(4) // []
+a.slice(2, 1) // []
+
+slice()方法的一个重要应用，是将类似数组的对象转为真正的数组
+Array.prototype.slice.call({ 0: 'a', 1: 'b', length: 2 })
+// ['a', 'b']
+
+Array.prototype.slice.call(document.querySelectorAll("div"));
+Array.prototype.slice.call(arguments);
+
+
+splice()方法用于删除原数组的一部分成员，并可以在删除的位置添加新的数组成员，返回值是被删除的元素
+arr.splice(start, count, addElement1, addElement2, ...);
+// 1
+var a = ['a', 'b', 'c', 'd', 'e', 'f'];
+a.splice(4, 2) // ["e", "f"]
+a // ["a", "b", "c", "d"]
+
+// 2
+var a = ['a', 'b', 'c', 'd', 'e', 'f'];
+a.splice(4, 2, 1, 2) // ["e", "f"]
+a // ["a", "b", "c", "d", 1, 2]
+
+// 3
+var a = ['a', 'b', 'c', 'd', 'e', 'f'];
+a.splice(-4, 2) // ["c", "d"]
+
+// 4
+var a = [1, 1, 1];
+
+a.splice(1, 0, 2) // []
+a // [1, 2, 1, 1]
+
+// 5
+var a = [1, 2, 3, 4];
+a.splice(2) // [3, 4]
+a // [1, 2]
+
+
+sort方法对数组成员进行排序，默认是按照字典顺序排序。排序后，原数组将被改变
+// 
+['d', 'c', 'b', 'a'].sort()
+// ['a', 'b', 'c', 'd']
+
+[4, 3, 2, 1].sort()
+// [1, 2, 3, 4]
+
+[11, 101].sort()
+// [101, 11]
+
+[10111, 1101, 111].sort()
+// [10111, 1101, 111]
+
+// 2 按照自定义方式排序
+[10111, 1101, 111].sort(function (a, b) {
+  return a - b;
+})
+// [111, 1101, 10111]
+
+
+// 3
+[
+  { name: "张三", age: 30 },
+  { name: "李四", age: 24 },
+  { name: "王五", age: 28  }
+].sort(function (o1, o2) {
+  return o1.age - o2.age;
+})
+// [
+//   { name: "李四", age: 24 },
+//   { name: "王五", age: 28  },
+//   { name: "张三", age: 30 }
+// ]
+
+
+map()方法将数组的所有成员依次传入参数函数，然后把每一次的执行结果组成一个新数组返回
+
+// 1
+[1, 2, 3].map(function(elem, index, arr) {
+  return elem * index;
+});
+// [0, 2, 6]
+
+// 2
+var arr = ['a', 'b', 'c'];
+
+[1, 2].map(function (e) {
+  return this[e];
+}, arr)
+// ['b', 'c']
+
+
+// 3
+如果数组有空位，map()方法的回调函数在这个位置不会执行，会跳过数组的空位
+var f = function (n) { return 'a' };
+
+[1, undefined, 2].map(f) // ["a", "a", "a"]
+[1, null, 2].map(f) // ["a", "a", "a"]
+[1, , 2].map(f) // ["a", , "a"]
+
+
+forEach()方法不返回值，只用来操作数据
+// 1
+function log(element, index, array) {
+  console.log('[' + index + '] = ' + element);
+}
+
+[2, 5, 9].forEach(log);
+// [0] = 2
+// [1] = 5
+// [2] = 9
+
+// 2
+var out = [];
+
+[1, 2, 3].forEach(function(elem) {
+  this.push(elem * elem);
+}, out);
+
+out // [1, 4, 9]
+
+
+forEach()方法无法中断执行，总是会将所有成员遍历完
+如果希望符合某种条件时，就中断遍历，要使用for循环
+// 1
+var arr = [1, 2, 3];
+
+for (var i = 0; i < arr.length; i++) {
+  if (arr[i] === 2) break;
+  console.log(arr[i]);
+}
+// 1
+
+forEach()方法也会跳过数组的空位
+var log = function (n) {
+  console.log(n + 1);
+};
+
+[1, undefined, 2].forEach(log)
+// 2
+// NaN
+// 3
+
+[1, null, 2].forEach(log)
+// 2
+// 1
+// 3
+
+[1, , 2].forEach(log)
+// 2
+// 3
+
+
+filter()方法用于过滤数组成员，满足条件的成员组成一个新数组返回
+// 1
+[1, 2, 3, 4, 5].filter(function (elem) {
+  return (elem > 3);
+})
+// [4, 5]
+
+// 2
+[1, 2, 3, 4, 5].filter(function (elem, index, arr) {
+  return index % 2 === 0;
+});
+// [1, 3, 5]
+
+// 3
+var obj = { MAX: 3 };
+var myFilter = function (item) {
+  if (item > this.MAX) return true;
+};
+
+var arr = [2, 8, 3, 4, 1, 3, 2, 9];
+arr.filter(myFilter, obj) // [8, 4, 9]
+
+
+some()
+every()
+这两个方法类似“断言”（assert），返回一个布尔值，表示判断数组成员是否符合某种条件
+
+some方法是只要一个成员的返回值是true，则整个some方法的返回值就是true，否则返回false
+// 1
+var arr = [1, 2, 3, 4, 5];
+arr.some(function (elem, index, arr) {
+  return elem >= 3;
+});
+// true
+
+every方法是所有成员的返回值都是true，整个every方法才返回true，否则返回false
+// 1
+var arr = [1, 2, 3, 4, 5];
+arr.every(function (elem, index, arr) {
+  return elem >= 3;
+});
+// false
+
+// 2
+function isEven(x) { return x % 2 === 0 }
+
+[].some(isEven) // false
+[].every(isEven) // true
+
+some和every方法还可以接受第二个参数，用来绑定参数函数内部的this变量
+
+reduce()方法和reduceRight()方法依次处理数组的每个成员，最终累计为一个值
+reduce()是从左到右处理
+reduceRight()则是从右到左
+
+// 1
+[1, 2, 3, 4, 5].reduce(function (a, b) {
+  console.log(a, b);
+  return a + b;
+})
+// 1 2
+// 3 3
+// 6 4
+// 10 5
+//最后结果：15
+
+用法
+[1, 2, 3, 4, 5].reduce(function (
+  a,   // 累积变量，必须
+  b,   // 当前变量，必须
+  i,   // 当前位置，可选
+  arr  // 原数组，可选
+) {
+  // ... ...
+
+
+// 1
+[1, 2, 3, 4, 5].reduce(function (a, b) {
+  return a + b;
+}, 10);
+// 25
+
+// 2
+function add(prev, cur) {
+  return prev + cur;
+}
+
+[].reduce(add)
+// TypeError: Reduce of empty array with no initial value
+[].reduce(add, 1)
+// 1
+
+
+// 3
+function subtract(prev, cur) {
+  return prev - cur;
+}
+
+[3, 2, 1].reduce(subtract) // 0
+[3, 2, 1].reduceRight(subtract) // -4
+
+
+// 4 找出字符长度最长的数组成员
+function findLongest(entries) {
+  return entries.reduce(function (longest, entry) {
+    return entry.length > longest.length ? entry : longest;
+  }, '');
+}
+
+findLongest(['aaa', 'bb', 'c']) // "aaa"
+
+indexOf方法返回给定元素在数组中第一次出现的位置，如果没有出现则返回-1
+// 1
+var a = ['a', 'b', 'c'];
+
+a.indexOf('b') // 1
+a.indexOf('y') // -1
+
+// 2
+['a', 'b', 'c'].indexOf('a', 1) // -1
+
+lastIndexOf方法返回给定元素在数组中最后一次出现的位置，如果没有出现则返回-1
+// 1
+var a = [2, 5, 9, 2];
+a.lastIndexOf(2) // 3
+a.lastIndexOf(7) // -1
+
+// 2
+[NaN].indexOf(NaN) // -1
+[NaN].lastIndexOf(NaN) // -1
+// 方法内部，使用严格相等运算符（===）进行比较，而NaN是唯一一个不等于自身的值
+
+
+链式使用
+var users = [
+  {name: 'tom', email: 'tom@example.com'},
+  {name: 'peter', email: 'peter@example.com'}
+];
+
+users
+.map(function (user) {
+  return user.email;
+})
+.filter(function (email) {
+  return /^t/.test(email);
+})
+.forEach(function (email) {
+  console.log(email);
+});
+// "tom@example.com"
+
+```
+
+- 包装对象
+```js
+“包装对象”，指的是与数值、字符串、布尔值分别相对应的Number、String、Boolean三个原生对象。这三个原生对象可以把原始类型的值变成（包装成）对象
+var v1 = new Number(123);
+var v2 = new String('abc');
+var v3 = new Boolean(true);
+
+typeof v1 // "object"
+typeof v2 // "object"
+typeof v3 // "object"
+
+v1 === 123 // false
+v2 === 'abc' // false
+v3 === true // false
+
+包装对象的设计目的
+首先是使得“对象”这种类型可以覆盖 JavaScript 所有的值，整门语言有一个通用的数据模型
+其次是使得原始类型的值也有办法调用自己的方法
+
+
+Number、String和Boolean 作为普通函数调用，常常用于将任意类型的值转为原始类型的 数值、字符串和布尔值
+// 字符串转为数值
+Number('123') // 123
+
+// 数值转为字符串
+String(123) // "123"
+
+// 数值转为布尔值
+Boolean(123) // true
+
+
+实例方法:
+valueOf()方法返回包装对象实例对应的原始类型的值
+new Number(123).valueOf()  // 123
+new String('abc').valueOf() // "abc"
+new Boolean(true).valueOf() // true
+
+toString()方法返回对应的字符串形式
+new Number(123).toString() // "123"
+new String('abc').toString() // "abc"
+new Boolean(true).toString() // "true"
+
+原始类型与实例对象的自动转换 (调用结束后，包装对象实例会自动销毁)
+var str = 'abc';
+str.length // 3
+
+// 等同于
+var strObj = new String(str)
+// String {
+//   0: "a", 1: "b", 2: "c", length: 3, [[PrimitiveValue]]: "abc"
+// }
+strObj.length // 3
+
+自动转换生成的包装对象是只读的，无法修改
+var s = 'Hello World';
+s.x = 123;
+s.x // undefined
+
+自定义方法
+包装对象还可以自定义方法和属性，供原始类型的值直接调用
+String.prototype.double = function () {
+  return this.valueOf() + this.valueOf();
+};
+
+'abc'.double()
+// abcabc
+
+Number.prototype.double = function () {
+  return this.valueOf() + this.valueOf();
+};
+
+(123).double() // 246
+// 123外面必须要加上圆括号，否则后面的点运算符（.）会被解释成小数点
+
+```
+
+- Boolean 对象
+- Number 对象
+```js
+// 1
+var n = new Number(1);
+typeof n // "object"
+
+// 2
+Number(true) // 1
+
+静态属性:
+Number.POSITIVE_INFINITY // Infinity
+Number.NEGATIVE_INFINITY // -Infinity
+Number.NaN // NaN
+
+Number.MAX_VALUE
+// 1.7976931348623157e+308
+Number.MAX_VALUE < Infinity
+// true
+
+Number.MIN_VALUE
+// 5e-324
+Number.MIN_VALUE > 0
+// true
+
+Number.MAX_SAFE_INTEGER // 9007199254740991
+Number.MIN_SAFE_INTEGER // -9007199254740991
+
+实例方法:
+toString方法，用来将一个数值转为字符串形式
+(10).toString() // "10"
+
+(10).toString(2) // "1010"
+(10).toString(8) // "12"
+(10).toString(16) // "a"
+
+10.toString(2)
+// SyntaxError: Unexpected token ILLEGAL
+
+10..toString(2)
+// "1010"
+
+// 其他方法还包括
+10 .toString(2) // "1010"
+10.0.toString(2) // "1010"
+
+10.5.toString() // "10.5"
+10.5.toString(2) // "1010.1"
+10.5.toString(8) // "12.4"
+10.5.toString(16) // "a.8"
+
+10['toString'](2) // "1010"
+toString方法只能将十进制的数，转为其他进制的字符串。如果要将其他进制的数，转回十进制，需要使用parseInt方法
+
+
+toFixed()方法先将一个数转为指定位数的小数，然后返回这个小数对应的字符串
+(10).toFixed(2) // "10.00"
+10.005.toFixed(2) // "10.01"
+
+(10.055).toFixed(2) // 10.05
+(10.005).toFixed(2) // 10.01
+
+toExponential方法用于将一个数转为科学计数法形式
+(10).toExponential()  // "1e+1"
+(10).toExponential(1) // "1.0e+1"
+(10).toExponential(2) // "1.00e+1"
+
+(1234).toExponential()  // "1.234e+3"
+(1234).toExponential(1) // "1.2e+3"
+(1234).toExponential(2) // "1.23e+3"
+
+Number.prototype.toPrecision()方法用于将一个数转为指定位数的有效数字
+(12.34).toPrecision(1) // "1e+1"
+(12.34).toPrecision(2) // "12"
+(12.34).toPrecision(3) // "12.3"
+(12.34).toPrecision(4) // "12.34"
+(12.34).toPrecision(5) // "12.340"
+
+(12.35).toPrecision(3) // "12.3"
+(12.25).toPrecision(3) // "12.3"
+(12.15).toPrecision(3) // "12.2"
+(12.45).toPrecision(3) // "12.4"
+
+Number.prototype.toLocaleString()方法接受一个地区码作为参数，返回一个字符串，表示当前数字在该地区的当地书写形式
+(123).toLocaleString('zh-Hans-CN-u-nu-hanidec')
+// "一二三"
+
+(123).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+// "$123.00"
+
+自定义方法:
+// 1
+Number.prototype.add = function (x) {
+  return this + x;
+};
+
+8['add'](2) // 10
+
+// 2
+Number.prototype.subtract = function (x) {
+  return this - x;
+};
+
+(8).add(2).subtract(4)
+// 6
+
+// 3
+Number.prototype.iterate = function () {
+  var result = [];
+  for (var i = 0; i <= this; i++) {
+    result.push(i);
+  }
+  return result;
+};
+
+(8).iterate()
+// [0, 1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+- String 对象
+```js
+// 1
+var s1 = 'abc';
+var s2 = new String('abc');
+
+typeof s1 // "string"
+typeof s2 // "object"
+
+s2.valueOf() // "abc"
+
+// 2
+new String('abc')
+// String {0: "a", 1: "b", 2: "c", length: 3}
+
+(new String('abc'))[1] // "b"
+
+// 3
+String(true) // "true"
+String(5) // "5"
+
+静态方法:
+String.fromCharCode()。该方法的参数是一个或多个数值，代表 Unicode 码点，返回值是这些码点组成的字符串
+// 1
+String.fromCharCode() // ""
+String.fromCharCode(97) // "a"
+String.fromCharCode(104, 101, 108, 108, 111)
+// "hello"
+
+实例属性:
+// 1
+'abc'.length // 3
+
+// 2
+charAt方法返回指定位置的字符，参数是从0开始编号的位置
+// 1
+var s = new String('abc');
+
+s.charAt(1) // "b"
+s.charAt(s.length - 1) // "c
+
+// 2
+'abc'.charAt(1) // "b"
+'abc'[1] // "b"
+
+// 3
+'abc'.charAt(-1) // ""
+'abc'.charAt(3) // ""
+
+charCodeAt()方法返回字符串指定位置的 Unicode 码点（十进制表示），相当于String.fromCharCode()的逆操作
+'abc'.charCodeAt(1) // 98
+'abc'.charCodeAt() // 97
+
+'abc'.charCodeAt(-1) // NaN
+'abc'.charCodeAt(4) // NaN
+
+concat方法用于连接两个字符串，返回一个新字符串，不改变原字符串
+// 1
+var s1 = 'abc';
+var s2 = 'def';
+
+s1.concat(s2) // "abcdef"
+s1 // "abc"
+
+// 2
+'a'.concat('b', 'c') // "abc"
+
+// 3
+var one = 1;
+var two = 2;
+var three = '3';
+
+''.concat(one, two, three) // "123"
+one + two + three // "33"
+
+slice()方法用于从原字符串取出子字符串并返回，不改变原字符串
+// 1
+'JavaScript'.slice(0, 4) // "Java"
+
+// 2
+'JavaScript'.slice(4) // "Script"
+
+// 3
+'JavaScript'.slice(-6) // "Script"
+'JavaScript'.slice(0, -6) // "Java"
+'JavaScript'.slice(-2, -1) // "p"
+
+// 4
+'JavaScript'.slice(2, 1) // ""
+
+substring方法用于从原字符串取出子字符串并返回，不改变原字符串，跟slice方法很相像
+'JavaScript'.substring(0, 4) // "Java"
+
+'JavaScript'.substring(4) // "Script"
+
+'JavaScript'.substring(10, 4) // "Script"
+// 等同于
+'JavaScript'.substring(4, 10) // "Script"
+
+//如果参数是负数，substring方法会自动将负数转为0
+'JavaScript'.substring(-3) // "JavaScript"
+'JavaScript'.substring(4, -3) // "Java"
+
+substr方法用于从原字符串取出子字符串并返回，不改变原字符串，跟slice和substring方法的作用相同
+'JavaScript'.substr(4, 6) // "Script"
+'JavaScript'.substr(4) // "Script"
+
+如果第一个参数是负数，表示倒数计算的字符位置。如果第二个参数是负数，将被自动转为0，因此会返回空字符串
+'JavaScript'.substr(-6) // "Script"
+'JavaScript'.substr(4, -1) // ""
+
+
+indexOf方法用于确定一个字符串在另一个字符串中第一次出现的位置，返回结果是匹配开始的位置。如果返回-1，就表示不匹配
+'hello world'.indexOf('o') // 4
+'JavaScript'.indexOf('script') // -1
+
+'hello world'.indexOf('o', 6) // 7
+
+'hello world'.lastIndexOf('o') // 7
+
+'hello world'.lastIndexOf('o', 6) // 4
+
+
+trim方法用于去除字符串两端的空格，返回一个新字符串，不改变原字符串
+'  hello world  '.trim()
+// "hello world"
+
+'\r\nabc \t'.trim() // 'abc'
+
+toLowerCase方法用于将一个字符串全部转为小写，toUpperCase则是全部转为大写。它们都返回一个新字符串，不改变原字符串
+'Hello World'.toLowerCase()
+// "hello world"
+
+'Hello World'.toUpperCase()
+// "HELLO WORLD"
+
+
+match方法用于确定原字符串是否匹配某个子字符串，返回一个数组，成员为匹配的第一个字符串。如果没有找到匹配，则返回null
+'cat, bat, sat, fat'.match('at') // ["at"]
+'cat, bat, sat, fat'.match('xt') // null
+
+var matches = 'cat, bat, sat, fat'.match('at');
+matches.index // 1
+matches.input // "cat, bat, sat, fat"
+
+match方法还可以使用正则表达式作为参数
+
+
+search方法的用法基本等同于match，但是返回值为匹配的第一个位置。如果没有找到匹配，则返回-1
+'cat, bat, sat, fat'.search('at') // 1
+search方法还可以使用正则表达式作为参数
+
+replace方法用于替换匹配的子字符串，一般情况下只替换第一个匹配（除非使用带有g修饰符的正则表达式）
+'aaa'.replace('a', 'b') // "baa"
+replace方法还可以使用正则表达式作为参数
+
+
+split方法按照给定规则分割字符串，返回一个由分割出来的子字符串组成的数组
+'a|b|c'.split('|') // ["a", "b", "c"]
+'a|b|c'.split('') // ["a", "|", "b", "|", "c"]
+'a|b|c'.split() // ["a|b|c"]
+'a||c'.split('|') // ['a', '', 'c']
+
+'|b|c'.split('|') // ["", "b", "c"]
+'a|b|'.split('|') // ["a", "b", ""]
+
+split方法还可以接受第二个参数，限定返回数组的最大成员数
+'a|b|c'.split('|', 0) // []
+'a|b|c'.split('|', 1) // ["a"]
+'a|b|c'.split('|', 2) // ["a", "b"]
+'a|b|c'.split('|', 3) // ["a", "b", "c"]
+'a|b|c'.split('|', 4) // ["a", "b", "c"]
+
+
+localeCompare方法用于比较两个字符串。它返回一个整数，如果小于0，表示第一个字符串小于第二个字符串；如果等于0，表示两者相等；如果大于0，表示第一个字符串大于第二个字符串
+'apple'.localeCompare('banana') // -1
+'apple'.localeCompare('apple') // 0
+
+'B' > 'a' // false
+'B'.localeCompare('a') // 1
+localeCompare方法会考虑自然语言的排序情况，将B排在a的前面
+
+localeCompare还可以有第二个参数，指定所使用的语言（默认是英语），然后根据该语言的规则进行比较
+'ä'.localeCompare('z', 'de') // -1
+'ä'.localeCompare('z', 'sv') // 1
+
+```
+
+- Math 对象
+```js
+静态属性 
+Math.E // 2.718281828459045
+Math.LN2 // 0.6931471805599453
+Math.LN10 // 2.302585092994046
+Math.LOG2E // 1.4426950408889634
+Math.LOG10E // 0.4342944819032518
+Math.PI // 3.141592653589793
+Math.SQRT1_2 // 0.7071067811865476
+Math.SQRT2 // 1.4142135623730951
+
+静态方法
+Math.abs()：绝对值
+Math.ceil()：向上取整
+Math.floor()：向下取整
+Math.max()：最大值
+Math.min()：最小值
+Math.pow()：幂运算
+Math.sqrt()：平方根
+Math.log()：自然对数
+Math.exp()：e的指数
+Math.round()：四舍五入
+Math.random()：随机数
+
+Math.random()返回0到1之间的一个伪随机数，可能等于0，但是一定小于1
+// 1
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+getRandomArbitrary(1.5, 6.5)
+// 2.4942810038223864
+
+// 2
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+getRandomInt(1, 6) // 5
+
+// 3
+function random_str(length) {
+  var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  ALPHABET += 'abcdefghijklmnopqrstuvwxyz';
+  ALPHABET += '0123456789-_';
+  var str = '';
+  for (var i = 0; i < length; ++i) {
+    var rand = Math.floor(Math.random() * ALPHABET.length);
+    str += ALPHABET.substring(rand, rand + 1);
+  }
+  return str;
+}
+
+random_str(6) // "NdQKOr"
+
+三角函数方法
+Math.sin(0) // 0
+Math.cos(0) // 1
+Math.tan(0) // 0
+
+Math.sin(Math.PI / 2) // 1
+
+Math.asin(1) // 1.5707963267948966
+Math.acos(1) // 0
+Math.atan(1) // 0.7853981633974483
+
+```
+
+- Date 对象
+```js
+无论有没有参数，直接调用Date总是返回当前时间
+Date()
+// "Tue Dec 01 2015 09:34:43 GMT+0800 (CST)"
+
+Date(2000, 1, 1)
+// "Tue Dec 01 2015 09:34:43 GMT+0800 (CST)"
+
+// 1
+var today = new Date();
+
+today
+// "Tue Dec 01 2015 09:34:43 GMT+0800 (CST)"
+
+// 等同于
+today.toString()
+// "Tue Dec 01 2015 09:34:43 GMT+0800 (CST)"
+
+
+// 2
+// 参数为时间零点开始计算的毫秒数
+new Date(1378218728000)
+// Tue Sep 03 2013 22:32:08 GMT+0800 (CST)
+
+// 参数为日期字符串
+new Date('January 6, 2013');
+// Sun Jan 06 2013 00:00:00 GMT+0800 (CST)
+
+// 参数为多个整数，
+// 代表年、月、日、小时、分钟、秒、毫秒
+new Date(2013, 0, 1, 0, 0, 0, 0)
+// Tue Jan 01 2013 00:00:00 GMT+0800 (CST)
+
+
+关于Date构造函数的参数
+1.参数可以是负整数，代表1970年元旦之前的时间
+new Date(-1378218728000)
+// Fri Apr 30 1926 17:27:52 GMT+0800 (CST)
+
+2.只要是能被Date.parse()方法解析的字符串，都可以当作参数
+new Date('2013-2-15')
+new Date('2013/2/15')
+new Date('02/15/2013')
+new Date('2013-FEB-15')
+new Date('FEB, 15, 2013')
+new Date('FEB 15, 2013')
+new Date('February, 15, 2013')
+new Date('February 15, 2013')
+new Date('15 Feb 2013')
+new Date('15, February, 2013')
+// Fri Feb 15 2013 00:00:00 GMT+0800 (CST)
+
+3.参数为年、月、日等多个整数时，年和月是不能省略的，其他参数都可以省略的
+new Date(2013)
+// Thu Jan 01 1970 08:00:02 GMT+0800 (CST)
+
+new Date(2013, 0)
+// Tue Jan 01 2013 00:00:00 GMT+0800 (CST)
+new Date(2013, 0, 1)
+// Tue Jan 01 2013 00:00:00 GMT+0800 (CST)
+new Date(2013, 0, 1, 0)
+// Tue Jan 01 2013 00:00:00 GMT+0800 (CST)
+new Date(2013, 0, 1, 0, 0, 0, 0)
+// Tue Jan 01 2013 00:00:00 GMT+0800 (CST)
+
+参数如果超出了正常范围，会被自动折算
+new Date(2013, 15)
+// Tue Apr 01 2014 00:00:00 GMT+0800 (CST)
+new Date(2013, 0, 0)
+// Mon Dec 31 2012 00:00:00 GMT+0800 (CST)
+
+参数还可以使用负数，表示扣去的时间
+new Date(2013, -1)
+// Sat Dec 01 2012 00:00:00 GMT+0800 (CST)
+new Date(2013, 0, -1)
+// Sun Dec 30 2012 00:00:00 GMT+0800 (CST)
+
+日期的运算
+类型自动转换时，Date实例如果转为数值，则等于对应的毫秒数；如果转为字符串，则等于对应的日期字符串
+var d1 = new Date(2000, 2, 1);
+var d2 = new Date(2000, 3, 1);
+
+d2 - d1
+// 2678400000
+d2 + d1
+// "Sat Apr 01 2000 00:00:00 GMT+0800 (CST)Wed Mar 01 2000 00:00:00 GMT+0800 (CST)"
+
+静态方法
+Date.now() // 1364026285194
+
+Date.parse('Aug 9, 1995')
+Date.parse('January 26, 2011 13:51:50')
+Date.parse('Mon, 25 Dec 1995 13:30:00 GMT')
+Date.parse('Mon, 25 Dec 1995 13:30:00 +0430')
+Date.parse('2011-10-10')
+Date.parse('2011-10-10T14:48:00')
+
+Date.parse('xxx') // NaN
+
+// 格式
+Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
+
+// 用法
+Date.UTC(2011, 0, 1, 2, 3, 4, 567)
+// 1293847384567
+
+实例方法
+to类：从Date对象返回一个字符串，表示指定的时间。
+get类：获取Date对象的日期和时间。
+set类：设置Date对象的日期和时间
+
+```
+
+- RegExp 对象
+```js
+新建正则表达式
+// 1
+var regex = /xyz/;
+
+// 2
+var regex = new RegExp('xyz');
+
+RegExp构造函数还可以接受第二个参数，表示修饰符
+var regex = new RegExp('xyz', 'i');
+// 等价于
+var regex = /xyz/i;
+
+
+实例属性
+1. 修饰符相关，用于了解设置了什么修饰符
+RegExp.prototype.ignoreCase：返回一个布尔值，表示是否设置了i修饰符。
+RegExp.prototype.global：返回一个布尔值，表示是否设置了g修饰符。
+RegExp.prototype.multiline：返回一个布尔值，表示是否设置了m修饰符。
+RegExp.prototype.flags：返回一个字符串，包含了已经设置的所有修饰符，按字母排序
+
+2. 与修饰符无关的属性
+RegExp.prototype.lastIndex：返回一个整数，表示下一次开始搜索的位置。该属性可读写，但是只在进行连续搜索时有意义，详细介绍请看后文。
+RegExp.prototype.source：返回正则表达式的字符串形式（不包括反斜杠），该属性只读
+
+// 1
+var r = /abc/igm;
+
+r.ignoreCase // true
+r.global // true
+r.multiline // true
+r.flags // 'gim'
+
+// 2
+var r = /abc/igm;
+
+r.lastIndex // 0
+r.source // "abc"
+
+实例方法
+正则实例对象的test方法返回一个布尔值，表示当前模式是否能匹配参数字符串
+/cat/.test('cats and dogs') // true
+
+如果正则表达式带有g修饰符，则每一次test方法都从上一次结束的位置开始向后匹配
+var r = /x/g;
+var s = '_x_x';
+
+r.lastIndex // 0
+r.test(s) // true
+
+r.lastIndex // 2
+r.test(s) // true
+
+r.lastIndex // 4
+r.test(s) // false
+
+带有g修饰符时，可以通过正则对象的lastIndex属性指定开始搜索的位置
+var r = /x/g;
+var s = '_x_x';
+
+r.lastIndex = 4;
+r.test(s) // false
+
+r.lastIndex // 0
+r.test(s) // true
+
+带有g修饰符时，正则表达式内部会记住上一次的lastIndex属性，这时不应该更换所要匹配的字符串，否则会有一些难以察觉的错误
+var r = /bb/g;
+r.test('bb') // true
+r.test('-bb-') // false
+
+
+lastIndex属性只对同一个正则表达式有效
+var count = 0;
+while (/a/g.test('babaa')) count++;
+// 上面代码会导致无限循环，因为while循环的每次匹配条件都是一个新的正则表达式，导致lastIndex属性总是等于0
+
+如果正则模式是一个空字符串，则匹配所有字符串
+new RegExp('').test('abc')
+// true
+
+exec()方法，用来返回匹配结果。如果发现匹配，就返回一个数组，成员是匹配成功的子字符串，否则返回null
+// 1
+var s = '_x_x';
+var r1 = /x/;
+var r2 = /y/;
+
+r1.exec(s) // ["x"]
+r2.exec(s) // null
+
+// 2
+var s = '_x_x';
+var r = /_(x)/;
+
+r.exec(s) // ["_x", "x"]
+
+
+// 3
+var r = /a(b+)a/;
+var arr = r.exec('_abbba_aba_');
+
+arr // ["abbba", "bbb"]
+
+arr.index // 1
+arr.input // "_abbba_aba_"
+
+// 正则表达式加上g修饰符
+var reg = /a/g;
+var str = 'abc_abc_abc'
+
+var r1 = reg.exec(str);
+r1 // ["a"]
+r1.index // 0
+reg.lastIndex // 1
+
+var r2 = reg.exec(str);
+r2 // ["a"]
+r2.index // 4
+reg.lastIndex // 5
+
+var r3 = reg.exec(str);
+r3 // ["a"]
+r3.index // 8
+reg.lastIndex // 9
+
+var r4 = reg.exec(str);
+r4 // null
+reg.lastIndex // 0
+
+
+// 4
+var reg = /a/g;
+var str = 'abc_abc_abc'
+
+while(true) {
+  var match = reg.exec(str);
+  if (!match) break;
+  console.log('#' + match.index + ':' + match[0]);
+}
+// #0:a
+// #4:a
+// #8:a
+
+正则实例对象的lastIndex属性不仅可读，还可写
+
+字符串的实例方法
+String.prototype.match()：返回一个数组，成员是所有匹配的子字符串。
+String.prototype.search()：按照给定的正则表达式进行搜索，返回一个整数，表示匹配开始的位置。
+String.prototype.replace()：按照给定的正则表达式进行替换，返回替换后的字符串。
+String.prototype.split()：按照给定规则进行字符串分割，返回一个数组，包含分割后的各个成员
+
+// 1
+var s = '_x_x';
+var r1 = /x/;
+var r2 = /y/;
+
+s.match(r1) // ["x"]
+s.match(r2) // null
+
+// 2
+var s = 'abba';
+var r = /a/g;
+
+s.match(r) // ["a", "a"]
+r.exec(s) // ["a"]
+
+// 3
+var r = /a|b/g;
+r.lastIndex = 7;
+'xaxb'.match(r) // ['a', 'b']
+r.lastIndex // 0
+
+
+// 1
+'_x_x'.search(/x/)
+// 1
+
+str.replace(search, replacement)
+
+// 1
+'aaa'.replace('a', 'b') // "baa"
+'aaa'.replace(/a/, 'b') // "baa"
+'aaa'.replace(/a/g, 'b') // "bbb"
+
+// 2
+var str = '  #id div.class  ';
+
+str.replace(/^\s+|\s+$/g, '')
+// "#id div.class"
+
+// 3
+'hello world'.replace(/(\w+)\s(\w+)/, '$2 $1')
+// "world hello"
+
+'abc'.replace('b', '[$`-$&-$\']')
+// "a[a-b-c]c"
+
+// 4
+'3 and 5'.replace(/[0-9]+/g, function (match) {
+  return 2 * match;
+})
+// "6 and 10"
+
+var a = 'The quick brown fox jumped over the lazy dog.';
+var pattern = /quick|brown|lazy/ig;
+
+a.replace(pattern, function replacer(match) {
+  return match.toUpperCase();
+});
+// The QUICK BROWN fox jumped over the LAZY do
+
+
+// 5
+var prices = {
+  'p1': '$1.99',
+  'p2': '$9.99',
+  'p3': '$5.00'
+};
+
+var template = '<span id="p1"></span>'
+  + '<span id="p2"></span>'
+  + '<span id="p3"></span>';
+
+template.replace(
+  /(<span id=")(.*?)(">)(<\/span>)/g,
+  function(match, $1, $2, $3, $4){
+    return $1 + $2 + $3 + prices[$2] + $4;
+  }
+);
+// "<span id="p1">$1.99</span><span id="p2">$9.99</span><span id="p3">$5.00</span>"
+
+str.split(separator, [limit])
+
+// 1
+// 非正则分隔
+'a,  b,c, d'.split(',')
+// [ 'a', '  b', 'c', ' d' ]
+
+// 正则分隔，去除多余的空格
+'a,  b,c, d'.split(/, */)
+// [ 'a', 'b', 'c', 'd' ]
+
+// 指定返回数组的最大成员
+'a,  b,c, d'.split(/, */, 2)
+[ 'a', 'b' ]
+
+// 2
+// 例一
+'aaa*a*'.split(/a*/)
+// [ '', '*', '*' ]
+
+// 例二
+'aaa**a*'.split(/a*/)
+// ["", "*", "*", "*"]
+
+
+// 3 如果正则表达式带有括号，则括号匹配的部分也会作为数组成员返回
+'aaa*a*'.split(/(a*)/)
+// [ '', 'aaa', '*', 'a', '*' ]
+
+
+字面量字符和元字符
+/dog/.test('old dog') // true
+
+点字符（.）匹配除回车（\r）、换行(\n) 、行分隔符（\u2028）和段分隔符（\u2029）以外的所有字符
+/c.t/
+
+位置字符
+^ 表示字符串的开始位置
+$ 表示字符串的结束位
+
+// test必须出现在开始位置
+/^test/.test('test123') // true
+
+// test必须出现在结束位置
+/test$/.test('new test') // true
+
+// 从开始位置到结束位置只有test
+/^test$/.test('test') // true
+/^test$/.test('test test') // false
+
+
+选择符（|）
+/11|22/.test('911') // true
+
+// 匹配fred、barney、betty之中的一个
+/fred|barney|betty/
+
+/a( |\t)b/.test('a\tb') // true
+
+转义符
+正则表达式中，需要反斜杠转义的，一共有12个字符：^ . [ $ ( ) | * + ? { 和 \
+/1+1/.test('1+1')
+// false
+
+/1\+1/.test('1+1')
+// true
+
+(new RegExp('1\+1')).test('1+1')
+// false
+
+(new RegExp('1\\+1')).test('1+1')
+// true
+
+
+特殊字符
+\n 匹配换行键
+\r 匹配回车键
+......
+
+
+字符类
+/[abc]/.test('hello world') // false
+/[abc]/.test('apple') // true
+
+/[^abc]/.test('bbc news') // true
+/[^abc]/.test('bbc') // false
+
+// 如果方括号内没有其他字符，即只有[^]，就表示匹配一切字符，其中包括换行符。相比之下，点号作为元字符（.）是不包括换行符的
+var s = 'Please yes\nmake my day!';
+
+s.match(/yes.*day/) // null
+s.match(/yes[^]*day/) // [ 'yes\nmake my day
+// 注意，脱字符只有在字符类的第一个位置才有特殊含义，否则就是字面含义
+
+
+/a-z/.test('b') // false
+/[a-z]/.test('b') // true
+
+[0-9.,]
+[0-9a-fA-F]
+[a-zA-Z0-9-]
+[1-31]
+
+连字符还可以用来指定 Unicode 字符的范围
+var str = "\u0130\u0131\u0132";
+/[\u0128-\uFFFF]/.test(str)
+// true
+
+预定义模式
+d 匹配0-9之间的任一数字，相当于[0-9]。
+\D 匹配所有0-9以外的字符，相当于[^0-9]。
+\w 匹配任意的字母、数字和下划线，相当于[A-Za-z0-9_]。
+\W 除所有字母、数字和下划线以外的字符，相当于[^A-Za-z0-9_]。
+\s 匹配空格（包括换行符、制表符、空格符等），相等于[ \t\r\n\v\f]。
+\S 匹配非空格的字符，相当于[^ \t\r\n\v\f]。
+\b 匹配词的边界。
+\B 匹配非词边界，即在词的内部
+
+// \s 的例子
+/\s\w*/.exec('hello world') // [" world"]
+
+// \b 的例子
+/\bworld/.test('hello world') // true
+/\bworld/.test('hello-world') // true
+/\bworld/.test('helloworld') // false
+
+// \B 的例子
+/\Bworld/.test('hello-world') // false
+/\Bworld/.test('helloworld') // true
+
+通常，正则表达式遇到换行符（\n）就会停止匹配
+var html = "<b>Hello</b>\n<i>world!</i>";
+
+/.*/.exec(html)[0]
+// "<b>Hello</b>"
+
+
+使用\s字符类，就能包括换行符
+var html = "<b>Hello</b>\n<i>world!</i>";
+
+/[\S\s]*/.exec(html)[0]
+// "<b>Hello</b>\n<i>world!</i>"
+上面代码中，[\S\s]指代一切字符
+
+
+
+重复类
+模式的精确匹配次数，使用大括号（{}）表示。{n}表示恰好重复n次，{n,}表示至少重复n次，{n,m}表示重复不少于n次，不多于m次
+/lo{2}k/.test('look') // true
+/lo{2,5}k/.test('looook') // true
+
+
+量词符
+量词符用来设定某个模式出现的次数
+? 问号表示某个模式出现0次或1次，等同于{0, 1}
+* 星号表示某个模式出现0次或多次，等同于{0,}
++ 加号表示某个模式出现1次或多次，等同于{1,}
+
+// t 出现0次或1次
+/t?est/.test('test') // true
+/t?est/.test('est') // true
+
+// t 出现1次或多次
+/t+est/.test('test') // true
+/t+est/.test('ttest') // true
+/t+est/.test('est') // false
+
+// t 出现0次或多次
+/t*est/.test('test') // true
+/t*est/.test('ttest') // true
+/t*est/.test('tttest') // true
+/t*est/.test('est') // true
+
+贪婪模式
+匹配到下一个字符不满足匹配规则为止
+var s = 'aaa';
+s.match(/a+/) // ["aaa"]
+
+非贪婪模式，即最小可能匹配
++?：表示某个模式出现1次或多次，匹配时采用非贪婪模式。
+*?：表示某个模式出现0次或多次，匹配时采用非贪婪模式。
+??：表格某个模式出现0次或1次，匹配时采用非贪婪模式
+var s = 'aaa';
+s.match(/a+?/) // ["a"]
+
+'abb'.match(/ab*/) // ["abb"]
+'abb'.match(/ab*?/) // ["a"]
+
+'abb'.match(/ab?/) // ["ab"]
+'abb'.match(/ab??/) // ["a"]
+
+
+修饰符
+修饰符（modifier）表示模式的附加规则，放在正则模式的最尾部
+// 单个修饰符
+var regex = /test/i;
+
+// 多个修饰符
+var regex = /test/ig;
+
+g修饰符表示全局匹配（global），加上它以后，正则对象将匹配全部符合条件的结果，主要用于搜索和替换
+// 1
+var regex = /b/;
+var str = 'abba';
+
+regex.test(str); // true
+regex.test(str); // true
+regex.test(str); // true
+
+// 2
+var regex = /b/g;
+var str = 'abba';
+
+regex.test(str); // true
+regex.test(str); // true
+regex.test(str); // false
+
+i修饰符以后表示忽略大小写（ignoreCase）
+/abc/.test('ABC') // false
+/abc/i.test('ABC') // true
+
+/world$/.test('hello world\n') // false
+/world$/m.test('hello world\n') // true
+
+
+m修饰符表示多行模式（multiline），会修改^和$的行为。默认情况下（即不加m修饰符时），^和$匹配字符串的开始处和结尾处，加上m修饰符以后，^和$还会匹配行首和行尾，即^和$会识别换行符（\n）
+/world$/.test('hello world\n') // false
+/world$/m.test('hello world\n') // true
+
+/^b/m.test('a\nb') // true
+
+
+组匹配
+// 1
+/fred+/.test('fredd') // true
+/(fred)+/.test('fredfred') // true
+
+// 2
+var m = 'abcabc'.match(/(.)b(.)/);
+m
+// ['abc', 'a', 'c']
+
+
+使用组匹配时，不宜同时使用g修饰符，否则match方法不会捕获分组的内容
+var m = 'abcabc'.match(/(.)b(.)/g);
+m // ['abc', 'abc']
+
+
+/(.)b(.)\1b\2/.test("abcabc")
+// true
+\1表示第一个括号匹配的内容（即a），\2表示第二个括号匹配的内容（即c）
+
+
+/y(..)(.)\2\1/.test('yabccab') // true
+
+/y((..)\2)\1/.test('yabababab') // true
+
+// 1
+var tagName = /<([^>]+)>[^<]*<\/\1>/;
+
+tagName.exec("<b>bold</b>")[1]
+// 'b'
+
+
+// 2
+var html = '<b class="hello">Hello</b><i>world</i>';
+var tag = /<(\w+)([^>]*)>(.*?)<\/\1>/g;
+
+var match = tag.exec(html);
+
+match[1] // "b"
+match[2] // " class="hello""
+match[3] // "Hello"
+
+match = tag.exec(html);
+
+match[1] // "i"
+match[2] // ""
+match[3] // "world"
+
+
+非捕获组
+(?:x)称为非捕获组（Non-capturing group），表示不返回该组匹配的内容，即匹配的结果中不计入这个括号
+// 1
+var m = 'abc'.match(/(?:.)b(.)/);
+m // ["abc", "c"]
+
+// 2
+// 正常匹配
+var url = /(http|ftp):\/\/([^/\r\n]+)(\/[^\r\n]*)?/;
+
+url.exec('http://google.com/');
+// ["http://google.com/", "http", "google.com", "/"]
+
+// 非捕获组匹配
+var url = /(?:http|ftp):\/\/([^/\r\n]+)(\/[^\r\n]*)?/;
+
+url.exec('http://google.com/');
+// ["http://google.com/", "google.com", "/"]
+
+
+先行断言
+x(?=y)称为先行断言（Positive look-ahead），x只有在y前面才匹配，y不会被计入返回结果
+
+“先行断言”中，括号里的部分是不会返回的
+var m = 'abc'.match(/b(?=c)/);
+m // ["b"]
+
+
+先行否定断言
+x(?!y)称为先行否定断言（Negative look-ahead），x只有不在y前面才匹配，y不会被计入返回结果
+
+/\d+(?!\.)/.exec('3.14')
+// ["14"]
+
+“先行否定断言”中，括号里的部分是不会返回的
+```
