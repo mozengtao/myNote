@@ -1522,3 +1522,554 @@ arr.forEach(function (chr) {
 // c
 
 ```
+
+- 运算符
+```js
+算术运算符
+x + y
+x - y
+x * y
+x / y
+x ** y
+x % y
+++x 或者 x++
+--x 或者 x--
+ +x
+-x
+
+// 1
+true + true // 2
+1 + true // 2
+
+'a' + 'bc' // "abc" (字符串的连接运算符)
+
+1 + 'a' // "1a"
+false + 'a' // "falsea"
+
+'3' + 4 + 5 // "345"    （如果一个运算子是字符串，非字符串会转成字符串）
+3 + 4 + '5' // "75"
+
+
+除了加法运算符，其他算术运算符（比如减法、除法和乘法）都不会发生重载。
+它们的规则是：所有运算子一律转为数值，再进行相应的数学运算
+
+1 - '2' // -1
+1 * '2' // 2
+1 / '2' // 0.5
+
+
+如果运算子是对象，必须先转成原始类型的值，然后再相加
+var obj = { p: 1 };
+obj + 2 // "[object Object]2"   // (对象obj转成原始类型的值是[object Object])
+
+对象转成原始类型的值的规则
+1.自动调用对象的valueOf方法（对象的valueOf方法总是返回对象自身）
+2.自动调用对象的toString方法，将其转为字符串
+
+var obj = { p: 1 };
+obj.valueOf().toString() // "[object Object]"
+
+自定义toString方法
+var obj = {
+  toString: function () {
+    return 'hello';
+  }
+};
+
+obj + 2 // "hello2"
+
+
+特例，如果运算子是一个Date对象的实例，那么会优先执行toString方法
+var obj = new Date();
+obj.valueOf = function () { return 1 };
+obj.toString = function () { return 'hello' };
+
+obj + 2 // "hello2"
+对象obj是一个Date对象的实例，并且自定义了valueOf方法和toString方法，结果toString方法优先执行
+
+数值运算符（+）它是一元运算符
+数值运算符的作用在于可以将任何值转为数值
+
++true // 1
++[] // 0
++{} // NaN
+
+负数值运算符（-），也同样具有将一个值转为数值的功能，只不过得到的值正负相反
+var x = 1;
+-x // -1
+-(-x) // 
+
+赋值运算符
+var x = 1;
+x += y
+x -= y
+x *= y
+x /= y
+x %= y
+x **= y
+x >>= y
+x <<= y
+x >>>= y
+x &= y
+x |= y
+x ^= y
+
+比较运算符
+JavaScript 一共提供了8个比较运算符
+> 大于运算符
+< 小于运算符
+<= 小于或等于运算符
+>= 大于或等于运算符
+== 相等运算符
+=== 严格相等运算符
+!= 不相等运算符
+!== 严格不相等运算符
+
+八个比较运算符分成两类：相等比较和非相等比较
+非相等比较：
+先看两个运算子是否都是字符串，如果是的，就按照字典顺序比较（实际上是比较 Unicode 码点），否则，将两个运算子都转成数值，再比较数值的大小
+
+字符串的比较：
+字符串按照字典顺序进行比较
+'cat' > 'dog' // false
+'cat' > 'catalog' // false
+
+非字符串的比较：
+1.原始类型值
+如果两个运算子都是原始类型的值，则是先转成数值再比较
+5 > '4' // true
+// 等同于 5 > Number('4')
+// 即 5 > 4
+
+true > false // true
+// 等同于 Number(true) > Number(false)
+// 即 1 > 0
+
+2 > true // true
+// 等同于 2 > Number(true)
+// 即 2 > 1
+
+任何值（包括NaN本身）与NaN使用非相等运算符进行比较，返回的都是false
+1 > NaN // false
+1 <= NaN // false
+'1' > NaN // false
+'1' <= NaN // false
+NaN > NaN // false
+NaN <= NaN // false
+
+2.对象
+如果运算子是对象，会转为原始类型的值，再进行比较
+对象转换成原始类型的值，算法是先调用valueOf方法；如果返回的还是对象，再接着调用toString方法
+var x = [2];
+x > '11' // true
+// 等同于 [2].valueOf().toString() > '11'
+// 即 '2' > '11'
+
+x.valueOf = function () { return '1' };
+x > '11' // false
+// 等同于 (function () { return '1' })() > '11'
+// 即 '1' > '11'
+
+[2] > [1] // true
+// 等同于 [2].valueOf().toString() > [1].valueOf().toString()
+// 即 '2' > '1'
+
+[2] > [11] // true
+// 等同于 [2].valueOf().toString() > [11].valueOf().toString()
+// 即 '2' > '11'
+
+({ x: 2 }) >= ({ x: 1 }) // true
+// 等同于 ({ x: 2 }).valueOf().toString() >= ({ x: 1 }).valueOf().toString()
+// 即 '[object Object]' >= '[object Object]
+
+严格相等运算符
+相等运算符（==）比较两个值是否相等
+严格相等运算符（===）比较它们是否为“同一个值”。如果两个值不是同一类型，严格相等运算符（===）直接返回false，而相等运算符（==）会将它们转换成同一个类型，再用严格相等运算符进行比较
+1.不同类型的值
+如果两个值的类型不同，直接返回false
+1 === "1" // false
+true === "true" // false
+
+2.同一类的原始类型值
+同一类型的原始类型的值（数值、字符串、布尔值）比较时，值相同就返回true，值不同就返回false
+1 === 0x1 // true
+
+NaN与任何值都不相等（包括自身）。另外，正0等于负0
+NaN === NaN  // false
++0 === -0 // true
+
+复合类型值
+两个复合类型（对象、数组、函数）的数据比较时，比较的是它们是否指向同一个地址
+{} === {} // false
+[] === [] // false
+(function () {} === function () {}) // false
+// 运算符两边的空对象、空数组、空函数的值，都存放在不同的内存地址，结果是false
+
+var v1 = {};
+var v2 = v1;
+v1 === v2 // true
+
+对于两个对象的比较，严格相等运算符比较的是地址，而大于或小于运算符比较的是值
+var obj1 = {};
+var obj2 = {};
+
+obj1 > obj2 // false
+obj1 < obj2 // false
+obj1 === obj2 // false
+
+undefined和null与自身严格相等
+undefined === undefined // true
+null === null // true
+
+var v1;
+var v2;
+v1 === v2 // true
+
+严格不相等运算符
+先求严格相等运算符的结果，然后返回相反值
+
+
+
+相等运算符 ==
+相等运算符用来比较相同类型的数据时，与严格相等运算符完全一样
+1 == 1.0
+// 等同于
+1 === 1.0
+
+比较不同类型的数据时，相等运算符会先将数据进行类型转换，然后再用严格相等运算符比较
+1.原始类型值
+原始类型的值会转换成数值再进行比较
+1 == true // true
+// 等同于 1 === Number(true)
+
+0 == false // true
+// 等同于 0 === Number(false)
+
+2 == true // false
+// 等同于 2 === Number(true)
+
+2 == false // false
+// 等同于 2 === Number(false)
+
+'true' == true // false
+// 等同于 Number('true') === Number(true)
+// 等同于 NaN === 1
+
+'' == 0 // true
+// 等同于 Number('') === 0
+// 等同于 0 === 0
+
+'' == false  // true
+// 等同于 Number('') === Number(false)
+// 等同于 0 === 0
+
+'1' == true  // true
+// 等同于 Number('1') === Number(true)
+// 等同于 1 === 1
+
+'\n  123  \t' == 123 // true
+// 因为字符串转为数字时，省略前置和后置的空格
+
+2.对象与原始类型值比较
+对象（这里指广义的对象，包括数组和函数）与原始类型的值比较时，先调用对象的valueOf()方法，如果得到原始类型的值，就按照上一小节的规则，互相比较；如果得到的还是对象，则再调用toString()方法，得到字符串形式，再进行比较
+// 1
+// 数组与数值的比较
+[1] == 1 // true
+
+// 数组与字符串的比较
+[1] == '1' // true
+[1, 2] == '1,2' // true
+
+// 对象与布尔值的比较
+[1] == true // true
+[2] == true // false
+
+// 2
+const obj = {
+  valueOf: function () {
+    console.log('执行 valueOf()');
+    return obj;
+  },
+  toString: function () {
+    console.log('执行 toString()');
+    return 'foo';
+  }
+};
+
+obj == 'foo'
+// 执行 valueOf()
+// 执行 toString()
+// true
+
+3. undefined 和 null
+undefined和null只有与自身比较，或者互相比较时，才会返回true；与其他类型的值比较时，结果都为false
+
+4.相等运算符的缺点
+相等运算符隐藏的类型转换，会带来一些违反直觉的结果
+
+不相等运算符 !=
+先求相等运算符的结果，然后返回相反值
+
+
+布尔运算符
+取反运算符：!
+且运算符：&&
+或运算符：||
+三元运算符：?:
+
+
+二进制位运算符
+|
+&
+~
+^
+<<
+>>
+>>> 头部补零的右移运算符
+
+头部补零的右移运算符（>>>）与右移运算符（>>）只有一个差别，就是一个数的二进制形式向右移动时，头部一律补零，而不考虑符号位。所以，该运算总是得到正值
+
+位运算符可以用作设置对象属性的开关
+var FLAG_A = 1; // 0001
+var FLAG_B = 2; // 0010
+var FLAG_C = 4; // 0100
+var FLAG_D = 8; // 1000
+
+var flags = 5; // 二进制的0101
+
+if (flags & FLAG_C) {
+  // ...
+}
+// 0101 & 0100 => 0100 => true
+
+
+其他运算符
+
+void运算符的作用是执行一个表达式，然后不返回任何值，或者说返回undefined
+void(0) // undefined
+void (x = 5) //undefined
+这个运算符的主要用途是浏览器的书签工具（Bookmarklet），以及在超级链接中插入代码防止网页跳转
+<script>
+function f() {
+  console.log('Hello World');
+}
+</script>
+<a href="http://example.com" onclick="f(); return false;">点击</a>
+
+
+逗号运算符用于对两个表达式求值，并返回后一个表达式的值
+var x = 0;
+var y = (x++, 10);
+
+数据类型的转换
+JavaScript 是一种动态类型语言，变量没有类型限制，可以随时赋予任意值
+
+强制转换
+强制转换主要指使用Number()、String()和Boolean()三个函数
+
+Number函数，可以将任意类型的值转化成数值
+1.原始类型值
+// 数值：转换后还是原来的值
+Number(324) // 324
+
+// 字符串：如果可以被解析为数值，则转换为相应的数值
+Number('324') // 324
+
+// 字符串：如果不可以被解析为数值，返回 NaN
+Number('324abc') // NaN
+
+// 空字符串转为0
+Number('') // 0
+
+// 布尔值：true 转成 1，false 转成 0
+Number(true) // 1
+Number(false) // 0
+
+// undefined：转成 NaN
+Number(undefined) // NaN
+
+// null：转成0
+Number(null) // 0
+
+Number函数将字符串转为数值，要比parseInt函数严格很多。基本上，只要有一个字符无法转成数值，整个字符串就会被转为NaN
+parseInt('42 cats') // 42
+Number('42 cats') // NaN
+
+parseInt和Number函数都会自动过滤一个字符串前导和后缀的空格
+parseInt('\t\v\r12.34\n') // 12
+Number('\t\v\r12.34\n') // 12.34
+
+
+2.对象
+Number方法的参数是对象时，将返回NaN，除非是包含单个数值的数组
+Number({a: 1}) // NaN
+Number([1, 2, 3]) // NaN
+Number([5]) // 5
+
+
+String函数可以将任意类型的值转化成字符串
+1.原始类型值
+String(123) // "123"
+String('abc') // "abc"
+String(true) // "true"
+String(undefined) // "undefined"
+String(null) // "null"
+
+2.对象
+String方法的参数如果是对象，返回一个类型字符串；如果是数组，返回该数组的字符串形式
+
+String({a: 1}) // "[object Object]"
+String([1, 2, 3]) // "1,2,3"
+
+String方法背后的转换规则：
+1.先调用对象自身的toString方法。如果返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
+
+2.如果toString方法返回的是对象，再调用原对象的valueOf方法。如果valueOf方法返回原始类型的值，则对该值使用String函数，不再进行以下步骤。
+
+3.如果valueOf方法返回的是对象，就报错
+
+
+Boolean()函数可以将任意类型的值转为布尔值
+除了以下五个值的转换结果为false，其他的值全部为true
+Boolean(undefined) // false
+Boolean(null) // false
+Boolean(0) // false
+Boolean(NaN) // false
+Boolean('') // false
+
+自动转换
+以下三种情况时，JavaScript 会自动转换数据类型
+1.不同类型的数据互相运算
+123 + 'abc' // "123abc"
+2.对非布尔值类型的数据求布尔值
+if ('abc') {
+  console.log('hello')
+}  // "hello"
+3.对非数值类型的值使用一元运算符（即+和-）
++ {foo: 'bar'} // NaN
+- [1, 2, 3] // NaN
+```
+
+- 错误处理
+```js
+JavaScript 解析或运行时，一旦发生错误，引擎就会抛出一个错误对象。JavaScript 原生提供Error构造函数，所有抛出的错误都是这个构造函数的实例
+var err = new Error('出错了');
+err.message // "出错了"
+
+Error实例对象的属性
+message：错误提示信息
+name：错误名称（非标准属性）
+stack：错误的堆栈（非标准属性）
+
+
+Error实例对象是最一般的错误类型，在它的基础上，存在Error的6个派生对象
+1.SyntaxError 对象
+2.ReferenceError 对象
+3.RangeError 对象
+4.TypeError 对象
+5.URIError 对象
+6.EvalError 对象
+
+自定义错误
+function UserError(message) {
+  this.message = message || '默认信息';
+  this.name = 'UserError';
+}
+
+UserError.prototype = new Error();
+UserError.prototype.constructor = UserError;
+
+new UserError('这是自定义的错误！');
+
+throw 语句
+throw语句的作用是手动中断程序执行，抛出一个错误
+var x = -1;
+
+if (x <= 0) {
+  throw new Error('x 必须为正数');
+}
+// Uncaught Error: x 必须为正数
+
+// 抛出自定义错误
+function UserError(message) {
+  this.message = message || '默认信息';
+  this.name = 'UserError';
+}
+
+throw new UserError('出错了！');
+// Uncaught UserError {message: "出错了！", name: "UserError"}
+
+throw可以抛出任何类型的值。也就是说，它的参数可以是任何值
+// 抛出一个字符串
+throw 'Error！';
+// Uncaught Error！
+
+// 抛出一个数值
+throw 42;
+// Uncaught 42
+
+// 抛出一个布尔值
+throw true;
+// Uncaught true
+
+// 抛出一个对象
+throw {
+  toString: function () {
+    return 'Error!';
+  }
+};
+// Uncaught {toString: ƒ}
+
+
+try...catch 结构
+try {
+  foo.bar();
+} catch (e) {
+  if (e instanceof EvalError) {
+    console.log(e.name + ": " + e.message);
+  } else if (e instanceof RangeError) {
+    console.log(e.name + ": " + e.message);
+  }
+  // ...
+}
+
+try...catch结构允许在最后添加一个finally代码块，表示不管是否出现错误，都必需在最后运行的语句
+
+finally代码块用法的典型场景
+openFile();
+
+try {
+  writeFile(Data);
+} catch(e) {
+  handleError(e);
+} finally {
+  closeFile();
+}
+
+try...catch...finally三者之间的执行顺序
+function f() {
+  try {
+    console.log(0);
+    throw 'bug';
+  } catch(e) {
+    console.log(1);
+    return true; // 这句原本会延迟到 finally 代码块结束再执行
+    console.log(2); // 不会运行
+  } finally {
+    console.log(3);
+    return false; // 这句会覆盖掉前面那句 return
+    console.log(4); // 不会运行
+  }
+
+  console.log(5); // 不会运行
+}
+
+var result = f();
+// 0
+// 1
+// 3
+
+result
+// false
+
+```
