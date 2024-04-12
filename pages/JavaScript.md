@@ -4381,3 +4381,246 @@ x(?!y)称为先行否定断言（Negative look-ahead），x只有不在y前面�
 
 “先行否定断言”中，括号里的部分是不会返回的
 ```
+
+- JSON 对象
+```js
+JSON 对值的类型和格式有严格的规定:
+1.复合类型的值只能是数组或对象，不能是函数、正则表达式对象、日期对象。
+2.原始类型的值只有四种：字符串、数值（必须以十进制表示）、布尔值和null（不能使1.用NaN, Infinity, -Infinity和undefined）。
+3.字符串必须使用双引号表示，不能使用单引号。
+4.对象的键名必须放在双引号里面。
+5.数组或对象最后一个成员的后面，不能加逗号。
+
+
+JSON对象是 JavaScript 的原生对象
+静态方法：
+JSON.stringify()
+JSON.parse()
+
+JSON.stringify()方法用于将一个值转为 JSON 字符串
+// 1
+JSON.stringify('abc') // ""abc""
+JSON.stringify(1) // "1"
+JSON.stringify(false) // "false"
+JSON.stringify([]) // "[]"
+JSON.stringify({}) // "{}"
+
+JSON.stringify([1, "false", false])
+// '[1,"false",false]'
+
+JSON.stringify({ name: "张三" })
+// '{"name":"张三"}'
+
+// 2
+JSON.stringify('foo') === "foo" // false
+JSON.stringify('foo') === "\"foo\"" // true
+
+JSON.stringify(false) // "false"
+JSON.stringify('false') // "\"false\""
+
+
+如果对象的属性是undefined、函数或 XML 对象，该属性会被JSON.stringify()过滤
+var obj = {
+  a: undefined,
+  b: function () {}
+};
+
+JSON.stringify(obj) // "{}"
+
+如果数组的成员是undefined、函数或 XML 对象，则这些值被转成null
+var arr = [undefined, function () {}];
+JSON.stringify(arr) // "[null,null]"
+
+
+正则对象会被转成空对象
+JSON.stringify(/foo/) // "{}"
+
+JSON.stringify()方法会忽略对象的不可遍历的属性
+var obj = {};
+Object.defineProperties(obj, {
+  'foo': {
+    value: 1,
+    enumerable: true
+  },
+  'bar': {
+    value: 2,
+    enumerable: false
+  }
+});
+
+JSON.stringify(obj); // "{"foo":1}"
+
+
+JSON.stringify()方法还可以接受一个数组，作为第二个参数，指定参数对象的哪些属性需要转成字符串
+// 1
+var obj = {
+  'prop1': 'value1',
+  'prop2': 'value2',
+  'prop3': 'value3'
+};
+
+var selectedProperties = ['prop1', 'prop2'];
+
+JSON.stringify(obj, selectedProperties)
+// "{"prop1":"value1","prop2":"value2"}"
+
+
+// 2
+function f(key, value) {
+  if (typeof value === "number") {
+    value = 2 * value;
+  }
+  return value;
+}
+
+JSON.stringify({ a: 1, b: 2 }, f)
+// '{"a": 2,"b": 4}'
+
+
+处理函数是递归处理所有的键
+var obj = {a: {b: 1}};
+
+function f(key, value) {
+  console.log("["+ key +"]:" + value);
+  return value;
+}
+
+JSON.stringify(obj, f)
+// []:[object Object]
+// [a]:[object Object]
+// [b]:1
+// '{"a":{"b":1}}
+
+
+递归处理中，每一次处理的对象，都是前一次返回的值
+var obj = {a: 1};
+
+function f(key, value) {
+  if (typeof value === 'object') {
+    return {b: 2};
+  }
+  return value * 2;
+}
+
+JSON.stringify(obj, f)
+// "{"b": 4}"
+
+
+如果处理函数返回undefined或没有返回值，则该属性会被忽略
+function f(key, value) {
+  if (typeof(value) === "string") {
+    return undefined;
+  }
+  return value;
+}
+
+JSON.stringify({ a: "abc", b: 123 }, f)
+// '{"b": 123}'
+
+
+JSON.stringify()还可以接受第三个参数，用于增加返回的 JSON 字符串的可读性
+// 1
+// 默认输出
+JSON.stringify({ p1: 1, p2: 2 })
+// JSON.stringify({ p1: 1, p2: 2 })
+
+// 分行输出
+JSON.stringify({ p1: 1, p2: 2 }, null, '\t')
+// {
+// 	"p1": 1,
+// 	"p2": 2
+// }
+
+第三个属性如果是一个数字，则表示每个属性前面添加的空格(最多不超过10个)
+JSON.stringify({ p1: 1, p2: 2 }, null, 2);
+/*
+"{
+  "p1": 1,
+  "p2": 2
+}"
+*/
+
+
+参数对象的 toJSON() 方法
+如果参数对象有自定义的toJSON()方法，那么JSON.stringify()会使用这个方法的返回值作为参数，而忽略原对象的其他属性
+// 1
+var user = {
+  firstName: '三',
+  lastName: '张',
+
+  get fullName(){
+    return this.lastName + this.firstName;
+  }
+};
+
+JSON.stringify(user)
+// "{"firstName":"三","lastName":"张","fullName":"张三"}"
+
+// 2
+var user = {
+  firstName: '三',
+  lastName: '张',
+
+  get fullName(){
+    return this.lastName + this.firstName;
+  },
+
+  toJSON: function () {
+    return {
+      name: this.lastName + this.firstName
+    };
+  }
+};
+
+JSON.stringify(user)
+// "{"name":"张三"}"
+
+
+toJSON()方法的一个应用是，将正则对象自动转为字符串
+var obj = {
+  reg: /foo/
+};
+
+// 不设置 toJSON 方法时
+JSON.stringify(obj) // "{"reg":{}}"
+
+// 设置 toJSON 方法时
+RegExp.prototype.toJSON = RegExp.prototype.toString;
+JSON.stringify(/foo/) // ""/foo/""
+
+
+
+JSON.parse()方法用于将 JSON 字符串转换成对应的值
+// 1
+JSON.parse('{}') // {}
+JSON.parse('true') // true
+JSON.parse('"foo"') // "foo"
+JSON.parse('[1, 5, "false"]') // [1, 5, "false"]
+JSON.parse('null') // null
+
+var o = JSON.parse('{"name": "张三"}');
+o.name // 张三
+
+// 2
+try {
+  JSON.parse("'String'");
+} catch(e) {
+  console.log('parsing error');
+}
+
+// 3
+function f(key, value) {
+  if (key === 'a') {
+    return value + 10;
+  }
+  return value;
+}
+
+JSON.parse('{"a": 1, "b": 2}', f)
+// {a: 11, b: 2}
+
+
+实现对象的深拷贝
+JSON.parse(JSON.stringify(obj))
+这种写法，可以深度克隆一个对象，但是对象内部不能有 JSON不允许的数据类型，比如函数、正则对象、日期对象等
+```
