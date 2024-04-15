@@ -4624,3 +4624,776 @@ JSON.parse('{"a": 1, "b": 2}', f)
 JSON.parse(JSON.stringify(obj))
 这种写法，可以深度克隆一个对象，但是对象内部不能有 JSON不允许的数据类型，比如函数、正则对象、日期对象等
 ```
+
+- 面向对象
+```js
+1.对象是单个实物的抽象
+2.对象是一个容器，封装了属性（property）和方法（method）
+
+构造函数
+专门用来生成实例对象的函数
+
+var Vehicle = function () {
+  this.price = 1000;
+};
+构造函数名字的第一个字母通常大写
+
+构造函数的特点：
+1.函数体内部使用了this关键字，代表了所要生成的对象实例
+2.生成对象的时候，必须使用new命令
+
+// 1
+var Vehicle = function (p) {
+  'use strict';   // 为了保证构造函数必须与new命令一起使用，一个解决办法是，构造函数内部使用严格模式
+  this.price = p;
+};
+
+var v = new Vehicle(500);
+
+
+new 命令的原理:
+1.创建一个空对象，作为将要返回的对象实例。
+2.将这个空对象的原型，指向构造函数的prototype属性。
+3.将这个空对象赋值给函数内部的this关键字。
+4.开始执行构造函数内部的代码。
+
+
+new命令简化的内部流程
+function _new(/* 构造函数 */ constructor, /* 构造函数参数 */ params) {
+  // 将 arguments 对象转为数组
+  var args = [].slice.call(arguments);
+  // 取出构造函数
+  var constructor = args.shift();
+  // 创建一个空对象，继承构造函数的 prototype 属性
+  var context = Object.create(constructor.prototype);
+  // 执行构造函数
+  var result = constructor.apply(context, args);
+  // 如果返回结果是对象，就直接返回，否则返回 context 对象
+  return (typeof result === 'object' && result != null) ? result : context;
+}
+
+// 实例
+var actor = _new(Person, '张三', 28);
+
+
+new.target:
+函数内部可以使用new.target属性。如果当前函数是new命令调用，new.target指向当前函数，否则为undefined
+// 1
+function f() {
+  console.log(new.target === f);
+}
+
+f() // false
+new f() // true
+
+// 2 判断函数调用的时候，是否使用new命令
+function f() {
+  if (!new.target) {
+    throw new Error('请使用 new 命令调用！');
+  }
+  // ...
+}
+
+f() // Uncaught Error: 请使用 new 命令调用！
+
+
+Object.create() 创建实例对象
+以现有的对象作为模板，生成新的实例对象
+
+var person1 = {
+  name: '张三',
+  age: 38,
+  greeting: function() {
+    console.log('Hi! I\'m ' + this.name + '.');
+  }
+};
+
+var person2 = Object.create(person1);
+
+person2.name // 张三
+person2.greeting() // Hi! I'm 张三.
+// 对象person1是person2的模板，后者继承了前者的属性和方法
+
+this 关键字
+this就是属性或方法“当前”所在的对象
+
+// 1
+var person = {
+  name: '张三',
+  describe: function () {
+    return '姓名：'+ this.name;
+  }
+};
+
+person.describe()
+// "姓名：张三"
+
+// 2 属性所在的当前对象是可变的，即this的指向是可变的
+var A = {
+  name: '张三',
+  describe: function () {
+    return '姓名：'+ this.name;
+  }
+};
+
+var B = {
+  name: '李四'
+};
+
+B.describe = A.describe;
+B.describe()
+// "姓名：李四"
+
+// 3
+function f() {
+  return '姓名：'+ this.name;
+}
+
+var A = {
+  name: '张三',
+  describe: f
+};
+
+var B = {
+  name: '李四',
+  describe: f
+};
+
+A.describe() // "姓名：张三"
+B.describe() // "姓名：李四"
+
+// 4
+var A = {
+  name: '张三',
+  describe: function () {
+    return '姓名：'+ this.name;
+  }
+};
+
+var name = '李四';
+var f = A.describe;
+f() // "姓名：李四"
+
+
+JavaScript 语言之所以有 this 的设计，跟内存里面的数据结构有关系
+
+var obj = { foo:  5 };
+foo属性，实际上是以下面的形式保存的
+{
+  foo: {
+    [[value]]: 5
+    [[writable]]: true
+    [[enumerable]]: true
+    [[configurable]]: true
+  }
+}
+
+由于 属性的值可能是一个函数，因此引擎会将函数单独保存在内存中，然后再将函数的地址赋值给foo属性的value属性
+{
+  foo: {
+    [[value]]: 函数的地址
+    ...
+  }
+}
+
+由于函数是一个单独的值，所以它可以在不同的环境（上下文）执行
+
+var f = function () {};
+var obj = { f: f };
+
+// 单独执行
+f()
+
+// obj 环境执行
+obj.f()
+
+
+JavaScript 允许在函数体内部，引用当前环境的其他变量
+var f = function () {
+  console.log(x);
+};
+
+JavaScript 允许在函数体内部，引用当前环境的其他变量
+由于函数可以在不同的运行环境执行，所以需要有一种机制，能够在函数体内部获得当前的运行环境（context）。所以，this就出现了，它的设计目的就是在函数体内部，指代函数当前的运行环境
+
+this 使用场合
+1.全局环境使用this，它指的就是顶层对象window
+this === window // true
+
+function f() {
+  console.log(this === window);
+}
+f() // true
+
+2.构造函数中的this，指的是实例对象
+var Obj = function (p) {
+  this.p = p;
+};
+
+3.如果对象的方法里面包含this，this的指向就是方法运行时所在的对象。该方法赋值给另一个对象，就会改变this的指向
+
+下面这几种用法，都会改变this的指向
+// 情况一
+(obj.foo = obj.foo)() // window
+// 情况二
+(false || obj.foo)() // window
+// 情况三
+(1, obj.foo)() // window
+
+// 情况一
+(obj.foo = function () {
+  console.log(this);
+})()
+// 等同于
+(function () {
+  console.log(this);
+})()
+
+// 情况二
+(false || function () {
+  console.log(this);
+})()
+
+// 情况三
+(1, function () {
+  console.log(this);
+})()
+
+
+绑定 this 的方法
+JavaScript 提供了call、apply、bind这三个方法，来切换/固定this的指向
+函数实例的call方法，可以指定函数内部this的指向（即函数执行时所在的作用域），然后在所指定的作用域中，调用该函数
+// 1
+var obj = {};
+
+var f = function () {
+  return this;
+};
+
+f() === window // true
+f.call(obj) === obj // true
+
+call方法的参数，应该是一个对象。如果参数为空、null和undefined，则默认传入全局对象
+var n = 123;
+var obj = { n: 456 };
+
+function a() {
+  console.log(this.n);
+}
+
+a.call() // 123
+a.call(null) // 123
+a.call(undefined) // 123
+a.call(window) // 123
+a.call(obj) // 456
+
+
+如果call方法的参数是一个原始值，那么这个原始值会自动转成对应的包装对象，然后传入call方法
+var f = function () {
+  return this;
+};
+
+f.call(5)
+// Number {[[PrimitiveValue]]: 5}
+
+
+call方法接受多个参数，call的第一个参数就是this所要指向的那个对象，后面的参数则是函数调用时所需的参数
+function add(a, b) {
+  return a + b;
+}
+
+add.call(this, 1, 2) // 3
+
+
+call方法的一个应用是调用对象的原生方法
+var obj = {};
+obj.hasOwnProperty('toString') // false
+
+// 覆盖掉继承的 hasOwnProperty 方法
+obj.hasOwnProperty = function () {
+  return true;
+};
+obj.hasOwnProperty('toString') // true
+
+Object.prototype.hasOwnProperty.call(obj, 'toString') // false
+hasOwnProperty是obj对象继承的方法，如果这个方法一旦被覆盖，就不会得到正确结果
+call方法可以解决这个问题，它将hasOwnProperty方法的原始定义放到obj对象上执行，这样无论obj上有没有同名方法，都不会影响结果
+
+
+apply方法的作用与call方法类似，也是改变this指向，然后再调用该函数，唯一的区别就是，它接收一个数组作为函数执行时的参数
+func.apply(thisValue, [arg1, arg2, ...])
+
+// 1
+function f(x, y){
+  console.log(x + y);
+}
+
+f.call(null, 1, 1) // 2
+f.apply(null, [1, 1]) // 2
+
+// 1 找出数组最大元素
+var a = [10, 2, 4, 15, 9];
+Math.max.apply(null, a) // 15
+
+// 2 将数组的空元素变为undefined
+Array.apply(null, ['a', ,'b'])
+// [ 'a', undefined, 'b' ]
+
+//
+var a = ['a', , 'b'];
+
+function print(i) {
+  console.log(i);
+}
+
+a.forEach(print)
+// a
+// b
+
+Array.apply(null, a).forEach(print)
+// a
+// undefined
+// b
+
+
+// 3 转换类似数组的对象
+Array.prototype.slice.apply({0: 1, length: 1}) // [1]
+Array.prototype.slice.apply({0: 1}) // []
+Array.prototype.slice.apply({0: 1, length: 2}) // [1, undefined]
+Array.prototype.slice.apply({length: 1}) // [undefined]
+
+// 4 绑定回调函数的对象
+var o = new Object();
+
+o.f = function () {
+  console.log(this === o);
+}
+
+var f = function (){
+  o.f.apply(o);
+  // 或者 o.f.call(o);
+};
+
+// jQuery 的写法
+$('#button').on('click', f)
+
+
+bind()方法用于将函数体内的this绑定到某个对象，然后返回一个新函数
+// 1
+var d = new Date();
+d.getTime() // 1481869925657
+
+var print = d.getTime;
+print() // Uncaught TypeError: this is not a Date object.
+// getTime()方法内部的this，绑定Date对象的实例，赋给变量print以后，内部的this已经不指向Date对象的实例了
+
+// 2
+var print = d.getTime.bind(d);
+print() // 1481869925657
+// bind()方法将getTime()方法内部的this绑定到d对象，这时就可以安全地将这个方法赋值给其他变量了
+
+
+// bind方法的参数就是所要绑定this的对象
+var counter = {
+  count: 0,
+  inc: function () {
+    this.count++;
+  }
+};
+
+var func = counter.inc.bind(counter);
+func();
+counter.count // 1
+// counter.inc()方法被赋值给变量func。这时必须用bind()方法将inc()内部的this，绑定到counter，否则就会出错
+
+// this绑定到其他对象也是可以的
+var counter = {
+  count: 0,
+  inc: function () {
+    this.count++;
+  }
+};
+
+var obj = {
+  count: 100
+};
+var func = counter.inc.bind(obj);
+func();
+obj.count // 101
+// bind()方法将inc()方法内部的this，绑定到obj对象。结果调用func函数以后，递增的就是obj内部的count属性
+
+// bind()还可以接受更多的参数，将这些参数绑定原函数的参数
+var add = function (x, y) {
+  return x * this.m + y * this.n;
+}
+
+var obj = {
+  m: 2,
+  n: 2
+};
+
+var newAdd = add.bind(obj, 5);
+newAdd(5) // 20
+
+如果bind()方法的第一个参数是null或undefined，等于将this绑定到全局对象，函数运行时this指向顶层对象（浏览器为window）
+
+bind()方法使用注意点
+1. bind()方法每运行一次，就返回一个新函数
+2. 结合回调函数使用
+3. 结合call()方法使用
+
+
+对象的继承
+原型对象的作用，就是定义所有实例对象共享的属性和方法
+
+构造函数的缺点:
+// 
+function Cat(name, color) {
+  this.name = name;
+  this.color = color;
+  this.meow = function () {
+    console.log('喵喵');
+  };
+}
+
+var cat1 = new Cat('大毛', '白色');
+var cat2 = new Cat('二毛', '黑色');
+
+cat1.meow === cat2.meow
+// false
+cat1和cat2是同一个构造函数的两个实例，它们都具有meow方法。由于meow方法是生成在每个实例对象上面，所以两个实例就生成了两次，也就是说，每新建一个实例，就会新建一个meow方法
+
+
+prototype 属性
+JavaScript 继承机制的设计思想就是，原型对象的所有属性和方法，都能被实例对象共享
+
+JavaScript 规定，每个函数都有一个prototype属性，指向一个对象
+
+function f() {}
+typeof f.prototype // "object"
+
+prototype属性对于普通函数来说，该属性基本无用。但是，对于构造函数来说，生成实例的时候，该属性会自动成为实例对象的原型
+
+// prototype
+function Animal(name) {
+  this.name = name;
+}
+Animal.prototype.color = 'white';
+Animal.prototype.walk = function () {
+  console.log(this.name + ' is walking');
+};
+
+var cat1 = new Animal('大毛');
+var cat2 = new Animal('二毛');
+
+cat1.color // 'white'
+cat2.color // 'white'
+
+
+原型链
+JavaScript 规定，所有对象都有自己的原型对象（prototype）
+一方面，任何一个对象，都可以充当其他对象的原型；另一方面，由于原型对象也是对象，所以它也有自己的原型。因此，就会形成一个“原型链”（prototype chain）
+
+所有对象的原型最终都可以上溯到Object.prototype，即Object构造函数的prototype属性
+
+Object.prototype的原型是null。null没有任何属性和方法，也没有自己的原型。因此，原型链的尽头就是null
+Object.getPrototypeOf(Object.prototype)
+// null
+
+
+// 举例来说，如果让构造函数的prototype属性指向一个数组，就意味着实例对象可以调用数组方法
+var MyArray = function () {};
+
+MyArray.prototype = new Array();
+MyArray.prototype.constructor = MyArray;
+
+var mine = new MyArray();
+mine.push(1, 2, 3);
+mine.length // 3
+mine instanceof Array // true
+
+constructor 属性
+prototype对象有一个constructor属性，默认指向prototype对象所在的构造函数
+function P() {}
+P.prototype.constructor === P // true
+
+由于constructor属性定义在prototype对象上面，意味着可以被所有实例对象继承
+function P() {}
+var p = new P();
+
+p.constructor === P // true
+p.constructor === P.prototype.constructor // true
+p.hasOwnProperty('constructor') // false
+
+
+constructor属性的作用是，可以得知某个实例对象，到底是哪一个构造函数产生的
+function F() {};
+var f = new F();
+
+f.constructor === F // true
+f.constructor === RegExp // false
+
+有了constructor属性，就可以从一个实例对象新建另一个实例
+function Constr() {}
+var x = new Constr();
+
+var y = new x.constructor();
+y instanceof Constr // true
+// x是构造函数Constr的实例，可以从x.constructor间接调用构造函数。这使得在实例方法中，调用自身的构造函数成为可能
+
+Constr.prototype.createCopy = function () {
+  return new this.constructor();
+};
+// 上面代码中，createCopy方法调用构造函数，新建另一个实例
+
+
+constructor属性表示原型对象与构造函数之间的关联关系，如果修改了原型对象，一般会同时修改constructor属性，防止引用的时候出错
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.constructor === Person // true
+
+Person.prototype = {
+  method: function () {}
+};
+
+Person.prototype.constructor === Person // false
+Person.prototype.constructor === Object // true
+// 上面代码中，构造函数Person的原型对象改掉了，但是没有修改constructor属性，导致这个属性不再指向Person
+
+
+所以，修改原型对象时，一般要同时修改constructor属性的指向
+// 坏的写法
+C.prototype = {
+  method1: function (...) { ... },
+  // ...
+};
+
+// 好的写法
+C.prototype = {
+  constructor: C,
+  method1: function (...) { ... },
+  // ...
+};
+
+// 更好的写法
+C.prototype.method1 = function (...) { ... };
+// 上面代码中，要么将constructor属性重新指向原来的构造函数，要么只在原型对象上添加方法，这样可以保证instanceof运算符不会失真
+
+
+如果不能确定constructor属性是什么函数，还有一个办法：通过name属性，从实例得到构造函数的名称
+function Foo() {}
+var f = new Foo();
+f.constructor.name // "Foo"
+
+
+instanceof 运算符
+instanceof运算符返回一个布尔值，表示对象是否为某个构造函数的实例
+instanceof运算符的左边是实例对象，右边是构造函数
+
+// 1
+var v = new Vehicle();
+v instanceof Vehicle // true
+
+
+v instanceof Vehicle
+// 等同于
+Vehicle.prototype.isPrototypeOf(v)
+
+
+由于instanceof检查整个原型链，因此同一个实例对象，可能会对多个构造函数都返回true
+var d = new Date();
+d instanceof Date // true
+d instanceof Object // true
+
+
+特殊情况：左边对象的原型链上，只有null对象
+var obj = Object.create(null);
+typeof obj // "object"
+obj instanceof Object // false
+// 唯一的instanceof运算符判断会失真的情况（一个对象的原型是null）
+
+instanceof运算符的一个用处，是判断值的类型
+var x = [1, 2, 3];
+var y = {};
+x instanceof Array // true
+y instanceof Object // true
+
+注意，instanceof运算符只能用于对象，不适用原始类型的值
+
+
+对于undefined和null，instanceof运算符总是返回false
+undefined instanceof Object // false
+null instanceof Object // false
+
+
+构造函数的继承
+1. 在子类的构造函数中，调用父类的构造函数
+2. 让子类的原型指向父类的原型，这样子类就可以继承父类原型
+
+//
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+Shape.prototype.move = function (x, y) {
+  this.x += x;
+  this.y += y;
+  console.info('Shape moved.');
+};
+
+// 让Rectangle构造函数继承Shape
+// 第一步，子类继承父类的实例
+function Rectangle() {
+  Shape.call(this); // 调用父类构造函数
+}
+// 另一种写法
+function Rectangle() {
+  this.base = Shape;
+  this.base();
+}
+
+// 第二步，子类继承父类的原型
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
+
+// 测试
+var rect = new Rectangle();
+
+rect instanceof Rectangle  // true
+rect instanceof Shape  // true
+
+
+// 有时只需要单个方法的继承
+ClassB.prototype.print = function() {
+  ClassA.prototype.print.call(this);
+  // some code
+}
+// 子类B的print方法先调用父类A的print方法，再部署自己的代码
+
+
+多重继承
+JavaScript 不提供多重继承功能，即不允许一个对象同时继承多个对象。但是，可以通过变通方法，实现这个功能
+
+function M1() {
+  this.hello = 'hello';
+}
+
+function M2() {
+  this.world = 'world';
+}
+
+function S() {
+  M1.call(this);
+  M2.call(this);
+}
+
+// 继承 M1
+S.prototype = Object.create(M1.prototype);
+// 继承链上加入 M2
+Object.assign(S.prototype, M2.prototype);
+
+// 指定构造函数
+S.prototype.constructor = S;
+
+var s = new S();
+s.hello // 'hello'
+s.world // 'world
+
+
+模块
+模块是实现特定功能的一组属性和方法的封装
+
+// 1 简单的做法是把模块写成一个对象，所有的模块成员都放到这个对象里面
+var module1 = new Object({
+　_count : 0,
+　m1 : function (){
+　　//...
+　},
+　m2 : function (){
+  　//...
+　}
+});
+
+缺点：这样的写法会暴露所有模块成员，内部状态可以被外部改写。比如，外部代码可以直接改变内部计数器的值
+
+
+// 2 封装私有变量：构造函数的写法
+function StringBuilder() {
+  var buffer = [];
+
+  this.add = function (str) {
+     buffer.push(str);
+  };
+
+  this.toString = function () {
+    return buffer.join('');
+  };
+
+}
+缺点：将私有变量封装在构造函数中，导致构造函数与实例对象是一体的，总是存在于内存之中，无法在使用完成后清除。这意味着，构造函数有双重作用，既用来塑造实例对象，又用来保存实例对象的数据，违背了构造函数与实例对象在数据上相分离的原则（即实例对象的数据，不应该保存在实例对象以外）。同时，非常耗费内存
+
+// 改进
+function StringBuilder() {
+  this._buffer = [];
+}
+
+StringBuilder.prototype = {
+  constructor: StringBuilder,
+  add: function (str) {
+    this._buffer.push(str);
+  },
+  toString: function () {
+    return this._buffer.join('');
+  }
+};
+缺点：将私有变量放入实例对象中，好处是看上去更自然，但是它的私有变量可以从外部读写，不是很安全
+
+
+// 3 封装私有变量：立即执行函数的写法
+var module1 = (function () {
+　var _count = 0;
+　var m1 = function () {
+　  //...
+　};
+　var m2 = function () {
+　　//...
+　};
+　return {
+　　m1 : m1,
+　　m2 : m2
+　};
+})();
+// JavaScript 模块的基本写法
+
+
+模块的放大模式 augmentation
+// 1
+var module1 = (function (mod){
+　mod.m3 = function () {
+　　//...
+　};
+　return mod;
+})(module1);
+// 为module1模块添加了一个新方法m3()，然后返回新的module1模块
+
+// 2 "宽放大模式"（Loose augmentation）
+var module1 = (function (mod) {
+　//...
+　return mod;
+})(window.module1 || {});
+// 与"放大模式"相比，“宽放大模式”就是“立即执行函数”的参数可以是空对象
+
+
+输入全局变量
+独立性是模块的重要特点，模块内部最好不与程序的其他部分直接交互，为了在模块内部调用全局变量，必须显式地将其他变量输入模块
+var module1 = (function ($, YAHOO) {
+　//...
+})(jQuery, YAHOO);
+// module1模块需要使用 jQuery 库和 YUI 库，就把这两个库（其实是两个模块）当作参数输入module1。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显
+
+
+
+```

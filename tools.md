@@ -1,3 +1,4 @@
+- [微信文件传输助手网页版](https://filehelper.weixin.qq.com/)
 - [[makeself]]
 - [[dot]]
 - ScreenToGif (Microsoft Store)
