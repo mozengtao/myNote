@@ -10,6 +10,8 @@
     - [Wireshark User’s Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)
 - [Lua/Examples](https://wiki.wireshark.org/Lua/Examples)
 - [Wireshark User's Guide](https://cse.sc.edu/~pokeefe/tutorials/wireshark/index.html)
+- [Create Wireshark Dissector in Lua](https://cq674350529.github.io/2020/09/03/Create-Wireshark-Dissector-in-Lua/)
+- [Wireshark解析器Lua脚本](https://kiosk007.top/post/wireshark%E8%A7%A3%E6%9E%90%E5%99%A8lua%E8%84%9A%E6%9C%AC/)
 - Creating a Wireshark dissector in Lua
     - [part 1](https://mika-s.github.io/wireshark/lua/dissector/2017/11/04/creating-a-wireshark-dissector-in-lua-1.html)
     - [part 2](https://mika-s.github.io/wireshark/lua/dissector/2017/11/06/creating-a-wireshark-dissector-in-lua-2.html)

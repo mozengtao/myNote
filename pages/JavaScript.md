@@ -5750,12 +5750,165 @@ launcher();
 
 定时器
 JavaScript 提供定时执行代码的功能，叫做定时器（timer），主要由setTimeout()和setInterval()这两个函数来完成。它们向任务队列添加定时任务
+setTimeout和setInterval函数，都返回一个整数值，表示计数器编号
 
 setTimeout(function (a,b) {
   console.log(a + b);
 }, 1000, 1, 1)
 
 setInterval指定某个任务每隔一段时间就执行一次，也就是无限次的定时执行
+
+// setInterval的一个常见用途是实现轮询
+var hash = window.location.hash;
+var hashWatcher = setInterval(function() {
+  if (window.location.hash != hash) {
+    updatePage();
+  }
+}, 1000);
+
+// 为了确保两次执行之间有固定的间隔，可以不用setInterval，而是每次执行结束后，使用setTimeout指定下一次执行的具体时间
+var i = 1;
+var timer = setTimeout(function f() {
+  // ...
+  timer = setTimeout(f, 2000);
+}, 2000);
+
+
+clearTimeout和clearInterval函数用来取消对应的定时器
+// 1
+var id1 = setTimeout(f, 1000);
+var id2 = setInterval(f, 1000);
+
+clearTimeout(id1);
+clearInterval(id2);
+
+// 取消当前所有的setTimeout定时器
+(function() {
+  // 每轮事件循环检查一次
+  var gid = setInterval(clearAllTimeouts, 0);
+
+  function clearAllTimeouts() {
+    var id = setTimeout(function() {}, 0);
+    while (id > 0) {
+      if (id !== gid) {
+        clearTimeout(id);
+      }
+      id--;
+    }
+  }
+})();
+
+
+运行机制
+setTimeout和setInterval的运行机制，是将指定的代码移出本轮事件循环，等到下一轮事件循环，再检查是否到了指定时间。如果到了，就执行对应的代码；如果不到，就继续等待
+setTimeout和setInterval指定的回调函数，必须等到本轮事件循环的所有同步任务都执行完，才会开始执行，但是的任务到底需要多少时间执行完，是不确定的
+
+
+Promise 对象
+Promise 对象是 JavaScript 的异步操作解决方案，为异步操作提供统一接口
+Promise 可以让异步操作写起来，就像在写同步操作的流程，而不必一层层地嵌套回调函数
+
+Promise 的设计思想是，所有异步任务都返回一个 Promise 实例。Promise 实例有一个then方法，用来指定下一步的回调函数
+
+// 1
+function f1(resolve, reject) {
+  // 异步代码...
+}
+
+var p1 = new Promise(f1);
+
+p1.then(f2);
+
+
+Promise 对象的状态
+
+Promise 实例具有三种状态:
+异步操作未完成（pending）
+异步操作成功（fulfilled）
+异步操作失败（rejected
+
+三种的状态的变化途径只有两种
+从“未完成”到“成功”
+从“未完成”到“失败”
+
+Promise 的最终结果只有两种
+异步操作成功，Promise 实例传回一个值（value），状态变为fulfilled
+异步操作失败，Promise 实例抛出一个错误（error），状态变为rejected
+
+
+Promise 构造函数
+var promise = new Promise(function (resolve, reject) {
+  // ...
+
+  if (/* 异步操作成功 */){
+    resolve(value);
+  } else { /* 异步操作失败 */
+    reject(new Error());
+  }
+});
+
+resolve和reject两个函数 由 JavaScript 引擎提供，不用自己实现
+resolve函数的作用是，将Promise实例的状态从“未完成”变为“成功”（即从pending变为fulfilled），在异步操作成功时调用，并将异步操作的结果，作为参数传递出去
+reject函数的作用是，将Promise实例的状态从“未完成”变为“失败”（即从pending变为rejected），在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去
+
+// 1
+function timeout(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms, 'done');
+  });
+}
+
+timeout(100)
+// timeout(100)返回一个 Promise 实例。100毫秒以后，该实例的状态会变为fulfilled
+
+Promise 实例的then方法，用来添加回调函数
+then方法可以接受两个回调函数:
+第一个是异步操作成功时（变为fulfilled状态）的回调函数
+第二个是异步操作失败（变为rejected）时的回调函数（该参数可以省略）
+一旦状态改变，就调用相应的回调函数
+
+// 1
+var p1 = new Promise(function (resolve, reject) {
+  resolve('成功');
+});
+p1.then(console.log, console.error);
+// "成功"
+
+var p2 = new Promise(function (resolve, reject) {
+  reject(new Error('失败'));
+});
+p2.then(console.log, console.error);
+// Error: 失败
+
+// then方法的链式使用
+p1
+  .then(step1)
+  .then(step2)
+  .then(step3)
+  .then(
+    console.log,
+    console.error
+  );
+// p1后面有四个then，意味依次有四个回调函数。只要前一步的状态变为fulfilled，就会依次执行紧跟在后面的回调函数
+
+
+then方法添加回调函数的不同的写法
+// 写法一
+f1().then(function () {
+  return f2();
+});
+
+// 写法二
+f1().then(function () {
+  f2();
+});
+
+// 写法三
+f1().then(f2());
+
+// 写法四
+f1().then(f2);
+
 
 
 ```
