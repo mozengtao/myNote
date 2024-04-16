@@ -5602,3 +5602,160 @@ function strict() {
 }
 
 ```
+
+- 异步操作
+```js
+单线程模型
+JavaScript 只在一个线程上运行
+
+注意，JavaScript 只在一个线程上运行，不代表 JavaScript 引擎只有一个线程。事实上，JavaScript 引擎有多个线程，单个脚本只能在一个线程上运行（称为主线程），其他线程都是在后台配合
+
+异步操作的模式
+1.回调函数
+function f1(callback) {
+  // ...
+  callback();
+}
+
+function f2() {
+  // ...
+}
+
+f1(f2);
+
+缺点：不利于代码的阅读和维护，各个部分之间高度耦合（coupling），使得程序结构混乱、流程难以追踪，而且每个任务只能指定一个回调函数
+
+2.事件监听
+
+为f1绑定一个事件
+f1.on('done', f2);
+
+对f1进行改写：
+function f1() {
+  setTimeout(function () {
+    // ...
+    f1.trigger('done');
+  }, 1000);
+}
+// f1.trigger('done')表示，执行完成后，立即触发done事件，从而开始执行f2
+
+缺点：整个程序都要变成事件驱动型，运行流程会变得很不清晰。阅读代码的时候，很难看出主流程
+
+
+3.发布/订阅
+
+f2向信号中心jQuery订阅done信号
+jQuery.subscribe('done', f2);
+
+f1进行如下改写
+function f1() {
+  setTimeout(function () {
+    // ...
+    jQuery.publish('done');
+  }, 1000);
+}
+
+jQuery.publish('done')的意思是，f1执行完成后，向信号中心jQuery发布done信号，从而引发f2的执行
+
+f2完成执行后，可以取消订阅（unsubscribe）
+jQuery.unsubscribe('done', f2);
+
+
+异步操作的流程控制
+1.串行执行
+编写一个流程控制函数，让它来控制异步任务，一个任务完成以后，再执行另一个
+var items = [ 1, 2, 3, 4, 5, 6 ];
+var results = [];
+
+function async(arg, callback) {
+  console.log('参数为 ' + arg +' , 1秒后返回结果');
+  setTimeout(function () { callback(arg * 2); }, 1000);
+}
+
+function final(value) {
+  console.log('完成: ', value);
+}
+
+function series(item) {
+  if(item) {
+    async( item, function(result) {
+      results.push(result);
+      return series(items.shift());
+    });
+  } else {
+    return final(results[results.length - 1]);
+  }
+}
+
+series(items.shift());
+
+2.并行执行
+所有异步任务同时执行，等到全部完成以后，才执行final函数
+var items = [ 1, 2, 3, 4, 5, 6 ];
+var results = [];
+
+function async(arg, callback) {
+  console.log('参数为 ' + arg +' , 1秒后返回结果');
+  setTimeout(function () { callback(arg * 2); }, 1000);
+}
+
+function final(value) {
+  console.log('完成: ', value);
+}
+
+items.forEach(function(item) {
+  async(item, function(result){
+    results.push(result);
+    if(results.length === items.length) {
+      final(results[results.length - 1]);
+    }
+  })
+});
+缺点：如果并行的任务较多，很容易耗尽系统资源，拖慢运行速度
+
+3.并行与串行的结合
+设置一个门槛，每次最多只能并行执行n个异步任务
+var items = [ 1, 2, 3, 4, 5, 6 ];
+var results = [];
+var running = 0;
+var limit = 2;
+
+function async(arg, callback) {
+  console.log('参数为 ' + arg +' , 1秒后返回结果');
+  setTimeout(function () { callback(arg * 2); }, 1000);
+}
+
+function final(value) {
+  console.log('完成: ', value);
+}
+
+function launcher() {
+  while(running < limit && items.length > 0) {
+    var item = items.shift();
+    async(item, function(result) {
+      results.push(result);
+      running--;
+      if(items.length > 0) {
+        launcher();
+      } else if(running === 0) {
+        final(results);
+      }
+    });
+    running++;
+  }
+}
+
+launcher();
+
+
+定时器
+JavaScript 提供定时执行代码的功能，叫做定时器（timer），主要由setTimeout()和setInterval()这两个函数来完成。它们向任务队列添加定时任务
+
+setTimeout(function (a,b) {
+  console.log(a + b);
+}, 1000, 1, 1)
+
+setInterval指定某个任务每隔一段时间就执行一次，也就是无限次的定时执行
+
+
+```
