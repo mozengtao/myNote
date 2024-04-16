@@ -5910,5 +5910,359 @@ f1().then(f2());
 f1().then(f2);
 
 
+```
+
+- DOM
+```js
+DOM 是 JavaScript 操作网页的接口，全称为“文档对象模型”（Document Object Model）
+DOM 的作用是将网页转为一个 JavaScript 对象，从而可以用脚本进行各种操作（比如增删内容）
+DOM 只是一个接口规范，可以用各种语言实现
+
+DOM 的最小组成单位叫做节点（node）。文档的树形结构（DOM 树），就是由各种不同类型的节点组成
+
+节点的类型:
+Document：整个文档树的顶层节点
+DocumentType：doctype标签（比如<!DOCTYPE html>）
+Element：网页的各种HTML标签（比如<body>、<a>等）
+Attr：网页元素的属性（比如class="right"）
+Text：标签之间或标签包含的文本
+Comment：注释
+DocumentFragment：文档的片段
+
+浏览器提供一个原生的节点对象Node，上面这七种节点都继承了Node，因此具有一些共同的属性和方法
+
+一个文档的所有节点，按照所在的层级，可以抽象成一种树状结构。这种树状结构就是 DOM 树
+
+浏览器原生提供document节点，代表整个文档
+document
+// 整个文档树
+
+除了根节点，其他节点都有三种层级关系
+父节点关系（parentNode）：直接的那个上级节点
+子节点关系（childNodes）：直接的下级节点
+同级节点关系（sibling）：拥有同一个父节点的节点
+
+DOM 提供操作接口，用来获取这三种关系的节点
+子节点接口包括firstChild（第一个子节点）和lastChild（最后一个子节点）等属
+同级节点接口包括nextSibling（紧邻在后的那个同级节点）和previousSibling（紧邻在前的那个同级节点）属性
+
+
+Node 接口
+所有 DOM 节点对象都继承了 Node 接口，拥有一些共同的属性和方法。这是 DOM 操作的基础
+
+nodeType属性返回一个整数值，表示节点的类型
+不同节点的nodeType属性值和对应的常量如下
+文档节点（document）：9，对应常量Node.DOCUMENT_NODE
+元素节点（element）：1，对应常量Node.ELEMENT_NODE
+属性节点（attr）：2，对应常量Node.ATTRIBUTE_NODE
+文本节点（text）：3，对应常量Node.TEXT_NODE
+文档片断节点（DocumentFragment）：11，对应常量Node.DOCUMENT_FRAGMENT_NODE
+文档类型节点（DocumentType）：10，对应常量Node.DOCUMENT_TYPE_NODE
+注释节点（Comment）：8，对应常量Node.COMMENT_NODE
+
+// 确定节点类型
+var node = document.documentElement.firstChild;
+if (node.nodeType === Node.ELEMENT_NODE) {
+  console.log('该节点是元素节点');
+}
+
+nodeName属性返回节点的名称
+// HTML 代码如下
+// <div id="d1">hello world</div>
+var div = document.getElementById('d1');
+div.nodeName // "DIV"
+
+不同节点的nodeName属性值如下
+文档节点（document）：#document
+元素节点（element）：大写的标签名
+属性节点（attr）：属性的名称
+文本节点（text）：#text
+文档片断节点（DocumentFragment）：#document-fragment
+文档类型节点（DocumentType）：文档的类型
+注释节点（Comment）：#comment
+
+
+nodeValue属性返回一个字符串，表示当前节点本身的文本值，该属性可读写
+// HTML 代码如下
+// <div id="d1">hello world</div>
+var div = document.getElementById('d1');
+div.nodeValue // null
+div.firstChild.nodeValue // "hello world"
+
+textContent属性返回当前节点和它的所有后代节点的文本内容
+// HTML 代码为
+// <div id="divA">This is <span>some</span> text</div>
+
+document.getElementById('divA').textContent
+// This is some text
+
+
+baseURI属性返回一个字符串，表示当前网页的绝对路径// 当前网页的网址为
+// http://www.example.com/index.html
+document.baseURI
+// "http://www.example.com/index.html"
+
+
+Node.ownerDocument属性返回当前节点所在的顶层文档对象，即document对象
+var d = p.ownerDocument;
+d === document // true
+
+
+Node.nextSibling属性返回紧跟在当前节点后面的第一个同级节点。如果当前节点后面没有同级节点，则返回null
+// HTML 代码如下
+// <div id="d1">hello</div><div id="d2">world</div>
+var d1 = document.getElementById('d1');
+var d2 = document.getElementById('d2');
+
+d1.nextSibling === d2 // true
+
+
+previousSibling属性返回当前节点前面的、距离最近的一个同级节点。如果当前节点前面没有同级节点，则返回null
+// HTML 代码如下
+// <div id="d1">hello</div><div id="d2">world</div>
+var d1 = document.getElementById('d1');
+var d2 = document.getElementById('d2');
+
+d2.previousSibling === d1 // true
+
+
+parentNode属性返回当前节点的父节点。对于一个节点来说，它的父节点只可能是三种类型：元素节点（element）、文档节点（document）和文档片段节点（documentfragment
+if (node.parentNode) {
+  node.parentNode.removeChild(node);
+}
+
+parentElement属性返回当前节点的父元素节点。如果当前节点没有父节点，或者父节点类型不是元素节点，则返回null
+if (node.parentElement) {
+  node.parentElement.style.color = 'red';
+}
+
+firstChild属性返回当前节点的第一个子节点，如果当前节点没有子节点，则返回null
+// HTML 代码如下
+// <p id="p1"><span>First span</span></p>
+var p1 = document.getElementById('p1');
+p1.firstChild.nodeName // "SPAN"
+
+
+childNodes属性返回一个类似数组的对象（NodeList集合），成员包括当前节点的所有子节点
+var children = document.querySelector('ul').childNodes;
+
+// 遍历某个节点的所有子节点
+var div = document.getElementById('div1');
+var children = div.childNodes;
+
+for (var i = 0; i < children.length; i++) {
+  // ...
+}
+
+
+isConnected属性返回一个布尔值，表示当前节点是否在文档之中
+var test = document.createElement('p');
+test.isConnected // false
+
+document.body.appendChild(test);
+test.isConnected // true
+
+
+方法
+appendChild()方法接受一个节点对象作为参数，将其作为最后一个子节点，插入当前节点。该方法的返回值就是插入文档的子节点
+var p = document.createElement('p');
+document.body.appendChild(p);
+
+hasChildNodes方法返回一个布尔值，表示当前节点是否有子节点
+var foo = document.getElementById('foo');
+
+if (foo.hasChildNodes()) {
+  foo.removeChild(foo.childNodes[0]);
+}
+
+// hasChildNodes方法结合firstChild属性和nextSibling属性，可以遍历当前节点的所有后代节点
+function DOMComb(parent, callback) {
+  if (parent.hasChildNodes()) {
+    for (var node = parent.firstChild; node; node = node.nextSibling) {
+      DOMComb(node, callback);
+    }
+  }
+  callback(parent);
+}
+
+// 用法
+DOMComb(document.body, console.log)
+
+
+cloneNode方法用于克隆一个节点。它接受一个布尔值作为参数，表示是否同时克隆子节点。它的返回值是一个克隆出来的新节点
+var cloneUL = document.querySelector('ul').cloneNode(true);
+
+
+insertBefore方法用于将某个节点插入父节点内部的指定位置
+var insertedNode = parentNode.insertBefore(newNode, referenceNode);
+
+
+removeChild方法接受一个子节点作为参数，用于从当前节点移除该子节点。返回值是移除的子节点
+var divA = document.getElementById('A');
+divA.parentNode.removeChild(divA);
+
+// 移除当前节点的所有子节点
+var element = document.getElementById('top');
+while (element.firstChild) {
+  element.removeChild(element.firstChild);
+}
+
+
+replaceChild方法用于将一个新的节点，替换当前节点的某一个子节点
+var replacedNode = parentNode.replaceChild(newChild, oldChild);
+
+contains方法返回一个布尔值，表示参数节点是否满足以下三个条件之一:
+参数节点为当前节点。
+参数节点为当前节点的子节点
+参数节点为当前节点的后代节点
+
+document.body.contains(node)
+
+
+compareDocumentPosition方法的用法，与contains方法完全一致，返回一个六个比特位的二进制值，表示参数节点与当前节点的关系
+// HTML 代码如下
+// <div id="mydiv">
+//   <form><input id="test" /></form>
+// </div>
+
+var div = document.getElementById('mydiv');
+var input = document.getElementById('test');
+
+div.compareDocumentPosition(input) // 20
+input.compareDocumentPosition(div) // 10
+
+
+isEqualNode方法返回一个布尔值，用于检查两个节点是否相等。所谓相等的节点，指的是两个节点的类型相同、属性相同、子节点相同
+// 1
+var p1 = document.createElement('p');
+var p2 = document.createElement('p');
+
+p1.isEqualNode(p2) // true
+
+// 2
+var p1 = document.createElement('p');
+var p2 = document.createElement('p');
+
+p1.isSameNode(p2) // false
+p1.isSameNode(p1) // true
+
+normalize方法用于清理当前节点内部的所有文本节点（text）。它会去除空的文本节点，并且将毗邻的文本节点合并成一个，也就是说不存在空的文本节点，以及毗邻的文本节点
+var wrapper = document.createElement('div');
+
+wrapper.appendChild(document.createTextNode('Part 1 '));
+wrapper.appendChild(document.createTextNode('Part 2 '));
+
+wrapper.childNodes.length // 2
+wrapper.normalize();
+wrapper.childNodes.length // 1
+
+
+getRootNode()方法返回当前节点所在文档的根节点document，与ownerDocument属性的作用相同
+document.body.firstChild.getRootNode() === document
+// true
+document.body.firstChild.getRootNode() === document.body.firstChild.ownerDocument
+// true
+
+
+
+NodeList 接口，HTMLCollection 接口
+节点都是单个对象，有时需要一种数据结构，能够容纳多个节点。DOM 提供两种节点集合，用于容纳多个节点：NodeList和HTMLCollection
+
+NodeList可以包含各种类型的节点，HTMLCollection只能包含 HTML 元素节点
+
+
+NodeList 接口
+NodeList实例是一个类似数组的对象，它的成员是节点对象
+// 1
+document.body.childNodes instanceof NodeList // true
+
+// 2
+var children = document.body.childNodes;
+
+Array.isArray(children) // false
+
+children.length // 34
+children.forEach(console.log)
+
+// 如果NodeList实例要使用数组方法，可以将其转为真正的数组
+var children = document.body.childNodes;
+var nodeArr = Array.prototype.slice.call(children);
+
+// for循环 遍历 NodeList 实例
+var children = document.body.childNodes;
+
+for (var i = 0; i < children.length; i++) {
+  var item = children[i];
+}
+
+
+length属性返回 NodeList 实例包含的节点数量
+document.querySelectorAll('xxx').length
+// 0
+
+forEach方法用于遍历 NodeList 的所有成员。它接受一个回调函数作为参数，每一轮遍历就执行一次这个回调函数，用法与数组实例的forEach方法完全一致
+var children = document.body.childNodes;
+children.forEach(function f(item, i, list) {
+  // ...
+}, this);
+
+
+item方法接受一个整数值作为参数，表示成员的位置，返回该位置上的成员
+document.body.childNodes.item(0)
+
+所有类似数组的对象，都可以使用方括号运算符取出成员
+document.body.childNodes[0]
+
+
+keys()返回键名的遍历器，values()返回键值的遍历器，entries()返回的遍历器同时包含键名和键值的信息
+var children = document.body.childNodes;
+
+for (var key of children.keys()) {
+  console.log(key);
+}
+// 0
+// 1
+// 2
+// ...
+
+for (var value of children.values()) {
+  console.log(value);
+}
+// #text
+// <script>
+// ...
+
+for (var entry of children.entries()) {
+  console.log(entry);
+}
+// Array [ 0, #text ]
+// Array [ 1, <script> ]
+// ...
+
+
+HTMLCollection 接口
+HTMLCollection是一个节点对象的集合，只能包含元素节点（element），不能包含其他类型的节点
+
+HTMLCollection的返回值是一个类似数组的对象，但是与NodeList接口不同，HTMLCollection没有forEach方法，只能使用for循环遍历
+
+length属性返回HTMLCollection实例包含的成员数量
+document.links.length // 18
+
+item方法接受一个整数值作为参数，表示成员的位置，返回该位置上的成员
+var c = document.images;
+var img0 = c.item(0);
+
+namedItem方法的参数是一个字符串，表示id属性或name属性的值，返回当前集合中对应的元素节点。如果没有对应的节点，则返回null
+// HTML 代码如下
+// <img id="pic" src="http://example.com/foo.jpg">
+
+var pic = document.getElementById('pic');
+document.images.namedItem('pic') === pic // true
+
+
+
+ParentNode 接口，ChildNode 接口
+arentNode接口表示当前节点是一个父节点，提供一些处理子节点的方法。ChildNode接口表示当前节点是一个子节点，提供一些相关方法
+
 
 ```
