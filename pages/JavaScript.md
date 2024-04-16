@@ -1,3 +1,4 @@
+- [JavaScript 教程](https://wangdoc.com/javascript/)
 ```js
 JavaScript 是一种轻量级的脚本语言，它不具备开发操作系统的能力，而是只用来编写控制其他大型应用程序（比如浏览器）的“脚本”
 JavaScript 也是一种嵌入式（embedded）语言，它本身提供的核心语法不算很多，JavaScript 本身不提供任何与 I/O（输入/输出）相关的 API，都要靠宿主环境（host）提供，所以 JavaScript 只合适嵌入更大型的应用程序环境，去调用宿主环境提供的底层 API
@@ -5395,5 +5396,209 @@ var module1 = (function ($, YAHOO) {
 // module1模块需要使用 jQuery 库和 YUI 库，就把这两个库（其实是两个模块）当作参数输入module1。这样做除了保证模块的独立性，还使得模块之间的依赖关系变得明显
 
 
+Object 对象的相关方法
+Object.getPrototypeOf方法返回参数对象的原型。这是获取原型对象的标准方法
+// 1
+var F = function () {};
+var f = new F();
+Object.getPrototypeOf(f) === F.prototype // true
+
+// 2 几种特殊对象的原型
+// 空对象的原型是 Object.prototype
+Object.getPrototypeOf({}) === Object.prototype // true
+
+// Object.prototype 的原型是 null
+Object.getPrototypeOf(Object.prototype) === null // true
+
+// 函数的原型是 Function.prototype
+function f() {}
+Object.getPrototypeOf(f) === Function.prototype // true
+
+
+Object.setPrototypeOf方法为参数对象设置原型，返回该参数对象。它接受两个参数，第一个是现有对象，第二个是原型对象。
+var a = {};
+var b = {x: 1};
+Object.setPrototypeOf(a, b);
+
+Object.getPrototypeOf(a) === b // true
+a.x // 1
+
+
+Object.create()方法
+从一个实例对象，生成另一个实例对象
+
+// 原型对象
+var A = {
+  print: function () {
+    console.log('hello');
+  }
+};
+
+// 实例对象
+var B = Object.create(A);
+
+Object.getPrototypeOf(B) === A // true
+B.print() // hello
+B.print === A.print // true
+
+下面三种方式生成的新对象是等价的
+var obj1 = Object.create({});
+var obj2 = Object.create(Object.prototype);
+var obj3 = new Object();
+
+Object.create()方法生成的新对象，动态继承了原型。在原型上添加或修改任何方法，会立刻反映在新对象之上
+var obj1 = { p: 1 };
+var obj2 = Object.create(obj1);
+
+obj1.p = 2;
+obj2.p // 2
+
+
+Object.create()方法还可以接受第二个参数。该参数是一个属性描述对象，它所描述的对象属性，会添加到实例对象，作为该对象自身的属性
+var obj = Object.create({}, {
+  p1: {
+    value: 123,
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  },
+  p2: {
+    value: 'abc',
+    enumerable: true,
+    configurable: true,
+    writable: true,
+  }
+});
+
+// 等同于
+var obj = Object.create({});
+obj.p1 = 123;
+obj.p2 = 'abc';
+
+
+Object.create()方法生成的对象，继承了它的原型对象的构造函数
+function A() {}
+var a = new A();
+var b = Object.create(a);
+
+b.constructor === A // true
+b instanceof A // true
+
+isPrototypeOf方法，用来判断该对象是否为参数对象的原型
+var o1 = {};
+var o2 = Object.create(o1);
+var o3 = Object.create(o2);
+
+o2.isPrototypeOf(o3) // true
+o1.isPrototypeOf(o3) // true
+
+
+Object.prototype.isPrototypeOf({}) // true
+Object.prototype.isPrototypeOf([]) // true
+Object.prototype.isPrototypeOf(/xyz/) // true
+Object.prototype.isPrototypeOf(Object.create(null)) // false
+
+
+实例对象的__proto__属性（前后各两个下划线），返回该对象的原型。该属性可读写
+var obj = {};
+var p = {};
+
+obj.__proto__ = p;
+Object.getPrototypeOf(obj) === p // true
+
+Object.getOwnPropertyNames方法返回一个数组，成员是参数对象本身的所有属性的键名，不包含继承的属性键名
+Object.getOwnPropertyNames(Date)
+// ["parse", "arguments", "UTC", "caller", "name", "prototype", "now", "length"]
+
+
+对象实例的hasOwnProperty方法返回一个布尔值，用于判断某个属性定义在对象自身，还是定义在原型链上
+Date.hasOwnProperty('length') // true
+Date.hasOwnProperty('toString') // false
+
+in运算符常用于检查一个属性是否存在
+in运算符返回一个布尔值，表示一个对象是否具有某个属性。它不区分该属性是对象自身的属性，还是继承的属性
+'length' in Date // true
+'toString' in Date // true
+
+获得对象的所有可遍历属性
+var o1 = { p1: 123 };
+
+var o2 = Object.create(o1, {
+  p2: { value: "abc", enumerable: true }
+});
+
+for (p in o2) {
+  console.info(p);
+}
+// p2
+// p1
+
+在for...in循环中获得对象自身的属性
+for ( var name in object ) {
+  if ( object.hasOwnProperty(name) ) {
+    /* loop code */
+  }
+}
+
+获得对象的所有属性的函数
+function inheritedPropertyNames(obj) {
+  var props = {};
+  while(obj) {
+    Object.getOwnPropertyNames(obj).forEach(function(p) {
+      props[p] = true;
+    });
+    obj = Object.getPrototypeOf(obj);
+  }
+  return Object.getOwnPropertyNames(props);
+}
+
+
+对象的拷贝
+1.确保拷贝后的对象，与原对象具有同样的原型
+2.确保拷贝后的对象，与原对象具有同样的实例属性
+
+// 1
+function copyObject(orig) {
+  var copy = Object.create(Object.getPrototypeOf(orig));
+  copyOwnPropertiesFrom(copy, orig);
+  return copy;
+}
+
+function copyOwnPropertiesFrom(target, source) {
+  Object
+    .getOwnPropertyNames(source)
+    .forEach(function (propKey) {
+      var desc = Object.getOwnPropertyDescriptor(source, propKey);
+      Object.defineProperty(target, propKey, desc);
+    });
+  return target;
+}
+
+// 2
+function copyObject(orig) {
+  return Object.create(
+    Object.getPrototypeOf(orig),
+    Object.getOwnPropertyDescriptors(orig)
+  );
+}
+
+
+严格模式
+为了兼容以前的代码，又不能改变老的语法，只能不断添加新的语法，引导程序员使用新语法
+
+严格模式可以用于整个脚本，也可以只用于单个函数
+'use strict';
+
+1.use strict放在脚本文件的第一行，整个脚本都将以严格模式运行
+<script>
+  'use strict';
+  console.log('这是严格模式');
+</script>
+
+2.use strict放在函数体的第一行，则整个函数以严格模式运行
+function strict() {
+  'use strict';
+  return '这是严格模式';
+}
 
 ```
