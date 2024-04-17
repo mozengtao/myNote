@@ -7573,4 +7573,580 @@ load 事件表示服务器传来的数据接收完毕，error 事件表示请求
 abort、load和error这三个事件，会伴随一个loadend事件，表示请求结束，但不知道其是否成功
 服务器超过指定时间还没有返回结果，就会触发 timeout 事件
 
+
+同源限制
+同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据
+同源政策是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了
+
+如果非同源，共有三种行为受到限制
+（1） 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB。
+（2） 无法接触非同源网页的 DOM。
+（3） 无法向非同源地址发送 AJAX 请求（可以发送，但浏览器会拒绝接受响应）
+
+Cookie 是服务器写入浏览器的一小段信息，只有同源的网页才能共享
+
+iframe元素可以在当前网页之中，嵌入其他网页。每个iframe元素形成自己的窗口，即有自己的window对象。iframe窗口之中的脚本，可以获得父窗口和子窗口。但是，只有在同源的情况下，父窗口和子窗口才能通信；如果跨域，就无法拿到对方的 DOM
+
+片段标识符（fragment identifier）指的是，URL 的#号后面的部分，比如http://example.com/x.html#fragment的#fragment。如果只是改变片段标识符，页面不会重新刷新
+
+
+同源政策规定，AJAX 请求只能发给同源的网址，否则就报错
+
+WebSocket 是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信
+
+CORS 是跨源资源分享（Cross-Origin Resource Sharing）的缩写。它是 W3C 标准，属于跨源 AJAX 请求的根本解决方法。相比 JSONP 只能发GET请求，CORS 允许任何类型的请求
+
+
+CORS 通信
+CORS 是一个 W3C 标准，全称是“跨源资源共享”（Cross-origin resource sharing），它允许浏览器向跨源的服务器，发出XMLHttpRequest请求，从而克服了 AJAX 只能同源使用的限制
+
+CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能
+整个 CORS 通信过程，都是浏览器自动完成，不需要用户参与
+实现 CORS 通信的关键是服务器。只要服务器实现了 CORS 接口，就可以跨源通信
+
+CORS 请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）
+
+只要同时满足以下两大条件，就属于简单请求
+1. 请求方法是以下三种方法之一
+HEAD
+GET
+POST
+
+2.HTTP 的头信息不超出以下几种字段
+Accept
+Accept-Language
+Content-Language
+Last-Event-ID
+Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain
+
+凡是不同时满足上面两个条件，就属于非简单请求。一句话，简单请求就是简单的 HTTP 方法与简单的 HTTP 头信息的结合
+
+简单请求
+对于简单请求，浏览器直接发出 CORS 请求。具体来说，就是在头信息之中，增加一个Origin字段
+
+
+CORS 请求默认不包含 Cookie 信息（以及 HTTP 认证信息等），这是为了降低 CSRF 攻击的风险。但是某些场合，服务器可能需要拿到 Cookie，这时需要服务器显式指定Access-Control-Allow-Credentials字段，告诉浏览器可以发送 Cookie
+Access-Control-Allow-Credentials: true
+同时，开发者必须在 AJAX 请求中打开withCredentials属性
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+
+非简单请求
+非简单请求是那种对服务器提出特殊要求的请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json
+非简单请求的 CORS 请求，会在正式通信之前，增加一次 HTTP 查询请求，称为“预检”请求（preflight）。浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些 HTTP 方法和头信息字段。只有得到肯定答复，浏览器才会发出正式的XMLHttpRequest请求，否则就报错
+
+
+Storage 接口用于脚本在浏览器保存数据
+两个对象部署了这个接口： window.sessionStorage和window.localStorage
+sessionStorage保存的数据用于浏览器的一次会话（session），当会话结束（通常是窗口关闭），数据被清空
+localStorage保存的数据长期存在，下一次访问该网站的时候，网页可以直接读取以前保存的数据
+
+Storage 接口只有一个属性
+Storage.length：返回保存的数据项个数
+
+5个方法
+Storage.setItem()方法用于存入数据
+Storage.getItem()方法用于读取数据
+Storage.removeItem()方法用于清除某个键名对应的键值
+Storage.clear()方法用于清除所有保存的数据
+Storage.key()方法接受一个整数作为参数（从零开始），返回该位置对应的键名
+
+
+Storage 接口储存的数据发生变化时，会触发 storage 事件，可以指定这个事件的监听函数
+window.addEventListener('storage', onStorageChange);
+
+
+window.history属性指向 History 对象，它表示当前窗口的浏览历史
+
+History 对象主要有两个属性
+History.length：当前窗口访问过的网址数量（包括当前网页）
+History.state：History 堆栈最上层的状态值
+
+方法
+History.back()：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。
+History.forward()：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。
+History.go()：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址，比如go(1)相当于forward()，go(-1)相当于back()。如果参数超过实际存在的网址范围，该方法无效果；如果不指定参数，默认参数为0，相当于刷新当前页面
+
+History.pushState()方法用于在历史中添加一条记录
+History.replaceState()方法用来修改 History 对象的当前记录，其他都与pushState()方法一模一样
+每当同一个文档的浏览历史（即history对象）出现变化时，就会触发popstate事件
+
+
+
+Location对象是浏览器提供的原生对象，提供 URL 相关的信息和操作方法
+
+Location对象提供以下属性
+Location.href：整个 URL。
+Location.protocol：当前 URL 的协议，包括冒号（:）。
+Location.host：主机。如果端口不是协议默认的80和433，则还会包括冒号（:）和端口。
+Location.hostname：主机名，不包括端口。
+Location.port：端口号。
+Location.pathname：URL 的路径部分，从根路径/开始。
+Location.search：查询字符串部分，从问号?开始。
+Location.hash：片段字符串部分，从#开始。
+Location.username：域名前面的用户名。
+Location.password：域名前面的密码。
+Location.origin：URL 的协议、主机名和端口
+
+
+方法
+assign方法接受一个 URL 字符串作为参数，使得浏览器立刻跳转到新的 URL
+replace方法接受一个 URL 字符串作为参数，使得浏览器立刻跳转到新的 URL
+reload方法使得浏览器重新加载当前网址，相当于按下浏览器的刷新按钮
+toString方法返回整个 URL 字符串，相当于读取Location.href属性
+
+
+URL 的编码和解码
+
+网页的 URL 只能包含合法的字符。合法字符分成两类
+1.URL 元字符：分号（;），逗号（,），斜杠（/），问号（?），冒号（:），at（@），&，等号（=），加号（+），美元符号（$），井号（#）
+2.语义字符：a-z，A-Z，0-9，连词号（-），下划线（_），点（.），感叹号（!），波浪线（~），星号（*），单引号（'），圆括号（()）
+
+除了以上字符，其他字符出现在 URL 之中都必须转义，规则是根据操作系统的默认编码，将每个字节转为百分号（%）加上两个大写的十六进制字母
+
+JavaScript 提供四个 URL 的编码/解码方法
+encodeURI()
+encodeURIComponent()
+decodeURI()
+decodeURIComponent()
+
+encodeURI()方法用于转码整个 URL。它的参数是一个字符串，代表整个 URL。它会将元字符和语义字符之外的字符，都进行转义
+encodeURI('http://www.example.com/q=春节')
+// "http://www.example.com/q=%E6%98%A5%E8%8A%82"
+
+encodeURIComponent()方法用于转码 URL 的组成部分，会转码除了语义字符之外的所有字符，即元字符也会被转码
+encodeURIComponent('春节')
+// "%E6%98%A5%E8%8A%82"
+encodeURIComponent('http://www.example.com/q=春节')
+// "http%3A%2F%2Fwww.example.com%2Fq%3D%E6%98%A5%E8%8A%82"
+
+decodeURI()方法用于整个 URL 的解码。它是encodeURI()方法的逆运算
+decodeURI('http://www.example.com/q=%E6%98%A5%E8%8A%82')
+// "http://www.example.com/q=春节"
+
+decodeURIComponent()用于URL 片段的解码。它是encodeURIComponent()方法的逆运算
+decodeURIComponent('%E6%98%A5%E8%8A%82')
+// "春节"
+
+
+URL 接口
+浏览器原生提供URL()接口，它是一个构造函数，用来构造、解析和编码 URL
+// 1
+var url = new URL('http://www.example.com/index.html');
+url.href
+// "http://www.example.com/index.html"
+
+// 2
+var url1 = new URL('index.html', 'http://example.com');
+url1.href
+// "http://example.com/index.html"
+
+var url2 = new URL('page2.html', 'http://example.com/page1.html');
+url2.href
+// "http://example.com/page2.html"
+
+var url3 = new URL('..', 'http://example.com/a/b.html')
+url3.href
+// "http://example.com/"
+
+
+URL 实例的属性与Location对象的属性基本一致，返回当前 URL 的信息
+
+
+实例属性
+URL.href：返回整个 URL
+URL.protocol：返回协议，以冒号:结尾
+URL.hostname：返回域名
+URL.host：返回域名与端口，包含:号，默认的80和443端口会省略
+URL.port：返回端口
+URL.origin：返回协议、域名和端口
+URL.pathname：返回路径，以斜杠/开头
+URL.search：返回查询字符串，以问号?开头
+URL.searchParams：返回一个URLSearchParams实例，该属性是Location对象没有的
+URL.hash：返回片段识别符，以井号#开头
+URL.password：返回域名前面的密码
+URL.username：返回域名前面的用户名
+
+// var url = new URL('http://user:passwd@www.example.com:4097/path/a.html?x=111#part1');
+
+url.href
+// "http://user:passwd@www.example.com:4097/path/a.html?x=111#part1"
+url.protocol
+// "http:"
+url.hostname
+// "www.example.com"
+url.host
+// "www.example.com:4097"
+url.port
+// "4097"
+url.origin
+// "http://www.example.com:4097"
+url.pathname
+// "/path/a.html"
+url.search
+// "?x=111"
+url.searchParams
+// URLSearchParams {}
+url.hash
+// "#part1"
+url.password
+// "passwd"
+url.username
+// "user"
+
+
+静态方法
+URL.createObjectURL()方法用来为上传/下载的文件、流媒体文件生成一个 URL 字符串
+URL.revokeObjectURL()方法用来释放URL.createObjectURL()方法生成的 URL 实例
+
+
+URLSearchParams对象是浏览器的原生对象，用来构造、解析和处理 URL 的查询字符串（即 URL 问号后面的部分
+// 方法一：传入字符串
+var params = new URLSearchParams('?foo=1&bar=2');
+// 等同于
+var params = new URLSearchParams(document.location.search);
+
+// 方法二：传入数组
+var params = new URLSearchParams([['foo', 1], ['bar', 2]]);
+
+// 方法三：传入对象
+var params = new URLSearchParams({'foo' : 1 , 'bar' : 2});
+
+// URLSearchParams会对查询字符串自动编码
+var params = new URLSearchParams({'foo': '你好'});
+params.toString() // "foo=%E4%BD%A0%E5%A5%BD"
+
+
+toString方法返回实例的字符串形式
+// 1
+var url = new URL('https://example.com?foo=1&bar=2');
+var params = new URLSearchParams(url.search);
+
+params.toString() // "foo=1&bar=2'
+
+// 2
+var params = new URLSearchParams({version: 2.0});
+window.location.href = location.pathname + '?' + params;
+
+
+append()方法用来追加一个查询参数。它接受两个参数，第一个为键名，第二个为键值
+delete()方法用来删除指定的查询参数。它接受键名作为参数
+has()方法返回一个布尔值，表示查询字符串是否包含指定的键名
+set()方法用来设置查询字符串的键值
+get()方法用来读取查询字符串里面的指定键。它接受键名作为参数
+getAll()方法返回一个数组，成员是指定键的所有键值
+
+sort()方法对查询字符串里面的键进行排序，规则是按照 Unicode 码点从小到大排列
+
+keys方法返回的是键名的遍历器，values方法返回的是键值的遍历器，entries返回的是键值对的遍历器
+
+
+ArrayBuffer 对象表示一段二进制数据，用来模拟内存里面的数据。通过这个对象，JavaScript 可以读写二进制数据。这个对象可以看作内存数据的表达
+
+Blob 对象表示一个二进制文件的数据内容，比如一个图片文件的内容就可以通过 Blob 对象读写。它通常用来读写文件，它的名字是 Binary Large Object （二进制大型对象）的缩写。它与 ArrayBuffer 的区别在于，它用于操作二进制文件，而 ArrayBuffer 用于操作内存
+
+
+实例属性和实例方法
+Blob具有两个实例属性size和type，分别返回数据的大小和类型
+Blob具有一个实例方法slice，用来拷贝原来的数据，返回的也是一个Blob实例
+
+
+获取文件信息
+文件选择器<input type="file">用来让用户选取文件
+
+AJAX 请求时，如果指定responseType属性为blob，下载下来的就是一个 Blob 对象
+
+浏览器允许使用URL.createObjectURL()方法，针对 Blob 对象生成一个临时 URL，以便于某些 API 使用
+
+取得 Blob 对象以后，可以通过FileReader对象，读取 Blob 对象的内容，即文件内容
+
+
+File 对象代表一个文件，用来读写文件信息。它继承了 Blob 对象，或者说是一种特殊的 Blob 对象，所有可以使用 Blob 对象的场合都可以使用它
+
+
+实例属性和实例方法
+
+File 对象的实例属性
+File.lastModified：最后修改时间
+File.name：文件名或文件路径
+File.size：文件大小（单位字节）
+File.type：文件的 MIME 类型
+
+// 1
+var myFile = new File([], 'file.bin', {
+  lastModified: new Date(2018, 1, 1),
+});
+myFile.lastModified // 1517414400000
+myFile.name // "file.bin"
+myFile.size // 0
+myFile.type // ""
+
+
+FileList对象是一个类似数组的对象，代表一组选中的文件，每个成员都是一个 File 实例
+
+FileReader 对象用于读取 File 对象或 Blob 对象所包含的文件内容
+
+
+表单（<form>）用来收集用户提交的数据，发送到服务器
+
+
+FormData 对象
+
+表单数据以键值对的形式向服务器发送，这个过程是浏览器自动完成的，有时候，我们希望通过脚本完成这个过程，构造或编辑表单的键值对，然后通过脚本发送给服务器。浏览器原生提供了 FormData 对象来完成这项工作
+
+FormData 的实例方法
+FormData.get(key)：获取指定键名对应的键值，参数为键名。如果有多个同名的键值对，则返回第一个键值对的键值。
+FormData.getAll(key)：返回一个数组，表示指定键名对应的所有键值。如果有多个同名的键值对，数组会包含所有的键值。
+FormData.set(key, value)：设置指定键名的键值，参数为键名。如果键名不存在，会添加这个键值对，否则会更新指定键名的键值。如果第二个参数是文件，还可以使用第三个参数，表示文件名。
+FormData.delete(key)：删除一个键值对，参数为键名。
+FormData.append(key, value)：添加一个键值对。如果键名重复，则会生成两个相同键名的键值对。如果第二个参数是文件，还可以使用第三个参数，表示文件名。
+FormData.has(key)：返回一个布尔值，表示是否具有该键名的键值对。
+FormData.keys()：返回一个遍历器对象，用于for...of循环遍历所有的键名。
+FormData.values()：返回一个遍历器对象，用于for...of循环遍历所有的键值。
+FormData.entries()：返回一个遍历器对象，用于for...of循环遍历所有的键值对。如果直接用for...of循环遍历 FormData 实例，默认就会调用这个方法
+
+
+表单的内置验证
+表单提交的时候，浏览器允许开发者指定一些条件，它会自动验证各个表单控件的值是否符合条件
+
+// 1
+<!-- 必填 -->
+<input required>
+
+<!-- 必须符合正则表达式 -->
+<input pattern="banana|cherry">
+
+<!-- 字符串长度必须为6个字符 -->
+<input minlength="6" maxlength="6">
+
+<!-- 数值必须在1到10之间 -->
+<input type="number" min="1" max="10">
+
+<!-- 必须填入 Email 地址 -->
+<input type="email">
+
+<!-- 必须填入 URL -->
+<input type="URL">
+
+
+表单元素和表单控件都有checkValidity()方法，用于手动触发校验
+// 触发整个表单的校验
+form.checkValidity()
+
+// 触发单个表单控件的校验
+formControl.checkValidity()
+
+
+控件元素的willValidate属性是一个布尔值，表示该控件是否会在提交时进行校验
+
+控件元素的validationMessage属性返回一个字符串，表示控件不满足校验条件时，浏览器显示的提示文本
+
+控件元素的setCustomValidity()方法用来定制校验失败时的报错信息
+
+控件元素的属性validity属性返回一个ValidityState对象，包含当前校验状态的信息
+
+表单元素的 HTML 属性novalidate，可以关闭浏览器的自动校验
+
+表单能够用四种编码，向服务器发送数据。编码格式由表单的enctype属性决定
+
+用户上传文件，也是通过表单。具体来说，就是通过文件输入框选择本地文件，提交表单的时候，浏览器就会把这个文件发送到服务器
+
+
+
+
+IndexedDB 就是浏览器提供的本地数据库，它可以被网页脚本创建和操作。IndexedDB 允许储存大量数据，提供查找接口，还能建立索引
+
+IndexedDB 的特点
+1. 键值对储存。 IndexedDB 内部采用对象仓库（object store）存放数据。所有类型的数据都可以直接存入，包括 JavaScript 对象。对象仓库中，数据以“键值对”的形式保存，每一个数据记录都有对应的主键，主键是独一无二的，不能有重复，否则会抛出一个错误。
+2. 异步。 IndexedDB 操作时不会锁死浏览器，用户依然可以进行其他操作，这与 LocalStorage 形成对比，后者的操作是同步的。异步设计是为了防止大量数据的读写，拖慢网页的表现。
+3. 支持事务。 IndexedDB 支持事务（transaction），这意味着一系列操作步骤之中，只要有一步失败，整个事务就都取消，数据库回滚到事务发生之前的状态，不存在只改写一部分数据的情况。
+4. 同源限制。 IndexedDB 受到同源限制，每一个数据库对应创建它的域名。网页只能访问自身域名下的数据库，而不能访问跨域的数据库。
+5. 储存空间大。 IndexedDB 的储存空间比 LocalStorage 大得多，一般来说不少于 250MB，甚至没有上限。
+6. 支持二进制储存。 IndexedDB 不仅可以储存字符串，还可以储存二进制数据（ArrayBuffer 对象和 Blob 对象）
+
+
+操作流程
+// 打开数据库
+var request = window.indexedDB.open(databaseName, version);
+
+// 新建数据库
+request.onupgradeneeded = function (event) {
+  db = event.target.result;
+  var objectStore;
+  if (!db.objectStoreNames.contains('person')) {
+    objectStore = db.createObjectStore('person', { keyPath: 'id' });
+  }
+}
+
+// 新建索引
+request.onupgradeneeded = function(event) {
+  db = event.target.result;
+  var objectStore = db.createObjectStore('person', { keyPath: 'id' });
+  objectStore.createIndex('name', 'name', { unique: false });
+  objectStore.createIndex('email', 'email', { unique: true });
+}
+
+// 新增数据
+function add() {
+  var request = db.transaction(['person'], 'readwrite')
+    .objectStore('person')
+    .add({ id: 1, name: '张三', age: 24, email: 'zhangsan@example.com' });
+
+  request.onsuccess = function (event) {
+    console.log('数据写入成功');
+  };
+
+  request.onerror = function (event) {
+    console.log('数据写入失败');
+  }
+}
+
+add();
+
+// 读取数据
+function read() {
+   var transaction = db.transaction(['person']);
+   var objectStore = transaction.objectStore('person');
+   var request = objectStore.get(1);
+
+   request.onerror = function(event) {
+     console.log('事务失败');
+   };
+
+   request.onsuccess = function( event) {
+      if (request.result) {
+        console.log('Name: ' + request.result.name);
+        console.log('Age: ' + request.result.age);
+        console.log('Email: ' + request.result.email);
+      } else {
+        console.log('未获得数据记录');
+      }
+   };
+}
+
+read();
+
+// 遍历数据
+function readAll() {
+  var objectStore = db.transaction('person').objectStore('person');
+
+   objectStore.openCursor().onsuccess = function (event) {
+     var cursor = event.target.result;
+
+     if (cursor) {
+       console.log('Id: ' + cursor.key);
+       console.log('Name: ' + cursor.value.name);
+       console.log('Age: ' + cursor.value.age);
+       console.log('Email: ' + cursor.value.email);
+       cursor.continue();
+    } else {
+      console.log('没有更多数据了！');
+    }
+  };
+}
+
+readAll();
+
+
+// 更新数据
+function update() {
+  var request = db.transaction(['person'], 'readwrite')
+    .objectStore('person')
+    .put({ id: 1, name: '李四', age: 35, email: 'lisi@example.com' });
+
+  request.onsuccess = function (event) {
+    console.log('数据更新成功');
+  };
+
+  request.onerror = function (event) {
+    console.log('数据更新失败');
+  }
+}
+
+update();
+
+// 删除数据
+function remove() {
+  var request = db.transaction(['person'], 'readwrite')
+    .objectStore('person')
+    .delete(1);
+
+  request.onsuccess = function (event) {
+    console.log('数据删除成功');
+  };
+}
+
+remove();
+
+// 使用索引
+
+objectStore.createIndex('name', 'name', { unique: false });   // 假定新建表格的时候，对name字段建立了索引
+
+var transaction = db.transaction(['person'], 'readonly');
+var store = transaction.objectStore('person');
+var index = store.index('name');
+var request = index.get('李四');
+
+request.onsuccess = function (e) {
+  var result = e.target.result;
+  if (result) {
+    // ...
+  } else {
+    // ...
+  }
+}
+
+
+
+浏览器原生提供indexedDB对象，作为开发者的操作接口
+
+indexedDB.open()方法用于打开数据库。这是一个异步操作，但是会立刻返回一个 IDBOpenDBRequest 对象
+
+indexedDB.deleteDatabase()方法用于删除一个数据库，参数为数据库的名字
+
+indexedDB.cmp()方法比较两个值是否为 indexedDB 的相同的主键
+
+IDBRequest 对象表示打开的数据库连接，indexedDB.open()方法和indexedDB.deleteDatabase()方法会返回这个对象。数据库的操作都是通过这个对象完成的
+
+打开数据成功以后，可以从IDBOpenDBRequest对象的result属性上面，拿到一个IDBDatabase对象，它表示连接的数据库。后面对数据库的操作，都通过这个对象完成
+
+IDBObjectStore 对象对应一个对象仓库（object store）。IDBDatabase.createObjectStore()方法返回的就是一个 IDBObjectStore 对象
+
+IDBTransaction 对象用来异步操作数据库事务，所有的读写操作都要通过这个对象进行
+
+IDBIndex 对象代表数据库的索引，通过这个对象可以获取数据库里面的记录
+
+DBCursor 对象代表指针对象，用来遍历数据仓库（IDBObjectStore）或索引（IDBIndex）的记录
+
+IDBKeyRange 对象代表数据仓库（object store）里面的一组主键。根据这组主键，可以获取数据仓库或索引里面的一组记录
+
+
+
+JavaScript 语言采用的是单线程模型
+Web Worker 的作用，就是为 JavaScript 创造多线程环境，允许主线程创建 Worker 线程，将一些任务分配给后者运行
+
+
+Web Worker 的使用限制：
+1. 同源限制
+2. DOM 限制
+3. 全局对象限制
+4. 通信联系
+5. 脚本限制
+6. 文件限制
+
+主线程采用new命令，调用Worker()构造函数，新建一个 Worker 线程
+
+Worker 线程内部需要有一个监听函数，监听message事件
+
+Worker 内部如果要加载其他脚本，有一个专门的方法importScripts()
+
+主线程可以监听 Worker 是否发生错误。如果发生错误，Worker 会触发主线程的error事件
+
+使用完毕，为了节省系统资源，必须关闭 Worker
+
+
+主线程与 Worker 之间的通信 是传值而不是传址，Worker 对通信内容的修改，不会影响到主线程
+
+
 ```
