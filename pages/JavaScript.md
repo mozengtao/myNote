@@ -7278,4 +7278,299 @@ SpiderMonkey (Firefox)
 V8 (Chrome, Chromium)
 
 
+浏览器里面，window对象（注意，w为小写）指当前的浏览器窗口。它也是当前页面的顶层对象，即最高一层的对象，所有其他对象都是它的下属。一个变量如果未声明，那么默认就是顶层对象的属性
+a = 1;
+window.a // 1
+
+window 对象的属性
+window.name属性是一个字符串，表示当前浏览器窗口的名字
+window.closed属性返回一个布尔值，表示窗口是否关闭
+window.opener属性表示打开当前窗口的父窗口
+window.self和window.window属性都指向窗口本身。这两个属性只读
+window.frames属性返回一个类似数组的对象，成员为页面内所有框架窗口，包括frame元素和iframe元素。window.frames[0]表示页面中第一个框架窗口
+window.length属性返回当前网页包含的框架总数
+
+window.frameElement属性主要用于当前窗口嵌在另一个网页的情况（嵌入<object>、<iframe>或<embed>元素），返回当前窗口所在的那个元素节点
+
+window.top属性指向最顶层窗口，主要用于在框架窗口（frame）里面获取顶层窗口
+window.parent属性指向父窗口。如果当前窗口没有父窗口，window.parent指向自身
+
+window.status属性用于读写浏览器状态栏的文本
+
+window.devicePixelRatio属性返回一个数值，表示一个 CSS 像素的大小与一个物理像素的大小之间的比率。也就是说，它表示一个 CSS 像素由多少个物理像素组成
+
+位置大小属性
+window.screenX和window.screenY属性，返回浏览器窗口左上角相对于当前屏幕左上角的水平距离和垂直距离（单位像素）
+window.innerHeight和window.innerWidth属性，返回网页在当前窗口中可见部分的高度和宽度，即“视口”（viewport）的大小（单位像素）
+window.outerHeight和window.outerWidth属性返回浏览器窗口的高度和宽度，包括浏览器菜单和边框（单位像素）
+window.scrollX属性返回页面的水平滚动距离，window.scrollY属性返回页面的垂直滚动距离，单位都为像素
+window.pageXOffset属性和window.pageYOffset属性，是window.scrollX和window.scrollY别名
+
+组件属性
+组件属性返回浏览器的组件对象
+window.locationbar：地址栏对象
+window.menubar：菜单栏对象
+window.scrollbars：窗口的滚动条对象
+window.toolbar：工具栏对象
+window.statusbar：状态栏对象
+window.personalbar：用户安装的个人工具栏对象
+
+这些对象的visible属性是一个布尔值，表示这些组件是否可见
+
+
+全局对象属性
+window.document：指向document对象
+window.location：指向Location对象，用于获取当前窗口的 URL 信息
+window.navigator：指向Navigator对象，用于获取环境信息
+window.history：指向History对象，表示浏览器的浏览历史
+window.localStorage：指向本地储存的 localStorage 数据
+window.sessionStorage：指向本地储存的 sessionStorage 数据
+window.console：指向console对象，用于操作控制台
+window.screen：指向Screen对象，表示屏幕信息
+window.isSecureContext属性返回一个布尔值，表示当前窗口是否处在加密环境
+
+window 对象的方法
+window.alert()、window.prompt()、window.confirm()都是浏览器与用户互动的全局方法
+
+window.alert()方法弹出的对话框，只有一个“确定”按钮，往往用来通知用户某些信息
+window.prompt()方法弹出的对话框，提示文字的下方，还有一个输入框，要求用户输入信息，并有“确定”和“取消”两个按钮。它往往用来获取用户输入的数据
+window.confirm()方法弹出的对话框，除了提示信息之外，只有“确定”和“取消”两个按钮，往往用来征询用户是否同意
+
+window.open方法用于新建另一个浏览器窗口，类似于浏览器菜单的新建窗口选项
+window.close方法用于关闭当前窗口
+window.stop()方法完全等同于单击浏览器的停止按钮，会停止加载图像、视频等正在或等待加载的对象
+
+window.moveTo()方法用于移动浏览器窗口到指定位置
+window.moveBy()方法将窗口移动到一个相对位置
+
+window.resizeTo()方法用于缩放窗口到指定大小
+window.resizeBy()方法用于缩放窗口
+
+window.scrollTo方法用于将文档滚动到指定位置
+window.scroll()方法是window.scrollTo()方法的别名
+window.scrollBy()方法用于将网页滚动指定距离（单位像素）
+
+
+window.print方法会跳出打印对话框，与用户点击菜单里面的“打印”命令效果相同
+window.focus()方法会激活窗口，使其获得焦点，出现在其他窗口的前面
+window.getSelection方法返回一个Selection对象，表示用户现在选中的文本
+
+window.getComputedStyle()方法接受一个元素节点作为参数，返回一个包含该元素的最终样式信息的对象
+window.matchMedia()方法用来检查 CSS 的mediaQuery语句
+
+window.requestAnimationFrame()推迟到浏览器下一次重流时执行，执行完才会进行下一次重绘
+window.requestIdleCallback()跟setTimeout类似，也是将某个函数推迟执行，但是它保证将回调函数推迟到系统资源空闲时执行
+
+事件
+window对象可以接收以下事件
+load事件发生在文档在浏览器窗口加载完毕时。window.onload属性可以指定这个事件的回调函数
+浏览器脚本发生错误时，会触发window对象的error事件
+
+window 对象的事件监听属性
+window.onafterprint：afterprint事件的监听函数。
+window.onbeforeprint：beforeprint事件的监听函数。
+window.onbeforeunload：beforeunload事件的监听函数。
+window.onhashchange：hashchange事件的监听函数。
+window.onlanguagechange: languagechange的监听函数。
+window.onmessage：message事件的监听函数。
+window.onmessageerror：MessageError事件的监听函数。
+window.onoffline：offline事件的监听函数。
+window.ononline：online事件的监听函数。
+window.onpagehide：pagehide事件的监听函数。
+window.onpageshow：pageshow事件的监听函数。
+window.onpopstate：popstate事件的监听函数。
+window.onstorage：storage事件的监听函数。
+window.onunhandledrejection：未处理的 Promise 对象的reject事件的监听函数。
+window.onunload：unload事件的监听函数
+
+
+多窗口操作
+网页可以使用iframe元素，嵌入其他网页，因此一个网页之中会形成多个窗口
+
+各个窗口之中的脚本，可以引用其他窗口
+top：顶层窗口，即最上层的那个窗口
+parent：父窗口
+self：当前窗口，即自身
+
+
+对于iframe嵌入的窗口，document.getElementById方法可以拿到该窗口的 DOM 节点，然后使用contentWindow属性获得iframe节点包含的window对象
+
+window.frames属性返回一个类似数组的对象，成员是所有子窗口的window对象。可以使用这个属性，实现窗口之间的互相引用
+
+
+window.navigator属性指向一个包含浏览器和系统信息的 Navigator 对象。脚本通过这个属性了解用户的环境信息
+navigator.userAgent属性返回浏览器的 User Agent 字符串，表示用户设备信息，包含了浏览器的厂商、版本、操作系统等信息
+
+Navigator.plugins属性返回一个类似数组的对象，成员是 Plugin 实例对象，表示浏览器安装的插件
+
+Navigator.platform属性返回用户的操作系统信息，比如MacIntel、Win32、Linux x86_64等
+
+navigator.onLine属性返回一个布尔值，表示用户当前在线还是离线（浏览器断线）
+
+Navigator.language属性返回一个字符串，表示浏览器的首选语言。该属性只读
+Navigator.languages属性返回一个数组，表示用户可以接受的语言
+
+Navigator.geolocation属性返回一个 Geolocation 对象，包含用户地理位置的信息。注意，该 API 只有在 HTTPS 协议下可用，否则调用下面方法时会报错
+
+navigator.cookieEnabled属性返回一个布尔值，表示浏览器的 Cookie 功能是否打开
+
+
+Navigator 对象的方法
+navigator.javaEnabled()方法返回一个布尔值，表示浏览器是否能运行 Java Applet 小程序
+Navigator.sendBeacon()方法用于向服务器异步发送数据，
+
+Navigator 的实验性属性
+......
+
+
+Screen 对象
+Screen 对象表示当前窗口所在的屏幕，提供显示设备的信息。window.screen属性指向这个对象
+Screen.height：浏览器窗口所在的屏幕的高度（单位像素）。除非调整显示器的分辨率，否则这个值可以看作常量，不会发生变化。显示器的分辨率与浏览器设置无关，缩放网页并不会改变分辨率。
+Screen.width：浏览器窗口所在的屏幕的宽度（单位像素）。
+Screen.availHeight：浏览器窗口可用的屏幕高度（单位像素）。因为部分空间可能不可用，比如系统的任务栏或者 Mac 系统屏幕底部的 Dock 区，这个属性等于height减去那些被系统组件的高度。
+Screen.availWidth：浏览器窗口可用的屏幕宽度（单位像素）。
+Screen.pixelDepth：整数，表示屏幕的色彩位数，比如24表示屏幕提供24位色彩。
+Screen.colorDepth：Screen.pixelDepth的别名。严格地说，colorDepth 表示应用程序的颜色深度，pixelDepth 表示屏幕的颜色深度，绝大多数情况下，它们都是同一件事。
+Screen.orientation：返回一个对象，表示屏幕的方向。该对象的type属性是一个字符串，表示屏幕的具体方向，landscape-primary表示横放，landscape-secondary表示颠倒的横放，portrait-primary表示竖放，portrait-secondary表示颠倒的竖放
+
+
+
+Cookie 是服务器保存在浏览器的一小段文本信息，一般大小不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息
+
+Cookie 的目的就是区分用户，以及放置状态信息，它的使用场景主要如下
+对话（session）管理：保存登录状态、购物车等需要记录的信息。
+个性化信息：保存用户的偏好，比如网页的字体大小、背景色等等。
+追踪用户：记录和分析用户行为
+
+
+每个 Cookie 都有以下几方面的元数据
+Cookie 的名字
+Cookie 的值（真正的数据写在这里面）
+到期时间（超过这个时间会失效）
+所属域名（默认为当前域名）
+生效的路径（默认为当前网址）
+
+
+Cookie 由 HTTP 协议生成，也主要是供 HTTP 协议使用
+......
+
+
+AJAX 是 Asynchronous JavaScript and XML 的缩写，指的是通过 JavaScript 的异步通信，从服务器获取 XML 文档从中提取数据，再更新当前网页的对应部分，而不用刷新整个网页
+
+后来，AJAX 这个词就成为 JavaScript 脚本发起 HTTP 通信的代名词，也就是说，只要用脚本发起通信，就可以叫做 AJAX 通信
+
+AJAX 包括以下几个步骤
+1.创建 XMLHttpRequest 实例
+2.发出 HTTP 请求
+3.接收服务器传回的数据
+4.更新网页数据
+
+简单来说，AJAX 通过原生的XMLHttpRequest对象发出 HTTP 请求，得到服务器返回的数据后，再进行处理
+现在，服务器返回的都是 JSON 格式的数据，XML 格式已经过时了，但是 AJAX 这个名字已经成了一个通用名词，字面含义已经消失了
+
+XMLHttpRequest对象是 AJAX 的主要接口，用于浏览器与服务器之间的通信，可以支持多种协议（比如file或ftp），发送任何格式的数据（包括字符串和二进制）
+//
+var xhr = new XMLHttpRequest();   // 生成实例
+xhr.open('GET', 'http://www.example.com/page.php', true);   // 使用open()方法指定建立 HTTP 连接
+
+xhr.onreadystatechange = handleStateChange;   // 指定回调函数，监听通信状态（readyState属性）的变化
+
+function handleStateChange() {
+  // ...
+}
+
+xhr.send(null);   使用send()方法，实际发出请求
+
+一旦拿到服务器返回的数据，AJAX 不会刷新整个网页，而是只更新网页里面的相关部分
+AJAX 只能向同源网址（协议、域名、端口都相同）发出 HTTP 请求，如果发出跨域请求，就会报错
+
+// 完整例子
+var xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = function(){
+  // 通信成功时，状态值为4
+  if (xhr.readyState === 4){
+    if (xhr.status === 200){
+      console.log(xhr.responseText);
+    } else {
+      console.error(xhr.statusText);
+    }
+  }
+};
+
+xhr.onerror = function (e) {
+  console.error(xhr.statusText);
+};
+
+xhr.open('GET', '/endpoint', true);
+xhr.send(null)
+
+
+XMLHttpRequest 的实例属性
+XMLHttpRequest.readyState返回一个整数，表示实例对象的当前状态
+0，表示 XMLHttpRequest 实例已经生成，但是实例的open()方法还没有被调用。
+1，表示open()方法已经调用，但是实例的send()方法还没有调用，仍然可以使用实例的setRequestHeader()方法，设定 HTTP 请求的头信息。
+2，表示实例的send()方法已经调用，并且服务器返回的头信息和状态码已经收到。
+3，表示正在接收服务器传来的数据体（body 部分）。这时，如果实例的responseType属性等于text或者空字符串，responseText属性就会包含已经收到的部分信息。
+4，表示服务器返回的数据已经完全接收，或者本次接收已经失败
+
+
+XMLHttpRequest.onreadystatechange属性指向一个监听函数。readystatechange事件发生时（实例的readyState属性变化），就会执行这个属性
+
+XMLHttpRequest.response属性表示服务器返回的数据体（即 HTTP 回应的 body 部分）。它可能是任何数据类型，比如字符串、对象、二进制对象等等
+
+XMLHttpRequest.responseType属性是一个字符串，表示服务器返回数据的类型
+XMLHttpRequest.responseType属性可以等于以下值
+""（空字符串）：等同于text，表示服务器返回文本数据。
+"arraybuffer"：ArrayBuffer 对象，表示服务器返回二进制数组。
+"blob"：Blob 对象，表示服务器返回二进制对象。
+"document"：Document 对象，表示服务器返回一个文档对象。
+"json"：JSON 对象。
+"text"：字符串
+
+XMLHttpRequest.responseText属性返回从服务器接收到的字符串，该属性为只读。只有 HTTP 请求完成接收以后，该属性才会包含完整的数据
+
+XMLHttpRequest.responseXML属性返回从服务器接收到的 HTML 或 XML 文档对象，该属性为只读
+
+XMLHttpRequest.responseURL属性是字符串，表示发送数据的服务器的网址
+
+XMLHttpRequest.status属性返回一个整数，表示服务器回应的 HTTP 状态码
+
+XMLHttpRequest.timeout属性返回一个整数，表示多少毫秒后，如果请求仍然没有得到结果，就会自动终止
+XMLHttpRequestEventTarget.ontimeout属性用于设置一个监听函数，如果发生 timeout 事件，就会执行这个监听函数
+
+事件监听属性
+XMLHttpRequest 对象可以对以下事件指定监听函数
+XMLHttpRequest.onloadstart：loadstart 事件（HTTP 请求发出）的监听函数
+XMLHttpRequest.onprogress：progress事件（正在发送和加载数据）的监听函数
+XMLHttpRequest.onabort：abort 事件（请求中止，比如用户调用了abort()方法）的监听函数
+XMLHttpRequest.onerror：error 事件（请求失败）的监听函数
+XMLHttpRequest.onload：load 事件（请求成功完成）的监听函数
+XMLHttpRequest.ontimeout：timeout 事件（用户指定的时限超过了，请求还未完成）的监听函数
+XMLHttpRequest.onloadend：loadend 事件（请求完成，不管成功或失败）的监听函数
+
+
+XMLHttpRequest.withCredentials属性是一个布尔值，表示跨域请求时，用户信息（比如 Cookie 和认证的 HTTP 头信息）是否会包含在请求之中，默认为false
+
+XMLHttpRequest 不仅可以发送请求，还可以发送文件，这就是 AJAX 文件上传。发送文件以后，通过XMLHttpRequest.upload属性可以得到一个对象，通过观察这个对象，可以得知上传的进展
+
+
+XMLHttpRequest 的实例方法
+XMLHttpRequest.open()方法用于指定 HTTP 请求的参数，或者说初始化 XMLHttpRequest 实例对象
+XMLHttpRequest.send()方法用于实际发出 HTTP 请求。它的参数是可选的，如果不带参数，就表示 HTTP 请求只有一个 URL，没有数据体，典型例子就是 GET 请求；如果带有参数，就表示除了头信息，还带有包含具体数据的信息体，典型例子就是 POST 请求
+XMLHttpRequest.setRequestHeader()方法用于设置浏览器发送的 HTTP 请求的头信息。该方法必须在open()之后、send()之前调用
+XMLHttpRequest.overrideMimeType()方法用来指定 MIME 类型，覆盖服务器返回的真正的 MIME 类型，从而让浏览器进行不一样的处理
+XMLHttpRequest.getResponseHeader()方法返回 HTTP 头信息指定字段的值，如果还没有收到服务器回应或者指定字段不存在，返回null
+XMLHttpRequest.getAllResponseHeaders()方法返回一个字符串，表示服务器发来的所有 HTTP 头信息
+XMLHttpRequest.abort()方法用来终止已经发出的 HTTP 请求。调用这个方法以后，readyState属性变为4，status属性变为0。
+
+
+XMLHttpRequest 实例的事件
+
+readyState属性的值发生改变，就会触发 readyStateChange 事件
+上传文件时，XMLHttpRequest 实例对象本身和实例的upload属性，都有一个progress事件，会不断返回上传的进度
+load 事件表示服务器传来的数据接收完毕，error 事件表示请求出错，abort 事件表示请求被中断（比如用户取消请求）
+abort、load和error这三个事件，会伴随一个loadend事件，表示请求结束，但不知道其是否成功
+服务器超过指定时间还没有返回结果，就会触发 timeout 事件
+
 ```
