@@ -6745,3 +6745,356 @@ takeRecords()方法用来清除变动记录，即不再处理未处理的变动�
 DOM 每次发生变化，就会生成一条变动记录（MutationRecord 实例）。该实例包含了与变动相关的所有信息。Mutation Observer 处理的就是一个个MutationRecord实例所组成的数组
 
 ```
+
+- 事件
+```js
+事件的本质是程序各个组成部分之间的一种通信方式，也是异步编程的一种实现。DOM 支持大量的事件
+
+DOM 节点的事件操作（监听和触发），都定义在EventTarget接口，该接口主要提供三个实例方法
+addEventListener()：绑定事件的监听函数
+removeEventListener()：移除事件的监听函数
+dispatchEvent()：触发事件
+
+EventTarget.addEventListener()用于在当前节点或对象上（即部署了 EventTarget 接口的对象），定义一个特定事件的监听函数
+target.addEventListener(type, listener[, useCapture]);
+
+EventTarget.removeEventListener()方法用来移除addEventListener()方法添加的事件监听函数
+div.addEventListener('click', listener, false);
+div.removeEventListener('click', listener, false);
+
+EventTarget.dispatchEvent()方法在当前节点上触发指定事件，从而触发监听函数的执行
+para.addEventListener('click', hello, false);
+var event = new Event('click');
+para.dispatchEvent(event);
+
+
+事件模型
+浏览器的事件模型，就是通过监听函数（listener）对事件做出反应。事件发生后，浏览器监听到了这个事件，就会执行对应的监听函数
+
+HTML 语言允许在元素的属性中，直接定义某些事件的监听代码
+<body onload="doSomething()">
+<div onclick="console.log('触发事件')">
+
+元素节点对象的事件属性，同样可以指定监听函数
+window.onload = doSomething;
+
+div.onclick = function (event) {
+  console.log('触发事件');
+};
+
+所有 DOM 节点实例都有addEventListener方法，用来为该节点定义事件的监听函数
+window.addEventListener('load', doSomething, false);
+
+
+EventTarget.addEventListener是推荐的指定监听函数的方法。它有如下优点：
+同一个事件可以添加多个监听函数。
+能够指定在哪个阶段（捕获阶段还是冒泡阶段）触发监听函数。
+除了 DOM 节点，其他对象（比如window、XMLHttpRequest等）也有这个接口，它等于是整个 JavaScript 统一的监听函数接口。
+
+this 的指向
+监听函数内部的this指向触发事件的那个元素节点
+
+
+事件的传播
+一个事件发生后，会在子元素和父元素之间传播（propagation）。这种传播分成三个阶段
+第一阶段：从window对象传导到目标节点（上层传到底层），称为“捕获阶段”（capture phase）。
+第二阶段：在目标节点上触发，称为“目标阶段”（target phase）。
+第三阶段：从目标节点传导回window对象（从底层传回上层），称为“冒泡阶段”（bubbling phase）
+
+
+事件的代理
+事件会在冒泡阶段向上传播到父节点，因此可以把子节点的监听函数定义在父节点上，由父节点的监听函数统一处理多个子元素的事件。这种方法叫做事件的代理（delegation）
+
+
+Event 对象
+事件发生以后，会产生一个事件对象，作为参数传给监听函数。浏览器原生提供一个Event对象，所有的事件都是这个对象的实例
+
+实例属性
+
+Event.bubbles属性返回一个布尔值，表示当前事件是否会冒泡
+
+Event.eventPhase属性返回一个整数常量，表示事件目前所处的阶段。该属性只读
+
+Event.cancelable属性返回一个布尔值，表示事件是否可以取消
+
+Event.cancelBubble属性是一个布尔值，如果设为true，相当于执行Event.stopPropagation()，可以阻止事件的传播
+
+Event.defaultPrevented属性返回一个布尔值，表示该事件是否调用过Event.preventDefault方法。该属性只读
+
+
+任意事件都有两个与事件相关的节点，一个是事件的原始触发节点（Event.target），另一个是事件当前正在通过的节点（Event.currentTarget）
+Event.currentTarget属性返回事件当前所在的节点，即事件当前正在通过的节点，也就是当前正在执行的监听函数所在的那个节点。随着事件的传播，这个属性的值会变
+Event.target属性返回原始触发事件的那个节点，即事件最初发生的节点。这个属性不会随着事件的传播而改变
+
+
+Event.type属性返回一个字符串，表示事件类型。事件的类型是在生成事件的时候指定的。该属性只读
+
+Event.timeStamp属性返回一个毫秒时间戳，表示事件发生的时间。它是相对于网页加载成功开始计算的
+
+Event.isTrusted属性返回一个布尔值，表示该事件是否由真实的用户行为产生。比如，用户点击链接会产生一个click事件，该事件是用户产生的；Event构造函数生成的事件，则是脚本产生的
+
+Event.detail属性只有浏览器的 UI （用户界面）事件才具有。该属性返回一个数值，表示事件的某种信息
+
+
+实例方法
+
+Event.preventDefault方法取消浏览器对当前事件的默认行为
+
+stopPropagation方法阻止事件在 DOM 中继续传播，防止再触发定义在别的节点上的监听函数，但是不包括在当前节点上其他的事件监听函数
+
+Event.stopImmediatePropagation方法阻止同一个事件的其他监听函数被调用，不管监听函数定义在当前节点还是其他节点
+
+Event.composedPath()返回一个数组，成员是事件的最底层节点和依次冒泡经过的所有上层节点
+
+
+
+鼠标事件
+鼠标事件都继承了MouseEvent接口
+
+点击事件
+click：按下鼠标（通常是按下主按钮）时触发。
+dblclick：在同一个元素上双击鼠标时触发。
+mousedown：按下鼠标键时触发。
+mouseup：释放按下的鼠标键时触发
+
+移动事件
+mousemove：当鼠标在一个节点内部移动时触发。当鼠标持续移动时，该事件会连续触发。为了避免性能问题，建议对该事件的监听函数做一些限定，比如限定一段时间内只能运行一次。
+mouseenter：鼠标进入一个节点时触发，进入子节点不会触发这个事件（详见后文）。
+mouseover：鼠标进入一个节点时触发，进入子节点会再一次触发这个事件（详见后文）。
+mouseout：鼠标离开一个节点时触发，离开父节点也会触发这个事件（详见后文）。
+mouseleave：鼠标离开一个节点时触发，离开父节点不会触发这个事件（详见后文）
+
+
+MouseEvent 接口
+MouseEvent接口代表了鼠标相关的事件，单击（click）、双击（dblclick）、松开鼠标键（mouseup）、按下鼠标键（mousedown）等动作，所产生的事件对象都是MouseEvent实例。此外，滚轮事件和拖拉事件也是MouseEvent实例
+
+
+MouseEvent 接口的实例属性
+MouseEvent.altKey、MouseEvent.ctrlKey、MouseEvent.metaKey、MouseEvent.shiftKey这四个属性都返回一个布尔值，表示事件发生时，是否按下对应的键。它们都是只读属性
+
+MouseEvent.button属性返回一个数值，表示事件发生时按下了鼠标的哪个键。该属性只读
+MouseEvent.buttons属性返回一个三个比特位的值，表示同时按下了哪些键。它用来处理同时按下多个鼠标键的情况。该属性只读
+
+MouseEvent.clientX属性返回鼠标位置相对于浏览器窗口左上角的水平坐标（单位像素）
+MouseEvent.clientY属性返回垂直坐标。这两个属性都是只读属性
+
+
+MouseEvent.movementX属性返回当前位置与上一个mousemove事件之间的水平距离（单位像素）
+MouseEvent.movementY属性返回当前位置与上一个mousemove事件之间的垂直距离（单位像素）
+
+MouseEvent.screenX属性返回鼠标位置相对于屏幕左上角的水平坐标（单位像素），MouseEvent.screenY属性返回垂直坐标。这两个属性都是只读属性
+
+MouseEvent.offsetX属性返回鼠标位置与目标节点左侧的padding边缘的水平距离（单位像素），MouseEvent.offsetY属性返回与目标节点上方的padding边缘的垂直距离
+
+MouseEvent.pageX属性返回鼠标位置与文档左侧边缘的距离（单位像素），MouseEvent.pageY属性返回与文档上侧边缘的距离（单位像素）
+
+MouseEvent.relatedTarget属性返回事件的相关节点
+
+
+MouseEvent.getModifierState方法返回一个布尔值，表示有没有按下特定的功能键
+
+
+WheelEvent 接口继承了 MouseEvent 实例，代表鼠标滚轮事件的实例对象。目前，鼠标滚轮相关的事件只有一个wheel事件，用户滚动鼠标的滚轮，就生成这个事件的实例
+
+WheelEvent事件实例除了具有Event和MouseEvent的实例属性和实例方法，还有一些自己的实例属性，但是没有自己的实例方法
+WheelEvent.deltaX：数值，表示滚轮的水平滚动量。
+WheelEvent.deltaY：数值，表示滚轮的垂直滚动量。
+WheelEvent.deltaZ：数值，表示滚轮的 Z 轴滚动量。
+WheelEvent.deltaMode：数值，表示上面三个属性的单位，0是像素，1是行，2是页
+
+
+键盘事件
+
+键盘事件由用户击打键盘触发，它们都继承了KeyboardEvent接口
+keydown：按下键盘时触发。
+keypress：按下有值的键时触发，即按下 Ctrl、Alt、Shift、Meta 这样无值的键，这个事件不会触发。对于有值的键，按下时先触发keydown事件，再触发这个事件。
+keyup：松开键盘时触发该事件
+
+
+KeyboardEvent接口用来描述用户与键盘的互动。这个接口继承了Event接口，并且定义了自己的实例属性和实例方法
+
+KeyboardEvent 的实例属性
+KeyboardEvent.altKey：是否按下 Alt 键
+KeyboardEvent.ctrlKey：是否按下 Ctrl 键
+KeyboardEvent.metaKey：是否按下 meta 键（Mac 系统是一个四瓣的小花，Windows 系统是 windows 键）
+KeyboardEvent.shiftKey：是否按下 Shift 键
+
+
+KeyboardEvent.code属性返回一个字符串，表示当前按下的键的字符串形式。该属性只读
+
+KeyboardEvent.key属性返回一个字符串，表示按下的键名。该属性只读
+
+KeyboardEvent.location属性返回一个整数，表示按下的键处在键盘的哪一个区域。它可能取以下值
+
+KeyboardEvent.repeat返回一个布尔值，代表该键是否被按着不放，以便判断是否重复这个键，即浏览器会持续触发keydown和keypress事件，直到用户松开手为止
+
+eyboardEvent 的实例方法
+KeyboardEvent.getModifierState()方法返回一个布尔值，表示是否按下或激活指定的功能键
+
+
+进度事件
+进度事件用来描述资源加载的进度，主要由 AJAX 请求、<img>、<audio>、<video>、<style>、<link>等外部资源的加载触发，继承了ProgressEvent接口
+
+主要事件：
+abort：外部资源中止加载时（比如用户取消）触发。如果发生错误导致中止，不会触发该事件。
+error：由于错误导致外部资源无法加载时触发。
+load：外部资源加载成功时触发。
+loadstart：外部资源开始加载时触发。
+loadend：外部资源停止加载时触发，发生顺序排在error、abort、load等事件的后面。
+progress：外部资源加载过程中不断触发。
+timeout：加载超时时触发。
+
+ProgressEvent接口主要用来描述外部资源加载的进度，比如 AJAX 加载、<img>、<video>、<style>、<link>等外部资源加载。进度相关的事件都继承了这个接口
+
+
+
+表单事件
+input事件当<input>、<select>、<textarea>的值发生变化时触发，input事件对象继承了InputEvent接口
+
+select事件当在<input>、<textarea>里面选中文本时触发
+
+change事件当<input>、<select>、<textarea>的值发生变化时触发。它与input事件的最大不同，就是不会连续触发，只有当全部修改完成时才会触发
+
+用户提交表单时，如果表单元素的值不满足校验条件，就会触发invalid事件
+
+
+reset事件当表单重置（所有表单成员变回默认值）时触发。
+
+submit事件当表单数据向服务器提交时触发。注意，submit事件的发生对象是<form>元素，而不是<button>元素，因为提交的是表单，而不是按钮，这两个事件发生在表单对象<form>上，而不是发生在表单的成员上
+
+
+InputEvent接口主要用来描述input事件的实例。该接口继承了Event接口，还定义了一些自己的实例属性和实例方法
+InputEvent.data属性返回一个字符串，表示变动的内容
+InputEvent.inputType属性返回一个字符串，表示字符串发生变更的类型
+InputEvent.dataTransfer属性返回一个 DataTransfer 实例
+
+
+触摸事件
+
+浏览器的触摸 API 由三个部分组成:
+Touch：一个触摸点
+TouchList：多个触摸点的集合
+TouchEvent：触摸引发的事件实例
+
+
+Touch 接口代表单个触摸点。触摸点可能是一根手指，也可能是一根触摸笔
+
+Touch 接口的实例属性
+Touch.identifier属性返回一个整数，表示触摸点的唯一 ID
+
+Touch.screenX属性和Touch.screenY属性，分别表示触摸点相对于屏幕左上角的横坐标和纵坐标，与页面是否滚动无关。
+Touch.clientX属性和Touch.clientY属性，分别表示触摸点相对于浏览器视口左上角的横坐标和纵坐标，与页面是否滚动无关。
+Touch.pageX属性和Touch.pageY属性，分别表示触摸点相对于当前页面左上角的横坐标和纵坐标，包含了页面滚动带来的位移
+
+Touch.radiusX属性和Touch.radiusY属性，分别返回触摸点周围受到影响的椭圆范围的 X 轴半径和 Y 轴半径，单位为像素。乘以 2 就可以得到触摸范围的宽度和高度。
+Touch.rotationAngle属性表示触摸区域的椭圆的旋转角度，单位为度数，在0到90度之间
+
+Touch.force属性返回一个0到1之间的数值，表示触摸压力。0代表没有压力，1代表硬件所能识别的最大压力
+
+Touch.target属性返回一个元素节点，代表触摸发生时所在的那个元素节点。即使触摸点已经离开了这个节点，该属性依然不变
+
+
+TouchList接口表示一组触摸点的集合。它的实例是一个类似数组的对象，成员是Touch的实例对象，表示所有触摸点
+
+TouchEvent 接口继承了 Event 接口，表示由触摸引发的事件实例，通常来自触摸屏或轨迹板
+
+TouchEvent 的实例属性
+TouchEvent.altKey：布尔值，表示触摸时是否按下了 Alt 键。
+TouchEvent.ctrlKey：布尔值，表示触摸时是否按下了 Ctrl 键。
+TouchEvent.shiftKey：布尔值：表示触摸时是否按下了 Shift 键。
+TouchEvent.metaKey：布尔值，表示触摸时是否按下了 Meta 键 或 Windows 键
+
+
+TouchEvent.changedTouches属性返回一个TouchList实例，成员是一组Touch实例对象，表示本次触摸事件的相关触摸点
+
+TouchEvent.touches属性返回一个TouchList实例，成员是所有仍然处于活动状态（即触摸中）的触摸点。一般来说，一个手指就是一个触摸点
+
+TouchEvent.targetTouches属性返回一个TouchList实例，成员是触摸事件的目标元素节点内部、所有仍然处于活动状态（即触摸中）的触摸点
+
+
+触摸事件的种类 TouchEvent.type
+touchstart：用户开始触摸时触发，它的target属性返回发生触摸的元素节点。
+touchend：用户不再接触触摸屏时（或者移出屏幕边缘时）触发，它的target属性与touchstart事件一致的，就是开始触摸时所在的元素节点。它的changedTouches属性返回一个TouchList实例，包含所有不再触摸的触摸点（即Touch实例对象）。
+touchmove：用户移动触摸点时触发，它的target属性与touchstart事件一致。如果触摸的半径、角度、力度发生变化，也会触发该事件。
+touchcancel：触摸点取消时触发，比如在触摸区域跳出一个模态窗口（modal window）、触摸点离开了文档区域（进入浏览器菜单栏）、用户的触摸点太多，超过了支持的上限（自动取消早先的触摸点）
+
+
+拖拉事件
+拖拉（drag）指的是，用户在某个对象上按下鼠标键不放，拖动它到另一个位置，然后释放鼠标键，将该对象放在那里
+
+当元素节点或选中的文本被拖拉时，就会持续触发拖拉事件
+drag：拖拉过程中，在被拖拉的节点上持续触发（相隔几百毫秒）。
+dragstart：用户开始拖拉时，在被拖拉的节点上触发，该事件的target属性是被拖拉的节点。通常应该在这个事件的监听函数中，指定拖拉的数据。
+dragend：拖拉结束时（释放鼠标键或按下 ESC 键）在被拖拉的节点上触发，该事件的target属性是被拖拉的节点。它与dragstart事件，在同一个节点上触发。不管拖拉是否跨窗口，或者中途被取消，dragend事件总是会触发的。
+dragenter：拖拉进入当前节点时，在当前节点上触发一次，该事件的target属性是当前节点。通常应该在这个事件的监听函数中，指定是否允许在当前节点放下（drop）拖拉的数据。如果当前节点没有该事件的监听函数，或者监听函数不执行任何操作，就意味着不允许在当前节点放下数据。在视觉上显示拖拉进入当前节点，也是在这个事件的监听函数中设置。
+dragover：拖拉到当前节点上方时，在当前节点上持续触发（相隔几百毫秒），该事件的target属性是当前节点。该事件与dragenter事件的区别是，dragenter事件在进入该节点时触发，然后只要没有离开这个节点，dragover事件会持续触发。
+dragleave：拖拉操作离开当前节点范围时，在当前节点上触发，该事件的target属性是当前节点。如果要在视觉上显示拖拉离开操作当前节点，就在这个事件的监听函数中设置。
+drop：被拖拉的节点或选中的文本，释放到目标节点时，在目标节点上触发。注意，如果当前节点不允许drop，即使在该节点上方松开鼠标键，也不会触发该事件。如果用户按下 ESC 键，取消这个操作，也不会触发该事件。该事件的监听函数负责取出拖拉数据，并进行相关处理
+
+
+拖拉事件都继承了DragEvent接口，这个接口又继承了MouseEvent接口和Event接口
+
+所有拖拉事件的实例都有一个DragEvent.dataTransfer属性，用来读写需要传递的数据。这个属性的值是一个DataTransfer接口的实例
+
+
+DataTransfer 的实例属性
+DataTransfer.dropEffect属性用来设置放下（drop）被拖拉节点时的效果，会影响到拖拉经过相关区域时鼠标的形状
+
+DataTransfer.effectAllowed属性设置本次拖拉中允许的效果
+
+DataTransfer.files属性是一个 FileList 对象，包含一组本地文件，可以用来在拖拉操作中传送
+
+DataTransfer.types属性是一个只读的数组，每个成员是一个字符串，里面是拖拉的数据格式（通常是 MIME 值）
+
+DataTransfer.items属性返回一个类似数组的只读对象（DataTransferItemList 实例），每个成员就是本次拖拉的一个对象（DataTransferItem 实例）
+
+
+DataTransfer 的实例方法
+
+DataTransfer.setData()方法用来设置拖拉事件所带有的数据
+
+DataTransfer.getData()方法接受一个字符串（表示数据类型）作为参数，返回事件所带的指定类型的数据（通常是用setData方法添加的数据）
+
+DataTransfer.clearData()方法接受一个字符串（表示数据类型）作为参数，删除事件所带的指定类型的数据
+
+拖动过程中（dragstart事件触发后），浏览器会显示一张图片跟随鼠标一起移动，表示被拖动的节点
+
+
+其他常见事件
+beforeunload事件在窗口、文档、各种资源将要卸载前触发。它可以用来防止用户不小心卸载资源
+unload事件在窗口关闭或者document对象将要卸载时触发。它的触发顺序排在beforeunload、pagehide事件后面
+load事件在页面或某个资源加载成功时触发。注意，页面或资源从浏览器缓存加载，并不会触发load事件
+error事件是在页面或资源加载失败时触发。abort事件在用户取消加载时触发
+
+session 历史事件
+pageshow事件在页面加载时触发，包括第一次加载和从缓存加载两种情况
+pagehide事件与pageshow事件类似，当用户通过“前进/后退”按钮，离开当前页面时触发
+popstate事件在浏览器的history对象的当前记录发生显式切换时触发
+hashchange事件在 URL 的 hash 部分（即#号后面的部分，包括#号）发生变化时触发。该事件一般在window对象上监听
+
+网页状态事件
+网页下载并解析完成以后，浏览器就会在document对象上触发 DOMContentLoaded 事件
+readystatechange事件当 Document 对象和 XMLHttpRequest 对象的readyState属性发生变化时触发
+
+窗口事件
+scroll事件在文档或文档元素滚动时触发，主要出现在用户拖动滚动条
+resize事件在改变浏览器窗口大小时触发，主要发生在window对象上面
+fullscreenchange事件在进入或退出全屏状态时触发，该事件发生在document对象上面
+
+剪贴板事件
+cut：将选中的内容从文档中移除，加入剪贴板时触发。
+copy：进行复制动作时触发。
+paste：剪贴板内容粘贴到文档后触发
+
+焦点事件
+焦点事件发生在元素节点和document对象上面，与获得或失去焦点相关
+
+
+CustomEvent 接口用于生成自定义的事件实例
+
+
+GlobalEventHandlers 接口
+指定事件的回调函数，推荐使用的方法是元素的addEventListener方法
+除了之外，还有一种方法可以直接指定事件的回调函数， div.onclick = clickHandler;，这个接口是由GlobalEventHandlers接口提供的。它的优点是使用比较方便，缺点是只能为每个事件指定一个回调函数，并且无法指定事件触发的阶段（捕获阶段还是冒泡阶段）
+...
+```
