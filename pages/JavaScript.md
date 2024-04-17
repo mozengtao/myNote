@@ -6262,7 +6262,486 @@ document.images.namedItem('pic') === pic // true
 
 
 ParentNode 接口，ChildNode 接口
-arentNode接口表示当前节点是一个父节点，提供一些处理子节点的方法。ChildNode接口表示当前节点是一个子节点，提供一些相关方法
+ParentNode接口表示当前节点是一个父节点，提供一些处理子节点的方法。ChildNode接口表示当前节点是一个子节点，提供一些相关方法
 
+children属性返回一个HTMLCollection实例，成员是当前节点的所有元素子节点。该属性只读
+
+firstElementChild属性返回当前节点的第一个元素子节点。如果没有任何元素子节点，则返回null
+
+lastElementChild属性返回当前节点的最后一个元素子节点，如果不存在任何元素子节点，则返回null
+
+childElementCount属性返回一个整数，表示当前节点的所有元素子节点的数目。如果不包含任何元素子节点，则返回0
+
+append()方法为当前节点追加一个或多个子节点，位置是最后一个元素子节点的后面
+
+prepend()方法为当前节点追加一个或多个子节点，位置是第一个元素子节点的前面
+
+
+如果一个节点有父节点，那么该节点就拥有了ChildNode接口
+remove()方法用于从父节点移除当前节点
+
+before()方法用于在当前节点的前面，插入一个或多个同级节点。两者拥有相同的父节点
+
+after()方法用于在当前节点的后面，插入一个或多个同级节点，两者拥有相同的父节点
+
+replaceWith()方法使用参数节点，替换当前节点。参数可以是元素节点，也可以是文本节点
+
+
+Document 节点
+
+document节点对象代表整个文档，每张网页都有自己的document对象
+
+window.document属性就指向这个对象
+
+document对象的不同获取办法:
+正常的网页，直接使用document或window.document。
+iframe框架里面的网页，使用iframe节点的contentDocument属性。
+Ajax 操作返回的文档，使用XMLHttpRequest对象的responseXML属性。
+内部节点的ownerDocument属性
+
+
+属性 
+document.defaultView属性返回document对象所属的window对象。如果当前文档不属于window对象，该属性返回null
+
+对于 HTML 文档来说，document对象一般有两个子节点，第一个子节点是document.doctype，指向<DOCTYPE>节点，即文档类型（Document Type Declaration，简写DTD）节点
+
+document.documentElement属性返回当前文档的根元素节点（root）
+
+document.body属性指向<body>节点，document.head属性指向<head>节点
+
+document.scrollingElement属性返回文档的滚动元素。也就是说，当文档整体滚动时，到底是哪个元素在滚动
+
+document.activeElement属性返回获得当前焦点（focus）的 DOM 元素
+
+document.fullscreenElement属性返回当前以全屏状态展示的 DOM 元素
+
+
+节点集合属性
+
+document.links属性返回当前文档所有设定了href属性的<a>及<area>节点
+
+document.forms属性返回所有<form>表单节点
+
+document.images属性返回页面所有<img>图片节点
+
+document.embeds属性和document.plugins属性，都返回所有<embed>节点
+
+document.scripts属性返回所有<script>节点
+
+document.styleSheets属性返回网页内嵌或引入的 CSS 样式表集合
+
+文档静态信息属性
+document.documentURI属性和document.URL属性都返回一个字符串，表示当前文档的网址
+
+document.domain属性返回当前文档的域名，不包含协议和端口
+
+Location对象是浏览器提供的原生对象，提供 URL 相关的信息和操作方法
+
+document.lastModified属性返回一个字符串，表示当前文档最后修改的时间
+
+document.title属性返回当前文档的标题
+
+document.characterSet属性返回当前文档的编码
+
+document.referrer属性返回一个字符串，表示当前文档的访问者来自哪里
+
+document.dir返回一个字符串，表示文字方向。它只有两个可能的值：rtl表示文字从右到左，阿拉伯文是这种方式；ltr表示文字从左到右，包括英语和汉语在内的大多数文字采用这种方式
+
+compatMode属性返回浏览器处理文档的模式，可能的值为BackCompat（向后兼容模式）和CSS1Compat（严格模式）
+
+
+文档状态属性
+document.hidden属性返回一个布尔值，表示当前页面是否可见
+
+document.visibilityState返回文档的可见状态
+
+document.readyState属性返回当前文档的状态，共有三种可能的值
+loading：加载 HTML 代码阶段（尚未完成解析）
+interactive：加载外部资源阶段
+complete：加载完成
+
+
+document.cookie属性用来操作浏览器 Cookie
+
+document.designMode属性控制当前文档是否可编辑
+
+document.currentScript属性只用在<script>元素的内嵌脚本或加载的外部脚本之中，返回当前脚本所在的那个 DOM 节点，即<script>元素的 DOM 节点
+
+document.implementation属性返回一个DOMImplementation对象。该对象有三个方法，主要用于创建独立于当前文档的新的 Document 对象
+DOMImplementation.createDocument()：创建一个 XML 文档
+DOMImplementation.createHTMLDocument()：创建一个 HTML 文档
+DOMImplementation.createDocumentType()：创建一个 DocumentType 对象
+
+
+方法
+document.open方法清除当前文档所有内容，使得文档处于可写状态，供document.write方法写入内容
+document.close方法用来关闭document.open()打开的文档
+
+document.write方法用于向当前文档写入内容
+
+document.querySelector方法接受一个 CSS 选择器作为参数，返回匹配该选择器的元素节点。如果有多个节点满足匹配条件，则返回第一个匹配的节点。如果没有发现匹配的节点，则返回null
+
+document.getElementsByTagName()方法搜索 HTML 标签名，返回符合条件的元素
+
+document.getElementsByClassName()方法返回一个类似数组的对象（HTMLCollection实例），包括了所有class名字符合指定条件的元素，元素的变化实时反映在返回结果中
+
+document.getElementsByName()方法用于选择拥有name属性的 HTML 元素（比如<form>、<radio>、<img>、<frame>、<embed>和<object>等），返回一个类似数组的的对象（NodeList实例），因为name属性相同的元素可能不止一个
+
+document.getElementById()方法返回匹配指定id属性的元素节点。如果没有发现匹配的节点，则返回null
+
+document.elementFromPoint()方法返回位于页面指定位置最上层的元素节点
+
+document.createElement方法用来生成元素节点，并返回该节点
+
+document.createTextNode方法用来生成文本节点（Text实例），并返回该节点。它的参数是文本节点的内容
+
+document.createAttribute方法生成一个新的属性节点（Attr实例），并返回它
+
+document.createComment方法生成一个新的注释节点，并返回该节点
+
+document.createDocumentFragment方法生成一个空的文档片段对象（DocumentFragment实例）
+
+document.createEvent方法生成一个事件对象（Event实例），该对象可以被element.dispatchEvent方法使用，触发指定事件
+
+addEventListener,removeEventListener,dispatchEvent 用于处理document节点的事件，都继承自EventTarget接口，用于处理document节点的事件
+
+document.hasFocus方法返回一个布尔值，表示当前文档之中是否有元素被激活或获得焦点
+
+document.adoptNode方法将某个节点及其子节点，从原来所在的文档或DocumentFragment里面移除，归属当前document对象，返回插入后的新节点
+document.importNode方法则是从原来所在的文档或DocumentFragment里面，拷贝某个节点及其子节点，让它们归属当前document对象
+
+document.createNodeIterator方法返回一个子节点遍历器
+
+document.createTreeWalker方法返回一个 DOM 的子树遍历器
+
+execCommand方法可以用来改变内容的样式
+
+queryCommandSupported()方法返回一个布尔值，表示浏览器是否支持document.execCommand()的某个命令
+
+document.queryCommandEnabled()方法返回一个布尔值，表示当前是否可用document.execCommand()的某个命令
+
+
+Element 节点
+Element节点对象对应网页的 HTML 元素。每一个 HTML 元素，在 DOM 树上都会转化成一个Element节点对象（以下简称元素节点），元素节点的nodeType属性都是1
+
+
+
+实例属性
+
+Element.id属性返回指定元素的id属性，该属性可读写
+
+Element.tagName属性返回指定元素的大写标签名，与nodeName属性的值相等
+
+Element.dir属性用于读写当前元素的文字方向，可能是从左到右（"ltr"），也可能是从右到左（"rtl"）
+
+Element.accessKey属性用于读写分配给当前元素的快捷键
+
+Element.draggable属性返回一个布尔值，表示当前元素是否可拖动。该属性可读写
+
+Element.lang属性返回当前元素的语言设置。该属性可读写
+
+Element.tabIndex属性返回一个整数，表示当前元素在 Tab 键遍历时的顺序。该属性可读写
+
+Element.title属性用来读写当前元素的 HTML 属性title。该属性通常用来指定，鼠标悬浮时弹出的文字提示框
+
+
+元素状态的相关属性
+
+Element.hidden属性返回一个布尔值，表示当前 HTML 元素的hidden属性的值
+
+HTML 元素可以设置contentEditable属性，使得元素的内容可以编辑
+Element.isContentEditable属性返回一个布尔值，同样表示是否设置了contenteditable属性。该属性只读
+
+Element.attributes属性返回一个类似数组的对象，成员是当前元素节点的所有属性节点
+
+className属性用来读写当前元素节点的class属性
+classList属性返回一个类似数组的对象，当前元素节点的每个class就是这个对象的一个成员
+
+Element.dataset属性返回一个对象，可以从这个对象读写data-属性
+
+Element.innerHTML属性返回一个字符串，等同于该元素包含的所有 HTML 代码。该属性可读写，常用来设置某个节点的内容
+
+Element.outerHTML属性返回一个字符串，表示当前元素节点的所有 HTML 代码，包括该元素本身和所有子元素
+
+Element.clientHeight属性返回一个整数值，表示元素节点的 CSS 高度（单位像素），只对块级元素生效，对于行内元素返回0。如果块级元素没有设置 CSS 高度，则返回实际高度
+
+Element.clientLeft属性等于元素节点左边框（left border）的宽度（单位像素），不包括左侧的padding和margin
+
+Element.scrollHeight属性返回一个整数值（小数会四舍五入），表示当前元素的总高度（单位像素）
+
+Element.scrollLeft属性表示当前元素的水平滚动条向右侧滚动的像素数量，Element.scrollTop属性表示当前元素的垂直滚动条向下滚动的像素数量
+
+Element.offsetParent属性返回最靠近当前元素的、并且 CSS 的position属性不等于static的上层元素
+
+Element.offsetHeight属性返回一个整数，表示元素的 CSS 垂直高度（单位像素）
+
+Element.offsetLeft返回当前元素左上角相对于Element.offsetParent节点的水平位移，Element.offsetTop返回垂直位移，单位为像素
+
+
+每个元素节点都有style用来读写该元素的行内样式信息
+Element.children属性返回一个类似数组的对象（HTMLCollection实例），包括当前元素节点的所有子元素
+
+Element.firstElementChild属性返回当前元素的第一个元素子节点，Element.lastElementChild返回最后一个元素子节点
+
+Element.nextElementSibling属性返回当前元素节点的后一个同级元素节点
+
+实例方法
+
+属性相关方法
+getAttribute()：读取某个属性的值
+getAttributeNames()：返回当前元素的所有属性名
+setAttribute()：写入属性值
+hasAttribute()：某个属性是否存在
+hasAttributes()：当前元素是否有属性
+removeAttribute()：删除属性
+
+Element.querySelector方法接受 CSS 选择器作为参数，返回父元素的第一个匹配的子元素
+
+Element.querySelectorAll方法接受 CSS 选择器作为参数，返回一个NodeList实例，包含所有匹配的子元素
+
+Element.getElementsByClassName方法返回一个HTMLCollection实例，成员是当前元素节点的所有具有指定 class 的子元素节点
+
+Element.getElementsByTagName()方法返回一个HTMLCollection实例，成员是当前节点的所有匹配指定标签名的子元素节点
+
+Element.closest方法接受一个 CSS 选择器作为参数，返回匹配该选择器的、最接近当前节点的一个祖先节点（包括当前节点本身）
+
+Element.matches方法返回一个布尔值，表示当前元素是否匹配给定的 CSS 选择器
+
+
+事件相关方法
+
+以下三个方法与Element节点的事件相关。这些方法都继承自EventTarget接口
+Element.addEventListener()：添加事件的回调函数
+Element.removeEventListener()：移除事件监听函数
+Element.dispatchEvent()：触发事件
+
+Element.scrollIntoView方法滚动当前元素，进入浏览器的可见区域
+
+Element.getBoundingClientRect方法返回一个对象，提供当前元素节点的大小、位置等信息，基本上就是 CSS 盒状模型的所有信息
+
+Element.getClientRects方法返回一个类似数组的对象，里面是当前元素在页面上形成的所有矩形（所以方法名中的Rect用的是复数）
+
+Element.insertAdjacentElement方法在相对于当前元素的指定位置，插入一个新的节点
+
+Element.insertAdjacentHTML方法用于将一个 HTML 字符串，解析生成 DOM 结构，插入相对于当前节点的指定位置
+
+Element.remove方法继承自 ChildNode 接口，用于将当前元素节点从它的父节点移除
+
+Element.focus方法用于将当前页面的焦点，转移到指定元素上
+Element.blur方法用于将焦点从当前元素移除
+
+Element.click方法用于在当前元素上模拟一次鼠标点击，相当于触发了click事件
+
+
+属性的操作
+HTML 元素包括标签名和若干个键值对，这个键值对就称为“属性”（attribute）
+
+属性本身是一个对象（Attr对象），一般都是通过元素节点对象（HTMlElement对象）来操作属性
+
+元素对象有一个attributes属性，返回一个类似数组的动态对象，成员是该元素标签的所有属性节点对象，属性的实时变化都会反映在这个节点对象上
+
+HTML 元素的标准属性（即在标准中定义的属性），会自动成为元素节点对象的属性
+
+属性操作的标准方法
+getAttribute()
+getAttributeNames()
+setAttribute()
+hasAttribute()
+hasAttributes()
+removeAttribute()
+
+
+dataset 属性
+在HTML元素上附加数据，供 JavaScript 脚本使用
+
+使用元素节点对象的dataset属性，它指向一个对象，可以用来操作 HTML 元素标签的data-*属性
+// 
+<div id="mydiv" data-foo="bar"
+
+var n = document.getElementById('mydiv');
+n.dataset.foo // bar
+n.dataset.foo = 'baz'
+
+删除一个data-*属性，可以直接使用delete命令
+
+delete document.getElementById('myDiv').dataset.foo;
+
+
+
+Text 节点和 DocumentFragment 节点
+文本节点（Text）代表元素节点（Element）和属性节点（Attribute）的文本内容。如果一个节点只包含一段文本，那么它就有一个文本子节点，代表该节点的文本内容
+
+Text 节点的属性
+
+data属性等同于nodeValue属性，用来设置或读取文本节点的内容
+
+wholeText属性将当前文本节点与毗邻的文本节点，作为一个整体返回
+
+length属性返回当前文本节点的文本长度
+
+nextElementSibling属性返回紧跟在当前文本节点后面的那个同级元素节点。如果取不到元素节点，则返回null
+
+
+Text 节点的方法
+appendData()：在Text节点尾部追加字符串。
+deleteData()：删除Text节点内部的子字符串，第一个参数为子字符串开始位置，第二个参数为子字符串长度。
+insertData()：在Text节点插入字符串，第一个参数为插入位置，第二个参数为插入的子字符串。
+replaceData()：用于替换文本，第一个参数为替换开始位置，第二个参数为需要被替换掉的长度，第三个参数为新加入的字符串。
+subStringData()：用于获取子字符串，第一个参数为子字符串在Text节点中的开始位置，第二个参数为子字符串长度
+
+
+remove方法用于移除当前Text节点
+
+splitText方法将Text节点一分为二，变成两个毗邻的Text节点
+
+
+DocumentFragment 节点 
+DocumentFragment节点代表一个文档的片段，本身就是一个完整的 DOM 树形结构
+
+DocumentFragment节点对象没有自己的属性和方法，全部继承自Node节点和ParentNode接口。也就是说，DocumentFragment节点比Node节点多出以下四个属性
+children：返回一个动态的HTMLCollection集合对象，包括当前DocumentFragment对象的所有子元素节点。
+firstElementChild：返回当前DocumentFragment对象的第一个子元素节点，如果没有则返回null。
+lastElementChild：返回当前DocumentFragment对象的最后一个子元素节点，如果没有则返回null。
+childElementCount：返回当前DocumentFragment对象的所有子元素数量
+
+
+CSS 操作
+
+CSS 与 JavaScript 是两个有着明确分工的领域
+CSS 负责页面的视觉效果
+JavaScript 负责与用户的行为互动
+
+1. 使用网页元素节点的getAttribute()方法、setAttribute()方法和removeAttribute()方法，直接读写或删除网页元素的style属性
+
+2. CSSStyleDeclaration 接口用来操作元素的样式。三个地方部署了这个接口
+元素节点的style属性（Element.style）
+CSSStyle实例的style属性
+window.getComputedStyle()的返回值
+
+
+CSSStyleDeclaration.cssText属性用来读写当前规则的所有样式声明文本
+
+CSSStyleDeclaration.length属性返回一个整数值，表示当前规则包含多少条样式声明
+
+CSSStyleDeclaration.parentRule属性返回当前规则所属的那个样式块（CSSRule 实例）
+
+CSSStyleDeclaration.getPropertyPriority方法接受 CSS 样式的属性名作为参数，返回一个字符串，表示有没有设置important优先级
+
+CSSStyleDeclaration.getPropertyValue方法接受 CSS 样式属性名作为参数，返回一个字符串，表示该属性的属性值
+
+CSSStyleDeclaration.item方法接受一个整数值作为参数，返回该位置的 CSS 属性名
+
+CSSStyleDeclaration.removeProperty方法接受一个属性名作为参数，在 CSS 规则里面移除这个属性，返回这个属性原来的值
+
+CSSStyleDeclaration.setProperty方法用来设置新的 CSS 属性
+
+
+CSS 模块的侦测
+...
+
+
+CSS 对象
+浏览器原生提供 CSS 对象，为 JavaScript 操作 CSS 提供一些工具方法
+
+CSS.escape方法用于转义 CSS 选择器里面的特殊字符
+CSS.supports方法返回一个布尔值，表示当前环境是否支持某一句 CSS 规则
+
+CSS 伪元素
+CSS 伪元素是通过 CSS 向 DOM 添加的元素，主要是通过:before和:after选择器生成，然后用content属性指定伪元素的内容
+
+
+StyleSheet接口代表网页的一张样式表，包括<link>元素加载的样式表和<style>元素内嵌的样式表
+
+
+实例属性
+
+StyleSheet.disabled返回一个布尔值，表示该样式表是否处于禁用状态
+
+Stylesheet.href返回样式表的网址
+
+StyleSheet.media属性返回一个类似数组的对象（MediaList实例），成员是表示适用媒介的字符串
+
+StyleSheet.title属性返回样式表的title属性
+
+StyleSheet.type属性返回样式表的type属性，通常是text/css
+
+CSS 的@import命令允许在样式表中加载其他样式表
+
+StyleSheet.ownerNode属性返回StyleSheet对象所在的 DOM 节点，通常是<link>或<style>
+
+CSSStyleSheet.cssRules属性指向一个类似数组的对象（CSSRuleList实例），里面每一个成员就是当前样式表的一条 CSS 规则
+
+
+实例方法
+CSSStyleSheet.insertRule方法用于在当前样式表的插入一个新的 CSS 规则
+
+CSSStyleSheet.deleteRule方法用来在样式表里面移除一条规则，它的参数是该条规则在cssRules对象中的位置
+
+
+CSSRuleList 接口是一个类似数组的对象，表示一组 CSS 规则，成员都是 CSSRule 实例
+
+
+一条 CSS 规则包括两个部分：CSS 选择器和样式声明
+JavaScript 通过 CSSRule 接口操作 CSS 规则。一般通过 CSSRuleList 接口（StyleSheet.cssRules）获取 CSSRule 实例
+
+
+CSSRule 实例的属性 
+
+CSSRule.cssText属性返回当前规则的文本
+
+CSSRule.parentStyleSheet属性返回当前规则所在的样式表对象（StyleSheet 实例）
+
+CSSRule.parentRule属性返回包含当前规则的父规则，如果不存在父规则（即当前规则是顶层规则），则返回null
+
+CSSRule.type属性返回一个整数值，表示当前规则的类型
+
+
+CSSStyleRule 接口
+CSSStyleRule.selectorText属性返回当前规则的选择器
+
+CSSStyleRule.style属性返回一个对象（CSSStyleDeclaration 实例），代表当前规则的样式声明，也就是选择器后面的大括号里面的部分
+
+
+window.matchMedia()方法用来将 CSS 的Media Query条件语句，转换成一个 MediaQueryList 实例
+
+MediaQueryList.media属性返回一个字符串，表示对应的 MediaQuery 条件语句
+
+MediaQueryList.matches属性返回一个布尔值，表示当前页面是否符合指定的 MediaQuery 条件语句
+
+MediaQueryList.onchange属性用来指定change事件的监听函数
+
+
+MediaQueryList 实例有两个方法MediaQueryList.addListener()和MediaQueryList.removeListener()，用来为change事件添加或撤销监听函数
+
+
+
+Mutation Observer API 用来监视 DOM 变动。DOM 的任何变动，比如节点的增减、属性的变动、文本内容的变动，这个 API 都可以得到通知
+
+MutationObserver构造函数 用来 新建一个观察器实例，同时指定这个实例的回调函数
+var observer = new MutationObserver(function (mutations, observer) {
+  mutations.forEach(function(mutation) {
+    console.log(mutation);
+  });
+});
+
+
+MutationObserver 的实例方法
+
+observe()方法用来启动监听
+var article = document.querySelector('article');
+
+var options = {
+  'childList': true,
+  'attributes':true
+} ;
+
+observer.observe(article, options);
+
+
+disconnect()方法用来停止观察。调用该方法后，DOM 再发生变动，也不会触发观察器
+takeRecords()方法用来清除变动记录，即不再处理未处理的变动。该方法返回变动记录的数组
+
+
+DOM 每次发生变化，就会生成一条变动记录（MutationRecord 实例）。该实例包含了与变动相关的所有信息。Mutation Observer 处理的就是一个个MutationRecord实例所组成的数组
 
 ```
