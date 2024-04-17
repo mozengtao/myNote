@@ -8150,3 +8150,127 @@ Worker 内部如果要加载其他脚本，有一个专门的方法importScripts
 
 
 ```
+
+- 网页元素接口
+```js
+<a>元素用来设置链接
+<a>元素有一系列 URL 相关属性，可以用来操作链接地址
+hash：片段识别符（以#开头）
+host：主机和端口（默认端口80和443会省略）
+hostname：主机名
+href：完整的 URL
+origin：协议、域名和端口
+password：主机名前的密码
+pathname：路径（以/开头）
+port：端口
+protocol：协议（包含尾部的冒号:）
+search：查询字符串（以?开头）
+username：主机名前的用户名
+
+// HTML 代码如下
+// <a id="test" href="http://user:passwd@example.com:8081/index.html?bar=1#foo">test</a>
+var a = document.getElementById('test');
+a.hash // "#foo"
+a.host // "example.com:8081"
+a.hostname // "example.com"
+a.href // "http://user:passed@example.com:8081/index.html?bar=1#foo"
+a.origin // "http://example.com:8081"
+a.password // "passwd"
+a.pathname // "/index.html"
+a.port // "8081"
+a.protocol // "http:"
+a.search // "?bar=1"
+a.username // "user"
+
+
+accessKey属性用来读写<a>元素的快捷键
+// HTML 代码如下
+// <a id="test" href="http://example.com">test</a>
+var a = document.getElementById('test');
+a.accessKey = 'k';
+
+download属性表示当前链接不是用来浏览，而是用来下载的。它的值是一个字符串，表示用户下载得到的文件名
+// HTML 代码如下
+// <a id="test" href="foo.jpg">下载</a>
+var a = document.getElementById('test');
+a.download = 'bar.jpg';
+
+hreflang属性用来读写<a>元素的 HTML 属性hreflang，表示链接指向的资源的语言
+// HTML 代码如下
+// <a id="test" href="https://example.com" hreflang="en">test</a>
+var a = document.getElementById('test');
+a.hreflang // "en"
+
+referrerPolicy属性用来读写<a>元素的 HTML 属性referrerPolicy，指定当用户点击链接时，如何发送 HTTP 头信息的referer字段
+// HTML 代码如下
+// <a id="test" href="https://example.com" referrerpolicy="no-referrer">test</a>
+var a = document.getElementById('test');
+a.referrerPolicy // "no-referrer"
+
+rel属性用来读写<a>元素的 HTML 属性rel，表示链接与当前文档的关系
+// HTML 代码如下
+// <a id="test" href="https://example.com" rel="license">license.html</a>
+var a = document.getElementById('test');
+a.rel // "license"
+
+tabIndex属性的值是一个整数，用来读写当前<a>元素在文档里面的 Tab 键遍历顺序
+// HTML 代码如下
+// <a id="test" href="https://example.com">test</a>
+var a = document.getElementById('test');
+a.tabIndex // 0
+
+target属性用来读写<a>元素的 HTML 属性target
+// HTML 代码如下
+// <a id="test" href="https://example.com" target="_blank">test</a>
+var a = document.getElementById('test');
+a.target // "_blank"
+
+text属性用来读写<a>元素的链接文本，等同于当前节点的textContent属性
+// HTML 代码如下
+// <a id="test" href="https://example.com">test</a>
+var a = document.getElementById('test');
+a.text // "test"
+
+type属性用来读写<a>元素的 HTML 属性type，表示链接目标的 MIME 类型
+// HTML 代码如下
+// <a id="test" type="video/mp4" href="example.mp4">video</a>
+var a = document.getElementById('test');
+a.type // "video/mp4"
+
+
+<a>元素的方法都是继承的，主要有以下三个
+blur()：从当前元素移除键盘焦点，详见HTMLElement接口的介绍。
+focus()：当前元素得到键盘焦点，详见HTMLElement接口的介绍。
+toString()：返回当前<a>元素的 HTML 属性href
+
+
+<img>元素用于插入图片，主要继承了 HTMLImageElement 接口
+
+<form>元素代表了表单，继承了 HTMLFormElement 接口
+
+<input>元素主要用于表单组件，它继承了 HTMLInputElement 接口
+
+<button>元素继承了HTMLButtonElement接口
+
+<option>元素表示下拉框（<select>，<optgroup>或<datalist>）里面的一个选项。它是 HTMLOptionElement 接口的实例
+
+<video>元素用来加载视频，是HTMLVideoElement对象的实例
+<audio>元素用来加载音频，是HTMLAudioElement对象的实例
+HTMLVideoElement和HTMLAudioElement都继承了HTMLMediaElement，所以这两个 HTML 元素有许多共同的属性和方法
+
+
+HTMLMediaElement并没有对应的 HTML 元素，而是作为<video>和<audio>的基类，定义一些它们共同的属性和方法
+
+HTMLVideoElement接口代表了<video>元素。这个接口继承了HTMLMediaElement接口，并且有一些自己的属性和方法
+
+HTMLAudioElement接口代表了<audio>元素，该接口继承了HTMLMediaElement，但是没有定义自己的属性和方法。浏览器原生提供一个Audio()构造函数，返回的就是HTMLAudioElement实例
+
+事件
+<video>和<audio>元素有以下事件
+loadstart：开始加载媒体文件时触发。
+progress：媒体文件加载过程中触发，大概是每秒触发2到8次。
+loadedmetadata：媒体文件元数据加载成功时触发。
+loadeddata：当前播放位置加载成功后触发
+......
+
+```
