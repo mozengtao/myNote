@@ -7098,3 +7098,184 @@ GlobalEventHandlers 接口
 除了之外，还有一种方法可以直接指定事件的回调函数， div.onclick = clickHandler;，这个接口是由GlobalEventHandlers接口提供的。它的优点是使用比较方便，缺点是只能为每个事件指定一个回调函数，并且无法指定事件触发的阶段（捕获阶段还是冒泡阶段）
 ...
 ```
+- 浏览器环境
+```js
+JavaScript 是浏览器的内置脚本语言。
+浏览器内置了 JavaScript 引擎，并且提供各种接口，让 JavaScript 脚本可以控制浏览器的各种功能。一旦网页内嵌了 JavaScript 脚本，浏览器加载网页，就会去执行脚本，从而达到操作浏览器的目的，实现网页的各种动态效果
+
+1. 代码嵌入网页的方法
+网页中嵌入 JavaScript 代码，主要有四种方法
+<script>元素直接嵌入代码。
+<script>标签加载外部脚本
+事件属性
+URL 协议
+
+// 1 script 元素嵌入代码
+// demo.html:
+<script>
+  var x = 1 + 5;
+  console.log(x);
+</script>
+
+// 2
+<script type="application/javascript">
+  console.log('Hello World');
+</script>
+
+// 如果type属性的值，浏览器不认识，那么它不会执行其中的代码，但是，这个<script>节点依然存在于 DOM 之中，可以使用<script>节点的text属性读出它的内容
+<script id="mydata" type="x-custom-data">
+  console.log('Hello World');
+</script>
+
+document.getElementById('mydata').text
+//   console.log('Hello World');
+
+script 元素加载外部脚本
+// 1
+<script src="https://www.example.com/script.js"></script>
+
+// 2
+<script charset="utf-8" src="https://www.example.com/script.js"></script>
+
+// 3 为了防止攻击者篡改外部脚本，script标签允许设置一个integrity属性，写入该外部脚本的 Hash 签名，用来验证脚本的一致性
+<script src="/assets/application.js"
+  integrity="sha256-TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs=">
+</script>
+
+
+事件属性 
+网页元素的事件属性（比如onclick和onmouseover），可以写入 JavaScript 代码。当指定事件发生时，就会调用这些代码
+<button id="myBtn" onclick="console.log(this.id)">点击</button>
+
+
+URL 协议
+URL 支持javascript:协议，即在 URL 的位置写入代码，使用这个 URL 的时候就会执行 JavaScript 代码
+<a href="javascript:console.log('Hello')">点击</a>
+
+浏览器的地址栏也可以执行javascript:协议
+javascript:console.log('Hello')
+
+// 如果 JavaScript 代码返回一个字符串，浏览器就会新建一个文档，展示这个字符串的内容，原有文档的内容都会消失
+<a href="javascript: new Date().toLocaleTimeString();">点击</a>
+
+
+浏览器加载 JavaScript 脚本，主要通过<script>元素完成。
+正常的网页加载流程:
+1.浏览器一边下载 HTML 网页，一边开始解析。也就是说，不等到下载完，就开始解析。
+2.解析过程中，浏览器发现<script>元素，就暂停解析，把网页渲染的控制权转交给 JavaScript 引擎。
+3.如果<script>元素引用了外部脚本，就下载该脚本再执行，否则就直接执行代码。
+4.JavaScript 引擎执行完毕，控制权交还渲染引擎，恢复往下解析 HTML 网页
+
+加载外部脚本时，浏览器会暂停页面渲染，等待脚本下载并执行完成后，再继续渲染。原因是 JavaScript 代码可以修改 DOM，所以必须把控制权让给它，否则会导致复杂的线程竞赛的问题
+
+为了避免这种情况，较好的做法是将<script>标签都放在页面底部
+
+
+defer 属性
+为了解决脚本文件下载阻塞网页渲染的问题，一个方法是对<script>元素加入defer属性
+<script src="a.js" defer></script>
+<script src="b.js" defer></script>
+// 只有等到 DOM 加载完成后，才会执行a.js和b.js
+
+defer属性的运行流程
+1.浏览器开始解析 HTML 网页。
+2.解析过程中，发现带有defer属性的<script>元素。
+3.浏览器继续往下解析 HTML 网页，同时并行下载<script>元素加载的外部脚本。
+4.浏览器完成解析 HTML 网页，此时再回过头执行已经下载完成的脚本
+
+对于内置而不是加载外部脚本的script标签，以及动态生成的script标签，defer属性不起作用。另外，使用defer加载的外部脚本不应该使用document.write方法
+
+
+async 属性
+解决“阻塞效应”的另一个方法是对<script>元素加入async属性
+
+<script src="a.js" async></script>
+<script src="b.js" async></script>
+// async属性的作用是，使用另一个进程下载脚本，下载时不会阻塞渲染
+
+async 属性的运行流程
+1.浏览器开始解析 HTML 网页。
+2.解析过程中，发现带有async属性的script标签。
+3.浏览器继续往下解析 HTML 网页，同时并行下载<script>标签中的外部脚本。
+4.脚本下载完成，浏览器暂停解析 HTML 网页，开始执行下载的脚本。
+5.脚本执行完毕，浏览器恢复解析 HTML 网页
+
+async属性可以保证脚本下载的同时，浏览器继续渲染，一旦采用这个属性，就无法保证脚本的执行顺序
+
+一般来说，如果脚本之间没有依赖关系，就使用async属性，如果脚本之间有依赖关系，就使用defer属性。如果同时使用async和defer属性，后者不起作用，浏览器行为由async属性决定
+
+
+脚本的动态加载
+script>元素还可以动态生成，生成后再插入页面，从而实现脚本的动态加载
+
+// 设置async属性为false 保证脚本的执行顺序
+['a.js', 'b.js'].forEach(function(src) {
+  var script = document.createElement('script');
+  script.src = src;
+  script.async = false;
+  document.head.appendChild(script);
+});
+// 代码不会阻塞页面渲染，而且可以保证b.js在a.js后面执行, 需要注意的是，在这段代码后面加载的脚本文件，会因此都等待b.js执行完成后再执行。
+
+// 为动态加载的脚本指定回调函数
+function loadScript(src, done) {
+  var js = document.createElement('script');
+  js.src = src;
+  js.onload = function() {
+    done();
+  };
+  js.onerror = function() {
+    done(new Error('Failed to load script ' + src));
+  };
+  document.head.appendChild(js);
+}
+
+
+加载使用的协议
+如果不指定协议，浏览器默认采用 HTTP 协议下载
+
+// 默认采用 HTTP 协议下载
+<script src="example.js"></script>
+
+// 采用 HTTPS 协议下载
+<script src="https://example.js"></script>
+
+// 根据页面本身的协议来决定加载协议
+<script src="//example.js"></script>
+
+
+浏览器的组成
+浏览器的核心是两部分：渲染引擎和 JavaScript 解释器（又称 JavaScript 引擎）
+
+渲染引擎的主要作用是，将网页代码渲染为用户视觉可以感知的平面文档
+
+不同的浏览器有不同的渲染引擎
+Firefox：Gecko 引擎
+Safari：WebKit 引擎
+Chrome：Blink 引擎
+IE: Trident 引擎
+Edge: EdgeHTML 引擎
+
+
+渲染引擎处理网页的四个阶段
+1.解析代码：HTML 代码解析为 DOM，CSS 代码解析为 CSSOM（CSS Object Model）。
+2.对象合成：将 DOM 和 CSSOM 合成一棵渲染树（render tree）。
+3.布局：计算出渲染树的布局（layout）。
+4.绘制：将渲染树绘制到屏幕
+
+以上四步并非严格按顺序执行
+
+
+
+JavaScript 引擎的主要作用是，读取网页中的 JavaScript 代码，对其处理后运行
+为了提高运行速度，目前的浏览器都将 JavaScript 进行一定程度的编译，生成类似字节码（bytecode）的中间代码，以提高运行速度，字节码不能直接运行，而是运行在一个虚拟机（Virtual Machine）之上，一般也把虚拟机称为 JavaScript 引擎
+
+常见的一些 JavaScript 虚拟机：
+Chakra (Microsoft Internet Explorer)
+Nitro/JavaScript Core (Safari)
+Carakan (Opera)
+SpiderMonkey (Firefox)
+V8 (Chrome, Chromium)
+
+
+```
