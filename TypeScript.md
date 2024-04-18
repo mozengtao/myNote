@@ -1224,7 +1224,24 @@ d = 2;
 
 interface 是对象的模板，可以看作是一种类型约定，使用了某个模板的对象，就拥有了指定的类型结构
 
+// 1
+interface Person {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+// 定义了一个接口Person，它指定一个对象模板，拥有三个属性firstName、lastName和age，任何实现这个接口的对象，都必须部署这三个属性，并且必须符合规定的类型
 
+实现该接口很简单，只要指定它作为对象的类型即可
+
+// 1
+const p:Person = {
+  firstName: 'John',
+  lastName: 'Smith',
+  age: 25
+};
+
+// 变量p的类型就是接口Person
 
 
 
