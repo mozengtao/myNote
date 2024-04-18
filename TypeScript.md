@@ -1243,6 +1243,356 @@ const p:Person = {
 
 // 变量p的类型就是接口Person
 
+方括号运算符可以取出 interface 某个属性的类型
+//
+interface Foo {
+  a: string;
+}
+
+type A = Foo['a']; // string
+
+
+interface 可以表示对象的各种语法，它的成员有5种形式
+对象属性
+对象的属性索引
+对象方法
+函数
+构造函数
+
+对象属性
+
+interface Point {
+  x: number;
+  y: number;
+}
+// x和y都是对象的属性，分别使用冒号指定每个属性的类型
+
+对象的属性索引
+
+interface A {
+  [prop: string]: number;
+}
+// [prop: string]就是属性的字符串索引，表示属性名只要是字符串，都符合类型要求
+
+属性索引共有string、number和symbol三种类型
+
+
+对象的方法共有三种写法
+// 写法一
+interface A {
+  f(x: boolean): string;
+}
+
+// 写法二
+interface B {
+  f: (x: boolean) => string;
+}
+
+// 写法三
+interface C {
+  f: { (x: boolean): string };
+}
+
+属性名可以采用表达式
+const f = 'f';
+
+interface A {
+  [f](x: boolean): string;
+}
+
+类型方法可以重载
+interface A {
+  f(): number;
+  f(x: boolean): boolean;
+  f(x: string, y: string): string;
+}
+
+interface 里面的函数重载，不需要给出实现，但是，由于对象内部定义方法时，无法使用函数重载的语法，所以需要额外在对象外部给出函数方法的实现
+
+// 
+interface A {
+  f(): number;
+  f(x: boolean): boolean;
+  f(x: string, y: string): string;
+}
+
+function MyFunc(): number;
+function MyFunc(x: boolean): boolean;
+function MyFunc(x: string, y: string): string;
+function MyFunc(
+  x?:boolean|string, y?:string
+):number|boolean|string {
+  if (x === undefined && y === undefined) return 1;
+  if (typeof x === 'boolean' && y === undefined) return true;
+  if (typeof x === 'string' && typeof y === 'string') return 'hello';
+  throw new Error('wrong parameters');  
+}
+
+const a:A = {
+  f: MyFunc
+}
+// 接口A的方法f()有函数重载，需要额外定义一个函数MyFunc()实现这个重载，然后部署接口A的对象a的属性f等于函数MyFunc()
+
+interface 也可以用来声明独立的函数
+//
+interface Add {
+  (x:number, y:number): number;
+}
+
+const myAdd:Add = (x,y) => x + y;
+// 接口Add声明了一个函数类型
+
+
+interface 内部可以使用new关键字，表示构造函数
+interface ErrorConstructor {
+  new (message?: string): Error;
+}
+// 接口ErrorConstructor内部有new命令，表示它是一个构造函数
+
+
+interface 可以使用extends关键字，继承其他 interface
+// 1
+interface Shape {
+  name: string;
+}
+
+interface Circle extends Shape {
+  radius: number;
+}
+//Circle继承了Shape，所以Circle其实有两个属性name和radius
+
+
+interface 允许多重继承
+// 1
+interface Style {
+  color: string;
+}
+
+interface Shape {
+  name: string;
+}
+
+interface Circle extends Style, Shape {
+  radius: number;
+}
+// Circle同时继承了Style和Shape，所以拥有三个属性color、name和radius
+
+多重接口继承，实际上相当于多个父接口的合并
+如果子接口与父接口存在同名属性，那么子接口的属性会覆盖父接口的属性
+
+
+interface 可以继承type命令定义的对象类型
+// 1
+type Country = {
+  name: string;
+  capital: string;
+}
+
+interface CountryWithPop extends Country {
+  population: number;
+}
+
+// CountryWithPop继承了type命令定义的Country对象，并且新增了一个population属性
+
+注意，如果type命令定义的类型不是对象，interface 就无法继承
+
+
+interface 还可以继承 class，即继承该类的所有成员
+// 1
+class A {
+  x:string = '';
+
+  y():boolean {
+    return true;
+  }
+}
+
+interface B extends A {
+  z: number
+}
+// B继承了A，因此B就具有属性x、y()和z
+
+实现B接口的对象就需要实现这些属性
+const b:B = {
+  x: '',
+  y: function(){ return true },
+  z: 123
+}
+
+
+多个同名接口会合并成一个接口
+// 1
+
+interface Box {
+  height: number;
+  width: number;
+}
+
+interface Box {
+  length: number;
+}
+// 两个Box接口会合并成一个接口，同时有height、width和length三个属性
+
+
+同名接口合并时，如果同名方法有不同的类型声明，那么会发生函数重载
+
+// 1
+
+interface Cloner {
+  clone(animal: Animal): Animal;
+}
+
+interface Cloner {
+  clone(animal: Sheep): Sheep;
+}
+
+interface Cloner {
+  clone(animal: Dog): Dog;
+  clone(animal: Cat): Cat;
+}
+
+// 等同于
+interface Cloner {
+  clone(animal: Dog): Dog;
+  clone(animal: Cat): Cat;
+  clone(animal: Sheep): Sheep;
+  clone(animal: Animal): Animal;
+}
+
+
+interface 与 type 的异同
+
+都能为对象类型起名
+// 1
+type Country = {
+  name: string;
+  capital: string;
+}
+
+interface Country {
+  name: string;
+  capital: string;
+}
+
+class命令也有类似作用，通过定义一个类，同时定义一个对象类型，但是，它会创造一个值，编译后依然存在
+如果只是单纯想要一个类型，应该使用type或interface
+
+interface 与 type 的区别：
+1.type能够表示非对象类型，而interface只能表示对象类型（包括数组、函数等）
+2.interface可以继承其他类型，type不支持继承
+  继承的主要作用是添加属性，type定义的对象类型如果想要添加属性，只能使用&运算符，重新定义一个类型
+3.同名interface会自动合并，同名type则会报错
+4.interface不能包含属性映射（mapping），type可以
+5.this关键字只能用于interface
+6.type 可以扩展原始数据类型，interface 不行
+7.interface无法表达某些复杂类型（比如交叉类型和联合类型），但是type可以
+
+// 1
+type Animal = {
+  name: string
+}
+
+type Bear = Animal & {
+  honey: boolean
+}
+// 类型Bear在Animal的基础上添加了一个属性honey
+
+
+interface添加属性，采用的是继承的写法
+// 1
+interface Animal {
+  name: string
+}
+
+interface Bear extends Animal {
+  honey: boolean
+}
+
+
+继承时，type 和 interface 是可以换用的。interface 可以继承 type
+// 1
+type Foo = { x: number; };
+
+interface Bar extends Foo {
+  y: number;
+}
+
+// 2
+interface Foo {
+  x: number;
+}
+
+type Bar = Foo & { y: number; };
+
+
+// 4
+interface Point {
+  x: number;
+  y: number;
+}
+
+// 正确
+type PointCopy1 = {
+  [Key in keyof Point]: Point[Key];
+};
+
+// 报错
+interface PointCopy2 {
+  [Key in keyof Point]: Point[Key];
+};
+
+// 5
+// 正确
+interface Foo {
+  add(num:number): this;
+};
+
+// 报错
+type Foo = {
+  add(num:number): this;
+};
+
+// 6
+// 正确
+type MyStr = string & {
+  type: 'new'
+};
+
+// 报错
+interface MyStr extends string {
+  type: 'new'
+}
+
+// 7
+type A = { /* ... */ };
+type B = { /* ... */ };
+
+type AorB = A | B;
+type AorBwithName = AorB & {
+  name: string
+};
+// 类型AorB是一个联合类型，AorBwithName则是为AorB添加一个属性
+
+一般情况下，interface灵活性比较高，便于扩充类型或自动合并，建议优先使用
+如果有复杂的类型运算，那么没有其他选择只能使用type
+
+
+类（class）是面向对象编程的基本构件，封装了属性和方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
