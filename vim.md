@@ -47,7 +47,7 @@
   :nmap <enter> :silent .w !awk '{print $NF}' \| xargs -i tmux neww git difftool -y {}<cr>
   （tmux环境下 Ctrl + q 可以显示pane number）
 
-  :nmap <C-x> :silent .w !xargs -0ri tmux send -t1 {}<cr>
+  :nmap <C-x> :silent .w !xargs -0ri tmux send -t1 {}<cr>   // 在vim下发送当前行内容到tmux的第一个pane并回车
   
   # enable paste mode
   :set paste
