@@ -1579,6 +1579,689 @@ type AorBwithName = AorB & {
 
 类（class）是面向对象编程的基本构件，封装了属性和方法
 
+类的属性可以在顶层声明，也可以在构造方法内部声明，对于顶层声明的属性，可以在声明时同时给出类型
+
+// 1
+class Point {
+  x:number;
+  y:number;
+}
+
+属性名前面加上 readonly 修饰符，就表示该属性是只读的。实例对象不能修改这个属性
+
+// 1
+class A {
+  readonly id = 'foo';
+}
+
+
+类的方法就是普通函数，类型声明方式与函数一致
+
+// 1
+class Point {
+  x:number;
+  y:number;
+
+  constructor(x:number, y:number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  add(point:Point) {
+    return new Point(
+      this.x + point.x,
+      this.y + point.y
+    );
+  }
+}
+// 构造方法constructor()和普通方法add()都注明了参数类型，但是省略了返回值类型，因为 TypeScript 可以自己推断出来
+
+类的方法跟普通函数一样，可以使用参数默认值，以及函数重载
+
+// 1
+class Point {
+  x: number;
+  y: number;
+
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+// 2
+class Point {
+  constructor(x:number, y:string);
+  constructor(s:string);
+  constructor(xs:number|string, y?:string) {
+    // ...
+  }
+}
+
+构造方法不能声明返回值类型，否则报错，因为它总是返回实例对象
+
+
+存取器（accessor）是特殊的类方法，包括取值器（getter）和存值器（setter）两种方法，取值器用来读取属性，存值器用来写入属性
+
+// 1
+class C {
+  _name = '';
+  get name() {
+    return this._name;
+  }
+  set name(value) {
+    this._name = value;
+  }
+}
+// get name()是取值器，其中get是关键词，name是属性名，外部读取name属性时，实例对象会自动调用这个方法
+// set name()是存值器，其中set是关键词，name是属性名。外部写入name属性时，实例对象会自动调用这个方法
+
+TypeScript 对存取器有以下规则
+1.如果某个属性只有get方法，没有set方法，那么该属性自动成为只读属性
+2.set方法的参数类型，必须兼容get方法的返回值类(TypeScript 5.1 版做出了改变，现在两者可以不兼容)
+3.get方法与set方法的可访问性必须一致，要么都为公开方法，要么都为私有方法
+
+类允许定义属性索引
+// 1
+class MyClass {
+  [s:string]: boolean |
+    ((s:string) => boolean);
+
+  get(s:string) {
+    return this[s] as boolean;
+  }
+}
+// [s:string]表示所有属性名类型为字符串的属性，它们的属性值要么是布尔值，要么是返回布尔值的函数
+
+
+类的 interface 接口
+
+interface 接口或 type 别名，可以用对象的形式，为 class 指定一组检查条件，类使用 implements 关键字，表示当前类满足这些外部类型条件的限制
+
+// 1
+interface Country {
+  name:string;
+  capital:string;
+}
+// 或者
+type Country = {
+  name:string;
+  capital:string;
+}
+
+class MyCountry implements Country {
+  name = '';
+  capital = '';
+}
+
+// interface或type都可以定义一个对象类型。类MyCountry使用implements关键字，表示该类的实例对象满足这个外部类型
+
+
+implements关键字后面，不仅可以是接口，也可以是另一个类。这时，后面的类将被当作接口
+// 1
+class Car {
+  id:number = 1;
+  move():void {};
+}
+
+class MyCar implements Car {
+  id = 2; // 不可省略
+  move():void {};   // 不可省略
+}
+
+// implements后面是类Car，这时 TypeScript 就把Car视为一个接口，要求MyCar实现Car里面的每一个属性和方法，否则就会报错
+
+interface 描述的是类的对外接口，也就是实例的公开属性和公开方法，不能定义私有的属性和方法
+
+
+类可以实现多个接口（其实是接受多重限制），每个接口之间使用逗号分隔
+// 1
+class Car implements MotorVehicle, Flyable, Swimmable {
+  // ...
+}
+
+同时实现多个接口并不是一个好的写法，容易使得代码难以管理，可以使用两种方法替代
+1.类的继承
+2.接口的继承
+
+// 1
+class Car implements MotorVehicle {
+}
+
+class SecretCar extends Car implements Flyable, Swimmable {
+}
+// Car类实现了MotorVehicle，而SecretCar类继承了Car类，然后再实现Flyable和Swimmable两个接口，相当于SecretCar类同时实现了三个接口
+
+// 2
+interface MotorVehicle {
+  // ...
+}
+interface Flyable {
+  // ...
+}
+interface Swimmable {
+  // ...
+}
+
+interface SuperCar extends MotoVehicle,Flyable, Swimmable {
+  // ...
+}
+
+class SecretCar implements SuperCar {
+  // ...
+}
+// 类SecretCar通过SuperCar接口，就间接实现了多个接口
+
+
+TypeScript 不允许两个同名的类，但是如果一个类和一个接口同名，那么接口会被合并进类
+// 1
+class A {
+  x:number = 1;
+}
+
+interface A {
+  y:number;
+}
+
+let a = new A();
+a.y = 10;
+
+a.x // 1
+a.y // 10
+
+
+TypeScript 的类本身就是一种类型，但是它代表该类的实例类型，而不是 class 的自身类型
+
+对于引用实例对象的变量来说，既可以声明类型为 Class，也可以声明类型为 Interface，因为两者都代表实例对象的类型
+// 1
+interface MotorVehicle {
+}
+
+class Car implements MotorVehicle {
+}
+
+// 写法一
+const c1:Car = new Car();
+// 写法二
+const c2:MotorVehicle = new Car();
+// 变量的类型可以写成类Car，也可以写成接口MotorVehicle。它们的区别是，如果类Car有接口MotoVehicle没有的属性和方法，那么只有变量c1可以调用这些属性和方法
+
+
+类名作为类型使用，实际上代表一个对象，因此可以把类看作为对象类型起名，TypeScript 有三种方法可以为对象类型起名：type、interface 和 class
+
+
+要获得一个类的自身类型，一个简便的方法就是使用 typeof 运算符
+
+// 1
+function createPoint(
+  PointClass:typeof Point,
+  x:number,
+  y:number
+):Point {
+  return new PointClass(x, y);
+}
+// createPoint()的第一个参数PointClass是Point类自身，要声明这个参数的类型，简便的方法就是使用typeof Point
+
+JavaScript 语言中，类只是构造函数的一种语法糖，本质上是构造函数的另一种写法。所以，类的自身类型可以写成构造函数的形式
+// 1
+function createPoint(
+  PointClass: new (x:number, y:number) => Point,
+  x: number,
+  y: number
+):Point {
+  return new PointClass(x, y);
+}
+
+构造函数也可以写成对象形式
+// 1
+function createPoint(
+  PointClass: {
+    new (x:number, y:number): Point
+  },
+  x: number,
+  y: number
+):Point {
+  return new PointClass(x, y);
+}
+
+可以把构造函数提取出来，单独定义一个接口（interface），这样可以大大提高代码的通用性
+// 1
+interface PointConstructor {
+  new(x:number, y:number):Point;
+}
+
+function createPoint(
+  PointClass: PointConstructor,
+  x: number,
+  y: number
+):Point {
+  return new PointClass(x, y);
+}
+
+类的自身类型就是一个构造函数，可以单独定义一个接口来表示
+
+
+Class 也遵循“结构类型原则”。一个对象只要满足 Class 的实例结构，就跟该 Class 属于同一个类型
+
+只要 A 类具有 B 类的结构，哪怕还有额外的属性和方法，TypeScript 也认为 A 兼容 B 的类型
+不仅是类，如果某个对象跟某个 class 的实例结构相同，TypeScript 也认为两者的类型相同
+
+// 1
+class Person {
+  name: string;
+}
+
+const obj = { name: 'John' };
+const p:Person = obj; // 正确
+
+由于这种情况，运算符instanceof不适用于判断某个对象是否跟某个 class 属于同一类型
+obj instanceof Person // false
+
+
+确定两个类的兼容关系时，只检查实例成员，不考虑静态成员和构造方法
+// 1
+class Point {
+  x: number;
+  y: number;
+  static t: number;
+  constructor(x:number) {}
+}
+
+class Position {
+  x: number;
+  y: number;
+  z: number;
+  constructor(x:string) {}
+}
+
+const point:Point = new Position('');
+
+
+如果类中存在私有成员（private）或保护成员（protected），那么确定兼容关系时，TypeScript 要求私有成员和保护成员来自同一个类，这意味着两个类需要存在继承关系
+// 1
+// 情况一
+class A {
+  private name = 'a';
+}
+
+class B extends A {
+}
+
+const a:A = new B();
+
+// 情况二
+class A {
+  protected name = 'a';
+}
+
+class B extends A {
+  protected name = 'b';
+}
+
+const a:A = new B();
+
+
+类的继承
+类（这里又称“子类”）可以使用 extends 关键字继承另一个类（这里又称“基类”）的所有属性和方法
+
+子类可以覆盖基类的同名方法，但是，子类的同名方法不能与基类的类型定义相冲突
+
+// 1
+class A {
+  greet() {
+    console.log('Hello, world!');
+  }
+}
+
+class B extends A {
+  greet(name?: string) {
+    if (name === undefined) {
+      super.greet();                // 使用super关键字指代基类是常见做法
+    } else {
+      console.log(`Hello, ${name}`);
+    }
+  }
+}
+
+如果基类包括保护成员（protected修饰符），子类可以将该成员的可访问性设置为公开（public修饰符），也可以保持保护成员不变，但是不能改用私有成员（private修饰符）
+// 1
+class A {
+  protected x: string = '';
+  protected y: string = '';
+  protected z: string = '';
+}
+
+class B extends A {
+  // 正确
+  public x:string = '';
+
+  // 正确
+  protected y:string = '';
+
+  // 报错
+  private z: string = '';
+}
+
+extends关键字后面不一定是类名，可以是一个表达式，只要它的类型是构造函数
+// 1
+// 例一
+class MyArray extends Array<number> {}
+
+// 例二
+class MyError extends Error {}
+
+// 例三
+class A {
+  greeting() {
+    return 'Hello from A';
+  }
+}
+class B {
+  greeting() {
+    return 'Hello from B';
+  }
+}
+
+interface Greeter {
+  greeting(): string;
+}
+
+interface GreeterConstructor {
+  new (): Greeter;
+}
+
+function getGreeterBase():GreeterConstructor {
+  return Math.random() >= 0.5 ? A : B;
+}
+
+class Test extends getGreeterBase() {
+  sayHello() {
+    console.log(this.greeting());
+  }
+}
+
+
+类的内部成员的外部可访问性，由三个可访问性修饰符（access modifiers）控制：public、private和protected
+public修饰符表示这是公开成员，外部可以自由访问
+private修饰符表示私有成员，只能用在当前类的内部，类的实例和子类都不能使用该成员
+protected修饰符表示该成员是保护成员，只能在类的内部使用该成员，实例无法使用该成员，但是子类内部可以使用
+
+// 1
+class Greeter {
+  public greet() {
+    console.log("hi!");
+  }
+}
+
+const g = new Greeter();
+g.greet();
+
+// 2
+class A {
+  private x:number = 0;
+}
+
+const a = new A();
+a.x // 报错
+
+class B extends A {
+  showX() {
+    console.log(this.x); // 报错
+  }
+}
+
+// 3
+class A {
+  protected x = 1;
+}
+
+class B extends A {
+  getX() {
+    return this.x;
+  }
+}
+
+const a = new A();
+const b = new B();
+
+a.x // 报错
+b.getX() // 1
+
+
+实例属性的简写形式
+
+class Point {
+  x:number;
+  y:number;
+
+  constructor(x:number, y:number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+简写为
+
+class Point {
+  constructor(
+    public x:number,
+    public y:number
+  ) {}
+}
+
+const p = new Point(10, 10);
+p.x // 10
+p.y // 10
+
+// 构造方法的参数x前面有public修饰符， TypeScript 就会自动声明一个公开属性x，同时还会设置x的值为构造方法的参数值
+
+
+// 2
+class A {
+  constructor(
+    public a: number,
+    protected b: number,
+    private c: number,
+    readonly d: number
+  ) {}
+}
+
+// 编译结果
+class A {
+    a;
+    b;
+    c;
+    d;
+    constructor(a, b, c, d) {
+      this.a = a;
+      this.b = b;
+      this.c = c;
+      this.d = d;
+    }
+}
+
+// 3
+class A {
+  constructor(
+    public readonly x:number,
+    protected readonly y:number,
+    private readonly z:number
+  ) {}
+}
+
+
+类的内部可以使用static关键字，定义静态成员，静态成员是只能通过类本身使用的成员，不能通过实例对象使用
+
+static关键字前面可以使用 public、private、protected 修饰符
+
+静态私有属性也可以用 ES6 语法的#前缀表示
+
+class MyClass {
+  private static x = 0;
+}
+等价于
+class MyClass {
+  static #x = 0;            //  ES6 语法的#前缀
+}
+
+public和protected的静态成员可以被继承
+// 1
+class A {
+  public static x = 1;
+  protected static y = 1;
+}
+
+class B extends A {
+  static getY() {
+    return B.y;
+  }
+}
+
+B.x // 1
+B.getY() // 1
+
+
+类也可以写成泛型，使用类型参数
+
+// 1
+class Box<Type> {
+  contents: Type;
+
+  constructor(value:Type) {
+    this.contents = value;
+  }
+}
+
+const b:Box<string> = new Box('hello!');
+
+静态成员不能使用泛型的类型参数
+
+
+TypeScript 允许在类的定义前面，加上关键字abstract，表示该类不能被实例化，只能当作其他类的模板。这种类就叫做“抽象类”（abstract class）
+
+抽象类的子类也可以是抽象类，也就是说，抽象类可以继承其他抽象类
+
+抽象类的内部可以有已经实现好的属性和方法，也可以有还未实现的属性和方法
+
+抽象类的作用是，确保各种相关的子类都拥有跟基类相同的接口，可以看作是模板。其中的抽象成员都是必须由子类实现的成员，非抽象成员则表示基类已经实现的、由所有子类共享的成员
+
+// 1
+abstract class A {
+  id = 1;
+}
+
+class B extends A {
+  amount = 100;
+}
+
+const b = new B();
+
+b.id // 1
+b.amount // 100
+
+
+
+类的方法经常用到this关键字，它表示该方法当前所在的对象
+
+// 1
+class A {
+  name = 'A';
+
+  getName() {
+    return this.name;
+  }
+}
+
+const a = new A();
+a.getName() // 'A'
+
+const b = {
+  name: 'b',
+  getName: a.getName
+};
+b.getName() // 'b'
+
+// 如果getName()在变量a上运行，this指向a；如果在b上运行，this指向b
+
+
+有些场合需要给出this类型，但是 JavaScript 函数通常不带有this参数，这时 TypeScript 允许函数增加一个名为this的参数，放在参数列表的第一位，用来描述函数内部的this关键字的类型
+
+this参数的类型可以声明为各种对象
+
+// 1
+function foo(
+  this: { name: string }
+) {
+  this.name = 'Jack';
+  this.name = 0; // 报错
+}
+
+foo.call({ name: 123 }); // 报错
+
+
+在类的内部，this本身也可以当作类型使用，表示当前类的实例对象
+// 1
+class Box {
+  contents:string = '';
+
+  set(value:string):this {
+    this.contents = value;
+    return this;
+  }
+}
+
+this类型不允许应用于静态成员
+
+有些方法返回一个布尔值，表示当前的this是否属于某种类型。这时，这些方法的返回值类型可以写成this is Type的形式，其中用到了is运算符
+// 1
+class FileSystemObject {
+  isFile(): this is FileRep {
+    return this instanceof FileRep;
+  }
+
+  isDirectory(): this is Directory {
+    return this instanceof Directory;
+  }
+
+  // ...
+}
+// 两个方法的返回值类型都是布尔值，写成this is Type的形式，可以精确表示返回值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
