@@ -131,3 +131,5 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - ellipsis	/ ɪˈlɪpsɪs /   省略；省略号
 - dissolve / dɪˈzɑːlv /    解散，解除；消失；（以化学手段）除去，分散；（使）溶解
 - boilerplate  / ˈbɔɪlərpleɪt /		样板文件；引用
+- joystick	  / ˈdʒɔɪstɪk /		 控制杆，操纵杆
+

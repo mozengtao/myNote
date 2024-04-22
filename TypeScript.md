@@ -5,8 +5,8 @@
 - [**The TypeScript Handbook**](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [Playground](https://www.typescriptlang.org/)
 - [Learn X in Y minutes](https://learnxinyminutes.com/docs/typescript/)
-- []()
-- []()
+- [A guide to async/await in TypeScript](https://blog.logrocket.com/async-await-typescript/)
+- [Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)
 - []()
 - []()
 

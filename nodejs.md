@@ -1,0 +1,4 @@
+- [nodejs modules](https://nodejs.org/docs/latest/api/)
+- [Node.js v20.12.0 文档](https://nodejs.cn/api/)
+- [nodejs playground](https://stackblitz.com/edit/node-rski7n?file=index.js)
+- [七天学会NodeJS](https://nqdeng.github.io/7-days-nodejs/)

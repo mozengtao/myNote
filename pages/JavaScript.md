@@ -1,3 +1,4 @@
+- [JavaScript教程](https://www.liaoxuefeng.com/wiki/1022910821149312)
 - [JavaScript 教程](https://wangdoc.com/javascript/)
 ```js
 JavaScript 是一种轻量级的脚本语言，它不具备开发操作系统的能力，而是只用来编写控制其他大型应用程序（比如浏览器）的“脚本”

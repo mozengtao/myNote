@@ -1,5 +1,6 @@
 - winget
 	- windows下的命令行安装应用程序工具
+- [Shell Commands for Windows 10: Navigating Common Folders in Windows](https://www.mirazon.com/shell-commands-for-windows-10-navigating-common-folders-in-windows/)
 - 添加开机自启动应用
 	```
 	1.Win + R: shell:startup
