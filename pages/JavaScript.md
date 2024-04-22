@@ -1,3 +1,8 @@
+- []()
+- []()
+- []()
+- [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+- [JavaScript Functions Tutorial](https://www.freecodecamp.org/news/javascript-function-iife-parameters-code-blocks-explained/)
 - [JavaScript教程](https://www.liaoxuefeng.com/wiki/1022910821149312)
 - [JavaScript 教程](https://wangdoc.com/javascript/)
 ```js

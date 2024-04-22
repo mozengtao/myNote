@@ -1,3 +1,5 @@
+- [Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)
+
 - [TypeScript 入门教程](https://ts.xcatliu.com/)
 - [TypeScript 使用指南手册](http://www.patrickzhong.com/TypeScript/PREFACE.html)
 - [TypeScript 教程](https://wangdoc.com/typescript/)
@@ -5,9 +7,9 @@
 - [**The TypeScript Handbook**](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [Playground](https://www.typescriptlang.org/)
 - [Learn X in Y minutes](https://learnxinyminutes.com/docs/typescript/)
+- [How Promises Work in JavaScript](https://www.freecodecamp.org/news/guide-to-javascript-promises/)
 - [A guide to async/await in TypeScript](https://blog.logrocket.com/async-await-typescript/)
 - [Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)
-- []()
 - []()
 
 
