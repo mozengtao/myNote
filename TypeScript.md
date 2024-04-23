@@ -2291,3 +2291,58 @@ class FileSystemObject {
 
 
 ```
+
+- Example 1
+```js
+// 模拟Makefile
+
+type MakeRule = {
+  target: string,
+  prerequisites: Array<string>,
+  commands: Array<string>,
+};
+
+type Makefile = {
+  rules: Array<MakeRule>,
+};
+
+let makefile_run = (self: Makefile) => {
+  if(self.rules.length === 0) {
+    throw new Error(`no rule was found in the makefile`);
+  }
+  let first_rule = self.rules[0];
+  eval_rule(first_rule, self.rules);
+};
+
+let eval_rule = (current_rule: MakeRule, rules: Array<MakeRule>) => {
+  for (let p of current_rule.prerequisites) {
+    let next_rule = rules.find(({target}) => target === p);
+    if(next_rule === undefined)
+      continue;
+    eval_rule(next_rule, rules);
+  }
+  console.log(`running commnand "${current_rule.commands.join(" ")}"`);
+};
+
+let sample_makefile: Makefile = {
+  rules: [
+    {
+      target: "target1",
+      prerequisites: ["target2"],
+      commands: ["command 1"]
+    },
+    {
+      target: "target2",
+      prerequisites: ["target3"],
+      commands: ["command 2"]
+    },
+    {
+      target: "target3",
+      prerequisites: ["prerequisite 4"],
+      commands: ["command 3"]
+    },
+  ]
+};
+
+makefile_run(sample_makefile);
+```
