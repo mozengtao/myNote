@@ -879,7 +879,7 @@ pc2 '1+2*3'
 - Tips
   collapsed:: true
 	- if条件判断
-		- ```bash
+		```bash
 		  [ is POSIX
 		  [[ is a Bash extension inspired from Korn shell
 		  
@@ -895,12 +895,12 @@ pc2 '1+2*3'
 		  
 		  如果使用[]进行条件判断，必须把变量用双引号引用起来，即 if [[ "$var" != "xxx" ]]，否则如果$var
 		  为null的话，判断条件变为 [ != "xxx" ]，此时会有"[: !=: unary operator expected"的语法错误
-		  ```
+		```
 	- 使用type命令查看bash函数，别名等定义
-	  collapsed:: true
-		- > type [-aftpP] name [name ...]
+		```bash
+		type [-aftpP] name [name ...]
 		  With no options, indicate how each name would be interpreted if used as a command name.  If the -t option is used, type prints a string which is  one  of  alias,  keyword,  function, builtin, or file if name is an alias, shell reserved word, function, builtin, or disk file, respectively.
-		- ```bash
+		  
 		  假设~/.bashrc里有如下函数定义
 		  function foo()
 		  {
@@ -916,7 +916,7 @@ pc2 '1+2*3'
 		  }
 		  morrism@localhost /tmp/x $ type -t foo
 		  function
-		  ```
+		```
 	- bash函数返回值
 		- > `echo` generates *output*. A command substitution like`$(...)` captures that output, but if you run a command without it, that output will go to the terminal.
 		  `return` sets *exit status*. This is what's used to determine which branch is taken when running `if your_function; then ...`, or to populate `$?`.
@@ -924,6 +924,7 @@ pc2 '1+2*3'
 		- `return` 用来设置退出状态，它用来决定当运行`if your_function; then ...`条件判断时执行哪一个分支，或者用来设置`$?`
 		- `$?`的取值范围为`0 ~ 255`，如果return的取值大于255，则会转换为`uint8`类型进行函数退出状态的设置
 - 参考文档
+	- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)
 	- [How to Declare and Access Associative Array in Bash](https://phoenixnap.com/kb/bash-associative-array)
 	- [Bash Scripting – Associative Array Explained With Examples](https://ostechnix.com/bash-associative-array/)
 	- [Take control of your data with associative arrays in Bash](https://opensource.com/article/20/6/associative-arrays-bash)
@@ -935,13 +936,13 @@ pc2 '1+2*3'
 	- [Parsing bash script options with getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/)
 	- [Parse Command Line Arguments in Bash](https://www.baeldung.com/linux/bash-parse-command-line-arguments)
 	- [Double Quotes](https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html)
-		- #+BEGIN_QUOTE
-		  Enclosing characters in double quotes (‘"’) **preserves the literal value** of all characters within the quotes, **with the exception** of ‘$’, ‘`’, ‘\’, and, when history expansion is enabled, ‘!’. 
-		  #+END_QUOTE
+		```bash
+		  Enclosing characters in double quotes " preserves the literal value of all characters within the quotes, with the exception of $, `, \, and, when history expansion is enabled, !. 
+		```
 	- [Single Quotes](https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html)
-	- #+BEGIN_QUOTE
-	  Enclosing characters in single quotes (‘'’) **preserves the literal value of each character** within the quotes.
-	  #+END_QUOTE
+		```bash
+	 	 Enclosing characters in single quotes ' preserves the literal value of each character within the quotes.
+	  	```
 	- [bash(1)](https://manpages.org/bash)
 		- BASHPID
 	- [前后台进程、孤儿进程和 daemon 类进程的父子关系](https://www.cnblogs.com/f-ck-need-u/p/17718649.html)
@@ -965,7 +966,6 @@ pc2 '1+2*3'
 - [Shell 编程范例](https://www.cntofu.com/book/44/index.html)
 - [man sh](https://linux.die.net/man/1/sh)
 - [编写健壮的 Shell 脚本](https://morven.life/posts/how-to-write-robust-shell-script/)
-- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)
 - [ANSI Escape Sequences  颜色输出](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)
 - [Everything you never wanted to know about ANSI escape codes](https://notes.burke.libbey.me/ansi-escape-codes/)
 - [ANSI escape code generator](https://ansi.gabebanks.net/)

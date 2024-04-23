@@ -121,10 +121,11 @@ sudo chmod 600 ~/.ssh/id_example
   ```
 - 服务器端配置
 	- `/etc/ssh/sshd_config`
+	- [sshd_config manual](https://www.man7.org/linux/man-pages/man5/sshd_config.5.html)
 	- 常用配置
 		- `Port`
 			- > **Port** Specifies the port number that **[sshd](https://linux.die.net/man/8/sshd)**(8) listens on. The default is 22. Multiple options of this type are permitted. See also **ListenAddress**.
-		- ForceCommand
+		- **ForceCommand**
 			- > Forces the execution of the command specified by **ForceCommand**, ignoring any command supplied by the client and *~/.ssh/rc* if present. The command is invoked by using the user's login shell with the -c option. This applies to shell, command, or subsystem execution. It is most useful inside a **Match** block. The command originally supplied by the client is available in the SSH_ORIGINAL_COMMAND environment variable. Specifying a command of ''internal-sftp'' will force the use of an in-process sftp server that requires no support files when used with **ChrootDirectory**.
 		- Match
 			- > Introduces a conditional block. If all of the criteria on the **Match** line are satisfied, the keywords on the following lines override those set in the global section of the config file, until either another **Match** line or the end of the file.
