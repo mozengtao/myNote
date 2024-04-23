@@ -1,5 +1,8 @@
 - [Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)
 
+- [Typescript Practices](https://omakoleg.github.io/typescript-practices/)
+- [typescript-eslint Rules](https://typescript-eslint.io/rules/)
+
 - [TypeScript 入门教程](https://ts.xcatliu.com/)
 - [TypeScript 使用指南手册](http://www.patrickzhong.com/TypeScript/PREFACE.html)
 - [TypeScript 教程](https://wangdoc.com/typescript/)
@@ -10,7 +13,8 @@
 - [How Promises Work in JavaScript](https://www.freecodecamp.org/news/guide-to-javascript-promises/)
 - [A guide to async/await in TypeScript](https://blog.logrocket.com/async-await-typescript/)
 - [Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)
-- []()
+- [async/await support in ES6 targets](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html)
+- [Mastering Async Programming in TypeScript: Promises, Async/Await, and Callbacks](https://dev.to/cliff123tech/mastering-async-programming-in-typescript-promises-asyncawait-and-callbacks-148b)
 
 
 ```ts
