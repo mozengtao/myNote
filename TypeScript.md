@@ -1,3 +1,5 @@
+- [**Web technology for developers**](https://developer.mozilla.org/en-US/docs/Web)
+
 - [Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)
 
 - [Typescript Practices](https://omakoleg.github.io/typescript-practices/)

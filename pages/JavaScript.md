@@ -6,6 +6,124 @@
 - [JavaScript Functions Tutorial](https://www.freecodecamp.org/news/javascript-function-iife-parameters-code-blocks-explained/)
 - [JavaScript教程](https://www.liaoxuefeng.com/wiki/1022910821149312)
 - [JavaScript 教程](https://wangdoc.com/javascript/)
+
+```js
+A JavaScript function is an executable piece of code developers use to bundle a block of zero or more statements.
+The instructions in a function's body can be a variable declaration, return call, console.log() invocation, function definition, or any other JavaScript statements.
+
+function nameOfFunction(parameter1, parameter2, ..., parameterX) {
+  // function's body
+}
+
+// Define a function with two parameters:
+function myName(firstName, lastName) {
+  console.log(`My full name is ${firstName} ${lastName}.`);
+}
+
+// Define a function with a default parameter
+function myName(firstName, lastName = "Sofela") {
+  console.log(`My full name is ${firstName} ${lastName}.`);
+}
+
+// A block is a pair of braces {...} used to group multiple statements together
+function getTime() {
+  const hourNow = new Date().getHours();
+  const minutesNow = new Date().getMinutes();
+  console.log(`The time is ${hourNow}:${minutesNow}.`);
+}
+
+// A function body is where you place a sequence of statements you want to execute
+const bestColors = ["Coral", "Blue", "DeepPink"];
+
+function updateMyBestColors(previousColors, newColor) {
+   const mybestColors = [...previousColors, newColor];
+   return mybestColors;
+}
+
+updateMyBestColors(bestColors, "GreenYellow");
+
+
+Four types of JavaScript functions:
+1.Function declaration
+2.Function expression
+3.Arrow function expression
+4.Immediately invoking function expression
+
+//1 A function declaration is a function created without assigning it to a variable
+function addNumbers() {
+  return 100 + 20;
+}
+
+//2 A function expression is a function you create and assign to a variable.
+const myFuncExpr = function addNumbers() {
+  return 100 + 20;
+};
+
+// anonymous function expression can also be used
+const myFuncExpr = function() {
+  return 100 + 20;
+};
+
+// 3 An arrow function expression is a shorthand way to write a function expression
+// You have to omit the function keyword and function name while writing an arrow function expression. Otherwise, JavaScript will throw a SyntaxError.
+// 3.1
+const myFuncExpr = () => {
+  return 100 + 20;
+};
+
+Important stuff to know about the JavaScript arrow function expression:
+1.The parameters' parentheses are optional
+2.The curly brackets and return keyword are optional
+3.Use parentheses to wrap any implicit object return
+
+// 1 arrow function contains only a single parameter. In such a case, its parentheses can be omitted
+const myFuncExpr = a => {
+  return a + 20;
+};
+
+// 2 arrow function contains only a single statement. In that case, you can omit its curly brackets and the return keyword
+const myFuncExpr = (x, y) => x + y;
+
+// 3 Suppose you wish to return an object implicitly. In such a case, wrap the object in a grouping operator (...)
+const myFuncExpr = () => ({
+  carColor: "White",
+  shoeColor: "Yellow",
+});
+
+// you can use the grouping operator to return any single value
+const myFuncExpr = x => (x + 56);
+
+// 4 An immediately invoked function expression (IIFE) is a function expression that invokes itself automatically.
+// We sometimes call an IIFE a "Self-Invoking Function Expression" or "Self-Executing Anonymous Function Expression."
+(function() {
+  /* ... */
+})();
+
+An IIFE is composed of three main components:
+1.A grouping operator: The first pair of parentheses ()
+2.A function: Enclosed within the grouping operator
+3.An invocator: The last pair of parentheses ()
+
+// define a named IIFE
+// The snippet enclosed the addNumbers function in parentheses to make the computer evaluate its data type before invoking it immediately after the evaluation
+(function addNumbers() {
+  console.log(100 + 20);
+})();
+
+// define an anonymous IIFE
+(function() {
+  console.log(100 + 20);
+})();
+
+// define an arrow function IIFE
+(() => console.log(100 + 20))();
+
+// define an async IIFE
+(async () => console.log(await 100 + 20))();
+
+```
+
+
 ```js
 JavaScript 是一种轻量级的脚本语言，它不具备开发操作系统的能力，而是只用来编写控制其他大型应用程序（比如浏览器）的“脚本”
 JavaScript 也是一种嵌入式（embedded）语言，它本身提供的核心语法不算很多，JavaScript 本身不提供任何与 I/O（输入/输出）相关的 API，都要靠宿主环境（host）提供，所以 JavaScript 只合适嵌入更大型的应用程序环境，去调用宿主环境提供的底层 API
