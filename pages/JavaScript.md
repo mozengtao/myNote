@@ -1,3 +1,4 @@
+- [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
 - [The JavaScript language](https://javascript.info/js)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)

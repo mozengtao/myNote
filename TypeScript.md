@@ -1,3 +1,5 @@
+- [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)
+- [Web 开发技术](https://developer.mozilla.org/zh-CN/docs/Web)
 - [**Web technology for developers**](https://developer.mozilla.org/en-US/docs/Web)
 
 - [Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)
