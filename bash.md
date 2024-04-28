@@ -1,4 +1,22 @@
 bash脚本中调用python返回的结果
+
+options
+```bash
+-c string If  the -c option is present, then commands are read from string.  If there are arguments after
+          the string, they are assigned to the positional parameters, starting with $0.
+
+#1 bash xxx
+读取 xxx 文件的内容，并将 xxx 的内容作为 bash 脚本命令执行
+
+# bash -c xxx
+将 xxx 字符串作为 bash 命令进行执行，等价于 start a bash session and execute xxx command，如果后面跟位置参数则位置参数作为 xxx 的参数
+bash -c 'echo "$0" "$1"' foo bar	# foo bar
+bash -c 'echo "$@"' bash foo bar	# foo bar
+
+
+-l        Make bash act as if it had been invoked as a login shell (see INVOCATION below).
+```
+
 ```bash
 # 常用快捷键
 CTRL+A              # 移动到行首，同 <Home>
