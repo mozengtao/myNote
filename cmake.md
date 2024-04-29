@@ -94,3 +94,5 @@
 	Never do an “in-source” build - that is, run cmake . from the source directory. It will pollute your source directory with build outputs, CMake configuration files, and will disable out-of-source builds. 
 	```
 	- [CMake 是怎么工作的？](https://www.tisonkun.org/2022/04/15/how-cmake-works/)
+	- `add_library OBJECT`
+		[对象文件的使用方法](https://wangshuyi.cn/2024/03/30/%E5%AF%B9%E8%B1%A1%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/)
