@@ -1,3 +1,84 @@
+- [Extending GDB using Python](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html)
+- [GDB 自动化操作的技术](https://segmentfault.com/a/1190000005367875)
+	- [用 Python 拓展 GDB 1](https://segmentfault.com/a/1190000005718889)
+	- [用 Python 拓展 GDB 2](https://segmentfault.com/a/1190000005732816)
+	- [用 Python 拓展 GDB 3](https://segmentfault.com/a/1190000005750456)
+	- [用 Python 拓展 GDB 4](https://segmentfault.com/a/1190000005772472)
+
+- 用 python 拓展 GDB
+```python
+# 启用 python 扩展
+(gdb) python import gdb
+(gdb)
+
+# example.py
+import gdb
+
+# Define a new GDB command
+class ExampleCommand(gdb.Command):
+    def __init__(self):
+        super(ExampleCommand, self).__init__("example-command", gdb.COMMAND_USER)
+
+    def invoke(self, args, from_tty):
+        print("Example command executed with arguments:", args)
+
+# Add the new command to GDB
+ExampleCommand()
+
+# Execute some custom action before program runs
+def my_init():
+    print("Debugger initialized")
+
+gdb.events.new_objfile.connect(my_init)
+
+# Execute some custom action when program execution stops
+def my_exit(event):
+    print("Debugger exiting")
+
+gdb.events.exited.connect(my_exit)
+
+# 加载 python 脚本 example.py
+(gdb) source example.py
+(gdb)
+
+# 执行 debug 命令
+(gdb) example-command hello
+Example command executed with arguments: hello
+```
+
+- gdb函数
+```gdb
+1.使用关键字 define xxx 定义名称为 xxx 的函数
+2.在函数的 body 里定义 xxx 执行的 gdb 命令
+3.函数的第 1 个参数为 arg0，第 2 个参数为 arg1, ...
+4.关键字 end 用来结束函数定义
+
+# 1
+define adder
+	print $arg0 + $arg1 + $arg2
+end
+
+adder 1 2 3
+
+# 2
+define adder
+	set $i = 0
+	set $sum = 0
+
+	while $i < $argc
+		eval "set $sum = $sum + $arg%d", $i
+		set $i = $i + 1
+	end
+
+	print $sum
+end
+
+使用 set $var = xxx 定义变量，变量的类型不受约束，可以是调试代码中的结构体等复杂数据类型
+对于自增操作，只能使用 $var = $var + 1
+eval template, expression 先对 template 做格式化处理，之后调用 eval 进行执行
+
+```
+
 - 本地使用交叉编译的gdb
 	- ```bash
 	  /opt/fsl/3.1/sysroots/x86_64-fslsdk-linux/usr/bin/powerpc-fsl-linux/powerpc-fsl-linux-gdb 
