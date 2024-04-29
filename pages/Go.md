@@ -1,6 +1,13 @@
 
 - [**Playground**](https://goplay.tools/)
 
+- [深入Go语言之旅](https://go.cyub.vip/)
+- [**Go 语言设计与实现**](https://draveness.me/golang/)
+
+- [Go 程序员宝典](https://shgopher.github.io/GOFamily/)
+
+- [Golang Internals, Part 1](https://www.altoros.com/blog/golang-internals-part-1-main-concepts-and-project-structure/)
+
 - [How to Write Go Code](https://go.dev/doc/code)
 - [**Go 学习路线**](https://github.com/rosedblabs/go-learning)
   - [7天用Go从零实现Web框架Gee教程](https://geektutu.com/post/gee.html)
@@ -88,7 +95,6 @@
 - [Go 语言进阶之旅](https://golang1.eddycjy.com/)
 - [Golang 进阶](https://github.com/weirubo/intermediate_go?tab=readme-ov-file)
 - [**Go语言高级编程**](https://chai2010.cn/advanced-go-programming-book/index.html)
-- [**Go 语言设计与实现**](https://draveness.me/golang/)
 - [GOBook](https://github.com/hapi666/GOBook)
 - [Mastering regular expressions in Go](https://www.honeybadger.io/blog/a-definitive-guide-to-regular-expressions-in-go/)
 - [The complete guide to dates and times in Go](https://www.honeybadger.io/blog/complete-guide-to-dates-and-times-in-go/)
