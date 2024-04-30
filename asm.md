@@ -1,6 +1,10 @@
 
 - [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
 
+- [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
+- [Linux System Call Table](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
+- [LINUX SYSTEM CALL TABLE FOR X86 64](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
+
 - [https://www.cs.virginia.edu/~evans/cs216/guides/x86.html](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
 - [NASM - The Netwide Assembler](https://www.nasm.us/doc/nasmdoc0.html)
 - [x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
