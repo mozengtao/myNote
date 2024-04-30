@@ -1,3 +1,14 @@
+
+- [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
+
+- [https://www.cs.virginia.edu/~evans/cs216/guides/x86.html](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
+- [NASM - The Netwide Assembler](https://www.nasm.us/doc/nasmdoc0.html)
+- [x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
+- [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
+- [Linux Assembly Tutorial](https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html)
+- [Assembly (NASM)](https://7h3w4lk3r.gitbook.io/the-hive/programming/assembly)
+- [Assembly Programming Tutorial](https://www.tutorialspoint.com/assembly_programming/index.htm)
+
 - nasm
 	- NASM是一个针对intel x86处理器架构的汇编器
 	  title:: asm
