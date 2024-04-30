@@ -46,6 +46,7 @@ gdb.events.exited.connect(my_exit)
 Example command executed with arguments: hello
 ```
 
+- [GDB扩展脚本](https://breezetemple.github.io/2020/05/07/Extending-GDB/)
 - gdb函数
 ```gdb
 1.使用关键字 define xxx 定义名称为 xxx 的函数
@@ -58,7 +59,14 @@ define adder
 	print $arg0 + $arg1 + $arg2
 end
 
-adder 1 2 3
+document adder
+Syntax: adder arg1 arg2 arg3
+end
+
+(gdb) help adder
+Syntax: adder arg1 arg2
+
+(gdb) adder 1 2 3
 
 # 2
 define adder
@@ -463,7 +471,7 @@ eval template, expression 先对 template 做格式化处理，之后调用 eval
 	  ```
 - [gdbcomm.txt](https://gist.github.com/shekkbuilder/8b52e2cf4142c35ba6de)
 - 用户自定义gdb命令
-	- [Canned Sequences of Commands](https://web.mit.edu/gnu/doc/html/gdb_toc.html#SEC139)
+	- [**Canned Sequences of Commands**](https://web.mit.edu/gnu/doc/html/gdb_toc.html#SEC139)
 	- [Commands for Controlled Output](https://sourceware.org/gdb/onlinedocs/gdb/Output.html)
 	- [User-defined Commands](https://sourceware.org/gdb/onlinedocs/gdb/Define.html#Define)
 	- [gdbinit参考文件](https://github.com/gdbinit/Gdbinit/blob/master/gdbinit)

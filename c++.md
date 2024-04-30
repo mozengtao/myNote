@@ -1,3 +1,13 @@
+- [OOPS Concepts in C++ with Examples](https://www.prepbytes.com/blog/cpp-programming/oops-concepts-in-c-with-examples/)
+- [C/C++ Programming](https://www3.ntu.edu.sg/home/ehchua/programming/#Cpp)
+
+- [Learn C++ by Example](https://www.manning.com/books/learn-c-plus-plus-by-example)
+- [LEARN C++](https://www.learncpp.com/)
+- [C++ By Example](https://cppbyexample.com/index.html)
+- [LearnCPP](https://github.com/Lakhankumawat/LearnCPP)
+- [C-plusplus-Programming-By-Example](https://github.com/PacktPublishing/C-plusplus-Programming-By-Example/tree/master)
+- [CPP_Beginner_to_Expert](https://github.com/tridibsamanta/CPP_Beginner_to_Expert/tree/master)
+
 - C++
   collapsed:: true
 	- 面向过程

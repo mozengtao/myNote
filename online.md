@@ -10,3 +10,5 @@
 - How to Send a Block of Code in Outlook
 	- [Online syntax highlighting for the masses](https://tohtml.com/)
 	- `From Menu bar navigate to "Plugins -> NppExport -> Copy RTF to clipboard"`
+- [texteditor](https://texteditor.com/)
+- [CodVerter](https://codverter.com/src/index)
