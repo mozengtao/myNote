@@ -1,4 +1,5 @@
-- []()
+- [**Shichao's Notes**](https://notes.shichao.io/toc/)
+
 - []()
 - []()
 - []()
