@@ -1,4 +1,8 @@
+![Arch of syslog](Architecture-of-syslog.png)
+
 - ```bash
+  不同的linux发行版可能使用不同的syslog daemon，常见的 syslog daemon 有 syslogd, syslog-ng, rsyslog
+
   # 可能会影响到系统时间和syslog时间戳的文件
   /etc/TZ
   /etc/localtime
@@ -85,3 +89,19 @@
 	- [Modules](https://www.rsyslog.com/doc/v8-stable/configuration/modules/#modules)
 	- [RainerScript](https://rsyslog.readthedocs.io/en/latest/rainerscript/index.html) the prime configuration language used for rsyslog
 	- [rsyslog releases](https://www.rsyslog.com/news-releases/)
+
+	- [Looking closer at the syslog](https://blog.brixit.nl/looking-closer-at-the-syslog/)
+		> So how does the syslog work
+		> 
+		> The way the syslog works is incredibly simple. The syslog daemon opens an unix domain socket at /dev/log. Applications connect to this socket and write log messages in the syslog format and the syslog daemon takes care of filtering those out and putting it in the various files in /var/log.
+		> 
+		> Kernel logging
+		> 
+		> Not all logging in the system comes from userspace. On Linux there's also the kernel log ringbuffer that can be read from /dev/kmsg. Reading from this file will return all the log messages in the kernel ringbuffer and also makes it possible to stream new log messages with further reads. The log messages from the kernel are in a similar but different format than the syslog socket
+		> 
+		> Systemd journald
+		> 
+		> So everything changed when journald was introduced. Figuring out how this all works involves diving into the systemd source code. Systemd provides several unix sockets related to logging in /var/run/systemd/journal:
+    	> dev-log this is symlinked to /dev/log and receives syslog formatted lines and writes it to the journal
+    	> stdout is a socket that receives logs from systemd units. This is what the systemd-cat command connects to. It writes a header on connection to give the application metadata and then the stdout or stderr is just connected straight to this socket.
+    	> socket receives the log messages in the binary journald format
