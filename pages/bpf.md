@@ -7,6 +7,8 @@
 - [eBPF 开发者教程](https://github.com/eunomia-bpf/bpf-developer-tutorial/blob/main/README.zh.md)
 - [TIL: eBPF is awesome](https://filipnikolovski.com/posts/ebpf/)
 
+- [Linux kernel profiling with perf](https://perf.wiki.kernel.org/index.php/Tutorial)
+
 - [The art of writing eBPF programs: a primer](https://sysdig.com/blog/the-art-of-writing-ebpf-programs-a-primer/)
 
 - [0x00C - eBPF](https://unzip.dev/0x00c-ebpf/)
