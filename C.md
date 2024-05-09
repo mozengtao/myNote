@@ -669,6 +669,8 @@
 			  }
 			  ```
 - 参考文档
+	- [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)
+	- [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html)
 	- [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
 	- [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
 	-[**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)
