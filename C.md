@@ -689,8 +689,22 @@
 			- [declaring a flexible array member](https://wiki.sei.cmu.edu/confluence/display/c/DCL38-C.+Use+the+correct+syntax+when+declaring+a+flexible+array+member)
 	- 类型声明
 		- [How to interpret complex C/C++ declarations](https://www.codeproject.com/Articles/7042/How-to-interpret-complex-C-C-declarations)
-		- [How To Read C Declarations](https://parrt.cs.usfca.edu/doc/how-to-read-C-declarations.html)
 		- [Reading C type declarations](http://unixwiz.net/techtips/reading-cdecl.html)
+		- [cdecl.org](https://cdecl.org/)
+		- 使用 c++ 中的 typeid 操作符获取变量类型
+			```c++
+			#include <typeinfo>
+			#include <iostream>
+
+			using namespace std;
+
+			int main(void)
+			{
+				void **p;
+				cout << typeid(p).name() << endl;	// PPv
+				return 0;
+			}
+			```
 - [Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) #github
 - [C](https://github.com/marcotrosi/C)
 - [**Programming in C**](https://users.cs.cf.ac.uk/dave/C/)
