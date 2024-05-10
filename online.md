@@ -1,3 +1,4 @@
+- [B 站收藏的“比较有质量”的课程](https://fast.v2ex.com/t/931949)
 - [**CodeConvert**](https://www.codeconvert.ai/free-converter)
 - [Algorithms](https://algs4.cs.princeton.edu/home/)
 - 在线资源汇总

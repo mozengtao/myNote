@@ -1,3 +1,7 @@
+- [**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+- [Operating Systems: Three Easy Pieces 中文版](https://github.com/remzi-arpacidusseau/ostep-translations/tree/master/chinese)
+- [Operating Systems: Three Easy Pieces 中文版](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)
+
 - [**Shichao's Notes**](https://notes.shichao.io/toc/)
 
 - []()
