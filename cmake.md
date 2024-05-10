@@ -1,3 +1,5 @@
+- [**cmake-examples**](https://github.com/ttroy50/cmake-examples/tree/master)
+
 - [CMake tips](https://github.com/sailorhero/cmake_study/blob/master/README.md)
 	- ```bash
 	  cmake --help-commands-list
@@ -53,6 +55,7 @@
 	  collapsed:: true
 		-
 - 参考文档
+	- [Cmake之深入理解find_package()的用法](https://zhuanlan.zhihu.com/p/97369704)
 	- [Tutorial: Easily supporting CMake install and find_package()](https://www.foonathan.net/2016/03/cmake-install/#content)
 	- [cmake 使用依赖项指南](https://runebook.dev/zh/docs/cmake/guide/using-dependencies/index#guide:Using%20Dependencies%20Guide)
 	- [Modern CMake](https://xiazuomo.gitbook.io/modern-cmake-chinese/introduction)
