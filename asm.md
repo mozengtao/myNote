@@ -1,6 +1,8 @@
 
 - [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
 
+- [PowerPC CODE Programming the PowerPC Chip in Assembly Language](http://www.bitsavers.org/components/motorola/PowerPC/Kacmarcik_Optimizing_PowerPC_Code_1995.pdf)
+
 - [GCC inline assembler code notes for PowerPC](https://confluence.slac.stanford.edu/display/CCI/GCC+inline+assembler+code+notes+for+PowerPC)
 - [Assembly Primer Part 1 — System Organization — PPC](https://brnz.org/hbr/?p=631)
 - [Balance of Power: Introducing PowerPC Assembly Language](http://preserve.mactech.com/articles/develop/issue_21/21balance.html)
