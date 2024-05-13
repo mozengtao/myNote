@@ -1,6 +1,13 @@
 
 - [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
 
+- [64-bit PowerPC ELF Application Binary Interface](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.html)
+- [Power Architecture 32-bit Application Binary Interface](https://example61560.wordpress.com/wp-content/uploads/2016/11/powerpc_abi.pdf)
+- [Power PC Embedded Application Binary Interface(EABI): 32-Bit Implementation](https://www.nxp.com/docs/en/application-note/PPCEABI.pdf)
+- [NXP e6500 Core Reference Manual](https://www.nxp.com/docs/en/reference-manual/E6500RM.pdf)
+- [Freescale PowerPC Architecture Primer](https://www.nxp.com/docs/en/white-paper/POWRPCARCPRMRM.pdf)
+- [PowerPC Architecture](http://www.bitsavers.org/components/ibm/powerpc/SR28-5124-00_PowerPC_Architecture_First_Edition_May93.pdf)
+
 - [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
 - [Linux System Call Table](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
 - [LINUX SYSTEM CALL TABLE FOR X86 64](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
