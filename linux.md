@@ -1,3 +1,5 @@
+- [How programs get run](https://lwn.net/Articles/630727/)
+- [How programs get run: ELF binaries](https://lwn.net/Articles/631631/)
 - [Understanding mmap](https://unix.stackexchange.com/questions/389124/understanding-mmap)
 - [Memory mapping](https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html)
 - [More about   `mmap()`   file access](https://biriukov.dev/docs/page-cache/5-more-about-mmap-file-access/)

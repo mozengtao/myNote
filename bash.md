@@ -1,4 +1,13 @@
-bash脚本中调用python返回的结果
+
+bash下的特殊变量
+```bash
+morrism@localhost ~ $ echo $BASHPID
+589311	# 当前bash的进程ID，在某些场景下可能与 $$ 的结果不同
+morrism@localhost ~ $ echo $$
+589311	# 当前bash的进程ID
+morrism@localhost ~ $ echo $PPID
+112411	# 当前bash的进程的父进程ID
+```
 
 options
 ```bash
@@ -38,6 +47,7 @@ ALT+f               # 向前（右边）移动一个单词
 ALT+t               # 交换单词
 ```
 
+bash脚本中调用python返回的结果
 ```bash
 #!/usr/bin/bash
 pc1()
