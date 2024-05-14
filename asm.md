@@ -1,7 +1,30 @@
 
 - [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
 
+- [x86 and amd64 instruction reference](https://www.felixcloutier.com/x86/)
+
+- [Brennan's Guide to Inline Assembly](https://www.cs.utexas.edu/users/dahlin/Classes/UGOS/reading/djgpp.html)
+
 - [GCC-Inline-Assembly-HOWTO](https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html)
+```asm
+Intel syntax and AT&T syntax
+
++------------------------------+------------------------------------+
+|       Intel Code             |      AT&T Code                     |
++------------------------------+------------------------------------+
+| mov     eax,1                |  movl    $1,%eax                   |   
+| mov     ebx,0ffh             |  movl    $0xff,%ebx                |   
+| int     80h                  |  int     $0x80                     |   
+| mov     ebx, eax             |  movl    %eax, %ebx                |
+| mov     eax,[ecx]            |  movl    (%ecx),%eax               |
+| mov     eax,[ebx+3]          |  movl    3(%ebx),%eax              | 
+| mov     eax,[ebx+20h]        |  movl    0x20(%ebx),%eax           |
+| add     eax,[ebx+ecx*2h]     |  addl    (%ebx,%ecx,0x2),%eax      |
+| lea     eax,[ebx+ecx]        |  leal    (%ebx,%ecx),%eax          |
+| sub     eax,[ebx+ecx*4h-20h] |  subl    -0x20(%ebx,%ecx,0x4),%eax |
++------------------------------+------------------------------------+
+```
+
 - [How to Use Inline Assembly Language in C Code](https://gcc.gnu.org/onlinedocs/gcc/extensions-to-the-c-language-family/how-to-use-inline-assembly-language-in-c-code.html)
 
 - [PowerPC CODE Programming the PowerPC Chip in Assembly Language](http://www.bitsavers.org/components/motorola/PowerPC/Kacmarcik_Optimizing_PowerPC_Code_1995.pdf)
@@ -22,7 +45,7 @@
 - [Linux System Call Table](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
 - [LINUX SYSTEM CALL TABLE FOR X86 64](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
 
-- [https://www.cs.virginia.edu/~evans/cs216/guides/x86.html](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
+- [The Netwide Assembler: NASM](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
 - [NASM - The Netwide Assembler](https://www.nasm.us/doc/nasmdoc0.html)
 - [x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
 - [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
