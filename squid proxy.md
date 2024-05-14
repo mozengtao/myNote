@@ -32,5 +32,7 @@
 - 查看squid服务log
 	- `sudo tail -f /var/log/squid/access.log`
 - 参考文档
+	- [Squid Documentation](https://www.squid-cache.org/Doc/)
+	- [Squid Proxy Server 3.1 Beginner’s Guide.pdf](https://github.com/neverusedname/MyBooks/blob/master/Squid%20Proxy%20Server%203.1%20Beginner%E2%80%99s%20Guide%20.pdf)
 	- [squid-proxy-configuration-linux](https://linuxhint.com/squid-proxy-configuration-linux/)
 	- [Squid Users Guide](https://projects.horms.net/projects/redundant_linux_paper/related/squid/index.html)

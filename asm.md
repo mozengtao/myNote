@@ -1,6 +1,7 @@
+- [RISC vs CISC](https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/)
+
 
 - [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
-
 - [Compiler Explorer](https://godbolt.org/)
 
 - [x86 and amd64 instruction reference](https://www.felixcloutier.com/x86/)
@@ -29,19 +30,19 @@ Intel syntax and AT&T syntax
 
 - [How to Use Inline Assembly Language in C Code](https://gcc.gnu.org/onlinedocs/gcc/extensions-to-the-c-language-family/how-to-use-inline-assembly-language-in-c-code.html)
 
-- [PowerPC CODE Programming the PowerPC Chip in Assembly Language](http://www.bitsavers.org/components/motorola/PowerPC/Kacmarcik_Optimizing_PowerPC_Code_1995.pdf)
-
-- [GCC inline assembler code notes for PowerPC](https://confluence.slac.stanford.edu/display/CCI/GCC+inline+assembler+code+notes+for+PowerPC)
-- [Assembly Primer Part 1 — System Organization — PPC](https://brnz.org/hbr/?p=631)
-- [Balance of Power: Introducing PowerPC Assembly Language](http://preserve.mactech.com/articles/develop/issue_21/21balance.html)
-- [64-bit PowerPC ELF Application Binary Interface](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.html)
-- [Power Architecture 32-bit Application Binary Interface](https://example61560.wordpress.com/wp-content/uploads/2016/11/powerpc_abi.pdf)
-- [Power PC Embedded Application Binary Interface(EABI): 32-Bit Implementation](https://www.nxp.com/docs/en/application-note/PPCEABI.pdf)
-- [NXP e6500 Core Reference Manual](https://www.nxp.com/docs/en/reference-manual/E6500RM.pdf)
-- [Freescale PowerPC Architecture Primer](https://www.nxp.com/docs/en/white-paper/POWRPCARCPRMRM.pdf)
-- [PowerPC Architecture](http://www.bitsavers.org/components/ibm/powerpc/SR28-5124-00_PowerPC_Architecture_First_Edition_May93.pdf)
-- [PowerPC Microprocessor Family: The Programming Environments](https://www.nxp.com/docs/en/user-guide/MPCFPE_AD_R1.pdf)
-- [64-bit PowerPC ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi-1.7.1.html)
+Powerpc ASM
+	- [PowerPC CODE Programming the PowerPC Chip in Assembly Language](http://www.bitsavers.org/components/motorola/PowerPC/Kacmarcik_Optimizing_PowerPC_Code_1995.pdf)
+	- [GCC inline assembler code notes for PowerPC](https://confluence.slac.stanford.edu/display/CCI/GCC+inline+assembler+code+notes+for+PowerPC)
+	- [Assembly Primer Part 1 — System Organization — PPC](https://brnz.org/hbr/?p=631)
+	- [Balance of Power: Introducing PowerPC Assembly Language](http://preserve.mactech.com/articles/develop/issue_21/21balance.html)
+	- [64-bit PowerPC ELF Application Binary Interface](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi.html)
+	- [Power Architecture 32-bit Application Binary Interface](https://example61560.wordpress.com/wp-content/uploads/2016/11/powerpc_abi.pdf)
+	- [Power PC Embedded Application Binary Interface(EABI): 32-Bit Implementation](https://www.nxp.com/docs/en/application-note/PPCEABI.pdf)
+	- [NXP e6500 Core Reference Manual](https://www.nxp.com/docs/en/reference-manual/E6500RM.pdf)
+	- [Freescale PowerPC Architecture Primer](https://www.nxp.com/docs/en/white-paper/POWRPCARCPRMRM.pdf)
+	- [PowerPC Architecture](http://www.bitsavers.org/components/ibm/powerpc/SR28-5124-00_PowerPC_Architecture_First_Edition_May93.pdf)
+	- [PowerPC Microprocessor Family: The Programming Environments](https://www.nxp.com/docs/en/user-guide/MPCFPE_AD_R1.pdf)
+	- [64-bit PowerPC ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi-1.7.1.html)
 
 - [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
 - [**Linux System Call Table**](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
