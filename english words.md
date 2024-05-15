@@ -133,4 +133,7 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - boilerplate  / ˈbɔɪlərpleɪt /		样板文件；引用
 - joystick	  / ˈdʒɔɪstɪk /		 控制杆，操纵杆
 - incorporate  / ɪnˈkɔːrpəreɪt /  包含，合并；组成公司；掺和，混合（成分）；使具体化，体现
-
+- second		/ ˈsekənd /		秒						  s
+- millisecond	/ ˈmɪlisekənd /	毫秒，千分之一秒			ms
+- microsecond	/ ˈmaɪkroʊsekənd /	微秒；百万分之一秒		us
+- nanosecond	/ ˈnænoʊsekənd /	纳秒；十亿分之一秒		ns
