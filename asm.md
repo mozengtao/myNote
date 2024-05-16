@@ -8,6 +8,10 @@
 
 - [Brennan's Guide to Inline Assembly](https://www.cs.utexas.edu/users/dahlin/Classes/UGOS/reading/djgpp.html)
 
+- [**x86 Assembly Guide**](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
+
+	![x86 registers](x86-registers.png)
+
 - [GCC-Inline-Assembly-HOWTO](https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html)
 ```asm
 Intel syntax and AT&T syntax
@@ -51,7 +55,6 @@ Powerpc ASM
 
 - [The Netwide Assembler: NASM](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
 - [NASM - The Netwide Assembler](https://www.nasm.us/doc/nasmdoc0.html)
-- [x86 Assembly Guide](https://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
 - [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
 - [Linux Assembly Tutorial](https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html)
 - [Assembly (NASM)](https://7h3w4lk3r.gitbook.io/the-hive/programming/assembly)
