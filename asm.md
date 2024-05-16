@@ -35,7 +35,8 @@ Intel syntax and AT&T syntax
 - [How to Use Inline Assembly Language in C Code](https://gcc.gnu.org/onlinedocs/gcc/extensions-to-the-c-language-family/how-to-use-inline-assembly-language-in-c-code.html)
 
 Powerpc ASM
-	-[POWER family and PowerPC® architecture overview](https://www.ibm.com/docs/en/aix/7.3?topic=storage-power-family-powerpc-architecture-overview)
+- [**PowerPC Microprocessor Family: The Programming Environments**](https://www.nxp.com/docs/en/user-guide/MPCFPE_AD_R1.pdf)
+	- [POWER family and PowerPC architecture overview](https://www.ibm.com/docs/en/aix/7.3?topic=storage-power-family-powerpc-architecture-overview)
 	- [PowerPC CODE Programming the PowerPC Chip in Assembly Language](http://www.bitsavers.org/components/motorola/PowerPC/Kacmarcik_Optimizing_PowerPC_Code_1995.pdf)
 	- [GCC inline assembler code notes for PowerPC](https://confluence.slac.stanford.edu/display/CCI/GCC+inline+assembler+code+notes+for+PowerPC)
 	- [Assembly Primer Part 1 — System Organization — PPC](https://brnz.org/hbr/?p=631)
@@ -46,7 +47,6 @@ Powerpc ASM
 	- [NXP e6500 Core Reference Manual](https://www.nxp.com/docs/en/reference-manual/E6500RM.pdf)
 	- [Freescale PowerPC Architecture Primer](https://www.nxp.com/docs/en/white-paper/POWRPCARCPRMRM.pdf)
 	- [PowerPC Architecture](http://www.bitsavers.org/components/ibm/powerpc/SR28-5124-00_PowerPC_Architecture_First_Edition_May93.pdf)
-	- [PowerPC Microprocessor Family: The Programming Environments](https://www.nxp.com/docs/en/user-guide/MPCFPE_AD_R1.pdf)
 	- [64-bit PowerPC ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi-1.7.1.html)
 
 - [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
