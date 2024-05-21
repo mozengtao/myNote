@@ -137,3 +137,4 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - millisecond	/ ˈmɪlisekənd /	毫秒，千分之一秒			ms
 - microsecond	/ ˈmaɪkroʊsekənd /	微秒；百万分之一秒		us
 - nanosecond	/ ˈnænoʊsekənd /	纳秒；十亿分之一秒		ns
+- constituent	/ kənˈstɪtʃuənt /	组成的，构成的；选举的，有任命（或选举）权的；立宪的，有宪法制定（或修改）权的
