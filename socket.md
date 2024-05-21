@@ -136,3 +136,4 @@
 	- [Hands-On-Network-Programming-with-C](https://github.com/codeplea/Hands-On-Network-Programming-with-C/tree/master) #github
 	- [**thePacketGeek**](https://thepacketgeek.com/)
 	- [Socket Interface](https://0xbharath.github.io/art-of-packet-crafting-with-scapy/networking/socket_interface/index.html)
+	- [Linux TCP/IP Connections Limit](https://www.baeldung.com/linux/tcp-ip-connections-limit)
