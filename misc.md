@@ -4,7 +4,7 @@
 
 - [**Shichao's Notes**](https://notes.shichao.io/toc/)
 
-- []()
+- [Build Your Own x From Scratch Books](https://build-your-own.org/)
 - []()
 - []()
 - []()
