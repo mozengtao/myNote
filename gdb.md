@@ -10,86 +10,86 @@
 	- [用 Python 拓展 GDB 4](https://segmentfault.com/a/1190000005772472)
 
 - 用 python 拓展 GDB
-```python
-# 启用 python 扩展
-(gdb) python import gdb
-(gdb)
+	```python
+	# 启用 python 扩展
+	(gdb) python import gdb
+	(gdb)
 
-# example.py
-import gdb
+	# example.py
+	import gdb
 
-# Define a new GDB command
-class ExampleCommand(gdb.Command):
-    def __init__(self):
-        super(ExampleCommand, self).__init__("example-command", gdb.COMMAND_USER)
+	# Define a new GDB command
+	class ExampleCommand(gdb.Command):
+		def __init__(self):
+			super(ExampleCommand, self).__init__("example-command", gdb.COMMAND_USER)
 
-    def invoke(self, args, from_tty):
-        print("Example command executed with arguments:", args)
+		def invoke(self, args, from_tty):
+			print("Example command executed with arguments:", args)
 
-# Add the new command to GDB
-ExampleCommand()
+	# Add the new command to GDB
+	ExampleCommand()
 
-# Execute some custom action before program runs
-def my_init():
-    print("Debugger initialized")
+	# Execute some custom action before program runs
+	def my_init():
+		print("Debugger initialized")
 
-gdb.events.new_objfile.connect(my_init)
+	gdb.events.new_objfile.connect(my_init)
 
-# Execute some custom action when program execution stops
-def my_exit(event):
-    print("Debugger exiting")
+	# Execute some custom action when program execution stops
+	def my_exit(event):
+		print("Debugger exiting")
 
-gdb.events.exited.connect(my_exit)
+	gdb.events.exited.connect(my_exit)
 
-# 加载 python 脚本 example.py
-(gdb) source example.py
-(gdb)
+	# 加载 python 脚本 example.py
+	(gdb) source example.py
+	(gdb)
 
-# 执行 debug 命令
-(gdb) example-command hello
-Example command executed with arguments: hello
-```
+	# 执行 debug 命令
+	(gdb) example-command hello
+	Example command executed with arguments: hello
+	```
 
 - [GDB扩展脚本](https://breezetemple.github.io/2020/05/07/Extending-GDB/)
 - gdb函数
-```gdb
-1.使用关键字 define xxx 定义名称为 xxx 的函数
-2.在函数的 body 里定义 xxx 执行的 gdb 命令
-3.函数的第 1 个参数为 arg0，第 2 个参数为 arg1, ...
-4.关键字 end 用来结束函数定义
+	```gdb
+	1.使用关键字 define xxx 定义名称为 xxx 的函数
+	2.在函数的 body 里定义 xxx 执行的 gdb 命令
+	3.函数的第 1 个参数为 arg0，第 2 个参数为 arg1, ...
+	4.关键字 end 用来结束函数定义
 
-# 1
-define adder
-	print $arg0 + $arg1 + $arg2
-end
-
-document adder
-Syntax: adder arg1 arg2 arg3
-end
-
-(gdb) help adder
-Syntax: adder arg1 arg2
-
-(gdb) adder 1 2 3
-
-# 2
-define adder
-	set $i = 0
-	set $sum = 0
-
-	while $i < $argc
-		eval "set $sum = $sum + $arg%d", $i
-		set $i = $i + 1
+	# 1
+	define adder
+		print $arg0 + $arg1 + $arg2
 	end
 
-	print $sum
-end
+	document adder
+	Syntax: adder arg1 arg2 arg3
+	end
 
-使用 set $var = xxx 定义变量，变量的类型不受约束，可以是调试代码中的结构体等复杂数据类型
-对于自增操作，只能使用 $var = $var + 1
-eval template, expression 先对 template 做格式化处理，之后调用 eval 进行执行
+	(gdb) help adder
+	Syntax: adder arg1 arg2
 
-```
+	(gdb) adder 1 2 3
+
+	# 2
+	define adder
+		set $i = 0
+		set $sum = 0
+
+		while $i < $argc
+			eval "set $sum = $sum + $arg%d", $i
+			set $i = $i + 1
+		end
+
+		print $sum
+	end
+
+	使用 set $var = xxx 定义变量，变量的类型不受约束，可以是调试代码中的结构体等复杂数据类型
+	对于自增操作，只能使用 $var = $var + 1
+	eval template, expression 先对 template 做格式化处理，之后调用 eval 进行执行
+
+	```
 
 - 本地使用交叉编译的gdb
 	- ```bash
@@ -100,57 +100,60 @@ eval template, expression 先对 template 做格式化处理，之后调用 eval
 	  	core.cms.3327
 	  ```
 - 常用命令
-	- ```bash
-	  #设置gdb prompt msg
-	  set prompt \033[31mgdb$ \033[0m
-	  
-	  #统计函数的执行时间，判断程序执行的瓶颈
-	  (gdb) disassemble /m cpecntrefresh
-	  之后在函数的开始和结束地址处添加断点(或者通过在函数的入口{和出口处添加断点})
-	  break *addrStart
-	  break *addrEnd
-	  之后通过对指点断点添加命令来统计函数的执行时间
-	  command 1
-	  shell echo $(date +%s.%N) > /tmp/funcStartTime
-	  continue
-	  end
-	  
-	  command 2
-	  shell echo $(date +%s.%N) > /tmp/funcEndTime
-	  continue
-	  end
-	  
-	  
-	  backtrace full: Complete backtrace with local variables
-	  up, down, frame: Move through frames
-	  watch: Suspend the process when a certain condition is met
-	  set print pretty on: Prints out prettily formatted C source code
-	  set logging on: Log debugging session to show to others for support
-	  set print array on: Pretty array printing
-	  finish: Continue till end of function
-	  enable and disable: Enable/disable breakpoints
-	  tbreak: Break once, and then remove the breakpoint
-	  where: Line number currently being executed
-	  info locals: View all local variables
-	  info args: View all function arguments
-	  list: view source
-	  rbreak: break on function matching regular expression
-	  
-	  info functions [REGEXP] to list all defined functions or whose matching REGEXP
-	  info address SYMBOL to find address of SYMBOL
-	  info symbol ADDR to display the name of the symbol residing at a given address ADDR
-	  
-	  (gdb) info line send_control_packets
-	  Line 1017 of "upstream_upper_mac.c" starts at address 0x127cf22 <us_upper_mac_run+146> and ends at 0x127cf25 <us_upper_mac_run+149>.
-	  Line 822 of "downstream_lower_mac.c" starts at address 0x1236934 <ds_lower_mac_run+148> and ends at 0x123693d <ds_lower_mac_run+157>.
-	  
-	  (gdb) info source
-	  Current source file is /usr/include/rte_ring_generic_pvt.h
-	  ......
-	  
-	  
-	  ```
-	- ```bash
+	```gdb
+		# 查看当前寄存器的值
+		info registers
+		info registers rbp
+		info registers rsp
+
+		# 设置gdb prompt msg
+		set prompt \033[31mgdb$ \033[0m
+		
+		#统计函数的执行时间，判断程序执行的瓶颈
+		(gdb) disassemble /m cpecntrefresh
+		之后在函数的开始和结束地址处添加断点(或者通过在函数的入口{和出口处添加断点})
+		break *addrStart
+		break *addrEnd
+		之后通过对指点断点添加命令来统计函数的执行时间
+		command 1
+		shell echo $(date +%s.%N) > /tmp/funcStartTime
+		continue
+		end
+		
+		command 2
+		shell echo $(date +%s.%N) > /tmp/funcEndTime
+		continue
+		end
+		
+		
+		backtrace full: Complete backtrace with local variables
+		up, down, frame: Move through frames
+		watch: Suspend the process when a certain condition is met
+		set print pretty on: Prints out prettily formatted C source code
+		set logging on: Log debugging session to show to others for support
+		set print array on: Pretty array printing
+		finish: Continue till end of function
+		enable and disable: Enable/disable breakpoints
+		tbreak: Break once, and then remove the breakpoint
+		where: Line number currently being executed
+		info locals: View all local variables
+		info args: View all function arguments
+		list: view source
+		rbreak: break on function matching regular expression
+		
+		info functions [REGEXP] to list all defined functions or whose matching REGEXP
+		info address SYMBOL to find address of SYMBOL
+		info symbol ADDR to display the name of the symbol residing at a given address ADDR
+		
+		(gdb) info line send_control_packets
+		Line 1017 of "upstream_upper_mac.c" starts at address 0x127cf22 <us_upper_mac_run+146> and ends at 0x127cf25 <us_upper_mac_run+149>.
+		Line 822 of "downstream_lower_mac.c" starts at address 0x1236934 <ds_lower_mac_run+148> and ends at 0x123693d <ds_lower_mac_run+157>.
+		
+		(gdb) info source
+		Current source file is /usr/include/rte_ring_generic_pvt.h
+		......
+	```
+	```bash
 	  # 查看变量类型
 	  (gdb) ptype i
 	  
@@ -237,8 +240,7 @@ eval template, expression 先对 template 做格式化处理，之后调用 eval
 	  (gdb) x/12bx input
 	  0x804a024 <input>:   0x31    0x32    0x33    0x34    0x35    0x36    0x37    0x38
 	  0x804a02c <i>:       0x02    0x00    0x00    0x00
-	  
-	  ```
+	```
 	- 启动调试
 		- ```bash
 		  调试二进制文件
