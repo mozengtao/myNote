@@ -1,6 +1,12 @@
 - tips
 	- toggleStickyScroll(鼠标滚动时顶上显示函数名称)
 
+```
+快捷键
+展开所有代码块：Ctrl + K, Ctrl + 0
+折叠所有代码块：Ctrl + K, Ctrl + J
+```
+
 - 文件内变量替换
 	- Ctrl + F2
 - 插件
