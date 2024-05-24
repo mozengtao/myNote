@@ -1,6 +1,9 @@
 
 - [**Playground**](https://goplay.tools/)
 
+- [lensm](https://github.com/loov/lensm)
+  > Go assembly and source viewer
+
 - [深入Go语言之旅](https://go.cyub.vip/)
 - [**Go 语言设计与实现**](https://draveness.me/golang/)
 

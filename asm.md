@@ -1,3 +1,14 @@
+
+- [**Linux Assembly Tutorial**](https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html)
+- [Linux Assembly Tutorial Step-by-Step Guide](https://web.archive.org/web/20120822144129/http://www.cin.ufpe.br/%7Eif817/arquivos/asmtut/index.html)
+- [**Assembly Basics**](https://cs61.seas.harvard.edu/site/2018/Asm1/) #harvard cs61
+
+- ![x86 Assembly, 32 bit](./assets/x86-32bit-asm.pdf)
+- ![The 32 bit x86 C Calling Convention](./assets/x86-32bit-calling-convention.pdf)
+- ![x86 Assembly, 64 bit](./assets/x86-64bit-asm.pdf)
+- ![The 64 bit x86 C Calling Convention](./assets/x86-64bit-calling-convention.pdf)
+
+
 - [RISC vs CISC](https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/)
 
 
@@ -56,7 +67,6 @@ Powerpc ASM
 - [The Netwide Assembler: NASM](http://www.cburch.com/csbsju/cs/350/docs/nasm/nasmdoc0.html)
 - [NASM - The Netwide Assembler](https://www.nasm.us/doc/nasmdoc0.html)
 - [NASM Tutorial](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
-- [Linux Assembly Tutorial](https://montcs.bloomu.edu/Information/LowLevel/Assembly/assembly-tutorial.html)
 - [Assembly (NASM)](https://7h3w4lk3r.gitbook.io/the-hive/programming/assembly)
 - [Assembly Programming Tutorial](https://www.tutorialspoint.com/assembly_programming/index.htm)
 

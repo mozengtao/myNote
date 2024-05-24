@@ -4,6 +4,9 @@
 
 - [**Shichao's Notes**](https://notes.shichao.io/toc/)
 
+- [CS 61: Systems Programming and Machine Organization (2018)](https://cs61.seas.harvard.edu/site/2018/)
+
+
 - [Build Your Own x From Scratch Books](https://build-your-own.org/)
 - []()
 - []()
