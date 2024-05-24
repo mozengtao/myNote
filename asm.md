@@ -7,13 +7,20 @@
 - ![The 32 bit x86 C Calling Convention](./assets/x86-32bit-calling-convention.pdf)
 - ![x86 Assembly, 64 bit](./assets/x86-64bit-asm.pdf)
 - ![The 64 bit x86 C Calling Convention](./assets/x86-64bit-calling-convention.pdf)
+- [Program and Data Representation](https://aaronbloomfield.github.io/pdr/readme.html) #pdf
 
+- [TheArtOfAssemblyLanguage](https://github.com/media-lib/prog_lib/blob/master/general/Randall%20Hyde%20-%20The%20Art%20of%20Assembly%20Language%2C%202nd%20Edition.pdf) #github
+- ![TheArtOfAssemblyLanguage](./assets/TheArtOfAssemblyLanguage.pdf)
+- ![ReverseEngineeringforBeginners](./assets/ReverseEngineeringforBeginners.pdf)
+
+- [**Reverse Engineering For Everyone**](https://0xinfection.github.io/reversing/) #online
+- [Reversing: Secrets of Reverse Engineering](https://github.com/media-lib/prog_lib/blob/master/general/Eldad%20Eilam%20-%20Reversing%20-%20Secrets%20of%20Reverse%20Engineering.pdf) #github
 
 - [RISC vs CISC](https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/)
 
 
-- [Online Compiler](https://www.mycompiler.io/new/asm-x86_64)
-- [Compiler Explorer](https://godbolt.org/)
+- [**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
+- [**Compiler Explorer**](https://godbolt.org/) #online
 
 - [x86 and amd64 instruction reference](https://www.felixcloutier.com/x86/)
 
