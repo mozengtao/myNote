@@ -9,6 +9,8 @@
 - ![The 64 bit x86 C Calling Convention](./assets/x86-64bit-calling-convention.pdf)
 - [Program and Data Representation](https://aaronbloomfield.github.io/pdr/readme.html) #pdf
 
+- [X86-64 Architecture Guide](http://6.s081.scripts.mit.edu/sp18/x86-64-architecture-guide.html) #online
+
 - [TheArtOfAssemblyLanguage](https://github.com/media-lib/prog_lib/blob/master/general/Randall%20Hyde%20-%20The%20Art%20of%20Assembly%20Language%2C%202nd%20Edition.pdf) #github
 - ![TheArtOfAssemblyLanguage](./assets/TheArtOfAssemblyLanguage.pdf)
 - ![ReverseEngineeringforBeginners](./assets/ReverseEngineeringforBeginners.pdf)
