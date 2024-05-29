@@ -532,6 +532,11 @@
 		  end
 		  ```
 - 参考文档
+	- [**Shell Commands**](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Shell-Commands.html)
+		```bash
+		(gdb) pipe info registers | grep rax
+		rax            0x0                 0
+		```
 	- [Setting Breakpoints](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Set-Breaks.html)
 	- [How does gdb call functions?](https://jvns.ca/blog/2018/01/04/how-does-gdb-call-functions/)
 	- [GDB 入门笔记](https://imageslr.com/2023/gdb.html)
@@ -549,7 +554,6 @@
 	- **[GDB-Python-Utils](https://github.com/crossbowerbt/GDB-Python-Utils)**
 	- [Extending   GDB   using Python](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html#Python)
 	- [Automate Debugging with GDB Python API](https://interrupt.memfault.com/blog/automate-debugging-with-gdb-python-api)
-	- [Shell Commands](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Shell-Commands.html)
 	- [gdbcomm.txt](https://gist.github.com/shekkbuilder/8b52e2cf4142c35ba6de)
 	- [Short-list of useful gdb commands](https://www.cs.sfu.ca/~ashriram/Courses/CS295/tutorials/gdb/gdb.html#short-list-of-useful-gdb-commands)
 	- [LD_PRELOAD Hacks](https://eklitzke.org/ld-preload-hacks)
