@@ -1,3 +1,9 @@
+- [**Debugging by Patrick Horgan**](http://dbp-consulting.com/tutorials/debugging/)
+- [Basic Assembler Debugging with GDB](http://dbp-consulting.com/tutorials/debugging/basicAsmDebuggingGDB.html)
+- [**Programming From The Ground Up**](http://savannah.nongnu.org/projects/pgubook/) #pdf
+
+![Programming From The Ground Up](./assets/ProgrammingGroundUp.pdf)
+
 - [onlinegdb](https://www.onlinegdb.com/)
 
 - [gdb tips](https://breezetemple.github.io/tags/gdb/)
