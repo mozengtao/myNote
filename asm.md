@@ -285,6 +285,9 @@ Powerpc ASM
 	- [Freescale PowerPC Architecture Primer](https://www.nxp.com/docs/en/white-paper/POWRPCARCPRMRM.pdf)
 	- [PowerPC Architecture](http://www.bitsavers.org/components/ibm/powerpc/SR28-5124-00_PowerPC_Architecture_First_Edition_May93.pdf)
 	- [64-bit PowerPC ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi-1.7.1.html)
+	- [gcc PowerPC Assembly Quick Reference](https://www.cs.uaf.edu/2011/fall/cs301/lecture/11_21_PowerPC.html)
+	- [PowerPC User-Level Instruction Set Quick Reference Card](http://www.tentech.ca/downloads/other/PPC_Quick_Ref_Card-Rev1_Oct12_2010.pdf)
+	- ![PowerPC Microprocessor Family:The Programming Environments for 32-Bit Microprocessors](./assets/PowerPC_TheProgrammingEnvironments.pdf)
 
 - [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
 - [**Linux System Call Table**](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
