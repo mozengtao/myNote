@@ -538,6 +538,7 @@
 		  end
 		  ```
 - 参考文档
+	- [GCC online documentation](https://gcc.gnu.org/onlinedocs/)
 	- [**Shell Commands**](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Shell-Commands.html)
 		```bash
 		(gdb) pipe info registers | grep rax
@@ -559,7 +560,9 @@
 	- [examining the Symbol Table](https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_toc.html#TOC114)
 	- **[GDB-Python-Utils](https://github.com/crossbowerbt/GDB-Python-Utils)**
 	- [Extending   GDB   using Python](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html#Python)
-	- [Automate Debugging with GDB Python API](https://interrupt.memfault.com/blog/automate-debugging-with-gdb-python-api)
+	- [**Automate Debugging with GDB Python API**](https://interrupt.memfault.com/blog/automate-debugging-with-gdb-python-api)
+	- [interrupt](https://github.com/memfault/interrupt/tree/master) #github
+	- [PythonGdbTutorial](https://sourceware.org/gdb/wiki/PythonGdbTutorial)
 	- [gdbcomm.txt](https://gist.github.com/shekkbuilder/8b52e2cf4142c35ba6de)
 	- [Short-list of useful gdb commands](https://www.cs.sfu.ca/~ashriram/Courses/CS295/tutorials/gdb/gdb.html#short-list-of-useful-gdb-commands)
 	- [LD_PRELOAD Hacks](https://eklitzke.org/ld-preload-hacks)

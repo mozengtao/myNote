@@ -728,3 +728,4 @@
  - [Bounded Flexible Arrays in C](https://people.kernel.org/kees/bounded-flexible-arrays-in-c)
  - [Flexible Array Members for C++](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1039r0.html)
  - [Zero-length arrays in C have to go at the end of the struct](https://shivankaul.com/blog/zero-length-arrays)
+ - [How to Use typeof, Statement Expressions and Block-Scope Label Names](https://www.oracle.com/solaris/technologies/c-type.html)
