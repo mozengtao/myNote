@@ -11,7 +11,9 @@
 	- **Managed Objects**: 应用程序的对象通过使用Managed Object API从ConfD management database读取配置. 应用程序的对象通过订阅机制，对配置的改变做出相应的响应。
 -
 - 参考文档
-	- [Confd User Guide](http://66.218.245.39/doc/html/index.html)
+	- [ConfD 6.4 Documentation](http://66.218.245.39/doc/)
+		- [Confd User Guide](http://66.218.245.39/doc/html/index.html)
+		- [C API (Manual Pages)](http://66.218.245.39/doc/html/rn02.html)
 	- [ConfD User Guide](https://manuals.plus/wp-content/sideloads/software-tail-f-confd-user-guide-original.pdf)
 	- [[YANG]]
 -
