@@ -552,7 +552,7 @@
 	- [GDB - Call Stack](https://www.cse.unsw.edu.au/~learn/debugging/modules/gdb_call_stack/)
 	- [Stopping and Continuing](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Stopping.html#Stopping)
 	- [**Debugging with GDB**](https://developer.apple.com/library/archive/documentation/DeveloperTools/gdb/gdb/gdb_toc.html)
-	- [Debugging with   GDB](https://sourceware.org/gdb/current/onlinedocs/gdb.html/)
+	- [**Debugging with GDB**](https://sourceware.org/gdb/current/onlinedocs/gdb.html/)
 	- [GDB Command Reference](https://visualgdb.com/gdbreference/commands/)
 	- [Examining Data](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Data.html#Data)
 		- [Copy Between Memory and a File](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Dump_002fRestore-Files.html#Dump_002fRestore-Files)
