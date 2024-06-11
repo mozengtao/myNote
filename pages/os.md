@@ -6,6 +6,7 @@
 [linux-insides](https://0xax.gitbooks.io/linux-insides/content/)
 [CS 372H, Spring 2011: Introduction to Operating Systems: Honors](https://cs.nyu.edu/~mwalfish/classes/ut/s11-cs372h/)
 [CS372H Operating Systems Lab 1](https://www.cs.utexas.edu/~lorenzo/corsi/cs372h/07S/labs/lab1/lab1.html)
+[CS372H Spring 2011 Lab 1: PC Bootstrap and GCC Calling Conventions](https://cs.nyu.edu/~mwalfish/classes/ut/s11-cs372h/labs/lab1.html)
 
 [COS 318: Operating Systems](https://www.cs.princeton.edu/courses/archive/fall09/cos318/)
 
