@@ -1,3 +1,111 @@
+```bash
+run, r
+    Start debugged program.
+
+break, brea, bre, br, b
+    Set breakpoint at specified location.
+    break [PROBE_MODIFIER] [LOCATION] [thread THREADNUM] [-force-condition] [if CONDITION]
+
+next, n
+    Step program, proceeding through subroutine calls.
+    Usage: next [N]
+
+list, l
+    List specified function or line.
+
+print, inspect, p
+    Print value of expression EXP.
+    Usage: print [[OPTION]... --] [/FMT] [EXP]
+
+quit, exit, q
+    Exit gdb.
+    Usage: quit [EXPR] or exit [EXPR]
+
+up
+    Select and print stack frame that called this one. An argument says how many frames up to go.
+
+down, dow, do
+    Select and print stack frame called by this one. An argument says how many frames down to go.
+
+backtrace, where, bt
+    Print backtrace of all stack frames, or innermost COUNT frames.
+    Usage: backtrace [OPTION]... [QUALIFIER]... [COUNT | -COUNT]
+
+display
+    Print value of expression EXP each time the program stops.
+    Usage: display[/FMT] EXP
+
+undisplay
+    Cancel some expressions to be displayed when program stops.
+    Usage: undisplay [NUM]...
+    Arguments are the code numbers of the expressions to stop displaying.
+    No argument means cancel all automatic-display expressions.
+    "delete display" has the same effect as this command.
+    Do "info display" to see current list of code numbers.
+
+step, s
+    Step program until it reaches a different source line.
+    Usage: step [N]
+    Argument N means step N times (or till program stops for another reason).
+
+continue, fg, c
+    Continue program being debugged, after signal or breakpoint.
+    Usage: continue [N]
+
+finish, fin
+    Execute until selected stack frame returns.
+    Usage: finish
+
+watch
+    Set a watchpoint for EXPRESSION.
+    Usage: watch [-location] EXPRESSION
+    Options:
+    -location
+        This evaluates EXPRESSION and watches the memory to which is refers.
+        -l can be used as a short form of -location.
+    A watchpoint stops execution of your program whenever the value of an expression changes.
+
+info, inf, i
+    Generic command for showing things about the program being debugged.
+    List of info subcommands:
+    info address -- Describe where symbol SYM is stored.
+    info args -- All argument variables of current stack frame or those matching REGEXPs.
+    info breakpoints, info b -- Status of specified breakpoints (all user-settable breakpoints if no argument).
+......
+
+delete, del, d
+    Delete all or some breakpoints.
+    Usage: delete [BREAKPOINTNUM]...
+    Arguments are breakpoint numbers with spaces in between.
+    To delete all breakpoints, give no argument.
+
+whatis
+    Print data type of expression EXP.
+    Only one level of typedefs is unrolled.  See also "ptype".
+
+target
+    Connect to a target machine or process.
+    The first argument is the type or protocol of the target machine.
+    Remaining arguments are interpreted by the target protocol.  For more
+    information on the arguments for a particular protocol, type
+    `help target ' followed by the protocol name.
+    List of target subcommands:
+    ......
+        target record-full -- Log program while executing and replay execution from log.
+
+    reverse-next, rn
+    Step program backward, proceeding through subroutine calls.
+    Like the "reverse-step" command as long as subroutine calls do not happen;
+    when they do, the call is treated as one instruction.
+    Argument N means do this N times (or till program stops for another reason).
+
+set
+    Evaluate expression EXP and assign result to variable VAR.
+    Usage: set VAR = EXP
+    This uses assignment syntax appropriate for the current language
+```
+
+
 - [**Debugging by Patrick Horgan**](http://dbp-consulting.com/tutorials/debugging/)
 - [Basic Assembler Debugging with GDB](http://dbp-consulting.com/tutorials/debugging/basicAsmDebuggingGDB.html)
 - [**Programming From The Ground Up**](http://savannah.nongnu.org/projects/pgubook/) #pdf
