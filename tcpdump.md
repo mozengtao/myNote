@@ -18,8 +18,25 @@
 	- [20 Advanced Tcpdump Examples in Linux](https://www.howtouselinux.com/post/20-tcpdump-advanced-examples-on-linux)
 	- [Tcpdump Command in Linux](https://linuxize.com/post/tcpdump-command-in-linux/)
 	- [man tcpdump](https://www.tcpdump.org/manpages/tcpdump.1.html)
-	- [man pcap-filter](https://linux.die.net/man/7/pcap-filter)
-	- [man pcap-filter](https://www.tcpdump.org/manpages/pcap-filter.7.html)
+	- [**man pcap-filter**](https://linux.die.net/man/7/pcap-filter)
+		```bash	
+		host HOST
+		dst host HOST
+		src host HOST
+
+		ether dst EHOST
+		ether src EHOST
+		ether host EHOST
+
+		dst port PORT
+		src port PORT
+		port PORT
+
+		less LENGTH
+		greater LENGTH
+		......
+		```	
+	- [**man pcap-filter**](https://www.tcpdump.org/manpages/pcap-filter.7.html)
 	- [Packet Filtering HOWTO](https://www.netfilter.org/documentation/HOWTO/packet-filtering-HOWTO.html#toc3)
 	- [Linux Socket Filtering aka Berkeley Packet Filter (BPF)](https://www.kernel.org/doc/html/latest/networking/filter.html#:~:text=Issuing%20a%20high-level%20filter%20command%20like%20tcpdump%20-i,displays%20what%20is%20being%20placed%20into%20this%20structure.) #bpf
 	- [PROGRAMMING WITH PCAP](https://www.tcpdump.org/pcap.html)

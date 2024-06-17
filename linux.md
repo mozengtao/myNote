@@ -31,6 +31,10 @@
 - [linux online books](https://www.linuxtopia.org/online_books/) #online
 - [Huge Page Settings and Disabling Huge Pages in Linux](https://www.baeldung.com/linux/huge-pages-management)
 
+- [The kernel’s command-line parameters](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html)
+
+- [How to uncompress and list an initramfs content on Linux](https://linuxconfig.org/how-to-uncompress-and-list-an-initramfs-content-on-linux)
+
 - linux kernel
 	```bash
 	morrism@localhost ~ $ uname -r
@@ -142,6 +146,103 @@
 	cat: pickle: No such device or address
 
 	mknod 创建的是device file 而不是 device, 所以设备文件存在并不意味着设备存在。
+
+	GRUB
+	GRUB comes after POST, and the BIOS
+	GRUB is installed in a special place on disk
+	GRUB loads the kernel, initial root filesystem, sets up the kernel command line, and then transfers control to the kernel.
+	GRUB can be interrupted, and you can interact with it.
+
+	[root@STB-2 ~]# man -k printf
+	asprintf (3)         - print to allocated string
+	dprintf (3)          - print to a file descriptor
+	format (n)           - Format a string in the style of sprintf
+	fprintf (3)          - formatted output conversion
+	fprintf (3p)         - print formatted output
+	fwprintf (3)         - formatted wide-character output conversion
+	fwprintf (3p)        - print formatted wide-character output
+	ldns_buffer_printf (3) - (unknown subject)
+	printf (1)           - format and print data
+	printf (1p)          - write formatted output
+	printf (3)           - formatted output conversion
+	printf (3p)          - print formatted output
+	snprintf (3)         - formatted output conversion
+	snprintf (3p)        - print formatted output
+	......
+
+	[root@STB-2 ~]# file /etc/default/grub
+	/etc/default/grub: ASCII text
+	[root@STB-2 ~]# ls -l /etc/grub.d/
+	total 72
+	-rwxr-xr-x. 1 root root  8702 Jul 28  2020 00_header
+	-rwxr-xr-x. 1 root root  1043 Mar 21  2019 00_tuned
+	-rwxr-xr-x. 1 root root   232 Jul 28  2020 01_users
+	-rwxr-xr-x. 1 root root 10781 Jul 28  2020 10_linux
+	-rwxr-xr-x. 1 root root 10275 Jul 28  2020 20_linux_xen
+	-rwxr-xr-x. 1 root root  2559 Jul 28  2020 20_ppc_terminfo
+	-rwxr-xr-x. 1 root root 11169 Jul 28  2020 30_os-prober
+	-rwxr-xr-x. 1 root root   214 Jul 28  2020 40_custom
+	-rwxr-xr-x. 1 root root   216 Jul 28  2020 41_custom
+	-rw-r--r--. 1 root root   483 Jul 28  2020 README
+
+	morrism@localhost ~/repos/fsl-linux (develop) $ sudo ls -l /boot/grub2/grub.cfg
+	-rw-r--r--. 1 root root 5115 Nov 17  2020 /boot/grub2/grub.cfg
+
+
+	grub2-mkconfig command is used to generate a new config file
+
+	Root file system: the filesystem that contains "/".
+	Initial RAM disk or RAM filesystem(initrd) is used to provide drivers and support for mounting the system's real root file system. initrd has an init that the kernel runs first. When the init from the initrd terminates, the Linux kernel starts init again; this time from the real filesystem, which is commonly on disk.
+
+	morrism@localhost ~/repos/fsl-linux (develop) $ sudo ls -l /proc/1/exe
+	lrwxrwxrwx. 1 root root 0 Jun 17 08:47 /proc/1/exe -> /usr/lib/systemd/systemd
+	morrism@localhost ~/repos/fsl-linux (develop) $ ls -l /lib
+	lrwxrwxrwx. 1 root root 7 Nov  3  2020 /lib -> usr/lib
+	morrism@localhost ~/repos/fsl-linux (develop) $ which init
+	/usr/sbin/init
+	morrism@localhost ~/repos/fsl-linux (develop) $ ls -l /usr/sbin/init
+	lrwxrwxrwx. 1 root root 22 Aug 10  2021 /usr/sbin/init -> ../lib/systemd/systemd
+
+	morrism@localhost ~/repos/fsl-linux (develop) $ sudo file /boot/initramfs-*
+	/boot/initramfs-0-rescue-459bdef659c147f88006c050437993e0.img: ASCII cpio archive (SVR4 with no CRC)
+	/boot/initramfs-4.18.0-240.15.1.el8_3.x86_64.img:              ASCII cpio archive (SVR4 with no CRC)
+	/boot/initramfs-4.18.0-305.25.1.el8_4.x86_64.img:              gzip compressed data, max compression, from Unix, original size 100695552
+	/boot/initramfs-4.18.0-305.3.1.el8.x86_64.img:                 gzip compressed data, max compression, from Unix, original size 100692992
+	initrd 每个 kernel release 都有一个对应的initrd
+
+	LKM
+
+	morrism@localhost ~/repos/fsl-linux (develop) $ uname -r
+	4.18.0-305.25.1.el8_4.x86_64
+	morrism@localhost ~/repos/fsl-linux (develop) $ ls -l /lib/modules/4.18.0-305.25.1.el8_4.x86_64
+	total 17952
+	-rw-r--r--.  1 root root      323 Nov  3  2021 bls.conf
+	lrwxrwxrwx.  1 root root       45 Nov  3  2021 build -> /usr/src/kernels/4.18.0-305.25.1.el8_4.x86_64
+	-rw-r--r--.  1 root root   192173 Nov  3  2021 config
+	drwxr-xr-x.  2 root root        6 Nov  3  2021 extra
+	drwxr-xr-x. 13 root root      141 Feb 24  2023 kernel
+	-rw-r--r--.  1 root root   888946 Feb 24  2023 modules.alias
+	-rw-r--r--.  1 root root   851641 Feb 24  2023 modules.alias.bin
+	-rw-r--r--.  1 root root      468 Nov  3  2021 modules.block
+	-rw-r--r--.  1 root root     7687 Nov  3  2021 modules.builtin
+	-rw-r--r--.  1 root root     9869 Feb 24  2023 modules.builtin.bin
+	-rw-r--r--.  1 root root   313488 Feb 24  2023 modules.dep
+	-rw-r--r--.  1 root root   427426 Feb 24  2023 modules.dep.bin
+	-rw-r--r--.  1 root root      383 Feb 24  2023 modules.devname
+	-rw-r--r--.  1 root root      153 Nov  3  2021 modules.drm
+	-rw-r--r--.  1 root root       34 Nov  3  2021 modules.modesetting
+	-rw-r--r--.  1 root root     1627 Nov  3  2021 modules.networking
+	-rw-r--r--.  1 root root   104032 Nov  3  2021 modules.order
+	-rw-r--r--.  1 root root      638 Feb 24  2023 modules.softdep
+	-rw-r--r--.  1 root root   437190 Feb 24  2023 modules.symbols
+	-rw-r--r--.  1 root root   531055 Feb 24  2023 modules.symbols.bin
+	lrwxrwxrwx.  1 root root        5 Nov  3  2021 source -> build
+	-rw-r--r--.  1 root root   367479 Nov  3  2021 symvers.gz
+	-rw-------.  1 root root  4166558 Nov  3  2021 System.map
+	drwxr-xr-x.  2 root root        6 Nov  3  2021 updates
+	drwxr-xr-x.  2 root root       40 Feb 24  2023 vdso
+	-rwxr-xr-x.  1 root root 10034312 Nov  3  2021 vmlinuz
+	drwxr-xr-x.  3 root root       23 Feb 24  2023 weak-updates
 
 
 	```
