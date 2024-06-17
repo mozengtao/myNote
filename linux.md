@@ -122,6 +122,26 @@
 	morrism@PC24036:~/ubuntu$ sysctl net.ipv4.ip_forward
 	net.ipv4.ip_forward = 0
 
+	[vcapuser@WEIR_STRAWBERRY-1 ~]$ cd /dev/
+	[vcapuser@WEIR_STRAWBERRY-1 dev]$ ls -l null
+	crw-rw-rw-. 1 root root 1, 3 Jun 15 19:47 null
+	[vcapuser@WEIR_STRAWBERRY-1 dev]$ ls -l |grep "^c" | grep " 1,"
+	crw-rw-rw-. 1 root root      1,   7 Jun 15 19:47 full
+	crw-r--r--. 1 root root      1,  11 Jun 15 19:47 kmsg
+	crw-r-----. 1 root kmem      1,   1 Jun 15 19:47 mem
+	crw-rw-rw-. 1 root root      1,   3 Jun 15 19:47 null
+	crw-r-----. 1 root kmem      1,   4 Jun 15 19:47 port
+	crw-rw-rw-. 1 root root      1,   8 Jun 15 19:47 random
+	crw-rw-rw-. 1 root root      1,   9 Jun 15 19:47 urandom
+	crw-rw-rw-. 1 root root      1,   5 Jun 15 19:47 zero
+	[vcapuser@WEIR_STRAWBERRY-1 dev]$ cd /tmp/
+	[vcapuser@WEIR_STRAWBERRY-1 tmp]$ sudo mknod pickle c 1 2
+	[vcapuser@WEIR_STRAWBERRY-1 tmp]$ ls -l pickle
+	crw-r--r--. 1 root root 1, 2 Jun 16 22:26 pickle
+	[vcapuser@WEIR_STRAWBERRY-1 tmp]$ cat pickle
+	cat: pickle: No such device or address
+
+	mknod 创建的是device file 而不是 device, 所以设备文件存在并不意味着设备存在。
 
 
 	```
