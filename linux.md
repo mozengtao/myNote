@@ -244,5 +244,19 @@
 	-rwxr-xr-x.  1 root root 10034312 Nov  3  2021 vmlinuz
 	drwxr-xr-x.  3 root root       23 Feb 24  2023 weak-updates
 
+	morrism@localhost ~/repos/fsl-linux (develop) $ uname -r
+	4.18.0-305.25.1.el8_4.x86_64
+
+	morrism@localhost ~/repos/fsl-linux (develop) $ ls /lib/modules/4.18.0-305.25.1.el8_4.x86_64/build/
+	arch   certs   drivers   fs       init  Kconfig  lib       Makefile.rhelver  Module.symvers  samples  security  System.map  usr   vmlinux.id
+	block  crypto  firmware  include  ipc   kernel   Makefile  mm                net             scripts  sound     tools       virt
+
+	如果编译linux module
+	make -C /lib/modules/$(uname -r)/build M=$PWD modules
+
+	在当前工作目录创建：
+	simplemodule.c
+	Makefile:
+		obj-m := simplemodule.o
 
 	```
