@@ -70,8 +70,8 @@
 		  	wait
 		      	The process will be started once when the specified runlevel is entered and init 
 		          will wait for its termination.
-		      respawn
-		      	The process will be restarted whenever it terminates (e.g. getty).
+			respawn
+				The process will be restarted whenever it terminates (e.g. getty).
 		  ```
 	- [[update-rc.d]]
 	- [Run Control Scripts](https://docs.huihoo.com/opensolaris/system-administration-guide-basic-administration/html/ch14s10.html)
