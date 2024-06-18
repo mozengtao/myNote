@@ -85,8 +85,130 @@
 	- strace -c whoami
 - 参考文档
 	- [Strace](https://eklitzke.org/strace)
-	- [man strace](https://man7.org/linux/man-pages/man1/strace.1.html)
+	- [**man strace**](https://man7.org/linux/man-pages/man1/strace.1.html)
 	- [strace command](https://www.baeldung.com/linux/strace-command)
-	- [The strace Command in Linux](https://www.baeldung.com/linux/strace-command)
+	- [**The strace Command in Linux**](https://www.baeldung.com/linux/strace-command)
+		```bash
+		strace pwd
+
+		sh -c 'echo $$; exec sleep 60'
+		strace -p xxx
+
+		改变环境变量的值
+		strace -E var1=val1 pwd
+
+		以另外一个用户运行和跟踪程序
+		strace -u xxx whoami
+
+		获取时间信息
+		strace -t whoami
+
+		获取统计信息
+		strace -c whoami
+
+		获取并排序统计信息
+		strace -c -S errors whoami
+
+		strace 表达式
+		strace -e qualifier=[!]value[,value] command
+		The qualifier must be from the list of trace, status, signal, quiet, abbrev, verbose, raw, read, write, fault, and inject.
+			filtering (trace, status, signal, quiet)
+			output formatting (abbrev, verbose, raw)
+			syscalls tampering (fault, inject)
+			file descriptor data dumping (read, write)
+		Filtering Output by Syscall Name:
+		strace -e trace=fstat whoami
+		strace -e trace=!fstat whoami
+
+		Filtering Output by Return Status:
+		strace -e status=!successful whoami
+		strace -e status=unfinished,unavailable whoami
+
+		Filtering Output by Signal:
+		strace -e signal=SIGBUS whoami
+
+		Suppressing Additional Informational Message:
+		strace -e quiet=exit whoami
+
+		Formatting the Output
+		Dereferencing Syscall Arguments:
+		strace -e verbose=none whoami
+
+		Abbreviating Syscall:
+		strace -e whoami
+		strace -e abbrev=none whoami
+
+		Displaying Undecoded Arguments:
+		strace whoami
+		strace -e raw=execve whoami
+
+		Syscall Tampering
+		One of the most powerful features of strace expression is its ability to alter the syscall behavior using inject and fault qualifiers
+		strace -e --inject=syscall_set[:error=errno|:retval=value][:signal=sig][:syscall=syscall][:delay_enter=delay][:delay_exit=delay][:when=expr] command
+
+		Injecting Fault Into Syscalls
+		strace -e inject=fstat:error=EPERM whoami
+
+		Controlling When Does the Faults Get Injected
+		strace -e inject=fstat:error=EPERM:when=2 whoami
+		strace -e inject=fstat:error=EPERM:when=2+ whoami
+		strace -e inject=fstat:error=EPERM:when=2+2 whoami
+
+		Introducing Delays in Syscalls
+		strace -e inject=fstat:delay_enter=2000000 whoami
+
+		Inject the delay after the syscall:
+		strace -e inject=fstat:delay_exit=2000000 whoami
+
+		File Descriptor Data Dumping
+		Dumping File Descriptors’ Data on Every Input Activity
+		strace -e read=3 whoami (dump the data whenever there’s input activity on file descriptor 3)
+
+		Dumping File Descriptors’ Data on Every Output Activity
+		strace -e write=5 whoami (dump the data of file descriptor 5 on every output activity)
+
+		print instruction pointer at the time of system call:
+		strace -i ls
+
+		print timestamp for each system call:
+		strace -r ls
+
+		prefix each output line with clock time:
+		strace -t ls
+
+		show time spent in system calls:
+		strace -T ls
+
+		跟踪程序并输出到文件
+		strace -o trace.txt ls
+
+		跟踪特定系统调用
+		strace -e trace=open,close ls
+
+		跟踪子进程的系统调用
+		strace -f ls
+
+		限制输出的字符串长度
+		strace -s 100 ls
+
+		跟踪网络相关的系统调用
+		strace -e trace=network wget http://example.com
+
+		跟踪文件I/O相关的系统调用
+		strace -e trace=file ls /tmp
+
+		跟踪内存相关的系统调用
+		strace -e trace=memory ls
+
+		跟踪信号交互
+		strace -e trace=signal kill -USR1 `pidof myprocess`
+
+		实时显示时间戳
+		strace -tt ls
+
+		以图形化方式显示跟踪信息
+		strace -o output.txt -ttT -ff myprogram
+		strace-graph < output.txt > graph.txt
+		```
 	- [Linux How to use strace - debugging - troubleshooting](https://www.math-linux.com/linux/tutorials/article/linux-how-to-use-strace-debugging-troubleshooting)
 	- [Exploring System Internals with lsof and strace](http://www.myhowto.org/solving-problems/7-exploring-system-internals-with-lsof-and-strace/)
