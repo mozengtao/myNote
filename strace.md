@@ -212,3 +212,4 @@
 		```
 	- [Linux How to use strace - debugging - troubleshooting](https://www.math-linux.com/linux/tutorials/article/linux-how-to-use-strace-debugging-troubleshooting)
 	- [Exploring System Internals with lsof and strace](http://www.myhowto.org/solving-problems/7-exploring-system-internals-with-lsof-and-strace/)
+	- [强大的strace命令用法详解](https://blog.csdn.net/cs729298/article/details/81906375)
