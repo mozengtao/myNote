@@ -49,6 +49,7 @@
 	- 打印之前和当前的SysV运行级别
 	- > When you request the **init** command to change run levels, all processes without an entry in the *runlevel* field for the target run level receive a warning signal (**SIGTERM**). There is a 20-second grace period before processes are forcibly terminated by the kill signal (**SIGKILL**).
 - 参考文档
+	- [inittab(5)](https://manpages.org/inittab/5)
 	- [/etc/inittab](https://sites.ualberta.ca/dept/chemeng/AIX-43/share/man/info/C/a_doc_lib/files/aixfiles/inittab.htm)
 	- [man inittab](https://www.cyberciti.biz/howto/question/man/inittab-man-page.php)
 		- ```bash
