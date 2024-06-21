@@ -1,3 +1,10 @@
+[Fast Fourier Transform Tutorial](https://www.karlsims.com/fft.html)
+[Fourier Transforms & the Frequency Domain](https://w.astro.berkeley.edu/~jrg/ngst/fft/fourier.html)
+[Fast Fourier Transform (FFT)](https://www.baeldung.com/cs/fast-fourier-transform)
+[FFT Tutorial](https://courses.cs.washington.edu/courses/cse474/17wi/labs/l5/fft.pdf)
+[The Fundamentals of FFT-Based Signal Analysisand Measurement](https://www.sjsu.edu/people/burford.furman/docs/me120/FFT_tutorial_NI.pdf)
+[Python Numerical Methods: FFT](https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter24.03-Fast-Fourier-Transform.html)
+
 [ThinkDSP](https://thinkdsp-cn.readthedocs.io/zh-cn/latest/)
 [General Purpose FFT (Fast Fourier/Cosine/Sine Transform) Package](https://www.kurims.kyoto-u.ac.jp/~ooura/fft.html)
 [OouraFFT](https://github.com/hayguen/OouraFFT/tree/main)
