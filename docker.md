@@ -175,6 +175,67 @@ morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q                     
 morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q | xargs sudo docker rmi -f
 ......
 
+-----------------------------------------
+morrism@PC24036:~/myFirstDockerImage$ cat web-server.Dockerfile
+FROM ubuntu
+LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
+
+USER root
+COPY ./web-server.bash /
+
+RUN chmod 755 /web-server.bash
+RUN apt -y update
+RUN apt -y install bash netcat
+
+USER nobody
+
+ENTRYPOINT [ "/web-server.bash" ]
+morrism@PC24036:~/myFirstDockerImage$ cat web-server.bash
+#!/usr/bin/env bash
+
+start_server() {
+  echo "Server started. Visit http://localhost:5000 to use it."
+  message=$(echo "<html><body><p>Hello! Today's date is $(date).</p></body></html>")
+  length=$(wc -c <<< "$message")
+  payload="\
+HTTP/1.1 200 OK
+Content-Length: $((length-1))
+
+$message"
+  while true
+  do echo -ne "$payload" | nc -l -p 5000
+  done
+}
+
+start_server
+
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker build -t my-web-server -f web-server.Dockerfile .
+[sudo] password for morrism:
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  7.168kB
+Step 1/9 : FROM ubuntu
+......
+
+sudo docker run -d --name my-web-server -p 5001:5000 my-web-server
+
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker run --rm --entrypoint sh ubuntu -c "echo 'hello world' > /tmp/file && cat /tmp/file"
+[sudo] password for morrism:
+hello world
+morrism@PC24036:~/myFirstDockerImage$ ls /tmp/file
+ls: cannot access '/tmp/file': No such file or directory
+morrism@PC24036:~/myFirstDockerImage$ sudo docker run --rm --entrypoint sh -v /tmp/container:/tmp ubuntu -c "echo 'hello world' > /tmp/file && cat /tmp/file"
+hello world
+morrism@PC24036:~/myFirstDockerImage$ cat /tmp/container/file
+hello world
+morrism@PC24036:~/myFirstDockerImage$
+
+
+
 
 ```
 
