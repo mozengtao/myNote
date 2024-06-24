@@ -1,3 +1,183 @@
+
+![The anatomy of a container](image-3.png)
+
+docker command cli
+```bash
+morrism@PC24036:~$ docker --help
+morrism@PC24036:~$ docker network --help
+morrism@PC24036:~$ docker network create --help
+
+morrism@PC24036:~$ sudo docker container create hello-world:linux
+[sudo] password for morrism:
+Unable to find image 'hello-world:linux' locally
+linux: Pulling from library/hello-world
+Digest: sha256:b7d87b72c676fe7b704572ebdfdf080f112f7a4c68fb77055d475e42ebc3686f
+Status: Downloaded newer image for hello-world:linux
+4d899b2443ed4ca6ec50c8994cbd31f3ed0ed016433129f8f6495df623d23bec
+
+morrism@PC24036:~$ sudo docker ps --all
+CONTAINER ID   IMAGE               COMMAND    CREATED              STATUS    PORTS     NAMES
+4d899b2443ed   hello-world:linux   "/hello"   About a minute ago   Created             elated_napier
+
+morrism@PC24036:~$ sudo docker start 4d899b2443ed4c
+4d899b2443ed4c
+
+morrism@PC24036:~$ sudo docker ps --all
+CONTAINER ID   IMAGE               COMMAND    CREATED         STATUS                      PORTS     NAMES
+4d899b2443ed   hello-world:linux   "/hello"   2 minutes ago   Exited (0) 10 seconds ago             elated_napier
+
+morrism@PC24036:~$ sudo docker logs 4d899b2443ed
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+......
+
+morrism@PC24036:~$ sudo docker container start --attach 4d899b2443ed
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+morrism@PC24036:~$ sudo docker run hello-world:linux              (docker run = docker container create + docker container start + docker container attach)
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+
+
+--------- Creat a Docker container from Dockerfile 1 --------------------
+
+morrism@PC24036:~/myFirstDockerImage$ cat Dockerfile
+FROM ubuntu
+
+LABEL maintainer="morrism"
+
+USER root
+
+COPY ./entrypoint.bash /
+
+RUN apt -y update
+RUN apt -y install curl bash
+RUN chmod 755 /entrypoint.bash
+
+USER nobody
+
+ENTRYPOINT [ "/entrypoint.bash" ]
+morrism@PC24036:~/myFirstDockerImage$ cat entrypoint.bash
+#!/usr/bin/env bash
+
+echo "The current time is ${date}"
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker run my-first-image
+The current time is
+
+--------- Creat a Docker container from Dockerfile 2 --------------------
+
+morrism@PC24036:~/myFirstDockerImage$ cat server.Dockerfile
+FROM ubuntu
+LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
+
+USER root
+COPY ./server.bash /
+
+RUN chmod 755 /server.bash
+RUN apt -y update
+RUN apt -y install bash
+
+USER nobody
+
+ENTRYPOINT [ "/server.bash" ]
+morrism@PC24036:~/myFirstDockerImage$ cat server.bash
+#!/usr/bin/env bash
+
+bash_is_current_version() {
+  bash --version | grep -q 'version 5'
+}
+
+start_server() {
+  echo "Server started. Press CTRL-C to stop..."
+  while true
+  do sleep 10
+  done
+}
+
+if ! bash_is_current_version
+then
+  >&2 echo "ERROR: Bash not installed or not the right version."
+  exit 1
+fi
+
+start_server
+
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker run my-server-image
+Server started. Press CTRL-C to stop...
+xxxfsdfdf
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker run -d my-server-image
+1db9dd9e0c90a27964e87c98d9a8859c204ff2755a6c6d87585b92c35637791a
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
+CONTAINER ID   IMAGE             COMMAND          CREATED          STATUS          PORTS     NAMES
+baa4fc37a2e3   my-server-image   "/server.bash"   20 seconds ago   Up 19 seconds             sharp_germain
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker exec 1db9dd9e0c90 date
+Mon Jun 24 08:36:01 UTC 2024
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker exec --interactive --tty 1db9dd9e0c90  bash
+nobody@1db9dd9e0c90:/$ ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  server.bash  srv  sys  tmp  usr  var
+nobody@1db9dd9e0c90:/$
+exit
+morrism@PC24036:~/myFirstDockerImage$
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker kill baa4fc37a2e3
+baa4fc37a2e3
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
+CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
+1db9dd9e0c90   my-server-image   "/server.bash"   6 minutes ago   Up 6 minutes             interesting_varahamihira
+morrism@PC24036:~/myFirstDockerImage$ sudo docker stop 1db9dd9e0c90
+1db9dd9e0c90
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
+CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
+34e53ee129c6   my-server-image   "/server.bash"   4 seconds ago   Up 2 seconds             busy_satoshi
+morrism@PC24036:~/myFirstDockerImage$ sudo docker stop -t 0 1db9dd9e0c90
+1db9dd9e0c90
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps -a
+CONTAINER ID   IMAGE               COMMAND              CREATED             STATUS                            PORTS     NAMES
+34e53ee129c6   my-server-image     "/server.bash"       53 seconds ago      Up 52 seconds                               busy_satoshi
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker rm -f 34e53ee129c6                                                                                                                          34e53ee129c6                                                                                                                                                                            
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps -aq | xargs sudo docker rm
+1db9dd9e0c90
+baa4fc37a2e3
+abc7c336bbec
+6cee9483cde4
+f52170766a0c
+ff4875b197b0
+6a2920de51ed
+4d899b2443ed
+morrism@PC24036:~/myFirstDockerImage$ sudo docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker images
+REPOSITORY        TAG       IMAGE ID       CREATED          SIZE
+my-server-image   latest    836da8e91653   19 minutes ago   115MB
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker rmi -f my-server-image
+...
+
+morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q                                                                                                                                   553be8cf2c8b                                                                                                                                                                                  2e1f9fa4aa03                                                                                                                                                                                  67f3a9b219ad                                                                                                                                                                                  35a88802559d                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  
+morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q | xargs sudo docker rmi -f
+......
+
+
+```
+
 - [[podman]]
 - linux容器
 	- linux容器是一种虚拟化技术，LXC(Linux Containers)不是模拟一个完整的操作系统，而是对进程进行隔离，对于容器里的进程来说，各种资源是虚拟的，从而实现与底层系统的隔离。

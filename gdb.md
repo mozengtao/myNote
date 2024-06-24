@@ -120,6 +120,7 @@ enable, en				使能断点
 	Usage: enable [BREAKPOINTNUM]...
 ```
 
+[7 pro tips for using the GDB step command](https://opensource.com/article/22/12/gdb-step-command)
 
 - [**Debugging by Patrick Horgan**](http://dbp-consulting.com/tutorials/debugging/)
 - [Basic Assembler Debugging with GDB](http://dbp-consulting.com/tutorials/debugging/basicAsmDebuggingGDB.html)
