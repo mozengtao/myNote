@@ -40,12 +40,9 @@ The practical effect of the previous assignment is that all files installed by b
 	  
 	  ```
 - yocto project
-  collapsed:: true
 	- ![image.png](../assets/image_1671676755810_0.png){:height 515, :width 776}
 - 构建系统工作流程
-  collapsed:: true
 	- ![_images/yp-how-it-works-new-diagram.png](https://docs.yoctoproject.org/_images/yp-how-it-works-new-diagram.png)
-	  collapsed:: true
 		- Fetch – 获取源代码
 		- Extract – 解压源代码
 		- Patch – 应用补丁
@@ -54,38 +51,27 @@ The practical effect of the previous assignment is that all files installed by b
 		- Install – 拷贝文件到目标目录
 		- Package – 打包安装文件
 - Yocto项目核心组件
-  collapsed:: true
 	- BitBake
-	  collapsed:: true
 		- 构建引擎，任务调度器，它负责解释配置文件和recipes并执行一系列的任务，来下载，配置，编译特定的应用和文件系统镜像。
 	- OpenEmbedded-Core
-	  collapsed:: true
 		- 一系列基础层的集合，它包含了一系列基础的recipes，layers，classess，这些组件在所有的嵌入式系统之间是共享的。
 	- Poky
-	  collapsed:: true
 		- 参考发行系统，它是一系列项目和工具的集合，用来引导构建基于Yocto项目的发行版。
 - OpenEmbedded-Core组织结构
-  collapsed:: true
 	- Recipe
-	  collapsed:: true
 		- 描述如何获取，配置，编译和打包应用和镜像，有特定的语法
 	- Layer
-	  collapsed:: true
 		- Layer由一系列的Recipe组成，通常为了实现一个通用的目的，如meta-ti-bsp
 		- 同一个发行版根据需求可能存在多个Layer
 	- 支持ARM，MIPS，PowerPC，RISC-V和x86结构
 	- 支持QEMU模拟的以上架构
 - 配置编译系统
 	- build/conf
-	  collapsed:: true
 		- bblayers.conf
-		  collapsed:: true
 			- 显式指定需要用到的Layer列表
 		- local.conf
-		  collapsed:: true
 			- 设置当前用户相关的配置变量，配置变量可以在这里进行覆写。
 - 变量
-  collapsed:: true
 	- OpenEmbedded使用配置变量保存信息
 	- 通常变量名称用大写字母表示，如CONF_VERSION
 	- 变量的值是字符串
@@ -108,15 +94,12 @@ The practical effect of the previous assignment is that all files installed by b
 			- `FILESEXTRAPATHS:prepend := "${THISDIR}${PN}` adds the folder to the set of
 			  paths where files are located (in a recipe).
 		- remove override
-		  collapsed:: true
 			- 移除变量里出现的所有指定值
 			- `IMAGE_INSTALL:remove = "i2c-tools"`
 		- 有条件的override
-		  collapsed:: true
 			- 追加machine名称只会定义针对特定machine的配置变量
 			- 它尝试匹配OVERRIDES中包含的MACHINE，SOC_FAMILY等定义的值
 			- 如果该override在OVERRIDES中，则应用赋值，否则赋值被忽略
-			  collapsed:: true
 				- ```bash
 				  # example 1
 				  OVERRIDES="arm:armv7a:ti-soc:ti33x:beaglebone:poky"
@@ -144,23 +127,18 @@ The practical effect of the previous assignment is that all files installed by b
 				  IMAGE_INSTALL = "busybox mtd-utils"
 				  ```
 	- 变量赋值顺序
-	  collapsed:: true
 		- ![image.png](../assets/image_1671694224440_0.png)
 - Package
-  collapsed:: true
 	- virtual package
-	  collapsed:: true
 		- 一些package有相同的目的，同时只能使用其中一个
 		- virtual package 用来描述功能，若干个package都可以用来提供该功能
 		- 只有一个提供该功能的package会被编译并集成到最终的image当中
 		- virtual package的形式如下`virtual/<name>`
-		  collapsed:: true
 			- virtual/bootloader: u-boot, u-boot-ti-staging…
 			- virtual/kernel: linux-yocto, linux-yocto-tiny, linux-yocto-rt, linux-ti-staging…
 			- virtual/libc: glibc, musl, newlib
 			- virtual/xserver: xserver-xorg
 		- 具体哪一个package variant被指定提供virtual package功能，通过PREFERRED_PROVIDER来指定，package name作为该变量后缀来指定variant
-		  collapsed:: true
 			- ```bash
 			  PREFERRED_PROVIDER_virtual/kernel ?= "linux-ti-staging"
 			  PREFERRED_PROVIDER_virtual/libgl = "mesa
@@ -168,7 +146,6 @@ The practical effect of the previous assignment is that all files installed by b
 		- Bitbake默认会选取最高优先级的Layer，最高version number的provider进行编译，除非该recipe定义了变量`DEFAULT_PREFERENCE ="-1"`
 		- 当多个package version可用时，可以通过变量`PREFERRED_VERSION`来显式指定一个provider
 		- %可以用作通配符
-		  collapsed:: true
 			- ```bash
 			  PREFERRED_VERSION_nginx = "1.20.1"
 			  PREFERRED_VERSION_linux-yocto = "5.14%"
@@ -177,9 +154,7 @@ The practical effect of the previous assignment is that all files installed by b
 		- 具体安装的package可以通过IMAGE_INSTALL配置变量的来指定
 		- 需要安装的package可以通过PACKAGE_EXCLUDE来过滤，如果使用该变量来指定不安装某个package，但是其他package又依赖该package，则会出现错误。该规则只适合于RPM和IPK安装包
 - Recipe
-  collapsed:: true
 	- ![image.png](../assets/image_1671698126913_0.png)
-	  collapsed:: true
 		- Recipe定义了如何处理一个特定的应用
 		- Recipe是一一系列指令，用来描述针对特定应用如何retrieve, patch, compile, install和产生二进制安装包
 		- Recipe定义了编译和运行时依赖
@@ -187,21 +162,15 @@ The practical effect of the previous assignment is that all files installed by b
 		- Recipe可以包含称为task的函数如fetch, configure, compile…
 		- Recipe自动定义了一些变量
 		  background-color:: pink
-		  collapsed:: true
 			- PN
-			  collapsed:: true
 				- package name，在recipe文件名称中指定
 			- BPN
-			  collapsed:: true
 				- 移除PN的前缀和后缀之后的结果，如nativesdk-，或者-native
 			- PV
-			  collapsed:: true
 				- package version，在recipe文件名称中指定
 			- PR
-			  collapsed:: true
 				- package revision，默认为r0
 			- BP
-			  collapsed:: true
 				- 定义为`${BPN}-${PV}`
 			- ```bash
 			  如果recipe名称为bash_5.1.bb
@@ -211,9 +180,7 @@ The practical effect of the previous assignment is that all files installed by b
 			  ```
 		- Recipe的name和version通常和上游的名称相匹配
 - Recipe组织结构
-  collapsed:: true
 	- `<application>.inc`
-	  collapsed:: true
 		- 公共的metadata
 	- `<application>_<version>.bb`
 		- `require <application>.inc`，以及定义特定版本的metadata
@@ -336,7 +303,6 @@ The practical effect of the previous assignment is that all files installed by b
 				- 在新的shell下用户手动解决冲突
 			- 默认在meta-poky下，`PATCHRESOLVE = "noop"`
 - Recipe示例
-  collapsed:: true
 	- ```bash
 	  DESCRIPTION = "Hello world program"
 	  HOMEPAGE = "http://example.net/hello/"
@@ -394,7 +360,6 @@ The practical effect of the previous assignment is that all files installed by b
 	  SRC_URI[md5sum] = "2cee42a2ff4f1cd4f9298eeeb2264519"
 	  ```
 - 扩展已有的Recipe
-  collapsed:: true
 	- ![image.png](../assets/image_1672021163653_0.png){:height 299, :width 594}
 	- recipe扩展文件以.bbappend结尾
 	- recipe扩展文件必须与它要扩展的recipe文件root name相同，但是可以使用通配符
@@ -414,7 +379,6 @@ The practical effect of the previous assignment is that all files installed by b
 			  	    "
 			  ```
 - recipe高级配置
-  collapsed:: true
 	- 现实世界中的recipe比较复杂
 		- 可能包含virtual package
 			- BitBake允许使用virtual package name代替实际的package name
@@ -423,7 +387,6 @@ The practical effect of the previous assignment is that all files installed by b
 				- `PROVIDES = "virtual/kernel"`
 		- 可能从class继承通用的处理函数
 - Class
-  collapsed:: true
 	- class提供公共代码的抽象实现，可以在多个recipe内重复使用
 	- class扩展.bbclass
 	- class文件放在layer的classes目录
@@ -507,7 +470,6 @@ The practical effect of the previous assignment is that all files installed by b
 		  }
 		  ```
 - Binary package
-  collapsed:: true
 	- 用于只安装已经编译好的二进制文件到最终的根文件系统中
 	- bin_package.bbclass
 		- Disables do_configure 和 do_compile
@@ -516,7 +478,6 @@ The practical effect of the previous assignment is that all files installed by b
 		- 设置LICENSE to CLOSED if applicable
 		- 可能需要`inherit allarch`
 - [[Bitbake]]文件包含
-  collapsed:: true
 	- Metadata可以通过被包含在不同文件之间共享
 	- BitBake使用BBPATH和当前目录来查找被包含的文件
 	- 包含文件的关键字
@@ -533,7 +494,6 @@ The practical effect of the previous assignment is that all files installed by b
 			- 包含本地文件`include ninvaders.inc`
 			- 从其他位置包含文件`require path/to/file.inc`
 - Recipe Debugging
-  collapsed:: true
 	- 对于每一个task，在temp目录下都有关于这个recipe的log
 	- bitbake可以dump整个环境
 		- `bitbake -e ninvaders`
@@ -548,7 +508,6 @@ The practical effect of the previous assignment is that all files installed by b
 			- `buildhistory-diff`
 	-
 - 配置变量
-  collapsed:: true
 	- [BBPATH](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBPATH)
 	- [BBFILES](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBFILES)
 	- [LAYERDIR](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-LAYERDIR)
