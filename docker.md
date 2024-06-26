@@ -234,6 +234,14 @@ morrism@PC24036:~/myFirstDockerImage$ cat /tmp/container/file
 hello world
 morrism@PC24036:~/myFirstDockerImage$
 
+Push images to the Docker registry:
+1.注册 Dockerhub
+2.在客户端通过 docker login 登录 Dockerhub
+3.重命令 docker iamge: docker tag my-web-server USERNAME/my-web-server:0.0.1
+4. docker push USERNAME/my-web-server:0.0.1
+
+
+sudo docker run --name website -v "$PWD/website:/usr/share/nginx/html" -p 8080:80 --rm nginx
 
 
 

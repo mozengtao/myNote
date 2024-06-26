@@ -1,3 +1,25 @@
+```
+1. 解决 "/usr/bin/ld: cannot find -lhdf5: No such file or directory"
+如果没有安装，直接安装
+sudo apt-get install libxxx-dev
+
+查询库文件 libhdf5.so 是否能在搜索路径中找到
+gcc -lhdf5 --verbose
+
+使用 /etc/ld.so.conf 配置文件
+sudo echo '/opt/biosoft/hdf5-1.8.15-patch1/lib/' >> /etc/ld.so.conf
+运行 sudo ldconfig 重新载入 /ext/ld.so.conf 中的路径，使修改生效
+
+修改环境变量
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/biosoft/hdf5-1.8.15-patch1/lib/
+
+建立对应的文件连接(如果有的话)
+morrism@morrism-vcmos-kirkstone ~ $ cd /usr/lib64/
+morrism@morrism-vcmos-kirkstone /usr/lib64 $ ls -l libgssapi_krb5* libkrb5* libk5crypto* libcom_err*
+lrwxrwxrwx 1 root root     17 Mar  9  2018 libcom_err.so.2 -> libcom_err.so.2.1
+
+sudo ln -s libcom_err.so.2.1 libcom_err.so
+```
 - [[Cross compiling]]
 - gcc编译过程
   collapsed:: true
