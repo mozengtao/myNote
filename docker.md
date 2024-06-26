@@ -247,6 +247,10 @@ sudo docker run --name website -v "$PWD/website:/usr/share/nginx/html" -p 8080:8
 
 ```
 
+[Container from scratch: table of contents](https://kevinboone.me/containerfromscratch_toc.html)
+[Difference Between chroot and Docker](https://www.baeldung.com/ops/chroot-vs-docker)
+[ruri](https://github.com/Moe-hacker/ruri)
+
 - [[podman]]
 - linux容器
 	- linux容器是一种虚拟化技术，LXC(Linux Containers)不是模拟一个完整的操作系统，而是对进程进行隔离，对于容器里的进程来说，各种资源是虚拟的，从而实现与底层系统的隔离。
