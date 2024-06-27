@@ -1,4 +1,16 @@
 ```bash
+ssh登陆流程：
+1.远程主机收到用户的登录请求，把自己的公钥发给用户
+2.用户收到远程主机发送的公钥后，利用公钥将登陆密码加密，发送给远程主机
+3.远程主机使用自己的私钥，解密登陆密码，如果密码正确，就同意用户登录
+
+跳过 ssh 首次连接远程主机的 fingerprint
+方法1
+ssh -o "StrictHostKeyChecking no" USER@HOST
+方法2
+在配置文件 ~/.ssh/config 或者 /etc/ssh/ssh_config 中增加配置选项
+StrictHostKeyChecking no
+
 # Permissions for .ssh folder and key files
 1. .ssh directory: 700 (drwx------)
 2. public key (.pub files): 644 (-rw-r--r--)
