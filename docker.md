@@ -1,5 +1,110 @@
 
 ![The anatomy of a container](image-3.png)
+Namespace + "Control Groups"
+	Namespace: Limits what you can see
+	Control Groups: Limits how much you can use
+
+Docker make containers easy:
+	1.Configuration through Dockerfiles, not shell commands
+	2.Share images with others through image registries
+	3.A super easy command line client and API
+
+Container Runtimes:
+	Can:
+		Create namespaces
+		Create and associate cgroups to namespaces(container)
+		Map filesystems to containers
+		Set container capabilities
+		Start, stop and remove individual containers
+
+	Cannot:
+		Build images
+		Pull images
+		Serve APIs for interacting with containers
+
+Types of container runtimes:
+OCI runtimes
+	Open Container Initiative(OCI)
+		OCI aims to standardize container technology, like container images and runtimes.
+		The OCI Runtime Specification outlines what a container is and how they should be managed.
+		runtime-spec does not dictate how to do these things.
+
+		runc
+		crun (smaller than runc and faster at starting and stopping containers)
+		youki (written in Rust)
+CRI runtimes
+	Container Runtime Interface(CRI)
+		CRI provides an API for running containers on container runtimes, This allows projects like Kubernetes to not be tied to any specific runtime or runtime standard
+
+	containerd is a popular CRI tuntime that uses runc by default to create OCI containers
+	CRI-O is a lightweight CRI runtime optimized for Kubernetes, maintained by Redhat, Intel and others
+
+
+The Container Engine:
+	Container engines make managing containers easy
+
+	Docker Engine
+		Uses containerd as its runtime by default
+	Podman
+		The Redhat container engine
+		Uses crun as its runtime by default
+
+/var/lib/docker: containers, volumes, and metadata
+
+morrism@PC24036:~$ sudo ls /var/lib/docker
+buildkit  containers  engine-id  image  network  overlay2  plugins  runtimes  swarm  tmp  volumes
+
+/var/run/docker.sock: the pipe between the Docker client and Docker Engine
+
+morrism@PC24036:~$ sudo ls -l /var/run/docker.sock
+srw-rw---- 1 root docker 0 Jun 26 09:32 /var/run/docker.sock
+
+/etc/docker/daemon.json: Docker Engine configuration(might not exist first)
+
+morrism@PC24036:~$ sudo ls -l /etc/docker/daemon.json
+-rw-r--r-- 1 root root 193 Jun 21 17:04 /etc/docker/daemon.json
+
+![container images](image-4.png)
+Container images:
+Container images are prepackaged filesystems for containers.
+
+morrism@PC24036:~/ubuntu/docker$ tar -t -f ./hello-world.tar.gz
+247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/
+247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/VERSION
+247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/json
+247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/layer.tar
+7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/
+7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/VERSION
+7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/json
+7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/layer.tar
+d68fcc334f453a8c889c682226e6c6dc39694eaa4af54fdc8cc03bba03fdbb1c.json
+manifest.json
+repositories
+
+morrism@PC24036:~/ubuntu/docker$ tar -x -O -f ./hello-world.tar.gz manifest.json
+[{"Config":"d68fcc334f453a8c889c682226e6c6dc39694eaa4af54fdc8cc03bba03fdbb1c.json","RepoTags":["test:latest"],"Layers":["7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/layer.tar","247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/layer.tar"]}]
+
+morrism@PC24036:~/ubuntu/docker$ tar -x -O -f ./hello-world.tar.gz manifest.json | jq .
+[
+  {
+    "Config": "d68fcc334f453a8c889c682226e6c6dc39694eaa4af54fdc8cc03bba03fdbb1c.json",
+    "RepoTags": [
+      "test:latest"
+    ],
+    "Layers": [
+      "7b473dec0fa9e1cd2ffeb04ca39b125972ca0927000ccd033404674671768b8a/layer.tar",
+      "247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/layer.tar"
+    ]
+  }
+]
+
+morrism@PC24036:~/ubuntu/docker$ tar -x -O -f ./hello-world.tar.gz 247460e92ef67fdf643394f29fdfdfcec2fde609010ec63e3b7bee779e1a4846/layer.tar | tar -t -f -                                   hello-from-linkedin-learning                                                                                                                                                      
+
+Storage drivers define how layers are stored on disk and represented to containers.
+overlay2 is the most popular storage driver.
+
+![docker image layers 1](image-5.png)
+![docker image layers 2](image-6.png)
 
 docker command cli
 ```bash
@@ -8,148 +113,144 @@ morrism@PC24036:~$ docker network --help
 morrism@PC24036:~$ docker network create --help
 
 morrism@PC24036:~$ sudo docker container create hello-world:linux
-[sudo] password for morrism:
-Unable to find image 'hello-world:linux' locally
-linux: Pulling from library/hello-world
-Digest: sha256:b7d87b72c676fe7b704572ebdfdf080f112f7a4c68fb77055d475e42ebc3686f
-Status: Downloaded newer image for hello-world:linux
-4d899b2443ed4ca6ec50c8994cbd31f3ed0ed016433129f8f6495df623d23bec
+	[sudo] password for morrism:
+	Unable to find image 'hello-world:linux' locally
+	linux: Pulling from library/hello-world
+	Digest: sha256:b7d87b72c676fe7b704572ebdfdf080f112f7a4c68fb77055d475e42ebc3686f
+	Status: Downloaded newer image for hello-world:linux
+	4d899b2443ed4ca6ec50c8994cbd31f3ed0ed016433129f8f6495df623d23bec
 
 morrism@PC24036:~$ sudo docker ps --all
-CONTAINER ID   IMAGE               COMMAND    CREATED              STATUS    PORTS     NAMES
-4d899b2443ed   hello-world:linux   "/hello"   About a minute ago   Created             elated_napier
+	CONTAINER ID   IMAGE               COMMAND    CREATED              STATUS    PORTS     NAMES
+	4d899b2443ed   hello-world:linux   "/hello"   About a minute ago   Created             elated_napier
 
 morrism@PC24036:~$ sudo docker start 4d899b2443ed4c
-4d899b2443ed4c
+	4d899b2443ed4c
 
 morrism@PC24036:~$ sudo docker ps --all
-CONTAINER ID   IMAGE               COMMAND    CREATED         STATUS                      PORTS     NAMES
-4d899b2443ed   hello-world:linux   "/hello"   2 minutes ago   Exited (0) 10 seconds ago             elated_napier
+	CONTAINER ID   IMAGE               COMMAND    CREATED         STATUS                      PORTS     NAMES
+	4d899b2443ed   hello-world:linux   "/hello"   2 minutes ago   Exited (0) 10 seconds ago             elated_napier
 
 morrism@PC24036:~$ sudo docker logs 4d899b2443ed
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-......
+	Hello from Docker!
+	This message shows that your installation appears to be working correctly.
+	......
 
 morrism@PC24036:~$ sudo docker container start --attach 4d899b2443ed
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
+	Hello from Docker!
+	This message shows that your installation appears to be working correctly.
 
 morrism@PC24036:~$ sudo docker run hello-world:linux              (docker run = docker container create + docker container start + docker container attach)
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
+	Hello from Docker!
+	This message shows that your installation appears to be working correctly.
 
 
 
 --------- Creat a Docker container from Dockerfile 1 --------------------
 
 morrism@PC24036:~/myFirstDockerImage$ cat Dockerfile
-FROM ubuntu
+	FROM ubuntu
 
-LABEL maintainer="morrism"
+	LABEL maintainer="morrism"
 
-USER root
+	USER root
 
-COPY ./entrypoint.bash /
+	COPY ./entrypoint.bash /
 
-RUN apt -y update
-RUN apt -y install curl bash
-RUN chmod 755 /entrypoint.bash
+	RUN apt -y update
+	RUN apt -y install curl bash
+	RUN chmod 755 /entrypoint.bash
 
-USER nobody
+	USER nobody
 
-ENTRYPOINT [ "/entrypoint.bash" ]
-morrism@PC24036:~/myFirstDockerImage$ cat entrypoint.bash
-#!/usr/bin/env bash
+	ENTRYPOINT [ "/entrypoint.bash" ]
+	morrism@PC24036:~/myFirstDockerImage$ cat entrypoint.bash
+	#!/usr/bin/env bash
 
-echo "The current time is ${date}"
+	echo "The current time is ${date}"
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker run my-first-image
-The current time is
+	The current time is
 
 --------- Creat a Docker container from Dockerfile 2 --------------------
 
 morrism@PC24036:~/myFirstDockerImage$ cat server.Dockerfile
-FROM ubuntu
-LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
+	FROM ubuntu
+	LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
 
-USER root
-COPY ./server.bash /
+	USER root
+	COPY ./server.bash /
 
-RUN chmod 755 /server.bash
-RUN apt -y update
-RUN apt -y install bash
+	RUN chmod 755 /server.bash
+	RUN apt -y update
+	RUN apt -y install bash
 
-USER nobody
+	USER nobody
 
-ENTRYPOINT [ "/server.bash" ]
-morrism@PC24036:~/myFirstDockerImage$ cat server.bash
-#!/usr/bin/env bash
+	ENTRYPOINT [ "/server.bash" ]
+	morrism@PC24036:~/myFirstDockerImage$ cat server.bash
+	#!/usr/bin/env bash
 
-bash_is_current_version() {
-  bash --version | grep -q 'version 5'
-}
+	bash_is_current_version() {
+	bash --version | grep -q 'version 5'
+	}
 
-start_server() {
-  echo "Server started. Press CTRL-C to stop..."
-  while true
-  do sleep 10
-  done
-}
+	start_server() {
+	echo "Server started. Press CTRL-C to stop..."
+	while true
+	do sleep 10
+	done
+	}
 
-if ! bash_is_current_version
-then
-  >&2 echo "ERROR: Bash not installed or not the right version."
-  exit 1
-fi
+	if ! bash_is_current_version
+	then
+	>&2 echo "ERROR: Bash not installed or not the right version."
+	exit 1
+	fi
 
-start_server
+	start_server
 
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker run my-server-image
-Server started. Press CTRL-C to stop...
-xxxfsdfdf
+	Server started. Press CTRL-C to stop...
+	......
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker run -d my-server-image
-1db9dd9e0c90a27964e87c98d9a8859c204ff2755a6c6d87585b92c35637791a
+	1db9dd9e0c90a27964e87c98d9a8859c204ff2755a6c6d87585b92c35637791a
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
-CONTAINER ID   IMAGE             COMMAND          CREATED          STATUS          PORTS     NAMES
-baa4fc37a2e3   my-server-image   "/server.bash"   20 seconds ago   Up 19 seconds             sharp_germain
+	CONTAINER ID   IMAGE             COMMAND          CREATED          STATUS          PORTS     NAMES
+	baa4fc37a2e3   my-server-image   "/server.bash"   20 seconds ago   Up 19 seconds             sharp_germain
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker exec 1db9dd9e0c90 date
-Mon Jun 24 08:36:01 UTC 2024
+	Mon Jun 24 08:36:01 UTC 2024
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker exec --interactive --tty 1db9dd9e0c90  bash
-nobody@1db9dd9e0c90:/$ ls
-bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  server.bash  srv  sys  tmp  usr  var
-nobody@1db9dd9e0c90:/$
-exit
-morrism@PC24036:~/myFirstDockerImage$
+	nobody@1db9dd9e0c90:/$ ls
+	bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  server.bash  srv  sys  tmp  usr  var
+	nobody@1db9dd9e0c90:/$
+	exit
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker kill baa4fc37a2e3
-baa4fc37a2e3
+	baa4fc37a2e3
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
-CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
-1db9dd9e0c90   my-server-image   "/server.bash"   6 minutes ago   Up 6 minutes             interesting_varahamihira
+	CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
+	1db9dd9e0c90   my-server-image   "/server.bash"   6 minutes ago   Up 6 minutes             interesting_varahamihira
 morrism@PC24036:~/myFirstDockerImage$ sudo docker stop 1db9dd9e0c90
-1db9dd9e0c90
+	1db9dd9e0c90
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker ps
-CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
-34e53ee129c6   my-server-image   "/server.bash"   4 seconds ago   Up 2 seconds             busy_satoshi
+	CONTAINER ID   IMAGE             COMMAND          CREATED         STATUS         PORTS     NAMES
+	34e53ee129c6   my-server-image   "/server.bash"   4 seconds ago   Up 2 seconds             busy_satoshi
 morrism@PC24036:~/myFirstDockerImage$ sudo docker stop -t 0 1db9dd9e0c90
-1db9dd9e0c90
+	1db9dd9e0c90
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker ps -a
-CONTAINER ID   IMAGE               COMMAND              CREATED             STATUS                            PORTS     NAMES
-34e53ee129c6   my-server-image     "/server.bash"       53 seconds ago      Up 52 seconds                               busy_satoshi
+	CONTAINER ID   IMAGE               COMMAND              CREATED             STATUS                            PORTS     NAMES
+	34e53ee129c6   my-server-image     "/server.bash"       53 seconds ago      Up 52 seconds                               busy_satoshi
 
-morrism@PC24036:~/myFirstDockerImage$ sudo docker rm -f 34e53ee129c6                                                                                                                          34e53ee129c6                                                                                                                                                                            
+morrism@PC24036:~/myFirstDockerImage$ sudo docker rm -f 							34e53ee129c6                                                                                                                          	34e53ee129c6                                                                                                                                                                            
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker ps -aq | xargs sudo docker rm
 1db9dd9e0c90
@@ -171,54 +272,55 @@ my-server-image   latest    836da8e91653   19 minutes ago   115MB
 morrism@PC24036:~/myFirstDockerImage$ sudo docker rmi -f my-server-image
 ...
 
-morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q                                                                                                                                   553be8cf2c8b                                                                                                                                                                                  2e1f9fa4aa03                                                                                                                                                                                  67f3a9b219ad                                                                                                                                                                                  35a88802559d                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  
+morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q                                                                                   553be8cf2c8b                                                                                                                                                                                  2e1f9fa4aa03                                                                                                                                                                                  67f3a9b219ad                                                                                                                                                                                  35a88802559d                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  d2c94e258dcb                                                                                                                                                                                  
+
 morrism@PC24036:~/myFirstDockerImage$ sudo docker images -q | xargs sudo docker rmi -f
 ......
 
 -----------------------------------------
 morrism@PC24036:~/myFirstDockerImage$ cat web-server.Dockerfile
-FROM ubuntu
-LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
+	FROM ubuntu
+	LABEL maintainer="Carlos Nunez <dev@carlosnunez.me>"
 
-USER root
-COPY ./web-server.bash /
+	USER root
+	COPY ./web-server.bash /
 
-RUN chmod 755 /web-server.bash
-RUN apt -y update
-RUN apt -y install bash netcat
+	RUN chmod 755 /web-server.bash
+	RUN apt -y update
+	RUN apt -y install bash netcat
 
-USER nobody
+	USER nobody
 
-ENTRYPOINT [ "/web-server.bash" ]
-morrism@PC24036:~/myFirstDockerImage$ cat web-server.bash
-#!/usr/bin/env bash
+	ENTRYPOINT [ "/web-server.bash" ]
+	morrism@PC24036:~/myFirstDockerImage$ cat web-server.bash
+	#!/usr/bin/env bash
 
-start_server() {
-  echo "Server started. Visit http://localhost:5000 to use it."
-  message=$(echo "<html><body><p>Hello! Today's date is $(date).</p></body></html>")
-  length=$(wc -c <<< "$message")
-  payload="\
-HTTP/1.1 200 OK
-Content-Length: $((length-1))
+	start_server() {
+	echo "Server started. Visit http://localhost:5000 to use it."
+	message=$(echo "<html><body><p>Hello! Today's date is $(date).</p></body></html>")
+	length=$(wc -c <<< "$message")
+	payload="\
+	HTTP/1.1 200 OK
+	Content-Length: $((length-1))
 
-$message"
-  while true
-  do echo -ne "$payload" | nc -l -p 5000
-  done
-}
+	$message"
+	while true
+	do echo -ne "$payload" | nc -l -p 5000
+	done
+	}
 
-start_server
+	start_server
 
 
 morrism@PC24036:~/myFirstDockerImage$ sudo docker build -t my-web-server -f web-server.Dockerfile .
-[sudo] password for morrism:
-DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
-            Install the buildx component to build images with BuildKit:
-            https://docs.docker.com/go/buildx/
+	[sudo] password for morrism:
+	DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+				Install the buildx component to build images with BuildKit:
+				https://docs.docker.com/go/buildx/
 
-Sending build context to Docker daemon  7.168kB
-Step 1/9 : FROM ubuntu
-......
+	Sending build context to Docker daemon  7.168kB
+	Step 1/9 : FROM ubuntu
+	......
 
 sudo docker run -d --name my-web-server -p 5001:5000 my-web-server
 
