@@ -106,6 +106,24 @@ overlay2 is the most popular storage driver.
 ![docker image layers 1](image-5.png)
 ![docker image layers 2](image-6.png)
 
+enable debug mode for container:
+/etc/docker/daemon.json:
+	"debug": true
+
+morrism@PC24036:~/ubuntu$ sudo journalctl -f -u docker
+Jun 26 09:32:38 PC24036 dockerd[287]: time="2024-06-26T09:32:38.372669836+08:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
+Jun 26 09:32:38 PC24036 dockerd[287]: time="2024-06-26T09:32:38.467222255+08:00" level=info msg="Loading containers: done."
+Jun 26 09:32:38 PC24036 dockerd[287]: time="2024-06-26T09:32:38.505404501+08:00" level=warning msg="WARNING: No blkio throttle.read_bps_device support"
+Jun 26 09:32:38 PC24036 dockerd[287]: time="2024-06-26T09:32:38.505438560+08:00" level=warning msg="WARNING: No blkio throttle.write_bps_device support"
+......
+
+The Dockerfile is a language for easily building container images.
+
+
+[Dockerfile Instructions](https://kapeli.com/cheat_sheets/Dockerfile.docset/Contents/Resources/Documents/index)
+[Docker Cheatsheet](https://collabnix.com/docker-cheatsheet/)
+[The Ultimate Docker Cheat Sheet](https://dockerlabs.collabnix.com/docker/cheatsheet/)
+
 docker command cli
 ```bash
 morrism@PC24036:~$ docker --help
