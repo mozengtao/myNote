@@ -669,6 +669,7 @@
 			  }
 			  ```
 - 参考文档
+	- [**Extensions to the C Language Family**](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/C-Extensions.html)
 	- [GNU C Language Manual](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/index.html#SEC_Contents)
 	- [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)
 	- [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html)
