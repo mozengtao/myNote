@@ -124,6 +124,43 @@ The Dockerfile is a language for easily building container images.
 [Docker Cheatsheet](https://collabnix.com/docker-cheatsheet/)
 [The Ultimate Docker Cheat Sheet](https://dockerlabs.collabnix.com/docker/cheatsheet/)
 
+Dockerfile instructions:
+FROM must be the first command in the Dockerfile
+	FROM $image
+	FROM $image:tag
+	FROM $image AS $tag
+	FROM $image:$tag AS $name
+
+morrism@PC24036:~/ubuntu/docker$ sudo docker images ls  (列出名字为ls的container image)
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+morrism@PC24036:~/ubuntu/docker$ sudo docker image ls
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+nginx        latest    e0c9858e10ed   7 days ago    188MB
+ubuntu       latest    35a88802559d   2 weeks ago   78.1MB
+morrism@PC24036:~/ubuntu/docker$ sudo docker images ubuntu
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+ubuntu       latest    35a88802559d   2 weeks ago   78.1MB
+
+COPY (Wildcards support):
+COPY $src-file $dest-file		(COPY ./my-file.txt /app/my-file.txt)
+COPY $src-file $dest-dir		(COPY ./my-file.txt /app/)
+COPY $src-dir $dest-dir			(COPY ./my-dir /app/)
+
+Wildcards: ? *
+
+Useful COPY Arguments:
+--chown $user:$group
+--link
+
+
+
+
+
+
+
+
+
+
 docker command cli
 ```bash
 morrism@PC24036:~$ docker --help
