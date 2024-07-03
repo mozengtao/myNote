@@ -283,6 +283,45 @@ type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
 - [man 5 sshd_config](https://linux.die.net/man/5/sshd_config)
 - [SSH Tunneling Explained](https://goteleport.com/blog/ssh-tunneling-explained/)
 - [How to Use SSH Port Forwarding](https://phoenixnap.com/kb/ssh-port-forwarding)
+- [**What's ssh port forwarding and what's the difference between ssh local and remote port forwarding**](https://unix.stackexchange.com/questions/115897/whats-ssh-port-forwarding-and-whats-the-difference-between-ssh-local-and-remot)
+![local forward 1](image-7.png)
+![remote forward 1](image-9.png)
+```sh
+# local forward (ssh creates an additional local port which it will forward to a port on the remote system)
+ssh -L 8080:127.0.0.1:80 user@webserver
+
+Then in your browser on local use URL http://localhost:8080/, it will connect to local machines port 8080, which ssh will forward on to remote ssh, and it will then make a request to 127.0.0.1:80. Note 127.0.0.1 is actually the remote server's localhost, but it could have been a host/IP available at the remote machine's network.
+
+# remote forward (ssh creates a listening port on the remote machine which it will forward back (Reverse) to the local ssh to forward on)
+ssh -R 10123:127.0.0.1:123 user@webserver
+
+After ssh connects to webserver, the remote ssh creates and lsitens on a port 10123. A process on webserver connecting to 10123, ssh will pick it up and send it back to the local machine's ssh, which sends it on to 127.0.01:123 port
+
+# 1
+ssh -L 80:localhost:80 SUPERSERVER
+
+You specify that a connection made to the local port 80 is to be forwarded to port 80 on SUPERSERVER. That means if someone connects to your computer with a webbrowser, he gets the response of the webserver running on SUPERSERVER. You, on your local machine, have no webserver running.
+
+# 2
+ssh -R 80:localhost:80 tinyserver
+
+You specify, that a connection made to the port 80 of tinyserver is to be forwarded to port 80 on your local machine. That means if someone connects to the small and slow server with a webbrowser, he gets the response of the webserver running on your local machine. The tinyserver, which has not enough diskspace for the big website, has no webserver running. But people connecting to tinyserver think so.
+
+# 3
+ssh -R 80:localhost:30180 tinyserver1
+ssh -R 80:localhost:30280 tinyserver2
+etc.
+
+The powerful machine has five webservers running on five different ports. If a user connects to one of the five tinyservers at port 80 with his webbrowser, the request is redirected to the corresponding webserver running on the powerful machine.
+
+# 4
+ssh -R 80:SUPERSERVER:30180 tinyserver1
+ssh -R 80:SUPERSERVER:30280 tinyserver2
+etc
+
+Your machine is only the connection between the powerful and the small servers. Then it would be (for one of the tinyservers that play to have their own webservers)
+
+```
 - [**Guide to Using SSH Port Forwarding (SSH Tunneling)**](https://builtin.com/software-engineering-perspectives/ssh-port-forwarding)
 - [**How to Set up SSH Tunneling**](https://linuxize.com/post/how-to-setup-ssh-tunneling/)
 - [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
