@@ -35,6 +35,7 @@
 	- i2ctransfer
 		- 以1次传输发送用户自定义的 I2c 消息
 - 参考文档
+	- [Linux I2C Sysfs](https://docs.kernel.org/i2c/i2c-sysfs.html)
 	- [i2cdump](https://helpmanual.io/man8/i2cdump/)
 	- [i2c deep dive](https://wiki.stmicroelectronics.cn/stm32mpu/index.php?title=I2C_overview)
 	- [i2c dev interface](https://www.kernel.org/doc/Documentation/i2c/dev-interface)
