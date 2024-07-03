@@ -283,6 +283,7 @@ type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
 - [man 5 sshd_config](https://linux.die.net/man/5/sshd_config)
 - [SSH Tunneling Explained](https://goteleport.com/blog/ssh-tunneling-explained/)
 - [How to Use SSH Port Forwarding](https://phoenixnap.com/kb/ssh-port-forwarding)
+- [**Guide to Using SSH Port Forwarding (SSH Tunneling)**](https://builtin.com/software-engineering-perspectives/ssh-port-forwarding)
 - [**How to Set up SSH Tunneling**](https://linuxize.com/post/how-to-setup-ssh-tunneling/)
 - [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
 - [Automating ssh-copy-id](https://www.baeldung.com/linux/ssh-copy-id-automate)
