@@ -322,6 +322,7 @@ etc
 Your machine is only the connection between the powerful and the small servers. Then it would be (for one of the tinyservers that play to have their own webservers)
 
 ```
+- [What Is SSH?](https://info.support.huawei.com/info-finder/encyclopedia/en/SSH.html)
 - [**Guide to Using SSH Port Forwarding (SSH Tunneling)**](https://builtin.com/software-engineering-perspectives/ssh-port-forwarding)
 - [**How to Set up SSH Tunneling**](https://linuxize.com/post/how-to-setup-ssh-tunneling/)
 - [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
@@ -330,3 +331,27 @@ Your machine is only the connection between the powerful and the small servers. 
 - [How To Configure SSH Key-Based Authentication on a Linux Server](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
 - [Permissions for .ssh folder and key files](https://frankindev.com/2020/11/26/permissions-for-.ssh-folder-and-key-files/)
 - [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)
+- [Understanding SSH](https://support.huawei.com/hedex/hdx.do?docid=EDOC1100351682&id=EN-US_CONCEPT_0000001563753685)
+	```bash
+	SSH working mechanism:
+	1. Connection setup
+		The SSH server listens to port 22 for SSH connections. After the client sends a connection request to the server, a TCP connection is set up between the client and server.
+
+	2. Version negotiation
+		The server and client determine which SSH version to use through version negotiation.
+
+	3. Algorithm negotiation
+		SSH supports multiple algorithms. Based on their supported algorithms, the server and client negotiate the following algorithms: key exchange algorithm for generating a session key, encryption algorithm for encrypting data, public key algorithm for digital signature and authentication, and hash-based message authentication code (HMAC) algorithm for data integrity protection.
+
+	4. Key exchange
+		The server and client dynamically generate a session key to protect data transmission and a session ID to identify the SSH connection through Diffie-Hellman key exchange. The client also authenticates the server during this stage.
+
+	5. Client authentication
+		The client sends an authentication request to the server, and the server authenticates the client.
+
+	6. Session request
+		After the authentication succeeds, the client sends a session request to the server, requesting the server to provide a certain type of service (STelnet, SFTP, or SCP). That is, the client requests to establish a session with the server.
+
+	7. Session interaction
+		After a session is established, the server and client exchange data.
+	```

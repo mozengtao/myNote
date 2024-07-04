@@ -10,7 +10,7 @@
 		  http_port 3128
 		  
 		  # 2. 在host上设置端口转发，使得来自主机135.251.92.240端口58080的流量可以转发给host上的squid服务（监听端口为3128）
-		  sudo sshpass -p root.123 ssh -CNfR 0.0.0.0:58080:127.0.0.1:3128 root@135.251.92.240
+		  ssh -CNfR 0.0.0.0:58080:127.0.0.1:3128 root@135.251.92.240
 		  
 		  # 3.在ip地址为135.251.92.240的主机上修改sshd配置/etc/ssh/sshd_config如下，之后重启sshd服务使之生效
 		  #GatewayPorts no
@@ -32,6 +32,7 @@
 - 查看squid服务log
 	- `sudo tail -f /var/log/squid/access.log`
 - 参考文档
+	- [Squid configuration directives](https://www.squid-cache.org/Doc/config/)
 	- [Squid Documentation](https://www.squid-cache.org/Doc/)
 	- [Squid Proxy Server 3.1 Beginner’s Guide.pdf](https://github.com/neverusedname/MyBooks/blob/master/Squid%20Proxy%20Server%203.1%20Beginner%E2%80%99s%20Guide%20.pdf)
 	- [squid-proxy-configuration-linux](https://linuxhint.com/squid-proxy-configuration-linux/)
