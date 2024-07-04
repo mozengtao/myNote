@@ -34,6 +34,7 @@
 - [The kernel’s command-line parameters](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html)
 
 - [How to uncompress and list an initramfs content on Linux](https://linuxconfig.org/how-to-uncompress-and-list-an-initramfs-content-on-linux)
+- [Linux Kernel Development - Extending Drivers for new Devices](https://javiercarrascocruz.github.io/)
 
 - linux kernel
 	```bash
