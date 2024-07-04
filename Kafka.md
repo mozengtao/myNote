@@ -1,3 +1,6 @@
+[conduktor](https://www.conduktor.io/)
+[How to Install Apache Kafka on Windows?](https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows/)
+
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统
 -
 - kafka的基本架构
@@ -229,6 +232,8 @@ Zookeeper
 	Zookeeper has a leader(writes) the rest of the servers are followers(reads)
 	(Zookeeper does NOT store consumer offsets with Kafka>v0.10)
 	![Zookeeper Cluster(ensemble)](image-20.png)
+
+	Kafka KRaft mode: Starting Kafka without Zookeeper
 
 Should you use Zookeeper ?
 	![Should you use Zookeeper ?](image-21.png)
