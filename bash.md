@@ -1,4 +1,29 @@
 
+[Bash Shebang](https://linuxize.com/post/bash-shebang/)
+[What is Shebang in Bash? | Your Script Interpreter Guide](https://ioflood.com/blog/shebang-bash/)
+[How does the #! shebang work?](https://stackoverflow.com/questions/3009192/how-does-the-shebang-work)
+[The #! magic, details about the shebang/hash-bang mechanism on various Unix flavours](https://www.in-ulm.de/~mascheck/various/shebang/)
+```bash
+This sequence of characters (#!) is called shebang and is used to tell the operating system which interpreter to use to parse the rest of the file.
+
+Shebang Interpreter Directive :
+	#!interpreter [arguments]
+
+	1.The directive must be the first line in the script.
+	2.The directive must start with shebang #!
+	3.White space after the shebang characters is optional.
+	4.Interpreter is the full path to a binary file (ex: /bin/sh, /bin/bash).
+	5.Interpreter arguments are optional.
+
+Two ways to use the Shebang directive and set the interpreter:
+1.Using the absolute path to the bash binary:
+	#!/bin/bash
+2.Using the env utility:
+	#!/usr/bin/env bash
+	it will search for the bash executable in the user’s $PATH environmental variable. If there are more than one paths to bash, the first one will be used by the script
+```
+
+
 bash下的特殊变量
 ```bash
 morrism@localhost ~ $ echo $BASHPID
