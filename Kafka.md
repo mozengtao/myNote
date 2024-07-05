@@ -1,6 +1,13 @@
 [conduktor](https://www.conduktor.io/)
 [How to Install Apache Kafka on Windows?](https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows/)
 
+[**Kafka DOCUMENTATION**](https://kafka.apache.org/documentation.html)
+
+[ksqlDB Quickstart](https://ksqldb.io/quickstart.html)
+[KSQLDB 101](https://developer.confluent.io/courses/ksqldb/intro/)
+[ksqlDB](https://github.com/confluentinc/ksql) #github
+
+
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统
 -
 - kafka的基本架构

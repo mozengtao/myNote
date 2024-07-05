@@ -1,4 +1,7 @@
 
+
+[GNU Coreutils](https://www.gnu.org/software/coreutils/manual/html_node/index.html)
+
 [Bash Shebang](https://linuxize.com/post/bash-shebang/)
 [What is Shebang in Bash? | Your Script Interpreter Guide](https://ioflood.com/blog/shebang-bash/)
 [How does the #! shebang work?](https://stackoverflow.com/questions/3009192/how-does-the-shebang-work)
