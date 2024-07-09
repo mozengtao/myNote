@@ -254,6 +254,181 @@ Kafka Theory Roundup
 	![Kafka Theory Roundup](image-23.png)
 
 
+WSL2: Start Zookeeper and Kafka
+1. Start Zoopkeeper
+	zookeeper-server-start.sh ~/kafka_2.13-3.0.0/config/zookeeper.properties
+2. Start Kafka Server
+	kafka-server-start.sh ~/kafka_2.13-3.0.0/config/server.properties
+
+
+WSL2: Start Apache Kafka without Zookeeper (KRaft mode)
+1. Generate a new ID for your cluster
+	kafka-storage.sh random-uuid
+
+	morrism@PC24036:~$ kafka-storage.sh random-uuid
+	JxyqIGKFRrOI_rkLjyIjbw
+2. Format your storage directory (replace <uuid> by your UUID obtained above)
+	kafka-storage.sh format -t JxyqIGKFRrOI_rkLjyIjbw -c ~/kafka_2.13-3.0.0/config/kraft/server.properties
+
+	morrism@PC24036:~$ kafka-storage.sh format -t JxyqIGKFRrOI_rkLjyIjbw -c ~/kafka_2.13-3.0.0/config/kraft/server.properties
+	Formatting /tmp/kraft-combined-logs
+3. Launch the broker itself in daemon mode
+	kafka-server-start.sh ~/kafka_2.13-3.0.0/config/kraft/server.properties
+
+Kafka CLI:
+
+kafka-topics.sh
+	create Kafka topics
+	list Kafka topics
+	describe Kafka topics
+	increase partitions in a Kafka topic
+	delet a Kafka topic
+
+	kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 3 --replication-factor 1 --create
+
+	kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+	kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --describe
+
+	kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
+
+	morrism@PC24036:~$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 3 --replication-factor 1 --create                                               WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.                    Created topic first_topic.                                                                                                                                                            
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --list
+	first_topic
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --describe
+	Topic: first_topic      TopicId: _t7T4e2jR7a52Nfw0DK38Q PartitionCount: 3       ReplicationFactor: 1    Configs: segment.bytes=1073741824
+			Topic: first_topic      Partition: 0    Leader: 1       Replicas: 1     Isr: 1
+			Topic: first_topic      Partition: 1    Leader: 1       Replicas: 1     Isr: 1
+			Topic: first_topic      Partition: 2    Leader: 1       Replicas: 1     Isr: 1	
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
+
+
+kafka-console-producer.sh
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 1 --replication-factor 1 --create                                 WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.
+	Created topic first_topic.
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic
+	>Hello World
+	>I love Kafka
+	>^C
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic --producer-property acks=all
+	>some message that is acked
+	>just for fun
+	>^C
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-console-producer.sh --bootstrap-server localhost:9092 --topic first_topic --property parse.key=true --property key.separator=:
+	>example key:example value
+	>name:Morris
+	>^C
+
+kafka-console-consumer.sh
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 3 --replication-factor 1 --create
+	WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.
+	Created topic first_topic.
+
+	Open 1 terminal for the consumer (consuer will block untill producer send data):
+	morrism@PC24036:~$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic
+	hello world
+	my name is Tom
+
+	Open another terminal for the producer:
+	morrism@PC24036:/tmp/kafka-logs$ kafka-console-producer.sh --bootstrap-server localhost:9092 --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner --topic first_topic
+	>hello world
+	>my name is Tom
+	>
+
+	(For consumer to consume messages from beginning, the message order is not guaranteed)
+	morrism@PC24036:~$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --from-beginning
+	my name is Tom
+	hello world
+
+	morrism@PC24036:~$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic --formatter kafka.tools.DefaultMessageFormatter --property print.timestamp=true --property print.key=true --property print.value=true --property print.partition=true --from-beginning
+	CreateTime:1720170268557        Partition:0     null    my name is Tom
+	CreateTime:1720170254954        Partition:1     null    hello world
+
+
+Kafka consumers in groups:
+
+	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic third_topic --partitions 3 --replication-factor 1 --create
+	WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.
+	Created topic third_topic.
+
+	kafka-console-producer.sh --bootstrap-server localhost:9092 --producer-property partitioner.class=org.apache.kafka.clients.producer.RoundRobinPartitioner --topic third_topic --group my-first-application
+	> 1
+	> 2
+
+	Terminal 1:
+	kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-first-application
+	1
+
+	Terminal 2:
+	kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-first-application
+	2
+
+	如果某个 group 中的 consumer 数量大于实际 partition 的数量，则会存在某几个consumer无法收到数据的情况
+
+	producer 先产生收据，后起consumer
+	kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-second-application
+
+	以不同的 group name来读取producer产生的数据
+	kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-second-application --from-beginning
+
+	再次以不同的 group name来读取producer产生的数据
+	kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic third_topic --group my-second-application --from-beginning
+
+
+kafka-consumer-groups.sh
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-first-group
+
+morrism@PC24036:~$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --topic first_topic --dry-run
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+my-first-application           first_topic                    0          0
+my-first-application           first_topic                    1          0
+my-first-application           first_topic                    2          0
+
+morrism@PC24036:~$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --topic first_topic --execute
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+my-first-application           first_topic                    0          0
+my-first-application           first_topic                    1          0
+my-first-application           first_topic                    2          0
+
+morrism@PC24036:~$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic first_topic  --group my-first-application
+
+2
+5
+1
+4
+3
+6
+
+reset-offsets 操作必须在没有consumer运行的情况下执行
+
+kafka-consumer-groups.sh
+	--reset-offsets                         Reset offsets of consumer group. 
+	...
+	--to-current                            Reset offsets to current offset.
+	--to-datetime <String: datetime>        Reset offsets to offset from datetime.
+											Format: 'YYYY-MM-DDTHH:mm:SS.sss'
+	--to-earliest                           Reset offsets to earliest offset.
+	--to-latest                             Reset offsets to latest offset.
+	--to-offset <Long: offset>              Reset offsets to a specific offset.
+	--topic <String: topic>                 The topic whose consumer group
+
+
+
+
+
+
 -
 - 帮助文档
 	- [librdkafka](https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html)
