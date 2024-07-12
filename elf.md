@@ -209,3 +209,13 @@
 	- [GNU Binary Utilities](https://docs.adacore.com/live/wave/binutils-stable/html/binutils/binutils.html#Top)
 	- [A ToC of the 20 part linker essay](https://lwn.net/Articles/276782/)
 	- [Special sections in Linux binaries](https://lwn.net/Articles/531148/)
+
+	[ELF Format Cheatsheet](https://gist.github.com/x0nu11byt3/bcb35c3de461e5fb66173071a2379779)
+	[Executable and Linkable Format (ELF)](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf)
+	[Practical Binary Analysis](https://terrorgum.com/tfox/books/practicalbinaryanalysis.pdf)
+	[Tool Interface Standard (TIS) Portable Formats Specification](https://refspecs.linuxfoundation.org/elf/TIS1.1.pdf)
+	[Tool Interface Standard (TIS) Executable and Linking Format (ELF) Specification](https://refspecs.linuxfoundation.org/elf/elf.pdf)
+	[The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)
+	[readelf elf文件格式分析](https://linuxtools-rst.readthedocs.io/zh-cn/latest/tool/readelf.html)
+	[打造史上最小可执行ELF文件(45字节)](https://tinylab-1.gitbook.io/cbook/02-chapter8)
+	[ELF转二进制](https://tinylab.org/elf2bin-part1/)
