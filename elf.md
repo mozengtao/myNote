@@ -219,3 +219,5 @@
 	[readelf elf文件格式分析](https://linuxtools-rst.readthedocs.io/zh-cn/latest/tool/readelf.html)
 	[打造史上最小可执行ELF文件(45字节)](https://tinylab-1.gitbook.io/cbook/02-chapter8)
 	[ELF转二进制](https://tinylab.org/elf2bin-part1/)
+
+	[Go elf package](https://pkg.go.dev/debug/elf)
