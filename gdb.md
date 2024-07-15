@@ -284,7 +284,7 @@ enable, en				使能断点
 		......
 	```
 	```bash
-	  # 查看变量类型
+	  # 查看变量/函数类型
 	  (gdb) ptype i
 	  
 	  # Set pretty formatting of structures (美化打印输出)
@@ -609,7 +609,8 @@ enable, en				使能断点
 - 用户自定义gdb命令
 	- [**Canned Sequences of Commands**](https://web.mit.edu/gnu/doc/html/gdb_toc.html#SEC139)
 	- [Commands for Controlled Output](https://sourceware.org/gdb/onlinedocs/gdb/Output.html)
-	- [User-defined Commands](https://sourceware.org/gdb/onlinedocs/gdb/Define.html#Define)
+	- [**User-defined Commands**](https://sourceware.org/gdb/onlinedocs/gdb/Define.html#Define)
+	- [**How to declare a variable in the scope of a given function with GDB?**](https://stackoverflow.com/questions/10284103/how-to-declare-a-variable-in-the-scope-of-a-given-function-with-gdb)
 	- [gdbinit参考文件](https://github.com/gdbinit/Gdbinit/blob/master/gdbinit)
 	- [如何编写 gdb 自定义命令](https://csstormq.github.io/blog/%E4%BB%A3%E7%A0%81%E8%B0%83%E8%AF%95%E7%AF%87%EF%BC%882%EF%BC%89%EF%BC%9A%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%20gdb%20%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4.html)
 	- [用户自定义gdb命令](https://sourceware.org/gdb/onlinedocs/gdb/Define.html#Define)
