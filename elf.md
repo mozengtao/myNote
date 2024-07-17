@@ -195,7 +195,6 @@
 	- [The ELF file format](https://www.gabriel.urdhr.fr/2015/09/28/elf-file-format/)
 	- [ELF loading and dynamic linking](https://www.gabriel.urdhr.fr/2015/01/22/elf-linking/)
 	- [Linkers and Loaders](https://www.wh0rd.org/books/linkers-and-loaders/linkers_and_loaders.pdf)
-	  id:: 63c0ba01-becf-48b5-b022-812e6d01b694
 	- [Introduction to ELF](https://people.redhat.com/mpolacek/src/devconf2012.pdf)
 	- [Acronyms relevant to Executable and Linkable Format](https://stevens.netmeister.org/631/elf.html)
 	- [anatomy-of-a-binary-executable](https://oswalt.dev/2020/11/anatomy-of-a-binary-executable/)
@@ -221,3 +220,40 @@
 	[ELF转二进制](https://tinylab.org/elf2bin-part1/)
 
 	[Go elf package](https://pkg.go.dev/debug/elf)
+
+	[Shared libraries with GCC on Linux](https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html)
+	[When to actually use dlopen()? Does dlopen() means dynamic loading?](https://stackoverflow.com/questions/63306734/when-to-actually-use-dlopen-does-dlopen-means-dynamic-loading)
+	```c
+	#include <stdlib.h>
+	#include <stdio.h>
+	#include <dlfcn.h>
+
+	int main(int argc, char **argv) {
+		void *handle;
+		double (*cosine)(double);
+		char *error;
+
+		handle = dlopen ("/lib/libm.so.6", RTLD_LAZY);
+		if (!handle) {
+			fputs (dlerror(), stderr);
+			exit(1);
+		}
+
+		cosine = dlsym(handle, "cos");
+		if ((error = dlerror()) != NULL)  {
+			fputs(error, stderr);
+			exit(1);
+		}
+
+		printf ("%f\n", (*cosine)(2.0));
+		dlclose(handle);
+	}
+
+	# gcc -rdynamic -o progdl progdl.c -ldl
+	```
+
+	[A programmer's guide to GNU C Compiler](https://opensource.com/article/22/5/gnu-c-compiler)
+	[Dynamically linking libraries while compiling code](https://opensource.com/article/22/5/compile-code-ldlibrarypath)
+	[Anyone can compile open source code in these three simple steps](https://opensource.com/article/21/11/compiling-code)
+	[How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)
+	[How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)
