@@ -41,6 +41,575 @@ The rule in C++ is that, if the function declares that it returns a value, then 
 this rule: if the main function does not return a value, then a value of 0 will be assumed. 
 */
 }
+
+
+Associated with symbols and conditional compilation is the compiler directive, #pragma once.
+Pragmas are directives specific to the compiler, and different compilers will support different pragmas.
+
+Windows uses the extension lib for static libraries and dll for dynamiclink libraries. 
+GNU gcc uses the extension a for static libraries and so for shared libraries
+
+Function prototype gives the compiler the information it needs to know about calling the function without providing the actual body of the function, the function definition
+
+When you include a file into your source file, the preprocessor will include the contents of that file (after taking into account any conditional compilation directives) and, recursively, any files included by that file.
+
+The compiler will not look forward in a source file, so if function A calls another function, B, in the same source file then function B must have already been defined before function A calls it, or there must be a prototype declaration
+This leads to a typical convention of having a header file associated with each source file that contains the prototypes of the functions in the source file, and the source file includes this header. This convention becomes more important when you write classes.
+
+The common terminology is that the output of a build step is called a target and the inputs of the build step (for example, source files) are the dependencies of that target.
+
+A simple project structure:
+// utils.h:
+#include <iostream>
+#include <string>
+#include <ctime>
+
+// utils.cpp:
+#include ″utils.h″
+...
+
+// main.cpp:
+#include "utils.h"
+#include "name.h"
+#include "time.h"
+void main()
+{
+	print_name();
+	print_time();
+}
+
+// name.h:
+void print_name();
+
+// time.h:
+void print_time();
+
+// name.c:
+#include "utils.h"
+#include "name.h"
+
+void print_name()
+{
+	...
+}
+
+// time.c:
+#include "utils.h"
+#include "time.h"
+
+void print_time()
+{
+	...
+}
+
+
+K&R style:
+if (/* some test */) {
+// the test is true
+if (/* some other test */) {
+// second test is true
+} else {
+// second test is false
+}
+} else {
+// the test is false
+}
+
+An expression is a sequence of operators and operands (variables or literals) that results in some value.
+
+A statement can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code.
+A statement ends with a semicolon. A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
+
+Broadly speaking, an expression becomes a statement by when you append a semicolon.
+
+Every expression is either an lvalue or an rvalue. An lvalue is an expression that refers to some memory location. An lvalue can appear on the left-hand or right-hand side of an assignment. All variables are lvalues
+
+An rvalue is a temporary item that does not exist longer than the expression that uses it; it will have a value, but cannot have a value assigned to it, so it can only exist on the right-hand side of an assignment. Literals are rvalues. 
+
+Comma operator has the lowest precedence
+
+In general, it is best to declare the variable as close as possible to where you will use it, and within the most restrictive scope. This prevents name clashes, where you will have to add additional information to disambiguate two or more variables
+
+Three ways to initialize variables:
+1. assign a value
+2. call the type constructor
+3. initialize a variable using function syntax
+
+int i = 1;
+int j = int(2);
+int k(3);
+
+Each type will have a literal representation.
+
+constants:
+const double pi = 3.1415;
+
+constant expressions:
+C++11 introduces a keyword called constexpr. This is applied to an expression, and indicates that the expression should be evaluated at compile type rather than at runtime
+
+constexpr double pi = 3.1415;
+constexpr double twopi = 2 * pi;
+
+The constexpr keyword can also be applied to functions that return a value that can be evaluated at compile time, and so this allows the compiler to optimize the code
+constexpr int triang(int i)
+{
+	return (i == 0) ? 0 : triang(i - 1) + i;
+}
+
+This function, when called with a literal in your code, can be evaluated at compile time. The constexpr is an indication to the compiler to check the usage of the function to see if it can determine the parameter at compile time
+If the compiler cannot determine the parameter at compile-time, the function will be called as normal. A function marked with the constexpr keyword must only have one expression
+
+An enum is a group of named constants, which means that you can use an enum as a parameter to a function
+An enumeration is an integer type and by default the compiler will assume an int, but you can change this by specifying the integer type in the declaration
+
+enum suits {clubs, diamonds, hearts, spades};
+enum suits : char {clubs, diamonds, hearts, spades};
+
+suits card1 = diamonds;
+suits card2 = suits::diamonds;    // scope it with the name of the enumeration which is better
+
+To force developers to specify the scope, you can apply the keyword class
+
+enum class suits : char {clubs, diamonds, hearts, spades};
+
+By default, the compiler will give the first enumerator a value of 0 and then increment the value for the subsequent enumerators.
+
+enum ports {ftp=21, ssh, telnet, smtp=25, http=80};
+
+In C++, you will access memory using a typed pointer, pointers are declared using the * symbol and you access a memory address with the & operator
+
+Namespaces give you one mechanism to modularize code. A namespace allows you to label your types, functions, and variables with a unique name so that, using the scope resolution operator, you can give a fully qualified name. 
+
+Defining a namespace is simple: you decorate the types, functions, and global variables with the namespace keyword and the name you give to it.
+
+// 1
+namespace utilities
+{
+	bool poll_data()
+	{
+		// code that returns a bool
+	}
+	int get_data()
+	{
+		// code that returns an integer
+	}
+}
+
+// 2
+namespace utilities
+{
+	// declare the functions
+	bool poll_data();
+	int get_data();
+}
+
+//define the functions
+bool utilities::poll_data()
+{
+	// code that returns a bool
+}
+
+int utilities::get_data()
+{
+	// code that returns an integer
+}
+
+One use of namespaces is to version your code
+ namespace utilities
+ {
+	bool poll_data();
+	int get_data();
+
+	namespace V2
+	{
+		bool poll_data();
+		int get_data();
+		int new_feature();
+	}
+ }
+
+When an item in a specific namespace calls an item in the same namespace, it does not have to use a qualified name
+It is important to note that, to declare a nested namespace, you have to do the nesting manually
+
+
+C++11 provides a facility called an inline namespace that allows you to define a nested namespace, but allows the compiler to treat the items as being in the parent namespace when it performs an argument-dependent lookup
+namespace utilities
+{
+	inline namespace V1
+	{
+		bool poll_data();
+		int get_data();
+	}
+
+	namespace V2
+	{
+		bool poll_data();
+		int get_data();
+		int new_feature();
+	}
+}
+
+Now to call the first version of get_data, you can use utilities::get_data or utilities::V1::get_data
+
+
+Use using statement to indicate that symbols declared in the specified namespace can be used without a fully qualified name
+using namespace utilities;
+int i = get_data();
+int j = V2::get_data();
+
+using std::cout;
+using std::endl;
+cout << "Hello, World!" << endl;
+
+The great advantage of a namespace is to be able to define your items with names that may be common, but are hidden from other code that does not know the namespace name of.
+
+namespace alias:
+
+namespace com_packtpub_richard_grimes
+{
+	int get_data();
+}
+
+int i = com_packtpub_richard_grimes::get_data();
+可以被简化为
+namespace packtRG = com_packtpub_richard_grimes;
+int i = packtRG::get_data();
+
+A namespace without a name has the special meaning that it has internal linkage, that is, the items can only be used in the current translation unit, the current file, and not in any other file.
+
+Code that is not declared in a namespace will be a member of the global namespace.  You can call the code without a namespace name, but you may want to explicitly indicate that the item is in the global namespace using the scope resolution operator without a namespace name
+
+int version = 42;
+void print_version()
+{
+	std::cout << "Version = " << ::version << std::endl;
+}
+
+Operators are used to compute a value from one or more operands. T
+
+
+The vector template is a class that contains items of the type specified in the angle brackets (<>); 
+The vector can be initialized in a special way called "list initialization" which is new to C++11, 
+
+using namespace std;
+vector<string> beatles = { "John", "Paul", "George", "Ringo" };
+for (int i = 0; i < beatles.size(); ++i)
+{
+	cout << beatles.at(i) << endl;
+}
+
+Range-based for:
+
+vector<string> beatles = { "John", "Paul", "George", "Ringo" };
+for (string musician : beatles)
+{
+	cout << musician << endl;
+}
+
+// 2
+int birth_years[] = { 1940, 1942, 1943, 1940 };
+for (int birth_year : birth_years)
+{
+	cout << birth_year << endl;
+}
+
+
+A variable is an instance of a type; it is the memory allocated to hold the data that the type can hold.
+
+C++ provides integer types of various sizes, the actual sizes of these types can be determined by the sizeof operator
+
+// #include <cstdint>
+using namespace std; // Values for x86
+cout << sizeof(int8_t) << endl; // 1
+cout << sizeof(int16_t) << endl; // 2
+cout << sizeof(int32_t) << endl; // 4
+cout << sizeof(int64_t) << endl; // 8
+
+// Using bitset to show bit patterns
+
+#include <iostream>
+#include <bitset>
+
+int main()
+{
+    // The compiler ignores the quote; it is just used as a visual aid.
+    unsigned long long every_other = 0xAAAA'AAAA'AAAA'AAAA;
+    unsigned long long each_other = 0x5555'5555'5555'5555;
+    std::cout << std::hex << std::showbase << std::uppercase;
+    std::cout << every_other << std::endl;
+    std::cout << each_other << std::endl;
+
+    // Using bitset to show bit patterns
+    std::bitset<64> bs_every(every_other);
+    std::cout << bs_every << std::endl;
+    
+    bs_every.set(0);
+    every_other = bs_every.to_ullong();
+    std::cout << bs_every << std::endl;
+    std::cout << every_other << std::endl;
+}
+
+
+reverse the byte order for big-endian and little-endian:
+	unsigned short reverse(unsigned short us)
+	{
+		return ((us & 0xff) << 8) | ((us & 0xff00) >> 8);
+	}
+
+Using character macros
+	Macro 		Tests if the character is:
+	isalnum 	An alphanumeric character, A to Z, a to z, 0 to 9
+	isalpha 	An alphabetic character, A to Z, a to z
+	isascii 	An ASCII character, 0x00 to 0x7f
+	isblank 	A space or horizontal tab
+	iscntrl 	A control character, 0x00 to 0x1f or 0x7f
+	isdigit 	A decimal digit 0 to 9
+	isgraph 	A printable character other than space, 0x21 to 0x7e
+	islower 	A lowercase character, a to z
+	isprint 	A printable character, 0x20 to 0x7e
+	ispunct 	A punctuation character, ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ ] ^ _ ` { | } ~ \
+	isspace 	A space
+	isupper 	An uppercase character, A to Z
+	isxdigit 	A hexadecimal digit, 0 to 9, a to f, A to F
+
+
+	toupper 	The uppercase version of the character
+	tolower 	The lowercase version of the character
+
+
+Raw strings
+	When you use a raw string literal you essentially switch off the meaning of escape characters.
+	The raw string is delimited with R"( and )". That is, the string is between the inner parentheses (Note that, the () is part of the syntax and is not part of the string.)
+
+	cout << R"(newline is \n in C++ and "quoted text" use quotes)";
+	打印结果：
+	newline is \n in C++ and "quoted text" use quotes
+
+
+String byte order
+	Extended character sets use more than one byte per character. If such characters are stored in a file, the order of the bytes becomes important. In this situation, the writer of the character must use the same order that will be used by potential readers.
+	One way to do this is to use a Byte Order Mark (BOM).
+
+The bool type holds a Boolean value, that is, just one of two values: true or false.
+
+Note that void is not really a type because you cannot create a void variable; it is the absence of a type.
+
+In C++11 another way to initialize variables was introduced: construction through a list initializer.
+
+	int i = 1;			// initialized to a value
+	int j = int(2);		// calling the type as if it is a function
+	int k(3);			// calls the constructor of the int type
+	int m{4};			// initializes the variable using an initialize list between curly braces ({})
+
+C++11 introduces a mechanism for declaring that a variable's type should be determined from the data it is initialized with, that is, auto
+
+	The auto keyword means that the compiler should create a variable with the type of the data that is assigned to it. The variable can only have a single type, the type the compiler decides is the type it needs for the data assigned to it, and you cannot use the variable elsewhere to hold data of a different type. Because the compiler needs to determine the type from an initializer, it means that all auto variables must be initialized:
+
+	auto i = 42; // int
+	auto l = 42l; // long
+	auto ll = 42ll; // long long
+	auto f = 1.0f; // float
+	auto d = 1.0; // double
+	auto c = 'q'; // char
+	auto b = true; // bool
+
+	The power of auto is when you use containers that can result in some fairly complicated looking types
+
+Storage classes
+
+	When declaring a variable, you can specify its storage class which indicates the lifetime, linkage (what other code can access it), and memory location of the variable.
+
+	static, which when applied to a variable in a function means that the variable can only be accessed within that function, but its lifetime is the same as the program
+
+	static can be used on variables declared at file scope, in which case it indicates that the variable can only be used in the current file, which is called internal linkage
+
+	If you omit the static keyword on a variable, defined at file scope, then it has an external linkage, which means the name of the variable is visible to code in other files
+
+	The static keyword says that the variable can only be used in the current file. The extern keyword indicates the opposite; the variable (or function) has external linkage and can be accessed in other files in the project.
+
+	The final storage class specifier is thread_local
+
+Using type aliases
+
+	C++ provides the typedef statement to create an alias for a type
+
+	typedef tuple<string, int> name_year_t;
+	vector<name_year_t> beatles;
+
+
+	The typedef keyword is a well-established way to create aliases in C++
+	C++11 introduces another way to create a type alias, the using statement
+		using name_year = tuple<string, int>;
+
+
+Aggregating data in record types
+
+	struct time_of_day
+	{
+		int sec;
+		int min;
+		int hour;
+	};
+
+There are several ways to initialize an instance of a structure.
+
+	You can also initialize structures using the list initializer syntax using curly braces ({}). The items in the braces should match the members of the struct in the order of the members as declared. If you provide fewer values than there are members, the remaining members are initialized to zero. Indeed, if you provide no items between the curly braces then all members are set to zero. It is an error to provide more initializers than there are members.
+
+	time_of_day lunch {0, 0, 13};
+	time_of_day midnight {};
+	time_of_day midnight_30 {0, 30};
+
+	// You can have a member of a struct that is a struct itself
+	struct working_hours
+	{
+		time_of_day start_work;
+		time_of_day end_work;
+	};
+
+	working_hours weekday{ {0, 30, 8}, {0, 0, 17} };
+
+
+Structure fields
+	A structure can have members that are as small as a single bit, called a bit-field. In this case, you declare an integer member with the number of bits that the member will take up. You are able to declare unnamed members.
+
+	struct item_length
+	{
+		unsigned short len : 10;
+		unsigned short : 5;
+		bool dirty : 1;
+	};
+
+Using structure names
+
+	In some cases, you may need to use a type before you have actually defined it. As long as you do not use the members, you can declare a type before defining it:
+
+	struct time_of_day;
+	void print_day(time_of_day time);
+
+	There is, however, an exception: a type can hold pointers to instances of the same type before the type is fully declared. This is because the compiler knows the size of a pointer, so it can allocate sufficient memory for the member. It is not until the entire type has been defined before you can create an instance of the type. The classic example of this is a linked list
+
+Determining alignment
+	One of the uses of structs is that if you know how data is held in memory you can deal with a struct as a block of memory.
+
+	The compiler will place variables in memory in the way that is the most efficient, in terms of memory usage, or speed of access. The various types will be aligned to alignment boundaries.
+
+	You can test the alignment of a specific type using the alignof operator passing the type name
+
+	std::cout << "alignment boundary for int is " << alignof(int) << std::endl;
+
+Storing data in the same memory with unions
+A union is a struct where all the members occupy the same memory. The size of such a type is the size of the largest member. Since a union can only hold one item of data, it is a mechanism to interpret the data in more than one way.
+
+// edited version
+ struct VARIANT
+ {
+	unsigned short vt;
+	union
+	{
+		unsigned char bVal;
+		short iVal;
+		long lVal;
+		long long llVal;
+		float fltVal;
+		double dblVal;
+	};
+ }
+
+
+Accessing runtime type information
+C++ provides an operator called typeid that will return type information about a variable (or a type) at runtime. Runtime Type Information (RTTI) is significant when you use custom types that can be used in a polymorphic way
+
+cout << "int type name: " << typeid(int).name() << endl;
+int i = 42;
+cout << "i type name: " << typeid(i).name() << endl;
+
+
+auto a = i;
+if (typeid(a) == typeid(int))
+{
+	cout << "we can treat a as an int" << endl;
+}
+
+
+Determining type limits
+	cout << "The int type can have values between ";
+	cout << numeric_limits<int>::min() << " and ";
+	cout << numeric_limits<int>::max() << endl;
+
+
+Type conversions
+Built-in conversions can have one of two outcomes: promotion or narrowing. 
+A promotion is when a smaller type is promoted to a larger type and you will not lose data. 
+A narrowing conversion happens when a value from a larger type is converted to a smaller type with potential loss of data.
+
+
+Casting
+In some cases, you will have to convert between types
+
+Various cast operations you can use in C++11:
+	Name 												Syntax
+	Construction										{}
+	Remove const requirement 							const_cast
+	Cast with no runtime checks 						static_cast
+	Bitwise casting of types 							reinterpret_cast
+	Cast between class pointers, with runtime checks 	dynamic_cast
+	C style 											()
+	Function style 										()
+
+
+Casting without runtime checks
+Most casts are performed using the static_cast operator, and this can be used to convert pointers to related pointer types as well as converting between numeric types.
+
+double pi = 3.1415;
+int pi_whole = static_cast<int>(pi);
+
+void unsafe_d(void* pData)
+{
+	double* pd = static_cast<double*>(pData);
+	cout << *pd << endl;
+}
+
+
+Casting pointers without runtime checks
+The reinterpret_cast operator allows pointers to one type to be converted to pointers of another type, and it can convert from a pointer to an integer and an integer to a pointer
+
+double pi = 3.1415;
+int i = reinterpret_cast<int>(&pi);
+cout << hex << i << endl;
+
+
+Casting with runtime checks
+The dynamic_cast operator is used to convert pointers between related classes
+
+
+Casting with list initializer
+The C++ compiler will allow some implicit conversions; in some cases, they may be intentional and in some cases, they may not be.
+
+
+double pi = 3.1415;
+// possibly loss of code
+int i = pi;
+
+
+int i = {pi};
+In this case, if pi can be converted to an int without loss (for example, if pi is a short) then the code will compile without even a warning. However, if pi is an incompatible type (in this case, a double) the compiler will issue an error
+
+
+char c = 35;
+cout << c << endl;	// "#" printed out
+
+To get the variable to be treated as a number you can use one of the following:
+
+cout << static_cast<short>(c) << endl;
+cout << short{ c } << endl;
+
+
+Using C casts
+	double pi = 3.1415;
+	float f1 = (float)pi;
+	float f2 = float(pi);
+
+
 ```
 
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
