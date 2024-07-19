@@ -139,3 +139,5 @@ diminish     [dɪ'mɪnɪʃ]     减少；减损；贬低
 - nanosecond	/ ˈnænoʊsekənd /	纳秒；十亿分之一秒		ns
 - constituent	/ kənˈstɪtʃuənt /	组成的，构成的；选举的，有任命（或选举）权的；立宪的，有宪法制定（或修改）权的
 - funky	[]		/ ˈfʌŋki /		时髦的；畏缩的；恶臭的
+- endure	/ ɪnˈdʊr /		持续存在，持久；忍受，忍耐
+- immerse	/ ɪˈmɜːrs /		使沉浸（于），使深陷（于）；使浸没（于液体中）

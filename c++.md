@@ -1,3 +1,48 @@
+```cpp
+
+/*
+#include tells the compiler to copy the contents of the specified file into the source file at this point
+<> 表示 编译器会从标准路径查找头文件
+C++标准库通常使用不带后缀的头文件，用户的自定义头文件通常使用.h, .hpp, .hxx的后缀
+*/
+#include <iostream>
+
+// 单行注释
+
+/*
+function 定义：
+返回类型 函数名(参数列表(参数类型:参数名称))
+{
+    函数体；
+}
+
+{} 标识一个 code block，在该例中标识 main 函数的 code block
+
+The convention with C++ is that a function called main is the entry point of the executable，即main函数是程序执行时第一个被call到的函数
+*/
+int main(int argc, char *argv[])
+{
+/*
+std 表示 std namespace
+:: is the scope resolution operator, and indicates that you want to access the cout object declared in the std namespace
+std::cout 表示 cout stream object is part of the standard C++ library
+<< means that a function called "operator <<" is called and is passed the string
+C++支持operator overloading，因此对于不同类型的参数，operator 的行为也不同
+
+The cout object is an instance of the ostream class and this has already been created before the main function is called
+*/
+    std::cout << "there are " << argc << " parameters" << std::endl;
+    for(int i = 0; i < argc; i++)
+    {
+        std::cout << argv[i] << std::endl;
+    }
+/*
+The rule in C++ is that, if the function declares that it returns a value, then it must return a value. However, there is a single exception to
+this rule: if the main function does not return a value, then a value of 0 will be assumed. 
+*/
+}
+```
+
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
 
 - [**C/C++ Programming**](https://www3.ntu.edu.sg/home/ehchua/programming/#Cpp)
