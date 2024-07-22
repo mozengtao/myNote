@@ -1,5 +1,11 @@
 - [[nvim]]
 - ```bash
+  # 格式化代码
+  sudo apt install clang-format
+  .vimrc:
+  autocmd FileType c,cpp setlocal equalprg=clang-format
+  选中代码，之后 G
+
   #Executing External Programs from Vim
   :!{cmd}
   :read !{cmd}

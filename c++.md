@@ -610,6 +610,244 @@ Using C casts
 	float f2 = float(pi);
 
 
+Using memory in C++
+
+The & operator returns the address of an object. That object can be a variable, a built-in type or the instance of a custom type, or even a function
+To access the data pointed to by a pointer, you must dereference it using the * operator
+
+Using null pointers
+The type of constant nullptr is not an integer, it is std::nullptr_t. All pointer types can be implicitly converted to this type, so nullptr can be used to initialize variables of all pointer types
+
+Types of memory
+	Static or global
+		declare a variable at the global level, or if you have a variable declared in a function as static
+	String pool
+	Automatic or stack
+	Free store
+
+Pointer arithmetic
+A pointer points to memory, and the type of the pointer determines the type of the data that can be accessed through the pointer.
+The whole reason for the void* pointer type is that it can point to anything.
+
+Passing multidimensional arrays to functions
+When you pass an array, the first dimension will be treated as a pointer
+	bool safe_torques(double nut_torques[][5], int num_wheels);
+	bool safe_torques(double (*nut_torques)[5], int num_wheels);
+
+Allocating individual objects
+The new operator is used with the type to allocate memory, and it will return a typed pointer to that memory (Built-in types do not have constructors, so instead a type initialization will occur and this will usually initialize the object to zero)
+
+int *p = new int; // allocate memory for one int
+delete p;
+p = nullptr;
+
+When you delete a pointer, the destructor for the object is called. For built-in types, this does nothing. 
+It is good practice to initialize a pointer to nullptr, after you have deleted it
+
+int *p1 = new int (42);
+int *p2 = new int {42};
+
+Allocating arrays of objects
+int *p = new int[2];
+delete [] p;
+
+
+Handling failed allocations
+	// VERY_BIG_NUMER is a constant defined elsewhere
+	int *pi;
+	try
+	{
+	pi = new int[VERY_BIG_NUMBER];
+	// other code
+	}
+	catch(const std::bad_alloc& e)
+	{
+	cout << "cannot allocate" << endl;
+	return;
+	}
+	// use pointer
+	delete [] pi;
+
+// not throw an exception if the allocation fails
+	int *pi = new (std::nothrow) int [VERY_BIG_NUMBER];
+	if (nullptr == pi)
+	{
+	cout << "cannot allocate" << endl;
+	}
+	else
+	{
+	// use pointer
+	delete [] pi;
+	}
+
+
+Resource Acquisition Is Initialization (RAII), which means using the features of C++ objects to manage resources. RAII in C++ needs classes and in particular, copy constructors and destructors.
+
+Standard Template Library (STL), provide a standard way to insert items into collection objects and ways to access the items and iterate through entire collections (called iterators)
+
+Standard Library arrays
+	 array and vector
+	
+Using the stack-based array class
+The array class allows you to create fixed sized arrays on the stack and, as with built-in arrays, they cannot shrink or expand at runtime.
+	array<int, 4> arr { 1, 2, 3, 4 };
+	for (int i : arr) cout << i << endl;
+	The reason is that array implements the begin and end functions that are required for this syntax
+
+	for (int i = 0; i < arr.size(); ++i) cout << arr[i] << endl;
+
+	You can access memory outside of the bounds of the array, To guard against this, the class provides a function, at, which will perform a range check and if the index is out of range the class will throw the C++ exception out_of_range.
+
+	array<int, 4> arr3;
+	arr3.fill(42); // put 42 in each item
+	arr2.swap(arr3); // swap items in arr2 with items in arr3
+
+Using the dynamically allocated vector class
+With vector class, the memory is dynamically allocated, which means that a vector can be expanded or shrunk at runtime
+The vector class provides indexed random access with square bracket syntax and a range check with the at function
+
+
+References
+A reference is an alias to an object. That is, it is another name for the object, and so access to the object is the same through a reference as it is through the object's variable name
+
+The pointer and reference have two different meanings. The reference is not initialized to the value of the variable, the variable's data; it is an alias for the variable name.
+
+You can have several aliases for a variable, and each must be initialized to the variable at the declaration. Once declared, you cannot make a reference refer to a different object.
+The following code will not compile:
+ int& r1; // error, must refer to a variable
+ int& r2 = nullptr; // error, must refer to a variable
+(Since a reference is an alias for another variable, it cannot exist without being initialized to a variable. Likewise, you cannot initialize it to anything other than a variable name, so there is no concept of a null reference.)
+
+int x = 1, y = 2;
+int& rx = x; // declaration, means rx is an alias for x
+rx = y; // assignment, changes value of x to the value of y
+
+Constant references
+This essentially makes the reference read-only: you can access the variable's data to read it, but not to change it
+	int i = 42;
+	const int& ri = i;
+	ri = 99; // error!
+
+Returning references
+Returning a reference from a function is a common idiom, but whenever you consider doing this make sure that the lifetime of the aliased variable is not the scope of the function
+
+Temporaries and references
+The lvalue references must refer to a variable, but C++ has some odd rules when it comes to const references declared on the stack. If the reference is a const, the compiler will extend the lifetime of a temporary for the lifetime of the reference.
+	const int& cri { 42 };
+In this code, the compiler will create a temporary int and initialize it to a value and then alias it to the cri reference (it is important that this reference is const). The temporary is available through the reference while it is in scope.
+
+
+The rvalue references
+C++11 defines a new type of reference, rvalue references.
+C++11 allows you to write code specifically for temporary objects, so in the case of the assignment, the operator for temporary objects can just move the data from the temporary into the object being assigned. In contrast, if the reference is not to a temporary object then the data will have to be copied. If the data is large, then this prevents a potentially expensive allocation and copy. This enables so-called move semantics.
+
+ string global{ "global" };
+
+ string& get_global()
+ {
+ 	return global;
+ }
+
+ string& get_static()
+ {
+ 	static string str { "static" };
+ 	return str;
+ }
+
+ string get_temp()
+ {
+ 	return "temp";
+ }
+
+string get_temp()
+{
+	return "temp";	// returns a temporary object
+}
+
+cout << get_temp() << endl;
+
+// use string
+void use_string(string& rs)
+{
+	string s { rs };	// a copy overhead--creating the string, s, from the reference, rs;
+	for (size_t i = 0; i < s.length(); ++i)
+	{
+		if ('a' == s[i] || 'b' == s[i] || 'o' == s[i])
+			s[i] = '_';
+	}
+	cout << s << endl;
+}
+
+// use move semantics
+void use_string(string&& s)		// the parameter is identified as an rvalue reference using the && suffix to the type
+{
+	for (size_t i = 0; i < s.length(); ++i)
+	{
+		if ('a' == s[i] || 'b' == s[i] || 'o' == s[i])
+			s[i] = '_';
+	}
+	cout << s << endl;
+}
+
+When you call this function, the compiler will call the right one according to the parameter passed to it:
+use_string(get_global()); // string& version
+use_string(get_static()); // string& version
+use_string(get_temp()); // string&& version
+use_string("C string"); // string&& version
+string str{"C++ string"};
+use_string(str); // string& version
+
+Ranged for and references
+// read the value
+for (int j : squares)
+{
+	cout << J << endl;
+}
+
+// change the value
+for (int& k : squares)
+{
+	k *= 2;
+}
+
+
+Ranged "for" for multidimensional arrays
+int arr[2][3] { { 2, 3, 4 }, { 5, 6, 7} };
+for (auto row : arr)
+{
+	for (auto col : row) // will not compile
+	{
+		cout << col << " " << endl;
+	}
+}
+
+Ranged "for" uses iterator objects and for arrays it uses the C++ Standard Library functions, begin and end, to create these objects. The compiler will see from the arr array in the outer ranged for that each item is an int[3] array, and so in the outer for loop the loop variable will be a copy of each element, in this case an int[3] array. You cannot copy arrays like this, so the compiler will provide a pointer to the first element, an int*, and this is used in the inner for loop.
+The compiler will attempt to obtain iterators for int*, but this is not possible because an int* contains no information about how many items it points to. There is a version of begin and end defined for int[3] (and all sizes of arrays) but not for int*.
+
+
+// The outer loop variable is in fact int (&)[3], That is, it is a reference to an int[3] (the parentheses used to indicate that it references an int[3] and is not an array of int&)
+for (auto& row : arr)	
+{
+	for (auto col : row)
+	{
+		cout << col << " " << endl;
+	}
+}
+
+
+
+Declaring and defining functions
+Code that uses a function has to have access to the name of the function, and so it needs to have access to either the function definition or the declaration of the function (also called the function prototype)
+
+The compiler uses the prototype to type-check that the calling code is calling the function, using the right types
+
+
+C Runtime Library is implementation:
+function is compiled in a static library or a dynamic link library
+function prototypes are provided in a header file
+include the header file for the library so that the function prototypes are available to the compiler
+type the prototype in your code
+library provided in the linker command line
 ```
 
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
