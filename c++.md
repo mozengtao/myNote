@@ -842,12 +842,523 @@ Code that uses a function has to have access to the name of the function, and so
 The compiler uses the prototype to type-check that the calling code is calling the function, using the right types
 
 
-C Runtime Library is implementation:
+C Runtime Library is implemented:
 function is compiled in a static library or a dynamic link library
 function prototypes are provided in a header file
 include the header file for the library so that the function prototypes are available to the compiler
 type the prototype in your code
 library provided in the linker command line
+
+However, much of the C++ Standard Library is implemented in header files, which means that these files can be quite large
+
+forward declaration: You do not have to define the function before it is used as long as the function prototype is defined before the function is called
+
+internal linkage and external linkage
+	static int mult(int, int); // defined in this file
+	extern int mult(int, int); // defined in another file
+
+the compiler is free to ignore constexpr and inline specifier, these specifiers are just a suggestion to the compiler.
+
+
+trailing return type
+
+inline auto mult(int lhs, int rhs) -> int
+{
+	return lhs * rhs;
+}
+
+// the compiler will deduce the return type from the actual value returned.
+// compiler will only know what the return type is from the function body, so you cannot provide a prototype for such functions
+inline auto mult(int lhs, int rhs)
+{
+	return lhs * rhs;
+}
+
+The return type on the left is given as auto, meaning that the actual return type is specified after the parameter list
+The -> int means that the return type is int
+
+
+Specifying exceptions
+
+Earlier versions of C++:
+provide a comma separated list of the types of the exceptions that may be thrown by code in the function
+provide an ellipsis (...) which means that the function may throw any exception
+provide an empty pair of parentheses, which means the function will not throw exceptions
+int calculate(int param) throw(overflow_error)
+{
+	// do something which potentially may overflow
+}
+
+C++11
+// C++11 style: 
+// no exception will be thrown was found
+int increment(int param) noexcept
+{
+	// check the parameter and handle overflow appropriately
+}
+
+Function body
+if the function is declared as returning auto, then the compiler will deduce the return type
+
+
+Using function parameters
+Passby-reference means that the variable in the calling code can be altered by the function, but this can be controlled by making the parameters const, in which case the reason for passby-reference is to prevent a (potentially costly) copy being made.
+
+Passing Initializer lists
+	point p;
+	p.x = 1; p.y = 1;
+	set_point(p);
+	set_point({ 1, 1 });
+
+
+Using default parameters
+The default values occur in the function definition, not in a function prototype, the parameters that can have default values are the right-most parameters
+
+void log_message(const string& msg, bool clear_screen = false)
+{
+	if (clear_screen) clear_the_screen();
+	cout << msg << endl;
+}
+
+log_message("first message", true);
+log_message("second message");
+bool user_decision = ask_user();
+log_message("third message", user_decision);
+
+
+Variable number of parameters
+A function with default parameter values can be regarded as having a variable number of user-provided parameters, where you know at compile time the maximum number of parameters and their values if the caller chooses not to provide values.
+
+Three ways to have a variable number of parameters: initializer lists, C-style variable argument lists, and variadic templated functions
+
+Initializer lists:
+	#include <initializer_list>
+	int sum(initializer_list<int> values)
+	{
+		int sum = 0;
+		for (int i : values) sum += i;
+		return sum;
+	}
+
+	cout << sum({}) << endl; // 0
+	cout << sum({-6, -5, -4, -3, -2, -1}) << endl; // -21
+	cout << sum({10, 20, 30}) << endl; // 60
+
+Argument lists:
+// 1
+int sum(int first, ...)
+{
+	int sum = 0;
+	va_list args;
+	va_start(args, first);
+	int i = first;
+	while (i != -1)
+	{
+		sum += i;
+		i = va_arg(args, int);
+	}
+	va_end(args);
+	return sum;
+}
+
+cout << sum(-1) << endl; // 0
+cout << sum(-6, -5, -4, -3, -2, -1) << endl; // -20 !!!
+cout << sum(10, 20, 30, -1) << endl; // 60
+
+// 2
+int sum(int count, ...)
+{
+	int sum = 0;
+	va_list args;
+	va_start(args, count);
+	while(count--)
+	{
+		int i = va_arg(args, int);
+		sum += i;
+	}
+	va_end(args);
+	return sum;
+}
+
+cout << sum(0) << endl; // 0
+cout << sum(6, -6, -5, -4, -3, -2, -1) << endl; // -21
+cout << sum(3, 10, 20, 30) << endl; // 60
+
+
+name mangling
+C++ compiler will decorate the name with extra symbols for the return type and parameters so that overloaded functions all have different names
+
+extern "C"
+the function has C linkage and the compiler will not use C++ name mangling
+
+Overloading functions
+several functions with the same name, but where the parameter list is different (the number of parameters and/or the type of the parameters)
+
+compiler will attempt to find the function that best fits the parameters provided:
+If there is not a suitable function, the compiler will attempt to convert the parameters to see if a function with those types exists. The compiler will start with trivial conversions (for example, an array name to a pointer, a type to a const type), and if this fails the compiler will try to promote the type (for example, bool to int). If that fails, the compiler will try standard conversions (for example, a reference to a type). If such conversions results in more than one possible candidate, then the compiler will issue an error that the function call is ambiguous.
+
+Functions and scope
+void f(int i) { /*does something*/ }
+void f(double d) { /*does something*/ }
+
+int main()
+{
+	void f(double d);	// The prototype is in the same scope as the function call, it hides the version with an int parameter
+	f(1);
+	return 0;
+}
+
+Deleted functions
+prevent the implicit conversion for built-in types you can delete the functions that you do not want callers to use
+
+void f(double) = delete;
+void g()
+{
+	f(1); // compiles
+	f(1.0); // C2280: attempting to reference a deleted function
+}
+
+
+Passing by value and passing by reference
+// don't allow any more than 100 items
+bool get_items(int count, vector<int>& values)
+{
+	if (count > 100) return false;
+	for (int i = 0; i < count; ++i)
+	{
+		values.push_back(i);
+	}
+	return true;
+}
+
+vector<int> items {};
+get_items(10, items);
+
+Asserts are defined using conditional compilation and so will only appear in debug builds (that is, C++ code compiled with debugging information).
+
+Using invariants
+If you don't explicitly document what the function does to external data, then you must ensure that when the function finishes such data is left untouched.
+For example, the cout object is global to your application, and it can be changed through manipulators to make it interpret numeric values in certain ways. If you change it in a function (say, by inserting the hex manipulator), then this change will remain when the cout object is used outside the function
+
+Declaring function pointers
+int (*fn)() = get_status;
+int error_value = fn();
+
+declare aliases for the type of the function pointer
+	typedef bool(*MyPtr)(MyType*, MyType*);
+	using MyPtr = bool(*)(MyType*, MyType*);	// more clear
+
+using two_ints = void (*)(int, int);
+
+void do_something(int l, int r){/* some code */}
+
+void caller()
+{
+	two_ints fn = do_something;	// Notice: not use a * for fn
+	fn(42, 99);
+}
+
+Using function pointers
+A function pointer is merely a pointer. This means that you can use it as a variable; you can return it from a function, or pass it as a parameter.
+
+using callback = void(*)(const string&);
+void big_routine(int loop_count, const callback progress)
+{
+	for (int i = 0; i < loop_count; ++i)
+	{
+		if (i % 100 == 0)
+		{
+			string msg("loop ");
+			msg += to_string(i);
+			progress(msg);
+		}
+	// routine
+	}
+}
+
+Templated functions
+C++ provides templates to allow you to write more generic code; you write the routine using a generic type and at compile time the compiler will generate a function with the appropriate types. 
+
+
+Defining templates
+Compiler deduces the template parameters from how you call the function
+// 1
+	template<typename T>
+	T maximum(T lhs, T rhs)
+	{
+		return (lhs > rhs) ? lhs : rhs;
+	}
+
+// 2
+	template<typename T, typename U>
+	T maximum(T lhs, U rhs)
+	{
+		return (lhs > rhs) ? lhs : rhs;
+	}
+
+// explicitly provide the types in the called function to call a specific version of the function and (if necessary) get the compiler to perform implicit conversions
+	// call template<typename T> maximum(T,T);
+	int i = maximum<int>(false, 100.99);
+
+Using template parameter values
+	template<int size, typename T>		// parameter size can be used in the function as a local (read-only) variable
+	T* init(T t)
+	{
+		T* arr = new T[size];
+		for (int i = 0; i < size; ++i) arr[i] = t;
+		return arr;
+	}
+
+	int *i10 = init<10>(42);	// init<10,int>(42) can be used to explicitly indicate that you require an int array
+	for (int i = 0; i < 10; ++i) cout << i10[i] << ' ';
+	cout << endl;
+	delete [] i10;
+
+// the compiler will instantiate this function for every combination of xxx and yyy that your code calls. 
+// If the template function has a large amount of code, then this may be an issue. One way around this is to use a helper function 
+	template<typename T> void print_array(T* arr, int size)
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			cout << arr[i] << endl;
+		}
+	}
+
+	template<typename T, int N> inline void print_array(T (&arr)[N])
+	{
+		print_array(arr, N);
+	}
+
+	int squares[] = { 1, 4, 9, 16, 25 };
+	print_array(squares);
+
+
+Specialized templates
+	In some cases, you may have a routine that works for most types (and a candidate for a templated function), but you may identify that some types need a different routine.
+
+	template <typename T> int number_of_bytes(T t)
+	{
+		return sizeof(T);
+	}
+
+	template<> int number_of_bytes<const char *>(const char *str)	// add the specialized type to the function name
+	{
+		return strlen(str) + 1;
+	}
+
+	// 2
+	define a templated function to return a maximum of two parameters of the same type
+	template<typename T>
+	T maximum(T lhs, T rhs)
+	{
+		return (lhs > rhs) ? lhs : rhs;
+	}
+
+	// delete the specialization for bool
+	template<> bool maximum<bool>(bool lhs, bool rhs) = delete;
+
+
+Variadic templates
+A variadic template is when there is a variable number of template parameters
+
+template<typename T, typename... Arguments>
+void func(T t, Arguments... args);
+
+You need to unpack the parameter pack to get access to the parameters passed by the caller
+You can determine how many items there are in the parameter pack using the special operator, sizeof... (note the ellipses are part of the name);
+
+To unpack the parameter pack
+1.uses recursion
+
+template<typename T> void print(T t)
+{
+	cout << t << endl;
+}
+
+template<typename T, typename... Arguments>
+void print(T first, Arguments ... next)
+{
+	print(first);
+	print(next...);
+}
+
+print(1, 2.0, "hello", bool);
+
+2.use an initializer list
+
+template<typename... Arguments>
+void print(Arguments ... args)
+{
+	int arr [sizeof...(args)] = { args... };	// all the parameters have to be the same type of the array
+	for (auto i : arr) cout << i << endl;
+}
+
+3.use the comma operator
+
+template<typename... Arguments>
+void print(Arguments ... args)
+{
+	int dummy[sizeof...(args)] = { (print(args), 0)... };
+}
+
+
+Overloaded operators
+C++ provides the keyword operator to indicate that the function is not used with the function call syntax, but instead is called using the syntax associated with the operator
+
+You can provide your own versions of the following unary operators:
+	! & + - * ++ -- ~
+You can also provide your own versions of the following binary operators:
+	!= == < <= > >= && ||
+	% %= + += - -= * *= / /= & &= | |= ^ ^= << <<= = >> =>>
+	-> ->* ,
+You can also write versions of the function call operator (), array subscript [], conversion operators, the cast operator (), and new and delete. 
+You cannot redefine the ., .*, ::, ?:, # or ## operators, nor the "named" operators, sizeof, alignof or typeid.
+
+struct point
+{
+	int x;
+	int y;
+};
+
+bool operator==(const point& lhs, const point& rhs)
+{
+	return (lhs.x == rhs.x) && (lhs.y == rhs.y);
+}
+
+bool operator!=(const point& lhs, const point& rhs)
+{
+	return !(lhs == rhs);
+}
+
+ostream& operator<<(ostream& os, const point& pt)
+{
+	os << "(" << pt.x << "," << pt.y << ")";
+	return os;
+}
+
+point p1{ 1,1 };
+point p2{ 1,1 };
+cout << boolalpha;
+cout << (p1 == p2) << endl; // true
+cout << (p1 != p2) << endl; // false
+
+Operator overloading is often referred to as syntactic sugar, syntax that makes the code easier to read--but this trivializes an important technique
+
+One example is functors, or function objects, where the class implements the () operator so that objects can be accessed as if they are functions
+
+
+Function objects
+A function object, or functor, is a custom type that implements the function call operator: (operator()). This means that a function operator can be called in a way that looks like it is a function
+
+The <functional> header file contains various types that can be used as function objects.
+
+The <algorithm> header contains functions that work on function objects
+
+
+lambda expressions
+C++11 provides a mechanism to get the compiler to determine the function objects that are required and bind parameters to them. These are called lambda expressions.
+
+A lambda expression is used to create an anonymous function object at the location where the function object will be used.
+
+auto less_than_10 = [](int a) {return a < 10; };
+bool b = less_than_10(4);
+
+The square brackets at the beginning of the lambda expression are called the capture list. This expression does not capture variables, so the brackets are empty.
+
+You can use variables declared outside of the lambda expression and these have to be captured. The capture list indicates whether all such variables will be captured by a reference (use [&]) or by a value (use [=]). You can also name the variables that will be captured (if there are more than one, use a comma-separated list) and if they are captured by a value, you use just their names. If they are captured by a reference, use a & on their names.
+
+// 1
+int limit = 99;
+auto less_than = [limit](int a) {return a < limit; };
+
+// 2
+auto incr = [] { static int i; return ++i; };
+incr();
+incr();
+cout << incr() << endl; // 3
+
+// 3
+auto swap = [](int& a, int& b) { int x = a; a = b; b = x; };
+int i = 10, j = 20;
+cout << i << " " << j << endl;
+swap(i, j);
+cout << i << " " << j << endl;
+
+// 4
+vector<int> v { 1, 2, 3, 4, 5 };
+int less_than_3 = count_if(
+	v.begin(), v.end(),
+	[](int a) { return a < 3; });
+cout << "There are " << less_than_3 << " items less than 3" << endl;
+
+
+Classes
+A class allows you to encapsulate data in a custom type, and you can define functions on that type so that only these functions will be able to access the data.
+
+The basic idea behind classes:
+A mechanism to encapsulate the data into a type that knows what bytes to change, and only allow that type to access the data.
+
+A struct is one of the class types that you can use in C++; the other two are union and class.
+
+
+Defining class behavior
+A class can define functions that can only be called through an instance of the class; such a function is often called a method. 
+An object will have state; this is provided by the data members defined by the class and initialized when the object is created. 
+The methods on an object define the behavior of the object, usually acting upon the state of the object. 
+When you design a class, you should think of the methods in this way: they describe the object doing something.
+
+class cartesian_vector
+{
+	// The public keyword means that any members defined after this specifier are accessible by code defined outside of the class.
+	// By default, all the members of a class are private unless you indicate otherwise. 
+	// private means that the member can only be accessed by other members of the class.
+	public:
+		double x;
+		double y;
+		// other methods
+		double get_magnitude() { return std::sqrt((x * x) + (y * y)); }
+};
+
+the difference between a struct and a class: 
+by default, members of a struct are public and by default, members of a class are private
+
+
+Using the this pointer
+class cartesian_vector
+{
+public:
+	double x;
+	double y;
+	// other methods
+	double get_magnitude()
+	{
+		// this makes it explicit that the items are members of the class
+		return std::sqrt((this->x * this->x) + (this->y * this->y));
+	}
+	reset(double x, double y) { this->x = x; this->y = y; }
+};
+
+You can dereference the this pointer with the * operator to get access to the object. This is useful when a member function must return a reference to the current object
+A method in a class can also pass the this pointer to an external function, which means that it is passing the current object by reference through a typed pointer
+
+
+Using the scope resolution operator
+
+	class cartesian_vector
+	{
+		public:
+			double x;
+			double y;
+			// other methods
+			double magnitude();
+	};
+
+	double cartesian_vector::magnitude()
+	{
+		return sqrt((this->x * this->x) + (this->y * this->y));
+	}
+
+
 ```
 
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
