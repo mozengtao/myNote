@@ -1729,6 +1729,492 @@ void outer::inner::f()	// Notice how the name of the nested class is prefixed wi
 {
 	// do something
 }
+
+Accessing const objects
+
+class point
+{
+	double x; double y;
+public:
+	double get_x() { return x; }
+	double get_y() { return y: }
+};
+
+void print_point(const point& p)
+{
+	cout << "(" << p.get_x() << "," << p.get_y() << ")" << endl;
+}
+
+ERROR: cannot convert 'this' pointer from 'const point' to 'point &'
+
+// solution
+double get_x() const { return x; }
+double get_y() const { return y: }
+
+This effectively means that the this pointer is const. The const keyword is part of the function prototype, so the method can be overloaded on this.
+
+A method marked with const must not alter the data members, not even temporarily, such a method can only call const methods. 
+There may be rare cases when a data member is designed to be changed through a const object; in this case the declaration of the member is marked with the mutable keyword.
+
+
+Using objects with pointers
+Objects can be created on the free store and accessed through a typed pointer
+
+
+Getting pointers to object members
+
+class cartesian_vector
+{
+public:
+	// other items
+	double get_magnitude() const
+	{
+		return std::sqrt((this->x * this->x) + (this->y * this->y));
+	}
+};
+
+double (cartesian_vector::*fn)() const = nullptr;
+fn = &cartesian_vector::get_magnitude;	// getting a pointer to a method on a class that must be called through an object
+
+cartesian_vector vec(1.0, 1.0);
+double mag = (vec.*fn)();		// use the pointer to the member operator .* on an object
+								// The pointer to the member operator says that the function pointer on the right is called with the object on the left
+
+// syntax for an object pointer
+cartesian_vector *pvec = new cartesian_vector(1.0, 1.0);
+double mag = (pvec->*fn)();
+delete pvec;
+
+
+Operator overloading
+One of behaviors of a type is the operations you can apply to it. C++ allows you to overload the C++ operators as part of a class so that it's clear that the operator is acting upon the type
+
+// inline in point
+point operator-() const
+{
+	return point(-this->x, -this->y);
+}
+
+point p1(-1,1);
+point p2 = -p1; // p2 is (1,-1)
+
+
+cartesian_vector point::operator-(point& rhs) const
+{
+	return cartesian_vector(this->x - rhs.x, this->y - rhs.y);
+}
+
+class mytype
+{
+public:
+	mytype& operator++()
+	{
+		// do actual increment
+		return *this;
+	}
+	mytype operator++(int)
+	{
+		mytype tmp(*this);
+		operator++(); // call the prefix code
+		return tmp;
+	}
+};
+
+
+Defining function classes
+A functor is a class that implements the () operator. This means that you can call an object using the same syntax as a function.
+
+
+class factor
+{
+	double f = 1.0;
+public:
+	factor(double d) : f(d) {}
+	double operator()(double x) const { return f * x; }
+};
+
+factor threeTimes(3); // create the functor object
+double ten = 10.0;
+double d1 = threeTimes(ten); // calls operator(double)
+double d2 = threeTimes(d1); // calls operator(double)
+
+double d2 = threeTimes.operator()(d1);
+
+This code shows that the functor object not only provides some behavior but it also can have a state.
+
+
+template<typename Fn>
+void print_value(double d, Fn& fn)
+{
+	double ret = fn(d);
+	cout << ret << endl;
+}
+
+The C++ Standard Library uses this magic, which means that the algorithms it provides can be called either with a global function or a functor, or a lambda expression.
+
+The Standard Library algorithms use three type of functional classes, generators, and unary and binary functions; that is, functions with zero, one or two parameters.
+
+
+Defining conversion operators
+converting the object into another type
+
+class mytype
+{
+	int i;
+public:
+	mytype(int i) : i(i) {}
+	explicit mytype(string s) : i(s.size()) {}
+	operator int () const { return i; }			//  convert an object back to an int
+};
+
+string s = "hello";
+mytype t = mytype(s); // explicit conversion
+int i = t; // implicit conversion
+
+
+// using a conversion operator: returning values from a stateful functor
+
+class averager
+{
+	double total;
+	int count;
+public:
+	averager() : total(0), count(0) {}
+	void operator()(double d) { total += d; count += 1; }
+	operator double() const
+	{
+		return (count != 0) ? (total / count) :
+			numeric_limits<double>::signaling_NaN();
+	}
+};
+
+vector<double> vals { 100.0, 20.0, 30.0 };
+double avg = for_each(vals.begin(), vals.end(), averager());
+
+
+Managing resources
+Resource Acquisition Is Initialization (RAII):
+Put simply, the resource is allocated in the constructor of an object and freed in the destructor, so it means that the lifetime of the resource is the lifetime of the object. Typically, such wrapper objects are allocated on the stack, and this means that you are guaranteed that the resource will be freed when the object goes out of scope regardless of how this happens.
+
+
+Writing wrapper classes
+There are several issues that you must address when writing a class to wrap a resource ...
+
+Using smart pointers
+The C++ Standard Library provides several classes to wrap resources accessed through pointers.
+The Standard Library has three smart pointer classes: unique_ptr, shared_ptr, and weak_ptr. Each handles how the resource is released in a different way, and how or whether you can copy a pointer.
+
+Managing exclusive ownership
+The unique_ptr class is constructed with a pointer to the object it will maintain.
+
+// version 1
+void f1()
+{
+	int* p = new int;
+	*p = 42;
+	cout << *p << endl;
+	delete p;
+}
+
+// version 2
+void f2()
+{
+	unique_ptr<int> p(new int);
+	*p = 42;
+	cout << *p << endl;
+	delete p.release();
+}
+
+// version 3: deterministic releasing of the resource
+void f3()
+{
+	unique_ptr<int> p(new int);
+	*p = 42;
+	cout << *p << endl;
+	p.reset();
+}
+
+void f4()
+{
+	unique_ptr<int> p(new int);
+	*p = 42;
+	cout << *p << endl;
+} // memory is deleted
+
+void f5()
+{
+	unique_ptr<int> p = make_unique<int>();
+	*p = 42;
+	cout << *p << endl;
+} // memory is deleted
+
+void f6()
+{
+	unique_ptr<point> p = make_unique<point>(1.0, 1.0);
+	p->x = 42;
+	cout << p->x << "," << p->y << endl;
+} // memory is deleted
+
+You cannot copy assign unique_ptr smart pointers (the copy assignment operator and copy constructor are deleted), but you can move them by transferring ownership of the resource from the source pointer to the destination pointer.
+
+Sharing ownership
+There are occasions when you will need to share a pointer, You need a mechanism where several objects can hold a pointer that will remain valid until all the objects using that pointer have indicated they will no longer need to use it.
+
+C++11 provides this facility with the shared_ptr class. This class maintains a reference count on the resource, and each copy of the shared_ptr for that resource will increment the reference count.
+
+shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
+
+You can create a shared_ptr object from a unique_ptr object, which means that the pointer is moved to the new object and the reference counting control block created.
+
+
+Handling dangling pointers
+You cannot use a weak_ptr object directly and there is no dereference operator. Instead, you create a weak_ptr object from a shared_ptr object and, when you want to access the resource, you create a shared_ptr object from the weak_ptr object. This means that a weak_ptr object has the same raw pointer, and access to the same control block as the shared_ptr object, but it does not take part in reference counting.
+
+Once created, the weak_ptr object will enable you to test whether the wrapper pointer is to an existing resource or to a resource that has been destroyed
+There are two ways to do this: 
+1.either call the member function expired or attempt to create a shared_ptr from the weak_ptr
+2.create a shared_ptr object from it
+
+	shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
+	weak_ptr<point> wp(sp1);
+
+	// code that may call sp1.reset() or may not
+
+	if (!wp.expired()) { /* can use the resource */}
+
+	shared_ptr<point> sp2 = wp.lock();
+	if (sp2 != nullptr) { /* can use the resource */}
+
+	try
+	{
+		shared_ptr<point> sp3(wp);
+		// use the pointer
+	}
+	catch(bad_weak_ptr& e)
+	{
+		// dangling weak pointer
+	}
+
+Templates
+Classes can be templated, which means that you can write generic code and the compiler will generate a class with the types that your code uses
+
+template <int N, typename T>
+class simple_array
+{
+	T data[N];
+public:
+	const T* begin() const { return data; }
+	const T* end() const { return data + N; }
+	int size() const { return N; }
+
+	T& operator[](int idx)
+	{
+		if (idx < 0 || idx >= N)
+			throw range_error("Range 0 to " + to_string(N));
+		return data[idx];
+	}
+};
+
+simple_array<4, int> four;
+four[0] = 10; four[1] = 20; four[2] = 30; four[3] = 40;
+for(int i : four) cout << i << " "; // 10 20 30 40
+cout << endl;
+four[4] = -99; // throws a range_error exception
+
+//  define a function out of the class declaration
+template<int N, typename T>
+T& simple_array<N,T>::operator[](int idx)
+{
+	if (idx < 0 || idx >= N)
+		throw range_error("Range 0 to " + to_string(N));
+	return data[idx];
+}
+
+// have default values for template parameters
+template<int N, typename T=int> class simple_array
+{
+	// same as before
+};
+
+
+// have a specific implementation for a template parameter
+template<int N> 
+class simple_array<N, char>
+{
+	char data[N];
+public:
+	simple_array<N, char>(const char* str)
+	{
+		strncpy(data, str, N);
+	}
+	int size() const { return N; }
+	char& operator[](int idx)
+	{
+		if (idx < 0 || idx >= N)
+			throw range_error("Range 0 to " + to_string(N));
+		return data[idx];
+	}
+	operator const char*() const { return data; }
+};
+
+Note that, with a specialization, you do not get any code from the fully templated class; you have to implement all the methods you want to provide, and, as illustrated here, methods that are relevant to the specialization but not available on the fully templated class.
+
+
+Using classes
+
+
+Object-Orientated Programming
+
+Inheritance and composition
+
+concrete classes
+
+reuse class in a new class:
+1. composition: add an instance of your utility class as a data member of the classes that will use the routine
+2. inheritance: inheritance is when one class extends another class the class being extended is called the base class, parent class, or superclass, and the class doing the extending is called a derived class, child class, or subclass
+
+differences between composition and inheritance:
+1.  in composition, the composed object is used by the class and not exposed directly to the client of the class. With inheritance, an object of the derived class is an object of the base class, so usually the client code will see the base class functionality, the derived class can override the base class methods and provide its own version
+
+Inheriting from a class
+
+class os_file
+{
+	const string file_name;
+	int file_handle;
+	// other data members
+public:
+	long get_size_in_bytes();
+	// other methods
+};
+
+class mp3_file : public os_file		// public inheritance
+{
+	long length_in_secs;
+	// other data members
+public:
+	long get_length_in_seconds();
+	// other methods
+};
+
+The encapsulation principle is important in C++. Although an object of child class contains the base class data members, they should only be changed by the base class methods.
+
+When a derived object is created, the base object must be created first (with an appropriate constructor), similarly, when a derived object is destroyed, the derived part of the object is destroyed first (through the destructor of the derived class) before the base class destructor is called
+
+If you do not explicitly call a base class constructor, then the compiler will call the default constructor of the base class as the first action of the derived class constructor. If the member list initializes data members, these will be initialized after any base class constructor is called.
+
+Overriding methods and hiding names
+The derived class inherits the functionality of the base class (subject to the access level of the methods), so a base class method can be called through an object of the derived class.
+
+struct base
+{
+	void f(){ /* do something */ }
+	void g(){ /* do something */ }
+};
+
+struct derived : base
+{
+	void f(int i)
+	{
+		base::f();
+		// do more stuff with i
+	}
+};
+
+derived d;
+d.f(42); // OK
+d.f(); // won't compile, derived::f(int) hides base::f
+
+derived d;
+d.derived::f(42); // same call as above
+d.base::f(); // call base class method
+derived *p = &d; // get an object pointer
+p->base::f(); // call base class method
+delete p;
+
+
+Using pointers and references
+
+A pointer (or a reference) to an instance of a derived class can be implicitly converted to a pointer (or a reference) to a base class object.
+
+// cast base class pointer to a derived class pointer
+// bad code
+void print_y(base *pb)
+{
+	// be wary of this
+	derived *pd = static_cast<derived*>(pb);
+	cout << "y = " << pd->y << endl;
+}
+
+void f()
+{
+	derived d;
+	print_y(&d); // implicit cast to base*
+}
+
+Access levels
+
+Members declared in the public section can be accessed by code in the class and by code outside the class either on an object or if the member is static, using the class name.
+Members declared in the private section can only be accessed by other members in the same class
+A derived class can access the private members of the base class but not the private members
+Members declared in the protected section can be accessed by methods in the same class or by methods in any derived class and by friends, but not by external code
+
+class base
+{
+protected:
+	void test();
+};
+
+class derived : public base
+{
+public:
+	void f() { test(); }
+};
+
+base b;
+b.test(); // won't compile
+derived d;
+d.f(); // OK
+d.test(); // won't compile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```
 
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
