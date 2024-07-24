@@ -1358,7 +1358,377 @@ Using the scope resolution operator
 		return sqrt((this->x * this->x) + (this->y * this->y));
 	}
 
+Defining class state
+Bear in mind that if you have a pointer to an item created in the free store, you need to know whose responsibility it is to deallocate the memory that the pointer points to. If you have a reference (or pointer) to an object created on a stack frame somewhere, you need to make sure that the objects of your class do not live longer than that stack frame
 
+When you declare data members as public it means that external code can read and write to the data members
+You can decide that you would prefer to only give read-only access, in which case you can make the members private and provide read access through accessors
+When you make the data members private it means that you cannot use the initializer list syntax to initialize an object, but we will address this later
+
+class cartesian_vector
+{
+	double x;
+	double y;
+	public:
+		double get_x() { return this->x; }
+		double get_y() { return this->y; }
+		// other methods
+	};
+
+Creating objects
+
+// This is direct initialization of the object and assumes that the data members of cartesian_vector are public.
+cartesian_vector vec { 10, 10 };
+cartesian_vector *pvec = new cartesian_vector { 5, 5 };
+// use pvec
+delete pvec
+
+C++11 allows direct initialization to provide default values in the class:
+class point
+{
+	public:
+		int x = 0;
+		int y = 0;
+};
+
+ class car
+{
+	public:
+		double tire_pressures[4] { 25.0, 25.0, 25.0, 25.0 };
+};
+
+Construction of objects
+constructors allows you to define special methods to perform the initialization of the object
+
+constructors:
+Default constructor: This is called to create an object with the default value.
+Copy constructor: This is used to create a new object based on the value of an existing object.
+Move constructor: This is used to create a new object using the data moved from an existing object.
+Destructor: This is called to clean up the resources used by an object.
+Copy assignment: This copies the data from one existing object into another existing object.
+Move assignment: This moves the data from one existing object into another existing object.
+
+The compiler-created versions of these functions will be implicitly public;
+
+A constructor is a member function that has the same name as the type, but does not return a value, so you cannot return a value if the construction fails, which potentially means that the caller will receive a partially constructed object
+
+Defining constructors
+The default constructor is used when an object is created without a value and hence the object will have to be initialized with a default value.
+
+// 1
+class point
+{
+	double x; double y;
+public:
+	point() { x = 0; y = 0; }
+};
+
+point p; // default constructor called
+point p {}; // calls default constructor
+
+
+// A more efficient way is to use direct initialization with a member list.
+point(double x, double y) : x(x), y(y) {}
+
+The identifiers outside the parentheses are the names of class members, and the items inside the parentheses are expressions used to initialize that member (in this case, a constructor parameter). 
+
+
+point(double x, double y) : x{x}, y{y} {}
+point p(10.0, 10.0);
+
+point arr[4];	// default constructor is called on the items; there is no way to call any other constructor, and so you have to initialize each one separately
+
+
+// default values for constructor parameters
+class car
+{
+	array<double, 4> tire_pressures;;
+	double spare;
+public:
+	car(double front, double back, double s = 25.0)
+	: tire_pressures{front, front, back, back}, spare{s} {}
+};
+
+car commuter_car(25, 27);
+car sports_car(26, 28, 28);
+
+Delegating constructors
+A constructor may call another constructor using the same member list syntax:
+class car
+{
+// data members
+public:
+	car(double front, double back, double s = 25.0)
+		: tire_pressures{front, front, back, back}, spare{s} {}
+	car(double all) : car(all, all) {}
+};
+
+
+Copy constructor
+A copy constructor is used when you pass an object by value (or return by value) or if you explicitly construct an object based on another object
+
+class point
+{
+	int x = 0;int y = 0;
+public:
+	point(const point& rhs) : x(rhs.x), y(rhs.y) {}
+};
+
+point p1(10, 10);
+
+point p2(p1);	// copy constructor is called
+point p3 = p1;	// copy constructor is called
+
+Converting between types
+
+	class cartesian_vector
+	{
+		double x; double y;
+	public:
+		cartesian_vector(const point& p) : x(p.x), y(p.y) {}
+	};
+
+	point p(10, 10);
+	cartesian_vector v1(p);
+	cartesian_vector v2 { p };
+	cartesian_vector v3 = p;
+	(The problem with the code above is that the cartesian_vector class accesses private members of the point class)
+
+Making friends
+
+class cartesian_vector; // forward decalartion
+
+class point
+{
+	double x; double y;
+public:
+	point(double x, double y) : x(x), y(y){}
+	friend class cartesian_point;
+	// This indicates that the code for the entire class, cartesian_vector, can have access to the private members (data and methods) of the point class
+};
+
+// declare friend functions
+ostream& operator<<(ostream& stm, const point& pt)
+ {
+ stm << "(" << pt.x << "," << pt.y << ")";
+ return stm;
+ }
+
+friend ostream& operator<<(ostream&, const point&);
+
+Such friend declarations have to be declared in the point class, but it is irrelevant whether it is put in the public or private section.
+
+Marking constructors as explicit
+In some cases, you do not want to allow the implicit conversion between one type that is passed as a parameter of the constructor of another type.
+This now means that the only way to call the constructor is using the parentheses syntax: explicitly calling the constructor. 
+
+class mytype
+{
+public:
+	explicit mytype(double x);
+};
+
+mytype t1 = 10.0; // will not compile, cannot convert
+mytype t2(10.0); // OK
+
+
+Destructing objects
+When an object is destroyed, a special method called the destructor is called. This method has the name of the class prefixed with a ~ symbol and it does not return a value.
+
+// 1
+void f(mytype t) // copy created
+{
+	// use t
+} 	// t destroyed
+
+void g()
+{
+	mytype t1;
+	f(t1);
+	if (true)
+	{
+		mytype t2;
+	} 	// t2 destroyed
+
+	mytype arr[4];
+} 	// 4 objects in arr destroyed in reverse order to creation
+	// t1 destroyed
+
+
+// when you return an object
+mytype get_object()
+{
+	mytype t; // default constructor creates t
+	return t; // copy constructor creates a temporary
+} 			  // t destroyed
+void h()
+{
+	test tt = get_object(); // copy constructor creates tt
+							// temporary destroyed, tt destroyed
+}
+
+// An object will be destroyed when you explicitly delete a pointer to an object allocated on the free store.
+// In this case, the call to the destructor is deterministic: it is called when your code calls delete
+
+mytype *get_object()
+{
+	return new mytype; // default constructor called
+}
+
+void f()
+{
+	mytype *p = get_object();
+	// use p
+	delete p; // object destroyed
+}
+
+If a data member in a class is a custom type with a destructor, then when the containing object is destroyed the destructors on the contained objects are called too. Nonetheless, note that this is only if the object is a class member. 
+
+If a class member is a pointer to an object in the free store, then you have to explicitly delete the pointer in the containing object's destructor. However, you need to know where the object the pointer points to is because if it is not in the free store, or if the object is used by other objects, calling delete will cause problems.
+
+
+Assigning objects
+The assignment operator is called when an already created object is assigned to the value of another one. 
+
+The copy assignment operator is typically a public member of the class and it takes a const reference to the object that will be used to provide the values for the assignment.
+
+class buffer
+{
+	// data members
+public:
+	buffer(const buffer&); // copy constructor
+	buffer& operator=(const buffer&); // copy assignment
+};
+
+buffer a, b, c; // default constructors called
+// do something with them
+a = b = c; // make them all the same value (more clear)
+a.operator=(b.operator=(c)); // make them all the same value
+
+
+key difference between the copy constructor and copy assignment methods:
+A copy constructor creates a new object that did not exist before the call. The calling code is aware that if the construction fails, then an exception will be raised.
+
+With assignment, both objects already exist, so you are copying the value from one object to another. This should be treated as an atomic action and all the copy should be performed; it is not acceptable for the assignment to fail halfway through, resulting in an object that is a bit of both objects
+
+Furthermore, in construction, an object only exists after the construction is successful, so a copy construction cannot happen on an object itself, but it is perfectly legal (if pointless) for code to assign an object to itself. The copy assignment needs to check for this situation and take appropriate action.
+
+
+Move semantics
+C++11 provides move semantics through a move constructor and a move assignment operator, which are called when a temporary object is used either to create another object or to be assigned to an existing object. In both cases, because the temporary object will not live beyond the statement, the contents of the temporary can be moved to the other object, leaving the temporary object in an invalid state. The compiler will create these functions for you through the default action of moving the data from the temporary to the newly created (or the assigned to) object.
+
+
+//  use only move and never to use copy
+class mytype
+{
+	int *p;
+public:
+	mytype(const mytype&) = delete; 			// copy constructor
+	mytype& operator= (const mytype&) = delete; // copy assignment
+	mytype&(mytype&&); 							// move constructor
+	mytype& operator=(mytype&&); 				// move assignment
+};
+
+mytype::mytype(mytype&& tmp)
+{
+	this->p = tmp.p;
+	tmp.p = nullptr;
+}
+
+Declaring static members
+You can declare a member of a class--a data member or a method--static.
+
+Defining static members
+When you use static on a class member it means that the item is associated with the class and not with a specific instance. 
+In the case, of data members, this means that there is one data item shared by all instances of the class. Likewise, a static method is not attached to an object, it is not __thiscall and has no this pointer.
+
+A static method is part of the namespace of a class, so it can create objects for the class and have access to their private members
+Note that the static function cannot call nonstatic methods on the class because a nonstatic method will need a this pointer, but a nonstatic method can call a static method.
+
+Two ways to call a static method, through an object or through the class name
+
+class mytype
+{
+public:
+	static void f(){}
+	void g(){ f(); }
+};
+
+mytype c;
+c.g(); // call the nonstatic method
+c.f(); // can also call the static method thru an object
+mytype::f(); // call static method without an object
+
+For static data members, need to define static data members outside of the class
+
+class mytype
+{
+public:
+	static int i;
+	static void incr() { i++; }
+};
+
+// in a source file
+int mytype::i = 42;
+// The data member is defined outside of the class at file scope. It is named using the class name, but note that it also has to be defined using the type.
+
+You can also declare a variable in a method that is static. In this case, the value is maintained across method calls, in all objects, so it has the same effect as a static class member, but you do not have the issue of defining the variable outside of the class.
+
+
+
+Using static and global objects
+A static variable in a global function will be created at some point before the function is first called. Similarly, a static object that is a member of a class will be initialized at some point before it is first accessed.
+
+Static and global objects are constructed before the main function is called, and destroyed after the main function finishes.
+The issue is if you have several source files with static objects in each. There is no guarantee on the order in which these objects will be initialized.
+
+Named constructors
+This is one application for public static methods. The idea is that since the static method is a member of the class it means that it has access to the private members of an instance of the class, so such a method can create an object, perform some additional initialization, and then return the object to the caller. This is a factory method
+
+class point
+{
+	double x; double y;
+public:
+	point(double x, double y) : x(x), y(y){}
+	static point polar(double r, double th)		//  use a static method as a named constructor
+	{
+		return point(r * cos(th), r * sin(th));
+	}
+}
+
+const double pi = 3.141529;
+const double root2 = sqrt(2);
+point p11 = point::polar(root2, pi/4);
+
+// polar method could be written (less efficiently) as
+point point::polar(double r, double th)
+{
+	point pt;
+	pt.x = r * cos(th);
+	pt.y = r * sin(th);
+	return pt;
+}
+
+
+Nested classes
+You can define a class within a class. If the nested class is declared as public, then you can create objects in the container class and return them to external code. Typically, however, you will want to declare a class that is used by the class and should be private. 
+
+// declares a public nested class
+class outer
+{
+	public:
+		class inner
+		{
+			public:
+			void f();
+		};
+		inner g() { return inner(); }
+};
+
+void outer::inner::f()	// Notice how the name of the nested class is prefixed with the name of the containing class.
+{
+	// do something
+}
 ```
 
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
