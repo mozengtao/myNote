@@ -3138,34 +3138,223 @@ for_each(middle, vec.end(), [](int i) {cout << i << " "; });
 cout << endl; // 67 90 45 64 44
 
 
+Using the numeric libraries
+The Standard Library has several libraries of classes to perform numeric manipulations.
+
+double radius_nm = 10.0;
+double volume_nm = pow(radius_nm, 3) * 3.1415 * 4.0 / 3.0;
+cout << "for " << radius_nm << "nm "
+"the volume is " << volume_nm << "nm3" << endl;
+double factor = ((double)nano::num / nano::den);
+double vol_factor = pow(factor, 3);
+cout << "for " << radius_nm * factor << "m "
+"the volume is " << volume_nm * vol_factor << "m3" << endl;
 
 
+//
+template<typename units>
+class dist_units
+{
+	double data;
+public:
+	dist_units(double d) : data(d) {}
+	
+	template <class other>
+	dist_units(const dist_units<other>& len) : data(len.value() *
+		ratio_divide<units, other>::type::den /
+		ratio_divide<units, other>::type::num) {}
+	
+	double value() const { return data; }
+};
+
+dist_units<kilo> earth_diameter_km(12742);
+cout << earth_diameter_km.value() << "km" << endl;
+dist_units<ratio<1>> in_meters(earth_diameter_km);
+cout << in_meters.value()<< "m" << endl;
+dist_units<ratio<1609344, 1000>> in_miles(earth_diameter_km);
+cout << in_miles.value()<< "miles" << endl;
 
 
+Complex numbers
+
+complex<double> a(1.0, 1.0);
+complex<double> b(-0.5, 0.5);
+complex<double> c = a + b;
+cout << a << " + " << b << " = " << c << endl;
+complex<double> d = polar(1.41421, -3.14152 / 4);
+cout << d << endl;
 
 
+Using Strings
+
+Using the string class as a container
+
+string s = "hellon";
+copy(s.begin(), s.end(), ostream_iterator<char>(cout));
+
+vector<char> v(s.begin(), s.end());
+copy(v.begin(), v.end(), ostream_iterator<char>(cout));
 
 
+Getting information about a string
+
+Altering strings
+
+Searching strings
+
+// 
+string str = "012the678the234the890";
+string::size_type pos = 0;
+while(true)
+{
+	pos++;
+	pos = str.find("the",pos);
+	if (pos == string::npos) break;
+	cout << pos << " " << str.substr(pos) << "n";
+}
+// 3 the678the234the890
+// 9 the234the890
+// 15 the890
+
+//
+string str = "012the678the234the890";
+string::size_type pos = string::npos;
+while(true)
+{
+	pos--;
+	pos = str.rfind("the",pos);
+	if (pos == string::npos) break;
+	cout << pos << " " << str.substr(pos) << "n";
+}
+// 15 the890
+// 9 the234the890
+// 3 the678the234the890
+
+//
+string str = "012the678the234the890";
+string::size_type pos = str.find_first_of("eh");
+if (pos != string::npos)
+{
+	cout << "found " << str[pos] << " at position ";
+	cout << pos << " " << str.substr(pos) << "n";
+}
+// found h at position 4 he678the234the890
+
+//
+string str = "012the678the234the890";
+string::size_type pos = str.find_first_not_of("0123456789");
+cout << "found " << str[pos] << " at position ";
+cout << pos << " " << str.substr(pos) << "n";
+// found t at position 3 the678the234the890
+
+//
+string str = " hello ";
+cout << "|" << str << "|n"; // | hello |
+string str1 = str.substr(str.find_first_not_of(" trn"));
+cout << "|" << str1 << "|n"; // |hello |
+string str2 = str.substr(0, str.find_last_not_of(" trn") + 1);
+cout << "|" << str2 << "|n"; // | hello|
 
 
+Internationalization
+
+Using facets Internationalization rules are known as facets. A locale object is a container of facets, and you can test if the locale has a specific facet using the has_facet function; if it does, you can get a const reference to the facet by calling the use_facet function.
 
 
+Converting strings to numbers
+
+string str = "49.5 red balloons";
+size_t idx = 0;
+double d = stod(str, &idx);
+d *= 2;
+string rest = str.substr(idx);
+cout << d << rest << "n"; // 99 red balloons
 
 
+Converting numbers to strings
+
+Using stream classes
+
+Outputting floating point numbers
+
+Outputting time and money
+
+Converting numbers to strings using streams
+
+Reading numbers from strings using streams
+
+Using regular expressions
+
+regex rx("[at]"); // search for either a or t
+cout << boolalpha;
+cout << regex_match("a", rx) << "n"; // true
+cout << regex_match("a", rx) << "n"; // true
+cout << regex_match("at", rx) << "n"; // false
 
 
+//
+string str("trumpet");
+regex rx("(trump)(.*)");
+match_results<string::const_iterator> sm;
+if (regex_match(str, sm, rx))
+{
+	cout << "the matches were: ";
+	for (unsigned i = 0; i < sm.size(); ++i)
+	{
+		cout << "[" << sm[i] << "," << sm.position(i) << "] ";
+	}
+	cout << "n";
+} // the matches were: [trumpet,0] [trump,0] [et,5]
 
 
+//
+regex rx("bd{2}b");
+smatch mr;
+string str = "1 4 10 42 100 999";
+string::const_iterator cit = str.begin();
+while (regex_search(cit, str.cend(), mr, rx))
+{
+	cout << mr[0] << "n";
+	cit += mr.position() + mr.length();
+}
 
 
+//
+string str("trumpet");
+regex rx("(trump)(.*)");
+match_results<string::const_iterator> sm;
+if (regex_match(str, sm, rx))
+{
+	string fmt = "Results: [$1] [$2]";
+	cout << sm.format(fmt) << "n";
+} // Results: [trump] [et]
+
+//
+string str = "the cat sat on the mat in the bathroom";
+regex rx("(b(.at)([^ ]*)");
+regex_iterator<string::iterator> next(str.begin(), str.end(), rx);
+regex_iterator<string::iterator> end;
+
+for (; next != end; ++next)
+{
+	cout << next->position() << " " << next->str() << ", ";
+}
+cout << "n";
+// 4 cat, 8 sat, 19 mat, 30 bathroom
 
 
+Replacing strings
+
+string str = "use the list<int> class in the example";
+regex rx("b(list)(<w*> )");
+string result = regex_replace(str, rx, "vector$2");
+cout << result << "n"; // use the vector<int> class in the example
 
 
+Diagnostics and Debugging
 
-
-
-
+Using pragmas
+Pragmas are compiler-specific and often are concerned with the technical details about the code sections in the object files.
 
 
 
