@@ -2177,6 +2177,966 @@ derived d;
 d.f(); // OK
 d.test(); // won't compile
 
+If you are writing a base class that you intend only ever to be used as a base class (client code should not create instances of it), then it makes sense to make the destructor protected
+
+class base
+{
+public:
+	// methods available through the derived object
+	protected:
+	~base(){}
+};
+
+
+Changing access level through inheritance
+When you override a method in the derived class, the access to the method is defined by the derived class. SO the access can be changed by the derived class
+
+class base
+{
+protected:
+	void f();
+public:
+	void g();
+};
+
+class derived : public base
+{
+public:
+	void f();
+protected:
+	void g();
+};
+
+// You can also expose a protected base class from a derived class as a public member with a using statement
+
+class base
+{
+protected:
+	void f(){ /* code */};
+};
+
+class derived: public base
+{
+public:
+	using base::f;		// the derived::f method is public without the derived class creating a new method
+};
+
+
+// make a method private so that it is not available to derived classes
+
+class base
+{
+public:
+	void f();
+};
+
+class derived: public base
+{
+protected:
+	using base::f;
+};
+
+base b;
+b.f(); // OK
+derived d;
+d.f(); // won't compile because the f method is protected
+
+
+// make the method available only in the derived class and not to in any classes that may derive from it
+
+class derived: public base
+{
+public:
+	void f() = delete;
+	void g()
+	{
+		base::f(); // call the base class method
+	}
+};
+
+Inheritance access levels
+If a base class has private members, and a class inherits using public inheritance: 
+the derived class still cannot access the private members; it only has access to public and protected members and objects of the derived class can only access the public members, and a class deriving from this class will only have access to the public and protected members.
+
+If a derived class derives through the protected inheritance: 
+it still has the same access to the base class as public and protected members, but the base class public and protected members will now be treated as protected through the derived class, so they can be accessed by a further derived class but are not accessible through an instance. 
+
+If a class derives through private inheritance:
+ all base class members become private in the derived class; so, although the derived class can access public and protected members, classes that derive from it cannot access any of the base class members.
+
+
+One way of looking at protected inheritance is if the derived class had a using statement for each of the public members of the base class in the protected part of the class.
+Similarly, private inheritance is as if you have deleted each of the public and protected methods of the base class.
+
+most inheritance will be through public inheritance
+private inheritance has a use when you want to access some functionality from a base class but do not want its functionality to be available to classes that derive from your class
+
+
+Multiple inheritance
+C++ allows you to inherit from more than one base class. This is a powerful facility when used with interfaces
+
+class base1 { public: void a(); };
+class base2 { public: void b(); };
+class derived : public base1, public base2
+{
+public:
+	// gets a and b
+};
+
+It is important when you consider multiple inheritances that you carefully review that you need the services via inheritance or whether composition is more appropriate. If a class provides a member that you do not want to be used by instances and you decide that you need to delete it, it is a good sign that you should consider composition.
+
+
+Object slicing
+
+if you cast a derived class object to a base class object, you create a new object, and that object is the base class object, just the base class object.
+
+It is almost always a better idea to pass objects by reference
+
+
+Introducing polymorphism
+
+Polymorphism comes from the Greek for many shapes
+
+A derived class pointer can be implicitly converted to a base class pointer, so a base* pointer can point to an instance of base, derived1, derived2, or derived3
+
+The polymorphic aspect is that through pointers (or references), an instance of a class can be treated as an instance of any of the classes in its inheritance hierarchy.
+
+
+Virtual methods
+A base class pointer or reference giving access to just the base class functionality, and makes sense, but it is restrictive
+
+The behavior of calling the derived method through a base class pointer is known as method dispatching. This method dispatching is not applied by default because it involves a little extra cost both in memory and performance.
+
+Methods that can take part in method dispatching are marked with the keyword virtual in the base class, and hence are usually called virtual methods. When you call such a method through a base class pointer, the compiler ensures that the method on the actual object's class is called. Since every method has a this pointer as a hidden parameter, the method dispatching mechanism must ensure that the this pointer is appropriate when the method is called. 
+
+
+// 1
+struct base
+{
+    // void who() { cout << "base "; }				// output: base base base
+    virtual void who() { cout << "base "; }			// output: derived1 derived2 derived3
+};
+
+struct derived1 : base
+{
+    void who() { cout << "derived1 "; }
+};
+
+struct derived2 : base
+{
+    void who() { cout << "derived2 "; }
+};
+
+struct derived3 : derived2
+{
+    void who() { cout << "derived3 "; }
+};
+
+void who_is_it(base& p)
+{
+    p.who();
+}
+
+
+derived1 d1;
+who_is_it(d1);
+derived2 d2;
+who_is_it(d2);
+derived3 d3;
+who_is_it(d3);
+cout << endl;
+
+
+It is important to point out that the method dispatching is applied only to the methods that virtual has been applied to in the base class
+Any other methods in the base class not marked with virtual will be called without method dispatching. 
+A derived class will inherit a virtual method and get the method dispatching automatically, it does not have to use the virtual keyword on any methods it overrides, but it is a useful visual indication as to how the method can be called
+
+For a virtual method to be called using method dispatching, the derived class method must match the same signature as the base class' virtual method in terms of the name, parameters, and return type.
+The one exception is if two methods differ by return types that are covariant, that is, one type can be converted to the other.
+
+
+Virtual method tables
+When the compiler sees a virtual method on a class, it will create a method pointer table, called the vtable, and put a pointer to each of the virtual methods in the class in the table. There will be a single copy of the vtable for the class. The compiler will also add a pointer to this table, called the vptr, in every instance of the class.
+
+![vptr and vtable illustration for base and derived class](image-24.png)
+
+![vptr and vtable illustration for base and derived class 2](image-25.png)
+
+
+Multiple inheritance and virtual method tables
+
+![vptr and vtable illustration for base and derived class 3](image-26.png)
+
+
+Virtual methods, construction, and destruction
+You should not call a virtual method in a constructor or a destructor, if you do, the call will resolve to the base class version of the method
+
+In general, a base class destructor should be either protected and non-virtual, or public and virtual.
+
+
+Containers and virtual methods
+
+// not work
+derived1 d1;
+derived2 d2;
+derived3 d3;
+vector<base> vec = { d1, d2, d3 };
+for (auto b : vec) b.who();
+cout << endl;
+
+// work version
+vector<reference_wrapper<base> > vec = { d1, d2, d3 };
+for (auto b : vec) b.get().who();						// the get method will return a reference to the wrapped object
+cout << endl;
+
+Friends and inheritance
+In C++, friendship is not inherited. If a class makes another class (or function) a friend, it means that the friend has access to its private and protected members as if the friend is a member of the class. If you derive from the friend class, the new class is not a friend of the first class, and it has no access to the members of that first class.
+
+class base
+{
+	int x = 0;
+public:
+	friend ostream& operator<<(ostream& stm, const base& b)
+	{
+		// thru b we can access the base private/protected members
+		stm << "base: " << b.x << " ";
+		return stm;
+	}
+};
+
+the friend function cannot be called as a virtual method, but it can call virtual methods and get the method dispatching
+
+class base
+{
+	int x = 0;
+protected:
+	// The actual work of printing out the object is delegated to a virtual function called output
+	virtual void output(ostream& stm) const { stm << x << " "; }
+public:
+	friend ostream& operator<<(ostream& stm, const base& b)
+	{
+		b.output(stm);
+		return stm;
+	}
+};
+
+class derived : public base
+{
+	int y = 0;
+protected:
+	virtual void output(ostream& stm) const
+	{
+		base::output(stm);
+		stm << y << " ";
+	}
+};
+
+
+Override and final
+
+When the compiler sees the override specifier, it knows that you intend to override a virtual method inherited from a base class and it will search the inheritance chain to find a suitable method. If no such method can be found, then the compiler will issue an error
+
+struct base
+{
+	virtual int f(int i);
+};
+
+struct derived: base
+{
+	// derived::f won't compile because there is no method in the inheritance chain with the same signature
+	virtual int f(short i) override;
+};
+
+The override specifier gets the compiler to perform some useful checks, so it is a good habit to use it on all derived overridden methods
+
+C++11 also provides a specifier called final, which you can apply to a method to indicate that a derived class cannot override it, or you can apply it to a class to indicate that you cannot derive from it
+
+class complete final { /* code */ };
+class extend: public complete{}; // won't compile
+
+
+Virtual inheritance
+
+diamond problem with multiple inheritance:
+
+	struct base { int x = 0; };
+	struct derived1 : base { /*members*/ };
+	struct derived2 : base { /*members*/ };
+	struct most_derived : derived1, derived2 { /*members*/ };
+	// most_derived object will have two copies of the data member x
+
+virtual inheritance:
+
+	struct derived1 : virtual base { /*members*/ };
+	struct derived2 : virtual base { /*members*/ };
+
+	Without virtual inheritance, derived classes just call the constructors of their immediate parent.
+	When you use virtual inheritance, the most_derived class has the responsibility to call the constructor of the topmost parent class and if you do not explicitly call the base class constructor, the compiler will automatically call the default constructor
+
+	derived1::derived1() : base(){}
+	derived2::derived2() : base(){}
+	most_derived::most_derived() : derived1(), derived2(), base(){}
+
+
+Abstract classes
+A class with virtual methods is still a concrete class--you can create instances of the class.
+You need a mechanism to force a derived class to provide an implementation of those virtual methods.
+
+C++ provides a mechanism called pure virtual methods that indicates that the method should be overridden by a derived class. 
+
+struct abstract_base
+{
+	// the = 0 syntax indicates that the method body is not provided by the abstract class
+	virtual void f() = 0;
+	void g()
+	{
+		cout << "do something" << endl;
+		f();
+	}
+};
+
+abstract_base b;	// can not compile
+
+// can create pointers or references to the class and call code on them
+void call_it(abstract_base& r)
+{
+	r.g();
+}
+
+// you can call the pure virtual function outside the class too
+void call_it2(abstract_base& r)
+{
+	r.f();
+}
+
+By declaring a pure virtual function, you make the class abstract, which means that you cannot create instances. You can, however, create pointers or references to the class and call code on them
+
+The only way to use an abstract class is to derive from it and implement the pure virtual functions:
+
+struct derived1 : abstract_base
+{
+	virtual void f() override { cout << "derived1::f" << endl; }
+};
+
+struct derived2 : abstract_base
+{
+	virtual void f() override { cout << "derived2::f" << endl; }
+};
+
+derived1 d1;
+call_it(d1);
+derived2 d2;
+call_it(d2);
+
+
+// the abstract base class can also provide a body for the method
+struct abstract_base
+{
+	virtual int h() = 0 { return 42; }
+};
+
+// this class cannot be instantiated, you must derive from it and you must implement the method to be able to instantiate an object
+struct derived : abstract_base
+{
+	virtual int h() override { return abstract_base::h() * 10; }
+};
+
+The derived class can call the pure virtual function defined in the abstract class, but when external code calls such a method, it will always result (through method dispatching) in a call to the implementation of the virtual method on the derived class
+
+
+Obtaining type information
+C++ provides type information, that is, you can get information that is unique to that type and, which identifies it.
+
+Runtime Type Information (RTTI): obtain type information at runtime
+
+string str = "hello";
+const type_info& ti = typeid(str);
+cout << ti.name() << endl;
+
+
+// 
+struct base {};
+struct derived { void f(); };
+void call_me(base *bp)
+{
+	derived *dp = (typeid(*bp) == typeid(derived))
+		? static_cast<derived*>(bp) : nullptr;
+	if (dp != nullptr) dp->f();
+}
+
+int main()
+{
+	derived d;
+	call_me(&d);
+	return 0;
+}
+
+// new call_me function
+void call_me(base *bp)
+{
+	derived *dp = dynamic_cast<derived*>(bp);
+	if (dp != nullptr) dp->f();
+}
+
+The dynamic_cast operator can be used for casts other than downcasts
+
+
+//
+struct base1 { void f(); };
+struct base2 { void g(); };
+struct derived : base1, base2 {};
+
+void call_me(base1 *b1)
+{
+	base2 *b2 = dynamic_cast<base2*>(b1);
+	if (b2 != nullptr) b2->g();
+}
+
+
+Smart pointers and virtual methods
+If you want to use dynamically created objects, you will want to use smart pointers to manage their lifetime. The good news is that virtual method dispatching works through smart pointers (they are simply wrappers around object pointers), and the bad news is that the class relationships are lost when you use smart pointers.
+
+
+Interfaces
+Pure virtual functions and virtual method dispatching leads to an incredibly powerful way of writing object-orientated code, which is called interfaces. 
+An interface is a class that has no functionality; it only has pure virtual functions. 
+The purpose of an interface is to define a behavior. 
+A concrete class that derives from an interface must provide an implementation of all of the methods on the interface, and hence this makes the interface a kind of contract.
+
+// the define makes it more obvious that we are defining abstract classes as interfaces
+#define interface struct
+interface IPrint
+{
+	virtual void set_page(/*size, orientation etc*/) = 0;
+	virtual void print_page(const string &str) = 0;
+};
+
+class inkjet_printer : public IPrint
+{
+public:
+	virtual void set_page(/*size, orientation etc*/) override
+	{
+	// set page properties
+	}
+
+	virtual void print_page(const string &str) override
+	{
+	cout << str << endl;
+	}
+};
+
+void print_doc(IPrint *printer, vector<string> doc);
+
+inkjet_printer inkjet;
+IPrint *printer = &inkjet;
+printer->set_page(/*properties*/);
+vector<string> doc {"page 1", "page 2", "page 3"};
+print_doc(printer, doc);
+
+
+interface IScan
+{
+	virtual void set_page(/*resolution etc*/) = 0;
+	virtual string scan_page() = 0;
+};
+
+class inkjet_printer : public IPrint, public IScan
+{
+public:
+	// The class already implements a method called set_page, We can address this with two different methods and qualifying their names
+	virtual void IPrint::set_page(/*etc*/) override { /*etc*/ }
+	virtual void print_page(const string &str) override
+	{
+		cout << str << endl;
+	}
+	virtual void IScan::set_page(/*etc*/) override { /*etc*/ }
+	virtual string scan_page() override
+	{
+		static int page_no;
+		string str("page ");
+		str += to_string(++page_no);
+		return str;
+	}
+};
+
+void scan_doc(IScan *scanner, int num_pages);
+
+inkjet_printer inkjet;
+IScan *scanner = &inkjet;
+scanner->set_page(/*properties*/);
+scan_doc(scanner, 5)
+
+IPrint *printer = dynamic_cast<IPrint*>(scanner);
+if (printer != nullptr)
+{
+	printer->set_page(/*properties*/);
+	vector<string> doc {"page 1", "page 2", "page 3"};
+	print_doc(printer, doc);
+}
+
+
+The advantage of using interfaces because the class implementation can change completely, but as long as it continues to implement the interfaces that the client code uses, users of the class can continue to use the class (although a recompile will be needed)
+
+
+interface inheritance: derive from the interface that needs changing and create a new interface
+
+	interface IPrint2 : IPrint
+	{
+		virtual void print_doc(const vector<string> &doc) = 0;
+	};
+
+	class inkjet_printer : public IPrint2, public IScan
+	{
+	public:
+		virtual void print_doc(const vector<string> &doc) override {
+			/* code*/
+		}
+		// other methods
+	}
+
+
+Class relationships
+
+inheritance offers some benefits, but it should not be treated as the best or only solution
+
+At the highest level, you should be aware of three main issues to avoid:
+	Rigidity: It is too hard to change a class because any change will affect too many other classes.
+	Fragility: When you change your class, it could cause unexpected changes in other classes.
+	Immobility: It is hard to reuse the class because it is too dependent on other classes
+
+In general, you should design your classes to avoid tight coupling between classes and interface programming is an excellent way to do this because an interface is simply a behavior and not an instance of a specific class.
+Another principle is that in general you should design your classes to be extendable. A more lightweight form of refining an algorithm is to pass a method pointer (or a functor), or an interface pointer to the method of a class for that method to call at an appropriate time to refine how it works. (For example, most sort algorithms require that you pass a method pointer to perform comparisons of two objects of the type that it is sorting.)
+
+
+
+Using mixin classes
+The mixin technique allows you to provide extensibility to classes without the lifetime issues of composition or the heavyweight aspect of raw inheritance.
+
+Instead of the developer deriving from a base class provided by the library and extending the functionality provided, the mixin class provided by the library is derived from a class provided by the developer.
+
+
+C++ allows you to provide a type through a template parameter so that the class is instantiated using this type at compile time. With mixin classes, the type passed through a template parameter is the name of a type that will be used as the base class. The developer simply provides a class with the specific methods and then creates a specialization of the mixin class using their class as the template parameter
+
+
+// Library code
+template <typename BASE>
+class mixin : public BASE
+{
+public:
+	void something()
+	{
+		cout << "mixin do something" << endl;
+		// a client developer using the functionality of the mixin class must implement a method with this name and with the same prototype, otherwise the mixin class cannot be used
+		BASE::something();
+		cout << "mixin something else" << endl;
+	}
+};
+
+// Client code to adapt the mixin class
+class impl
+{
+public:
+	void something()
+	{
+		cout << "impl do something" << endl;
+	}
+};
+
+mixin<impl> obj;
+obj.something();
+
+output:
+mixin do something
+impl do something
+mixin something else
+
+
+Using the Standard Library Containers
+
+Working with pairs and tuples
+
+associate two items together
+
+template <typename T1, typename T2>
+struct pair
+{
+	T1 first;
+	T2 second;
+	// other members
+};
+
+auto name_age = make_pair("Richard", 52);
+
+pair <int, int> a(1, 1);
+pair <int, int> a(1, 2);
+cout << boolalpha;
+cout << a << " < " << b << " " << (a < b) << endl;
+
+
+int i1 = 0, i2 = 0;
+pair<int&, int&> p(i1, i2);
+++p.first; // changes i1
+
+In C++11 you can use the ref function (in <functional>) to specify that the pair will be for references
+	auto p2 = make_pair(ref(i1), ref(i2));
+	++p2.first; // changes i1
+
+The pair class allows you to return two values in one object.
+
+
+auto p = minmax(20,10);
+cout << "{" << p.first << "," << p.second << "}" << endl;
+
+The Standard Library provides the tuple class that you can have any number of parameters of any type. 
+
+tuple<int, int, int> t3 { 1,2,3 };
+cout << "{"
+	<< get<0>(t3) << "," << get<1>(t3) << "," << get<2>(t3)
+	<< "}" << endl; // {1,2,3}
+
+
+int& tmp = get<0>(t3);
+tmp = 42;				// changes the first item to 42
+get<1>(t3) = 99;		// changes the second item to 99
+
+// extract all the items with one call
+int i1, i2, i3;
+tie(i1, i2, i3) = t3;
+cout << i1 << "," << i2 << "," << i3 << endl;
+
+//
+tuple<int&, int&, int&> tr3 = tie(i1, i2, i3);
+tr3 = t3;
+
+
+Containers
+The Standard Library containers allow you to group together zero or more items of the same type and access them serially through iterators. Every such object has a begin method that returns an iterator object to the first item and an end function that returns an iterator object for the item after the last item in the container. 
+
+
+// 1
+vector<int> primes{1, 3, 5, 7, 11, 13};
+for (size_t idx = 0; idx < primes.size(); ++idx)
+{
+	cout << primes[idx] << " ";
+}
+cout << endl;
+
+
+// better version for 1 since not all containers allow random access
+template<typename container> void print(container& items)
+{
+	for (container::iterator it = items.begin();
+		it != items.end(); ++it)
+	{
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+
+
+Sequence containers
+Sequence containers store a series of items and the order that they are stored in, and, when you access them with an iterator, the items are retrieved in the order in which they were put into the container. After creating a container, you can change the sort order with library functions.
+
+List
+As the name suggests, a list object is implemented by a doubly linked list in which each item has a link to the next item and the previous one.
+
+list<int> primes{ 3,5,7 };
+primes.push_back(11);
+primes.push_back(13);
+primes.push_front(2);
+primes.push_front(1);
+
+int last = primes.back(); // get the last item
+primes.pop_back(); // remove it
+
+auto start = primes.begin(); // 1
+start++; // 2
+auto last = start; // 2
+last++; // 3
+last++; // 5
+primes.erase(start, last); // remove 2 and 3
+
+list<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+planck.remove(6); // {2,0,7,0,0,4,0}
+
+list<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+auto it = planck.begin();
+++it;
+++it;
+planck.insert(it, -1); // {6,6,-1,2,6,0,7,0,0,4,0}
+
+//
+struct point
+{
+	double x = 0, y = 0;
+	point(double _x, double _y) : x(_x), y(_y) {}
+};
+
+list<point> points;
+point p(1.0, 1.0);
+points.push_back(p);
+points.emplace_back(2.0, 2.0);
+
+//
+list<int> num1 { 2,7,1,8,2,8 }; // digits of Euler's number
+list<int> num2 { 3,1,4,5,6,8 }; // digits of pi
+num1.swap(num2);
+
+//
+list<int> num1 { 2,7,1,8,2,8 }; // digits of Euler's number
+list<int> num2 { 3,1,4,5,6,8 }; // digits of pi
+num1.sort(); // {1,2,2,7,8,8}
+num2.sort(); // {1,3,4,5,6,8}
+num1.merge(num2); // {1,1,2,2,3,4,5,6,7,8,8,8}
+
+num1.unique(); // {1,2,3,4,5,6,7,8}
+
+
+Forward list
+The forward_list class is like the list class, but it only allows items to insert and remove items from the front of the list
+
+forward_list<int> euler { 2,7,1,8,2,8 };
+euler.push_front(-1); 		// { -1,2,7,1,8,2,8 }
+auto it = euler.begin(); 	// iterator points to -1
+euler.insert_after(it, -2); // { -1,-2,2,7,1,8,2,8 }
+euler.pop_front(); 			// { -2,2,7,1,8,2,8 }
+euler.remove_if([](int i){return i < 0;});
+							// { 2,7,1,8,2,8 }
+
+
+Vector
+The vector class has the behavior of a dynamic array; that is, there is indexed random access to items and the container will grow as more items are inserted into it. You can create a vector object with an initialization list, and with a specified number of copies of an item.
+
+vector<int> distrib(10); // ten intervals
+for (int count = 0; count < 1000; ++count)
+{
+	int val = rand() % 10;
+	++distrib[val];
+}
+for (int i : distrib) cout << i << endl;
+
+
+Deque
+The name deque means double-ended queue, which means that it can grow from both ends, and, although you can insert items in the middle, it is more expensive. As a queue, it means that the items are ordered, but, because the items can be put into the queue from either end, the order is not necessarily the same order in which you put items into the container.
+
+
+Associative containers
+An associative container allows you to provide indexes that are not numeric; these are the keys, and you can associate values with them. As you insert key-value pairs into the container, they will be ordered so that the container can subsequently efficiently access the value by its key.
+
+Maps and multimaps
+A map container stores two different items, a key and a value, and it maintains the items in an sort order according to the key. A sorted map means that it is quick to locate an item.
+
+map<string, int> people;
+people.emplace("Washington", 1789);
+people.emplace("Adams", 1797);
+people.emplace("Jefferson", 1801);
+people.emplace("Madison", 1809);
+people.emplace("Monroe", 1817);
+auto it = people.begin();
+pair<string, int> first_item = *it;
+cout << first_item.first << " " << first_item.second << endl;
+
+Once you have filled the map you can search for a value using the following:
+	The at method, which is passed a key and returns a reference to the value for that key
+	The [] operator, which when passed a key returns a reference to the value for that key
+	The find function, which will use the predicate specified in the template (unlike the global find function, mentioned later) and it will give you an iterator to the entire item as a pair object
+	The begin method will give you an iterator to the first item and the end method will give you an iterator after the last item
+	The lower_bound method returns an iterator to the item that has a key equal to or greater than the key that you pass as a parameter
+	The upper_bound method returns an iterator of the first item in the map that has a key greater than the key provided
+	The equal_range method returns both the lower and upper bounds values in a pair object
+
+Sets and multisets
+Sets behave as if they are maps, but the key is the same as the value;
+
+set<string> people{
+	"Washington","Adams", "Jefferson","Madison","Monroe",
+	"Adams", "Van Buren","Harrison","Tyler","Polk"};
+for (string s : people) cout << s << endl;
+
+
+Unordered containers
+
+
+Special purpose containers
+
+queue<int> primes;
+primes.push(1);
+primes.push(2);
+primes.push(3);
+primes.push(5);
+primes.push(7);
+primes.push(11);
+while (primes.size() > 0)
+{
+	cout << primes.front() << ",";
+	primes.pop();
+}
+cout << endl; // prints 1,2,3,5,7,11
+
+//
+struct task
+{
+	string name;
+	int priority;
+	task(const string& n, int p) : name(n), priority(p) {}
+	bool operator <(const task& rhs) const {
+		return this->priority < rhs.priority;
+	}
+};
+
+priority_queue<task> to_do;
+to_do.push(task("tidy desk", 1));
+to_do.push(task("check in code", 10));
+to_do.push(task("write spec", 8));
+to_do.push(task("strategy meeting", 8));
+while (to_do.size() > 0)
+{
+	cout << to_do.top().name << " " << to_do.top().priority << endl;
+	to_do.pop();
+}
+
+
+Using iterators
+
+iterators behave like pointers, they are usually objects of iterator classes
+
+All iterators have the following behaviors:
+Operator 						Behaviors
+* 								Gives access to the element at the current position
+++ 								Moves forward to the next element (usually you will use the prefix operator)(this is only if the iterator allows forward movement)
+-- 								Moves backward to the previous element (usually you will use the prefix operator)(this is only if the iterator allows backward movement)
+== and != 						Compares if two iterators are in the same position
+= 								Assigns an iterator
+
+
+nput and output iterators
+As the name suggests, an input iterator will only move forward and will have read access, and an output iterator will only move forward but will have write access. 
+
+
+Stream iterators
+These are adapter classes in <iterators> that can be used to read items from an input stream or write items to an output stream.
+
+vector<int> data { 1,2,3,4,5 };
+ostream_iterator<int> my_out(cout, " ");
+copy(data.cbegin(), data.cend(), my_out);
+cout << endl;
+
+
+Using iterators with the C Standard Library
+
+
+Algorithms
+The Standard Library has an extensive collection of generic functions in the <algorithm> header file. By generic we mean that they access data via iterators without knowing what the iterators refer to and so it means that you can write generic code to work for any appropriate container. However, if you know the container type and that container has a member method to perform the same action, you should use the member.
+
+
+Iteration of items
+//
+vector<int> vec;
+vec.resize(5);
+fill(vec.begin(), vec.end(), 42);
+
+//
+vector<int> vec(5);
+generate(vec.begin(), vec.end(),
+	[]() {static int i; return ++i; });
+
+//
+vector<int> vec { 1,4,9,16,25 };
+for_each(vec.begin(), vec.end(),
+	[](int i) { cout << i << " "; });
+cout << endl;
+
+//
+vector<int> vec { 1,2,3,4,5 };
+for_each(vec.begin(), vec.end(),
+	[](int& i) { i *= i; });
+
+//
+vector<int> vec { 1,2,3,4,5 };
+vector<int> results;
+for_each(vec.begin(), vec.end(),
+	[&results](int i) { results.push_back(i*i); });
+
+//
+vector<int> vec1 { 1,2,3,4,5 };
+vector<int> vec2 { 5,4,3,2,1 };
+vector<int> results;
+transform(vec1.begin(), vec1.end(), vec2.begin(),
+	back_inserter(results), [](int i, int j) { return i*j; });
+
+
+Getting information
+
+vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+auto number = count(planck.begin(), planck.end(), 6);
+
+
+Comparing containers
+
+vector<int> v1 { 1,2,3,4 };
+vector<int> v2 { 1,2 };
+vector<int> v3 { 5,6,7 };
+cout << boolalpha;
+cout << (v1 > v2) << endl; // true
+cout << (v1 > v3) << endl; // false
+
+
+Changing Items
+
+vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+vector<int> result(4); // we want 4 items
+auto it1 = planck.begin(); // get the first position
+it1 += 2; // move forward 2 places
+auto it2 = it1 + 4; // move 4 items
+move(it1, it2, result.begin()); // {2,6,0,7}
+
+
+ector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+vector<int> result;
+remove_copy(planck.begin(), planck.end(),
+	back_inserter(result), 6);
+
+
+vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+vector<int> temp;
+unique_copy(planck.begin(), planck.end(), back_inserter(temp));
+planck.assign(temp.begin(), temp.end());
+
+
+Finding Items
+
+vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+auto imin = min_element(planck.begin(), planck.end());
+auto imax = max_element(planck.begin(), planck.end());
+cout << "values between " << *imin << " and "<< *imax << endl;
+
+
+// search for duplicates and get the position of those duplicates
+vector<int> vec{0,1,2,3,4,4,5,6,7,7,7,8,9};
+vector<int>::iterator it = vec.begin();
+do
+{
+	it = adjacent_find(it, vec.end());
+	if (it != vec.end())
+	{
+		cout << "duplicate " << *it << endl;
+		++it;
+	}
+} while (it != vec.end());
+
+
+Sorting items
+
+vector<int> vec{45,23,67,6,29,44,90,3,64,18};
+auto middle = vec.begin() + 5;
+partial_sort(vec.begin(), middle, vec.end());
+cout << "smallest items" << endl;
+for_each(vec.begin(), middle, [](int i) {cout << i << " "; });
+cout << endl; // 3 6 18 23 29
+cout << "biggest items" << endl;
+for_each(middle, vec.end(), [](int i) {cout << i << " "; });
+cout << endl; // 67 90 45 64 44
+
 
 
 
