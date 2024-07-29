@@ -3358,8 +3358,11 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 
 
-
-
+// How to easily make std::cout thread-safe
+//There are other ways, but stringstream uses << just like cout.. 
+	std::stringstream msg;
+	msg << "Error:" << Err_num << ", " << ErrorString( Err_num ) << "\n"; 
+	std::cout << msg.str();
 
 
 
