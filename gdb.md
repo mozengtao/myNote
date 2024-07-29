@@ -1,3 +1,6 @@
+[**Debugging with GDB**](https://developer.apple.com/library/archive/documentation/DeveloperTools/gdb/gdb/gdb_toc.html)
+[**Debugging with GDB**](https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html#SEC_Contents)
+
 ```bash
 run, r	运行debug程序
     Start debugged program.
