@@ -3378,7 +3378,7 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 [Standard for Programming Language C++](https://open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4594.pdf) #online
 
-[LEARN C++](https://www.learncpp.com/) #online
+[**LEARN C++**](https://www.learncpp.com/) #online
 
 [C++ By Example](https://cppbyexample.com/) #online
 
@@ -3390,7 +3390,6 @@ Pragmas are compiler-specific and often are concerned with the technical details
 - [OOPS Concepts in C++ with Examples](https://www.prepbytes.com/blog/cpp-programming/oops-concepts-in-c-with-examples/)
 
 - [Learn C++ by Example](https://www.manning.com/books/learn-c-plus-plus-by-example)
-- [LEARN C++](https://www.learncpp.com/)
 - [C++ By Example](https://cppbyexample.com/index.html)
 - [LearnCPP](https://github.com/Lakhankumawat/LearnCPP)
 - [C-plusplus-Programming-By-Example](https://github.com/PacktPublishing/C-plusplus-Programming-By-Example/tree/master)
