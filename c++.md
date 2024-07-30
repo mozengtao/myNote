@@ -3369,6 +3369,19 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 ```
 
+[OOPS Guidebook](https://github.com/MadhavBahl/OOPS/tree/master) #github
+
+![Object Oriented Programming Using C++](./assets/ObjectOrientedProgrammingUsingCPlusPlus.pdf) #pdf
+![OOB Demystified](./assets/OOP_Demystified.pdf) #pdf
+
+[Demystified Object Oriented Programming with CPP](https://github.com/PacktPublishing/Demystified-Object-Oriented-Programming-with-CPP) #github
+
+[Standard for Programming Language C++](https://open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4594.pdf) #online
+
+[LEARN C++](https://www.learncpp.com/) #online
+
+[C++ By Example](https://cppbyexample.com/) #online
+
 - [**C++ Online Compiler**](https://www.mycompiler.io/new/cpp)
 
 - [**C/C++ Programming**](https://www3.ntu.edu.sg/home/ehchua/programming/#Cpp)
