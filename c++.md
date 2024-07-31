@@ -3383,6 +3383,8 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 [Standard for Programming Language C++](https://open-std.org/jtc1/sc22/wg21/docs/papers/2016/n4594.pdf) #online
 
+[**C++ - Standards**](https://www.open-std.org/jtc1/sc22/wg21/docs/standards)
+
 [**LEARN C++**](https://www.learncpp.com/) #online
 
 [C++ By Example](https://cppbyexample.com/) #online
