@@ -3372,6 +3372,8 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 ```
 
+[**Standard C++ Library reference**](https://cplusplus.com/reference/)
+
 [**Working Draft Programming Languages — C++**](https://eel.is/c++draft/) #online
 
 [OOPS Guidebook](https://github.com/MadhavBahl/OOPS/tree/master) #github
