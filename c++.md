@@ -3371,6 +3371,11 @@ Pragmas are compiler-specific and often are concerned with the technical details
 
 
 ```
+
+[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#main)
+
+[cppbestpractices](https://github.com/cpp-best-practices/cppbestpractices/tree/master)
+
 [**C++ reference**](https://en.cppreference.com/w/)
 [**Standard C++ Library reference**](https://cplusplus.com/reference/)
 
