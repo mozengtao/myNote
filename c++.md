@@ -4853,3 +4853,102 @@ Pragmas are compiler-specific and often are concerned with the technical details
 	- [**C++ Books**](https://github.com/EbookFoundation/free-programming-books/blob/main/books/free-programming-books-langs.md#c-2)
 	- [Open Data Structures (in C++)](http://opendatastructures.org/ods-cpp.pdf) #pdf
 	- []()
+
+
+Examples
+```c++
+// enum class (https://en.cppreference.com/w/cpp/language/enum)
+/* Scoped enumerations :
+	enum struct|class name { enumerator = constant-expression , enumerator = constant-expression , ... }				(1)	
+	enum struct|class name : type { enumerator = constant-expression , enumerator = constant-expression , ... }			(2)	
+	enum struct|class name ;																							(3)	
+	enum struct|class name : type ;																						(4)	
+	1) declares a scoped enumeration type whose underlying type is int (the keywords class and struct are exactly equivalent)
+	2) declares a scoped enumeration type whose underlying type is type
+	3) opaque enum declaration for a scoped enumeration whose underlying type is int
+	4) opaque enum declaration for a scoped enumeration whose underlying type is type
+*/
+enum class WbTriggerType : uint8
+{
+	None = 0, // used for freerun
+	Timestamp,
+	MapSid,
+	MapMiniSlot,
+	MapIuc,
+	PmapSid
+};
+
+// map (https://en.cppreference.com/w/cpp/container/map)
+std::map<WbTriggerType, std::string> WbTriggerTypeStringMap = {
+	{WbTriggerType::None, "None"},
+	{WbTriggerType::Timestamp, "Timestamp"},
+	{WbTriggerType::MapSid, "MapSid"},
+	{WbTriggerType::MapMiniSlot, "MapMiniSlot"},
+	{WbTriggerType::MapIuc, "MapIuc"},
+	{WbTriggerType::PmapSid, "PmapSid"} };
+
+// override (https://en.cppreference.com/w/cpp/language/override)
+/*
+In a member function declaration or definition, override specifier ensures that the function is virtual and is overriding a virtual function from a base class. The program is ill-formed (a compile-time error is generated) if this is not true.
+override is an identifier with a special meaning when used after member function declarators; it is not a reserved keyword otherwise.
+*/
+class GatingHandler {
+ public:
+...
+    virtual bool isReady(ChannelIdentifier channel) = 0;
+...
+};
+
+class UsQamGatingHandler : public GatingHandler {
+ public:
+    bool isReady(ChannelIdentifier channel) override;
+...
+};
+
+
+// Zero-initialization (https://en.cppreference.com/w/cpp/language/zero_initialization)
+uint8 channel{};
+
+
+// Member functions with cv-qualifiers (https://en.cppreference.com/w/cpp/language/member_functions#Member_functions_with_cv-qualifiers)
+struct Array
+{
+    std::vector<int> data;
+    Array(int sz) : data(sz) {}
+ 
+    // const member function
+    int operator[](int idx) const
+    {                     // the this pointer has type const Array*
+        return data[idx]; // transformed to (*this).data[idx];
+    }
+}
+
+// Deleted functions (https://en.cppreference.com/w/cpp/language/function)
+/*
+= delete ;	(4)	(since C++11)
+4) Explicitly deleted function definition.
+*/
+struct T
+{
+    void* operator new(std::size_t) = delete;
+};
+ 
+T* p = new T;    // Error: attempts to call deleted T::operator new
+
+
+// Default constructors (https://en.cppreference.com/w/cpp/language/default_constructor)
+/*
+What does "default" mean after a class' function declaration? (https://stackoverflow.com/questions/6502828/what-does-default-mean-after-a-class-function-declaration)
+" = default" means that you want to use the compiler-generated version of that function, so you don't need to specify a body.
+
+You can also use "= delete" to specify that you don't want the compiler to generate that function automatically.
+*/
+class ConfigHandler final: public EthStatusdHandler
+{
+public:
+    ConfigHandler() = default;
+    virtual ~ConfigHandler() = default;
+};
+
+
+```
