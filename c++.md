@@ -4852,6 +4852,10 @@ Pragmas are compiler-specific and often are concerned with the technical details
 	- [API Design for Cpp.pdf](https://github.com/GeorgeQLe/Textbooks-and-Papers/blob/master/%5BC%2B%2B%5D%20API%20Design%20for%20Cpp.pdf)
 	- [**C++ Books**](https://github.com/EbookFoundation/free-programming-books/blob/main/books/free-programming-books-langs.md#c-2)
 	- [Open Data Structures (in C++)](http://opendatastructures.org/ods-cpp.pdf) #pdf
+	- [What is meant by Resource Acquisition is Initialization (RAII)?](https://stackoverflow.com/questions/2321511/what-is-meant-by-resource-acquisition-is-initialization-raii)
+	- []()
+	- []()
+	- []()
 	- []()
 
 
@@ -4950,5 +4954,231 @@ public:
     virtual ~ConfigHandler() = default;
 };
 
+
+// Constructors and member initializer lists (https://en.cppreference.com/w/cpp/language/constructor)
+struct S
+{
+    int n;
+ 
+    S(int);       // constructor declaration
+ 
+    S() : n(7) {} // constructor definition:
+                  // ": n(7)" is the initializer list
+                  // ": n(7) {}" is the function body
+};
+
+// Destructors
+/*
+A destructor is a special member function that is called when the lifetime of an object ends. The purpose of the destructor is to free the resources that the object may have acquired during its lifetime.
+*/
+struct A
+{
+	int i;
+
+	A(int num) : i(num) { std::cout << "ctor a " << std::endl; }
+	~A() { std::cout << "dctor a " << std::endl; }
+}
+
+
+// RAII (https://en.cppreference.com/w/cpp/language/raii)	(https://medium.com/@gealleh/the-importance-of-practicing-raii-in-c-87011f3e3931)
+/*
+Resource Acquisition Is Initialization or RAII, is a C++ programming technique which binds the life cycle of a resource that must be acquired before use to the lifetime of an object.
+The main idea is to bind the lifecycle of a resource that must be explicitly acquired and released to the lifetime of an object.
+When an object is created, it acquires some resource (like opening a file, allocating memory, etc.), and when the object goes out of scope, its destructor is automatically called, releasing the resource.
+In C++, RAII is implemented using constructors and destructors. A constructor acquires the resource, and the corresponding destructor releases it.
+
+RAII can be summarized as follows:
+	encapsulate each resource into a class, where
+		the constructor acquires the resource and establishes all class invariants or throws an exception if that cannot be done,
+		the destructor releases the resource and never throws exceptions;
+	always use the resource via an instance of a RAII-class that either
+		has automatic storage duration or temporary lifetime itself, or
+		has lifetime that is bounded by the lifetime of an automatic or temporary object.
+*/
+
+// 1
+std::mutex m;
+ 
+void bad() 
+{
+    m.lock();             // acquire the mutex
+    f();                  // if f() throws an exception, the mutex is never released
+    if (!everything_ok())
+        return;           // early return, the mutex is never released
+    m.unlock();           // if bad() reaches this statement, the mutex is released
+}
+ 
+void good()
+{
+    std::lock_guard<std::mutex> lk(m); // RAII class: mutex acquisition is initialization
+    f();                               // if f() throws an exception, the mutex is released
+    if (!everything_ok())
+        return;                        // early return, the mutex is released
+}
+
+// Memory Management
+class MyArray {
+public:
+    MyArray(size_t size) : data(new int[size]) {}  // Constructor acquires memory
+    ~MyArray() { delete[] data; }                   // Destructor releases memory
+private:
+    int* data;
+};
+// When an object of MyArray goes out of scope, its destructor is automatically called, and the memory is freed.
+
+// File Handling
+#include <fstream>
+#include <string>
+class FileHandler {
+public:
+    FileHandler(const std::string& filename) : file(filename) {
+        // Open the file in the constructor
+        if (!file.is_open()) {
+            throw std::runtime_error("Unable to open file");
+        }
+    }
+    ~FileHandler() {
+        // Close the file in the destructor
+        file.close();
+    }
+    // ... (Other file operations)
+private:
+    std::fstream file;
+};
+// This ensures that the file is always closed properly, even if an exception occurs in the program.
+
+// Creating and Removing Files
+#include <cstdio>
+#include <string>
+class TempFile {
+public:
+    TempFile(const std::string& name) : filename(name) {
+        // Create the file
+        std::ofstream temp(filename);
+        temp << "Temporary content";
+    }
+    ~TempFile() {
+        // Remove the file
+        std::remove(filename.c_str());
+    }
+private:
+    std::string filename;
+};
+//  The destructor removes the file from the filesystem, ensuring that no temporary files are left behind when the program ends or if an exception is thrown
+
+
+
+// 文件操作 (https://en.cppreference.com/w/cpp/io/basic_fstream)
+#include <fstream>
+//#include <ifstream>
+
+using namespce std;
+
+fstream myfile("test.txt", ios::out)
+// ifstream myfile("test.txt")
+
+if(!myfile.is_open()) {
+	cout << "file not opened!" << endl;
+	return -1;
+}
+
+myfile << "hello world" << endl;
+
+myfile.close();
+
+
+// template (https://en.cppreference.com/w/cpp/language/templates)
+/*
+C++ 是强类型编程语言，模板是C++支持泛型的主要手段
+1.函数模板
+2.类模板
+*/
+
+// 函数模板
+
+// 1
+template <typename T>
+T add2(T t1, T t2)
+{
+	return t1 + t2;
+}
+
+cout << add2(1, 2) << endl;
+cout << add2(1.1, 2.2) << endl;
+
+// 2
+template <typename T1, typename T2>
+void printPair(T1 t1, T2 t2) {
+	cout << "Pair: " << t1 << " and " << t2 << endl;
+}
+
+printPair<string, int>("key1", 1);
+printPair<int, double>(1, 2.2);
+
+// 隐式实例化:编译器根据调用的数据类型自动实例化模板
+printPair("key1", 1);
+printPair(1, 2.2);
+
+// 3 非类型参数
+template <int N>
+void printNTimes(const std::string& message) {
+	for(int i = 0; i< N; ++i) {
+		cout << message << endl;
+	}
+}
+
+printNTimes<3>("hello");
+printNTimes<5>("world");
+
+// 模板特化：允许为特定的数据类型提供定制的实现
+template <typename T>
+T add(T t1, T t2)
+{
+	return t1 + t2;
+}
+
+template <>
+int add(int i1, int i2){
+	return 2 * (i1 + i2);
+}
+
+cout << add(2, 3) << endl;
+cout << add(1.1, 2.2) << endl;
+
+// 延迟实例化和.hpp
+
+
+// 类模板
+/*
+类模板的类型参数可以有默认值
+类模板没有自动推导的使用方式
+*/
+template <typename T1, typename T2=double>
+class Student {
+public:
+	Student(string name, T1 age, T2 score) {
+		this->name = name;
+		this->age = age;
+		this->score = score;
+	}
+
+	void showMe() {
+		cout << this->name << " " << this->age << " " << this->score << endl;
+	}
+private:
+	string name;
+	T1 age;
+	T2 score;
+};
+
+
+Student<int, double> s1("Tom", 23, 78.5);
+s1.showMe();
+
+Student<double, double> s2("Tom", 23.5, 78.5);
+s2.showMe();
+
+Student<int> s3("Tom", 24, 78.5);
+s3.showMe();
 
 ```
