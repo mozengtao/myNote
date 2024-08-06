@@ -1,6 +1,16 @@
 [**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
 [**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
 
+[CPP C++ Papyrus](https://caiorss.github.io/C-Cpp-Notes/)
+
+[The Standard Template Library Tutorial](https://www4.rcf.bnl.gov/~phoncs/oncs/stl_tutorial/prwmain.htm#i)
+
+functor:
+[What are C++ functors and their uses?](https://stackoverflow.com/questions/356950/what-are-c-functors-and-their-uses)
+[C++ Functors](https://euccas.github.io/blog/20170115/c-plus-plus-functors.html)
+[Functors: Function Objects in C++](https://www.cprogramming.com/tutorial/functors-function-objects-in-c++.html)
+
+
 ```cpp
 
 /*
@@ -5180,5 +5190,242 @@ s2.showMe();
 
 Student<int> s3("Tom", 24, 78.5);
 s3.showMe();
+
+
+// 类模板成员函数的实例化：延迟实例化，在调用的时候才会实例化
+class Me {
+public:
+    void showMe() {
+        cout << "This is me" << endl;
+    }
+};
+
+template <typename T>
+class MyClass {
+public:
+    void execute() {
+        T obj;
+        obj.showMe();   // not defined
+    }
+};
+
+MyClass<Me> obj;
+obj.execute();
+
+// 在模板类的外部完成成员函数的实现
+template <typename T>
+class Me {
+public:
+    void showMe(T info);
+};
+
+template <typename T>
+void Me<T>::showMe(T info) {
+    cout << info << endl;
+}
+
+Me<int> me;
+me.showMe(24);
+
+// 类模板对象作为参数
+template <typename T1, typename T2=double>
+class Student {
+public:
+	Student(string name, T1 age, T2 score) {
+		this->name = name;
+		this->age = age;
+		this->score = score;
+	}
+
+	void showMe() {
+		cout << this->name << " " << this->age << " " << this->score << endl;
+	}
+private:
+	string name;
+	T1 age;
+	T2 score;
+};
+
+// 1 确定类型的传入
+void func1(Student<int,double> &stu)
+{
+    stu.showMe();
+}
+
+// 2 参数模板化
+template <typename T1, typename T2>
+void func2(Student<T1, T2> &stu)
+{
+    stu.showMe();
+}
+
+// 3 将整个类模板化
+template <typename T>
+void func3(T &stu)
+{
+    stu.showMe();
+}
+
+Student<int,double> stu1("Tom", 20, 61.2);
+func1(stu1);
+
+Student<int,double> stu2("Lily", 23, 80.2);
+func2(stu2);
+
+Student<int,double> stu3("Xiao", 24, 91.3);
+func3(stu3);
+
+// 类模板与继承
+
+// 1 基类是模板类， 子类是普通类
+// 确定父类的具体类型
+template <typename T>
+class Base {
+public:
+    T var;
+};
+
+class child: public Base(int)
+{
+    
+}
+
+// 父类是模板类，子类也是模板类
+template <typename T>
+class Base {
+public:
+    T var;
+};
+
+template <typename T, typename U>
+class child: public Base(T)
+{
+public:
+    U age;
+};
+
+
+// 友元函数和模板类
+
+// 1 在类内部实现全局友元函数
+template <typename T1, typename T2=double>
+class Student {
+    // 在类的内部实现的友元函数是全局函数，直接使用函数名称进行使用
+    friend void PrintS(Student<T1, T2>& stu) {
+        cout << stu.name << " " << stu.age << " " << stu.score << endl; // access private data
+        stu.showMe();   // access public function
+    }
+public:
+	Student(string name, T1 age, T2 score) {
+		this->name = name;
+		this->age = age;
+		this->score = score;
+	}
+
+	void showMe() {
+		cout << this->name << " " << this->age << " " << this->score << endl;
+	}
+private:
+	string name;
+	T1 age;
+	T2 score;
+};
+
+// 2 在类外部实现全局友元函数
+// 提前向编译器声明类
+template <typename T1, typename T2>
+class Student;
+
+// 提前向编译器声明函数
+template <typename T1, typename T2>
+void PrintS(Student<T1, T2>& stu);
+
+// 2 在类外部实现全局友元函数
+template <typename T1, typename T2=double>
+class Student {
+    // 在类的内部用<>声明友元函数关联的类是一个模板类
+    friend void PrintS<>(Student<T1, T2>& stu);
+public:
+	Student(string name, T1 age, T2 score) {
+		this->name = name;
+		this->age = age;
+		this->score = score;
+	}
+
+	void showMe() {
+		cout << this->name << " " << this->age << " " << this->score << endl;
+	}
+private:
+	string name;
+	T1 age;
+	T2 score;
+};
+
+template <typename T1, typename T2>
+void PrintS(Student<T1, T2>& stu) {
+    cout << stu.name << " " << stu.age << " " << stu.score << endl; // access private data
+    stu.showMe();   // access public function
+}
+
+
+Student<int,double> stu1("Tom", 20, 61.2);
+PrintS(stu1);
+
+
+// STL (Standard Template Library)
+// CPP/C++ STL Iterators and Algorithms (https://caiorss.github.io/C-Cpp-Notes/STL%20Iterators%20and%20Algorithms.html)
+/*
+Key STL Features: Containers, Iterators, & Algorithms
+	Container class: Holds elements & iterators
+	Functor class: result used to guide algorithm
+	Algorithm function: performs action indirectly on container’s elements, using iterators, optionally guided by a functor (iterators provide structured access to elements, functors guide algorithm behaviors)
+
+Containers:
+	Sequential: vector, deque, list
+	Associative: set, multi set, map, multimap
+	Adapters: stack, queue, priority_queue
+
+Iterators
+	Input, output, forward, bidirectional, & random access
+	Each container declares a trait for the type of iterator it provides
+
+Generic Algorithms
+	Mutating, non-mutating, sorting, & numeric
+
+Functors
+	Objects that define operator() & act like functions
+
+Adapters that provide alternative access sequential & associative containers
+*/
+
+// vector (https://cplusplus.com/reference/vector/vector/)
+
+// iterator (https://cplusplus.com/reference/iterator/iterator/)
+
+// deque (https://cplusplus.com/reference/deque/deque/)
+
+// list (https://cplusplus.com/reference/list/)
+
+// map (https://cplusplus.com/reference/map/)
+
+// set (https://cplusplus.com/reference/set/)
+
+// stack (https://cplusplus.com/reference/stack/)
+
+// queue (https://cplusplus.com/reference/queue/)
+
+// unordered_map (https://cplusplus.com/reference/unordered_map/)
+
+// functor (https://euccas.github.io/blog/20170115/c-plus-plus-functors.html)
+
+// algorithm (https://cplusplus.com/reference/algorithm/)
+
+// function adaptor (https://www.all4coders.com/2023/05/14/function-adaptors/)
+
+// Projections are Function Adaptors (https://brevzin.github.io/c++/2022/02/13/projections-function-adaptors/)
+
+// Adapter in C++, the Right Way (https://medium.com/@antwang/adapter-in-c-the-right-way-de7d6d853b83)
+
+
 
 ```
