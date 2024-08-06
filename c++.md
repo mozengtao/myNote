@@ -1,6 +1,8 @@
 [**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
 [**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
 
+[LEARN C++](https://www.learncpp.com/)
+
 [CPP C++ Papyrus](https://caiorss.github.io/C-Cpp-Notes/)
 
 [The Standard Template Library Tutorial](https://www4.rcf.bnl.gov/~phoncs/oncs/stl_tutorial/prwmain.htm#i)
@@ -10,6 +12,12 @@ functor:
 [C++ Functors](https://euccas.github.io/blog/20170115/c-plus-plus-functors.html)
 [Functors: Function Objects in C++](https://www.cprogramming.com/tutorial/functors-function-objects-in-c++.html)
 
+[**C++ Lambda Anonymous Functions - The Simple Guide**](https://www.moreofless.co.uk/lamba-cplusplus)
+[Lambda expressions (since C++11)](https://en.cppreference.com/w/cpp/language/lambda)
+
+[**C++ Algorithms library**](https://en.cppreference.com/w/cpp/algorithm)
+
+[std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)
 
 ```cpp
 
@@ -5427,5 +5435,8 @@ Adapters that provide alternative access sequential & associative containers
 // Adapter in C++, the Right Way (https://medium.com/@antwang/adapter-in-c-the-right-way-de7d6d853b83)
 
 
+
+// Multi-thread
+// thread (https://cplusplus.com/reference/thread/thread/)
 
 ```
