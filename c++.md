@@ -1,6 +1,10 @@
 [**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
 [**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
 
+[**C++ Language Reference**](https://learn.microsoft.com/en-us/cpp/cpp/cpp-language-reference?view=msvc-170)
+
+[**Apache C++ Standard Library User's Guide**](https://stdcxx.apache.org/doc/stdlibug/booktoc.html)
+
 [LEARN C++](https://www.learncpp.com/)
 
 [CPP C++ Papyrus](https://caiorss.github.io/C-Cpp-Notes/)
