@@ -23,6 +23,9 @@ functor:
 
 [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)
 
+[**using**](https://en.cppreference.com/w/cpp/keyword/using)
+[How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)
+
 ```cpp
 
 /*
