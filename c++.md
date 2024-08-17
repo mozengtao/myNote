@@ -41,25 +41,25 @@ C++标准库通常使用不带后缀的头文件，用户的自定义头文件�
 
 /*
 function 定义：
-返回类型 函数名(参数列表(参数类型:参数名称))
+返回类型 函数名(类型1 参数名称1, 类型2 参数名称2, ...))
 {
     函数体；
 }
 
-{} 标识一个 code block，在该例中标识 main 函数的 code block
+{} 标识一个 code block
 
-The convention with C++ is that a function called main is the entry point of the executable，即main函数是程序执行时第一个被call到的函数
+对于C++而言main函数是程序执行时第一个被call到的函数
 */
 int main(int argc, char *argv[])
 {
 /*
 std 表示 std namespace
-:: is the scope resolution operator, and indicates that you want to access the cout object declared in the std namespace
-std::cout 表示 cout stream object is part of the standard C++ library
+:: 是 scope resolution operator, 表示cout对象是在std的命名空间下声明的
+std::cout 表示 cout stream object 是C++标准库的一部分
 << means that a function called "operator <<" is called and is passed the string
 C++支持operator overloading，因此对于不同类型的参数，operator 的行为也不同
 
-The cout object is an instance of the ostream class and this has already been created before the main function is called
+cout对象是ostream class的一个实例，在main函数调用之前创建
 */
     std::cout << "there are " << argc << " parameters" << std::endl;
     for(int i = 0; i < argc; i++)
@@ -67,150 +67,85 @@ The cout object is an instance of the ostream class and this has already been cr
         std::cout << argv[i] << std::endl;
     }
 /*
-The rule in C++ is that, if the function declares that it returns a value, then it must return a value. However, there is a single exception to
-this rule: if the main function does not return a value, then a value of 0 will be assumed. 
+在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
 */
 }
 
 
-Associated with symbols and conditional compilation is the compiler directive, #pragma once.
-Pragmas are directives specific to the compiler, and different compilers will support different pragmas.
+Pragmas是针对编译器的指令,不同的编译器支持不同的#pragma指令.
+库文件的后缀：
+	Windows:
+		静态库	".lib"
+		动态库	".dll"
+	GNU gcc:
+		静态库	".a"
+		动态库	".so"
 
-Windows uses the extension lib for static libraries and dll for dynamiclink libraries. 
-GNU gcc uses the extension a for static libraries and so for shared libraries
+Function prototype（函数原型）在不给定函数定义的情况下，向编译器声明调用函数所必须遵循的接口规范
+如果函数A调用函数B，则函数B必须在函数A之前定义或者声明，通常将函数名的声明写在一个单独的头文件里，函数的实现写在另外一个源文件里。
 
-Function prototype gives the compiler the information it needs to know about calling the function without providing the actual body of the function, the function definition
-
-When you include a file into your source file, the preprocessor will include the contents of that file (after taking into account any conditional compilation directives) and, recursively, any files included by that file.
-
-The compiler will not look forward in a source file, so if function A calls another function, B, in the same source file then function B must have already been defined before function A calls it, or there must be a prototype declaration
-This leads to a typical convention of having a header file associated with each source file that contains the prototypes of the functions in the source file, and the source file includes this header. This convention becomes more important when you write classes.
-
-The common terminology is that the output of a build step is called a target and the inputs of the build step (for example, source files) are the dependencies of that target.
-
-A simple project structure:
-// utils.h:
-#include <iostream>
-#include <string>
-#include <ctime>
-
-// utils.cpp:
-#include ″utils.h″
-...
-
-// main.cpp:
-#include "utils.h"
-#include "name.h"
-#include "time.h"
-void main()
-{
-	print_name();
-	print_time();
-}
-
-// name.h:
-void print_name();
-
-// time.h:
-void print_time();
-
-// name.c:
-#include "utils.h"
-#include "name.h"
-
-void print_name()
-{
-	...
-}
-
-// time.c:
-#include "utils.h"
-#include "time.h"
-
-void print_time()
-{
-	...
-}
+build
+	target: the output of a build step
+	the dependencies of that target: the inputs of the build step
 
 
-K&R style:
-if (/* some test */) {
-// the test is true
-if (/* some other test */) {
-// second test is true
-} else {
-// second test is false
-}
-} else {
-// the test is false
-}
+An expression(表达式) is a sequence of operators and operands (variables or literals) that results in some value.
 
-An expression is a sequence of operators and operands (variables or literals) that results in some value.
+A statement（语句） can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code. A statement ends with a semicolon. A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
 
-A statement can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code.
-A statement ends with a semicolon. A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
+通常来讲，表达式后加分号可以变为语句
+每个表达式要么是lvalue，要么是rvalue, lvalue是一个表达式，它指向特定的内存位置，lvalue可以出现在赋值的左边或者右边，所有变量都是lvalues
+rvalue是一个临时的值，它的生命周期只存在于使用它的表达式，它有特定的值但是不能接受赋值，所以它只能存在在赋值的右边，典型的rvalue是字面常量
 
-Broadly speaking, an expression becomes a statement by when you append a semicolon.
 
-Every expression is either an lvalue or an rvalue. An lvalue is an expression that refers to some memory location. An lvalue can appear on the left-hand or right-hand side of an assignment. All variables are lvalues
+Comma operator（逗号） 操作符的优先级最低
+通常，在使用变量时再进行变量的声明，可以有效的避免命名冲突
 
-An rvalue is a temporary item that does not exist longer than the expression that uses it; it will have a value, but cannot have a value assigned to it, so it can only exist on the right-hand side of an assignment. Literals are rvalues. 
+变量赋值的3中方法：
+1. assign a value (直接赋值)
+	int i = 1;
+2. call the type constructor (调用类型的构造函数)
+	int j = int(2);
+3. initialize a variable using function syntax （使用函数式语法进行赋值）
+	int k(3);
 
-Comma operator has the lowest precedence
+每一种类型都有对应的字面常量的表示
 
-In general, it is best to declare the variable as close as possible to where you will use it, and within the most restrictive scope. This prevents name clashes, where you will have to add additional information to disambiguate two or more variables
-
-Three ways to initialize variables:
-1. assign a value
-2. call the type constructor
-3. initialize a variable using function syntax
-
-int i = 1;
-int j = int(2);
-int k(3);
-
-Each type will have a literal representation.
-
-constants:
+常量:
 const double pi = 3.1415;
 
-constant expressions:
-C++11 introduces a keyword called constexpr. This is applied to an expression, and indicates that the expression should be evaluated at compile type rather than at runtime
+constant expressions（常量表达式）:
+constexpr 关键字适用于表达式，表明该表达式 should be evaluated at compile type rather than at runtime
 
 constexpr double pi = 3.1415;
 constexpr double twopi = 2 * pi;
 
-The constexpr keyword can also be applied to functions that return a value that can be evaluated at compile time, and so this allows the compiler to optimize the code
+当 constexpr 关键字应用于函数时，表明该函数代码允许编译器在编译期间对代码进行常量优化（evaluated at compile time），如果编译器无法在编译期间确定参数的值，则函数被视普通的函数不进行优化。
 constexpr int triang(int i)
 {
 	return (i == 0) ? 0 : triang(i - 1) + i;
 }
+如果一个函数用constexpr进行修饰，则该函数必须只包含一个表达式（A function marked with the constexpr keyword must only have one expression）
 
-This function, when called with a literal in your code, can be evaluated at compile time. The constexpr is an indication to the compiler to check the usage of the function to see if it can determine the parameter at compile time
-If the compiler cannot determine the parameter at compile-time, the function will be called as normal. A function marked with the constexpr keyword must only have one expression
 
-An enum is a group of named constants, which means that you can use an enum as a parameter to a function
-An enumeration is an integer type and by default the compiler will assume an int, but you can change this by specifying the integer type in the declaration
 
-enum suits {clubs, diamonds, hearts, spades};
-enum suits : char {clubs, diamonds, hearts, spades};
+编译器假定 enum 的默认类型为 int 类型，但是用户可以在声明时显式指定其类型
+
+enum suits {clubs, diamonds, hearts, spades};			// 默认为 int 类型
+enum suits : char {clubs, diamonds, hearts, spades};	// 指定 enum 的类型为 char
 
 suits card1 = diamonds;
 suits card2 = suits::diamonds;    // scope it with the name of the enumeration which is better
 
-To force developers to specify the scope, you can apply the keyword class
+使用关键字 class 可以强制用户在使用enum的值的时候指定scope
+enum class suits : char {clubs, diamonds, hearts, spades};	// 强制用户在使用enum的值的时候指定scope
+suits card3 = suits::diamonds;    // scope it with the name of the enumeration which is better
 
-enum class suits : char {clubs, diamonds, hearts, spades};
-
-By default, the compiler will give the first enumerator a value of 0 and then increment the value for the subsequent enumerators.
-
+编译器默认给定 enum 的第一个值为0，之后依次累加1
 enum ports {ftp=21, ssh, telnet, smtp=25, http=80};
 
-In C++, you will access memory using a typed pointer, pointers are declared using the * symbol and you access a memory address with the & operator
+命名空间 namespace 是一种模块化组织代码的机制，命名空间使用 scope resolution operator :: 来 label your types, functions, and variables with a unique name  
 
-Namespaces give you one mechanism to modularize code. A namespace allows you to label your types, functions, and variables with a unique name so that, using the scope resolution operator, you can give a fully qualified name. 
-
-Defining a namespace is simple: you decorate the types, functions, and global variables with the namespace keyword and the name you give to it.
 
 // 1
 namespace utilities
@@ -244,7 +179,7 @@ int utilities::get_data()
 	// code that returns an integer
 }
 
-One use of namespaces is to version your code
+命名空间的应用之一就是用来管理代码的版本
  namespace utilities
  {
 	bool poll_data();
@@ -257,15 +192,14 @@ One use of namespaces is to version your code
 		int new_feature();
 	}
  }
+当命名空间中函数调用同级命名空间下的函数时，不需要使用 a qualified name
+当声明嵌套的命名空间时，需要手动进行嵌套声明
 
-When an item in a specific namespace calls an item in the same namespace, it does not have to use a qualified name
-It is important to note that, to declare a nested namespace, you have to do the nesting manually
+inline namespace 用来定义嵌套的命名空间，但是当进行argument-dependent lookup时允许编译器将该嵌套的命名空间当作其parent namespace进行查找
 
-
-C++11 provides a facility called an inline namespace that allows you to define a nested namespace, but allows the compiler to treat the items as being in the parent namespace when it performs an argument-dependent lookup
 namespace utilities
 {
-	inline namespace V1
+	inline namespace V1			// 此时utilities::get_data 与 utilities::V1::get_data 等效
 	{
 		bool poll_data();
 		int get_data();
@@ -279,10 +213,7 @@ namespace utilities
 	}
 }
 
-Now to call the first version of get_data, you can use utilities::get_data or utilities::V1::get_data
-
-
-Use using statement to indicate that symbols declared in the specified namespace can be used without a fully qualified name
+使用 using statement 用来将特定的 namespace 中声明的符号引入当前的命名空间而不必使用完整的路径(symbols declared in the specified namespace can be used without a fully qualified name)
 using namespace utilities;
 int i = get_data();
 int j = V2::get_data();
@@ -291,9 +222,9 @@ using std::cout;
 using std::endl;
 cout << "Hello, World!" << endl;
 
-The great advantage of a namespace is to be able to define your items with names that may be common, but are hidden from other code that does not know the namespace name of.
+namespace 的作用是将定义的 items 限制在特定的范围里，避免与其他命名空间下的同名 items 产生冲突
 
-namespace alias:
+namespace alias: 用于对特定的 namespace 定义别名
 
 namespace com_packtpub_richard_grimes
 {
@@ -305,8 +236,10 @@ int i = com_packtpub_richard_grimes::get_data();
 namespace packtRG = com_packtpub_richard_grimes;
 int i = packtRG::get_data();
 
+没有名字的 namespace 意味着内部链接（internal linkage），即只能在当前的文件中使用，在其他文件中不可用
 A namespace without a name has the special meaning that it has internal linkage, that is, the items can only be used in the current translation unit, the current file, and not in any other file.
 
+没有声明在任何命名空间中的代码意味着 global namespace, 在这种情况下code可以省略 namesapce name，也可以显式的使用 scope resolution operator without a namespace name 来表明 该 item 时在 global namespace 下
 Code that is not declared in a namespace will be a member of the global namespace.  You can call the code without a namespace name, but you may want to explicitly indicate that the item is in the global namespace using the scope resolution operator without a namespace name
 
 int version = 42;
@@ -315,12 +248,11 @@ void print_version()
 	std::cout << "Version = " << ::version << std::endl;
 }
 
-Operators are used to compute a value from one or more operands. T
-
 
 The vector template is a class that contains items of the type specified in the angle brackets (<>); 
 The vector can be initialized in a special way called "list initialization" which is new to C++11, 
 
+// traverse 1
 using namespace std;
 vector<string> beatles = { "John", "Paul", "George", "Ringo" };
 for (int i = 0; i < beatles.size(); ++i)
@@ -328,25 +260,21 @@ for (int i = 0; i < beatles.size(); ++i)
 	cout << beatles.at(i) << endl;
 }
 
-Range-based for:
-
+// Range-based for:
 vector<string> beatles = { "John", "Paul", "George", "Ringo" };
 for (string musician : beatles)
 {
 	cout << musician << endl;
 }
 
-// 2
+// traverse 2
 int birth_years[] = { 1940, 1942, 1943, 1940 };
 for (int birth_year : birth_years)
 {
 	cout << birth_year << endl;
 }
 
-
-A variable is an instance of a type; it is the memory allocated to hold the data that the type can hold.
-
-C++ provides integer types of various sizes, the actual sizes of these types can be determined by the sizeof operator
+变量是类型的实例化，代表了容纳这个数据类型大小的内存单元。
 
 // #include <cstdint>
 using namespace std; // Values for x86
@@ -380,13 +308,14 @@ int main()
 }
 
 
-reverse the byte order for big-endian and little-endian:
+big-endian and little-endian 的转换:
 	unsigned short reverse(unsigned short us)
 	{
 		return ((us & 0xff) << 8) | ((us & 0xff00) >> 8);
 	}
 
-Using character macros
+字符处理相关的宏定义
+/*
 	Macro 		Tests if the character is:
 	isalnum 	An alphanumeric character, A to Z, a to z, 0 to 9
 	isalpha 	An alphabetic character, A to Z, a to z
@@ -405,36 +334,30 @@ Using character macros
 
 	toupper 	The uppercase version of the character
 	tolower 	The lowercase version of the character
+*/
 
-
-Raw strings
-	When you use a raw string literal you essentially switch off the meaning of escape characters.
-	The raw string is delimited with R"( and )". That is, the string is between the inner parentheses (Note that, the () is part of the syntax and is not part of the string.)
+Raw strings(原始字符串), 当需要 switch off 转义字符时候会用到 raw string
+	R"(xxxxxxxxx)"
 
 	cout << R"(newline is \n in C++ and "quoted text" use quotes)";
 	打印结果：
 	newline is \n in C++ and "quoted text" use quotes
 
 
-String byte order
-	Extended character sets use more than one byte per character. If such characters are stored in a file, the order of the bytes becomes important. In this situation, the writer of the character must use the same order that will be used by potential readers.
-	One way to do this is to use a Byte Order Mark (BOM).
+String byte order（字符串字节序）
+扩展字符集的一个字符可能会使用多个字节进行表示，如果这类字符在文件中进行存储，那么字节序就变得很关键，此时会用到  Byte Order Mark (BOM)
 
-The bool type holds a Boolean value, that is, just one of two values: true or false.
+The bool type : true or false.
 
-Note that void is not really a type because you cannot create a void variable; it is the absence of a type.
+void 并不是一个类型，因此不能定义一个 void 类型的变量， void 代表 the absence of a type
 
-In C++11 another way to initialize variables was introduced: construction through a list initializer.
-
+变量的初始化：
 	int i = 1;			// initialized to a value
 	int j = int(2);		// calling the type as if it is a function
 	int k(3);			// calls the constructor of the int type
 	int m{4};			// initializes the variable using an initialize list between curly braces ({})
 
-C++11 introduces a mechanism for declaring that a variable's type should be determined from the data it is initialized with, that is, auto
-
-	The auto keyword means that the compiler should create a variable with the type of the data that is assigned to it. The variable can only have a single type, the type the compiler decides is the type it needs for the data assigned to it, and you cannot use the variable elsewhere to hold data of a different type. Because the compiler needs to determine the type from an initializer, it means that all auto variables must be initialized:
-
+auto：变量类型自动推导，因为编译器需要根据 initializer 进行类型推导，所以所有的 auto 变量必须初始化。
 	auto i = 42; // int
 	auto l = 42l; // long
 	auto ll = 42ll; // long long
@@ -442,37 +365,33 @@ C++11 introduces a mechanism for declaring that a variable's type should be dete
 	auto d = 1.0; // double
 	auto c = 'q'; // char
 	auto b = true; // bool
-
-	The power of auto is when you use containers that can result in some fairly complicated looking types
+auto 变量通常用于在使用 container 时候自动推导 container 内的元素类型。
 
 Storage classes
+声明变量时，可以通过指定变量的 storage class 来限定变量的 lifetime, linkage(what other code can access it) 以及变量的内存位置
 
-	When declaring a variable, you can specify its storage class which indicates the lifetime, linkage (what other code can access it), and memory location of the variable.
+static variable in a function
+	变量只能在函数内部访问， 但是变量的 lifetime is the same as the program
+static variable declared at file scope
+	变量只能在当前文件内部访问（internal linkage）
+variable declared at file scope without static
+	external linkage,变量对别的文件可见
 
-	static, which when applied to a variable in a function means that the variable can only be accessed within that function, but its lifetime is the same as the program
+extern 关键字表明 variable 或者 function 具有 external linkage 属性，可以被外部文件访问
 
-	static can be used on variables declared at file scope, in which case it indicates that the variable can only be used in the current file, which is called internal linkage
 
-	If you omit the static keyword on a variable, defined at file scope, then it has an external linkage, which means the name of the variable is visible to code in other files
+thread_local 也是storage class specifier 之一
 
-	The static keyword says that the variable can only be used in the current file. The extern keyword indicates the opposite; the variable (or function) has external linkage and can be accessed in other files in the project.
-
-	The final storage class specifier is thread_local
-
-Using type aliases
-
-	C++ provides the typedef statement to create an alias for a type
-
+使用类型别名
+// 1 typedef
 	typedef tuple<string, int> name_year_t;
 	vector<name_year_t> beatles;
 
-
-	The typedef keyword is a well-established way to create aliases in C++
-	C++11 introduces another way to create a type alias, the using statement
-		using name_year = tuple<string, int>;
+// 2 using
+	using name_year = tuple<string, int>;
 
 
-Aggregating data in record types
+struct 用来 Aggregating data in record types
 
 	struct time_of_day
 	{
@@ -482,14 +401,11 @@ Aggregating data in record types
 	};
 
 There are several ways to initialize an instance of a structure.
-
-	You can also initialize structures using the list initializer syntax using curly braces ({}). The items in the braces should match the members of the struct in the order of the members as declared. If you provide fewer values than there are members, the remaining members are initialized to zero. Indeed, if you provide no items between the curly braces then all members are set to zero. It is an error to provide more initializers than there are members.
-
-	time_of_day lunch {0, 0, 13};
-	time_of_day midnight {};
+	time_of_day lunch {0, 0, 13};	// 按照结构体的成员顺序进行 list initializer
+	time_of_day midnight {};		// 提供的初始化的值的个数少于结构体成员个数，the remaining members are initialized to zero
 	time_of_day midnight_30 {0, 30};
 
-	// You can have a member of a struct that is a struct itself
+	// 结构体提的成员类型可以时另外一个结构体
 	struct working_hours
 	{
 		time_of_day start_work;
@@ -500,8 +416,7 @@ There are several ways to initialize an instance of a structure.
 
 
 Structure fields
-	A structure can have members that are as small as a single bit, called a bit-field. In this case, you declare an integer member with the number of bits that the member will take up. You are able to declare unnamed members.
-
+结构体成员可以是单个比特(bit-field)，结构体成员可以是匿名的
 	struct item_length
 	{
 		unsigned short len : 10;
@@ -509,25 +424,17 @@ Structure fields
 		bool dirty : 1;
 	};
 
-Using structure names
-
-	In some cases, you may need to use a type before you have actually defined it. As long as you do not use the members, you can declare a type before defining it:
-
+使用 struct name
+在一些场景下，在定义 struct 之前可能会用到它，此时只要确保不访问 struct 成员的情况下，可以对 struct 进行声明并使用
 	struct time_of_day;
 	void print_day(time_of_day time);
+然而也有例外，a type can hold pointers to instances of the same type before the type is fully declared。原因是指针的大小是确定的，因此编译器可以为结构体成员分配足够的内存。但是创建类型的实例之前类型定义必须确定下来，典型的例子是链表的定义
 
-	There is, however, an exception: a type can hold pointers to instances of the same type before the type is fully declared. This is because the compiler knows the size of a pointer, so it can allocate sufficient memory for the member. It is not until the entire type has been defined before you can create an instance of the type. The classic example of this is a linked list
-
-Determining alignment
-	One of the uses of structs is that if you know how data is held in memory you can deal with a struct as a block of memory.
-
+结构体成员内存对齐
 	The compiler will place variables in memory in the way that is the most efficient, in terms of memory usage, or speed of access. The various types will be aligned to alignment boundaries.
-
-	You can test the alignment of a specific type using the alignof operator passing the type name
-
+	alignof 操作符用来测试特定类型的 alignment
 	std::cout << "alignment boundary for int is " << alignof(int) << std::endl;
 
-Storing data in the same memory with unions
 A union is a struct where all the members occupy the same memory. The size of such a type is the size of the largest member. Since a union can only hold one item of data, it is a mechanism to interpret the data in more than one way.
 
 // edited version
@@ -546,8 +453,8 @@ A union is a struct where all the members occupy the same memory. The size of su
  }
 
 
-Accessing runtime type information
-C++ provides an operator called typeid that will return type information about a variable (or a type) at runtime. Runtime Type Information (RTTI) is significant when you use custom types that can be used in a polymorphic way
+typeid 操作符用于返回运行时变量的类型信息
+Runtime Type Information (RTTI) is significant when you use custom types that can be used in a polymorphic way
 
 cout << "int type name: " << typeid(int).name() << endl;
 int i = 42;
@@ -566,16 +473,14 @@ Determining type limits
 	cout << numeric_limits<int>::min() << " and ";
 	cout << numeric_limits<int>::max() << endl;
 
+类型转换（Type conversions）
+promotion
+	不损失数据
+narrowing
+	存在数据损失的风险
 
-Type conversions
-Built-in conversions can have one of two outcomes: promotion or narrowing. 
-A promotion is when a smaller type is promoted to a larger type and you will not lose data. 
-A narrowing conversion happens when a value from a larger type is converted to a smaller type with potential loss of data.
 
-
-Casting
-In some cases, you will have to convert between types
-
+Casting(convert between types)
 Various cast operations you can use in C++11:
 	Name 												Syntax
 	Construction										{}
@@ -642,42 +547,33 @@ Using C casts
 
 Using memory in C++
 
-The & operator returns the address of an object. That object can be a variable, a built-in type or the instance of a custom type, or even a function
-To access the data pointed to by a pointer, you must dereference it using the * operator
-
-Using null pointers
+常量 nullptr 的类型不是整形，而是 std::nullptr_t ，所有指针类型都可以转换为 nullptr ，因此 nullptr 用来初始化所有指针类型的变量  
 The type of constant nullptr is not an integer, it is std::nullptr_t. All pointer types can be implicitly converted to this type, so nullptr can be used to initialize variables of all pointer types
 
-Types of memory
-	Static or global
-		declare a variable at the global level, or if you have a variable declared in a function as static
-	String pool
-	Automatic or stack
-	Free store
+内存类型
+	static or global
+	string pool
+	automatic or stack
+	free store
 
-Pointer arithmetic
-A pointer points to memory, and the type of the pointer determines the type of the data that can be accessed through the pointer.
-The whole reason for the void* pointer type is that it can point to anything.
+void* 指针类型可以指向任何类型
 
-Passing multidimensional arrays to functions
-When you pass an array, the first dimension will be treated as a pointer
+当多维数组用作函数参数时，第一维被看作指针类型
 	bool safe_torques(double nut_torques[][5], int num_wheels);
 	bool safe_torques(double (*nut_torques)[5], int num_wheels);
 
-Allocating individual objects
-The new operator is used with the type to allocate memory, and it will return a typed pointer to that memory (Built-in types do not have constructors, so instead a type initialization will occur and this will usually initialize the object to zero)
+new 操作符用来分配特定类型大小的内存，返回指向内存地址的特定类型的指针（内置类型不存在构造函数，因此通常初始化该变量为 zero）
 
 int *p = new int; // allocate memory for one int
 delete p;
 p = nullptr;
 
-When you delete a pointer, the destructor for the object is called. For built-in types, this does nothing. 
-It is good practice to initialize a pointer to nullptr, after you have deleted it
+当对指针执行 delete 操作时，object 对应的 destructor 被调用，对于内置类型的变量，delete 什么也不做。
+对指针执行 delete 操作后，最好将该指针赋值为 nullptr
 
 int *p1 = new int (42);
 int *p2 = new int {42};
 
-Allocating arrays of objects
 int *p = new int[2];
 delete [] p;
 
@@ -687,13 +583,13 @@ Handling failed allocations
 	int *pi;
 	try
 	{
-	pi = new int[VERY_BIG_NUMBER];
-	// other code
+		pi = new int[VERY_BIG_NUMBER];
+		// other code
 	}
 	catch(const std::bad_alloc& e)
 	{
-	cout << "cannot allocate" << endl;
-	return;
+		cout << "cannot allocate" << endl;
+		return;
 	}
 	// use pointer
 	delete [] pi;
@@ -702,12 +598,12 @@ Handling failed allocations
 	int *pi = new (std::nothrow) int [VERY_BIG_NUMBER];
 	if (nullptr == pi)
 	{
-	cout << "cannot allocate" << endl;
+		cout << "cannot allocate" << endl;
 	}
 	else
 	{
-	// use pointer
-	delete [] pi;
+		// use pointer
+		delete [] pi;
 	}
 
 
@@ -715,34 +611,23 @@ Resource Acquisition Is Initialization (RAII), which means using the features of
 
 Standard Template Library (STL), provide a standard way to insert items into collection objects and ways to access the items and iterate through entire collections (called iterators)
 
-Standard Library arrays
-	 array and vector
-	
-Using the stack-based array class
-The array class allows you to create fixed sized arrays on the stack and, as with built-in arrays, they cannot shrink or expand at runtime.
+array 类 用于在 stack 上分配固定大小的数组，该数组的大小在运行时不能动态的改变
 	array<int, 4> arr { 1, 2, 3, 4 };
-	for (int i : arr) cout << i << endl;
-	The reason is that array implements the begin and end functions that are required for this syntax
+	for (int i : arr) cout << i << endl;	// array 类实现了 begin 和 end 方法 支持这种语法
 
 	for (int i = 0; i < arr.size(); ++i) cout << arr[i] << endl;
 
-	You can access memory outside of the bounds of the array, To guard against this, the class provides a function, at, which will perform a range check and if the index is out of range the class will throw the C++ exception out_of_range.
+	为了防止数组访问越界，array class 提供了 at 方法，用来执行 range check，如果访问越界会触发 out_of_range exception
 
 	array<int, 4> arr3;
 	arr3.fill(42); // put 42 in each item
 	arr2.swap(arr3); // swap items in arr2 with items in arr3
 
-Using the dynamically allocated vector class
-With vector class, the memory is dynamically allocated, which means that a vector can be expanded or shrunk at runtime
-The vector class provides indexed random access with square bracket syntax and a range check with the at function
+vector 类 和 array 类 类似，用于内存分配，vector 的大小可以在运行时动态的增加或者减小，vector 支持随机访问，同样也提供了 at 方法
 
+引用时对象的别名，通过引用访问对象和通过变量名访问对象效果相同
+一个变量可能存在多个别名（引用），引用在声明时必须同时进行初始化，并且引用一旦声明该引用不能指向另外一个变量
 
-References
-A reference is an alias to an object. That is, it is another name for the object, and so access to the object is the same through a reference as it is through the object's variable name
-
-The pointer and reference have two different meanings. The reference is not initialized to the value of the variable, the variable's data; it is an alias for the variable name.
-
-You can have several aliases for a variable, and each must be initialized to the variable at the declaration. Once declared, you cannot make a reference refer to a different object.
 The following code will not compile:
  int& r1; // error, must refer to a variable
  int& r2 = nullptr; // error, must refer to a variable
