@@ -891,7 +891,7 @@ extern "C" 表明 采用 C 语言的链接规则，即不使用 C++ name manglin
 3. 如果步骤 2 失败，编译器尝试 promote the type (例如将 bool 提升为 int)
 4. 如果步骤 3 失败，编译器尝试 prstandard conversions（例如将引用转换为对应的类型），如果转换后存在多个备选函数原型则报错
 
-Functions and scope
+Functions and scope （函数的作用范围）
 void f(int i) { /*does something*/ }
 void f(double d) { /*does something*/ }
 
@@ -902,8 +902,7 @@ int main()
 	return 0;
 }
 
-Deleted functions
-prevent the implicit conversion for built-in types you can delete the functions that you do not want callers to use
+Deleted functions （函数调用者显示声明不使用的函数原型，避免编译器对内置类型的 implicit conversion）
 
 void f(double) = delete;
 void g()
@@ -913,8 +912,7 @@ void g()
 }
 
 
-Passing by value and passing by reference
-// don't allow any more than 100 items
+引用作为函数参数
 bool get_items(int count, vector<int>& values)
 {
 	if (count > 100) return false;
@@ -928,17 +926,20 @@ bool get_items(int count, vector<int>& values)
 vector<int> items {};
 get_items(10, items);
 
-Asserts are defined using conditional compilation and so will only appear in debug builds (that is, C++ code compiled with debugging information).
+Asserts 使用条件编译，之后存在于 debug build 版本
+```
 
-Using invariants
-If you don't explicitly document what the function does to external data, then you must ensure that when the function finishes such data is left untouched.
-For example, the cout object is global to your application, and it can be changed through manipulators to make it interpret numeric values in certain ways. If you change it in a function (say, by inserting the hex manipulator), then this change will remain when the cout object is used outside the function
+```cpp
+Using invariants （不变式）
+对于类似 cout object 等函数外部的数据，必须确保函数在使用该数据之后，该数据和函数调用前是完全一致的
 
-Declaring function pointers
+
+函数指针
 int (*fn)() = get_status;
 int error_value = fn();
 
-declare aliases for the type of the function pointer
+函数类型别名
+// typedef 或者 using
 	typedef bool(*MyPtr)(MyType*, MyType*);
 	using MyPtr = bool(*)(MyType*, MyType*);	// more clear
 
@@ -952,9 +953,7 @@ void caller()
 	fn(42, 99);
 }
 
-Using function pointers
-A function pointer is merely a pointer. This means that you can use it as a variable; you can return it from a function, or pass it as a parameter.
-
+函数指针作为函数参数
 using callback = void(*)(const string&);
 void big_routine(int loop_count, const callback progress)
 {
@@ -970,12 +969,9 @@ void big_routine(int loop_count, const callback progress)
 	}
 }
 
-Templated functions
-C++ provides templates to allow you to write more generic code; you write the routine using a generic type and at compile time the compiler will generate a function with the appropriate types. 
+Templated functions （函数模板）
+编译器会根据模板函数及实际函数调用的参数类型生成对应的函数原型
 
-
-Defining templates
-Compiler deduces the template parameters from how you call the function
 // 1
 	template<typename T>
 	T maximum(T lhs, T rhs)
@@ -990,11 +986,11 @@ Compiler deduces the template parameters from how you call the function
 		return (lhs > rhs) ? lhs : rhs;
 	}
 
-// explicitly provide the types in the called function to call a specific version of the function and (if necessary) get the compiler to perform implicit conversions
+// 调用函数时显示提供类型，调用特定的版本的模板函数，如果有必要编译器可能会进行隐式的参数类型转换
 	// call template<typename T> maximum(T,T);
 	int i = maximum<int>(false, 100.99);
 
-Using template parameter values
+使用模板的参数值
 	template<int size, typename T>		// parameter size can be used in the function as a local (read-only) variable
 	T* init(T t)
 	{
@@ -1027,9 +1023,7 @@ Using template parameter values
 	print_array(squares);
 
 
-Specialized templates
-	In some cases, you may have a routine that works for most types (and a candidate for a templated function), but you may identify that some types need a different routine.
-
+Specialized templates （为特定类型实现定制化实现）
 	template <typename T> int number_of_bytes(T t)
 	{
 		return sizeof(T);
@@ -1041,7 +1035,6 @@ Specialized templates
 	}
 
 	// 2
-	define a templated function to return a maximum of two parameters of the same type
 	template<typename T>
 	T maximum(T lhs, T rhs)
 	{
@@ -1052,18 +1045,14 @@ Specialized templates
 	template<> bool maximum<bool>(bool lhs, bool rhs) = delete;
 
 
-Variadic templates
-A variadic template is when there is a variable number of template parameters
+Variadic templates（可变参数模板）
 
 template<typename T, typename... Arguments>
 void func(T t, Arguments... args);
 
-You need to unpack the parameter pack to get access to the parameters passed by the caller
-You can determine how many items there are in the parameter pack using the special operator, sizeof... (note the ellipses are part of the name);
+// unpack the parameter pack, sizeof... 可以用来获取可变参数的个数
 
-To unpack the parameter pack
-1.uses recursion
-
+// 1 使用递归
 template<typename T> void print(T t)
 {
 	cout << t << endl;
@@ -1076,10 +1065,9 @@ void print(T first, Arguments ... next)
 	print(next...);
 }
 
-print(1, 2.0, "hello", bool);
+print(1, 2.0, "hello", false);
 
-2.use an initializer list
-
+// 2 使用初始化列表 (所有可变参数的类型必须一致)
 template<typename... Arguments>
 void print(Arguments ... args)
 {
@@ -1087,7 +1075,11 @@ void print(Arguments ... args)
 	for (auto i : arr) cout << i << endl;
 }
 
-3.use the comma operator
+// 3 使用逗号运算符
+template<typename T> void print(T t)
+{
+	cout << t << endl;
+}
 
 template<typename... Arguments>
 void print(Arguments ... args)
@@ -1095,18 +1087,24 @@ void print(Arguments ... args)
 	int dummy[sizeof...(args)] = { (print(args), 0)... };
 }
 
+运算符重载
+使用操作符的语法而不是函数调用的语法进行函数调用
 
-Overloaded operators
-C++ provides the keyword operator to indicate that the function is not used with the function call syntax, but instead is called using the syntax associated with the operator
-
-You can provide your own versions of the following unary operators:
+支持运算符重载的一元运算符:
 	! & + - * ++ -- ~
-You can also provide your own versions of the following binary operators:
+支持运算符重载的二进制运算相关运算符:
 	!= == < <= > >= && ||
 	% %= + += - -= * *= / /= & &= | |= ^ ^= << <<= = >> =>>
 	-> ->* ,
-You can also write versions of the function call operator (), array subscript [], conversion operators, the cast operator (), and new and delete. 
-You cannot redefine the ., .*, ::, ?:, # or ## operators, nor the "named" operators, sizeof, alignof or typeid.
+也可以对如下运算符进行重载
+function call operator ()
+array subscript []
+conversion operators
+the cast operator ()
+new and delete
+
+不能对如下操作符进行重载
+., .*, ::, ?:, # or ## operators, nor the "named" operators, sizeof, alignof or typeid.
 
 struct point
 {
@@ -1136,30 +1134,22 @@ cout << boolalpha;
 cout << (p1 == p2) << endl; // true
 cout << (p1 != p2) << endl; // false
 
-Operator overloading is often referred to as syntactic sugar, syntax that makes the code easier to read--but this trivializes an important technique
+Function objects（函数对象，functor）
+function object 或者叫做 functor, 是自定义类型实现了函数调用操作符 ()，函数对象可以使用类似函数的方式进行使用
 
-One example is functors, or function objects, where the class implements the () operator so that objects can be accessed as if they are functions
+<functional> 头文件包含了不同的可以被用作函数对象的类型
+<algorithm> 头文件包含了作用于不同函数对象的函数
 
-
-Function objects
-A function object, or functor, is a custom type that implements the function call operator: (operator()). This means that a function operator can be called in a way that looks like it is a function
-
-The <functional> header file contains various types that can be used as function objects.
-
-The <algorithm> header contains functions that work on function objects
-
-
-lambda expressions
+lambda expression（lambda 表达式）
 C++11 provides a mechanism to get the compiler to determine the function objects that are required and bind parameters to them. These are called lambda expressions.
+lambda 表达式用来在函数对象被用到的地方创建匿名函数
 
-A lambda expression is used to create an anonymous function object at the location where the function object will be used.
-
-auto less_than_10 = [](int a) {return a < 10; };
+auto less_than_10 = [](int a) {return a < 10; };	// [] 被称作 captrue list，用于捕获lambda 表达式之外的变量，该示例中没有捕捉任何变量所以为空
 bool b = less_than_10(4);
 
-The square brackets at the beginning of the lambda expression are called the capture list. This expression does not capture variables, so the brackets are empty.
 
-You can use variables declared outside of the lambda expression and these have to be captured. The capture list indicates whether all such variables will be captured by a reference (use [&]) or by a value (use [=]). You can also name the variables that will be captured (if there are more than one, use a comma-separated list) and if they are captured by a value, you use just their names. If they are captured by a reference, use a & on their names.
+captured by a reference (use [&]) 
+captured by a value (use [=])，此时可以省略 = 号
 
 // 1
 int limit = 99;
@@ -1186,26 +1176,22 @@ int less_than_3 = count_if(
 cout << "There are " << less_than_3 << " items less than 3" << endl;
 
 
-Classes
-A class allows you to encapsulate data in a custom type, and you can define functions on that type so that only these functions will be able to access the data.
+class 用来定义类，即封装自定义的数据类型并且定义可以对该类型数据进行操作的函数，背后的思想是封装数据以便于明确哪些字节的数据可以被操作并且只允许该类型进行操作
 
-The basic idea behind classes:
-A mechanism to encapsulate the data into a type that knows what bytes to change, and only allow that type to access the data.
+C++用于类型封装的结构：
+struct
+class
+union
 
-A struct is one of the class types that you can use in C++; the other two are union and class.
-
-
-Defining class behavior
-A class can define functions that can only be called through an instance of the class; such a function is often called a method. 
-An object will have state; this is provided by the data members defined by the class and initialized when the object is created. 
-The methods on an object define the behavior of the object, usually acting upon the state of the object. 
-When you design a class, you should think of the methods in this way: they describe the object doing something.
+class:
+method 是类的实例可以调用的函数，通常对类的数据成员进行操作
+data members 定义了类对象的状态
 
 class cartesian_vector
 {
-	// The public keyword means that any members defined after this specifier are accessible by code defined outside of the class.
-	// By default, all the members of a class are private unless you indicate otherwise. 
-	// private means that the member can only be accessed by other members of the class.
+	// public 关键字表明类的成员可以被类之外的代码访问
+	// 默认类的成员属性为 private 
+	// private 关键字表明类的成员只能被被该类的其他成员访问
 	public:
 		double x;
 		double y;
@@ -1213,11 +1199,9 @@ class cartesian_vector
 		double get_magnitude() { return std::sqrt((x * x) + (y * y)); }
 };
 
-the difference between a struct and a class: 
-by default, members of a struct are public and by default, members of a class are private
+struct 和 class 区别是，struct 的成员默认为 public， class 的成员默认为 private
 
-
-Using the this pointer
+this 指针表示当前对象
 class cartesian_vector
 {
 public:
@@ -1232,32 +1216,21 @@ public:
 	reset(double x, double y) { this->x = x; this->y = y; }
 };
 
-You can dereference the this pointer with the * operator to get access to the object. This is useful when a member function must return a reference to the current object
-A method in a class can also pass the this pointer to an external function, which means that it is passing the current object by reference through a typed pointer
+// 2
+class cartesian_vector
+{
+	public:
+		double x;
+		double y;
+		// other methods
+		double magnitude();
+};
 
-
-Using the scope resolution operator
-
-	class cartesian_vector
-	{
-		public:
-			double x;
-			double y;
-			// other methods
-			double magnitude();
-	};
-
-	double cartesian_vector::magnitude()
-	{
-		return sqrt((this->x * this->x) + (this->y * this->y));
-	}
-
-Defining class state
-Bear in mind that if you have a pointer to an item created in the free store, you need to know whose responsibility it is to deallocate the memory that the pointer points to. If you have a reference (or pointer) to an object created on a stack frame somewhere, you need to make sure that the objects of your class do not live longer than that stack frame
-
-When you declare data members as public it means that external code can read and write to the data members
-You can decide that you would prefer to only give read-only access, in which case you can make the members private and provide read access through accessors
-When you make the data members private it means that you cannot use the initializer list syntax to initialize an object, but we will address this later
+double cartesian_vector::magnitude()
+{
+	return sqrt((this->x * this->x) + (this->y * this->y));
+}
+当成员是 private 时，意味着你不能使用 initializer list 语法进行对象的初始化
 
 class cartesian_vector
 {
@@ -1268,8 +1241,6 @@ class cartesian_vector
 		double get_y() { return this->y; }
 		// other methods
 	};
-
-Creating objects
 
 // This is direct initialization of the object and assumes that the data members of cartesian_vector are public.
 cartesian_vector vec { 10, 10 };
@@ -1285,29 +1256,24 @@ class point
 		int y = 0;
 };
 
- class car
+class car
 {
 	public:
 		double tire_pressures[4] { 25.0, 25.0, 25.0, 25.0 };
 };
 
-Construction of objects
-constructors allows you to define special methods to perform the initialization of the object
 
-constructors:
-Default constructor: This is called to create an object with the default value.
-Copy constructor: This is used to create a new object based on the value of an existing object.
-Move constructor: This is used to create a new object using the data moved from an existing object.
-Destructor: This is called to clean up the resources used by an object.
-Copy assignment: This copies the data from one existing object into another existing object.
-Move assignment: This moves the data from one existing object into another existing object.
+构造函数用来定义特殊的成员函数来对对象进行初始化，构造函数的名称和类名相同并且不返回任何值
 
-The compiler-created versions of these functions will be implicitly public;
+构造函数的类型:
+Default constructor默认构造函数: This is called to create an object with the default value.
+Copy constructor拷贝构造函数: This is used to create a new object based on the value of an existing object.
+Move constructor移动构造函数: This is used to create a new object using the data moved from an existing object.
+Destructor析构函数: This is called to clean up the resources used by an object.
+Copy assignment拷贝赋值: This copies the data from one existing object into another existing object.
+Move assignment移动赋值: This moves the data from one existing object into another existing object.
 
-A constructor is a member function that has the same name as the type, but does not return a value, so you cannot return a value if the construction fails, which potentially means that the caller will receive a partially constructed object
-
-Defining constructors
-The default constructor is used when an object is created without a value and hence the object will have to be initialized with a default value.
+编译器创建的默认构造函数默认是 public 属性
 
 // 1
 class point
@@ -1321,19 +1287,14 @@ point p; // default constructor called
 point p {}; // calls default constructor
 
 
-// A more efficient way is to use direct initialization with a member list.
-point(double x, double y) : x(x), y(y) {}
-
-The identifiers outside the parentheses are the names of class members, and the items inside the parentheses are expressions used to initialize that member (in this case, a constructor parameter). 
-
-
-point(double x, double y) : x{x}, y{y} {}
+// direct initialization with a member list
+point(double x, double y) : x(x), y(y) {}	// 括号外部的 x 表示类的成员， 括号里的 x 表示传递给构造函数的参数
 point p(10.0, 10.0);
 
-point arr[4];	// default constructor is called on the items; there is no way to call any other constructor, and so you have to initialize each one separately
+point arr[4];	// 数组的每个成员都会调用默认构造函数进行初始化，此种情况下没有办法调用别的构造函数，因此需要对每个成员进行单独初始化
 
 
-// default values for constructor parameters
+// 带默认参数的构造函数
 class car
 {
 	array<double, 4> tire_pressures;;
@@ -1346,8 +1307,7 @@ public:
 car commuter_car(25, 27);
 car sports_car(26, 28, 28);
 
-Delegating constructors
-A constructor may call another constructor using the same member list syntax:
+Delegating constructors 代理构造函数：构造函数使用成员列表的语法调用其他构造函数
 class car
 {
 // data members
@@ -1358,8 +1318,8 @@ public:
 };
 
 
-Copy constructor
-A copy constructor is used when you pass an object by value (or return by value) or if you explicitly construct an object based on another object
+Copy constructor拷贝构造函数
+当 按值传递对象，或者 按值返回 或者 显式的通过已有对象构造新的对象时拷贝构造函数被调用
 
 class point
 {
@@ -1370,11 +1330,10 @@ public:
 
 point p1(10, 10);
 
-point p2(p1);	// copy constructor is called
-point p3 = p1;	// copy constructor is called
+point p2(p1);	// 通过已有对象构造新的对象，拷贝函数被调用
+point p3 = p1;	// 按值传递对象，拷贝函数被调用
 
-Converting between types
-
+不同类型的类对象之间的转换（编译失败的代码）
 	class cartesian_vector
 	{
 		double x; double y;
@@ -1388,8 +1347,7 @@ Converting between types
 	cartesian_vector v3 = p;
 	(The problem with the code above is that the cartesian_vector class accesses private members of the point class)
 
-Making friends
-
+解决办法：使用友元类
 class cartesian_vector; // forward decalartion
 
 class point
@@ -1398,7 +1356,7 @@ class point
 public:
 	point(double x, double y) : x(x), y(y){}
 	friend class cartesian_point;
-	// This indicates that the code for the entire class, cartesian_vector, can have access to the private members (data and methods) of the point class
+	// 友元类的声明，表明cartesian_vector可以访问point类的所有私有成员（数据成员或者方法）
 };
 
 // declare friend functions
