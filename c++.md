@@ -607,9 +607,9 @@ Handling failed allocations
 	}
 
 
-Resource Acquisition Is Initialization (RAII), which means using the features of C++ objects to manage resources. RAII in C++ needs classes and in particular, copy constructors and destructors.
+Resource Acquisition Is Initialization (RAII), RAII 使用 C++ 对象的一些特性来管理资源，准确点说用到了C++ 类的拷贝构造函数和析构函数。
 
-Standard Template Library (STL), provide a standard way to insert items into collection objects and ways to access the items and iterate through entire collections (called iterators)
+Standard Template Library (STL), STL 提供了一系列的方法向集合对象插入元素，访问集合元素以及通过迭代器便利整个集合等方法
 
 array 类 用于在 stack 上分配固定大小的数组，该数组的大小在运行时不能动态的改变
 	array<int, 4> arr { 1, 2, 3, 4 };
@@ -628,33 +628,30 @@ vector 类 和 array 类 类似，用于内存分配，vector 的大小可以在
 引用时对象的别名，通过引用访问对象和通过变量名访问对象效果相同
 一个变量可能存在多个别名（引用），引用在声明时必须同时进行初始化，并且引用一旦声明该引用不能指向另外一个变量
 
-The following code will not compile:
+如下代码会编译失败:
  int& r1; // error, must refer to a variable
  int& r2 = nullptr; // error, must refer to a variable
-(Since a reference is an alias for another variable, it cannot exist without being initialized to a variable. Likewise, you cannot initialize it to anything other than a variable name, so there is no concept of a null reference.)
+(由于引用是变量的别名，因此只有初始化后才有意义，同样只能通过变量的名称来对引用就行初始化，也没有空引用的概念)
 
 int x = 1, y = 2;
 int& rx = x; // declaration, means rx is an alias for x
 rx = y; // assignment, changes value of x to the value of y
 
-Constant references
-This essentially makes the reference read-only: you can access the variable's data to read it, but not to change it
+Constant reference （使得引用只读）
 	int i = 42;
 	const int& ri = i;
 	ri = 99; // error!
 
 Returning references
-Returning a reference from a function is a common idiom, but whenever you consider doing this make sure that the lifetime of the aliased variable is not the scope of the function
+函数返回引用是一项常用的功能，但是当使用这项功能时一定要确保引用对应的变量的生命周期在函数返回后依然存在。
 
 Temporaries and references
-The lvalue references must refer to a variable, but C++ has some odd rules when it comes to const references declared on the stack. If the reference is a const, the compiler will extend the lifetime of a temporary for the lifetime of the reference.
-	const int& cri { 42 };
-In this code, the compiler will create a temporary int and initialize it to a value and then alias it to the cri reference (it is important that this reference is const). The temporary is available through the reference while it is in scope.
+lvalue reference 必须指向一个变量，但是 C++ 对于在 stack 上声明的常量引用有一些特殊的规则，对于常量引用编译器会扩展临时变量的生命周期为引用的生命周期。
+	const int& cri { 42 };	// 编译器创建临时整形变量42并初始化为常量引用 cri ，通过常量引用 42 的 lifetime 扩展至 cri 的生命周期.
 
 
-The rvalue references
-C++11 defines a new type of reference, rvalue references.
-C++11 allows you to write code specifically for temporary objects, so in the case of the assignment, the operator for temporary objects can just move the data from the temporary into the object being assigned. In contrast, if the reference is not to a temporary object then the data will have to be copied. If the data is large, then this prevents a potentially expensive allocation and copy. This enables so-called move semantics.
+rvalue reference
+rvalue reference 用于 move the data from the temporary into the object being assigned，防止 a potentially expensive allocation and copy （move semantic）
 
  string global{ "global" };
 
@@ -704,7 +701,7 @@ void use_string(string&& s)		// the parameter is identified as an rvalue referen
 	cout << s << endl;
 }
 
-When you call this function, the compiler will call the right one according to the parameter passed to it:
+当执行函数调用时，编译器会根据调用参数（类型 + 个数）确定对应的函数原型调用正确的函数
 use_string(get_global()); // string& version
 use_string(get_static()); // string& version
 use_string(get_temp()); // string&& version
@@ -735,12 +732,10 @@ for (auto row : arr)
 		cout << col << " " << endl;
 	}
 }
-
-Ranged "for" uses iterator objects and for arrays it uses the C++ Standard Library functions, begin and end, to create these objects. The compiler will see from the arr array in the outer ranged for that each item is an int[3] array, and so in the outer for loop the loop variable will be a copy of each element, in this case an int[3] array. You cannot copy arrays like this, so the compiler will provide a pointer to the first element, an int*, and this is used in the inner for loop.
-The compiler will attempt to obtain iterators for int*, but this is not possible because an int* contains no information about how many items it points to. There is a version of begin and end defined for int[3] (and all sizes of arrays) but not for int*.
+Ranged "for" 使用迭代器对象即使 begin 和 end 来创建 元素对象，因此对于外层循环 每个元素的类型为 int[3] array ，因此外层循环尝试创建 int[3] 类型的元素拷贝，但是对于 array 类型不支持此类拷贝，因此编译器提供的是指向第一个元素的指针，即 int* 给内层循环使用，编译器尝试获取 int* 类型的 iterator 但是是不可能成功的因为 int* 没有任何它所指向多少个元素的信息，int[3] 有对应的 begin 和 end，但是 int* 却没有。
 
 
-// The outer loop variable is in fact int (&)[3], That is, it is a reference to an int[3] (the parentheses used to indicate that it references an int[3] and is not an array of int&)
+// 外层循环的元素类型为 int (&)[3], 即 int[3] 类型的引用 (括号用来表明是 int[3] 类型的引用，而不是 int& 类型的数组)
 for (auto& row : arr)	
 {
 	for (auto col : row)
@@ -750,34 +745,26 @@ for (auto& row : arr)
 }
 
 
+生命和定义函数
+function definition
+function declaration （function prototype）
+编译器根据 function prototype 进行函数的类型检查，即函数调用时是否使用了正确的参数（类型和个数）
 
-Declaring and defining functions
-Code that uses a function has to have access to the name of the function, and so it needs to have access to either the function definition or the declaration of the function (also called the function prototype)
-
-The compiler uses the prototype to type-check that the calling code is calling the function, using the right types
 
 
-C Runtime Library is implemented:
-function is compiled in a static library or a dynamic link library
-function prototypes are provided in a header file
-include the header file for the library so that the function prototypes are available to the compiler
-type the prototype in your code
-library provided in the linker command line
+function forward declaration（函数前向声明）
+You do not have to define the function before it is used as long as the function prototype is defined before the function is called
 
-However, much of the C++ Standard Library is implemented in header files, which means that these files can be quite large
-
-forward declaration: You do not have to define the function before it is used as long as the function prototype is defined before the function is called
-
-internal linkage and external linkage
+内部链接和外部链接
 	static int mult(int, int); // defined in this file
 	extern int mult(int, int); // defined in another file
 
-the compiler is free to ignore constexpr and inline specifier, these specifiers are just a suggestion to the compiler.
+constexpr and inline specifier 对于编译器只是提示作用, 并不意味着 编译器 一定会对代码进行对应的优化
 
 
-trailing return type
+trailing return type 函数返回类型
 
-inline auto mult(int lhs, int rhs) -> int
+inline auto mult(int lhs, int rhs) -> int	// auto 表示函数的返回类型在参数列表之后指定，-> int 表示返回类型为整形
 {
 	return lhs * rhs;
 }
@@ -786,25 +773,22 @@ inline auto mult(int lhs, int rhs) -> int
 // compiler will only know what the return type is from the function body, so you cannot provide a prototype for such functions
 inline auto mult(int lhs, int rhs)
 {
-	return lhs * rhs;
+	return lhs * rhs;	// 函数返回类型为 auto ，编译器会对返回类型进行自动推导
 }
 
-The return type on the left is given as auto, meaning that the actual return type is specified after the parameter list
-The -> int means that the return type is int
 
 
-Specifying exceptions
+早期C++版本的异常表示:
+1. 使用 a comma separated list of the types of the exceptions 表示函数体执行过程中可能发生的异常类型
+2. 使用 ellipsis (...)  表示函数体执行过程中可能发生异常
+3. 使用 an empty pair of parentheses 表明函数不会产生异常
 
-Earlier versions of C++:
-provide a comma separated list of the types of the exceptions that may be thrown by code in the function
-provide an ellipsis (...) which means that the function may throw any exception
-provide an empty pair of parentheses, which means the function will not throw exceptions
 int calculate(int param) throw(overflow_error)
 {
 	// do something which potentially may overflow
 }
 
-C++11
+C++11 使用 noexcept 关键字表示函数不会产生异常
 // C++11 style: 
 // no exception will be thrown was found
 int increment(int param) noexcept
@@ -812,22 +796,16 @@ int increment(int param) noexcept
 	// check the parameter and handle overflow appropriately
 }
 
-Function body
-if the function is declared as returning auto, then the compiler will deduce the return type
 
-
-Using function parameters
-Passby-reference means that the variable in the calling code can be altered by the function, but this can be controlled by making the parameters const, in which case the reason for passby-reference is to prevent a (potentially costly) copy being made.
-
-Passing Initializer lists
+Initializer list 作为函数参数
 	point p;
 	p.x = 1; p.y = 1;
 	set_point(p);
 	set_point({ 1, 1 });
 
 
-Using default parameters
-The default values occur in the function definition, not in a function prototype, the parameters that can have default values are the right-most parameters
+default parameter （默认参数）
+默认参数出现在函数的定义中（不是 function prototype），并且出现在函数参数列表的最右边
 
 void log_message(const string& msg, bool clear_screen = false)
 {
@@ -840,13 +818,12 @@ log_message("second message");
 bool user_decision = ask_user();
 log_message("third message", user_decision);
 
+可变参数的3中形式: 
+initializer lists
+C-style variable argument lists
+variadic templated functions
 
-Variable number of parameters
-A function with default parameter values can be regarded as having a variable number of user-provided parameters, where you know at compile time the maximum number of parameters and their values if the caller chooses not to provide values.
-
-Three ways to have a variable number of parameters: initializer lists, C-style variable argument lists, and variadic templated functions
-
-Initializer lists:
+初始化列表:
 	#include <initializer_list>
 	int sum(initializer_list<int> values)
 	{
@@ -859,7 +836,7 @@ Initializer lists:
 	cout << sum({-6, -5, -4, -3, -2, -1}) << endl; // -21
 	cout << sum({10, 20, 30}) << endl; // 60
 
-Argument lists:
+参数列表:
 // 1
 int sum(int first, ...)
 {
@@ -901,16 +878,18 @@ cout << sum(3, 10, 20, 30) << endl; // 60
 
 
 name mangling
-C++ compiler will decorate the name with extra symbols for the return type and parameters so that overloaded functions all have different names
+C++ compiler 在编译期间会对根据函数返回类型即参数对函数名进行修饰以支持函数重载等，因此重载后的函数编译后有不同的函数名称
 
-extern "C"
-the function has C linkage and the compiler will not use C++ name mangling
+extern "C" 表明 采用 C 语言的链接规则，即不使用 C++ name mangling
 
-Overloading functions
-several functions with the same name, but where the parameter list is different (the number of parameters and/or the type of the parameters)
+函数重载
+多个函数具有相同的名称，但是参数列表不同（参数个数 或者 参数类型不同）
 
-compiler will attempt to find the function that best fits the parameters provided:
-If there is not a suitable function, the compiler will attempt to convert the parameters to see if a function with those types exists. The compiler will start with trivial conversions (for example, an array name to a pointer, a type to a const type), and if this fails the compiler will try to promote the type (for example, bool to int). If that fails, the compiler will try standard conversions (for example, a reference to a type). If such conversions results in more than one possible candidate, then the compiler will issue an error that the function call is ambiguous.
+编译器根据函数参数列表查找最优函数原型的过程
+1. 编译器根据参数列表查找最优的函数原型
+2. 如果没有最优的函数原型，则尝试对参数进行参数类型转换（例如数组转换为指针类型，普通类型转换为 const 类型）
+3. 如果步骤 2 失败，编译器尝试 promote the type (例如将 bool 提升为 int)
+4. 如果步骤 3 失败，编译器尝试 prstandard conversions（例如将引用转换为对应的类型），如果转换后存在多个备选函数原型则报错
 
 Functions and scope
 void f(int i) { /*does something*/ }
