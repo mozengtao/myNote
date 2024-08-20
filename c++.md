@@ -1,3 +1,7 @@
+[**Modernes C++**](https://www.modernescpp.com/index.php/table-of-content/)
+
+[编程指北](https://csguide.cn/cpp)
+
 [**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
 [**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
 
@@ -1240,9 +1244,9 @@ class cartesian_vector
 		double get_x() { return this->x; }
 		double get_y() { return this->y; }
 		// other methods
-	};
+};
 
-// This is direct initialization of the object and assumes that the data members of cartesian_vector are public.
+// 当类的数据成员是public属性时才能采用如下的直接初始化的方式，如果数据成员是private属性代码会编译失败
 cartesian_vector vec { 10, 10 };
 cartesian_vector *pvec = new cartesian_vector { 5, 5 };
 // use pvec
@@ -1345,7 +1349,7 @@ point p3 = p1;	// 按值传递对象，拷贝函数被调用
 	cartesian_vector v1(p);
 	cartesian_vector v2 { p };
 	cartesian_vector v3 = p;
-	(The problem with the code above is that the cartesian_vector class accesses private members of the point class)
+// 编译失败的原因是因为cartesian_vector类访问了point类的私有成员
 
 解决办法：使用友元类
 class cartesian_vector; // forward decalartion
@@ -1367,12 +1371,9 @@ ostream& operator<<(ostream& stm, const point& pt)
  }
 
 friend ostream& operator<<(ostream&, const point&);
+// 友元类的声明需要声明在point类中，放在public 或者 private 部分都可以，没有区别
 
-Such friend declarations have to be declared in the point class, but it is irrelevant whether it is put in the public or private section.
-
-Marking constructors as explicit
-In some cases, you do not want to allow the implicit conversion between one type that is passed as a parameter of the constructor of another type.
-This now means that the only way to call the constructor is using the parentheses syntax: explicitly calling the constructor. 
+显示声明构造函数Marking constructors as explicit，即强制必须使用括号的语法调用构造函数
 
 class mytype
 {
@@ -1384,8 +1385,7 @@ mytype t1 = 10.0; // will not compile, cannot convert
 mytype t2(10.0); // OK
 
 
-Destructing objects
-When an object is destroyed, a special method called the destructor is called. This method has the name of the class prefixed with a ~ symbol and it does not return a value.
+析构函数 destructor
 
 // 1
 void f(mytype t) // copy created
@@ -1397,7 +1397,7 @@ void g()
 {
 	mytype t1;
 	f(t1);
-	if (true)
+	if(true)
 	{
 		mytype t2;
 	} 	// t2 destroyed
@@ -1419,9 +1419,7 @@ void h()
 							// temporary destroyed, tt destroyed
 }
 
-// An object will be destroyed when you explicitly delete a pointer to an object allocated on the free store.
-// In this case, the call to the destructor is deterministic: it is called when your code calls delete
-
+// 2
 mytype *get_object()
 {
 	return new mytype; // default constructor called
@@ -1434,22 +1432,15 @@ void f()
 	delete p; // object destroyed
 }
 
-If a data member in a class is a custom type with a destructor, then when the containing object is destroyed the destructors on the contained objects are called too. Nonetheless, note that this is only if the object is a class member. 
-
-If a class member is a pointer to an object in the free store, then you have to explicitly delete the pointer in the containing object's destructor. However, you need to know where the object the pointer points to is because if it is not in the free store, or if the object is used by other objects, calling delete will cause problems.
-
-
-Assigning objects
-The assignment operator is called when an already created object is assigned to the value of another one. 
-
-The copy assignment operator is typically a public member of the class and it takes a const reference to the object that will be used to provide the values for the assignment.
+如果类的数据成员是实现了destructor自定义数据类型，那么当包含对象被销毁时，包含对象的析构函数也会被调用。不过请注意，这只是在对象是类成员的情况下。
+如果类成员是指向空闲存储空间中对象的指针，则必须在包含对象的析构函数中显式删除该指针。
 
 class buffer
 {
 	// data members
 public:
 	buffer(const buffer&); // copy constructor
-	buffer& operator=(const buffer&); // copy assignment
+	buffer& operator=(const buffer&); // copy assignment operator
 };
 
 buffer a, b, c; // default constructors called
@@ -1458,16 +1449,13 @@ a = b = c; // make them all the same value (more clear)
 a.operator=(b.operator=(c)); // make them all the same value
 
 
-key difference between the copy constructor and copy assignment methods:
-A copy constructor creates a new object that did not exist before the call. The calling code is aware that if the construction fails, then an exception will be raised.
-
-With assignment, both objects already exist, so you are copying the value from one object to another. This should be treated as an atomic action and all the copy should be performed; it is not acceptable for the assignment to fail halfway through, resulting in an object that is a bit of both objects
-
-Furthermore, in construction, an object only exists after the construction is successful, so a copy construction cannot happen on an object itself, but it is perfectly legal (if pointless) for code to assign an object to itself. The copy assignment needs to check for this situation and take appropriate action.
+复制构造函数与复制赋值方法的主要区别：
+复制构造函数创建的新对象在调用前并不存在。如果构造失败，就会引发异常。
+在复制赋值时，两个对象都已存在，因此你是在将值从一个对象复制到另一个对象。这应被视为一个原子操作，所有的复制都应执行
 
 
-Move semantics
-C++11 provides move semantics through a move constructor and a move assignment operator, which are called when a temporary object is used either to create another object or to be assigned to an existing object. In both cases, because the temporary object will not live beyond the statement, the contents of the temporary can be moved to the other object, leaving the temporary object in an invalid state. The compiler will create these functions for you through the default action of moving the data from the temporary to the newly created (or the assigned to) object.
+move constructor and a move assignment operator
+which are called when a temporary object is used either to create another object or to be assigned to an existing object, the contents of the temporary can be moved to the other object, leaving the temporary object in an invalid state.
 
 
 //  use only move and never to use copy
@@ -1487,17 +1475,9 @@ mytype::mytype(mytype&& tmp)
 	tmp.p = nullptr;
 }
 
-Declaring static members
-You can declare a member of a class--a data member or a method--static.
-
-Defining static members
-When you use static on a class member it means that the item is associated with the class and not with a specific instance. 
-In the case, of data members, this means that there is one data item shared by all instances of the class. Likewise, a static method is not attached to an object, it is not __thiscall and has no this pointer.
-
-A static method is part of the namespace of a class, so it can create objects for the class and have access to their private members
-Note that the static function cannot call nonstatic methods on the class because a nonstatic method will need a this pointer, but a nonstatic method can call a static method.
-
-Two ways to call a static method, through an object or through the class name
+类的静态成员
+	静态数据成员（the item is associated with the class and not with a specific instance， there is one data item shared by all instances of the class）
+	静态方法（A static method is part of the namespace of a class，the static function cannot call nonstatic methods on the class because a nonstatic method will need a this pointer, but a nonstatic method can call a static method）
 
 class mytype
 {
@@ -1511,7 +1491,6 @@ c.g(); // call the nonstatic method
 c.f(); // can also call the static method thru an object
 mytype::f(); // call static method without an object
 
-For static data members, need to define static data members outside of the class
 
 class mytype
 {
@@ -1520,22 +1499,16 @@ public:
 	static void incr() { i++; }
 };
 
-// in a source file
 int mytype::i = 42;
-// The data member is defined outside of the class at file scope. It is named using the class name, but note that it also has to be defined using the type.
+// 类的静态成员需要在类的外部进行定义，并且定义时需要带上类型T
 
-You can also declare a variable in a method that is static. In this case, the value is maintained across method calls, in all objects, so it has the same effect as a static class member, but you do not have the issue of defining the variable outside of the class.
+可以在静态方法中声明变量。在这种情况下，变量值会在所有对象中的所有方法调用中保持不变，因此其效果与静态类成员相同，但不会出现在类外定义变量的问题
 
+全局函数中的静态变量将在函数首次调用前的某个时刻创建。同样，作为类成员的静态对象也会在首次访问前的某个时刻被初始化。
+静态对象和全局对象在主函数被调用前创建，并在主函数结束后销毁。
 
-
-Using static and global objects
-A static variable in a global function will be created at some point before the function is first called. Similarly, a static object that is a member of a class will be initialized at some point before it is first accessed.
-
-Static and global objects are constructed before the main function is called, and destroyed after the main function finishes.
-The issue is if you have several source files with static objects in each. There is no guarantee on the order in which these objects will be initialized.
-
-Named constructors
-This is one application for public static methods. The idea is that since the static method is a member of the class it means that it has access to the private members of an instance of the class, so such a method can create an object, perform some additional initialization, and then return the object to the caller. This is a factory method
+命名构造函数
+这是公共静态方法的一种应用。其原理是，由于静态方法是类的成员，这意味着它可以访问类实例的私有成员，因此这种方法可以创建一个对象，执行一些额外的初始化，然后将对象返回给调用者。这是一个工厂方法
 
 class point
 {
@@ -1552,7 +1525,7 @@ const double pi = 3.141529;
 const double root2 = sqrt(2);
 point p11 = point::polar(root2, pi/4);
 
-// polar method could be written (less efficiently) as
+// polar 方法的实现细节如下
 point point::polar(double r, double th)
 {
 	point pt;
@@ -1562,8 +1535,8 @@ point point::polar(double r, double th)
 }
 
 
-Nested classes
-You can define a class within a class. If the nested class is declared as public, then you can create objects in the container class and return them to external code. Typically, however, you will want to declare a class that is used by the class and should be private. 
+嵌套类
+可以在一个类中定义一个类。如果将嵌套类声明为公共类，那么就可以在容器类中创建对象并将其返回给外部代码。不过，通常情况下，你会希望声明一个被类使用的类，并且该类应该是私有的。 
 
 // declares a public nested class
 class outer
@@ -1572,7 +1545,7 @@ class outer
 		class inner
 		{
 			public:
-			void f();
+				void f();
 		};
 		inner g() { return inner(); }
 };
@@ -1582,7 +1555,7 @@ void outer::inner::f()	// Notice how the name of the nested class is prefixed wi
 	// do something
 }
 
-Accessing const objects
+访问常量对象
 
 class point
 {
@@ -1597,23 +1570,16 @@ void print_point(const point& p)
 	cout << "(" << p.get_x() << "," << p.get_y() << ")" << endl;
 }
 
-ERROR: cannot convert 'this' pointer from 'const point' to 'point &'
+// ERROR: cannot convert 'this' pointer from 'const point' to 'point &'
 
 // solution
 double get_x() const { return x; }
 double get_y() const { return y: }
 
-This effectively means that the this pointer is const. The const keyword is part of the function prototype, so the method can be overloaded on this.
+this 指针是常量。const 关键字是函数原型的一部分，因此方法可以在此基础上重载。
+标记为 const 的方法不能改变数据成员，哪怕是暂时改变也不行，这样的方法只能调用 const 方法。
+在极少数情况下，数据成员可能会通过 const 对象进行更改；在这种情况下，成员的声明会标记为 mutable 关键字
 
-A method marked with const must not alter the data members, not even temporarily, such a method can only call const methods. 
-There may be rare cases when a data member is designed to be changed through a const object; in this case the declaration of the member is marked with the mutable keyword.
-
-
-Using objects with pointers
-Objects can be created on the free store and accessed through a typed pointer
-
-
-Getting pointers to object members
 
 class cartesian_vector
 {
@@ -1625,11 +1591,11 @@ public:
 	}
 };
 
-double (cartesian_vector::*fn)() const = nullptr;
-fn = &cartesian_vector::get_magnitude;	// getting a pointer to a method on a class that must be called through an object
+double (cartesian_vector::*fn)() const = nullptr;	// 声明指向method的指针
+fn = &cartesian_vector::get_magnitude;	// 指向类的方法的函数指针必须通过类的对象进行调用
 
 cartesian_vector vec(1.0, 1.0);
-double mag = (vec.*fn)();		// use the pointer to the member operator .* on an object
+double mag = (vec.*fn)();		// 使用对象的成员操作符 .* 进行函数指针的调用
 								// The pointer to the member operator says that the function pointer on the right is called with the object on the left
 
 // syntax for an object pointer
@@ -1638,8 +1604,7 @@ double mag = (pvec->*fn)();
 delete pvec;
 
 
-Operator overloading
-One of behaviors of a type is the operations you can apply to it. C++ allows you to overload the C++ operators as part of a class so that it's clear that the operator is acting upon the type
+运算符重载
 
 // inline in point
 point operator-() const
@@ -1672,10 +1637,8 @@ public:
 	}
 };
 
-
-Defining function classes
-A functor is a class that implements the () operator. This means that you can call an object using the same syntax as a function.
-
+函数类
+函数类是一个实现（）操作符的类。这意味着可以使用与函数相同的语法调用对象
 
 class factor
 {
@@ -1685,14 +1648,11 @@ public:
 	double operator()(double x) const { return f * x; }
 };
 
-factor threeTimes(3); // create the functor object
+factor threeTimes(3); // create the functor object  函数对象不仅提供了一些行为，还可以有一个状态
 double ten = 10.0;
 double d1 = threeTimes(ten); // calls operator(double)
 double d2 = threeTimes(d1); // calls operator(double)
-
-double d2 = threeTimes.operator()(d1);
-
-This code shows that the functor object not only provides some behavior but it also can have a state.
+double d2 = threeTimes.operator()(d1);	// 等价
 
 
 template<typename Fn>
@@ -1701,14 +1661,10 @@ void print_value(double d, Fn& fn)
 	double ret = fn(d);
 	cout << ret << endl;
 }
-
-The C++ Standard Library uses this magic, which means that the algorithms it provides can be called either with a global function or a functor, or a lambda expression.
-
-The Standard Library algorithms use three type of functional classes, generators, and unary and binary functions; that is, functions with zero, one or two parameters.
+Fn 可以是 global function, a functor 或者 a lambda expression.
 
 
-Defining conversion operators
-converting the object into another type
+定义转换操作符，将对象转换为另一种类型
 
 class mytype
 {
@@ -1744,20 +1700,20 @@ vector<double> vals { 100.0, 20.0, 30.0 };
 double avg = for_each(vals.begin(), vals.end(), averager());
 
 
-Managing resources
 Resource Acquisition Is Initialization (RAII):
-Put simply, the resource is allocated in the constructor of an object and freed in the destructor, so it means that the lifetime of the resource is the lifetime of the object. Typically, such wrapper objects are allocated on the stack, and this means that you are guaranteed that the resource will be freed when the object goes out of scope regardless of how this happens.
+资源在对象的构造函数中分配，在析构函数中释放，因此资源的生命周期就是对象的生命周期。通常情况下，这种封装对象是在栈上分配的，这意味着无论对象如何退出作用域，都能保证资源会被释
 
-
+C++中管理资源的方法
 Writing wrapper classes
-There are several issues that you must address when writing a class to wrap a resource ...
-
+	There are several issues that you must address when writing a class to wrap a resource ...
 Using smart pointers
-The C++ Standard Library provides several classes to wrap resources accessed through pointers.
-The Standard Library has three smart pointer classes: unique_ptr, shared_ptr, and weak_ptr. Each handles how the resource is released in a different way, and how or whether you can copy a pointer.
+	https://www.luozhiyun.com/archives/762
+	https://iliubang.cn/posts/cpp/2022-04-20-c++%E4%B8%ADunique_ptr%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/
 
+	The C++ Standard Library provides several classes to wrap resources accessed through pointers.
+	The Standard Library has three smart pointer classes: unique_ptr, shared_ptr, and weak_ptr. Each handles how the resource is released in a different way, and how or whether you can copy a pointer.
 Managing exclusive ownership
-The unique_ptr class is constructed with a pointer to the object it will maintain.
+	The unique_ptr class is constructed with a pointer to the object it will maintain.
 
 // version 1
 void f1()
@@ -1795,7 +1751,7 @@ void f4()
 
 void f5()
 {
-	unique_ptr<int> p = make_unique<int>();
+	unique_ptr<int> p = make_unique<int>();		// C++14
 	*p = 42;
 	cout << *p << endl;
 } // memory is deleted
@@ -1807,25 +1763,21 @@ void f6()
 	cout << p->x << "," << p->y << endl;
 } // memory is deleted
 
-You cannot copy assign unique_ptr smart pointers (the copy assignment operator and copy constructor are deleted), but you can move them by transferring ownership of the resource from the source pointer to the destination pointer.
 
-Sharing ownership
-There are occasions when you will need to share a pointer, You need a mechanism where several objects can hold a pointer that will remain valid until all the objects using that pointer have indicated they will no longer need to use it.
-
-C++11 provides this facility with the shared_ptr class. This class maintains a reference count on the resource, and each copy of the shared_ptr for that resource will increment the reference count.
+Sharing ownership (shared_ptr)
+在某些情况下，您需要共享一个指针，您需要一种机制，让多个对象可以持有一个指针，该指针将一直有效，直到所有使用该指针的对象都表示不再需要使用它为止
 
 shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 
-You can create a shared_ptr object from a unique_ptr object, which means that the pointer is moved to the new object and the reference counting control block created.
+以从一个 unique_ptr 对象创建一个 shared_ptr 对象，这意味着指针会被移动到新对象上，并创建引用计数控制块
 
+处理悬空指针
+需要从一个 shared_ptr 对象创建一个 weak_ptr 对象，当你想访问资源时，再从 weak_ptr 对象创建一个 shared_ptr 对象。这意味着 weak_ptr 对象与 shared_ptr 对象具有相同的原始指针，并可访问相同的控制块，但不参与引用计数。
 
-Handling dangling pointers
-You cannot use a weak_ptr object directly and there is no dereference operator. Instead, you create a weak_ptr object from a shared_ptr object and, when you want to access the resource, you create a shared_ptr object from the weak_ptr object. This means that a weak_ptr object has the same raw pointer, and access to the same control block as the shared_ptr object, but it does not take part in reference counting.
-
-Once created, the weak_ptr object will enable you to test whether the wrapper pointer is to an existing resource or to a resource that has been destroyed
-There are two ways to do this: 
-1.either call the member function expired or attempt to create a shared_ptr from the weak_ptr
-2.create a shared_ptr object from it
+创建 weak_ptr 对象后，您就可以测试封装指针是指向现有资源，还是指向已被销毁的资源。
+有两种方法可以做到这一点： 
+1.要么调用已失效的成员函数，要么尝试从 weak_ptr 创建一个 shared_ptr
+2.从中创建一个 shared_ptr 对象
 
 	shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 	weak_ptr<point> wp(sp1);
@@ -1847,8 +1799,8 @@ There are two ways to do this:
 		// dangling weak pointer
 	}
 
-Templates
-Classes can be templated, which means that you can write generic code and the compiler will generate a class with the types that your code uses
+
+类模板
 
 template <int N, typename T>
 class simple_array
@@ -1909,26 +1861,11 @@ public:
 	operator const char*() const { return data; }
 };
 
-Note that, with a specialization, you do not get any code from the fully templated class; you have to implement all the methods you want to provide, and, as illustrated here, methods that are relevant to the specialization but not available on the fully templated class.
+通过特殊化，你不能从类模板中获得任何代码；你必须实现类模板的所有方法
 
 
-Using classes
 
-
-Object-Orientated Programming
-
-Inheritance and composition
-
-concrete classes
-
-reuse class in a new class:
-1. composition: add an instance of your utility class as a data member of the classes that will use the routine
-2. inheritance: inheritance is when one class extends another class the class being extended is called the base class, parent class, or superclass, and the class doing the extending is called a derived class, child class, or subclass
-
-differences between composition and inheritance:
-1.  in composition, the composed object is used by the class and not exposed directly to the client of the class. With inheritance, an object of the derived class is an object of the base class, so usually the client code will see the base class functionality, the derived class can override the base class methods and provide its own version
-
-Inheriting from a class
+composition and inheritance （组合和继承）
 
 class os_file
 {
@@ -1949,14 +1886,13 @@ public:
 	// other methods
 };
 
-The encapsulation principle is important in C++. Although an object of child class contains the base class data members, they should only be changed by the base class methods.
+尽管子类对象包含基类数据成员，但它们只能由基类方法进行更改
 
-When a derived object is created, the base object must be created first (with an appropriate constructor), similarly, when a derived object is destroyed, the derived part of the object is destroyed first (through the destructor of the derived class) before the base class destructor is called
+创建派生对象时，必须先创建基对象（使用适当的构造函数），同样，销毁派生对象时，也必须先销毁对象的派生部分（通过派生类的析构函数），然后再调用基类的析构函数
 
-If you do not explicitly call a base class constructor, then the compiler will call the default constructor of the base class as the first action of the derived class constructor. If the member list initializes data members, these will be initialized after any base class constructor is called.
+如果没有明确调用基类构造函数，那么编译器将调用基类的默认构造函数作为派生类构造函数的第一个动作。如果成员列表初始化了数据成员，那么这些成员将在基类构造函数被调用后被初始化。
 
-Overriding methods and hiding names
-The derived class inherits the functionality of the base class (subject to the access level of the methods), so a base class method can be called through an object of the derived class.
+派生类继承了基类的功能（取决于方法的访问级别），因此基类方法可以通过派生类对象调用。
 
 struct base
 {
@@ -1984,10 +1920,7 @@ derived *p = &d; // get an object pointer
 p->base::f(); // call base class method
 delete p;
 
-
-Using pointers and references
-
-A pointer (or a reference) to an instance of a derived class can be implicitly converted to a pointer (or a reference) to a base class object.
+指向派生类实例的指针（或引用）可以隐式转换为指向基类对象的指针（或引用）
 
 // cast base class pointer to a derived class pointer
 // bad code
@@ -2004,12 +1937,11 @@ void f()
 	print_y(&d); // implicit cast to base*
 }
 
-Access levels
+访问级别 https://csguide.cn/cpp/object_oriented/member_accessibility.html
+public
+private
+protected
 
-Members declared in the public section can be accessed by code in the class and by code outside the class either on an object or if the member is static, using the class name.
-Members declared in the private section can only be accessed by other members in the same class
-A derived class can access the private members of the base class but not the private members
-Members declared in the protected section can be accessed by methods in the same class or by methods in any derived class and by friends, but not by external code
 
 class base
 {
@@ -2029,7 +1961,7 @@ derived d;
 d.f(); // OK
 d.test(); // won't compile
 
-If you are writing a base class that you intend only ever to be used as a base class (client code should not create instances of it), then it makes sense to make the destructor protected
+如果您编写的基类只能作为基类使用（客户端代码不应创建它的实例），那么将析构函数设置为 protected
 
 class base
 {
@@ -2040,8 +1972,7 @@ public:
 };
 
 
-Changing access level through inheritance
-When you override a method in the derived class, the access to the method is defined by the derived class. SO the access can be changed by the derived class
+覆盖派生类中的方法时，方法的访问权限由派生类定义。因此，派生类可以更改访问权限
 
 class base
 {
@@ -2106,26 +2037,15 @@ public:
 	}
 };
 
-Inheritance access levels
-If a base class has private members, and a class inherits using public inheritance: 
-the derived class still cannot access the private members; it only has access to public and protected members and objects of the derived class can only access the public members, and a class deriving from this class will only have access to the public and protected members.
-
-If a derived class derives through the protected inheritance: 
-it still has the same access to the base class as public and protected members, but the base class public and protected members will now be treated as protected through the derived class, so they can be accessed by a further derived class but are not accessible through an instance. 
-
-If a class derives through private inheritance:
- all base class members become private in the derived class; so, although the derived class can access public and protected members, classes that derive from it cannot access any of the base class members.
+public inheritance （通常大部分继承都是 public 继承）: 
+	派生类不能访问基类的 private 成员，它只能访问 public 和 private 成员，派生类的对象只能访问基类的 public 成员，并且继承自该派生类的类也只能访问 public 和 private 成员
+protected inheritance:
+	派生类可以访问基类的 public 和 private 成员，但是基类的 public 和 private 成员在派生类中的属性变为 protected ，继承自该派生类的类不能访问基类的任何成员
+private inheritance:
+	所有基类的成员在派生类中的属性变为 private，因此尽管派生类可以访问基类的 public 和 private 成员，但是继承自该派生类的类不能访问基类的任何成员
 
 
-One way of looking at protected inheritance is if the derived class had a using statement for each of the public members of the base class in the protected part of the class.
-Similarly, private inheritance is as if you have deleted each of the public and protected methods of the base class.
-
-most inheritance will be through public inheritance
-private inheritance has a use when you want to access some functionality from a base class but do not want its functionality to be available to classes that derive from your class
-
-
-Multiple inheritance
-C++ allows you to inherit from more than one base class. This is a powerful facility when used with interfaces
+多重继承
 
 class base1 { public: void a(); };
 class base2 { public: void b(); };
@@ -2135,30 +2055,18 @@ public:
 	// gets a and b
 };
 
-It is important when you consider multiple inheritances that you carefully review that you need the services via inheritance or whether composition is more appropriate. If a class provides a member that you do not want to be used by instances and you decide that you need to delete it, it is a good sign that you should consider composition.
+多重继承通常很少遇到，如果遇到的时候考虑是否 组合 更合适
+
+如果将派生类对象转换为基类对象，则会创建一个新对象，该对象就是基类对象，只是基类对象而已。
+
+通过引用传递对象几乎总是更好的方法
 
 
-Object slicing
-
-if you cast a derived class object to a base class object, you create a new object, and that object is the base class object, just the base class object.
-
-It is almost always a better idea to pass objects by reference
+多态polymorphism
+多态性是指通过指针（或引用），一个类的实例可以被视为其继承层次结构中任何一个类的实例
 
 
-Introducing polymorphism
-
-Polymorphism comes from the Greek for many shapes
-
-A derived class pointer can be implicitly converted to a base class pointer, so a base* pointer can point to an instance of base, derived1, derived2, or derived3
-
-The polymorphic aspect is that through pointers (or references), an instance of a class can be treated as an instance of any of the classes in its inheritance hierarchy.
-
-
-Virtual methods
-A base class pointer or reference giving access to just the base class functionality, and makes sense, but it is restrictive
-
-The behavior of calling the derived method through a base class pointer is known as method dispatching. This method dispatching is not applied by default because it involves a little extra cost both in memory and performance.
-
+虚方法virtual method 是实现多态的基础
 Methods that can take part in method dispatching are marked with the keyword virtual in the base class, and hence are usually called virtual methods. When you call such a method through a base class pointer, the compiler ensures that the method on the actual object's class is called. Since every method has a this pointer as a hidden parameter, the method dispatching mechanism must ensure that the this pointer is appropriate when the method is called. 
 
 
@@ -2189,44 +2097,34 @@ void who_is_it(base& p)
     p.who();
 }
 
-
 derived1 d1;
-who_is_it(d1);
 derived2 d2;
-who_is_it(d2);
 derived3 d3;
+who_is_it(d1);
+who_is_it(d2);
 who_is_it(d3);
 cout << endl;
 
-
-It is important to point out that the method dispatching is applied only to the methods that virtual has been applied to in the base class
-Any other methods in the base class not marked with virtual will be called without method dispatching. 
-A derived class will inherit a virtual method and get the method dispatching automatically, it does not have to use the virtual keyword on any methods it overrides, but it is a useful visual indication as to how the method can be called
-
-For a virtual method to be called using method dispatching, the derived class method must match the same signature as the base class' virtual method in terms of the name, parameters, and return type.
-The one exception is if two methods differ by return types that are covariant, that is, one type can be converted to the other.
+method dispatching 只适用于基类中标记为 virtual 的方法
+派生类会默认继承基类的 virtual 方法，因此自动获得了 method dispatching 的能力
+对于 method dispatching， 派生类中的方法签名必须和基类的 virtual 方的完全一致，唯一的例外是方法的返回值的类型可以相互转换
 
 
-Virtual method tables
-When the compiler sees a virtual method on a class, it will create a method pointer table, called the vtable, and put a pointer to each of the virtual methods in the class in the table. There will be a single copy of the vtable for the class. The compiler will also add a pointer to this table, called the vptr, in every instance of the class.
+虚方法表Virtual method table
 
 ![vptr and vtable illustration for base and derived class](image-24.png)
 
 ![vptr and vtable illustration for base and derived class 2](image-25.png)
 
 
-Multiple inheritance and virtual method tables
+多重继承的虚方法表
 
 ![vptr and vtable illustration for base and derived class 3](image-26.png)
 
 
-Virtual methods, construction, and destruction
-You should not call a virtual method in a constructor or a destructor, if you do, the call will resolve to the base class version of the method
+通常不应该在派生类构造函数或析构函数中调用虚方法，如果这样做的话调用的将是该方法的基类版本。
+一般来说，基类的析构函数应该是受保护的非虚拟方法，或者是公共的虚拟方法
 
-In general, a base class destructor should be either protected and non-virtual, or public and virtual.
-
-
-Containers and virtual methods
 
 // not work
 derived1 d1;
@@ -2237,12 +2135,12 @@ for (auto b : vec) b.who();
 cout << endl;
 
 // work version
-vector<reference_wrapper<base> > vec = { d1, d2, d3 };
+vector<reference_wrapper<base>> vec = { d1, d2, d3 };
 for (auto b : vec) b.get().who();						// the get method will return a reference to the wrapped object
 cout << endl;
 
-Friends and inheritance
-In C++, friendship is not inherited. If a class makes another class (or function) a friend, it means that the friend has access to its private and protected members as if the friend is a member of the class. If you derive from the friend class, the new class is not a friend of the first class, and it has no access to the members of that first class.
+friend 是不可继承的，如果在一个 class 中声明其他类或者函数为 friend，那么 friend 就可以访问该 class 中的 private 和 protected 成员，就像该 friend 是该 class 的成员一样
+如果派生类继承自友元类，那么派生类不是 first class 的友元，派生类不能访问 first class 的成员
 
 class base
 {
@@ -2256,7 +2154,7 @@ public:
 	}
 };
 
-the friend function cannot be called as a virtual method, but it can call virtual methods and get the method dispatching
+友元函数不能作为 虚函数 进行调用，但是他可以调用虚函数从而获取 method dispatching 的能力
 
 class base
 {
@@ -2283,10 +2181,7 @@ protected:
 	}
 };
 
-
-Override and final
-
-When the compiler sees the override specifier, it knows that you intend to override a virtual method inherited from a base class and it will search the inheritance chain to find a suitable method. If no such method can be found, then the compiler will issue an error
+override 用来在派生类中覆写继承链上匹配的基类的 virtual 方法
 
 struct base
 {
@@ -2299,47 +2194,44 @@ struct derived: base
 	virtual int f(short i) override;
 };
 
-The override specifier gets the compiler to perform some useful checks, so it is a good habit to use it on all derived overridden methods
+override specifier 会让编译器执行一些有用的 check，因此对于在派生类覆写的方法最好都加上 override
 
-C++11 also provides a specifier called final, which you can apply to a method to indicate that a derived class cannot override it, or you can apply it to a class to indicate that you cannot derive from it
+final 用来标识在派生类中的不能覆写基类的方法，在基类中使用时标识该类不能被继承
 
 class complete final { /* code */ };
 class extend: public complete{}; // won't compile
 
 
-Virtual inheritance
+虚继承Virtual inheritance
 
-diamond problem with multiple inheritance:
-
+多重继承可能会导致的菱形问题：
 	struct base { int x = 0; };
 	struct derived1 : base { /*members*/ };
 	struct derived2 : base { /*members*/ };
 	struct most_derived : derived1, derived2 { /*members*/ };
-	// most_derived object will have two copies of the data member x
+    d.derived1::x = 1;
+    d.derived2::x = 2;
+    cout << d.derived1::x << endl;		// 1
+    cout << d.derived2::x << endl;		// 2
 
-virtual inheritance:
-
+虚继承:
 	struct derived1 : virtual base { /*members*/ };
 	struct derived2 : virtual base { /*members*/ };
 
-	Without virtual inheritance, derived classes just call the constructors of their immediate parent.
-	When you use virtual inheritance, the most_derived class has the responsibility to call the constructor of the topmost parent class and if you do not explicitly call the base class constructor, the compiler will automatically call the default constructor
+	如果没有虚继承，派生类只会调用其直接父类的构造函数。
+	使用虚继承时，派生类有责任调用最上层父类的构造函数，如果没有明确调用基类的构造函数，编译器将自动调用默认构造函数
 
 	derived1::derived1() : base(){}
 	derived2::derived2() : base(){}
 	most_derived::most_derived() : derived1(), derived2(), base(){}
 
-
-Abstract classes
-A class with virtual methods is still a concrete class--you can create instances of the class.
-You need a mechanism to force a derived class to provide an implementation of those virtual methods.
-
-C++ provides a mechanism called pure virtual methods that indicates that the method should be overridden by a derived class. 
+抽象类 abstract class
+具有虚方法的类仍然是一个具体类，即你可以创建该类的实例。
+为了提供一种机制强制派生类提供这些虚方法的实现，C++ 提供了一种称为纯虚方法（pure virtual method）的机制，表示该方法应被派生类重写。
 
 struct abstract_base
 {
-	// the = 0 syntax indicates that the method body is not provided by the abstract class
-	virtual void f() = 0;
+	virtual void f() = 0;	// the = 0 syntax indicates that the method body is not provided by the abstract class
 	void g()
 	{
 		cout << "do something" << endl;
@@ -2361,9 +2253,8 @@ void call_it2(abstract_base& r)
 	r.f();
 }
 
-By declaring a pure virtual function, you make the class abstract, which means that you cannot create instances. You can, however, create pointers or references to the class and call code on them
-
-The only way to use an abstract class is to derive from it and implement the pure virtual functions:
+通过声明 pure virtual function 把该类成为 abstract class ，意味着不能创建该类的实例，但是可以创建该类的指针或者引用并对其进行代码调用
+使用抽象类的唯一方法就是继承该抽象类并且实现纯虚函数
 
 struct derived1 : abstract_base
 {
@@ -2381,25 +2272,20 @@ derived2 d2;
 call_it(d2);
 
 
-// the abstract base class can also provide a body for the method
+// 在抽象类中可以提供方法的函数体
 struct abstract_base
 {
 	virtual int h() = 0 { return 42; }
 };
 
-// this class cannot be instantiated, you must derive from it and you must implement the method to be able to instantiate an object
 struct derived : abstract_base
 {
-	virtual int h() override { return abstract_base::h() * 10; }
+	virtual int h() override { return abstract_base::h() * 10; }	// 派生类可以调用抽象类的 纯虚函数
 };
 
-The derived class can call the pure virtual function defined in the abstract class, but when external code calls such a method, it will always result (through method dispatching) in a call to the implementation of the virtual method on the derived class
 
 
-Obtaining type information
-C++ provides type information, that is, you can get information that is unique to that type and, which identifies it.
-
-Runtime Type Information (RTTI): obtain type information at runtime
+Runtime Type Information (RTTI) 用于在运行时获取对象的类型信息
 
 string str = "hello";
 const type_info& ti = typeid(str);
@@ -2430,7 +2316,7 @@ void call_me(base *bp)
 	if (dp != nullptr) dp->f();
 }
 
-The dynamic_cast operator can be used for casts other than downcasts
+dynamic_cast and static_cast in C++ (https://stackoverflow.com/questions/2253168/dynamic-cast-and-static-cast-in-c)
 
 
 //
@@ -2444,18 +2330,13 @@ void call_me(base1 *b1)
 	if (b2 != nullptr) b2->g();
 }
 
+智能指针和虚方法
+如果要使用动态创建的对象，可以使用智能指针来管理它们的生命周期。好消息是，虚方法的分派可以通过智能指针进行（它们只是对象指针的包装），坏消息是，使用智能指针时，类的关系会丢失。
 
-Smart pointers and virtual methods
-If you want to use dynamically created objects, you will want to use smart pointers to manage their lifetime. The good news is that virtual method dispatching works through smart pointers (they are simply wrappers around object pointers), and the bad news is that the class relationships are lost when you use smart pointers.
 
+interface
+interface 是一个只包含纯虚函数的类，它的目的是为了约定行为，继承自 interface 的派生类必须实现 interface 约定的所有方法
 
-Interfaces
-Pure virtual functions and virtual method dispatching leads to an incredibly powerful way of writing object-orientated code, which is called interfaces. 
-An interface is a class that has no functionality; it only has pure virtual functions. 
-The purpose of an interface is to define a behavior. 
-A concrete class that derives from an interface must provide an implementation of all of the methods on the interface, and hence this makes the interface a kind of contract.
-
-// the define makes it more obvious that we are defining abstract classes as interfaces
 #define interface struct
 interface IPrint
 {
@@ -2526,11 +2407,10 @@ if (printer != nullptr)
 	print_doc(printer, doc);
 }
 
+interface 相对于 class 的优势是，class的实现可能会发生变化，但是只要它实现了接口固定的方法， 使用该类的客户端就不需要做改动
 
-The advantage of using interfaces because the class implementation can change completely, but as long as it continues to implement the interfaces that the client code uses, users of the class can continue to use the class (although a recompile will be needed)
 
-
-interface inheritance: derive from the interface that needs changing and create a new interface
+接口继承interface inheritance
 
 	interface IPrint2 : IPrint
 	{
@@ -2546,29 +2426,17 @@ interface inheritance: derive from the interface that needs changing and create 
 		// other methods
 	}
 
+类 使用过程中的3需要注意的问题：
+	Rigidity: 改变一个类的实现是很难的，因为任何改变都可能影响其他的类
+	Fragility: 当改变类的实现时，可能会引起其他类的意想不到改变
+	Immobility: 由于类的实现依赖于其他类，因此类的复用变得很难
 
-Class relationships
-
-inheritance offers some benefits, but it should not be treated as the best or only solution
-
-At the highest level, you should be aware of three main issues to avoid:
-	Rigidity: It is too hard to change a class because any change will affect too many other classes.
-	Fragility: When you change your class, it could cause unexpected changes in other classes.
-	Immobility: It is hard to reuse the class because it is too dependent on other classes
-
-In general, you should design your classes to avoid tight coupling between classes and interface programming is an excellent way to do this because an interface is simply a behavior and not an instance of a specific class.
-Another principle is that in general you should design your classes to be extendable. A more lightweight form of refining an algorithm is to pass a method pointer (or a functor), or an interface pointer to the method of a class for that method to call at an appropriate time to refine how it works. (For example, most sort algorithms require that you pass a method pointer to perform comparisons of two objects of the type that it is sorting.)
-
+一般来说，在设计类时应避免类与类之间的紧密耦合，而接口编程正是实现这一点的绝佳方法，因为接口只是一种行为，而不是特定类的实例。
+另一个原则是，一般来说，设计的类应具有可扩展性。refining an algorithm 的一种更轻量级的形式是将方法指针（或函数）或接口指针传递给类的方法，让该方法在适当的时候调用，以refining an algorithm的工作方式。(例如，大多数排序算法都要求传递一个方法指针，以便对排序类型的两个对象进行比较）
 
 
 Using mixin classes
-The mixin technique allows you to provide extensibility to classes without the lifetime issues of composition or the heavyweight aspect of raw inheritance.
-
-Instead of the developer deriving from a base class provided by the library and extending the functionality provided, the mixin class provided by the library is derived from a class provided by the developer.
-
-
-C++ allows you to provide a type through a template parameter so that the class is instantiated using this type at compile time. With mixin classes, the type passed through a template parameter is the name of a type that will be used as the base class. The developer simply provides a class with the specific methods and then creates a specialization of the mixin class using their class as the template parameter
-
+What are Mixins (as a concept): https://stackoverflow.com/questions/18773367/what-are-mixins-as-a-concept
 
 // Library code
 template <typename BASE>
@@ -2603,11 +2471,7 @@ impl do something
 mixin something else
 
 
-Using the Standard Library Containers
-
-Working with pairs and tuples
-
-associate two items together
+标准库下的 container
 
 template <typename T1, typename T2>
 struct pair
@@ -2633,13 +2497,13 @@ In C++11 you can use the ref function (in <functional>) to specify that the pair
 	auto p2 = make_pair(ref(i1), ref(i2));
 	++p2.first; // changes i1
 
-The pair class allows you to return two values in one object.
+pair 类提供了一种返回包含两个值的对象 (https://en.cppreference.com/w/cpp/utility/pair)
 
 
 auto p = minmax(20,10);
 cout << "{" << p.first << "," << p.second << "}" << endl;
 
-The Standard Library provides the tuple class that you can have any number of parameters of any type. 
+tuple 类提供了一种返回包含多个值的对象 (https://en.cppreference.com/w/cpp/utility/tuple)
 
 tuple<int, int, int> t3 { 1,2,3 };
 cout << "{"
@@ -2661,9 +2525,7 @@ tuple<int&, int&, int&> tr3 = tie(i1, i2, i3);
 tr3 = t3;
 
 
-Containers
-The Standard Library containers allow you to group together zero or more items of the same type and access them serially through iterators. Every such object has a begin method that returns an iterator object to the first item and an end function that returns an iterator object for the item after the last item in the container. 
-
+容器 container
 
 // 1
 vector<int> primes{1, 3, 5, 7, 11, 13};
