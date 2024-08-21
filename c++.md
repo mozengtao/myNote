@@ -1,5 +1,8 @@
 [**Modernes C++**](https://www.modernescpp.com/index.php/table-of-content/)
 
+[**algorithm**](https://cplusplus.com/reference/algorithm/)
+[**string**](https://cplusplus.com/reference/string/string/)
+
 [编程指北](https://csguide.cn/cpp)
 
 [**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
@@ -2037,6 +2040,8 @@ public:
 	}
 };
 
+https://learn.microsoft.com/zh-cn/cpp/cpp/member-access-control-cpp?view=msvc-170
+
 public inheritance （通常大部分继承都是 public 继承）: 
 	派生类不能访问基类的 private 成员，它只能访问 public 和 private 成员，派生类的对象只能访问基类的 public 成员，并且继承自该派生类的类也只能访问 public 和 private 成员
 protected inheritance:
@@ -2548,11 +2553,10 @@ template<typename container> void print(container& items)
 }
 
 
-Sequence containers
-Sequence containers store a series of items and the order that they are stored in, and, when you access them with an iterator, the items are retrieved in the order in which they were put into the container. After creating a container, you can change the sort order with library functions.
+sequence container 
 
-List
-As the name suggests, a list object is implemented by a doubly linked list in which each item has a link to the next item and the previous one.
+list
+底层实现是双向链表
 
 list<int> primes{ 3,5,7 };
 primes.push_back(11);
@@ -2606,8 +2610,8 @@ num1.merge(num2); // {1,1,2,2,3,4,5,6,7,8,8,8}
 num1.unique(); // {1,2,3,4,5,6,7,8}
 
 
-Forward list
-The forward_list class is like the list class, but it only allows items to insert and remove items from the front of the list
+forward list
+forward_list 类似 list, 但是只允许向 list的前端插入和删除元素
 
 forward_list<int> euler { 2,7,1,8,2,8 };
 euler.push_front(-1); 		// { -1,2,7,1,8,2,8 }
@@ -2618,8 +2622,8 @@ euler.remove_if([](int i){return i < 0;});
 							// { 2,7,1,8,2,8 }
 
 
-Vector
-The vector class has the behavior of a dynamic array; that is, there is indexed random access to items and the container will grow as more items are inserted into it. You can create a vector object with an initialization list, and with a specified number of copies of an item.
+vector
+vector 的行为类似于 动态数组
 
 vector<int> distrib(10); // ten intervals
 for (int count = 0; count < 1000; ++count)
@@ -2630,15 +2634,13 @@ for (int count = 0; count < 1000; ++count)
 for (int i : distrib) cout << i << endl;
 
 
-Deque
-The name deque means double-ended queue, which means that it can grow from both ends, and, although you can insert items in the middle, it is more expensive. As a queue, it means that the items are ordered, but, because the items can be put into the queue from either end, the order is not necessarily the same order in which you put items into the container.
+deque (double-ended queue)
+deque grows from both ends, 尽管可以从中间向 deque 插入元素但是效率不高，并且由于可以从两端向deque插入元素，因此元素的顺序和插入的顺序不一致
 
 
-Associative containers
-An associative container allows you to provide indexes that are not numeric; these are the keys, and you can associate values with them. As you insert key-value pairs into the container, they will be ordered so that the container can subsequently efficiently access the value by its key.
+关联容器associative container
 
-Maps and multimaps
-A map container stores two different items, a key and a value, and it maintains the items in an sort order according to the key. A sorted map means that it is quick to locate an item.
+map and multimap
 
 map<string, int> people;
 people.emplace("Washington", 1789);
@@ -2650,28 +2652,22 @@ auto it = people.begin();
 pair<string, int> first_item = *it;
 cout << first_item.first << " " << first_item.second << endl;
 
-Once you have filled the map you can search for a value using the following:
-	The at method, which is passed a key and returns a reference to the value for that key
-	The [] operator, which when passed a key returns a reference to the value for that key
-	The find function, which will use the predicate specified in the template (unlike the global find function, mentioned later) and it will give you an iterator to the entire item as a pair object
-	The begin method will give you an iterator to the first item and the end method will give you an iterator after the last item
-	The lower_bound method returns an iterator to the item that has a key equal to or greater than the key that you pass as a parameter
-	The upper_bound method returns an iterator of the first item in the map that has a key greater than the key provided
-	The equal_range method returns both the lower and upper bounds values in a pair object
+map 元素的查找：
+	at method
+	[] operator
+	find function
+	begin method and end method
+	lower_bound method
+	upper_bound method
+	equal_range method
 
-Sets and multisets
-Sets behave as if they are maps, but the key is the same as the value;
+set and multiset
 
 set<string> people{
 	"Washington","Adams", "Jefferson","Madison","Monroe",
 	"Adams", "Van Buren","Harrison","Tyler","Polk"};
 for (string s : people) cout << s << endl;
 
-
-Unordered containers
-
-
-Special purpose containers
 
 queue<int> primes;
 primes.push(1);
@@ -2710,11 +2706,10 @@ while (to_do.size() > 0)
 }
 
 
-Using iterators
+迭代器iterators
+迭代器的行为类似于函数指针，迭代器通常是 iterator class 的对象
 
-iterators behave like pointers, they are usually objects of iterator classes
-
-All iterators have the following behaviors:
+所有迭代器都具有如下行为:
 Operator 						Behaviors
 * 								Gives access to the element at the current position
 ++ 								Moves forward to the next element (usually you will use the prefix operator)(this is only if the iterator allows forward movement)
@@ -2723,12 +2718,13 @@ Operator 						Behaviors
 = 								Assigns an iterator
 
 
-nput and output iterators
-As the name suggests, an input iterator will only move forward and will have read access, and an output iterator will only move forward but will have write access. 
+input and output iterator
+input iterator 只能向前移动并且只有 read 权限
+output iterator 只能向后移动并且只有 write 权限
 
 
-Stream iterators
-These are adapter classes in <iterators> that can be used to read items from an input stream or write items to an output stream.
+stream iterator
+流迭代器用于从输入流读取数据或者向输出流写入数据
 
 vector<int> data { 1,2,3,4,5 };
 ostream_iterator<int> my_out(cout, " ");
@@ -2736,14 +2732,10 @@ copy(data.cbegin(), data.cend(), my_out);
 cout << endl;
 
 
-Using iterators with the C Standard Library
+algorithm
+C++标准库提供了一系列通用的算法，这些算法可以通过迭代器访问container里面的元素而不必知道具体迭代器的实现
 
-
-Algorithms
-The Standard Library has an extensive collection of generic functions in the <algorithm> header file. By generic we mean that they access data via iterators without knowing what the iterators refer to and so it means that you can write generic code to work for any appropriate container. However, if you know the container type and that container has a member method to perform the same action, you should use the member.
-
-
-Iteration of items
+迭代容器中的元素
 //
 vector<int> vec;
 vec.resize(5);
@@ -2779,14 +2771,10 @@ transform(vec1.begin(), vec1.end(), vec2.begin(),
 	back_inserter(results), [](int i, int j) { return i*j; });
 
 
-Getting information
-
 vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
-auto number = count(planck.begin(), planck.end(), 6);
+auto number = count(planck.begin(), planck.end(), 6);	// 返回指定范围内和数值相等的元素个数
 
-
-Comparing containers
-
+容器的比较操作
 vector<int> v1 { 1,2,3,4 };
 vector<int> v2 { 1,2 };
 vector<int> v3 { 5,6,7 };
@@ -2795,17 +2783,15 @@ cout << (v1 > v2) << endl; // true
 cout << (v1 > v3) << endl; // false
 
 
-Changing Items
-
 vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
 vector<int> result(4); // we want 4 items
 auto it1 = planck.begin(); // get the first position
 it1 += 2; // move forward 2 places
 auto it2 = it1 + 4; // move 4 items
-move(it1, it2, result.begin()); // {2,6,0,7}
+move(it1, it2, result.begin()); // {2,6,0,7} 把指定范围内的元素移动到从指定位置开始的位置
 
 
-ector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
+vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
 vector<int> result;
 remove_copy(planck.begin(), planck.end(),
 	back_inserter(result), 6);
@@ -2817,8 +2803,7 @@ unique_copy(planck.begin(), planck.end(), back_inserter(temp));
 planck.assign(temp.begin(), temp.end());
 
 
-Finding Items
-
+元素查找
 vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
 auto imin = min_element(planck.begin(), planck.end());
 auto imax = max_element(planck.begin(), planck.end());
@@ -2839,8 +2824,7 @@ do
 } while (it != vec.end());
 
 
-Sorting items
-
+元素排序
 vector<int> vec{45,23,67,6,29,44,90,3,64,18};
 auto middle = vec.begin() + 5;
 partial_sort(vec.begin(), middle, vec.end());
@@ -2852,9 +2836,7 @@ for_each(middle, vec.end(), [](int i) {cout << i << " "; });
 cout << endl; // 67 90 45 64 44
 
 
-Using the numeric libraries
-The Standard Library has several libraries of classes to perform numeric manipulations.
-
+数学库函数
 double radius_nm = 10.0;
 double volume_nm = pow(radius_nm, 3) * 3.1415 * 4.0 / 3.0;
 cout << "for " << radius_nm << "nm "
@@ -2889,8 +2871,7 @@ dist_units<ratio<1609344, 1000>> in_miles(earth_diameter_km);
 cout << in_miles.value()<< "miles" << endl;
 
 
-Complex numbers
-
+复数
 complex<double> a(1.0, 1.0);
 complex<double> b(-0.5, 0.5);
 complex<double> c = a + b;
@@ -2899,22 +2880,13 @@ complex<double> d = polar(1.41421, -3.14152 / 4);
 cout << d << endl;
 
 
-Using Strings
-
-Using the string class as a container
+字符串 string
 
 string s = "hellon";
 copy(s.begin(), s.end(), ostream_iterator<char>(cout));
 
 vector<char> v(s.begin(), s.end());
 copy(v.begin(), v.end(), ostream_iterator<char>(cout));
-
-
-Getting information about a string
-
-Altering strings
-
-Searching strings
 
 // 
 string str = "012the678the234the890";
@@ -2970,13 +2942,9 @@ string str2 = str.substr(0, str.find_last_not_of(" trn") + 1);
 cout << "|" << str2 << "|n"; // | hello|
 
 
-Internationalization
+国际化 internationalization
 
-Using facets Internationalization rules are known as facets. A locale object is a container of facets, and you can test if the locale has a specific facet using the has_facet function; if it does, you can get a const reference to the facet by calling the use_facet function.
-
-
-Converting strings to numbers
-
+字符串转换为数字
 string str = "49.5 red balloons";
 size_t idx = 0;
 double d = stod(str, &idx);
@@ -2985,7 +2953,7 @@ string rest = str.substr(idx);
 cout << d << rest << "n"; // 99 red balloons
 
 
-Converting numbers to strings
+数字转换为字符串
 
 Using stream classes
 
@@ -2997,8 +2965,7 @@ Converting numbers to strings using streams
 
 Reading numbers from strings using streams
 
-Using regular expressions
-
+正则表达式
 regex rx("[at]"); // search for either a or t
 cout << boolalpha;
 cout << regex_match("a", rx) << "n"; // true
@@ -3057,33 +3024,20 @@ cout << "n";
 // 4 cat, 8 sat, 19 mat, 30 bathroom
 
 
-Replacing strings
-
 string str = "use the list<int> class in the example";
 regex rx("b(list)(<w*> )");
 string result = regex_replace(str, rx, "vector$2");
 cout << result << "n"; // use the vector<int> class in the example
 
-
-Diagnostics and Debugging
-
-Using pragmas
-Pragmas are compiler-specific and often are concerned with the technical details about the code sections in the object files.
-
-
-
-// How to easily make std::cout thread-safe
+// 如何让 cout 的输出是线程安全的（即在多线程的情况下保证输出完整性）How to easily make std::cout thread-safe
 //There are other ways, but stringstream uses << just like cout.. 
 	std::stringstream msg;
 	msg << "Error:" << Err_num << ", " << ErrorString( Err_num ) << "\n"; 
 	std::cout << msg.str();
 
-
-
-
 ```
 
-[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#main)
+[**C++ Core Guidelines**](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#main)
 
 [cppbestpractices](https://github.com/cpp-best-practices/cppbestpractices/tree/master)
 
