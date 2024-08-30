@@ -5086,4 +5086,97 @@ Adapters that provide alternative access sequential & associative containers
 // Multi-thread
 // thread (https://cplusplus.com/reference/thread/thread/)
 
+    // 原始字面量
+    cout << "D:\hello\world\test.text" << endl;
+    cout << R"(D:\hello\world\test.text)" << endl;
+    cout << R"xyz(D:\hello\world\test.text)xyz" << endl;
+
+	// nullptr
+	#ifndef NULL
+		#ifdef __cplusplus
+			#define NULL 0				// 源码是C++程序NULL就是0
+		#else
+			#define NULL ((void *)0)	// C程序NULL表示(void*)0
+		#endif
+	#endif
+
+	void func(char *p)
+	{
+		cout << "void func(char *p)" << endl;
+	}
+
+	void func(int p)
+	{
+		cout << "void func(int p)" << endl;
+	}
+
+	func(NULL);		// 想要调用重载函数 void func(char *p)，实际调用的是函数void func(int p)
+	func(nullptr);	// 调用重载函数 void func(char *p)
+	// nullptr 无法隐式转换为整形，但是可以隐式匹配指针类型。在 C++11 标准下，相比 NULL 和 0，使用 nullptr 初始化空指针可以令我们编写的程序更加健壮
+
+
+	// constexpr
+	void func(const int num)
+	{
+		const int count = 24;
+		int array[num];            // error，num是一个只读变量，不是常量，即变量只读并不等价于常量
+		int array1[count];         // ok，count是一个常量
+	}
+	constexpr 关键字是用来修饰常量表达式的。所谓常量表达式，指的就是由多个常量（值不会改变）组成并且在编译过程中就得到计算结果的表达式，即常量表达式的计算发生在程序的编译阶段，这可以极大提高程序的执行效率
+
+	使用中建议将 const 和 constexpr 的功能区分开，即凡是表达“只读”语义的场景都使用 const，表达“常量”语义的场景都使用 constexpr
+
+	定义常量时，const 和 constexpr 是等价的，都可以在程序的编译阶段计算出结果
+	const int m = f();  // 不是常量表达式，m的值只有在运行时才会获取。
+	const int i=520;    // 是一个常量表达式
+	const int j=i+1;    // 是一个常量表达式
+
+	constexpr int i=520;    // 是一个常量表达式
+	constexpr int j=i+1;    // 是一个常量表达式
+
+	对于 C++ 内置类型的数据，可以用 constexpr 修饰，如果是自定义的数据类型（用 struct或者class 实现），用 constexpr 修饰是不行的
+
+	// 常量表达式函数 (函数主要包括以下几种：普通函数/类成员函数、类的构造函数、模板函数)
+	// 普通函数/类的成员函数
+	1.函数必须要有返回值，并且return 返回的表达式必须是常量表达式
+	2.函数在使用之前，必须有对应的定义语句，即使用前常量表达式函数的定义必须存在
+	3.函数体中，不能出现非常量表达式之外的语句（using 指令、typedef 语句以及 static_assert 断言、return语句除外）
+
+	class Test
+	{
+	public:
+		constexpr int func()
+		{
+			constexpr int var = 100;
+			return 5 * var;
+		}
+	};
+
+	constexpr int num = t.func();
+
+	// 模板函数 (如果 constexpr 修饰的模板函数实例化结果不满足常量表达式函数的要求，则 constexpr 会被自动忽略，即该函数就等同于一个普通函数
+	template<typename T>
+	constexpr T dispaly(T t) {
+		return t;
+	}
+
+	struct Person p { "luffy", 19 };
+	struct Person ret = dispaly(p);		// 参数p是变量，constexpr 无效
+
+	constexpr int ret1 = dispaly(250);	// 参数p是常量，constexpr 有效
+
+	constexpr struct Person p1 { "luffy", 19 };
+	constexpr struct Person p2 = dispaly(p1);	// 参数p是常量，constexpr 有效
+
+	// 构造函数 (构造函数的函数体必须为空，并且必须采用初始化列表的方式为各个成员赋值)
+	struct Person {
+		constexpr Person(const char* p, int age) :name(p), age(age)
+		{
+		}
+		const char* name;
+		int age;
+	};
+
+	constexpr struct Person p1("luffy", 19);
+
 ```
