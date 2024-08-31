@@ -5179,4 +5179,577 @@ Adapters that provide alternative access sequential & associative containers
 
 	constexpr struct Person p1("luffy", 19);
 
+    // auto
+    使用auto声明的变量必须要进行初始化，以让编译器推导出它的实际类型，在编译时将auto占位符替换为真正的类型
+    规则：
+    当变量不是指针或者引用类型时，推导的结果中不会保留const、volatile关键字
+    当变量是指针或者引用类型时，推导的结果中会保留const、volatile关键字
+
+    auto pi = 3.14;
+    //auto nb;    // error,auto变量必须初始化
+    
+    int i1 = 10;
+    auto* p1 = &i1;    // &i 的类型为 int*，因此此时 auto的类型为 int
+    auto p2 = &i1;    // &i 的类型为 int*，因此此时 auto的类型为 int*
+    
+    int i2 = 11;
+    const auto i = i2;  // auto 被替换为 int ，i 的类型为 const int
+    
+    auto i3 == i2;          //  不是指针或者引用类型时，推导的结果中不会保留const、volatile关键字,   i3 的类型为 int
+    const auto& i4 = i2;    // i4 的类型为 const int*
+    auto& i5 = i4;          // i5 的类型为 const int*
+    
+    auto* p3 = &i;          // p3 的类型为 const int*
+
+
+    auto的应用
+    1.用于STL的容器遍历
+    map<int, string> mp;
+    mp.insert(make_pair(1, "a"));
+    mp.insert(make_pair(2, "b"));
+    mp.insert(make_pair(3, "c"));
+    
+    // map<int, string>::iterator it = mp.begin();
+    auto it = mp.begin();
+    for(; it != mp.end(); ++it)
+        cout << "key: " << it->first << ", value: " << it->second << endl;
+    2.用于泛型编程
+    class T1
+    {
+    public:
+        static int get()
+        {
+            return 10;
+        }
+    };
+
+    class T2
+    {
+    public:
+        static string get()
+        {
+            return "hello, world";
+        }
+    };
+
+    template <class A>
+    void func(void)
+    {
+        auto val = A::get();
+        cout << "val: " << val << endl;
+    }
+
+    func<T1>();     // val: 10
+    func<T2>();     // val: hello, world
+
+    // 不使用 auto 的版本
+    template <class T, typename P>
+    void func(void)
+    {
+        P val = T::get();
+        cout << "val: " << val << endl;
+    }
+
+
+    func<T1, int>();
+    func<T2, string>();
+
+    // decltype
+    1. 表达式为普通变量或者普通表达式或者类表达式，在这种情况下，使用decltype推导出的类型和表达式的类型是一致的
+
+    int a = 10;
+    decltype(a) b = 99;                 // b -> int
+    decltype(a+3.14) c = 52.13;         // c -> double
+    decltype(a+b*c) d = 520.1314;       // d -> double
+    
+    const int& e = a;                   // e -> const int&
+    decltype(e) f = a;                  // f -> const int&
+    
+    decltype(Test::value) c = 0;        // c -> const int
+    
+    Test t;
+    decltype(t.text) g = "hello";       // g -> string
+    
+    2. 表达式是函数调用，使用decltype推导出的类型和函数返回值一致 (对于纯右值而言，只有类类型可以携带const、volatile限定符，除此之外需要忽略掉这两个限定符)
+    class Test{...};
+    //函数声明
+    int func_int();                 // 返回值为 int
+    int& func_int_r();              // 返回值为 int&
+    int&& func_int_rr();            // 返回值为 int&&
+    
+    const int func_cint();          // 返回值为 const int
+    const int& func_cint_r();       // 返回值为 const int&
+    const int&& func_cint_rr();     // 返回值为 const int&&
+    
+    const Test func_ctest();        // 返回值为 const Test
+    
+    //decltype类型推导
+    int n = 100;
+    decltype(func_int()) a = 0;		
+    decltype(func_int_r()) b = n;	
+    decltype(func_int_rr()) c = 0;	
+    decltype(func_cint())  d = 0;	
+    decltype(func_cint_r())  e = n;	
+    decltype(func_cint_rr()) f = 0;	
+    decltype(func_ctest()) g = Test();
+    
+    3.表达式是一个左值，或者被括号( )包围，使用 decltype推导出的是表达式类型的引用（如果有const、volatile限定符不能忽略）
+	class Test
+	{
+	public:
+		int num;
+	};
+
+    const Test obj{1};
+    decltype(obj.num) a = 0;    // a -> int (1)
+    decltype((obj.num)) b = a;  // b -> const int& (3)
+    //加法表达式
+    int n = 0, m = 0;
+    decltype(n + m) c = 0;      // c -> int (1)
+    decltype(n = n + m) d = n;  // d -> int& (3)
+
+	// decltype在泛型编程中的应用
+	template <class T>
+	class Container
+	{
+	public:
+		void func(T& c)
+		{
+			for (m_it = c.begin(); m_it != c.end(); ++m_it)
+			{
+				cout << *m_it << " " << endl;
+			}
+			cout << endl;
+		}
+	private:
+		// T::iterator m_it; // compile error, T must be a specific type during compiling
+		decltype(T().begin()) m_it;  // 这里不能确定迭代器类型
+	};
+
+	list<int> lst{ 1,2,3,4,5,6,7,8,9 };
+	Container<list<int>> obj;
+	obj.func(lst);
+
+	const list<int> lst1{ 1,2,3,4,5,6,7,8,9 };
+	Container<const list<int>> obj1;
+	obj1.func(lst1);
+
+	// 返回类型后置
+
+	// 不使用返回类型后置的代码版本
+	// R->返回值类型, T->参数1类型, U->参数2类型
+	template <typename R, typename T, typename U>
+	R add(T t, U u)
+	{
+		return t + u;
+	}
+
+    int x = 520;
+    double y = 13.14;
+    // auto z = add<decltype(x + y), int, double>(x, y);
+    auto z = add<decltype(x + y)>(x, y);	// 简化之后的写法
+	该解决方案过于理想化，通常函数的具体实现细节是看不到的，因此根据decltype(x + y)进行返回值类型的推导是不合理的
+
+	C++11中增加了返回类型后置语法，说明白一点就是将decltype和auto结合起来完成返回类型的推导
+
+	template <typename T, typename U>
+	// 返回类型后置语法
+	auto add(T t, U u) -> decltype(t+u) 
+	{
+		return t + u;	// 此处简化了函数的实现细节，具体的返回类型可能发生转换，decltype(t+u) 只需保证 t+u 表达式的类型和具体函数返回值的类型以致即可，和函数的具体实现细节无关
+	}
+
+    int x = 520;
+    double y = 13.14;
+    // auto z = add<int, double>(x, y);
+    auto z = add(x, y);		// 简化之后的写法
+
+	// 示例 2
+	int& test(int &i)
+	{
+		return i;
+	}
+
+	double test(double &d)
+	{
+		d = d + 100;
+		return d;
+	}
+
+	template <typename T>
+	auto myFunc(T& t) -> decltype(test(t))
+	{
+		return test(t);
+	}
+
+	int x = 520;
+	double y = 13.14;
+	// auto z = myFunc<int>(x);
+	auto z = myFunc(x);             // 简化之后的写法
+	cout << "z: " << z << endl;		// z: 520
+
+	// auto z = myFunc<double>(y);
+	auto z1 = myFunc(y);            // 简化之后的写法
+	cout << "z1: " << z1 << endl;	// z1: 113.14
+
+	// final关键字来限制某个类不能被继承，或者某个虚函数不能被重写
+	如果使用final修饰函数，只能修饰虚函数，并且要把final关键字放到类或者函数的后面
+
+	// 1
+	class Base
+	{
+	public:
+		virtual void test()
+		{
+			cout << "Base class...";
+		}
+	};
+
+	class Child : public Base
+	{
+	public:
+		void test() final
+		{
+			cout << "Child class...";
+		}
+	};
+
+	class GrandChild : public Child
+	{
+	public:
+		// 语法错误, 不允许重写
+		void test()
+		{
+			cout << "GrandChild class...";
+		}
+	};
+
+	// 2
+	class Base
+	{
+	public:
+		virtual void test()
+		{
+			cout << "Base class...";
+		}
+	};
+
+	class Child final: public Base
+	{
+	public:
+		void test()
+		{
+			cout << "Child class...";
+		}
+	};
+
+	// error, 语法错误
+	class GrandChild : public Child
+	{
+	public:
+	};
+
+
+	override关键字确保在派生类中声明的重写函数与基类的虚函数有相同的签名，同时也明确表明将会重写基类的虚函数，这样就可以保证重写的虚函数的正确性，也提高了代码的可读性
+	class Base
+	{
+	public:
+		virtual void test()
+		{
+			cout << "Base class...";
+		}
+	};
+
+	class Child : public Base
+	{
+	public:
+		void test() override		// 确保在派生类中声明的重写函数与基类的虚函数有相同的签名，同时也明确表明将会重写基类的虚函数
+		{
+			cout << "Child class...";
+		}
+	};
+
+	class GrandChild : public Child
+	{
+	public:
+		void test() override		// // 确保在派生类中声明的重写函数与基类的虚函数有相同的签名，同时也明确表明将会重写基类的虚函数
+		{
+			cout << "Child class...";
+		}
+	};
+
+	C++11 关于 模板的优化
+	C++11 之前，在泛型编程中，模板实例化有一个非常繁琐的地方，那就是连续的两个右尖括号（>>）会被编译器解析成右移操作符，而不是模板参数表的结束，C++11对此进行了优化
+	C++11 之前，不支持函数模板默认参数，C++11添加了对函数模板默认参数的支持
+
+
+	当默认模板参数和模板参数自动推导同时使用时（优先级从高到低）：
+		如果可以推导出参数类型则使用推导出的类型
+		如果函数模板无法推导出参数类型，那么编译器会使用默认模板参数
+		如果无法推导出模板参数类型并且没有设置默认模板参数，编译器就会报错。
+		(模板参数类型的自动推导不会参考函数模板中指定的默认参数)
+
+	template <typename T = long, typename U = int>
+	void mytest(T t = 'A', U u = 'B')
+	{
+		cout << "t: " << t << ", u: " << u << endl;
+	}
+
+	mytest('a', 'b');
+	mytest<int>('a', 'b');
+	mytest<char>('a', 'b');
+	mytest<int, char>('a', 'b');
+	mytest<char, int>('a', 'b');
+	mytest();
+
+
+	// using 定义类型别名
+	typedef unsigned int uint_t;
+	using uint_t = int;
+
+	typedef int(*func_ptr)(int, double);
+	using func_ptr = int(*)(int, double);
+
+	template <typename T>
+	typedef map<int, T> mymap;	// error, 语法错误
+
+	// solution
+		template <typename T>
+		// 定义外敷类
+		struct MyMap
+		{
+			typedef map<int, T> type;
+		};
+
+		MyMap<string>::type m;
+		m.insert(make_pair(1, "luffy"));
+		m.insert(make_pair(2, "ace"));
+
+		MyMap<int>::type m1;
+		m1.insert(1, 100);
+		m1.insert(2, 200);
+
+	template <typename T>
+	using mymap = map<int, T>;
+
+	// 示例
+	template <typename T>
+	using mymap = map<int, T>;
+
+	// map的value指定为string类型
+	mymap<string> m;
+	m.insert(make_pair(1, "luffy"));
+	m.insert(make_pair(2, "ace"));
+
+	// map的value指定为int类型
+	mymap<int> m1;
+	m1.insert(1, 100);
+	m1.insert(2, 200);
+
+
+	// 委托构造函数
+	委托构造函数允许使用同一个类中的一个构造函数调用其它的构造函数，从而简化相关变量的初始化
+	class Test
+	{
+	public:
+		Test() {};
+		Test(int max)
+		{
+			this->m_max = max > 0 ? max : 100;
+		}
+	/*
+		Test(int max, int min)
+		{
+			this->m_max = max > 0 ? max : 100;              // 冗余代码
+			this->m_min = min > 0 && min < max ? min : 1;   
+		}
+	*/
+
+		Test(int max, int min):Test(max)
+		{
+			// this->m_max = max > 0 ? max : 100;              // 冗余代码
+			this->m_min = min > 0 && min < max ? min : 1;   
+		}
+	/*
+		Test(int max, int min, int mid)
+		{
+			this->m_max = max > 0 ? max : 100;             // 冗余代码
+			this->m_min = min > 0 && min < max ? min : 1;  // 冗余代码
+			this->m_middle = mid < max && mid > min ? mid : 50;
+		}
+	*/
+		Test(int max, int min, int mid):Test(max, min)
+		{
+			// this->m_max = max > 0 ? max : 100;             // 冗余代码
+			// this->m_min = min > 0 && min < max ? min : 1;  // 冗余代码
+			this->m_middle = mid < max && mid > min ? mid : 50;
+		}
+
+		int m_min;
+		int m_max;
+		int m_middle;
+	};
+
+    Test t(90, 30, 60);
+    cout << "min: " << t.m_min << ", middle: " 
+         << t.m_middle << ", max: " << t.m_max << endl;
+
+
+	// 继承构造函数可以让派生类直接使用基类的构造函数，而无需自己再写构造函数，尤其是在基类有很多构造函数的情况下，可以极大地简化派生类构造函数的编写
+
+	class Base
+	{
+	public:
+		Base(int i) :m_i(i) {}
+		Base(int i, double j) :m_i(i), m_j(j) {}
+		Base(int i, double j, string k) :m_i(i), m_j(j), m_k(k) {}
+
+		void func(int i)
+		{
+			cout << "base class: i = " << i << endl;
+		}
+		
+		void func(int i, string str)
+		{
+			cout << "base class: i = " << i << ", str = " << str << endl;
+		}
+
+		int m_i;
+		double m_j;
+		string m_k;
+	};
+
+	class Child : public Base
+	{
+	public:
+	/*
+		Child(int i) :Base(i) {}
+		Child(int i, double j) :Base(i, j) {}
+		Child(int i, double j, string k) :Base(i, j, k) {}
+	*/
+		using Base::Base;	// 子类中直接继承父类的所有的构造函数
+		using Base::func;	// 子类中隐藏了父类中的同名函数，可以通过using的方式在子类中使用基类中的函数
+		void func()
+		{
+			cout << "child class: i'am luffy!!!" << endl;
+		}
+	};
+
+    Child c(520, 13.14, "i love you");
+    cout << "int: " << c.m_i << ", double: " 
+         << c.m_j << ", string: " << c.m_k << endl;
+
+
+    Child c(250);
+    c.func();
+    c.func(19);
+    c.func(19, "luffy");
+
+
+	// 列表初始化
+	class Person {
+	public:
+		Person(int age):age(age) {}
+		Person(int age, string name):age(age), name(name) {}
+	private:
+		int age;
+		string name;
+	};
+
+	Person get_person()
+	{
+		return { 20, "xiaoming" };	// 调用对应的构造函数Person(int age, string name)返回匿名对象
+	}
+
+	Person p1(20);
+	Person p2 = 20;
+	Person p3 = { 20 };	// 列表初始化
+	Person p4{ 20 };	// 列表初始化
+
+    int i1 = { 123 };
+    int i2{ 123 };
+    int arr1[] = { 1, 2, 3 };
+    int arr2[]{ 1, 2, 3 };
+    
+    int *pp1 = new int{ 123 };
+    int i3 = int{ 123 };
+    int *arr3 = new int[3]{ 1, 2, 3 };
+
+
+	// std::initializer_list 进行任意长度的数据的初始化
+	void print_list(initializer_list<int> ls)
+	{
+		auto it = ls.begin();
+		for(; it != ls.end(); it++)
+		cout << *it << endl;
+	}
+
+	print_list({ 1, 2, 3, 4, 5 });
+
+	// 2
+	class Test
+	{
+	public:
+		Test(std::initializer_list<string> list)
+		{
+			for (auto it = list.begin(); it != list.end(); ++it)
+			{
+				cout << *it << " ";
+				m_names.push_back(*it);
+			}
+			cout << endl;
+		}
+	private:
+		vector<string> m_names;
+	};
+
+	Test t({ "jack", "lucy", "tom" });
+	Test t1({ "hello", "world", "nihao", "shijie" });
+
+	// 基于范围的 for 循环
+    vector<int> v = { 1, 2, 3 };
+    
+    for(const auto &item : v)
+        cout << item << endl;
+    
+    for(auto &item : v)
+        cout << item++ << endl;
+
+    for(auto item : v)
+        cout << item << endl;
+
+	// 对应set容器来说，内部元素都是只读的，这是由容器的特性决定的，因此在for循环中auto&会被视为const auto &
+
+    set<int> st{ 1, 2, 3 };
+    
+    for(auto &item : st)		// item -> const int&
+        cout << item << endl;
+
+
+	// 在遍历关联型容器时也会出现同样的问题，基于范围的for循环中，虽然可以得到一个std::pair引用，但是我们是不能修改里边的first值的，也就是key值
+
+    map<int, string> m{
+        {1, "lucy"},{2, "lily"},{3, "tom"}
+    };
+
+    for(auto& item : m)
+    {
+        // item.first 是一个常量
+        cout << "id: " << item.first++ << ", name: " << item.second << endl;  // error
+    }
+
+	// 容器对象访问次数
+	vector<int> v{ 1,2,3,4,5,6 };
+	vector<int>& getRange()
+	{
+		cout << "get vector range..." << endl;
+		return v;
+	}
+
+	for (auto val : getRange())	// 只获取一次容器对象，一次性确定了访问边界
+	{
+		cout << val << " ";
+	}
+	cout << endl;
+
 ```
