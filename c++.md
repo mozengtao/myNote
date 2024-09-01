@@ -6209,4 +6209,393 @@ Adapters that provide alternative access sequential & associative containers
 		return 0;
 	};
 
+
+	在C++11添加了右值引用，并且不能使用左值初始化右值引用，如果想要使用左值初始化一个右值引用需要借助std::move()函数，使用std::move方法可以将左值转换为右值。使用这个函数并不能移动任何东西，而是和移动构造函数一样都具有移动语义，将对象的状态或者所有权从一个对象转移到另一个对象，只是转移，没有内存拷贝。
+
+	从实现上讲，std::move基本等同于一个类型转换：static_cast<T&&>(lvalue);
+
+	list<string> ls1 = {
+		"str1", "str2", "str3", "str4"
+	};
+
+	list<string> ls2 = move(ls1);   // ls1 不再使用的情况下，可以使用move进行资源的转移
+
+
+
+	右值引用类型是独立于值的，一个右值引用作为函数参数的形参时，在函数内部转发该参数给内部其他函数时，它就变成一个左值，并不是原来的类型了。如果需要按照参数原来的类型转发到另一个函数，可以使用C++11提供的std::forward()函数，该函数实现的功能称之为完美转发
+
+	// 函数原型
+	template <class T> T&& forward (typename remove_reference<T>::type& t) noexcept;
+	template <class T> T&& forward (typename remove_reference<T>::type&& t) noexcept;
+
+	// 精简之后的样子
+	std::forward<T>(t);
+
+	当T为左值引用类型时，t将被转换为T类型的左值
+	当T不是左值引用类型时，t将被转换为T类型的右值
+
+	template<typename T>
+	void printValue(T& t)
+	{
+		cout << "l-value: " << t << endl;
+	}
+
+	template<typename T>
+	void printValue(T&& t)
+	{
+		cout << "r-value: " << t << endl;
+	}
+
+	template<typename T>
+	void testForward(T && v)
+	{
+		printValue(v);
+		printValue(move(v));
+		printValue(forward<T>(v));
+		cout << endl;
+	}
+
+
+	testForward(520);
+	int num = 1314;
+	testForward(num);
+	testForward(forward<int>(num));
+	testForward(forward<int&>(num));
+	testForward(forward<int&&>(num));
+
+	output:
+		l-value: 520
+		r-value: 520
+		r-value: 520
+
+		l-value: 1314
+		r-value: 1314
+		l-value: 1314
+
+		l-value: 1314
+		r-value: 1314
+		r-value: 1314
+
+		l-value: 1314
+		r-value: 1314
+		l-value: 1314
+
+		l-value: 1314
+		r-value: 1314
+		r-value: 1314
+
+	testForward(520);函数的形参为未定引用类型T&&，实参为右值，初始化后被推导为一个右值引用
+		printValue(v);已命名的右值v，编译器会视为左值处理，实参为左值
+		printValue(move(v));已命名的右值编译器会视为左值处理，通过move又将其转换为右值，实参为右值
+		printValue(forward<T>(v));forward的模板参数为右值引用，最终得到一个右值，实参为``右值`
+	testForward(num);函数的形参为未定引用类型T&&，实参为左值，初始化后被推导为一个左值引用
+		printValue(v);实参为左值
+		printValue(move(v));通过move将左值转换为右值，实参为右值
+		printValue(forward<T>(v));forward的模板参数为左值引用，最终得到一个左值引用，实参为左值
+	testForward(forward<int>(num));forward的模板类型为int，最终会得到一个右值，函数的形参为未定引用类型T&&被右值初始化后得到一个右值引用类型
+		printValue(v);已命名的右值v，编译器会视为左值处理，实参为左值
+		printValue(move(v));已命名的右值编译器会视为左值处理，通过move又将其转换为右值，实参为右值
+		printValue(forward<T>(v));forward的模板参数为右值引用，最终得到一个右值，实参为右值
+	testForward(forward<int&>(num));forward的模板类型为int&，最终会得到一个左值，函数的形参为未定引用类型T&&被左值初始化后得到一个左值引用类型
+		printValue(v);实参为左值
+		printValue(move(v));通过move将左值转换为右值，实参为右值
+		printValue(forward<T>(v));forward的模板参数为左值引用，最终得到一个左值，实参为左值
+	testForward(forward<int&&>(num));forward的模板类型为int&&，最终会得到一个右值，函数的形参为未定引用类型T&&被右值初始化后得到一个右值引用类型
+		printValue(v);已命名的右值v，编译器会视为左值处理，实参为左值
+		printValue(move(v));已命名的右值编译器会视为左值处理，通过move又将其转换为右值，实参为右值
+		printValue(forward<T>(v));forward的模板参数为右值引用，最终得到一个右值，实参为右值
+
+
+	C++11中提供了三种智能指针，使用这些智能指针时需要引用头文件<memory>：
+		std::shared_ptr：共享的智能指针
+		std::unique_ptr：独占的智能指针
+		std::weak_ptr：弱引用的智能指针，它不共享指针，不能操作资源，是用来监视shared_ptr的
+
+	共享智能指针是指多个智能指针可以同时管理同一块有效的内存
+
+	shared_ptr的初始化
+	1.通过构造函数初始化
+		// 使用智能指针管理一块 int 型的堆内存
+		shared_ptr<int> ptr1(new int(520));
+		cout << "ptr1管理的内存引用计数: " << ptr1.use_count() << endl;     // 1
+		// 使用智能指针管理一块字符数组对应的堆内存
+		shared_ptr<char> ptr2(new char[12]);
+		cout << "ptr2管理的内存引用计数: " << ptr2.use_count() << endl;     // 1
+		// 创建智能指针对象, 不管理任何内存
+		shared_ptr<int> ptr3;
+		cout << "ptr3管理的内存引用计数: " << ptr3.use_count() << endl;     // 0
+		// 创建智能指针对象, 初始化为空
+		shared_ptr<int> ptr4(nullptr);
+		cout << "ptr4管理的内存引用计数: " << ptr4.use_count() << endl;     // 0
+	2.通过拷贝和移动构造函数初始化
+		// 使用智能指针管理一块 int 型的堆内存, 内部引用计数为 1
+		shared_ptr<int> ptr1(new int(520));
+		cout << "ptr1管理的内存引用计数: " << ptr1.use_count() << endl;     // 1
+		//调用拷贝构造函数
+		shared_ptr<int> ptr2(ptr1);
+		cout << "ptr2管理的内存引用计数: " << ptr2.use_count() << endl;     // 2
+		shared_ptr<int> ptr3 = ptr1;
+		cout << "ptr3管理的内存引用计数: " << ptr3.use_count() << endl;     // 3
+		//调用移动构造函数
+		shared_ptr<int> ptr4(std::move(ptr1));
+		cout << "ptr4管理的内存引用计数: " << ptr4.use_count() << endl;     // 3
+		std::shared_ptr<int> ptr5 = std::move(ptr2);
+		cout << "ptr5管理的内存引用计数: " << ptr5.use_count() << endl;     // 3
+	3.通过std::make_shared初始化
+		class Test
+		{
+		public:
+			Test() 
+			{
+				cout << "construct Test..." << endl;
+			}
+			Test(int x) 
+			{
+				cout << "construct Test, x = " << x << endl;
+			}
+			Test(string str) 
+			{
+				cout << "construct Test, str = " << str << endl;
+			}
+			~Test()
+			{
+				cout << "destruct Test ..." << endl;
+			}
+		};
+
+
+		// 使用智能指针管理一块 int 型的堆内存, 内部引用计数为 1
+		shared_ptr<int> ptr1 = make_shared<int>(520);
+		cout << "ptr1管理的内存引用计数: " << ptr1.use_count() << endl;
+
+		shared_ptr<Test> ptr2 = make_shared<Test>();
+		cout << "ptr2管理的内存引用计数: " << ptr2.use_count() << endl;
+
+		shared_ptr<Test> ptr3 = make_shared<Test>(520);
+		cout << "ptr3管理的内存引用计数: " << ptr3.use_count() << endl;
+
+		shared_ptr<Test> ptr4 = make_shared<Test>("我是要成为海贼王的男人!!!");
+		cout << "ptr4管理的内存引用计数: " << ptr4.use_count() << endl;
+
+		output:
+			ptr1管理的内存引用计数: 1
+			construct Test...
+			ptr2管理的内存引用计数: 1
+			construct Test, x = 520
+			ptr3管理的内存引用计数: 1
+			construct Test, str = 我是要成为海贼王的男人!!!
+			ptr4管理的内存引用计数: 1
+			destruct Test ...
+			destruct Test ...
+			destruct Test ...
+	4.通过 reset方法初始化
+		// 使用智能指针管理一块 int 型的堆内存, 内部引用计数为 1
+		shared_ptr<int> ptr1 = make_shared<int>(520);
+		shared_ptr<int> ptr2 = ptr1;
+		shared_ptr<int> ptr3 = ptr1;
+		shared_ptr<int> ptr4 = ptr1;
+		cout << "ptr1管理的内存引用计数: " << ptr1.use_count() << endl;
+		cout << "ptr2管理的内存引用计数: " << ptr2.use_count() << endl;
+		cout << "ptr3管理的内存引用计数: " << ptr3.use_count() << endl;
+		cout << "ptr4管理的内存引用计数: " << ptr4.use_count() << endl;
+
+		ptr4.reset();
+		cout << "ptr1管理的内存引用计数: " << ptr1.use_count() << endl;
+		cout << "ptr2管理的内存引用计数: " << ptr2.use_count() << endl;
+		cout << "ptr3管理的内存引用计数: " << ptr3.use_count() << endl;
+		cout << "ptr4管理的内存引用计数: " << ptr4.use_count() << endl;
+
+		shared_ptr<int> ptr5;
+		ptr5.reset(new int(250));
+		cout << "ptr5管理的内存引用计数: " << ptr5.use_count() << endl;
+	5.获取原始指针
+		int len = 128;
+		shared_ptr<char> ptr(new char[len]);
+		// 得到指针的原始地址
+		char* add = ptr.get();
+		memset(add, 0, len);
+		strcpy(add, "我是要成为海贼王的男人!!!");
+		cout << "string: " << add << endl;
+		
+		shared_ptr<int> p(new int);
+		*p = 100;
+		cout << *p.get() << "  " << *p << endl;
+
+	指定删除器
+	// 自定义删除器函数，释放int型内存
+	void deleteIntPtr(int* p)
+	{
+		delete p;
+		cout << "int 型内存被释放了...";
+	}
+
+	shared_ptr<int> ptr(new int(250), deleteIntPtr);
+	return 0;
+
+	在C++11中使用shared_ptr管理动态数组时，需要指定删除器，因为std::shared_ptr的默认删除器不支持数组对象
+
+	int main()
+	{
+		shared_ptr<int> ptr(new int[10], [](int* p) {delete[]p; });
+		// shared_ptr<int> ptr(new int[10], default_delete<int[]>());
+
+		shared_ptr<Test> ptr(new Test[10], [](Test* p) {delete[]p; });
+		// shared_ptr<Test> ptr(new Test[10], default_delete<Test[]>());
+		return 0;
+	}
+
+	自己封装一个make_shared_array方法来让shared_ptr支持数组
+	template <typename T>
+	shared_ptr<T> make_share_array(size_t size)
+	{
+		// 返回匿名对象
+		return shared_ptr<T>(new T[size], default_delete<T[]>());
+	}
+
+	int main()
+	{
+		shared_ptr<int> ptr1 = make_share_array<int>(10);
+		cout << ptr1.use_count() << endl;
+		shared_ptr<char> ptr2 = make_share_array<char>(128);
+		cout << ptr2.use_count() << endl;
+		return 0;
+	}
+
+	独占的智能指针
+	std::unique_ptr是一个独占型的智能指针，不允许通过赋值将一个unique_ptr赋值给另一个unique_ptr
+	std::unique_ptr不允许复制，但是可以通过函数返回给其他的std::unique_ptr，还可以通过std::move来转译给其他的std::unique_ptr，这样原始指针的所有权就被转移了，这个原始指针还是被独占的
+
+	unique_ptr<int> func()
+	{
+		return unique_ptr<int>(new int(520));
+	}
+
+
+	// 通过构造函数初始化
+	unique_ptr<int> ptr1(new int(10));
+	// 通过转移所有权的方式初始化
+	unique_ptr<int> ptr2 = move(ptr1);
+	unique_ptr<int> ptr3 = func();
+
+	// reset
+	unique_ptr<int> ptr1(new int(10));
+	unique_ptr<int> ptr2 = move(ptr1);
+
+	ptr1.reset();
+	ptr2.reset(new int(250));
+
+	unique_ptr指定删除器和shared_ptr指定删除器是有区别的，unique_ptr指定删除器的时候需要确定删除器的类型，所以不能像shared_ptr那样直接指定删除器
+
+
+	shared_ptr<int> ptr1(new int(10), [](int*p) {delete p; });	// ok
+	unique_ptr<int> ptr1(new int(10), [](int*p) {delete p; });	// error
+
+	int main()
+	{
+		using func_ptr = void(*)(int*);
+		unique_ptr<int, func_ptr> ptr1(new int(10), [](int*p) {delete p; });
+
+		return 0;
+	}
+
+
+	int main()
+	{
+		using func_ptr = void(*)(int*);
+		// unique_ptr<int, func_ptr> ptr1(new int(10), [=](int*p) {delete p; });	// error
+		unique_ptr<int, function<void(int*)>> ptr1(new int(10), [&](int*p) {delete p; });
+		return 0;
+	}
+
+
+	弱引用智能指针std::weak_ptr可以看做是shared_ptr的助手，它不管理shared_ptr内部的指针。
+	std::weak_ptr没有重载操作符*和->，因为它不共享指针，不能操作资源，所以它的构造不会增加引用计数，析构也不会减少引用计数，它的主要作用就是作为一个旁观者监视shared_ptr中管理的资源是否存在
+
+	shared_ptr 使用注意事项
+	1.不能使用一个原始地址初始化多个共享智能指针
+	1.函数不能返回管理了this的共享智能指针对象
+	1.共享智能指针不能循环引用
+
+	// 问题代码
+	struct Test
+	// fix: struct Test : public enable_shared_from_this<Test>
+	{
+		shared_ptr<Test> getSharedPtr()
+		{
+			return shared_ptr<Test>(this);
+			// fix: return shared_from_this();
+		}
+		
+		~Test()
+		{
+			cout << "class Test is disstruct ..." << endl;
+		}
+
+	};
+
+	int main() 
+	{
+		// error 1
+		Test* t = new Test;
+		shared_ptr<Test> ptr1(t);
+		shared_ptr<Test> ptr2 = ptr1;
+
+		// error 2
+		shared_ptr<Test> sp1(new Test);
+		cout << "use_count: " << sp1.use_count() << endl;
+		shared_ptr<Test> sp2 = sp1->getSharedPtr();
+		cout << "use_count: " << sp1.use_count() << endl;
+		return 0;
+	}
+
+	// free(): double free detected in tcache 2
+
+	通过weak_ptr来解决，通过wek_ptr返回管理this资源的共享智能指针对象shared_ptr。
+	C++11中为我们提供了一个模板类叫做std::enable_shared_from_this<T>，这个类中有一个方法叫做shared_from_this()，通过这个方法可以返回一个共享智能指针，在函数的内部就是使用weak_ptr来监测this对象，并通过调用weak_ptr的lock()方法返回一个shared_ptr对象
+
+
+	// 问题代码(智能指针循环引用导致内存泄露)
+	struct TA;
+	struct TB;
+
+	struct TA
+	{
+		shared_ptr<TB> bptr;
+		// fix: weak_ptr<TB> bptr; (在TA或者TB中把其中之一变为weak_ptr都能解决问题)
+		~TA()
+		{
+			cout << "class TA is disstruct ..." << endl;
+		}
+	};
+
+	struct TB
+	{
+		shared_ptr<TA> aptr;
+		~TB()
+		{
+			cout << "class TB is disstruct ..." << endl;
+		}
+	};
+
+	void testPtr()
+	{
+		shared_ptr<TA> ap(new TA);
+		shared_ptr<TB> bp(new TB);
+		cout << "TA object use_count: " << ap.use_count() << endl;
+		cout << "TB object use_count: " << bp.use_count() << endl;
+
+		ap->bptr = bp;
+		bp->aptr = ap;
+		cout << "TA object use_count: " << ap.use_count() << endl;
+		cout << "TB object use_count: " << bp.use_count() << endl;
+	}
+
+	int main()
+	{
+		testPtr();
+		return 0;
+	}
+
 ```
+[C++](https://subingwen.cn/categories/C/)
+[设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)
