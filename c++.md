@@ -5752,4 +5752,461 @@ Adapters that provide alternative access sequential & associative containers
 	}
 	cout << endl;
 
+
+	可调用对象
+	1.函数指针
+	int print(int i)
+	{
+		cout << i << endl;
+		return 0;
+	}
+
+	// int (*func)(int) = &print;
+	int (*func)(int) = print;
+
+	func(1);
+
+	2.具有operator()成员函数的类对象（仿函数）
+	struct MyClass
+	{
+		// ()操作符重载
+		void operator()(string msg)
+		{
+			cout << "msg: " << msg << endl;
+		}
+	};
+
+
+	MyClass obj;
+	obj("我是要成为海贼王的男人!!!");	// 仿函数
+
+	3.可被转换为函数指针的类对象
+	using func_ptr = void(*)(int, string);
+	struct MyClass
+	{
+		static void print(int a, string b)
+		{
+			cout << "name: " << b << ", age: " << a << endl;
+		}
+
+		// 将类对象转换为函数指针
+		operator func_ptr()
+		{
+			return print;
+		}
+	};
+
+
+	MyClass obj;
+	// 对象转换为函数指针, 并调用
+	obj(19, "Monkey D. Luffy");
+
+	4.是类成员函数指针或者类成员指针
+	struct Test
+	{
+		void print(int a, string b)
+		{
+			cout << "name: " << b << ", age: " << a << endl;
+		}
+		int m_num;
+	};
+
+	// 定义类成员函数指针指向类成员函数
+	void (Test::*func_ptr)(int, string) = &Test::print;
+	// 类成员指针指向类成员变量
+	int Test::*obj_ptr = &Test::m_num;
+
+	Test t;
+	// 通过类成员函数指针调用类成员函数
+	(t.*func_ptr)(19, "Monkey D. Luffy");
+	// 通过类成员指针初始化类成员变量
+	t.*obj_ptr = 1;
+
+	由此可见，C++中的可调用类型虽然具有比较统一的操作形式，但定义方式五花八门，因此，C++11通过提供std::function 和 std::bind统一了可调用对象的各种操作。
+	使用std::function作为函数的传入参数，可以将定义方式不相同的可调用对象进行统一的传递，这样大大增加了程序的灵活性
+
+
+	std::function是可调用对象的包装器
+
+	int add(int a, int b)
+	{
+		cout << a << " + " << b << " = " << a + b << endl;
+		return a + b;
+	}
+
+	class T1
+	{
+	public:
+		static int sub(int a, int b)
+		{
+			cout << a << " - " << b << " = " << a - b << endl;
+			return a - b;
+		}
+	};
+
+	class T2
+	{
+	public:
+		int operator()(int a, int b)
+		{
+			cout << a << " * " << b << " = " << a * b << endl;
+			return a * b;
+		}
+	};
+
+
+	// 绑定一个普通函数
+	function<int(int, int)> f1 = add;
+	// 绑定一个静态类成员函数
+	function<int(int, int)> f2 = T1::sub;
+	// 绑定一个仿函数
+	T2 t;
+	function<int(int, int)> f3 = t;
+
+	// 函数调用
+	f1(9, 3);
+	f2(9, 3);
+	f3(9, 3);
+
+	std::function作为回调函数使用
+	class A
+	{
+	public:
+		// 构造函数参数是一个包装器对象
+		A(const function<void()>& f) : callback(f)
+		{
+		}
+
+		void notify()
+		{
+			callback(); // 调用通过构造函数得到的函数指针
+		}
+	private:
+		function<void()> callback;
+	};
+
+	class B
+	{
+	public:
+		void operator()()
+		{
+			cout << "我是要成为海贼王的男人!!!" << endl;
+		}
+	};
+
+	B b;
+	A a(b); // 仿函数通过包装器对象进行包装
+	a.notify();
+
+	std::bind绑定器用来将可调用对象与其参数一起进行绑定。绑定后的结果可以使用std::function进行保存，并延迟调用到任何我们需要的时候
+	它主要有两大作用：
+	1.将可调用对象与其参数一起绑定成一个仿函数。
+	2.将多元（参数个数为n，n>1）可调用对象转换为一元或者（n-1）元可调用对象，即只绑定部分参数。
+
+	std::bind绑定器返回的是一个仿函数类型，得到的返回值可以直接赋值给一个std::function，在使用的时候我们并不需要关心绑定器的返回值类型，使用auto进行自动类型推导就可以了
+
+	可调用对象包装器std::function是不能实现对类成员函数指针或者类成员指针的包装的，但是通过绑定器std::bind的配合之后，就可以完美的解决这个问题了
+
+	// 绑定非类成员函数/变量
+	auto f = std::bind(可调用对象地址, 绑定的参数/占位符);
+	// 绑定类成员函/变量
+	auto f = std::bind(类函数/成员地址, 类实例对象地址, 绑定的参数/占位符);
+
+	// 1
+	void callFunc(int x, const function<void(int)>& f)
+	{
+		if (x % 2 == 0)
+		{
+			f(x);
+		}
+	}
+
+	void output(int x)
+	{
+		cout << x << " ";
+	}
+
+	void output_add(int x)
+	{
+		cout << x + 10 << " ";
+	}
+
+
+	// 使用绑定器绑定可调用对象和参数
+	auto f1 = bind(output, placeholders::_1);
+	for (int i = 0; i < 10; ++i)
+	{
+		callFunc(i, f1);
+	}
+	cout << endl;
+
+	auto f2 = bind(output_add, placeholders::_1);
+	for (int i = 0; i < 10; ++i)
+	{
+		callFunc(i, f2);
+	}
+	cout << endl;
+
+	// 2
+	void output(int x, int y)
+	{
+		cout << x << " " << y << endl;
+	}
+
+	// 使用绑定器绑定可调用对象和参数, 并调用得到的仿函数
+	bind(output, 1, 2)();                       // 1 2
+	bind(output, placeholders::_1, 2)(10);      // 10 2
+	bind(output, 2, placeholders::_1)(10);      // 2 10
+
+	// error, 调用时没有第二个参数
+	// bind(output, 2, placeholders::_2)(10);
+	// 调用时第一个参数10被吞掉了，没有被使用
+	bind(output, 2, placeholders::_2)(10, 20);  // 2 20
+
+	bind(output, placeholders::_1, placeholders::_2)(10, 20);   // 10 20
+	bind(output, placeholders::_2, placeholders::_1)(10, 20);   // 20 10
+
+	// 3
+	class Test
+	{
+	public:
+		void output(int x, int y)
+		{
+			cout << "x: " << x << ", y: " << y << endl;
+		}
+		int m_number = 100;
+	};
+
+	Test t;
+	// 绑定类成员函数
+	function<void(int, int)> f1 =  bind(&Test::output, &t, placeholders::_1, placeholders::_2);
+	// 绑定类成员变量(公共)
+	function<int&(void)> f2 = bind(&Test::m_number, &t);
+
+	// 调用
+	f1(520, 1314);
+	f2() = 2333;
+	cout << "t.m_number: " << t.m_number << endl;
+
+
+	Lambda表达式
+	[capture](params) opt -> ret {body;};
+
+	很多时候，lambda表达式的返回值是非常明显的，因此在C++11中允许省略lambda表达式的返回值
+	labmda表达式不能通过列表初始化自动推导出返回值类型
+
+	捕获列表
+	[] - 不捕捉任何变量
+	[&] - 捕获外部作用域中所有变量, 并作为引用在函数体内使用 (按引用捕获)
+	[=] - 捕获外部作用域中所有变量, 并作为副本在函数体内使用 (按值捕获)
+		拷贝的副本在匿名函数体内部是只读的
+	[=, &foo] - 按值捕获外部作用域中所有变量, 并按照引用捕获外部变量 foo
+	[bar] - 按值捕获 bar 变量, 同时不捕获其他变量
+	[&bar] - 按引用捕获 bar 变量, 同时不捕获其他变量
+	[this] - 捕获当前类中的this指针
+		让lambda表达式拥有和当前类成员函数同样的访问权限
+		如果已经使用了 & 或者 =, 默认添加此选项
+
+
+	opt:
+	mutable
+		可以修改按值传递进来的拷贝（注意是能修改拷贝，而不是值本身）
+	exception
+		指定函数抛出的异常，如抛出整数类型的异常，可以使用throw()
+
+	class Test
+	{
+	public:
+		void output(int x, int y)
+		{
+			auto x1 = [] {return m_number; };                      // error
+			auto x2 = [=] {return m_number + x + y; };             // ok
+			auto x3 = [&] {return m_number + x + y; };             // ok
+			auto x4 = [this] {return m_number; };                  // ok
+			auto x5 = [this] {return m_number + x + y; };          // error
+			auto x6 = [this, x, y] {return m_number + x + y; };    // ok
+			auto x7 = [this] {return m_number++; };                // ok
+		}
+		int m_number = 100;
+	};
+
+	int main(void)
+	{
+		int a = 10, b = 20;
+		auto f1 = [] {return a; };                        // error 没有捕获外部变量，因此无法访问变量 a
+		auto f2 = [&] {return a++; };                     // ok 使用引用的方式捕获外部变量，可读写
+		auto f3 = [=] {return a; };                       // ok 使用值拷贝的方式捕获外部变量，可读
+		auto f4 = [=] {return a++; };                     // error 使用值拷贝的方式捕获外部变量，可读不能写
+		auto f5 = [a] {return a + b; };                   // error 使用拷贝的方式捕获了外部变量a，没有捕获外部变量b，因此无法访问变量b
+		auto f6 = [a, &b] {return a + (b++); };           // ok 使用拷贝的方式捕获了外部变量a，只读，使用引用的方式捕获外部变量b，可读写
+		auto f7 = [=, &b] {return a + (b++); };           // ok 使用值拷贝的方式捕获所有外部变量以及b的引用，b可读写，其他只读
+
+		return 0;
+	}
+
+	被mutable修改是lambda表达式就算没有参数也要写明参数列表，并且可以去掉按值捕获的外部变量的只读（const）属性
+
+	int a = 0;
+	auto f1 = [=] {return a++; };              // error, 按值捕获外部变量, a是只读的
+	auto f2 = [=]()mutable {return a++; };     // ok
+
+	为什么通过值拷贝的方式捕获的外部变量是只读的:
+		lambda表达式的类型在C++11中会被看做是一个带operator()的类，即仿函数。
+		按照C++标准，lambda表达式的operator()默认是const的，一个const成员函数是无法修改成员变量值的。
+	mutable选项的作用就在于取消operator()的const属性。
+
+	因为lambda表达式在C++中会被看做是一个仿函数，因此可以使用std::function和std::bind来存储和操作lambda表达式
+		// 包装可调用函数
+		std::function<int(int)> f1 = [](int a) {return a; };
+		// 绑定可调用函数
+		std::function<int(int)> f2 = bind([](int a) {return a; }, placeholders::_1);
+
+		// 函数调用
+		cout << f1(100) << endl;
+		cout << f2(200) << endl;
+
+	对于没有捕获任何变量的lambda表达式，还可以转换成一个普通的函数指针：
+	using func_ptr = int(*)(int);
+	// 没有捕获任何外部变量的匿名函数
+	func_ptr f = [](int a)
+	{
+		return a;  
+	};
+	// 函数调用
+	f(1314);
+
+
+	右值引用
+	Lvalue (Locator Value)
+	Rvalue (Read Value)
+
+	// 左值
+	int i = 1;
+	// 左值引用
+	int& j = i;
+	// 右值引用
+	int&& k = 1;
+	// 常量左值引用
+	const int& l1 = i;
+	const int& l2 = k;
+	// 常量右值引用
+	const int&& l = 1;
+	const int& m = l;
+
+	右值引用就是对一个右值进行引用的类型。因为右值是匿名的，所以我们只能通过引用的方式找到它
+	右值引用的主要作用是延长临时对象的生命周期
+
+	class Test
+	{
+	public:
+		Test() : m_num(new int(100))
+		{
+			cout << "construct Test" << endl;
+		}
+
+		Test(const Test& a) : m_num(new int(*a.m_num))
+		{
+			cout << "copy construct Test" << endl;
+		}
+
+		// 添加移动构造函数 -> 复用其他对象中的资源(堆内存)
+		Test(Test&& a) : m_num(a.m_num)
+		{
+			a.m_num = nullptr;
+			cout << "move construct Test" << endl;
+		}
+
+		~Test()
+		{
+			cout << "destruct Test" << endl;
+			delete m_num;
+		}
+
+		int* m_num;
+	};
+
+	Test getObj()
+	{
+		Test t;
+		return t;   // 返回临时对象
+	}
+
+	int main()
+	{
+		Test t = getObj();
+		cout << "t.m_num: " << *t.m_num << endl;
+		return 0;
+	};
+
+
+	在C++中，并不是所有情况下 && 都代表是一个右值引用，具体的场景体现在模板和自动类型推导中.
+	在以下两种场景下 &&被称作未定的引用类型
+		如果是模板参数需要指定为T&&
+		如果是自动类型推导需要指定为auto &&
+
+	另外还有一点需要额外注意const T&&表示一个右值引用，不是未定引用类型
+
+	template<typename T>
+	void f(T&& param);
+	void f1(const T&& param);
+	f(10); 	// 右值引用
+	int x = 10;
+	f(x);   // 左值引用
+	f1(x);	// error, x是左值
+	f1(10); // ok, 10是右值
+
+
+	T&&或者auto&&这种未定引用类型，当它作为参数时，有可能被一个右值引用初始化，也有可能被一个左值引用初始化，在进行类型推导时右值引用类型（&&）会发生变化，这种变化被称为引用折叠。在C++11中引用折叠的规则如下：
+	1.通过右值推导 T&& 或者 auto&& 得到的是一个右值引用类型
+	2.通过非右值（右值引用、左值、左值引用、常量右值引用、常量左值引用）推导 T&& 或者 auto&& 得到的是一个左值引用类型
+
+
+	int&& a1 = 5;
+	auto&& bb = a1;     // a1为右值引用，推导出的bb为左值引用类型
+	auto&& bb1 = 5;     // 5为右值，推导出的bb1为右值引用类型
+
+	int a2 = 5;
+	int &a3 = a2;
+	auto&& cc = a3;     // a3为左值引用，推导出的cc为左值引用类型
+	auto&& cc1 = a2;    // a2为左值，推导出的cc1为左值引用类型
+
+	const int& s1 = 100;
+	const int&& s2 = 100;
+	auto&& dd = s1;     // s1为常量左值引用，推导出的dd为常量左值引用类型
+	auto&& ee = s2;     // s2为常量右值引用，推导出的ee为常量左值引用类型
+
+	const auto&& x = 5; // x为右值引用，不需要推导，只能通过右值初始化
+
+
+	总结一下关于&&的使用：
+	左值和右值是独立于他们的类型的，右值引用类型可能是左值也可能是右值。
+	编译器会将已命名的右值引用视为左值，将未命名的右值引用视为右值。
+	auto&&或者函数参数类型自动推导的T&&是一个未定的引用类型，它可能是左值引用也可能是右值引用类型，这取决于初始化的值类型（上面有例子）。
+	通过右值推导 T&& 或者 auto&& 得到的是一个右值引用类型，其余都是左值引用类型
+
+	void printValue(int &i)
+	{
+		cout << "l-value: " << i << endl;
+	}
+
+	void printValue(int &&i)
+	{
+		cout << "r-value: " << i << endl;
+	}
+
+	void forward(int &&k)
+	{
+		printValue(k);  // 右值引用作为函数参数进行传递被视作左值引用
+	}
+
+	int main()
+	{
+		int i = 520;
+		printValue(i);
+		printValue(1314);
+		forward(250);
+
+		return 0;
+	};
+
 ```
