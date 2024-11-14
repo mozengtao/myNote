@@ -610,5 +610,12 @@ leaf linkName {
 	}
 }
 ```
-- [pyang](https://github.com/mbj4668/pyang)
-- [网络工程师的Python之路 -- NETCONF、YANG、ncclient理论和实战](https://zhuanlan.zhihu.com/p/258555515)
+[pyang](https://github.com/mbj4668/pyang)  
+[网络工程师的Python之路 -- NETCONF、YANG、ncclient理论和实战](https://zhuanlan.zhihu.com/p/258555515)  
+[What Is YANG?](https://info.support.huawei.com/info-finder/encyclopedia/en/YANG.html)  
+[NETCONF Programming Guide](https://support.huawei.com/enterprise/en/doc/EDOC1100216384)  
+[Understanding YANG Introduction to the YANG modeling language](https://network.developer.nokia.com/sr/learn/yang/understanding-yang/)  
+[ConfD User Guide](http://66.218.245.39/doc/html/)  
+[ConfD: The external database API](http://66.218.245.39/doc/html/ch07.html)  
+[confd_lib_dp — callback library for connecting data providers to ConfD](http://66.218.245.39/doc/html/rn02re11.html)  
+[tailf_yang_extensions — Tail-f YANG extensions](http://66.218.245.39/doc/html/rn03re21.html)  

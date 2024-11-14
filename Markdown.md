@@ -1,207 +1,266 @@
-[Markdown基本语法](https://www.markdown.xyz/basic-syntax/)
-[Mardown教程 Obsidian版本](https://publish.obsidian.md/csj-obsidian/0+-+Obsidian/Markdown/Markdown%E8%B6%85%E7%BA%A7%E6%95%99%E7%A8%8B+Obsidian%E7%89%88 "按住Ctrl跳转")
+[Markdown基本语法](https://www.markdown.xyz/basic-syntax/)  
+[Markdown Basic Syntax](https://www.markdownguide.org/basic-syntax/)  
 
-- [**Writing Markdown**](https://shd101wyy.github.io/markdown-preview-enhanced/#/markdown-basics?id=markdown-basics)
-### 标题
-%%
-标题共六级，# × 标题级数 + 空格 + 文本内容
-%%
-### 斜体/粗体
-#### 斜体
-<!-- * + 文本内容 + * -->
-*斜体文本1*
-#### 粗体
-<!--  **+ 文本内容 + ** -->
-**粗体文本1**
-#### 粗斜体
-<!-- ***+ 文本内容 + *** -->
-***粗斜体文本1***
-#### 斜体包含粗体
-<!-- * + 斜体文本 + ** + 粗体文本 + ** + 斜体文本 + * -->
-*这里是一段斜体中**包含粗体**的文字*
-#### 粗体包含斜体
-<!-- ** + 粗体文本 + * + 斜体文本 + * + 粗体文本 + ** -->
-**这里是一段粗体中*包含斜体*的文字**
-### 线
-#### 水平分割线 
----
-***
-#### 文本删除线
-<!-- ~~ + 文本内容 +~~ 首尾各加两个 ~ 波浪号 -->
-~~这是一段删除了的文本~~
-#### 文本下划线
-<!-- <u> + 文本内容 + </u> -->
-<u>这是一段加了下划线的文本<u/>
-### 列表&引用
-#### 有序列表
-<!-- 1. + 空格 + 文本内容 -->
-1. 这是第一个有序列表 <!-- 写文本前，先 ( Shift + Enter ) -->
- 这是同个列表下另起一行的内容
-2.  这是第二个有序列表
- 这是同个列表下另起一行的内容
-#### 无序列表
-<!-- - + 空格 + 文本内容 -->
-- 这是第1个无序列表 <!-- 写文本前，先 ( Shift + Enter ) -->
-  这是同个列表下，另起一行的文本内容
-- 这是第2个无序列表 <!-- 写文本前，先 ( Shift + Tab 或 Ctrl + [ ) -->
-  这是同个列表下，另起一行的文本内容
-#### 引用
-<!-- > + 空格 + 文本内容 -->
-> 这是第一段引用文本的第1行
-> 这是第一段引用文本的第2行
->> 这是第二段引用文本的第1行
->>> 这是第二段引用文本的第2行
-### 缩进&退格
-<!-- 缩进: Tab或者Ctrl + [, 退格: Shift + Tab或者Ctrl + ] -->
-####  有序列表的缩&退
-1. 第一级有序列表1
-	1. 第二级有序列表1 <!-- 写文本之前，先( Tab 或 Ctrl + ] ) ；写完文本后，再(Enter) -->
-	2.  第二级有序列表2
-2. 第一级有序列表2 <!-- 写文本前，先 ( Shift + Tab 或 Ctrl + [ ) -->
-#### 无序列表的缩&退
-- 第一级无序列表1
-	- 第二级无序列表1 <!-- 写文本前，先( Tab 或 Ctrl + ] ) ；写完后，再(Enter) -->
-	- 第二级无序列表2
-#### 引用的缩&退
-<!-- 引用需另起一行，并额外多打一个 > 来完成 缩进, 如果要退回上一级，敲2下回车键即可 -->
-> 这是第一级引用
-> >这是第二级引用
-> 
-> 这里又是第一级引用了
-#### 有序&无序&引用 连续套娃
-<!-- 有序列表、无序列表、引用 三者之间，可以相互嵌套-->
-<!-- 核心键 ： Shift + Enter & Enter & Shift + Tab ( 或 Ctrl + [ )-->
-<!-- Shift + Enter 在切换格式的嵌套中，是 自带一层 缩进 效果的-->
-
-1. 第一级 有序列表1 <!-- (Shift + Enter) -->
-	- 第二级 无序列表1 <!-- (Shift + Enter) -->
-	  >第三级 引用1  <!-- (Enter) -->
-	  >- 第四级 无序列表2 <!-- (Shift + Enter) -->
-	  > 	 1. 第五级 有序列表2
-### 网页链接与图像
-#### 网页链接
-<!-- [ + 显示文本内容 + ] + ( + 链接地址 + 空格 + " + 提示信息文本 + " + ) -->
-[必应一下，你就知道](https://cn.bing.com/ "必应一下")
-##### 链接的加粗
-<!-- 把一对 ** 加在 显示文本内容的首尾 -->
-[**必应一下，你就知道**](https://cn.bing.com/ "必应一下")
-#### 图像
-<!-- 在网页链接前面加个 ! (英文格式的)，! 代表 可见 -->
-<!-- 本地图片直接复制粘贴即可 -->
-<!-- Obsidian的本地图片可以用![[图片名|宽度数值x高度数值]]调整大小 -->
-![湘湖1](https://z3.ax1x.com/2021/08/06/fuNkXq.jpg "湘湖一角")
-
-![[pic1.jpg|240x240]]
-### 表格
-<!-- | 是构成表格的主要 框架, - 区分 表头 和 表格主体, : 控制 表格内 文本内容 的 对齐方式 -->
-|表头1|表头2|表头3|
-|:-|:-:|-:|
-|数据1|数据2|数据3|
-|数据4|数据5|数据6|
-#### 表格中文本的换行
-<!-- 在长文本进行换行，可以在 中间 插入一个 <br> （ 换行标签 ) -->
-|表头1|表头2|表头3|
-|:-|:-:|-:|
-|数据1|数据2, a very long data string, <br>which needs to be splited into another line|数据3|
-### 代码域
-#### 行内代码
-<!-- 输入两个 ` 反引号 ，在中间写代码内容 -->
-`printf("hello world!")`
-#### 代码块
-<!-- 
-``` + 语言种类
- 代码内容
-``` 
--->
-
-```c
-char*
-pmac(uint8_t *m)
-{
-      char *p;
-      static int idx;
-      static char buf[8][32];
-
-      p = buf[idx++];
-      if(idx >= nelem(buf))
-              idx = 0;
-
-      snprintf(p, 32, "%02x:%02x:%02x:%02x:%02x:%02x", m[0], m[1], m[2], m[3], m[4], m[5]);
-      
-      return p;
-
-}
+### Headings
 ```
-### 任务列表(待办)
-<!-- - + 空格 +[ ] +空格 + 任务列表内容 ( 中括号[ ] 里面必须有个空格) -->
-<!-- 在源代码界面，在中括号内输入英文字母x,标记为已办 -->
-- [x] 待办列表1
-	- [x] 待办列表2
-	      另起一行的待办列表
-- [ ] 待办列表3
-- [ ] 待办列表4
-### 注释
-<!-- 这里是注释的内容 -->
-%%这是Obsidian的注释内容%%
+# Heading level 1
+## Heading level 2
+### Heading level 3
+#### Heading level 4
+##### Heading level 5
+###### Heading level 6
+```
 
-<!-- 这是单行注释内容 -->
+### Headings Alternate Syntax
+```
+Heading level 1
+=====
 
-<!-- 这是多行
-注释
-内容
--->
+Heading level 2
+---
+```
 
-%%这是Obsidian的单行注释内容%%
+### Paragraphs
+```
+use a blank line to separate one or more lines of text.
 
-%%这是
-Obsidian的
-多行注释内容
-%%
-### 变量
-#### 网页链接变量
-%%
-输入为[显示文本内容] + [变量名]
-变量名可以在文档任意区域输入，格式如下:
-[变量名] + : + 空格 + 链接地址
-%%
+line 1
 
-[必应一下，你就知道][必应]
-[知乎一下，就有答案][知乎]
+line 2
+```
 
-<!-- 这里是变量区域 -->
-[必应]: https://cn.bing.com/
-[知乎]: https://www.zhihu.com/
-#### 脚注
-%%
-在需要输入脚注的地方输入[^脚注代号]
-在其他区域定义脚注变量
-%%
+### Line Breaks
+```
+To create a line break or new line (<br>), end a line with two or more spaces, and then type return.
 
-鲁迅的原名是[^1]，浙江哪里人[^2]
-<!-- 这里是变量区域 -->
-[^1]: 周树人
-[^2]: 绍兴人
-### 拓展文本标记
-%%Markdown 想实现更多的文本显示效果，只能依赖HTML标记实现%%
-#### 键盘文本
-<!-- <kbd>键盘文本</kbd> -->
-<kbd>这里是键盘文本</kbd>
-#### 放大文本
-<!-- <big>这是一段放大的文本</big> -->
-<big>这是一段放大的文本</big>
-#### 缩小文本
-<!-- <small>这是一段缩小的文本</small> -->
-<small>这是一段缩小的文本</small>
-#### 多彩文本
-<font color=orange>这是一段橘色的文本</fond>
-### 拓展文本显示结果
-%%拓展显示效果既不是原生 Markdown语法 支持的，也非 HTML标记，而是部分编辑器 提供的 额外标识符，属于拓展语法，旨在为 Markdown使用者 提供更多样式选择%%
-### 转义字符
-<!-- 
-利用转义字符，在这些标识符 前面 加上 反斜线
--->
-### 高亮文本
-==这是一段高亮的文本==
+line1   (here there are more that 2 spaces)
+line 2
+```
 
-\*利用转义字符，在这些标识符 前面 加上 反斜线\*
-- [Markdown 官方教程](https://markdown.com.cn/)
+### Emphasis
+#### Bold
+```
+I just love **bold text**.
+
+Love**is**bold
+```
+#### Italic
+```
+Italicized text is the *cat's meow*.
+
+A*cat*meow
+```
+
+#### Bold and Italic
+```
+This text is ***really important***.
+
+This is really***very***important text.
+```
+
+### Blockquotes
+```
+For compatibility, put blank lines before and after blockquotes
+
+> Dorothy followed her through many of the beautiful rooms in her castle.
+```
+
+#### Blockquotes with Multiple Paragraphs
+```
+Blockquotes can contain multiple paragraphs. Add a > on the blank lines between the paragraphs.
+
+> Dorothy followed her through many of the beautiful rooms in her castle.
+>
+> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+```
+
+#### Nested Blockquotes
+```
+Blockquotes can be nested. Add a >> in front of the paragraph you want to nest
+
+> Dorothy followed her through many of the beautiful rooms in her castle.
+>
+>> The Witch bade her clean the pots and kettles and sweep the floor and keep the fire fed with wood.
+```
+
+#### Blockquotes with Other Elements
+```
+Blockquotes can contain other Markdown formatted elements. Not all elements can be used — you’ll need to experiment to see which ones work.
+
+> #### The quarterly results look great!
+>
+> - Revenue was off the chart.
+> - Profits were higher than ever.
+>
+>  *Everything* is going according to **plan**.
+```
+
+### Lists
+#### Ordered Lists
+```
+To create an ordered list, add line items with numbers followed by periods. The numbers don’t have to be in numerical order, but the list should start with the number one.
+
+1. Frist item
+1. Second item
+1. Third item
+1. Fourth item
+
+1. Frist item
+2. Second item
+3. Third item
+4. Fourth item
+
+1. Frist item
+8. Second item
+4. Third item
+4. Fourth item
+
+1. Frist item
+2. Second item
+3. Third item
+4. Fourth item
+
+1. Frist item
+2. Second item
+3. Third item
+     1. Indented item
+     2. Indented item
+4. Fourth item
+```
+
+#### Unordered Lists
+```
+To create an unordered list, add dashes (-), asterisks (*), or plus signs (+) in front of line items. Indent one or more items to create a nested list
+
+- Frist item
+- Second item
+- Third item
+- Fourth item
+
+
+- Frist item
+- Second item
+- Third item
+     - Indented item
+     - Indented item
+- Fourth item
+```
+
+#### Starting Unordered List Items With Numbers
+```
+If you need to start an unordered list item with a number followed by a period, you can use a backslash (\) to escape the period.
+
+- 1968\. A great year!
+- I think 1969 was second best.
+```
+
+#### Adding Elements in Lists
+```
+To add another element in a list while preserving the continuity of the list, indent the element four spaces or one tab, as shown in the following examples.
+
+// Paragraphs
+
+* This is the first list item.
+* Here's the second list item.
+
+    I need to add another paragraph below the second list item.
+
+* And here's the third list item.
+
+// Blockquotes
+
+* This is the first list item.
+* Here's the second list item.
+
+    > A blockquote would look great below the second list item.
+
+* And here's the third list item.
+
+// Code Blocks
+Code blocks are normally indented four spaces or one tab. When they’re in a list, indent them eight spaces or two tabs.
+
+1. Open the file.
+2. Find the following code block on line 21:
+
+        <html>
+          <head>
+            <title>Test</title>
+          </head>
+
+3. Update the title to match the name of your website.
+
+// Images
+
+1. Open the file containing the Linux mascot.
+2. Marvel at its beauty.
+
+    ![Tux, the Linux mascot](/assets/images/tux.png)
+
+3. Close the file.
+
+// Lists
+You can nest an unordered list in an ordered list, or vice versa.
+
+1. First item
+2. Second item
+3. Third item
+    - Indented item
+    - Indented item
+4. Fourth item
+```
+
+### Code
+```
+To denote a word or phrase as code, enclose it in backticks (`)
+
+At the command prompt, type `nano`.
+```
+
+### Escaping Backticks
+```
+If the word or phrase you want to denote as code includes one or more backticks, you can escape it by enclosing the word or phrase in double backticks (``).
+
+``Use `code` in your Markdown file.``
+```
+
+### Code Blocks
+```
+To create code blocks, indent every line of the block by at least four spaces or one tab.
+
+    <html>
+      <head>
+      </head>
+    </html>
+```
+
+### Horizontal Rules
+```
+To create a horizontal rule, use three or more asterisks (***), dashes (---), or underscores (___) on a line by themselves.
+
+For compatibility, put blank lines before and after horizontal rules.
+
+---
+
+---
+```
+
+### Links
+```
+To create a link, enclose the link text in brackets (e.g., [Duck Duck Go]) and then follow it immediately with the URL in parentheses (e.g., (https://duckduckgo.com)).
+
+My favorite search engine is [Duck Duck Go](https://duckduckgo.com).
+
+// Adding Titles
+
+ou can optionally add a title for a link. This will appear as a tooltip when the user hovers over the link. To add a title, enclose it in quotation marks after the URL.
+
+My favorite search engine is [Duck Duck Go](https://duckduckgo.com "The best search engine for privacy").
+```
+
+### URLs and Email Addresses
+```
+To quickly turn a URL or email address into a link, enclose it in angle brackets.
+
+<https://www.markdownguide.org>
+<fake@example.com>
+```

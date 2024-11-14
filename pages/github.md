@@ -17,8 +17,8 @@
 - [**The github.dev web-based editor**](https://docs.github.com/en/codespaces/the-githubdev-web-based-editor)
 - [如何使用 Git/GitHub](https://docs.spongepowered.org/6.0.0/zh-CN/contributing/howtogit.html)
 - Tips
-	- **To clone a private repository from your account or organization, you need to generate a PAT(Personal Access Token) on your Github account, and add it to the command above.**
-	- ```
+	> **To clone a private repository from your account or organization, you need to generate a PAT(Personal Access Token) on your Github account, and add it to the command above.**
+	``` bash
+	  # howto
 	  git clone https://<pat>@github.com/<your account or organization>/<repo>.git
 	  ````
-	-
