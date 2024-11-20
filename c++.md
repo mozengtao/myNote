@@ -6601,4 +6601,5 @@ Adapters that provide alternative access sequential & associative containers
 [设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)
 [C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)
 [C++ std::move() 实现详解](https://gukaifeng.cn/posts/c-stdmove-shi-xian-xiang-jie/)
-[C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)
+[C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)  
+[Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main)  

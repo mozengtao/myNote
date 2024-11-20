@@ -392,7 +392,6 @@ pc2 '1+2*3'
 	  一个新的子进程来运行该脚本
 	  ```
 - Unix Shell I/O重定向
-  collapsed:: true
 	- 重定向是由shell首先完成的，在找到命令之前
 		- shell会创建一个新的空文件或者截断（清空）一个现有的文件(^^Shell 并不关心你在命令行的什么地方进行文件的重定向^^)
 		- 在做完重定向，并从命令行中删除语法后，shell会找到并执行命令（如果有的话）行中的语法，shell会找到并执行命令（如果有的话）
@@ -404,14 +403,11 @@ pc2 '1+2*3'
 		      >file echo hi there mom                   # echo has three arguments
 		  ```
 - Philosophy
-  collapsed:: true
 	- shell 脚本必须清晰可读的布局
 		- 易于阅读，修改和维护
 	- 避免使用不必要的命令
-	  collapsed:: true
 		- `grep "mystring" /tmp/myfile` 要优于 `cat /tmp/myfile | grep "mystring"` 因为创建和销毁进程会消耗操作系统的资源，特别是在多重循环等场景下。
 - bash算术运算
-  collapsed:: true
 	- 执行算术运算的方法
 		- ```bash
 		  #算术扩展
@@ -507,33 +503,25 @@ pc2 '1+2*3'
 	- [Bash Math Operations (Bash Arithmetic) Explained](https://phoenixnap.com/kb/bash-math)
 	- [Perform arithmetic operations](https://bash.cyberciti.biz/guide/Perform_arithmetic_operations)
 - shell启动文件
-  collapsed:: true
 	- login shell
 		- `/etc/profile`
-		  collapsed:: true
 			- 全局配置脚本，适合于所有用户
 				- `/etc/profile.d/*.sh`
 					- 在`/etc/profile`中会判断该目录下是否包含shell脚本，如果包含则运行
 		- `~/.bash_profile`
-		  collapsed:: true
 			- 特定用户的启动文件，可以用来扩展或者覆写全局配置脚本的配置
 		- `~/.bash_login`
-		  collapsed:: true
 			- 如果`~/.bash_profile`不存在，则会读取该脚本
 		- `~/.profile`
-		  collapsed:: true
 			- 如果`~/.bash_profile` 和 `~/.bash_login`都不存在，则会读取该脚本
 	- non-login shell
 		- `/etc/bash.bashrc`
-		  collapsed:: true
 			- 全局配置脚本，适合于所有用户
 		- `~/.bashrc`
-		  collapsed:: true
 			- 特定用户的启动文件，可以用来扩展或者覆写全局配置脚本的配置
 		- In addition to reading the startup files above, non-login shells also inherit the environment from their parent process, usually a login shell
 		- 除了读取以上配置文件，non-login shell也继承父进程的环境变量，通常是一个login shell
 - 流程控制
-  collapsed:: true
 	- ```bash
 	  # if语句
 	  if commands; then
@@ -656,7 +644,6 @@ pc2 '1+2*3'
 	  }   # end of system_info
 	  ```
 - 检查命令的退出状态
-  collapsed:: true
 	- ```bash
 	  # Check the exit status
 	  cd "$some_directory"
@@ -676,7 +663,6 @@ pc2 '1+2*3'
 	  fi
 	  ```
 - here script
-  collapsed:: true
 	- 也称作here document，是IO重定向的一种形式，它提供了一种方法用来包含文本内容作为另一个命令的标准输入。
 	- ```bash
 	  command << token
@@ -719,7 +705,6 @@ pc2 '1+2*3'
 - [[watch]]
 - [[readlink]]
 - 输入重定向
-  collapsed:: true
 	- ```bash
 	  # wc knows it is reading from file, so file name is listed
 	  $ wc -l file.txt
@@ -730,13 +715,11 @@ pc2 '1+2*3'
 	  3
 	  ```
 - 丢弃命令输出
-  collapsed:: true
 	- ```bash
 	  command > /dev/null
 	  command > /dev/null 2>&1
 	  ```
 - 命令分组
-  collapsed:: true
 	- ```bash
 	  {
 	  	echo "I found all these PNGs:"
@@ -749,7 +732,6 @@ pc2 '1+2*3'
 	  { echo "123"; echo "456"; } > txt2
 	  ```
 - 自定义函数
-  collapsed:: true
 	- ```bash
 	  function myadd()
 	  {
@@ -759,7 +741,6 @@ pc2 '1+2*3'
 	  echo "1 + 2 = $(myadd 1 2)"
 	  ```
 - 用户输入
-  collapsed:: true
 	- ```bash
 	  read name
 	  echo "Hello $name"
@@ -768,7 +749,6 @@ pc2 '1+2*3'
 	  echo $name
 	  ```
 - 文件读写
-  collapsed:: true
 	- ```bash
 	  while read -r line
 	  do
@@ -776,13 +756,11 @@ pc2 '1+2*3'
 	  done <file.txt
 	  ```
 - here-string
-  collapsed:: true
 	- ```bash
 	  read first second <<< "hello world"
 	  echo $second $first
 	  ```
 - 进程替换
-  collapsed:: true
 	- 进程替换使用系统内部文件 `/dev/fd/<n>` 发送括号内进程的结果到另一个进程
 	- 使用 echo 命令可以查看进程替换对应的文件名
 		- ```bash
@@ -823,7 +801,6 @@ pc2 '1+2*3'
 			  sort <(egrep -v '^#' <(paste -d: <(cut -d: -f5 /etc/passwd)  <(cut -d: -f1 /etc/passwd) ) )
 			  ```
 - 构建数组
-  collapsed:: true
 	- ```bash
 	  files=(*.txt)
 	  for file in ${files[@]}
@@ -896,43 +873,34 @@ pc2 '1+2*3'
 	- cat
 	- [[realpath]]
 	  background-color:: red
-	  collapsed:: true
 		- 获取文件的绝对路径
 	- [[pgrep]]
-	  collapsed:: true
 		- 基于名称或者其他条件查找进程
 	- [[exec]]
-	  collapsed:: true
 		- 不创建subshell，而是用命令替换当前shell执行
 	- [[stat]]
-	  collapsed:: true
 		- 获取文件状态信息
 	- [[env]]
-	  collapsed:: true
 		- 打印环境变量或者在不修改当前环境的情况下在新环境下运行应用
 	- [[lsof]]
-	  collapsed:: true
 		- 列举打开的文件
 	- [[fuser]]
-	  collapsed:: true
 		- > identify processes using files or sockets
 	- [[timeout]]
-	  collapsed:: true
 		- > run a command with a time limit
 	- [[column]]
-	  collapsed:: true
 		- > columnate lists
-	- tldr
-	  collapsed:: true
+	- tldr([tldr online](https://tldr.inbrowser.app/))
 		- Too Long; Didn't Read
-		  collapsed:: true
 			- ```bash
 			  tldr grep
+
+			  tldr mount
+			  man mount
+			  mount --help
 			  ```
 	- man
-	  collapsed:: true
 		- 获取命令或函数参考手册
-		  collapsed:: true
 			- ```bash
 			  man dash
 			  man builtin
@@ -942,10 +910,8 @@ pc2 '1+2*3'
 	- [[kill]]
 	- [[cmp]]
 - shell脚本格式检查
-  collapsed:: true
 	- [shellcheck online](https://www.shellcheck.net/)
 - Bash带颜色输出
-  collapsed:: true
 	- ```bash
 	  red='\e[0;31m'
 	  blue='\e[0;34m'
@@ -955,7 +921,6 @@ pc2 '1+2*3'
 	  printf "%bhello world%b\n" ${red} ${endColor}
 	  ```
 - 通过`set`命令改变shell选项
-  collapsed:: true
 	- [内置的set命令](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
 	- 用法示例
 		- ```bash
@@ -969,7 +934,6 @@ pc2 '1+2*3'
 		  3.在脚本的开头可以指定 #!/bin/bash -xv
 		  ```
 - Tips
-  collapsed:: true
 	- if条件判断
 		```bash
 		  [ is POSIX
