@@ -109,3 +109,7 @@
 # Go 实战
 [Build Your Own Database From Scratch](https://build-your-own.org/database/)  
 [Let's Build a Simple Database](https://cstack.github.io/db_tutorial/)  
+
+[Understand how to use C libraries in Go, with CGO](https://dev.to/metal3d/understand-how-to-use-c-libraries-in-go-with-cgo-3dbn)  
+[Go Wiki: cgo](https://go.dev/wiki/cgo)  
+

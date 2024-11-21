@@ -22,3 +22,5 @@
 [The Rust Standard Library](https://doc.rust-lang.org/std/#primitives)  
 [The Rust Reference](https://doc.rust-lang.org/stable/reference/)    
 [Rust Ownership by Example](https://depth-first.com/articles/2020/01/27/rust-ownership-by-example/)  
+
+[**From (C)Go to Rust**](https://radu-matei.com/blog/from-go-to-rust-static-linking-ffi/)  
