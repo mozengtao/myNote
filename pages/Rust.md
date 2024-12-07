@@ -6,6 +6,10 @@
 [通过例子学 Rust](https://www.rustwiki.org.cn/zh-CN/rust-by-example/)  
 [Rust 秘典](https://nomicon.purewhite.io/intro.html)  
 
+[Rust for Rustacean](https://github.com/rustaccato/road-to-being-master-rustacean)  
+[Rust in Action](https://github.com/rustaccato/road-to-being-master-rustacean)  
+[Zero to Production in Rust](https://github.com/rustaccato/road-to-being-master-rustacean)  
+
 [The Cargo Book](https://doc.rust-lang.org/cargo/)  
 
 [Asynchronous Programming in Rust](https://rust-lang.github.io/async-book/)  
