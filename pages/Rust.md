@@ -1,4 +1,6 @@
 [**Playground**](https://play.rust-lang.org/)  
+[The Rust Standard Library](https://doc.rust-lang.org/std/index.html)  
+[Rust 标准库](https://www.rustwiki.org.cn/zh-CN/std/index.html)  
 
 [Rust 程序设计语言](https://rustwiki.org/zh-CN/book/title-page.html)  
 [Rust 程序设计语言](https://kaisery.github.io/trpl-zh-cn/title-page.html)  
