@@ -1,5 +1,27 @@
 - [[nvim]]
 - ```bash
+  # vim + tmux
+  当在 Vim 中按下 Ctrl + x 时，将光标所在行的内容通过 xargs 发送到 tmux 会话（第 0 个窗口）
+  nmap <C-x> :silent .w !xargs -0ri tmux send -t0 {}<cr>
+  nmap <C-x>
+    普通模式下的键值映射
+  :silent
+    后续命令在执行时不显示任何输出
+  .w
+    .w 命令会将当前行的内容保存到一个临时文件中，w 命令通常并不指定文件名，Vim 会在后台自动生成文件路径。如果没有指定文件路径，它会写入一个临时文件
+    :w 命令输出内容时，它会将当前行的文本通过标准输出（stdout）传递到后续的命令
+    使用 ! 命令时，Vim 会把标准输出从 .w 的执行结果（即当前行的内容）传递给 xargs，而不是直接将其写入一个文件
+  !xargs -0ri tmux send -t0 {}<cr>
+    xargs 从标准输入读取内容
+    xargs 处理标准输入并传递给 tmux send
+    -0ri
+      -0
+        使用 NUL 字符作为输入项的分隔符
+      -r
+        如果没有输入内容，xargs 不会执行任何操作
+      -i
+        xargs 会用 {} 替换输入内容
+
   # 格式化代码
   sudo apt install clang-format
   .vimrc:

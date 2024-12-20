@@ -1,8 +1,10 @@
-- [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)
-- [The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)
-- [typing — Support for type hints](https://docs.python.org/3/library/typing.html)
-- [How to Use Type Hints for Multiple Return Types in Python](https://realpython.com/python-type-hints-multiple-types/)
-- []
+[Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
+[The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
+[typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
+[How to Use Type Hints for Multiple Return Types in Python](https://realpython.com/python-type-hints-multiple-types/)  
+[Python Module Index](https://docs.python.org/3/py-modindex.html)  
+[NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
+
 	```python
 	def greeting(name: str) -> str:
 		return 'Hello ' + name

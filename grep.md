@@ -27,6 +27,9 @@
 	         -o, --only-matching
 	                Print only the matched (non-empty) parts of a matching
 	                line, with each such part on a separate output line.
+			-e PATTERN, --regexp=PATTERN
+					Use  PATTERN  as  the  pattern.  If this option is used multiple times or is combined with the -f (--file) option, search for all patterns given.
+					This option can be used to protect a pattern beginning with “-”.
 	  ```
 - 参考文档
 	- [man grep](https://man7.org/linux/man-pages/man1/grep.1.html)
