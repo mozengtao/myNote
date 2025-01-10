@@ -2548,13 +2548,395 @@ Python对SMTP支持有smtplib和email两个模块，email负责构造邮件，sm
 
 # POP3收取邮件
 poplib模块，实现了POP3协议，可以直接用来收邮件，email模块提供的各种类来解析原始文本，变成可阅读的邮件对象
+```
 
 ## 访问数据库
+```python
+表是数据库中存放关系数据的集合，一个数据库里面通常都包含多个表，比如学生的表，班级的表，学校的表，等等。表和表之间通过外键关联
+要操作关系数据库，首先需要连接到数据库，一个数据库连接称为Connection
+连接到数据库后，需要打开游标，称之为Cursor，通过Cursor执行SQL语句，然后，获得执行结果
+
+
 # SQLite
+SQLite是一种嵌入式数据库，它的数据库就是一个文件。由于SQLite本身是C写的，而且体积很小，所以，经常被集成到各种应用程序中，甚至在iOS和Android的App中都可以集成
 import sqlite3
+
+conn = sqlite3.connect('test.db')   # 如果文件不存在，会自动在当前目录创建
+cursor = conn.cursor()
+cursor.execute('create table user (id varchar(20) primary key, name varchar(20))')
+cursor.execute('insert into user (id, name) values (\'1\', \'Michael\')')
+cursor.rowcount     # 通过rowcount获得插入的行数
+conn.commit()       # 提交事务
+cursor.close()      # 关闭Cursor
+conn.close()        # 关闭Connection
+
+conn = sqlite3.connect('test.db')
+cursor = conn.cursor()
+cursor.execute('select * from user where id=?', ('1',))     # 执行查询语句
+values = cursor.fetchall()                                  # 获得查询结果集
+values                                                      # [('1', 'Michael')]
+cursor.close()
+conn.close()
+
 # MySQL
+MySQL是Web世界中使用最广泛的数据库服务器
+SQLite的特点是轻量级、可嵌入，但不能承受高并发访问，适合桌面和移动应用。而MySQL是为服务器端设计的数据库，能承受高并发访问，同时占用的内存也远远大于SQLite。
+此外，MySQL内部有多种数据库引擎，最常用的引擎是支持数据库事务的InnoDB
+
 pip install mysql-connector-python
+
+
 # ORM框架 SQLAlchemy
+数据库表是一个二维表，包含多行多列。把一个表的内容用Python的数据结构表示出来的话，可以用一个list表示多行，list的每一个元素是tuple，表示一行记录
+比如，包含id和name的user表
+[
+    ('1', 'Michael'),
+    ('2', 'Bob'),
+    ('3', 'Adam')
+]
+用tuple表示一行很难看出表的结构。如果把一个tuple用class实例来表示，就可以更容易地看出表的结构
+class User(object):
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+[
+    User('1', 'Michael'),
+    User('2', 'Bob'),
+    User('3', 'Adam')
+]
+ORM技术：Object-Relational Mapping，把关系数据库的表结构映射到对象上，这种转换是通过 ORM 框架实现的，在Python中，最有名的ORM框架是SQLAlchemy
+
 pip install sqlalchemy
+
+```
+
+## Web开发
+```python
+Client/Server模式，不适合Web，最大的原因是Web应用程序的修改和升级非常迅速，而CS架构需要每个客户端逐个升级桌面App
+Browser/Server模式：客户端只需要浏览器，应用程序的逻辑和数据都存储在服务器端。浏览器只需要请求服务器，获取Web页面，并把Web页面展示给用户即可
+
+# HTTP
+HTML是一种用来定义网页的文本，会HTML，就可以编写网页
+HTTP是在网络上传输HTML的协议，用于浏览器和服务器的通信
+
+HTML定义了页面的内容，CSS来控制页面元素的样式，而JavaScript负责页面的交互逻辑
+
+# HTML
+# hello.html
+<html>
+<head>
+  <title>Hello</title>
+</head>
+<body>
+  <h1>Hello, world!</h1>
+</body>
+</html>
+
+# CSS(Cascading Style Sheets)
+CSS用来控制HTML里的所有元素如何展现，比如，给标题元素<h1>加一个样式，变成48号字体，灰色，带阴影
+<html>
+<head>
+  <title>Hello</title>
+  <style>
+    h1 {
+      color: #333333;
+      font-size: 48px;
+      text-shadow: 3px 3px 3px #666666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hello, world!</h1>
+</body>
+</html>
+
+# JavaScript
+JavaScript是为了让HTML具有交互性而作为脚本语言添加的，JavaScript既可以内嵌到HTML中，也可以从外部链接到HTML中
+如果我们希望当用户点击标题时把标题变成红色，就必须通过JavaScript来实现
+<html>
+<head>
+  <title>Hello</title>
+  <style>
+    h1 {
+      color: #333333;
+      font-size: 48px;
+      text-shadow: 3px 3px 3px #666666;
+    }
+  </style>
+  <script>
+    function change() {
+      document.getElementsByTagName('h1')[0].style.color = '#ff0000';
+    }
+  </script>
+</head>
+<body>
+  <h1 onclick="change()">Hello, world!</h1>
+</body>
+</html>
+
+# WSGI 接口 (Web Server Gateway Interface)
+Web应用的本质：
+1.浏览器发送一个HTTP请求；
+2.服务器收到请求，生成一个HTML文档；
+3.服务器把HTML文档作为HTTP响应的Body发送给浏览器；
+4.浏览器收到HTTP响应，从HTTP Body取出HTML文档并显示
+
+简单的Web应用是先把HTML用文件保存好，用一个现成的HTTP服务器软件，接收用户请求，从文件中读取HTML，返回。Apache、Nginx、Lighttpd等是常见的静态服务器
+如果要动态生成HTML，需要自己实现HTTP请求、解析HTTP请求、发送HTTP响应这些底层代码，正确的做法是底层代码由专门的服务器软件实现，只用Python专注于生成HTML文档。因为我们不希望接触到TCP连接、HTTP原始请求和响应格式，所以，需要一个统一的接口，让我们专心用Python编写Web业务，这个接口就是WSGI：Web Server Gateway Interface
+
+Python内置了一个WSGI服务器，这个模块叫wsgiref，考虑任何运行效率，仅供开发和测试使用
+
+# hello.py
+def application(environ, start_response):       # application()函数由WSGI服务器调用
+    start_response('200 OK', [('Content-Type', 'text/html')])
+    return [b'<h1>Hello, web!</h1>']
+
+# server.py
+from wsgiref.simple_server import make_server
+from hello import application
+
+httpd = make_server('', 8000, application)
+print('Serving HTTP on port 8000...')
+
+httpd.serve_forever()   # 开始监听HTTP请求
+
+# Web框架
+WSGI提供的接口比较低级，需要在WSGI接口之上能进一步抽象，让用户专注于用一个函数处理一个URL，至于URL到函数的映射，则交给Web框架来做
+Flask 是一个目前比较流行的Web框架
+Flask通过Python的装饰器在内部自动地把URL和函数给关联起来
+# 
+from flask import Flask
+from flask import request
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return '<h1>Home</h1>'
+
+@app.route('/signin', methods=['GET'])
+def signin_form():
+    return '''<form action="/signin" method="post">
+              <p><input name="username"></p>
+              <p><input name="password" type="password"></p>
+              <p><button type="submit">Sign In</button></p>
+              </form>'''
+
+@app.route('/signin', methods=['POST'])
+def signin():
+    # 需要从request对象读取表单内容：
+    if request.form['username']=='admin' and request.form['password']=='password':
+        return '<h3>Hello, admin!</h3>'
+    return '<h3>Bad username or password.</h3>'
+
+if __name__ == '__main__':
+    app.run()
+
+常见的Python Web框架：
+Flask
+Django
+web.py
+Bottle
+Tornado
+
+# 模板
+Web App最复杂的部分在HTML页面，HTML不仅要正确，还要通过CSS美化，再加上复杂的JavaScript脚本来实现各种交互和动画效果。总之，生成HTML页面的难度很大
+使用模板，则是预先准备一个HTML文档，这个HTML文档不是普通的HTML，而是嵌入了一些变量和指令，然后，根据我们传入的数据，替换后，得到最终的HTML，发送给用户，即MVC：Model-View-Controller
+
+# MVC 模式
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html') # render_template 用来实现模板的渲染
+
+@app.route('/signin', methods=['GET'])
+def signin_form():
+    return render_template('form.html')
+
+@app.route('/signin', methods=['POST'])
+def signin():
+    username = request.form['username']
+    password = request.form['password']
+    if username=='admin' and password=='password':
+        return render_template('signin-ok.html', username=username)
+    return render_template('form.html', message='Bad username or password', username=username)
+
+if __name__ == '__main__':
+    app.run()
+
+Flask默认支持的模板是jinja2 (pip install jinja2)
+
+# jinja2模板
+
+# home.html
+<html>
+<head>
+  <title>Home</title>
+</head>
+<body>
+  <h1 style="font-style:italic">Home</h1>
+</body>
+</html>
+
+# form.html
+<html>
+<head>
+  <title>Please Sign In</title>
+</head>
+<body>
+  {% if message %}
+  <p style="color:red">{{ message }}</p>
+  {% endif %}
+  <form action="/signin" method="post">
+    <legend>Please sign in:</legend>
+    <p><input name="username" placeholder="Username" value="{{ username }}"></p>
+    <p><input name="password" placeholder="Password" type="password"></p>
+    <p><button type="submit">Sign In</button></p>
+  </form>
+</body>
+</html>
+
+# signin-ok.html
+<html>
+<head>
+  <title>Welcome, {{ username }}</title>
+</head>
+<body>
+  <p>Welcome, {{ username }}!</p>
+</body>
+</html>
+
+一定要把模板放到正确的templates目录下，templates和app.py在同级目录下
+app.py
+templates
+    form.html
+    home.html
+    signin-ok.html
+
+通过MVC，在Python代码中处理M：Model和C：Controller，而V：View是通过模板处理的，成功地把Python代码和HTML代码最大限度地分离了
+
+常见的模板:
+Jinja2
+Mako
+Cheetah
+Django
+
+```
+## 异步IO
+```python
+# 协程 Coroutine
+协程执行过程中，在子程序内部可中断，然后转而执行别的子程序，在适当的时候再返回来接着执行
+协程最大的优势是执行效率，它没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显
+第二大优势就是不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态
+
+Python对协程的支持是通过generator实现
+
+Python的yield不但可以返回一个值，它还可以接收调用者发出的参数
+
+传统的生产者-消费者模型是一个线程写消息，一个线程取消息，通过锁机制控制队列和等待，但一不小心就可能死锁
+改用协程，生产者生产消息后，直接通过yield跳转到消费者开始执行，待消费者执行完毕后，切换回生产者继续生产，效率极高
+
+#
+def consumer():
+    r = ''
+    while True:
+        n = yield r                                     # consumer通过yield拿到消息，处理，又通过yield把结果传回
+        if not n:
+            return
+        print('[CONSUMER] Consuming %s...' % n)
+        r = '200 OK'
+
+def produce(c):
+    c.send(None)                                        # 启动生成器
+    n = 0
+    while n < 5:
+        n = n + 1
+        print('[PRODUCER] Producing %s...' % n)
+        r = c.send(n)                                   # 切换到consumer执行
+        print('[PRODUCER] Consumer return: %s' % r)     # producer拿到consumer处理的结果，继续生产下一条消息
+    c.close()                                           # 关闭consumer
+
+c = consumer()
+produce(c)
+
+整个流程无锁，由一个线程执行，produce和consumer协作完成任务，所以称为“协程”，而非线程的抢占式多任务
+
+# asyncio
+asyncio的编程模型就是一个消息循环。asyncio模块内部实现了EventLoop，把需要执行的协程扔到EventLoop中执行，就实现了异步IO
+用asyncio提供的@asyncio.coroutine可以把一个generator标记为coroutine类型，然后在coroutine内部用yield from调用另一个coroutine实现异步操作
+Python 3.5 引入了新的语法async和await，可以让coroutine的代码更简洁易读
+
+# 
+async def hello(name):
+    print("Hello %s! (%s)" % (name, threading.current_thread))
+    await asyncio.sleep(1)                                              # 主线程并未等待，而是去执行EventLoop中其他可以执行的async函数了，因此可以实现并发执行
+    print("Hello %s again! (%s)" % (name, threading.current_thread))
+    return name
+
+async def main():
+    L = await asyncio.gather(hello("Bob"), hello("Alice"))
+    print(L)
+
+asyncio.run(main())
+
+# 用asyncio的异步网络连接来获取sina、sohu和163的网站首页
+import asyncio
+
+async def wget(host):
+    print(f"wget {host}...")
+    # 连接80端口:
+    reader, writer = await asyncio.open_connection(host, 80)
+    # 发送HTTP请求:
+    header = f"GET / HTTP/1.0\r\nHost: {host}\r\n\r\n"
+    writer.write(header.encode("utf-8"))
+    await writer.drain()
+
+    # 读取HTTP响应:
+    while True:
+        line = await reader.readline()
+        if line == b"\r\n":
+            break
+        print("%s header > %s" % (host, line.decode("utf-8").rstrip()))
+    # Ignore the body, close the socket
+    writer.close()
+    await writer.wait_closed()
+    print(f"Done {host}.")
+
+async def main():
+    await asyncio.gather(wget("www.sina.com.cn"), wget("www.sohu.com"), wget("www.163.com"))
+
+asyncio.run(main())
+
+# aiohttp
+asyncio实现了TCP、UDP、SSL等协议，aiohttp 则是基于asyncio实现的HTTP框架
+使用aiohttp时，定义处理不同URL的async函数，然后通过app.add_routes()添加映射，最后通过run_app()以asyncio的机制启动整个处理流程
+
+# 编写一个HTTP服务器，分别处理以下URL
+/ - 首页返回Index Page
+/{name} - 根据URL参数返回文本Hello, {name}!
+
+# app.py
+from aiohttp import web
+
+async def index(request):
+    text = "<h1>Index Page</h1>"
+    return web.Response(text=text, content_type="text/html")
+
+async def hello(request):
+    name = request.match_info.get("name", "World")
+    text = f"<h1>Hello, {name}</h1>"
+    return web.Response(text=text, content_type="text/html")
+
+app = web.Application()
+
+# 添加路由:
+app.add_routes([web.get("/", index), web.get("/{name}", hello)])
+
+if __name__ == "__main__":
+    web.run_app(app)
 
 ```

@@ -797,6 +797,8 @@
     ![alt text](image-1.png)
 - 
     ```python
+    # http server
+    python3 -m http.server --directory /home/morrism/python/templates 8888
     ```
 - 
     ```python
