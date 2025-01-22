@@ -1,4 +1,6 @@
-
+[Golang tutorial series](https://golangbot.com/learn-golang-series/)  
+[Difference between Function and Methods in Golang](https://medium.com/@ravikumarray92/difference-between-function-and-methods-in-golang-986fc16b5912)  
+[An Introduction to Programming in Go](https://www.golang-book.com/books/intro)  
 [**Playground**](https://goplay.tools/)  
 
 [lensm](https://github.com/loov/lensm)  

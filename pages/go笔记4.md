@@ -2,14 +2,14 @@
 - 结构体
     > 将多个任意类型的变量组合在一起的聚合数据类型
     ```go
-    # 定义结构体
+    // 定义结构体
     type xxx  struct {
         name type
         name type
         ...
     }
 
-    // 示例
+    // e.g
     type Profile struct {
         name    string
         age     int
@@ -18,7 +18,7 @@
         father  *Profile
     }
 
-    或者
+    等价于
 
     type Profile struct {
         name,gender    string   // 相邻属性为同一类型，可以合并写在一起
@@ -27,7 +27,7 @@
         father  *Profile
     }
 
-    关于结构体定义组合字面量的若个规则：
+    // 结构体定义组合字面量的若个规则：
     1. 当最后一个字段和结果不在同一行时，, 不可省略
     xm := Profile {
         name: "xiaoming",
@@ -42,9 +42,9 @@
     2. 初始化结构体时，字段名要么全写，要么全不写
     3. 初始化结构体时，未赋值的字段会自动赋值为其类型对应的零值 （需要注意的是:只有通过指定字段名才可以赋值部分字段）
 
-    # 绑定方法
+    // 绑定方法
     // Go 语言中，我们无法在结构体内定义方法, 通过使用组合函数的方式来定义结构体方法
-    // 示例
+    // e.g
     func (person Profile) FmtProfile {
         fmt.Printf("name: %s\n", person.name)
         fmt.Printf("age: %d\n", person.age)
@@ -53,7 +53,7 @@
     // FmtProfile 是方法名
     // (person Profile) 表示将 FmtProfile 方法与 Profile 实例绑定，Profile 称为方法的接收者，person 表示实例本身，相当于python中的self, 在方法内可以使用person.XXX来访问实例属性
 
-    # 方法的参数传递方式
+    // 方法的参数传递方式
     1. 按值传递
     2. 按指针传递(推荐使用)
         需要在方法内改变实例的属性时，必须使用指针作为方法的接收者
@@ -61,7 +61,7 @@
         person.age += 1
     }
 
-    # 实现类似于"继承"的效果
+    // 实现类似于"继承"的效果
     type company struct {
         companyName string
         companyAddr string
@@ -89,11 +89,11 @@
         company:    myCom,
     }
 
-    # 内部方法与外部方法
+    // 内部方法与外部方法
     // 方法的首字母大写时，该方法对于所有包都是public，其他包可以调用该方法
     // 方法的首字母小写时，该方法是private，其他包无法调用该方法
 
-    # 实例化方法
+    // 实例化方法
     // 1
     xm := Profile {
         name:   "xiaoming",
@@ -122,7 +122,7 @@
     // 接口指定了一个类型应该具有的方法，并由该类型决定如何实现这些方法
     // 当一个类型定义了接口中的所有方法，我们称它实现了该接口
     // Go 语言通过接口实现多态
-    # 使用 type 关键字定义接口
+    // 使用 type 关键字定义接口
     type Phone interface {
         call()
     }
@@ -210,11 +210,10 @@
         Addr string `json:"addr,omitempty`
     }
 
-    # Tag 的格式
     // Tag 由反引号包含，由一对或几对的键值对组成，通过空格来分割键值
     `key01:"value01" key02:"value02" key03:"value03"`
 
-    # 获取 Tag 的3个步骤
+    // 获取 Tag 的3个步骤
     1.获取字段 field
     2.获取标签 Tag
     3.获取键值对 key:value
@@ -266,14 +265,12 @@
 - 类型断言 Type Assertion
     > 类型断言的用途： 1.检查 i 是否为 nil  2. 检查 i 存储的值是否为某个类型
     ```go
-    # 使用方式
     // 方式 1
     t := i.(T)  // 断言接口对象 i 不为 nil，并且接口对象 i 存储的值的类型是 T, 断言成功返回 i 的值，失败触发 panic
     // 方式 2
     t, ok := i.(T)  // 和方式1的区别是，断言失败不会触发 panic，而是将 ok 的值设置为 false
 
-    # Type Switch
-    // 用来区分多种类型
+    // Type Switch 用来区分多种类型
     func findType(i interface{}) {
         switch x := i.(type) {
             case int:
@@ -295,7 +292,7 @@
     ```go
     每个接口都包含两个属性，一个是值，一个是类型，对于空接口来说，值和类型都是nil
 
-    # 如何使用空接口
+    // 如何使用空接口
     // 1 使用 interface{} 作为类型声明一个实例，这个实例可以承载任意类型的值
     var i interface{}
 
@@ -340,7 +337,7 @@
         fmt.Println(value)
     }
 
-    # 使用空接口的注意事项
+    // 使用空接口的注意事项
     1. 空接口可以承载任意值，但不代表任意类型就可以承接空接口类型的值（从实现的角度看，任意类型的值都满足空接口，因此空接口类型可以保存任何值，也可以从空接口中取出原值，但是不允许将空接口类型的对象赋值给固定类型的对象）
     2. 当空接口承载数组和切片后，该对象无法再进行切片，如下会报错
     sli := []int{1, 2, 3}
@@ -361,8 +358,7 @@
     ```
 - 接口的3个"潜规则"
     ```go
-    1. 对方法调用的限制
-        接口是一组固定的方法集，由于静态类型的限制，接口变量有时仅能调用其中特定的一些方法
+    1. 对方法调用的限制: 接口是一组固定的方法集，由于静态类型的限制，接口变量有时仅能调用其中特定的一些方法
     type Phone interface {
         call()
     }
@@ -384,7 +380,7 @@
     phone.call()
     phone.send_msg()    // error: phone.send_msg undefined (type Phone has no field or method send_msg)
     // 出错的原因是phone对象显式声明为Phone接口类型，因此phone调用的方法会受到此接口的限制
-    # 解决方法
+    // 解决方法
     phone := iPhone{name: "mi"}
     phone.call()
     phone.send_msg()
@@ -401,7 +397,7 @@
     }
     // error: cannot type switch on non-interface value a (type int)
     // 出错原因是 Go 会将传入的参数值的类型转换为 interfacee{} 类型
-    # 解决方法： 将变量的静态类型转换为 interface{} 类型
+    // 解决方法： 将变量的静态类型转换为 interface{} 类型
     a := 10
 
     switch interface{}(a).(type) {
@@ -418,7 +414,7 @@
 - 反射
     > 反射可以用来获取对象的类型，属性及方法等
     ```go
-    # 反射世界里的两种类型
+    // 反射世界里的两种类型
     1. reflect.Type
     2. reflect.Value
 
@@ -440,7 +436,7 @@
     // 接口变量，实际上是由一 pair (type和data)组合而成的，pair 对中记录着实际变量的值和类型，也就是说在真实世界里，type 和 value 是合并在一起组成 接口变量的
     // 在反射的世界里，type 和 data 却是分开的，他们分别由 reflect.Type 和 reflect.Value 来表现
 
-    # 反射的三大定律
+    // 反射的三大定律
     1.反射可以将接口类型变量 转换为“反射类型对象”；
     2.反射可以将 “反射类型对象”转换为 接口类型变量；
     3.如果要修改 “反射类型对象” 其类型必须是 可写的；
@@ -506,7 +502,7 @@
     v2.SetString("world")
     fmt.Println(name)
 
-    # 获取类别
+    // 获取类别
     // Type 对象和 Value 对象可以通过 Kind() 方法返回对应的接口变量的基础类型
     reflect.TypeOf(m).Kind()
     reflect.ValueOf(m).Kind()
@@ -543,7 +539,7 @@
         UnsafePointer       // 底层指针
     }
 
-    # Kind 函数的使用
+    // Kind 函数的使用
     // 1
     type Profile struct {
 
@@ -577,7 +573,7 @@
     fmt.Println("m Type: ", v.Elem().Type())
     fmt.Println("m Kind: ", v.Elem().Kind())
 
-    # 类型转换
+    // 类型转换
     // 1
     var age int = 25
 
@@ -607,7 +603,7 @@
     Pointer()
     Interface()
 
-    # 对切片的操作
+    // 对切片的操作
     Slice() 函数与 Int() 等类型转换函数**不一样**，它返回的还是 reflect.Value 发射对象，而不是我们所想的真实世界里的切片对象
 
     var numList []int = []int{1, 2}
@@ -637,7 +633,7 @@
 
     fmt.Println(arr)
 
-    # 对属性的操作
+    // 对属性的操作
     // NumField() 和 Field()
     type Person struct {
         name    string
@@ -653,7 +649,7 @@
         fmt.Println("The %d field: %v", i+1, v.Field(i))
     }
 
-    # 对方法的操作
+    // 对方法的操作
     // NumMethod() 和 Method()  (要获取Name，使用Typeof)
     type Person struct {
         name    string
@@ -677,7 +673,7 @@
         fmt.Println("The %d field: %v", i+1, v.Method(i).Name)
     }
 
-    # 动态调用函数（要调用Call，使用ValueOf）
+    // 动态调用函数（要调用Call，使用ValueOf）
     // 1 (使用索引)
     type Person struct {
         name    string
@@ -770,7 +766,7 @@
     或者
     age := (interface{})(25)
 
-    # 接口细分
+    // 接口细分
     1.iface
         表示带有一组方法的接口
     2.eface
@@ -817,7 +813,7 @@
     ```
 - make 和 new
     ```go
-    # new
+    // new
     // The new built-in function allocates memory. The first argument is a type,
     // not a value, and the value returned is a pointer to a newly
     // allocated zero value of that type.
@@ -1097,12 +1093,12 @@
     // HasPrefix returns true if name has any string in given slice as prefix.
     func HasPrefix(name string, prefixes []string) bool { ...
 
-    # 特别注释
+    // 特别注释
     TODO：提醒维护人员此部分代码待完成
     FIXME：提醒维护人员此处有BUG待修复
     NOTE：维护人员要关注的一些问题说明
 
-    # 包的导入
+    // 包的导入
     标准库排最前面，第三方包次之、项目内的其它包和当前包的子包排最后，每种分类以一空行分隔
     尽量不要使用相对路径来导入包
     import (
@@ -1122,11 +1118,11 @@
         "github.com/gogits/gogs/routers/user"
     )
 
-    # 善用 gofmt
+    // 善用 gofmt
     使用 tab 进行缩进
     一行最长不要超过 80 个字符
 
-    # 结合 Makefile 简化编译过程
+    // 结合 Makefile 简化编译过程
     // 利用 -ldflags 动态往程序中注入信息
     BINARY="demo"
     VERSION=0.0.1
@@ -1147,20 +1143,20 @@
         @go build -ldflags ${ldflags} -o  build/${BINARY}.mac  -tags=jsoniter
         @echo "build done."
     
-    # 依赖管理：好用的工作区模式
+    // 依赖管理：好用的工作区模式
     // 正常 Go 项目中引用的包，都需要在对应代码托管网站上有该包，才能编译及运行
     // (在 $GOPATH/src 目录下创建 github.com/iswbm/demo 及 github.com/iswbm/util 两个空的 go 包) 但如果 demo 引用 util 项目的包，而 util 本身也还在自己的本地上开发，并没有上传到 github，那么 demo 包在调试过程中肯定是无法找到 util 包的
     // Go 1.18 提供的工作区模式，就可以优雅的解决如上出现的问题
     ```
 - 并发编程
     ```go
-    # 函数
+    // 函数
     函数是基于功能或 逻辑进行封装的可复用的代码结构，主要是为了提高代码可读性和可维护性
     Go语言是编译型语言，所以函数编写的顺序是无关紧要的
     1.普通函数
     2.匿名函数
 
-    # 函数声明
+    // 函数声明
     func 函数名称(形参列表) (返回值列表) {
         函数体
     }
@@ -1173,7 +1169,7 @@
         fmt.Println(sum(1, 2))
     }
 
-    # 可变参数
+    // 可变参数
     1.多个类型一致的参数
     2.多个类型不一致的参数
     // 使用 ...int 表示一个元素为 int 类型的切片，用来接收调用者传入的参数
@@ -1210,7 +1206,7 @@
     var v4 float32 = 1.23
     MyPrintf(v1, v2, v3, v4)
 
-    # 多个可变参数函数传递参数
+    // 多个可变参数函数传递参数
     ... 除了用来接收多个参数，还可以用来解序列，将函数的可变参数(一个切片)一个一个的取出来，传递给另一个可变参数的函数，而不是传递可变参数变量本身，这个用法，也只能在给函数传递参数里使用
     func sum(args ...int) int {
         var result int
@@ -1228,21 +1224,19 @@
     
     fmt.Println(Sum(1, 2, 3))
 
-    # 函数的返回值
+    // 函数的返回值
     当没有指明返回值的类型时, 函数体可以用 return 来结束函数的运行，但 return 后不能跟任何一个对象
     Go 支持一个函数返回多个值
     Go支持返回带有变量名的值
     func double(a int) (b int) {
-        // 不能使用 := ，因为在返回值那里已经声明返回值的类型为int
-        b = a * 2
-        // 不需要指明返回哪个命令，因为返回值那里已经指定了变量名
-        return
+        b = a * 2   // 不能使用 := ，因为在返回值那里已经声明返回值的类型为int
+        return  // 不需要指明返回哪个命令，因为返回值那里已经指定了变量名
     }
 
-    # 方法与函数
+    // 方法与函数
     方法，是一种特殊的函数。当你一个函数和对象/结构体进行绑定的时候，我们就称这个函数是一个方法
 
-    # 匿名函数
+    // 匿名函数
     匿名函数，就是没有名字的函数，它只有函数逻辑体，而没有函数名
     匿名函数只有拥有短暂的生命，一般都是定义后立即使用
     func(data int) {
@@ -1263,7 +1257,7 @@
         fmt.Println(v)
     })
 
-    # 函数类型
+    // 函数类型
     函数类型表示表示着所有拥有同样的入参类型和返回值类型的函数集合
     // Greeting function type
     type Greeting func(name string) string
@@ -1293,7 +1287,7 @@
     在 main 中或者其下调用的代码中才可以使用 go + func() 的方法来启动协程
     main 函数作为main goroutine, 执行完成后，其下运行的所有协程会自动退出
 
-    # 信道 chan
+    // chan
     chan 提供了 goroutine 之间传输信息的通道, chan 是一种队列式的数据结构，遵循先入先出的规则
 
     // 每个 chan 只能传递一种数据类型的数据，声明时必须指定类型
@@ -1304,7 +1298,7 @@
 
     信道实例 := make(chan 信道类型)
 
-    # 信道的操作：发送数据和读取数据
+    // 发送/读取数据
     pipeline := make(chan int)  // 定义 chan
     pipeline<- 200              // 向信道发送数据
     mydata := <-pipeline        // 从信道读取数据，并赋值给mydata
@@ -1316,7 +1310,7 @@
     x, ok := <-pipeline
     // 第二个返回值 ok 表示信道是否被关闭，如果已经被关闭，ok 为 false，若还没被关闭，ok 为true
 
-    # 信道容量与长度
+    // 信道容量与长度
     使用 make 创建信道，make 接收两个参数
     1.信道类型
     2.信道容量：默认为0，表示可以缓存的数据个数
@@ -1331,7 +1325,7 @@
     pipeline<- 1
     fmt.Printf("pipeline current length: %d\n", len(pipeline))
 
-    # 缓冲信道 与 无缓冲信道
+    // 缓冲信道 与 无缓冲信道
     // 缓冲信道 允许信道里存储一个或多个数据，意味着，设置了缓冲区后，发送端和接收端可以处于异步状态
     pipline := make(chan int, 10)
     // 无缓冲信道
@@ -1341,7 +1335,7 @@
     // 或者
     pipline := make(chat int, 0)
 
-    # 双向信道与单向信道
+    // 双向信道与单向信道
     // 默认情况下信道都是双向的
     单向信道分为：只读信道 和 只写信道
     // 只读信道
@@ -1402,7 +1396,7 @@
         }
     }
 
-    # 用信道来做锁
+    // 用信道来做锁
     当信道里的数据量已经达到设定的的容量时，此时再往信道里发送数据会阻塞整个程序
 
     // 示例
@@ -1424,7 +1418,7 @@
         fmt.Println("x value: ", x)
     }
 
-    # 信道传递是深拷贝吗
+    // 信道传递是深拷贝吗
     值类型：String, Array, Int, Struct, Float, Bool     (深拷贝)
     引用类型：Slice, Map                                (浅拷贝)
     对于信道而言，是否是深拷贝，取决于你传入的值是值类型，还是引用类型
@@ -1436,9 +1430,9 @@
     4.从已关闭的 channel 读取消息不会产生 panic，且能读出 channel 中还未被读取的消息，若消息均已被读取，则会读取到该类型的零值。
     5.从已关闭的 channel 读取消息永远不会阻塞，并且会返回一个为 false 的值，用以判断该 channel 是否已关闭（x,ok := <- ch）
     6.关闭 channel 会产生一个广播机制，所有向 channel 读取消息的 goroutine 都会收到消息
-    7.chan 在 Golang 中是一等公民，它是线程安全的，面对并发问题，应首先想到 channel
+    7. chan 在 Golang 中是一等公民，它是线程安全的，面对并发问题，应首先想到 channel
 
-    # WaitGroup
+    // WaitGroup
     Goroutine 之间的通信机制
     1.使用信道来标记完成
     // “不要通过共享内存来通信，要通过通信来共享内存”
@@ -1519,7 +1513,7 @@
 	2.同一协程里，不要对已解锁的锁再次解锁
 	3.加了锁后，别忘了解锁，必要时使用 defer 语句
 
-	# RWMutex 将程序对资源的访问分为读操作和写操作
+	// RWMutex 将程序对资源的访问分为读操作和写操作
 	为了保证数据的安全，它规定了当有人还在读取数据（即读锁占用）时，不允计有人更新这个数据（即写锁会阻塞）
 	为了保证程序的效率，多个人（线程）读取数据（拥有读锁）时，互不影响不会造成阻塞，它不会像 Mutex 那样只允许有一个人（线程）读取同一个数据
 
@@ -1774,7 +1768,7 @@
         fmt.Println("主程序退出！！")
     }
 
-    # 根 Context
+    // 根 Context
     Go 已经实现了2个，我们代码中最开始都是以这两个内置的context作为最顶层的parent context，衍生出更多的子Context
     var (
         background = new(emptyCtx)
@@ -1793,7 +1787,7 @@
     // TODO，如果我们不知道该使用什么Context的时候，可以使用这个，但是实际应用中，暂时还没有使用过这个TODO
     // 它们两个本质上都是emptyCtx结构体类型，是一个不可取消，没有设置截止时间，没有携带任何值的Context
 
-    # Context 的继承衍生
+    // Context 的继承衍生
     context 包的几个 With 系列的函数
     func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
     func WithDeadline(parent Context, deadline time.Time) (Context, CancelFunc)
@@ -1903,7 +1897,7 @@
         fmt.Println("主程序退出！！")
     }
 
-    # Context 使用注意事项
+    // Context 使用注意事项
     1.通常 Context 都是做为函数的第一个参数进行传递（规范性做法），并且变量名建议统一叫 ctx
     2.Context 是线程安全的，可以放心地在多个 goroutine 中使用。
     3.当你把 Context 传递给多个 goroutine 使用时，只要执行一次 cancel 操作，所有的 goroutine 就可以收到 取消的信号
@@ -1918,7 +1912,7 @@
     上述两种操作，都会异常程序触发 panic
     Go 语言并没有提供一个内置的函数来判断一个通道是否关闭
     ```go
-    # 通道编程模型
+    // 通道编程模型
     思路:
     1.（发送者）对一个已关闭的通道，写入数据  Not OK
     2.（接收者）对一个已关闭的通道，读取数据  OK
@@ -2106,9 +2100,9 @@
 - fmt.Printf 函数
     打印函数
     ```go
-    1.fmt.Print: 正常打印字符串和变量，不会进行格式化，不会自动换行，需要手动添加 \n 进行换行，多个变量值之间不会添加空格
-    2.fmt.Println：正常打印字符串和变量，不会进行格式化，多个变量值之间会添加空格，并且在每个变量值后面会进行自动换行
-    3.fmt.Printf：可以按照自己需求对变量进行格式化打印。需要手动添加 \n 进行换行
+    1. fmt.Print: 正常打印字符串和变量，不会进行格式化，不会自动换行，需要手动添加 \n 进行换行，多个变量值之间不会添加空格
+    2. fmt.Println：正常打印字符串和变量，不会进行格式化，多个变量值之间会添加空格，并且在每个变量值后面会进行自动换行
+    3. fmt.Printf：可以按照自己需求对变量进行格式化打印。需要手动添加 \n 进行换行
 
     fmt.Print("hello", "world\n")   // helloworld
     fmt.Prntln("hello", "world")    // hello world
@@ -2119,7 +2113,7 @@
         return Fprintf(os.Stdout, format, a...)
     }
 
-    # Printf 的占位符
+    // Printf 的占位符
 
     %v：以值的默认格式打印
     %+v：类似%v，但输出结构体时会添加字段名
@@ -2212,7 +2206,7 @@
         fmt.Printf("%G\n", f)       // 12.34
     }
 
-    # 宽度标识符
+    // 宽度标识符
     %[宽度.精度]标识符
     如果未指定精度，会使用默认精度；如果点号后没有跟数字，表示精度为0
 	fmt.Printf("%f\n", f)    // 以默认精度打印
@@ -2238,7 +2232,7 @@
 	fmt.Printf("%q \n", "中文")     // "中文"
 	fmt.Printf("%+q \n", "中文")    // "\u4e2d\u6587"
 
-    # 占位符 %
+    // 占位符 %
     %#x：给打印出来的是 16 进制字符串加前缀 0x
     %#q：用反引号包含，打印原始字符串
     %#U：若是可打印的字符，则将其打印出来
@@ -2260,7 +2254,7 @@
 	fmt.Printf("%p \n", &a)          // 0xc000088018
 	fmt.Printf("%#p \n", &a)        // c000088018
 
-    # 对齐补全
+    // 对齐补全
 	fmt.Printf("a%5sc\n", "b")	    // a    bc
 	fmt.Printf("a%-5sc\n", "b")	    // ab    c
 
@@ -2414,7 +2408,7 @@
         fmt.Println(name)
     }
 
-    # 参数类型
+    // 参数类型
     // 布尔型
     var debug bool
 
@@ -2440,7 +2434,7 @@
         flag.DurationVar(&interval, "interval", 1 * time.Second, "your name")
     }
 
-    # 自定义类型
+    // 自定义类型
     flag 包支持的类型有 Bool、Duration、Float64、Int、Int64、String、Uint、Uint64
     这些类型的参数被封装到其对应的后端类型中，比如 Int 类型的参数被封装为 intValue，String 类型的参数被封装为 stringValue
     这些后端的类型都实现了 flag.Value 接口，因此可以把一个命令行参数抽象为一个 Flag 类型的实例
@@ -2512,7 +2506,7 @@
         fmt.Println(members)
     }
 
-    # 长短选项
+    // 长短选项
     flag 包，在使用上，其实并没有没有长短选项之别
     ```
 - 文件操作
@@ -2607,7 +2601,7 @@
         }
     }
 
-    # 每次只读取固定字节数
+    // 每次只读取固定字节数
     // 使用 os 库
     通用的做法:
     1.先创建一个文件句柄，可以使用 os.Open 或者 os.OpenFile
@@ -2636,7 +2630,7 @@
         }
     }
 
-    // 使用 syscall 库
+    // syscall package
     os 库本质上也是调用 syscall 库，但由于 syscall 过于底层，如非特殊需要，一般不会使用 syscall
 
     // 会每次读取 100 字节的数据，并发送到通道中，由另外一个协程进行读取并打印出来

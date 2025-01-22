@@ -1,34 +1,34 @@
 # 基础知识
 - 创建变量
     ```go
-    1. 一行声明一个变量
+    // 声明变量
+    // 1
     var name string = "Go编程时光"
 
-    2. 多个变量一起声明
+    // 2
     var (
         name string
         age int
         gender string
     )
 
-    3. 声明和初始化一个变量(推导声明写法或者短类型声明法：编译器会自动根据右值类型推断出左值的对应类型)
-    name := "Go编程时光"
+    // 声明并初始化变量
+    name := "Go编程时光"    // 只使用于函数内部
     等价于
     var name string = "Go编程时光"
     等价于
-    var name = "Go编程时光"
-    限制:这种方法只能用于函数内部
+    var name = "Go编程时光" // type reference
 
-    4. 声明和初始化多个变量
+    // 声明和初始化多个变量
     name, age := "wangbm", 28
 
-    5. new 函数声明一个指针变量
+    // 声明一个指针变量
     ptr := new(int)
     new 函数，是 Go 里的一个内建函数,使用表达式 new(Type) 将创建一个Type类型的匿名变量，初始化为Type类型的零值，然后返回变量地址，返回的指针类型为*Type
     ptr: 变量地址
     *ptr: 变量值
 
-    new函数类似是一种语法糖，而不是一个新的基础概念
+    // new函数是一种语法糖
     func newInt() *int {
         return new(int)
     }
@@ -38,8 +38,8 @@
         return &dummy
     }
 
-    变量/常量都只能声明一次，声明多次，编译就会报错,但是有一个例外，"匿名变量"，也称作占位符，或者空白标识符，用下划线表示
-    匿名变量的优点
+    // "匿名变量"，也称作占位符，或者空白标识符，用下划线表示
+    匿名变量的特点
         1.不分配内存，不占用内存空间
         2.不需要你为命名无用的变量名而纠结
         3.多次声明不会有任何问题
@@ -89,7 +89,7 @@
         var mystr1 string = "hello"
         等价于
         var mystr2 [5]byte = [5]byte{104, 101, 108, 108, 111}
-        字符串的表示方法，除了双引号之外，还可以使用反引号进行表示，即
+        
         var mystr1 string = "\\r\\n"    (解释型表示法)
         等价于
         var mystr2 string = `\r\n`      (原生型表示法)
@@ -121,22 +121,20 @@
 
             arr := [3]int{1, 2, 3}
 
-            arr := [...]int{1, 2, 3}
-            为了避免硬编码，使用...让Go语言根据时间情况来分配内存
+            arr := [...]int{1, 2, 3}    // 为了避免硬编码，使用...会根据实际情况来分配内存
 
-            [3]int 和 [4]int 是不同的类型，使用fmt的 %T 可以检查具体的类型
+            // [3]int 和 [4]int 是不同的类型，使用fmt的 %T 可以检查具体的类型
             arr1 := [...]int{1, 2, 3}
             arr2 := [...]int{1, 2, 3, 4}
             fmt.Printf("%d 的类型是: %T\n", arr1, arr1)
             fmt.Printf("%d 的类型是: %T\n", arr2, arr2)
 
-            别名类型
+            // 类型别名，即自定义类型
             type arr3 [3]int
             myarr := arr3{1, 2, 3}
 
-            定义数组的简化写法
-            arr := [4]int{2:3}
-            [4]int{2:3}， 4表示数组有4个元素，2:3表示数组索引为2的值为3，其他未指定的值为0
+            // 定义数组的简化写法
+            arr := [4]int{2:3}  // 4表示数组有4个元素，2:3表示数组索引为2的值为3，其他未指定的值为0
             ```
         - 切片
             > 切片也是可以容纳若干相同类型的元素的容器，但是无法通过切片类型来确定其值的长度。切片是对数组的一个连续片段的引用，切片是一个引用类型，终止索引标识的项不包括在切片内(左闭右开区间). 数组的容器大小固定，而切片可以通过append进行元素的添加
@@ -170,7 +168,7 @@
             var strList []string
             // 声明整型切片
             var numList []int
-            // 声明一个孔切片
+            // 声明一个空切片
             var numListEmpty = []int{}
 
             #3
@@ -187,16 +185,11 @@
             fmt.Println(myslice)
             fmt.Println(len(myslice), cap(myslice))
 
-            myslice := []int{1}
-            // 追加一个元素
-            myslice = append(myslice, 2)
-            // 追加多个元素
-            myslice = append(myslice, 3, 4)
-            // 追加一个切片
-            myslice = append(myslice, []int{7, 8}...)
-            // 在第一个位置插入元素
-            myslice = append([]int{0}, myslice...)
-            // 在中间插入一个切片
+            myslice := []int{1} // 追加一个元素
+            myslice = append(myslice, 2)    // 追加多个元素
+            myslice = append(myslice, 3, 4) // 追加一个切片
+            myslice = append(myslice, []int{7, 8}...)   // 在第一个位置插入元素
+            myslice = append([]int{0}, myslice...)  // 在中间插入一个切片
             myslice = append(myslice[:5], append([]int{5, 6}, myslice[5:]...)...)
             ```
             - [How Slices Work in Go](https://blog.devgenius.io/how-slices-work-in-go-fbc772514001)
@@ -207,25 +200,21 @@
         > 字典是由若干个 key:value 这样的键值对映射组合在一起的数据结构, 它是哈希表的一个实现，这就要求它的每个映射里的key，都是唯一的, 换句话说就是key必须是可哈希的(一个不可变对象，都可以用一个哈希值来唯一表示，这样的不可变对象，比如字符串类型的对象（可以说除了切片、 字典，函数之外的其他内建类型都算）)
         ```go
         #声明并初始化字典
-        // 方法1
+        // 1
         var scores map[string]int = map[string]int{"english": 80, "chinese": 85}
-        // 方法2
+        // 2
         scores := map[string]int{"english": 80, "chinese": 85}
-        // 方法3
+        // 3
         scores := make(map[string]int)
         scores["english"] = 80
         scores["chinese"] = 85
 
-        #字典的操作
-        // 添加元素
-        scores["math"] = 95
-        // 更新
-        scores["math"] = 100
-        // 读取
-        fmt.Println(scores["math"])
-        // 注意：当访问一个不存在的key时，并不会直接报错，而是会返回这个value的零值
-        // 删除
-        delete(scores, "math")
+        // 字典的操作
+        scores["math"] = 95 // 添加
+        scores["math"] = 100    // 更新
+        fmt.Println(scores["math"]) // 读取，注意：当访问一个不存在的key时，并不会直接报错，而是会返回这个value的零值
+        delete(scores, "math")  // 删除
+        
         // 当key不存在，会返回value-type的零值 ，所以你不能通过返回的结果是否是零值来判断对应的 key 是否存在，因为 key 对应的 value 值可能恰好就是零值
         // 判断key是否存在 (字典的下标读取可以返回两个值，使用第二个返回值都表示对应的 key 是否存在)
         math, ok := scores["math"]
@@ -242,16 +231,15 @@
 
         }
         
-        #字典的循环
-        // 获取 key 和 value
+        // 字典的遍历(key + value)
         for subject, score := range scores {
             fmt.Printf("key: %s, value: %d\n", subject, score)
         }
-        // 只获取key
+        // key
         for subject := range scores {
             fmt.Printf("key: %s\n", subject)
         }
-        // 只获取value
+        // value
         for _, score := range scores {
             fmt.Printf("value: %d\n", score)
         }
@@ -259,7 +247,7 @@
     - 布尔类型
         > 在 Go 中，真值用 true 表示，不但不与 1 相等，并且更加严格，不同类型无法进行比较，而假值用 false 表示，同样与 0 无法比较
         ```go
-        # bool 与 int 不能直接转换，如果要转换，需要你自己实现函数
+        // bool 与 int 不能直接转换，如果要转换，需要你自己实现函数
         func bool2int(b bool) int {
             if b {
                 return 1
@@ -271,13 +259,13 @@
             return i != 0
         }
 
-        // Go中使用 ! 对逻辑值取反
+        // !
         var male bool = true
         fmr.Println(!male == false)
         或者
         fmr.Println(male != false)
 
-        // Go中使用 && 和 || 进行逻辑运算，且具有短路行为
+        // && 和 || 的逻辑运算具有短路行为
         fmt.Println(age > 18 && gender == "male")
         fmt.Println(age < 18 || gender == "male")
         ```
@@ -303,7 +291,7 @@
         fmt.Printf("%p", ptr)
         fmt.Println(ptr)
 
-        # 指针的类型
+        // 指针的类型
         astr := "hello"
         aint := 1
         abool := false
@@ -316,7 +304,6 @@
         fmt.Printf("arune pointer type: %T\n", &arune)
         fmt.Printf("afloat pointer type: %T\n", &afloat)
 
-        # 指针的零值
         // 指针声明后，没有进行初始化，其零值是 nil
         var b *int
         fmt.Println(b) // 输出为<nil>
@@ -346,7 +333,7 @@
         ```
 - 流程控制
     ```go
-    # if (Go编译器，对于 { 和 } 的位置有严格的要求，它要求 else if （或 else）和 两边的花括号，必须在同一行)
+    // if ... else if 两边的花括号，必须在同一行
     if condition1 {
         branch1
     } else if condition2 {
@@ -361,7 +348,7 @@
         fmt.Println("成年了")
     }
 
-    # switch
+    // switch
     switch expression {
         case exp1:
             branch1
@@ -371,9 +358,8 @@
         default:
             branchElse;
     }
-    // 只要有一个 case 满足条件，就会执行对应的代码块，然后直接退出 switch - case ，如果 一个都没有满足，才会执行 default 的代码块
 
-    // 一个case 多个条件
+    // switch ... case , 注意：case 条件常量不能重复
     month := 2
     switch month {
         case 3, 4, 5:
@@ -387,7 +373,6 @@
         default:
             fmt.Println("输入有误...")
     }
-    // 注意：case 条件常量不能重复
     // switch 后可以接函数
     func getResult(args ...int) bool {
         for _, i := range args {
@@ -408,6 +393,7 @@
         case false:
             fmt.Println("有挂科记录")
     }
+    
     // switch 后可以不接任何变量，表达式，函数，此时 switch-case 相当于 if-elseif-else
     score := 30
 
@@ -424,38 +410,36 @@
             fmt.Println("输入有误...")
     }
 
-    # case 中 fallthrough 关键字的使用
+    // case 中 fallthrough 关键字的使用
     s := "hello"
 
     switch {
         case s == "hello":
             fmt.Println("hello")
-            fallthrough
+            fallthrough             // fallthrough 只能穿透一层，意思是它让你直接执行下一个case的语句，而且不需要判断条件
         case s != "world":
             fmt.println("world")
     }
-    // 注意：fallthrough 只能穿透一层，意思是它让你直接执行下一个case的语句，而且不需要判断条件
 
-    # for
-    // 语法
+    // for
     for [condition |  ( init; condition; increment ) | Range]
     {
     statement(s);
     }
 
-    // 接1个条件表达式
+    // 1
     a := 1
     for a <= 5 {
         fmt.Println(a)
         a++
     }
 
-    // 接3个条件表达式
+    // 2
     for i := 1; i <= 5; i++ {
         fmt.Println(i)
     }
 
-    // 不接表达式，无限循环
+    // 3
     for {
         ...
     }
@@ -464,7 +448,7 @@
 
     }
 
-    // 示例
+    // e.g
     var i := 1
     for {
         if i > 5 {
@@ -484,8 +468,7 @@
         fmt.Printf("hello, %v\n", i)
     }
 
-    # goto 无条件跳转
-    // goto 语句通常与条件语句配合使用。可用来实现条件转移， 构成循环，跳出循环体等功能
+    // goto
     // 1
         i := 1
     flag:
@@ -518,8 +501,7 @@
         }
     // 注意：goto语句与标签之间不能有变量声明，否则编译错误
 
-    # defer延迟语句
-    // defer xxx() 表示将xxx函数的调用延迟到当前函数执行完后再执行
+    // defer 将函数的调用延迟到当前函数执行完后再执行
     func myfunc() {
         fmt.Println("B")
     }
@@ -546,7 +528,7 @@
         fmt.Println(name) // 输出 python
     }
 
-    # 多个defer反序调用
+    // 多个defer反序调用，后进先出
     name := "go"
     defer fmt.Println(name) // 输出: go
 
@@ -560,9 +542,8 @@
         java
         python
         go
-    //  多个defer 是反序调用的，有点类似栈一样，后进先出
 
-    # defer 与 return 孰先孰后
+    // defer 是 return 后才调用
     var name string = "go"
 
     func myfunc() string {
@@ -609,7 +590,7 @@
         return
     }
 
-    使用 defer 简化后的代码
+    // 使用 defer 简化后的代码
 
     func f() {
         r := getResource()  //0，获取资源
@@ -634,7 +615,6 @@
         return
     }
 
-    # select-case
     // select-case 用法比较单一，它仅能用于 信道/通道 的相关操作
     select {
         case exp1:
@@ -686,7 +666,7 @@
     // select 里的 case 表达式只要求你是对信道的操作即可，不管你是往信道写入数据，还是从信道读出数据
     // 当一个信道被 close 后，select 也能命中
 
-    # select 与 switch 的区别
+    // select 与 switch 的区别
     select 只能用于 channel 的操作(写入/读出/关闭)，而 switch 则更通用一些；
     select 的 case 是随机的，而 switch 里的 case 是顺序执行；
     select 要注意避免出现死锁，同时也可以自行实现超时机制；
