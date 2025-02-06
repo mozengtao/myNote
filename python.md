@@ -1,3 +1,5 @@
+[Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
+[argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
 [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
 [The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
 [typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
@@ -34,7 +36,6 @@
 	- [Using PYTHONPATH](https://bic-berkeley.github.io/psych-214-fall-2016/using_pythonpath.html)
 	- [Python import, sys.path, and PYTHONPATH Tutorial](https://www.devdungeon.com/content/python-import-syspath-and-pythonpath-tutorial)
 - 常用函数
-  collapsed:: true
 	- ```python
 	  # 执行shell命令
 	  # run subprocess and returns out, err, errcode
@@ -74,19 +75,15 @@
 	  (b'5516\nb\nhardlink\nt1.py\nt1.sh\nt2.sh\nt3.sh\ntxt1\ntxt2\nweir.run\n', b'')
 	  ```
 - 安装python环境
-  collapsed:: true
 	- 安装时注意勾选**“添加python到path环境变量”**的选项，方便之后在任何地方使用python
 - 数据类型
-  collapsed:: true
 	- 数字
-	  collapsed:: true
 		- ```python
 		  123
 		  12.3
 		  # 数字可进行算术运算
 		  ```
 	- 字符串
-	  collapsed:: true
 		- ```python
 		  "hello world"
 		  'hello world'
@@ -113,15 +110,12 @@
 		  
 		  ```
 	- 布尔值 Boolean
-	  collapsed:: true
 		- ```python
 		  True
 		  False
 		  ```
 	- 可变列表 List
-	  collapsed:: true
 		- 有序，可变动
-		  background-color:: red
 		- ```python
 		  ["hello", "world"]
 		  list = [1, 2, 3, 4, 5]
@@ -150,9 +144,7 @@
 		  list[0][0:2] = [5, 6, 7, 8]
 		  ```
 	- 固定列表 Tuple
-	  collapsed:: true
 		- 有序，不可变动
-		  background-color:: red
 		- ```python
 		  (1, 2, 3)
 		  ("hello", "world")
@@ -162,9 +154,7 @@
 		  tuple[0:2]
 		  ```
 	- 集合 Set
-	  collapsed:: true
 		- 无序，可变动
-		  background-color:: red
 		- ```python
 		  {1, 2, 3}
 		  {"hello", "world"}
@@ -195,7 +185,6 @@
 		  s3 = set("hello")
 		  ```
 	- 字典 Dictionary
-	  collapsed:: true
 		- 键值对的集合
 		- ```python
 		  {"apple": "苹果"， "data": 数据}
@@ -223,16 +212,13 @@
 		  dict1 = { x: x*2 for x in [1, 2, 3] }
 		  ```
 	- 变量
-	  collapsed:: true
 		- 存储不同类型的数据，进行后续的处理
 		- ```python
 		  x = 3
 		  x = "hello world"
 		  ```
 - 流程控制
-  collapsed:: true
 	- if
-	  collapsed:: true
 		- ```python
 		  # 基本结构
 		  if condition1:
@@ -254,7 +240,6 @@
 		    print("invalid score")
 		  ```
 	- while
-	  collapsed:: true
 		- ```python
 		  # 基本结构
 		  while condition:
@@ -274,7 +259,6 @@
 		  
 		  ```
 	- for
-	  collapsed:: true
 		- ```python
 		  # 基本结构
 		  for var in range:
@@ -300,13 +284,10 @@
 		  
 		  ```
 		- break
-		  collapsed:: true
 			- 跳出当前循环
 		- continue
-		  collapsed:: true
 			- 跳过当次循环，继续下一轮循环
 - 函数
-  collapsed:: true
 	- ```python
 	  # 基本结构
 	  def function_name(param1, param2, ...):
@@ -353,11 +334,8 @@
 				  ```
 - 模块 module
 	- 将函数实现写入一个独立的 python 文件，该文件称为模块，模块可以被载入多次重复使用
-	  background-color:: red
 	- 模块的载入与使用
-	  collapsed:: true
 		- 直接载入模块
-		  collapsed:: true
 			- ```python
 			  import sys
 			  
@@ -365,7 +343,6 @@
 			  print(sys.path)
 			  ```
 		- 模组别名
-		  collapsed:: true
 			- ```python
 			  import sys as s
 			  
@@ -374,7 +351,6 @@
 			  ```
 	- 内建模块
 		- random
-		  collapsed:: true
 			- ```python
 			  import random
 			  
@@ -399,10 +375,8 @@
 			  random.shuffle(data)
 			  ```
 			- 正态分布
-			  collapsed:: true
 				- ![image.png](../assets/image_1668400164635_0.png)
 		- statistics
-		  collapsed:: true
 			- ```python
 			  import statistics
 			  
@@ -416,10 +390,8 @@
 			  statistics.stdev([1, 2, 3, 4])
 			  ```
 	- 自定义模块
-	  collapsed:: true
 		- 新建模块目录例如`modules`，在目录下新建多个python文件(例如 geometry.py, math.py)分别实现对应的模块功能
 		- 使用时需要将模块目录路径加入到系统的path环境变量
-		  collapsed:: true
 			- ```python
 			  import sys
 			  sys.path.append("modules")
@@ -431,7 +403,6 @@
 		- [man pexpect](https://pexpect.sourceforge.net/pexpect.html)
 		- [man pxssh](https://pexpect.sourceforge.net/pxssh.html)
 		- pxssh实现ssh自动登陆
-		  collapsed:: true
 			- 示例1
 				- ```python
 				  #!/usr/bin/python
@@ -470,7 +441,6 @@
 				  	login("135.251.92.219", "vcapuser", "eacadmin")
 				  ```
 		- 示例
-		  collapsed:: true
 			- ```python
 			  #!/usr/bin/python
 			  
@@ -556,12 +526,9 @@
 		- [Portable password input](https://docs.python.org/3/library/getpass.html)
 	- shutil
 		- [High-level file operations](https://docs.python.org/3.8/library/shutil.html)
-- 封包 package
-  collapsed:: true
+- package
 	- 用来整理和分类模块
-	  background-color:: red
 	- 文件夹结构
-	  collapsed:: true
 		- ```
 		  - 项目文件夹
 		  	- 主程序.py
@@ -585,13 +552,10 @@
 		  distance = point.distance(3, 4)
 		  ```
 	- 使用封包
-	  collapsed:: true
 		- `import 封包名称.模组名称`
 		- `import 封包名称.模组名称 as 模组别名`
 - 文件读写
-  collapsed:: true
 	- 普通文本文件的读写
-	  collapsed:: true
 		- ```python
 		  # 文件写
 		  with open("data.txt", mode="w", encoding="utf-8") as file:
@@ -612,7 +576,6 @@
 		  print(sum)
 		  ```
 	- json 文件的读写
-	  collapsed:: true
 		- ```python
 		  import json
 		  
@@ -629,7 +592,6 @@
 		    json.dump(data, file)
 		  ```
 - 网络连接
-  collapsed:: true
 	- ```python
 	  import urllib.request as request
 	  
@@ -649,11 +611,7 @@
 	      file.write(company["公司名称"] + "\n")
 	  ```
 - 类 class
-  collapsed:: true
 	- [Classes](https://docs.python.org/3/tutorial/classes.html)
-	- 类是相关变量和函数的封装，变量和函数统称为类的属性
-	- 类和类的实例
-	  collapsed:: true
 		- ```python
 		  # 示例 1
 		  class Point:
@@ -690,15 +648,10 @@
 		  print(data)
 		  f1.close()
 		  ```
-		-
 - 网络爬虫
-  collapsed:: true
 	- 关键：尽可能地让程序模仿一个普通使用者的样子
-	  background-color:: blue
-	  collapsed:: true
 		- 网页页面右键`View page source`可以查看HTML文件源码。F12可以进入开发者工具
 		- ![image.png](../assets/image_1668405216789_0.png){:height 308, :width 746}
-		  collapsed:: true
 			- ```python
 			  import urllib.request as req
 			  
@@ -723,16 +676,13 @@
 			  ```
 			- 注意：需要在终端 Terminal 安装第3方套件，`pip install beautifulsoup4`
 - python 技巧
-  collapsed:: true
 	- F string
-	  collapsed:: true
 		- ```python
 		  name = "Tim"
 		  str = f'Hello {name} {2 +3} {[1, 2, 3].}'
 		  print(str)
 		  ```
 	- unpacking
-	  collapsed:: true
 		- ```python
 		  tup = (1, 2, 3)
 		  lst = [1, 2, 3]
@@ -746,13 +696,11 @@
 		  print(a, b, c)
 		  ```
 	- 多变量赋值
-	  collapsed:: true
 		- ```python
 		  width, height = 400, 500
 		  width, height = height, width
 		  ```
 	- 列表推导
-	  collapsed:: true
 		- ```python
 		  x = [i for i in range(100) if i % 2 == 0]
 		  x = [i * j for i in range(10) for j in range(10)]
@@ -766,7 +714,6 @@
 		  print(x)
 		  ```
 	- 对象重复
-	  collapsed:: true
 		- ```python
 		  x = "hello" * 3
 		  x = [1, 2, 3] * 3
@@ -774,12 +721,10 @@
 		  x = (1, 2) * 3
 		  ```
 	- 内置条件
-	  collapsed:: true
 		- ```python
 		  x = 1 if 2 > 3 else 0
 		  ```
 	- zip
-	  collapsed:: true
 		- ```python
 		  names = ['tim', 'joe', 'billy', 'sally']
 		  ages = [21, 19, 18, 43]
@@ -791,7 +736,6 @@
 		      print(eye_color)
 		  ```
 	- \*args and **kwargs
-	  collapsed:: true
 		- ```python
 		  def func1(arg1, arg2, arg3):
 		    print(arg1, arg2, arg3)
@@ -810,7 +754,6 @@
 		  func2(arg2=2, arg1=1, arg3=3)
 		  ```
 	- For 和 While 的 else 语句
-	  collapsed:: true
 		- ```python
 		  search = [1, 2, 3]
 		  target = 4
@@ -823,13 +766,11 @@
 		    print("I did not find it")
 		  ```
 	- 关键字排序
-	  collapsed:: true
 		- ```python
 		  lst = [[1, 2], [3, 4], [4, 2], [-1, 3], [4, 5], [2, 3]]
 		  lst.sort(key=lambda x: x[1] + x[0])
 		  ```
 - 内置函数
-  collapsed:: true
 	- map
 		- map(fun, iterable)
 			- ```python
@@ -886,8 +827,7 @@
 	  ```
 - contextlib
 	```python
-	什么是context manager
-	在一个类里，实现了__enter__和__exit__的方法，这个类的实例就是一个上下文管理器
+	context manager: 在一个类里，实现了__enter__和__exit__的方法，这个类的实例就是一个上下文管理器
 	class Resource():
 		def __enter__(self):
 			print('===connect to resource===')
@@ -938,7 +878,6 @@
 	exc_tb：异常的错误栈信息
 	当主逻辑代码没有报异常时，这三个参数将都为None
 
-	什么是 contextlib
 	contextlib是一个装饰器，你只要按照它的代码协议来实现函数内容，就可以将这个函数对象变成一个上下文管理器
 	import contextlib
 
@@ -1539,3 +1478,51 @@
 
 	print('Output:',output.stdout.decode("utf-8"))
 	```
+## argparse
+```python
+Four straightforward steps to use Python’s argparse:
+1. Import the argparse module.
+2. Create an argument parser by instantiating ArgumentParser.
+3. Add arguments and options to the parser using the .add_argument() method.
+4. Call .parse_args() on the parser to get the Namespace of arguments.
+
+
+Two types of command-line arguments:
+1. Positional arguments, which you know as arguments
+2. Optional arguments, which you know as options, flags, or switches.(Optional arguments aren’t mandatory. They allow you to modify the behavior of the command)
+
+The first argument to the .add_argument() method sets the difference between arguments and options. This argument is identified as either name or flag. 
+if you provide a name, then you’ll be defining an argument.
+if you use a flag, then you’ll add an option.
+
+import argparse
+import datetime
+from pathlib import Path
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("path")
+
+parser.add_argument("-l", "--long", action="store_true")
+
+args = parser.parse_args()
+
+target_dir = Path(args.path)
+
+if not target_dir.exists():
+    print("The target directory doesn't exist")
+    raise SystemExit(1)
+
+def build_output(entry, long=False):
+    if long:
+        size = entry.stat().st_size
+        date = datetime.datetime.fromtimestamp(
+            entry.stat().st_mtime).strftime(
+            "%b %d %H:%M:%S"
+        )
+        return f"{size:>6d} {date} {entry.name}"
+    return entry.name
+
+for entry in target_dir.iterdir():
+    print(build_output(entry, long=args.long))
+```
