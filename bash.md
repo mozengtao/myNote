@@ -2,6 +2,17 @@
 bash functions
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)
 ```bash
+# locale - get locale-specific information
+morrism@PC24036:~/testdir$ locale -a
+C
+C.utf8
+en_US.utf8
+POSIX
+zh_CN.utf8
+
+morrism@PC24036:~/testdir$ echo $LANG
+en_US.utf8
+
 # 1
 function function_name() {
 # Function code here

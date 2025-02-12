@@ -1,40 +1,43 @@
-[**Modernes C++**](https://www.modernescpp.com/index.php/table-of-content/)
+[C++ reference](https://en.cppreference.com/w)  
+[C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
+![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
+[The C++ Standard Library - A Tutorial and Reference source code](http://www.cppstdlib.com/)  
+[C++ Templates The Complete Guide, 2nd Edition](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%20Templates%20The%20Complete%20Guide%2C%202nd%20Edition%20%5BBooxRack%5D.pdf) #pdf  
+![C++ Templates: The Complete Guide](./assets/CPlusPlusTemplatesTheCompleteGuide2ndEdition.pdf) #pdf  
+[C++ Templates - The Complete Guide souce code](http://www.tmplbook.com/)  
+[C+++Templates+完全导引](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%2BTemplates%2B%E5%AE%8C%E5%85%A8%E5%AF%BC%E5%BC%95.pdf) #pdf  
 
-[**algorithm**](https://cplusplus.com/reference/algorithm/)
-[**string**](https://cplusplus.com/reference/string/string/)
+[深度探索C++对象模型](https://github.com/xuchen-tech/Books/blob/main/%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2C%2B%2B%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B(jb51.net).pdf) #pdf  
 
-[编程指北](https://csguide.cn/cpp)
 
-[**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)
-[**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online
+[Learn C++ Programming](https://www.programiz.com/cpp-programming)  
+[LEARN C++](https://www.learncpp.com/)  
+[cppbestpractices](https://github.com/cpp-best-practices/cppbestpractices/tree/master)  
+[Effective-Modern-Cpp](https://github.com/downdemo/Effective-Modern-Cpp/tree/master)  
 
-[C++ 文档](https://learn.microsoft.com/zh-cn/cpp/cpp/?view=msvc-170)
+[Threading in C++](https://ananyapam7.github.io/blog/2023/threading/)  
 
-[**C++ Language Reference**](https://learn.microsoft.com/en-us/cpp/cpp/cpp-language-reference?view=msvc-170)
-
-[**Apache C++ Standard Library User's Guide**](https://stdcxx.apache.org/doc/stdlibug/booktoc.html)
-
-[LEARN C++](https://www.learncpp.com/)
-
-[CPP C++ Papyrus](https://caiorss.github.io/C-Cpp-Notes/)
-
-[The Standard Template Library Tutorial](https://www4.rcf.bnl.gov/~phoncs/oncs/stl_tutorial/prwmain.htm#i)
-
-functor:
-[What are C++ functors and their uses?](https://stackoverflow.com/questions/356950/what-are-c-functors-and-their-uses)
-[C++ Functors](https://euccas.github.io/blog/20170115/c-plus-plus-functors.html)
-[Functors: Function Objects in C++](https://www.cprogramming.com/tutorial/functors-function-objects-in-c++.html)
-
-[**C++ Lambda Anonymous Functions - The Simple Guide**](https://www.moreofless.co.uk/lamba-cplusplus)
-[Lambda expressions (since C++11)](https://en.cppreference.com/w/cpp/language/lambda)
-
-[**C++ Algorithms library**](https://en.cppreference.com/w/cpp/algorithm)
-
-[std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)
-
-[**using**](https://en.cppreference.com/w/cpp/keyword/using)
-[How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)
-
+[**Modernes C++**](https://www.modernescpp.com/index.php/table-of-content/)  
+[**algorithm**](https://cplusplus.com/reference/algorithm/)  
+[**string**](https://cplusplus.com/reference/string/string/)  
+[编程指北](https://csguide.cn/cpp)  
+[**C++ online compiler**](https://www.programiz.com/cpp-programming/online-compiler/)  
+[**Online Compiler**](https://www.mycompiler.io/new/asm-x86_64) #online  
+[C++ 文档](https://learn.microsoft.com/zh-cn/cpp/cpp/?view=msvc-170)  
+[**C++ Language Reference**](https://learn.microsoft.com/en-us/cpp/cpp/cpp-language-reference?view=msvc-170)  
+[**Apache C++ Standard Library User's Guide**](https://stdcxx.apache.org/doc/stdlibug/booktoc.html)  
+[CPP C++ Papyrus](https://caiorss.github.io/C-Cpp-Notes/)  
+[The Standard Template Library Tutorial](https://www4.rcf.bnl.gov/~phoncs/oncs/stl_tutorial/prwmain.htm#i)  
+## functor:    
+[What are C++ functors and their uses?](https://stackoverflow.com/questions/356950/what-are-c-functors-and-their-uses)  
+[C++ Functors](https://euccas.github.io/blog/20170115/c-plus-plus-functors.html)  
+[Functors: Function Objects in C++](https://www.cprogramming.com/tutorial/functors-function-objects-in-c++.html)  
+[**C++ Lambda Anonymous Functions - The Simple Guide**](https://www.moreofless.co.uk/lamba-cplusplus)  
+[Lambda expressions (since C++11)](https://en.cppreference.com/w/cpp/language/lambda)  
+[**C++ Algorithms library**](https://en.cppreference.com/w/cpp/algorithm)  
+[std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)  
+[**using**](https://en.cppreference.com/w/cpp/keyword/using)  
+[How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
 ```cpp
 
 /*
@@ -3039,7 +3042,6 @@ cout << result << "n"; // use the vector<int> class in the example
 
 [**C++ Core Guidelines**](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#main)
 
-[cppbestpractices](https://github.com/cpp-best-practices/cppbestpractices/tree/master)
 
 [**C++ reference**](https://en.cppreference.com/w/)
 [**Standard C++ Library reference**](https://cplusplus.com/reference/)
@@ -6597,9 +6599,9 @@ Adapters that provide alternative access sequential & associative containers
 	}
 
 ```
-[C++](https://subingwen.cn/categories/C/)
-[设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)
-[C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)
-[C++ std::move() 实现详解](https://gukaifeng.cn/posts/c-stdmove-shi-xian-xiang-jie/)
-[C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)  
-[Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main)  
+[C++](https://subingwen.cn/categories/C/)  
+[设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)  
+[C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)  
+[C++ std::move() 实现详解](https://gukaifeng.cn/posts/c-stdmove-shi-xian-xiang-jie/)  
+[C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)    
+[Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main)    
