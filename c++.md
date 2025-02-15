@@ -1,3 +1,5 @@
+[modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) #github  
+
 [C++ reference](https://en.cppreference.com/w)  
 [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
 ![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
@@ -6,9 +8,15 @@
 ![C++ Templates: The Complete Guide](./assets/CPlusPlusTemplatesTheCompleteGuide2ndEdition.pdf) #pdf  
 [C++ Templates - The Complete Guide souce code](http://www.tmplbook.com/)  
 [C+++Templates+完全导引](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%2BTemplates%2B%E5%AE%8C%E5%85%A8%E5%AF%BC%E5%BC%95.pdf) #pdf  
+[Modern C++ Design: Generic Programming and Design Patterns Applied](https://github.com/lighthousand/books/blob/master/Modern%20C%2B%2B%20Design--Generic%20Programming%20and%20Design%20Patterns%20Applied.pdf) #pdf  
+
 
 [深度探索C++对象模型](https://github.com/xuchen-tech/Books/blob/main/%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2C%2B%2B%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B(jb51.net).pdf) #pdf  
 
+
+[Storing Callable Objects in C++](https://tech.jocodoma.com/2019/02/26/Storing-Callable-Objects-in-CPP/)  
+
+[Awesome Modern C++](https://awesomecpp.com/)  
 
 [Learn C++ Programming](https://www.programiz.com/cpp-programming)  
 [LEARN C++](https://www.learncpp.com/)  
@@ -39,123 +47,59 @@
 [**using**](https://en.cppreference.com/w/cpp/keyword/using)  
 [How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
 ```cpp
+// 在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
 
-/*
-#include tells the compiler to copy the contents of the specified file into the source file at this point
-<> 表示 编译器会从标准路径查找头文件
-C++标准库通常使用不带后缀的头文件，用户的自定义头文件通常使用.h, .hpp, .hxx的后缀
-*/
-#include <iostream>
+std::cout << "hello world" << std::endl;
+// std 表示 std namespace, :: 是 scope resolution operator, std::cout表示cout对象是在std的命名空间下声明的, cout对象是ostream class的一个实例，在main函数调用之前创建
 
-// 单行注释
+// Pragmas是针对编译器的指令,不同的编译器支持不同的#pragma指令
 
-/*
-function 定义：
-返回类型 函数名(类型1 参数名称1, 类型2 参数名称2, ...))
-{
-    函数体；
-}
+// Function prototype（函数原型）在不给定函数定义的情况下，向编译器声明调用函数所必须遵循的接口规范
+// 如果函数A调用函数B，则函数B必须在函数A之前定义或者声明，通常将函数名的声明写在一个单独的头文件里，函数的实现写在另外一个源文件里。
 
-{} 标识一个 code block
+// expression(表达式) is a sequence of operators and operands (variables or literals) that results in some value.
+// statement（语句） can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code.
+// A statement ends with a semicolon. 
+// A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
 
-对于C++而言main函数是程序执行时第一个被call到的函数
-*/
-int main(int argc, char *argv[])
-{
-/*
-std 表示 std namespace
-:: 是 scope resolution operator, 表示cout对象是在std的命名空间下声明的
-std::cout 表示 cout stream object 是C++标准库的一部分
-<< means that a function called "operator <<" is called and is passed the string
-C++支持operator overloading，因此对于不同类型的参数，operator 的行为也不同
+// 表达式要么是lvalue，要么是rvalue, lvalue是一个表达式，它指向特定的内存位置，lvalue可以出现在赋值的左边或者右边，所有变量都是lvalues
+// rvalue是一个临时的值，它的生命周期只存在于使用它的表达式，它有特定的值但是不能接受赋值，所以它只能存在在赋值的右边，典型的rvalue是字面常量
 
-cout对象是ostream class的一个实例，在main函数调用之前创建
-*/
-    std::cout << "there are " << argc << " parameters" << std::endl;
-    for(int i = 0; i < argc; i++)
-    {
-        std::cout << argv[i] << std::endl;
-    }
-/*
-在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
-*/
-}
+// 变量赋值
+int i = 1;	// 直接赋值
+int j = int(2);	// 调用类型的构造函数
+int k(3);	// 使用函数式语法进行赋值
 
-
-Pragmas是针对编译器的指令,不同的编译器支持不同的#pragma指令.
-库文件的后缀：
-	Windows:
-		静态库	".lib"
-		动态库	".dll"
-	GNU gcc:
-		静态库	".a"
-		动态库	".so"
-
-Function prototype（函数原型）在不给定函数定义的情况下，向编译器声明调用函数所必须遵循的接口规范
-如果函数A调用函数B，则函数B必须在函数A之前定义或者声明，通常将函数名的声明写在一个单独的头文件里，函数的实现写在另外一个源文件里。
-
-build
-	target: the output of a build step
-	the dependencies of that target: the inputs of the build step
-
-
-An expression(表达式) is a sequence of operators and operands (variables or literals) that results in some value.
-
-A statement（语句） can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code. A statement ends with a semicolon. A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
-
-通常来讲，表达式后加分号可以变为语句
-每个表达式要么是lvalue，要么是rvalue, lvalue是一个表达式，它指向特定的内存位置，lvalue可以出现在赋值的左边或者右边，所有变量都是lvalues
-rvalue是一个临时的值，它的生命周期只存在于使用它的表达式，它有特定的值但是不能接受赋值，所以它只能存在在赋值的右边，典型的rvalue是字面常量
-
-
-Comma operator（逗号） 操作符的优先级最低
-通常，在使用变量时再进行变量的声明，可以有效的避免命名冲突
-
-变量赋值的3中方法：
-1. assign a value (直接赋值)
-	int i = 1;
-2. call the type constructor (调用类型的构造函数)
-	int j = int(2);
-3. initialize a variable using function syntax （使用函数式语法进行赋值）
-	int k(3);
-
-每一种类型都有对应的字面常量的表示
-
-常量:
+// 常量:
 const double pi = 3.1415;
 
-constant expressions（常量表达式）:
-constexpr 关键字适用于表达式，表明该表达式 should be evaluated at compile type rather than at runtime
-
-constexpr double pi = 3.1415;
+// constant expressions（常量表达式）
+constexpr double pi = 3.1415;	// 常量表达式在编译时 evaluate，而非运行时
 constexpr double twopi = 2 * pi;
 
-当 constexpr 关键字应用于函数时，表明该函数代码允许编译器在编译期间对代码进行常量优化（evaluated at compile time），如果编译器无法在编译期间确定参数的值，则函数被视普通的函数不进行优化。
+// constexpr 作用于函数时，表示该函数代码允许编译器在编译期间对代码进行常量优化（evaluated at compile time），如果编译器无法在编译期间确定参数的值，则函数被视普通的函数不进行优化。
 constexpr int triang(int i)
 {
 	return (i == 0) ? 0 : triang(i - 1) + i;
 }
-如果一个函数用constexpr进行修饰，则该函数必须只包含一个表达式（A function marked with the constexpr keyword must only have one expression）
+// 如果一个函数用constexpr进行修饰，则该函数必须只包含一个表达式（A function marked with the constexpr keyword must only have one expression）
 
 
-
-编译器假定 enum 的默认类型为 int 类型，但是用户可以在声明时显式指定其类型
-
+// enum 的默认类型为 int 类型，但是用户可以在声明时显式指定其类型
 enum suits {clubs, diamonds, hearts, spades};			// 默认为 int 类型
 enum suits : char {clubs, diamonds, hearts, spades};	// 指定 enum 的类型为 char
 
 suits card1 = diamonds;
 suits card2 = suits::diamonds;    // scope it with the name of the enumeration which is better
 
-使用关键字 class 可以强制用户在使用enum的值的时候指定scope
+// 关键字 class 强制用户在使用 enum 的值的时候指定 scope
 enum class suits : char {clubs, diamonds, hearts, spades};	// 强制用户在使用enum的值的时候指定scope
 suits card3 = suits::diamonds;    // scope it with the name of the enumeration which is better
 
-编译器默认给定 enum 的第一个值为0，之后依次累加1
+// enum 的第一个值为0，之后依次累加1
 enum ports {ftp=21, ssh, telnet, smtp=25, http=80};
 
-命名空间 namespace 是一种模块化组织代码的机制，命名空间使用 scope resolution operator :: 来 label your types, functions, and variables with a unique name  
-
+// 命名空间 namespace 是一种模块化组织代码的机制，命名空间使用 scope resolution operator :: 来 label your types, functions, and variables with a unique name  
 
 // 1
 namespace utilities
@@ -189,7 +133,7 @@ int utilities::get_data()
 	// code that returns an integer
 }
 
-命名空间的应用之一就是用来管理代码的版本
+// 命名空间的应用之一就是用来管理代码的版本
  namespace utilities
  {
 	bool poll_data();
@@ -202,11 +146,10 @@ int utilities::get_data()
 		int new_feature();
 	}
  }
-当命名空间中函数调用同级命名空间下的函数时，不需要使用 a qualified name
-当声明嵌套的命名空间时，需要手动进行嵌套声明
+// 当命名空间中函数调用同级命名空间下的函数时，不需要使用 a qualified name
+// 当声明嵌套的命名空间时，需要手动进行嵌套声明
 
-inline namespace 用来定义嵌套的命名空间，但是当进行argument-dependent lookup时允许编译器将该嵌套的命名空间当作其parent namespace进行查找
-
+// inline namespace 用来定义嵌套的命名空间，但是当进行argument-dependent lookup时允许编译器将该嵌套的命名空间当作其parent namespace进行查找
 namespace utilities
 {
 	inline namespace V1			// 此时utilities::get_data 与 utilities::V1::get_data 等效
@@ -223,7 +166,7 @@ namespace utilities
 	}
 }
 
-使用 using statement 用来将特定的 namespace 中声明的符号引入当前的命名空间而不必使用完整的路径(symbols declared in the specified namespace can be used without a fully qualified name)
+// using statement 用来将特定的 namespace 中声明的符号引入当前的命名空间而不必使用完整的路径
 using namespace utilities;
 int i = get_data();
 int j = V2::get_data();
@@ -232,26 +175,22 @@ using std::cout;
 using std::endl;
 cout << "Hello, World!" << endl;
 
-namespace 的作用是将定义的 items 限制在特定的范围里，避免与其他命名空间下的同名 items 产生冲突
+// namespace 的作用是将定义的 items 限制在特定的范围里，避免与其他命名空间下的同名 items 产生冲突
 
-namespace alias: 用于对特定的 namespace 定义别名
-
+// namespace alias: 用于对特定的 namespace 定义别名
 namespace com_packtpub_richard_grimes
 {
 	int get_data();
 }
 
 int i = com_packtpub_richard_grimes::get_data();
-可以被简化为
+// 可以被简化为
 namespace packtRG = com_packtpub_richard_grimes;
 int i = packtRG::get_data();
 
-没有名字的 namespace 意味着内部链接（internal linkage），即只能在当前的文件中使用，在其他文件中不可用
-A namespace without a name has the special meaning that it has internal linkage, that is, the items can only be used in the current translation unit, the current file, and not in any other file.
+// 没有名字的 namespace 意味着内部链接（internal linkage），即只能在当前的文件中使用，在其他文件中不可用 (A namespace without a name has the special meaning that it has internal linkage, that is, the items can only be used in the current translation unit, the current file, and not in any other file.)
 
-没有声明在任何命名空间中的代码意味着 global namespace, 在这种情况下code可以省略 namesapce name，也可以显式的使用 scope resolution operator without a namespace name 来表明 该 item 时在 global namespace 下
-Code that is not declared in a namespace will be a member of the global namespace.  You can call the code without a namespace name, but you may want to explicitly indicate that the item is in the global namespace using the scope resolution operator without a namespace name
-
+// 没有声明在任何命名空间中的代码意味着 global namespace, 在这种情况下code可以省略 namesapce name，也可以显式的使用 scope resolution operator without a namespace name 来表明 该 item 时在 global namespace 下 (Code that is not declared in a namespace will be a member of the global namespace.  You can call the code without a namespace name, but you may want to explicitly indicate that the item is in the global namespace using the scope resolution operator without a namespace name)
 int version = 42;
 void print_version()
 {
@@ -259,8 +198,8 @@ void print_version()
 }
 
 
-The vector template is a class that contains items of the type specified in the angle brackets (<>); 
-The vector can be initialized in a special way called "list initialization" which is new to C++11, 
+// vector template is a class that contains items of the type specified in the angle brackets (<>); 
+// vector can be initialized in a special way called "list initialization" which is new to C++11, 
 
 // traverse 1
 using namespace std;
@@ -270,7 +209,7 @@ for (int i = 0; i < beatles.size(); ++i)
 	cout << beatles.at(i) << endl;
 }
 
-// Range-based for:
+// Range-based for
 vector<string> beatles = { "John", "Paul", "George", "Ringo" };
 for (string musician : beatles)
 {
@@ -284,8 +223,7 @@ for (int birth_year : birth_years)
 	cout << birth_year << endl;
 }
 
-变量是类型的实例化，代表了容纳这个数据类型大小的内存单元。
-
+//变量是类型的实例化，代表了容纳这个数据类型大小的内存单元。
 // #include <cstdint>
 using namespace std; // Values for x86
 cout << sizeof(int8_t) << endl; // 1
@@ -294,7 +232,6 @@ cout << sizeof(int32_t) << endl; // 4
 cout << sizeof(int64_t) << endl; // 8
 
 // Using bitset to show bit patterns
-
 #include <iostream>
 #include <bitset>
 
@@ -318,13 +255,13 @@ int main()
 }
 
 
-big-endian and little-endian 的转换:
-	unsigned short reverse(unsigned short us)
-	{
-		return ((us & 0xff) << 8) | ((us & 0xff00) >> 8);
-	}
+// big-endian <-> little-endian
+unsigned short reverse(unsigned short us)
+{
+	return ((us & 0xff) << 8) | ((us & 0xff00) >> 8);
+}
 
-字符处理相关的宏定义
+// 字符处理相关的宏定义
 /*
 	Macro 		Tests if the character is:
 	isalnum 	An alphanumeric character, A to Z, a to z, 0 to 9
@@ -346,28 +283,25 @@ big-endian and little-endian 的转换:
 	tolower 	The lowercase version of the character
 */
 
-Raw strings(原始字符串), 当需要 switch off 转义字符时候会用到 raw string
-	R"(xxxxxxxxx)"
+// Raw strings(原始字符串), 当需要 switch off 转义字符时候会用到 raw string，即 R"(xxxxxxxxx)"
 
-	cout << R"(newline is \n in C++ and "quoted text" use quotes)";
-	打印结果：
-	newline is \n in C++ and "quoted text" use quotes
+std::cout << R"(newline is \n in C++ and "quoted text" use quotes)";
+// output: newline is \n in C++ and "quoted text" use quotes
 
 
-String byte order（字符串字节序）
-扩展字符集的一个字符可能会使用多个字节进行表示，如果这类字符在文件中进行存储，那么字节序就变得很关键，此时会用到  Byte Order Mark (BOM)
+// String byte order（字符串字节序）: 扩展字符集的一个字符可能会使用多个字节进行表示，如果这类字符在文件中进行存储，那么字节序就变得很关键，此时会用到  Byte Order Mark (BOM)
 
-The bool type : true or false.
+// bool type : true or false.
 
-void 并不是一个类型，因此不能定义一个 void 类型的变量， void 代表 the absence of a type
+// void 并不是一个类型，因此不能定义一个 void 类型的变量， void 代表 the absence of a type
 
-变量的初始化：
+// 变量的初始化
 	int i = 1;			// initialized to a value
 	int j = int(2);		// calling the type as if it is a function
 	int k(3);			// calls the constructor of the int type
 	int m{4};			// initializes the variable using an initialize list between curly braces ({})
 
-auto：变量类型自动推导，因为编译器需要根据 initializer 进行类型推导，所以所有的 auto 变量必须初始化。
+// auto：变量类型自动推导，因为编译器需要根据 initializer 进行类型推导，所以所有的 auto 变量必须初始化。
 	auto i = 42; // int
 	auto l = 42l; // long
 	auto ll = 42ll; // long long
@@ -375,82 +309,66 @@ auto：变量类型自动推导，因为编译器需要根据 initializer 进行
 	auto d = 1.0; // double
 	auto c = 'q'; // char
 	auto b = true; // bool
-auto 变量通常用于在使用 container 时候自动推导 container 内的元素类型。
+// auto 通常用于在使用 container 时候自动推导 container 内的元素类型。
 
-Storage classes
-声明变量时，可以通过指定变量的 storage class 来限定变量的 lifetime, linkage(what other code can access it) 以及变量的内存位置
+// Storage classes, 声明变量时，可以通过指定变量的 storage class 来限定变量的 lifetime, linkage(what other code can access it) 以及变量的内存位置
+// static variable in a function, 变量只能在函数内部访问， 但是变量的 lifetime is the same as the program
+// static variable declared at file scope, 变量只能在当前文件内部访问（internal linkage）
+// variable declared at file scope without static, external linkage,变量对别的文件可见
+// extern 关键字表明 variable 或者 function 具有 external linkage 属性，可以被外部文件访问
+// thread_local 也是storage class specifier 之一
 
-static variable in a function
-	变量只能在函数内部访问， 但是变量的 lifetime is the same as the program
-static variable declared at file scope
-	变量只能在当前文件内部访问（internal linkage）
-variable declared at file scope without static
-	external linkage,变量对别的文件可见
+// 类型别名
+// typedef
+typedef tuple<string, int> name_year_t;
+vector<name_year_t> beatles;
 
-extern 关键字表明 variable 或者 function 具有 external linkage 属性，可以被外部文件访问
+// using
+using name_year = tuple<string, int>;
 
+// struct 用来 Aggregating data in record types
+struct time_of_day
+{
+	int sec;
+	int min;
+	int hour;
+};
 
-thread_local 也是storage class specifier 之一
+// 初始化 struct 实例
+time_of_day lunch {0, 0, 13};	// 按照结构体的成员顺序进行 list initializer
+time_of_day midnight {};		// 提供的初始化的值的个数少于结构体成员个数，the remaining members are initialized to zero
+time_of_day midnight_30 {0, 30};
 
-使用类型别名
-// 1 typedef
-	typedef tuple<string, int> name_year_t;
-	vector<name_year_t> beatles;
+// 结构体提的成员类型可以时另外一个结构体
+struct working_hours
+{
+	time_of_day start_work;
+	time_of_day end_work;
+};
 
-// 2 using
-	using name_year = tuple<string, int>;
+working_hours weekday{ {0, 30, 8}, {0, 0, 17} };
 
+// Structure fields, 结构体成员可以是单个比特(bit-field)，结构体成员可以是匿名的
+struct item_length
+{
+	unsigned short len : 10;
+	unsigned short : 5;	// 匿名结构体成员
+	bool dirty : 1;
+};
 
-struct 用来 Aggregating data in record types
+// struct name 的使用，在一些场景下，在定义 struct 之前可能会用到它，此时只要确保不访问 struct 成员的情况下，可以对 struct 进行声明并使用
+struct time_of_day;
+void print_day(time_of_day time);
+// 然而也有例外，a type can hold pointers to instances of the same type before the type is fully declared。原因是指针的大小是确定的，因此编译器可以为结构体成员分配足够的内存。但是创建类型的实例之前类型定义必须确定下来，典型的例子是链表的定义
 
-	struct time_of_day
-	{
-		int sec;
-		int min;
-		int hour;
-	};
+// 结构体成员内存对齐 (The compiler will place variables in memory in the way that is the most efficient, in terms of memory usage, or speed of access. The various types will be aligned to alignment boundaries.)
+// alignof 操作符用来测试特定类型的 alignment
+std::cout << "alignment boundary for int is " << alignof(int) << std::endl;
 
-There are several ways to initialize an instance of a structure.
-	time_of_day lunch {0, 0, 13};	// 按照结构体的成员顺序进行 list initializer
-	time_of_day midnight {};		// 提供的初始化的值的个数少于结构体成员个数，the remaining members are initialized to zero
-	time_of_day midnight_30 {0, 30};
-
-	// 结构体提的成员类型可以时另外一个结构体
-	struct working_hours
-	{
-		time_of_day start_work;
-		time_of_day end_work;
-	};
-
-	working_hours weekday{ {0, 30, 8}, {0, 0, 17} };
-
-
-Structure fields
-结构体成员可以是单个比特(bit-field)，结构体成员可以是匿名的
-	struct item_length
-	{
-		unsigned short len : 10;
-		unsigned short : 5;
-		bool dirty : 1;
-	};
-
-使用 struct name
-在一些场景下，在定义 struct 之前可能会用到它，此时只要确保不访问 struct 成员的情况下，可以对 struct 进行声明并使用
-	struct time_of_day;
-	void print_day(time_of_day time);
-然而也有例外，a type can hold pointers to instances of the same type before the type is fully declared。原因是指针的大小是确定的，因此编译器可以为结构体成员分配足够的内存。但是创建类型的实例之前类型定义必须确定下来，典型的例子是链表的定义
-
-结构体成员内存对齐
-	The compiler will place variables in memory in the way that is the most efficient, in terms of memory usage, or speed of access. The various types will be aligned to alignment boundaries.
-	alignof 操作符用来测试特定类型的 alignment
-	std::cout << "alignment boundary for int is " << alignof(int) << std::endl;
-
-A union is a struct where all the members occupy the same memory. The size of such a type is the size of the largest member. Since a union can only hold one item of data, it is a mechanism to interpret the data in more than one way.
-
-// edited version
+// union is a mechanism to interpret the data in more than one way since all the members share the same chunk of memory.
  struct VARIANT
  {
-	unsigned short vt;
+	unsigned short vt;	// type
 	union
 	{
 		unsigned char bVal;
@@ -463,14 +381,13 @@ A union is a struct where all the members occupy the same memory. The size of su
  }
 
 
-typeid 操作符用于返回运行时变量的类型信息
-Runtime Type Information (RTTI) is significant when you use custom types that can be used in a polymorphic way
-
-cout << "int type name: " << typeid(int).name() << endl;
+// typeid 用于返回运行时变量的类型信息 (Runtime Type Information (RTTI) is significant when you use custom types that can be used in a polymorphic way)
+// 1
+cout << "int type name: " << typeid(int).name() << endl;	// i
 int i = 42;
-cout << "i type name: " << typeid(i).name() << endl;
+cout << "i type name: " << typeid(i).name() << endl;		// i
 
-
+// 2
 auto a = i;
 if (typeid(a) == typeid(int))
 {
@@ -478,19 +395,17 @@ if (typeid(a) == typeid(int))
 }
 
 
-Determining type limits
-	cout << "The int type can have values between ";
-	cout << numeric_limits<int>::min() << " and ";
-	cout << numeric_limits<int>::max() << endl;
+// type limits
+cout << "The int type can have values between ";
+cout << numeric_limits<int>::min() << " and ";
+cout << numeric_limits<int>::max() << endl;
 
-类型转换（Type conversions）
-promotion
-	不损失数据
-narrowing
-	存在数据损失的风险
+// 类型转换（Type conversions）
+// promotion, 不损失数据
+// narrowing, 存在数据损失的风险
 
-
-Casting(convert between types)
+// Casting(convert between types)
+/*
 Various cast operations you can use in C++11:
 	Name 												Syntax
 	Construction										{}
@@ -500,11 +415,9 @@ Various cast operations you can use in C++11:
 	Cast between class pointers, with runtime checks 	dynamic_cast
 	C style 											()
 	Function style 										()
+*/
 
-
-Casting without runtime checks
-Most casts are performed using the static_cast operator, and this can be used to convert pointers to related pointer types as well as converting between numeric types.
-
+// Casting without runtime checks, Most casts are performed using the static_cast operator, and this can be used to convert pointers to related pointer types as well as converting between numeric types.
 double pi = 3.1415;
 int pi_whole = static_cast<int>(pi);
 
@@ -514,179 +427,156 @@ void unsafe_d(void* pData)
 	cout << *pd << endl;
 }
 
-
-Casting pointers without runtime checks
-The reinterpret_cast operator allows pointers to one type to be converted to pointers of another type, and it can convert from a pointer to an integer and an integer to a pointer
-
+// Casting pointers without runtime checks, The reinterpret_cast operator allows pointers to one type to be converted to pointers of another type, and it can convert from a pointer to an integer and an integer to a pointer
 double pi = 3.1415;
 int i = reinterpret_cast<int>(&pi);
 cout << hex << i << endl;
 
+// Casting with runtime checks, The dynamic_cast operator is used to convert pointers between related classes
 
-Casting with runtime checks
-The dynamic_cast operator is used to convert pointers between related classes
+// Casting with list initializer, The C++ compiler will allow some implicit conversions; in some cases, they may be intentional and in some cases, they may not be.
 
-
-Casting with list initializer
-The C++ compiler will allow some implicit conversions; in some cases, they may be intentional and in some cases, they may not be.
-
-
+// 1
 double pi = 3.1415;
 // possibly loss of code
 int i = pi;
 
+// 2
+int i = {pi}; // In this case, if pi can be converted to an int without loss (for example, if pi is a short) then the code will compile without even a warning. However, if pi is an incompatible type (in this case, a double) the compiler will issue an error
 
-int i = {pi};
-In this case, if pi can be converted to an int without loss (for example, if pi is a short) then the code will compile without even a warning. However, if pi is an incompatible type (in this case, a double) the compiler will issue an error
-
-
+// 3
 char c = 35;
 cout << c << endl;	// "#" printed out
-
-To get the variable to be treated as a number you can use one of the following:
-
+// To get the variable to be treated as a number you can use one of the following:
 cout << static_cast<short>(c) << endl;
 cout << short{ c } << endl;
 
-
-Using C casts
+// Using C casts
 	double pi = 3.1415;
 	float f1 = (float)pi;
 	float f2 = float(pi);
 
+// 常量 nullptr 的类型不是整形，而是 std::nullptr_t ，所有指针类型都可以转换为 nullptr ，因此 nullptr 用来初始化所有指针类型的变量  (The type of constant nullptr is not an integer, it is std::nullptr_t. All pointer types can be implicitly converted to this type, so nullptr can be used to initialize variables of all pointer types)
 
-Using memory in C++
+// 内存类型
+/*
+static or global
+string pool
+automatic or stack
+free store
+*/
 
-常量 nullptr 的类型不是整形，而是 std::nullptr_t ，所有指针类型都可以转换为 nullptr ，因此 nullptr 用来初始化所有指针类型的变量  
-The type of constant nullptr is not an integer, it is std::nullptr_t. All pointer types can be implicitly converted to this type, so nullptr can be used to initialize variables of all pointer types
+// void* 可以指向任何类型
 
-内存类型
-	static or global
-	string pool
-	automatic or stack
-	free store
+// 当多维数组用作函数参数时，第一维被看作指针类型
+bool safe_torques(double nut_torques[][5], int num_wheels);
+bool safe_torques(double (*nut_torques)[5], int num_wheels);
 
-void* 指针类型可以指向任何类型
-
-当多维数组用作函数参数时，第一维被看作指针类型
-	bool safe_torques(double nut_torques[][5], int num_wheels);
-	bool safe_torques(double (*nut_torques)[5], int num_wheels);
-
-new 操作符用来分配特定类型大小的内存，返回指向内存地址的特定类型的指针（内置类型不存在构造函数，因此通常初始化该变量为 zero）
-
+//new 操作符用来分配特定类型大小的内存，返回指向内存地址的特定类型的指针（内置类型不存在构造函数，因此通常初始化该变量为 zero）
 int *p = new int; // allocate memory for one int
 delete p;
 p = nullptr;
+// 当对指针执行 delete 操作时，object 对应的 destructor 被调用，对于内置类型的变量，delete 什么也不做。
+// 对指针执行 delete 操作后，最好将该指针赋值为 nullptr
 
-当对指针执行 delete 操作时，object 对应的 destructor 被调用，对于内置类型的变量，delete 什么也不做。
-对指针执行 delete 操作后，最好将该指针赋值为 nullptr
-
+//
 int *p1 = new int (42);
 int *p2 = new int {42};
+
+delete p1;
+delete p2;
+p1 = nullptr;
+p2 = nullptr;
 
 int *p = new int[2];
 delete [] p;
 
-
-Handling failed allocations
-	// VERY_BIG_NUMER is a constant defined elsewhere
-	int *pi;
-	try
-	{
-		pi = new int[VERY_BIG_NUMBER];
-		// other code
-	}
-	catch(const std::bad_alloc& e)
-	{
-		cout << "cannot allocate" << endl;
-		return;
-	}
-	// use pointer
-	delete [] pi;
+//  Handling failed allocations
+int *pi;
+try
+{
+	pi = new int[VERY_BIG_NUMBER];
+	// other code
+}
+catch(const std::bad_alloc& e)
+{
+	cout << "cannot allocate" << endl;
+	return;
+}
+// use pointer
+delete [] pi;
 
 // not throw an exception if the allocation fails
-	int *pi = new (std::nothrow) int [VERY_BIG_NUMBER];
-	if (nullptr == pi)
-	{
-		cout << "cannot allocate" << endl;
-	}
-	else
-	{
-		// use pointer
-		delete [] pi;
-	}
+int *pi = new (std::nothrow) int [VERY_BIG_NUMBER];
+if (nullptr == pi)
+{
+	cout << "cannot allocate" << endl;
+}
+else
+{
+	// use pointer
+	delete [] pi;
+}
 
+// RAII: Resource Acquisition Is Initialization, RAII 使用 C++ 对象的一些特性来管理资源，准确点说用到了C++ 类的拷贝构造函数和析构函数。
+// Standard Template Library (STL), STL 提供了一系列的方法向集合对象插入元素，访问集合元素以及通过迭代器便利整个集合等方法
 
-Resource Acquisition Is Initialization (RAII), RAII 使用 C++ 对象的一些特性来管理资源，准确点说用到了C++ 类的拷贝构造函数和析构函数。
+// array 类 用于在 stack 上分配固定大小的数组，该数组的大小在运行时不能动态的改变
+array<int, 4> arr { 1, 2, 3, 4 };
+for (int i : arr)
+	cout << i << endl;	// array 类实现了 begin 和 end 方法 支持这种语法
 
-Standard Template Library (STL), STL 提供了一系列的方法向集合对象插入元素，访问集合元素以及通过迭代器便利整个集合等方法
+for (int i = 0; i < arr.size(); ++i)
+	cout << arr[i] << endl;
 
-array 类 用于在 stack 上分配固定大小的数组，该数组的大小在运行时不能动态的改变
-	array<int, 4> arr { 1, 2, 3, 4 };
-	for (int i : arr) cout << i << endl;	// array 类实现了 begin 和 end 方法 支持这种语法
+// 为了防止数组访问越界，array class 提供了 at 方法，用来执行 range check，如果访问越界会触发 out_of_range exception
+array<int, 4> arr3;
+arr3.fill(42); // put 42 in each item
+arr2.swap(arr3); // swap items in arr2 with items in arr3
 
-	for (int i = 0; i < arr.size(); ++i) cout << arr[i] << endl;
+// vector 类 和 array 类 类似，用于内存分配，vector 的大小可以在运行时动态的增加或者减小，vector 支持随机访问，同样也提供了 at 方法
 
-	为了防止数组访问越界，array class 提供了 at 方法，用来执行 range check，如果访问越界会触发 out_of_range exception
+// 引用时对象的别名，通过引用访问对象和通过变量名访问对象效果相同，一个变量可能存在多个别名（引用），引用在声明时必须同时进行初始化，并且引用一旦声明该引用不能指向另外一个变量
 
-	array<int, 4> arr3;
-	arr3.fill(42); // put 42 in each item
-	arr2.swap(arr3); // swap items in arr2 with items in arr3
-
-vector 类 和 array 类 类似，用于内存分配，vector 的大小可以在运行时动态的增加或者减小，vector 支持随机访问，同样也提供了 at 方法
-
-引用时对象的别名，通过引用访问对象和通过变量名访问对象效果相同
-一个变量可能存在多个别名（引用），引用在声明时必须同时进行初始化，并且引用一旦声明该引用不能指向另外一个变量
-
-如下代码会编译失败:
+//
  int& r1; // error, must refer to a variable
  int& r2 = nullptr; // error, must refer to a variable
-(由于引用是变量的别名，因此只有初始化后才有意义，同样只能通过变量的名称来对引用就行初始化，也没有空引用的概念)
+// 由于引用是变量的别名，因此只有初始化后才有意义，同样只能通过变量的名称来对引用就行初始化，也没有空引用的概念
 
 int x = 1, y = 2;
 int& rx = x; // declaration, means rx is an alias for x
 rx = y; // assignment, changes value of x to the value of y
 
-Constant reference （使得引用只读）
-	int i = 42;
-	const int& ri = i;
-	ri = 99; // error!
+// Constant reference （使得引用只读）
+int i = 42;
+const int& ri = i;
+ri = 99; // error!
 
-Returning references
-函数返回引用是一项常用的功能，但是当使用这项功能时一定要确保引用对应的变量的生命周期在函数返回后依然存在。
+// Returning references, 函数返回引用是一项常用的功能，但是当使用这项功能时一定要确保引用对应的变量的生命周期在函数返回后依然存在。
 
-Temporaries and references
-lvalue reference 必须指向一个变量，但是 C++ 对于在 stack 上声明的常量引用有一些特殊的规则，对于常量引用编译器会扩展临时变量的生命周期为引用的生命周期。
-	const int& cri { 42 };	// 编译器创建临时整形变量42并初始化为常量引用 cri ，通过常量引用 42 的 lifetime 扩展至 cri 的生命周期.
+// Temporaries and references, lvalue reference 必须指向一个变量，但是 C++ 对于在 stack 上声明的常量引用有一些特殊的规则，对于常量引用编译器会扩展临时变量的生命周期为引用的生命周期。
+const int& cri { 42 };	// 编译器创建临时整形变量42并初始化为常量引用 cri ，通过常量引用 42 的 lifetime 扩展至 cri 的生命周期.
 
+// rvalue reference 用于 move the data from the temporary into the object being assigned，防止 a potentially expensive allocation and copy （move semantic）
+string global{ "global" };
 
-rvalue reference
-rvalue reference 用于 move the data from the temporary into the object being assigned，防止 a potentially expensive allocation and copy （move semantic）
+string& get_global()
+{
+return global;
+}
 
- string global{ "global" };
-
- string& get_global()
- {
- 	return global;
- }
-
- string& get_static()
- {
- 	static string str { "static" };
- 	return str;
- }
-
- string get_temp()
- {
- 	return "temp";
- }
+string& get_static()
+{
+static string str { "static" };
+return str;
+}
 
 string get_temp()
 {
 	return "temp";	// returns a temporary object
 }
 
-cout << get_temp() << endl;
+std::cout << get_temp() << endl;
 
 // use string
 void use_string(string& rs)
@@ -711,7 +601,7 @@ void use_string(string&& s)		// the parameter is identified as an rvalue referen
 	cout << s << endl;
 }
 
-当执行函数调用时，编译器会根据调用参数（类型 + 个数）确定对应的函数原型调用正确的函数
+// 当执行函数调用时，编译器会根据调用参数（类型 + 个数）确定对应的函数原型调用正确的函数
 use_string(get_global()); // string& version
 use_string(get_static()); // string& version
 use_string(get_temp()); // string&& version
@@ -719,7 +609,7 @@ use_string("C string"); // string&& version
 string str{"C++ string"};
 use_string(str); // string& version
 
-Ranged for and references
+// Ranged for and references
 // read the value
 for (int j : squares)
 {
@@ -733,7 +623,7 @@ for (int& k : squares)
 }
 
 
-Ranged "for" for multidimensional arrays
+// Ranged "for" for multidimensional arrays
 int arr[2][3] { { 2, 3, 4 }, { 5, 6, 7} };
 for (auto row : arr)
 {
@@ -742,7 +632,7 @@ for (auto row : arr)
 		cout << col << " " << endl;
 	}
 }
-Ranged "for" 使用迭代器对象即使 begin 和 end 来创建 元素对象，因此对于外层循环 每个元素的类型为 int[3] array ，因此外层循环尝试创建 int[3] 类型的元素拷贝，但是对于 array 类型不支持此类拷贝，因此编译器提供的是指向第一个元素的指针，即 int* 给内层循环使用，编译器尝试获取 int* 类型的 iterator 但是是不可能成功的因为 int* 没有任何它所指向多少个元素的信息，int[3] 有对应的 begin 和 end，但是 int* 却没有。
+// Ranged "for" 使用迭代器对象即使 begin 和 end 来创建 元素对象，因此对于外层循环 每个元素的类型为 int[3] array ，因此外层循环尝试创建 int[3] 类型的元素拷贝，但是对于 array 类型不支持此类拷贝，因此编译器提供的是指向第一个元素的指针，即 int* 给内层循环使用，编译器尝试获取 int* 类型的 iterator 但是是不可能成功的因为 int* 没有任何它所指向多少个元素的信息，int[3] 有对应的 begin 和 end，但是 int* 却没有。
 
 
 // 外层循环的元素类型为 int (&)[3], 即 int[3] 类型的引用 (括号用来表明是 int[3] 类型的引用，而不是 int& 类型的数组)
@@ -755,25 +645,16 @@ for (auto& row : arr)
 }
 
 
-生命和定义函数
-function definition
-function declaration （function prototype）
-编译器根据 function prototype 进行函数的类型检查，即函数调用时是否使用了正确的参数（类型和个数）
+// function forward declaration（前向声明）, You do not have to define the function before it is used as long as the function prototype is defined before the function is called
+
+// internal linkage 和 external linkage
+static int mult(int, int); // defined in this file
+extern int mult(int, int); // defined in another file
+
+// constexpr and inline specifier 只是提示作用, 并不意味着 编译器 一定会对代码进行对应的优化
 
 
-
-function forward declaration（函数前向声明）
-You do not have to define the function before it is used as long as the function prototype is defined before the function is called
-
-内部链接和外部链接
-	static int mult(int, int); // defined in this file
-	extern int mult(int, int); // defined in another file
-
-constexpr and inline specifier 对于编译器只是提示作用, 并不意味着 编译器 一定会对代码进行对应的优化
-
-
-trailing return type 函数返回类型
-
+// trailing return type
 inline auto mult(int lhs, int rhs) -> int	// auto 表示函数的返回类型在参数列表之后指定，-> int 表示返回类型为整形
 {
 	return lhs * rhs;
@@ -785,38 +666,37 @@ inline auto mult(int lhs, int rhs)
 {
 	return lhs * rhs;	// 函数返回类型为 auto ，编译器会对返回类型进行自动推导
 }
+```
 
 
-
-早期C++版本的异常表示:
+```cpp
+// 早期C++版本的异常表示
+/*
 1. 使用 a comma separated list of the types of the exceptions 表示函数体执行过程中可能发生的异常类型
 2. 使用 ellipsis (...)  表示函数体执行过程中可能发生异常
 3. 使用 an empty pair of parentheses 表明函数不会产生异常
+*/
 
 int calculate(int param) throw(overflow_error)
 {
 	// do something which potentially may overflow
 }
 
-C++11 使用 noexcept 关键字表示函数不会产生异常
-// C++11 style: 
-// no exception will be thrown was found
+// C++11 使用 noexcept 关键字表示函数不会产生异常
 int increment(int param) noexcept
 {
 	// check the parameter and handle overflow appropriately
 }
 
 
-Initializer list 作为函数参数
-	point p;
-	p.x = 1; p.y = 1;
-	set_point(p);
-	set_point({ 1, 1 });
+// Initializer list 作为函数参数
+point p;
+p.x = 1; p.y = 1;
+set_point(p);
+set_point({ 1, 1 });
 
 
-default parameter （默认参数）
-默认参数出现在函数的定义中（不是 function prototype），并且出现在函数参数列表的最右边
-
+// default parameter （默认参数）, 默认参数出现在函数的定义中（不是 function prototype），并且出现在函数参数列表的最右边
 void log_message(const string& msg, bool clear_screen = false)
 {
 	if (clear_screen) clear_the_screen();
@@ -828,25 +708,27 @@ log_message("second message");
 bool user_decision = ask_user();
 log_message("third message", user_decision);
 
-可变参数的3中形式: 
-initializer lists
-C-style variable argument lists
-variadic templated functions
+// 可变参数的形式
+/*
+1. initializer lists
+2. C-style variable argument lists
+3. variadic templated functions
+*/
 
-初始化列表:
-	#include <initializer_list>
-	int sum(initializer_list<int> values)
-	{
-		int sum = 0;
-		for (int i : values) sum += i;
-		return sum;
-	}
+// 初始化列表
+#include <initializer_list>
+int sum(initializer_list<int> values)
+{
+	int sum = 0;
+	for (int i : values) sum += i;
+	return sum;
+}
 
-	cout << sum({}) << endl; // 0
-	cout << sum({-6, -5, -4, -3, -2, -1}) << endl; // -21
-	cout << sum({10, 20, 30}) << endl; // 60
+cout << sum({}) << endl; // 0
+cout << sum({-6, -5, -4, -3, -2, -1}) << endl; // -21
+cout << sum({10, 20, 30}) << endl; // 60
 
-参数列表:
+// 参数列表
 // 1
 int sum(int first, ...)
 {
@@ -887,21 +769,20 @@ cout << sum(6, -6, -5, -4, -3, -2, -1) << endl; // -21
 cout << sum(3, 10, 20, 30) << endl; // 60
 
 
-name mangling
-C++ compiler 在编译期间会对根据函数返回类型即参数对函数名进行修饰以支持函数重载等，因此重载后的函数编译后有不同的函数名称
+// name mangling, C++ compiler 在编译期间会对根据函数返回类型即参数对函数名进行修饰以支持函数重载等，因此重载后的函数编译后有不同的函数名称
+// extern "C" 表明 采用 C 语言的链接规则，即不使用 C++ name mangling
 
-extern "C" 表明 采用 C 语言的链接规则，即不使用 C++ name mangling
+// 函数重载: 多个函数具有相同的名称，但是参数列表不同（参数个数 或者 参数类型不同）
 
-函数重载
-多个函数具有相同的名称，但是参数列表不同（参数个数 或者 参数类型不同）
-
-编译器根据函数参数列表查找最优函数原型的过程
+// 编译器根据函数参数列表查找最优函数原型的过程
+/*
 1. 编译器根据参数列表查找最优的函数原型
 2. 如果没有最优的函数原型，则尝试对参数进行参数类型转换（例如数组转换为指针类型，普通类型转换为 const 类型）
 3. 如果步骤 2 失败，编译器尝试 promote the type (例如将 bool 提升为 int)
 4. 如果步骤 3 失败，编译器尝试 prstandard conversions（例如将引用转换为对应的类型），如果转换后存在多个备选函数原型则报错
+*/
 
-Functions and scope （函数的作用范围）
+// Functions and scope （函数的作用范围）
 void f(int i) { /*does something*/ }
 void f(double d) { /*does something*/ }
 
@@ -912,8 +793,8 @@ int main()
 	return 0;
 }
 
-Deleted functions （函数调用者显示声明不使用的函数原型，避免编译器对内置类型的 implicit conversion）
 
+// Deleted functions （函数调用者显示声明不使用的函数原型，避免编译器对内置类型的 implicit conversion）
 void f(double) = delete;
 void g()
 {
@@ -922,7 +803,7 @@ void g()
 }
 
 
-引用作为函数参数
+// 引用作为函数参数
 bool get_items(int count, vector<int>& values)
 {
 	if (count > 100) return false;
@@ -936,22 +817,19 @@ bool get_items(int count, vector<int>& values)
 vector<int> items {};
 get_items(10, items);
 
-Asserts 使用条件编译，之后存在于 debug build 版本
+// Asserts 使用条件编译，之后存在于 debug build 版本
 ```
 
 ```cpp
-Using invariants （不变式）
-对于类似 cout object 等函数外部的数据，必须确保函数在使用该数据之后，该数据和函数调用前是完全一致的
+// Using invariants （不变式）, 对于类似 cout object 等函数外部的数据，必须确保函数在使用该数据之后，该数据和函数调用前是完全一致的
 
-
-函数指针
+// 函数指针
 int (*fn)() = get_status;
 int error_value = fn();
 
-函数类型别名
-// typedef 或者 using
-	typedef bool(*MyPtr)(MyType*, MyType*);
-	using MyPtr = bool(*)(MyType*, MyType*);	// more clear
+// 函数类型别名, 使用typedef 或者 using
+typedef bool(*MyPtr)(MyType*, MyType*);
+using MyPtr = bool(*)(MyType*, MyType*);	// more clear
 
 using two_ints = void (*)(int, int);
 
@@ -963,7 +841,7 @@ void caller()
 	fn(42, 99);
 }
 
-函数指针作为函数参数
+// 函数指针作为函数参数
 using callback = void(*)(const string&);
 void big_routine(int loop_count, const callback progress)
 {
@@ -978,92 +856,101 @@ void big_routine(int loop_count, const callback progress)
 	// routine
 	}
 }
-
-Templated functions （函数模板）
-编译器会根据模板函数及实际函数调用的参数类型生成对应的函数原型
-
+```
+```CPP
+// Templated functions （函数模板）, 编译器会根据模板函数及实际函数调用的参数类型生成对应的函数原型
 // 1
-	template<typename T>
-	T maximum(T lhs, T rhs)
-	{
-		return (lhs > rhs) ? lhs : rhs;
-	}
+template<typename T>
+T maximum(T lhs, T rhs)
+{
+	return (lhs > rhs) ? lhs : rhs;
+}
 
 // 2
-	template<typename T, typename U>
-	T maximum(T lhs, U rhs)
-	{
-		return (lhs > rhs) ? lhs : rhs;
-	}
+template<typename T, typename U>
+T maximum(T lhs, U rhs)
+{
+	return (lhs > rhs) ? lhs : rhs;
+}
 
 // 调用函数时显示提供类型，调用特定的版本的模板函数，如果有必要编译器可能会进行隐式的参数类型转换
-	// call template<typename T> maximum(T,T);
-	int i = maximum<int>(false, 100.99);
+int i = maximum<int>(false, 100.99);	// T maximum(T lhs, T rhs)
 
-使用模板的参数值
-	template<int size, typename T>		// parameter size can be used in the function as a local (read-only) variable
-	T* init(T t)
-	{
-		T* arr = new T[size];
-		for (int i = 0; i < size; ++i) arr[i] = t;
-		return arr;
-	}
+/*
+int size 是一个非类型模板参数（non-type template parameter）, 非类型模板参数允许你在编译时为模板指定一个常量值
+int size 是一个编译时常量，用于指定数组的大小。在函数 init 中，size 的值在编译时已经确定下来，因此可以在函数内部用作局部变量来定义数组的大小和控制循环
+size 是一个只读的局部变量，不能在函数内部修改它的值
+size 是在编译时传递给模板的，因此所有使用该模板的实例化都会根据传入的 size 值生成不同的代码
+*/
+template<int size, typename T>		// parameter size can be used in the function as a local (read-only) variable
+T* init(T t)
+{
+	T* arr = new T[size];
+	for (int i = 0; i < size; ++i) arr[i] = t;
+	return arr;
+}
 
-	int *i10 = init<10>(42);	// init<10,int>(42) can be used to explicitly indicate that you require an int array
-	for (int i = 0; i < 10; ++i) cout << i10[i] << ' ';
-	cout << endl;
-	delete [] i10;
+// init<10,int>(42) can be used to explicitly indicate that you require an int array
+int *i10 = init<10>(42);
+for (int i = 0; i < 10; ++i) cout << i10[i] << ' ';
+cout << endl;
+delete [] i10;
 
 // the compiler will instantiate this function for every combination of xxx and yyy that your code calls. 
 // If the template function has a large amount of code, then this may be an issue. One way around this is to use a helper function 
-	template<typename T> void print_array(T* arr, int size)
+template<typename T> 
+void print_array(T* arr, int size)
+{
+	for (int i = 0; i < size; ++i)
 	{
-		for (int i = 0; i < size; ++i)
-		{
-			cout << arr[i] << endl;
-		}
+		cout << arr[i] << endl;
 	}
+}
 
-	template<typename T, int N> inline void print_array(T (&arr)[N])
-	{
-		print_array(arr, N);
-	}
+template<typename T, int N>
+inline void print_array(T (&arr)[N])
+{
+	print_array(arr, N);
+}
 
-	int squares[] = { 1, 4, 9, 16, 25 };
-	print_array(squares);
-
-
-Specialized templates （为特定类型实现定制化实现）
-	template <typename T> int number_of_bytes(T t)
-	{
-		return sizeof(T);
-	}
-
-	template<> int number_of_bytes<const char *>(const char *str)	// add the specialized type to the function name
-	{
-		return strlen(str) + 1;
-	}
-
-	// 2
-	template<typename T>
-	T maximum(T lhs, T rhs)
-	{
-		return (lhs > rhs) ? lhs : rhs;
-	}
-
-	// delete the specialization for bool
-	template<> bool maximum<bool>(bool lhs, bool rhs) = delete;
+int squares[] = { 1, 4, 9, 16, 25 };
+print_array(squares);
 
 
-Variadic templates（可变参数模板）
+// Specialized templates （为特定类型实现定制化实现）
+template <typename T>
+int number_of_bytes(T t)
+{
+	return sizeof(T);
+}
 
+template<> 
+int number_of_bytes<const char *>(const char *str)	// add the specialized type to the function name
+{
+	return strlen(str) + 1;
+}
+
+// 2
+template<typename T>
+T maximum(T lhs, T rhs)
+{
+	return (lhs > rhs) ? lhs : rhs;
+}
+
+// delete the specialization for bool
+template<>
+bool maximum<bool>(bool lhs, bool rhs) = delete;
+
+
+// Variadic templates（可变参数模板）
 template<typename T, typename... Arguments>
 void func(T t, Arguments... args);
 
 // unpack the parameter pack, sizeof... 可以用来获取可变参数的个数
 
 // 1 使用递归
-template<typename T> void print(T t)
+template<typename T>
+void print(T t)
 {
 	cout << t << endl;
 }
@@ -1086,7 +973,8 @@ void print(Arguments ... args)
 }
 
 // 3 使用逗号运算符
-template<typename T> void print(T t)
+template<typename T>
+void print(T t)
 {
 	cout << t << endl;
 }
@@ -1097,23 +985,23 @@ void print(Arguments ... args)
 	int dummy[sizeof...(args)] = { (print(args), 0)... };
 }
 
-运算符重载
-使用操作符的语法而不是函数调用的语法进行函数调用
+// 运算符重载, 使用操作符的语法而不是函数调用的语法进行函数调用
+// 支持运算符重载的一元运算符:
+! & + - * ++ -- ~
 
-支持运算符重载的一元运算符:
-	! & + - * ++ -- ~
-支持运算符重载的二进制运算相关运算符:
-	!= == < <= > >= && ||
-	% %= + += - -= * *= / /= & &= | |= ^ ^= << <<= = >> =>>
-	-> ->* ,
-也可以对如下运算符进行重载
+// 支持运算符重载的二进制运算相关运算符:
+!= == < <= > >= && ||
+% %= + += - -= * *= / /= & &= | |= ^ ^= << <<= = >> =>>
+-> ->* ,
+
+// 支持重载的其他运算符
 function call operator ()
 array subscript []
 conversion operators
 the cast operator ()
 new and delete
 
-不能对如下操作符进行重载
+// 不能对如下操作符进行重载
 ., .*, ::, ?:, # or ## operators, nor the "named" operators, sizeof, alignof or typeid.
 
 struct point
@@ -1144,8 +1032,7 @@ cout << boolalpha;
 cout << (p1 == p2) << endl; // true
 cout << (p1 != p2) << endl; // false
 
-Function objects（函数对象，functor）
-function object 或者叫做 functor, 是自定义类型实现了函数调用操作符 ()，函数对象可以使用类似函数的方式进行使用
+// Function objects（函数对象，functor）, 或者叫做 functor, 是自定义类型实现了函数调用操作符 ()，函数对象可以使用类似函数的方式进行使用
 
 <functional> 头文件包含了不同的可以被用作函数对象的类型
 <algorithm> 头文件包含了作用于不同函数对象的函数
@@ -1188,7 +1075,7 @@ cout << "There are " << less_than_3 << " items less than 3" << endl;
 
 class 用来定义类，即封装自定义的数据类型并且定义可以对该类型数据进行操作的函数，背后的思想是封装数据以便于明确哪些字节的数据可以被操作并且只允许该类型进行操作
 
-C++用于类型封装的结构：
+// C++用于类型封装的结构：
 struct
 class
 union
@@ -1209,9 +1096,9 @@ class cartesian_vector
 		double get_magnitude() { return std::sqrt((x * x) + (y * y)); }
 };
 
-struct 和 class 区别是，struct 的成员默认为 public， class 的成员默认为 private
+// struct 和 class 区别是，struct 的成员默认为 public， class 的成员默认为 private
 
-this 指针表示当前对象
+// this 指针表示当前对象
 class cartesian_vector
 {
 public:
@@ -1240,7 +1127,7 @@ double cartesian_vector::magnitude()
 {
 	return sqrt((this->x * this->x) + (this->y * this->y));
 }
-当成员是 private 时，意味着你不能使用 initializer list 语法进行对象的初始化
+// 当成员是 private 时，意味着你不能使用 initializer list 语法进行对象的初始化
 
 class cartesian_vector
 {
@@ -1258,7 +1145,7 @@ cartesian_vector *pvec = new cartesian_vector { 5, 5 };
 // use pvec
 delete pvec
 
-C++11 allows direct initialization to provide default values in the class:
+// C++11 allows direct initialization to provide default values in the class:
 class point
 {
 	public:
@@ -1273,9 +1160,8 @@ class car
 };
 
 
-构造函数用来定义特殊的成员函数来对对象进行初始化，构造函数的名称和类名相同并且不返回任何值
-
-构造函数的类型:
+// 构造函数用来定义特殊的成员函数来对对象进行初始化，构造函数的名称和类名相同并且不返回任何值
+// 构造函数的类型:
 Default constructor默认构造函数: This is called to create an object with the default value.
 Copy constructor拷贝构造函数: This is used to create a new object based on the value of an existing object.
 Move constructor移动构造函数: This is used to create a new object using the data moved from an existing object.
@@ -1343,18 +1229,18 @@ point p1(10, 10);
 point p2(p1);	// 通过已有对象构造新的对象，拷贝函数被调用
 point p3 = p1;	// 按值传递对象，拷贝函数被调用
 
-不同类型的类对象之间的转换（编译失败的代码）
-	class cartesian_vector
-	{
-		double x; double y;
-	public:
-		cartesian_vector(const point& p) : x(p.x), y(p.y) {}
-	};
+// 不同类型的类对象之间的转换（编译失败的代码）
+class cartesian_vector
+{
+	double x; double y;
+public:
+	cartesian_vector(const point& p) : x(p.x), y(p.y) {}
+};
 
-	point p(10, 10);
-	cartesian_vector v1(p);
-	cartesian_vector v2 { p };
-	cartesian_vector v3 = p;
+point p(10, 10);
+cartesian_vector v1(p);
+cartesian_vector v2 { p };
+cartesian_vector v3 = p;
 // 编译失败的原因是因为cartesian_vector类访问了point类的私有成员
 
 解决办法：使用友元类
@@ -1379,8 +1265,7 @@ ostream& operator<<(ostream& stm, const point& pt)
 friend ostream& operator<<(ostream&, const point&);
 // 友元类的声明需要声明在point类中，放在public 或者 private 部分都可以，没有区别
 
-显示声明构造函数Marking constructors as explicit，即强制必须使用括号的语法调用构造函数
-
+// 显示声明构造函数Marking constructors as explicit，即强制必须使用括号的语法调用构造函数
 class mytype
 {
 public:
@@ -1455,7 +1340,7 @@ a = b = c; // make them all the same value (more clear)
 a.operator=(b.operator=(c)); // make them all the same value
 
 
-复制构造函数与复制赋值方法的主要区别：
+// 复制构造函数与复制赋值方法的主要区别：
 复制构造函数创建的新对象在调用前并不存在。如果构造失败，就会引发异常。
 在复制赋值时，两个对象都已存在，因此你是在将值从一个对象复制到另一个对象。这应被视为一个原子操作，所有的复制都应执行
 
@@ -1541,7 +1426,7 @@ point point::polar(double r, double th)
 }
 
 
-嵌套类
+// 嵌套类
 可以在一个类中定义一个类。如果将嵌套类声明为公共类，那么就可以在容器类中创建对象并将其返回给外部代码。不过，通常情况下，你会希望声明一个被类使用的类，并且该类应该是私有的。 
 
 // declares a public nested class
@@ -1561,7 +1446,7 @@ void outer::inner::f()	// Notice how the name of the nested class is prefixed wi
 	// do something
 }
 
-访问常量对象
+// 访问常量对象
 
 class point
 {
@@ -1610,7 +1495,7 @@ double mag = (pvec->*fn)();
 delete pvec;
 
 
-运算符重载
+// 运算符重载
 
 // inline in point
 point operator-() const
@@ -1770,8 +1655,7 @@ void f6()
 } // memory is deleted
 
 
-Sharing ownership (shared_ptr)
-在某些情况下，您需要共享一个指针，您需要一种机制，让多个对象可以持有一个指针，该指针将一直有效，直到所有使用该指针的对象都表示不再需要使用它为止
+// Sharing ownership (shared_ptr), 在某些情况下，您需要共享一个指针，您需要一种机制，让多个对象可以持有一个指针，该指针将一直有效，直到所有使用该指针的对象都表示不再需要使用它为止
 
 shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 
@@ -1806,8 +1690,7 @@ shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 	}
 
 
-类模板
-
+// 类模板
 template <int N, typename T>
 class simple_array
 {
@@ -1871,8 +1754,7 @@ public:
 
 
 
-composition and inheritance （组合和继承）
-
+// composition and inheritance （组合和继承）
 class os_file
 {
 	const string file_name;
@@ -1943,11 +1825,12 @@ void f()
 	print_y(&d); // implicit cast to base*
 }
 
-访问级别 https://csguide.cn/cpp/object_oriented/member_accessibility.html
+// 访问级别 https://csguide.cn/cpp/object_oriented/member_accessibility.html
+/*
 public
 private
 protected
-
+*/
 
 class base
 {
@@ -2342,9 +2225,7 @@ void call_me(base1 *b1)
 如果要使用动态创建的对象，可以使用智能指针来管理它们的生命周期。好消息是，虚方法的分派可以通过智能指针进行（它们只是对象指针的包装），坏消息是，使用智能指针时，类的关系会丢失。
 
 
-interface
-interface 是一个只包含纯虚函数的类，它的目的是为了约定行为，继承自 interface 的派生类必须实现 interface 约定的所有方法
-
+// interface 是一个只包含纯虚函数的类，它的目的是为了约定行为，继承自 interface 的派生类必须实现 interface 约定的所有方法
 #define interface struct
 interface IPrint
 {
@@ -2505,14 +2386,11 @@ In C++11 you can use the ref function (in <functional>) to specify that the pair
 	auto p2 = make_pair(ref(i1), ref(i2));
 	++p2.first; // changes i1
 
-pair 类提供了一种返回包含两个值的对象 (https://en.cppreference.com/w/cpp/utility/pair)
-
-
+// pair 类提供了一种返回包含两个值的对象 (https://en.cppreference.com/w/cpp/utility/pair)
 auto p = minmax(20,10);
 cout << "{" << p.first << "," << p.second << "}" << endl;
 
-tuple 类提供了一种返回包含多个值的对象 (https://en.cppreference.com/w/cpp/utility/tuple)
-
+// tuple 类提供了一种返回包含多个值的对象 (https://en.cppreference.com/w/cpp/utility/tuple)
 tuple<int, int, int> t3 { 1,2,3 };
 cout << "{"
 	<< get<0>(t3) << "," << get<1>(t3) << "," << get<2>(t3)
@@ -2533,8 +2411,7 @@ tuple<int&, int&, int&> tr3 = tie(i1, i2, i3);
 tr3 = t3;
 
 
-容器 container
-
+// 容器 container
 // 1
 vector<int> primes{1, 3, 5, 7, 11, 13};
 for (size_t idx = 0; idx < primes.size(); ++idx)
@@ -2556,10 +2433,8 @@ template<typename container> void print(container& items)
 }
 
 
-sequence container 
-
-list
-底层实现是双向链表
+// sequence container 
+// list (底层实现是双向链表)
 
 list<int> primes{ 3,5,7 };
 primes.push_back(11);
@@ -2613,8 +2488,7 @@ num1.merge(num2); // {1,1,2,2,3,4,5,6,7,8,8,8}
 num1.unique(); // {1,2,3,4,5,6,7,8}
 
 
-forward list
-forward_list 类似 list, 但是只允许向 list的前端插入和删除元素
+// forward list, forward_list 类似 list, 但是只允许向 list的前端插入和删除元素
 
 forward_list<int> euler { 2,7,1,8,2,8 };
 euler.push_front(-1); 		// { -1,2,7,1,8,2,8 }
@@ -2625,9 +2499,7 @@ euler.remove_if([](int i){return i < 0;});
 							// { 2,7,1,8,2,8 }
 
 
-vector
-vector 的行为类似于 动态数组
-
+// vector 的行为类似于 动态数组
 vector<int> distrib(10); // ten intervals
 for (int count = 0; count < 1000; ++count)
 {
@@ -2637,13 +2509,11 @@ for (int count = 0; count < 1000; ++count)
 for (int i : distrib) cout << i << endl;
 
 
-deque (double-ended queue)
-deque grows from both ends, 尽管可以从中间向 deque 插入元素但是效率不高，并且由于可以从两端向deque插入元素，因此元素的顺序和插入的顺序不一致
+// deque (double-ended queue), deque grows from both ends, 尽管可以从中间向 deque 插入元素但是效率不高，并且由于可以从两端向deque插入元素，因此元素的顺序和插入的顺序不一致
 
 
-关联容器associative container
-
-map and multimap
+// 关联容器associative container
+// map and multimap
 
 map<string, int> people;
 people.emplace("Washington", 1789);
@@ -2655,7 +2525,7 @@ auto it = people.begin();
 pair<string, int> first_item = *it;
 cout << first_item.first << " " << first_item.second << endl;
 
-map 元素的查找：
+// map 元素的查找：
 	at method
 	[] operator
 	find function
@@ -2664,7 +2534,7 @@ map 元素的查找：
 	upper_bound method
 	equal_range method
 
-set and multiset
+// set and multiset
 
 set<string> people{
 	"Washington","Adams", "Jefferson","Madison","Monroe",
@@ -2709,8 +2579,7 @@ while (to_do.size() > 0)
 }
 
 
-迭代器iterators
-迭代器的行为类似于函数指针，迭代器通常是 iterator class 的对象
+// 迭代器iterators, 迭代器的行为类似于函数指针，迭代器通常是 iterator class 的对象
 
 所有迭代器都具有如下行为:
 Operator 						Behaviors
@@ -2777,7 +2646,7 @@ transform(vec1.begin(), vec1.end(), vec2.begin(),
 vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
 auto number = count(planck.begin(), planck.end(), 6);	// 返回指定范围内和数值相等的元素个数
 
-容器的比较操作
+// 容器的比较操作
 vector<int> v1 { 1,2,3,4 };
 vector<int> v2 { 1,2 };
 vector<int> v3 { 5,6,7 };
@@ -2806,7 +2675,7 @@ unique_copy(planck.begin(), planck.end(), back_inserter(temp));
 planck.assign(temp.begin(), temp.end());
 
 
-元素查找
+// 元素查找
 vector<int> planck{ 6,6,2,6,0,7,0,0,4,0 };
 auto imin = min_element(planck.begin(), planck.end());
 auto imax = max_element(planck.begin(), planck.end());
@@ -2827,7 +2696,7 @@ do
 } while (it != vec.end());
 
 
-元素排序
+// 元素排序
 vector<int> vec{45,23,67,6,29,44,90,3,64,18};
 auto middle = vec.begin() + 5;
 partial_sort(vec.begin(), middle, vec.end());
@@ -2874,7 +2743,7 @@ dist_units<ratio<1609344, 1000>> in_miles(earth_diameter_km);
 cout << in_miles.value()<< "miles" << endl;
 
 
-复数
+// 复数
 complex<double> a(1.0, 1.0);
 complex<double> b(-0.5, 0.5);
 complex<double> c = a + b;
@@ -2883,8 +2752,7 @@ complex<double> d = polar(1.41421, -3.14152 / 4);
 cout << d << endl;
 
 
-字符串 string
-
+// 字符串 string
 string s = "hellon";
 copy(s.begin(), s.end(), ostream_iterator<char>(cout));
 
@@ -3034,9 +2902,9 @@ cout << result << "n"; // use the vector<int> class in the example
 
 // 如何让 cout 的输出是线程安全的（即在多线程的情况下保证输出完整性）How to easily make std::cout thread-safe
 //There are other ways, but stringstream uses << just like cout.. 
-	std::stringstream msg;
-	msg << "Error:" << Err_num << ", " << ErrorString( Err_num ) << "\n"; 
-	std::cout << msg.str();
+std::stringstream msg;
+msg << "Error:" << Err_num << ", " << ErrorString( Err_num ) << "\n"; 
+std::cout << msg.str();
 
 ```
 
