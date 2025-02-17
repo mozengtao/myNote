@@ -46,6 +46,271 @@
 [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)  
 [**using**](https://en.cppreference.com/w/cpp/keyword/using)  
 [How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
+
+## C++ 的线程同步机制
+```cpp
+/*
+互斥锁：用于保护共享资源，防止竞争条件
+条件变量：用于线程间的通信，等待特定条件
+信号量：用于控制资源的并发访问数量
+读写锁：适用于读多写少的场景
+原子操作：用于简单的线程安全操作
+屏障：用于同步多个线程的执行进度
+*/
+
+// 1 mutex (互斥锁)
+/*
+机制：用于保护共享资源，确保同一时间只有一个线程可以访问该资源
+应用场景：
+	1. 保护共享数据结构（链表，队列等）的访问
+	2. 防止多个线程同时修改同一个变量
+*/
+// e.g
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx;
+int shared_data = 0;
+
+void increment() {
+    std::lock_guard<std::mutex> lock(mtx);
+    ++shared_data;
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Shared data: " << shared_data << std::endl;
+    return 0;
+}
+
+// 2 condition variable (条件变量)
+/*
+用于线程间的通信，允许一个线程等待某个条件成立，而另一个线程在条件成立时通知等待的线程
+应用场景：
+	1. 生产者-消费者问题，生成者生产数据并通知消费者线程消费
+	2. 线程池中的任务调度
+*/
+
+// e.g
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+
+std::mutex mtx;
+std::condition_variable cv;
+std::queue<int> data_queue;
+
+void producer() {
+    for (int i = 0; i < 10; ++i) {
+        std::lock_guard<std::mutex> lock(mtx);
+        data_queue.push(i);
+        cv.notify_one();
+    }
+}
+
+void consumer() {
+    while (true) {
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, []{ return !data_queue.empty(); });
+        int data = data_queue.front();
+        data_queue.pop();
+        std::cout << "Consumed: " << data << std::endl;
+        if (data == 9) break;
+    }
+}
+
+int main() {
+    std::thread t1(producer);
+    std::thread t2(consumer);
+
+    t1.join();
+    t2.join();
+
+    return 0;
+}
+
+// 3 semaphore 信号量
+/*
+机制：用于控制对共享资源的访问数量，允许多个线程同时访问资源，但限制最大并发数
+应用场景：
+	1. 限制同时访问某个资源的线程数量
+	2. 实现资源池（如数据库连接池）
+*/
+
+// e.g
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+class Semaphore {
+public:
+    Semaphore(int count = 0) : count(count) {}
+
+    void acquire() {
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [this]() { return count > 0; });
+        --count;
+    }
+
+    void release() {
+        std::lock_guard<std::mutex> lock(mtx);
+        ++count;
+        cv.notify_one();
+    }
+
+private:
+    std::mutex mtx;
+    std::condition_variable cv;
+    int count;
+};
+
+Semaphore sem(2);
+
+void task(int id) {
+    sem.acquire();
+    std::cout << "Task " << id << " is running" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "Task " << id << " is done" << std::endl;
+    sem.release();
+}
+
+int main() {
+    std::thread t1(task, 1);
+    std::thread t2(task, 2);
+    std::thread t3(task, 3);
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    return 0;
+}
+
+// 4 read-write lock
+/*
+机制：允许多个读线程同时访问共享资源，但写线程独占资源
+应用场景：
+	1. 读多写少的场景，如缓存系统
+	2. 数据库系统中的并发读取和写入
+*/
+
+// e.g
+#include <iostream>
+#include <thread>
+#include <shared_mutex>
+
+std::shared_mutex rw_mutex;
+int shared_data = 0;
+
+void reader(int id) {
+    std::shared_lock<std::shared_mutex> lock(rw_mutex);
+    std::cout << "Reader " << id << " reads: " << shared_data << std::endl;
+}
+
+void writer(int id) {
+    std::unique_lock<std::shared_mutex> lock(rw_mutex);
+    ++shared_data;
+    std::cout << "Writer " << id << " writes: " << shared_data << std::endl;
+}
+
+int main() {
+    std::thread readers[5];
+    std::thread writers[2];
+
+    for (int i = 0; i < 5; ++i) {
+        readers[i] = std::thread(reader, i);
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        writers[i] = std::thread(writer, i);
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        readers[i].join();
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        writers[i].join();
+    }
+
+    return 0;
+}
+
+// 5 atomic operations 原子操作
+/*
+机制：原子操作不可中断，通常用于简单的变量操作，确保线程安全
+应用场景：
+	1. 计数器，标志位等简单变量的操作
+	2. 无锁数据结果（如无锁队列）
+*/
+
+// e.g
+#include <iostream>
+#include <thread>
+#include <atomic>
+
+std::atomic<int> counter(0);
+
+void increment() {
+    for (int i = 0; i < 1000; ++i) {
+        ++counter;
+    }
+}
+
+int main() {
+    std::thread t1(increment);
+    std::thread t2(increment);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "Counter: " << counter << std::endl;
+    return 0;
+}
+
+// 6 barrier 屏障
+/*
+机制：屏障用于同步多个线程，确保所有线程都到达某个点后再继续执行
+应用场景：
+	1. 并行计算，确保所有线程完成某个阶段后再进入下一个阶段
+	2. 多线程初始化时，确保所有线程都初始化完成后再继续
+*/
+
+// e.g
+#include <iostream>
+#include <thread>
+#include <barrier>
+
+std::barrier sync_point(3); // 3个线程同步
+
+void task(int id) {
+    std::cout << "Thread " << id << " is working" << std::endl;
+    sync_point.arrive_and_wait(); // 等待其他线程
+    std::cout << "Thread " << id << " continues" << std::endl;
+}
+
+int main() {
+    std::thread t1(task, 1);
+    std::thread t2(task, 2);
+    std::thread t3(task, 3);
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    return 0;
+}
+```
+
 ```cpp
 // 在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
 
@@ -986,24 +1251,25 @@ void print(Arguments ... args)
 }
 
 // 运算符重载, 使用操作符的语法而不是函数调用的语法进行函数调用
-// 支持运算符重载的一元运算符:
+/*
+#1 支持运算符重载的一元运算符:
 ! & + - * ++ -- ~
 
-// 支持运算符重载的二进制运算相关运算符:
+#2 支持运算符重载的二进制运算相关运算符:
 != == < <= > >= && ||
 % %= + += - -= * *= / /= & &= | |= ^ ^= << <<= = >> =>>
 -> ->* ,
 
-// 支持重载的其他运算符
+#3 支持重载的其他运算符
 function call operator ()
 array subscript []
 conversion operators
 the cast operator ()
 new and delete
 
-// 不能对如下操作符进行重载
+#4 不能对如下操作符进行重载
 ., .*, ::, ?:, # or ## operators, nor the "named" operators, sizeof, alignof or typeid.
-
+*/
 struct point
 {
 	int x;
@@ -1034,19 +1300,16 @@ cout << (p1 != p2) << endl; // false
 
 // Function objects（函数对象，functor）, 或者叫做 functor, 是自定义类型实现了函数调用操作符 ()，函数对象可以使用类似函数的方式进行使用
 
-<functional> 头文件包含了不同的可以被用作函数对象的类型
-<algorithm> 头文件包含了作用于不同函数对象的函数
+// <functional> 头文件包含了不同的可以被用作函数对象的类型
+// <algorithm> 头文件包含了作用于不同函数对象的函数
 
-lambda expression（lambda 表达式）
-C++11 provides a mechanism to get the compiler to determine the function objects that are required and bind parameters to them. These are called lambda expressions.
-lambda 表达式用来在函数对象被用到的地方创建匿名函数
+// lambda expression（lambda 表达式）, C++11 provides a mechanism to get the compiler to determine the function objects that are required and bind parameters to them. These are called lambda expressions. lambda 表达式用来在函数对象被用到的地方创建匿名函数
 
 auto less_than_10 = [](int a) {return a < 10; };	// [] 被称作 captrue list，用于捕获lambda 表达式之外的变量，该示例中没有捕捉任何变量所以为空
 bool b = less_than_10(4);
 
-
-captured by a reference (use [&]) 
-captured by a value (use [=])，此时可以省略 = 号
+// captured by a reference (use [&]) 
+// captured by a value (use [=])，此时可以省略 = 号
 
 // 1
 int limit = 99;
@@ -1073,16 +1336,18 @@ int less_than_3 = count_if(
 cout << "There are " << less_than_3 << " items less than 3" << endl;
 
 
-class 用来定义类，即封装自定义的数据类型并且定义可以对该类型数据进行操作的函数，背后的思想是封装数据以便于明确哪些字节的数据可以被操作并且只允许该类型进行操作
+// class 用来定义类，即封装自定义的数据类型并且定义可以对该类型数据进行操作的函数，背后的思想是封装数据以便于明确哪些字节的数据可以被操作并且只允许该类型进行操作
+/*
+method 是类的实例可以调用的函数，通常对类的数据成员进行操作
+data members 定义了类对象的状态
+*/
 
-// C++用于类型封装的结构：
+// C++用于类型封装的结构
+/*
 struct
 class
 union
-
-class:
-method 是类的实例可以调用的函数，通常对类的数据成员进行操作
-data members 定义了类对象的状态
+*/
 
 class cartesian_vector
 {
@@ -1145,7 +1410,7 @@ cartesian_vector *pvec = new cartesian_vector { 5, 5 };
 // use pvec
 delete pvec
 
-// C++11 allows direct initialization to provide default values in the class:
+// C++11 allows direct initialization to provide default values in the class
 class point
 {
 	public:
@@ -1161,15 +1426,16 @@ class car
 
 
 // 构造函数用来定义特殊的成员函数来对对象进行初始化，构造函数的名称和类名相同并且不返回任何值
-// 构造函数的类型:
-Default constructor默认构造函数: This is called to create an object with the default value.
-Copy constructor拷贝构造函数: This is used to create a new object based on the value of an existing object.
-Move constructor移动构造函数: This is used to create a new object using the data moved from an existing object.
-Destructor析构函数: This is called to clean up the resources used by an object.
-Copy assignment拷贝赋值: This copies the data from one existing object into another existing object.
-Move assignment移动赋值: This moves the data from one existing object into another existing object.
+/* 构造函数的类型:
+Default constructor(默认构造函数): This is called to create an object with the default value.
+Copy constructor(拷贝构造函数): This is used to create a new object based on the value of an existing object.
+Move constructor(移动构造函数): This is used to create a new object using the data moved from an existing object.
+Destructor(析构函数): This is called to clean up the resources used by an object.
+Copy assignment(拷贝赋值): This copies the data from one existing object into another existing object.
+Move assignment(移动赋值): This moves the data from one existing object into another existing object.
 
 编译器创建的默认构造函数默认是 public 属性
+*/
 
 // 1
 class point
@@ -1203,7 +1469,7 @@ public:
 car commuter_car(25, 27);
 car sports_car(26, 28, 28);
 
-Delegating constructors 代理构造函数：构造函数使用成员列表的语法调用其他构造函数
+// Delegating constructors 代理构造函数：构造函数使用成员列表的语法调用其他构造函数
 class car
 {
 // data members
@@ -1214,8 +1480,7 @@ public:
 };
 
 
-Copy constructor拷贝构造函数
-当 按值传递对象，或者 按值返回 或者 显式的通过已有对象构造新的对象时拷贝构造函数被调用
+// Copy constructor(拷贝构造函数), 当 按值传递对象，或者 按值返回 或者 显式的通过已有对象构造新的对象时拷贝构造函数被调用
 
 class point
 {
@@ -1243,7 +1508,7 @@ cartesian_vector v2 { p };
 cartesian_vector v3 = p;
 // 编译失败的原因是因为cartesian_vector类访问了point类的私有成员
 
-解决办法：使用友元类
+// 解决办法：使用友元类
 class cartesian_vector; // forward decalartion
 
 class point
@@ -1276,8 +1541,7 @@ mytype t1 = 10.0; // will not compile, cannot convert
 mytype t2(10.0); // OK
 
 
-析构函数 destructor
-
+// 析构函数 destructor
 // 1
 void f(mytype t) // copy created
 {
@@ -1323,8 +1587,8 @@ void f()
 	delete p; // object destroyed
 }
 
-如果类的数据成员是实现了destructor自定义数据类型，那么当包含对象被销毁时，包含对象的析构函数也会被调用。不过请注意，这只是在对象是类成员的情况下。
-如果类成员是指向空闲存储空间中对象的指针，则必须在包含对象的析构函数中显式删除该指针。
+// 如果类的数据成员是实现了destructor自定义数据类型，那么当包含对象被销毁时，包含对象的析构函数也会被调用。不过请注意，这只是在对象是类成员的情况下。
+// 如果类成员是指向空闲存储空间中对象的指针，则必须在包含对象的析构函数中显式删除该指针。
 
 class buffer
 {
@@ -1340,14 +1604,13 @@ a = b = c; // make them all the same value (more clear)
 a.operator=(b.operator=(c)); // make them all the same value
 
 
-// 复制构造函数与复制赋值方法的主要区别：
-复制构造函数创建的新对象在调用前并不存在。如果构造失败，就会引发异常。
-在复制赋值时，两个对象都已存在，因此你是在将值从一个对象复制到另一个对象。这应被视为一个原子操作，所有的复制都应执行
+// 复制构造函数与复制赋值方法的主要区别
+/*
+	复制构造函数创建的新对象在调用前并不存在。如果构造失败，就会引发异常。
+	在复制赋值时，两个对象都已存在，因此你是在将值从一个对象复制到另一个对象。这应被视为一个原子操作，所有的复制都应执行
+*/
 
-
-move constructor and a move assignment operator
-which are called when a temporary object is used either to create another object or to be assigned to an existing object, the contents of the temporary can be moved to the other object, leaving the temporary object in an invalid state.
-
+// move constructor and a move assignment operator, which are called when a temporary object is used either to create another object or to be assigned to an existing object, the contents of the temporary can be moved to the other object, leaving the temporary object in an invalid state.
 
 //  use only move and never to use copy
 class mytype
@@ -1366,9 +1629,11 @@ mytype::mytype(mytype&& tmp)
 	tmp.p = nullptr;
 }
 
-类的静态成员
+//类的静态成员
+/*
 	静态数据成员（the item is associated with the class and not with a specific instance， there is one data item shared by all instances of the class）
 	静态方法（A static method is part of the namespace of a class，the static function cannot call nonstatic methods on the class because a nonstatic method will need a this pointer, but a nonstatic method can call a static method）
+*/
 
 class mytype
 {
@@ -1392,15 +1657,14 @@ public:
 
 int mytype::i = 42;
 // 类的静态成员需要在类的外部进行定义，并且定义时需要带上类型T
-
+/*
 可以在静态方法中声明变量。在这种情况下，变量值会在所有对象中的所有方法调用中保持不变，因此其效果与静态类成员相同，但不会出现在类外定义变量的问题
 
 全局函数中的静态变量将在函数首次调用前的某个时刻创建。同样，作为类成员的静态对象也会在首次访问前的某个时刻被初始化。
 静态对象和全局对象在主函数被调用前创建，并在主函数结束后销毁。
+*/
 
-命名构造函数
-这是公共静态方法的一种应用。其原理是，由于静态方法是类的成员，这意味着它可以访问类实例的私有成员，因此这种方法可以创建一个对象，执行一些额外的初始化，然后将对象返回给调用者。这是一个工厂方法
-
+// 命名构造函数, 这是公共静态方法的一种应用。其原理是，由于静态方法是类的成员，这意味着它可以访问类实例的私有成员，因此这种方法可以创建一个对象，执行一些额外的初始化，然后将对象返回给调用者。这是一个工厂方法
 class point
 {
 	double x; double y;
@@ -1426,9 +1690,7 @@ point point::polar(double r, double th)
 }
 
 
-// 嵌套类
-可以在一个类中定义一个类。如果将嵌套类声明为公共类，那么就可以在容器类中创建对象并将其返回给外部代码。不过，通常情况下，你会希望声明一个被类使用的类，并且该类应该是私有的。 
-
+// 嵌套类, 可以在一个类中定义一个类。如果将嵌套类声明为公共类，那么就可以在容器类中创建对象并将其返回给外部代码。不过，通常情况下，你会希望声明一个被类使用的类，并且该类应该是私有的。 
 // declares a public nested class
 class outer
 {
@@ -1467,11 +1729,11 @@ void print_point(const point& p)
 double get_x() const { return x; }
 double get_y() const { return y: }
 
+/*
 this 指针是常量。const 关键字是函数原型的一部分，因此方法可以在此基础上重载。
 标记为 const 的方法不能改变数据成员，哪怕是暂时改变也不行，这样的方法只能调用 const 方法。
 在极少数情况下，数据成员可能会通过 const 对象进行更改；在这种情况下，成员的声明会标记为 mutable 关键字
-
-
+*/
 class cartesian_vector
 {
 public:
@@ -1496,7 +1758,6 @@ delete pvec;
 
 
 // 运算符重载
-
 // inline in point
 point operator-() const
 {
@@ -1528,9 +1789,7 @@ public:
 	}
 };
 
-函数类
-函数类是一个实现（）操作符的类。这意味着可以使用与函数相同的语法调用对象
-
+// 函数类是一个实现了（）操作符的类。这意味着可以使用与函数相同的语法调用对象
 class factor
 {
 	double f = 1.0;
@@ -1547,16 +1806,14 @@ double d2 = threeTimes.operator()(d1);	// 等价
 
 
 template<typename Fn>
-void print_value(double d, Fn& fn)
+void print_value(double d, Fn& fn)	// Fn 可以是 global function, a functor 或者 a lambda expression.
 {
 	double ret = fn(d);
 	cout << ret << endl;
 }
-Fn 可以是 global function, a functor 或者 a lambda expression.
 
 
-定义转换操作符，将对象转换为另一种类型
-
+// 定义转换操作符，将对象转换为另一种类型
 class mytype
 {
 	int i;
@@ -1572,7 +1829,6 @@ int i = t; // implicit conversion
 
 
 // using a conversion operator: returning values from a stateful functor
-
 class averager
 {
 	double total;
@@ -1591,20 +1847,17 @@ vector<double> vals { 100.0, 20.0, 30.0 };
 double avg = for_each(vals.begin(), vals.end(), averager());
 
 
-Resource Acquisition Is Initialization (RAII):
-资源在对象的构造函数中分配，在析构函数中释放，因此资源的生命周期就是对象的生命周期。通常情况下，这种封装对象是在栈上分配的，这意味着无论对象如何退出作用域，都能保证资源会被释
+// Resource Acquisition Is Initialization (RAII): 资源在对象的构造函数中分配，在析构函数中释放，因此资源的生命周期就是对象的生命周期。通常情况下，这种封装对象是在栈上分配的，这意味着无论对象如何退出作用域，都能保证资源会被释
 
-C++中管理资源的方法
+// C++中管理资源的方法
+/*
 Writing wrapper classes
 	There are several issues that you must address when writing a class to wrap a resource ...
 Using smart pointers
 	https://www.luozhiyun.com/archives/762
 	https://iliubang.cn/posts/cpp/2022-04-20-c++%E4%B8%ADunique_ptr%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7/
-
-	The C++ Standard Library provides several classes to wrap resources accessed through pointers.
-	The Standard Library has three smart pointer classes: unique_ptr, shared_ptr, and weak_ptr. Each handles how the resource is released in a different way, and how or whether you can copy a pointer.
-Managing exclusive ownership
-	The unique_ptr class is constructed with a pointer to the object it will maintain.
+	C++标准库提供了3中智能指针类用来简化资源的管理：unique_ptr, shared_ptr, and weak_ptr
+*/
 
 // version 1
 void f1()
@@ -1656,7 +1909,6 @@ void f6()
 
 
 // Sharing ownership (shared_ptr), 在某些情况下，您需要共享一个指针，您需要一种机制，让多个对象可以持有一个指针，该指针将一直有效，直到所有使用该指针的对象都表示不再需要使用它为止
-
 shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 
 以从一个 unique_ptr 对象创建一个 shared_ptr 对象，这意味着指针会被移动到新对象上，并创建引用计数控制块
@@ -1669,25 +1921,25 @@ shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
 1.要么调用已失效的成员函数，要么尝试从 weak_ptr 创建一个 shared_ptr
 2.从中创建一个 shared_ptr 对象
 
-	shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
-	weak_ptr<point> wp(sp1);
+shared_ptr<point> sp1 = make_shared<point>(1.0,1.0);
+weak_ptr<point> wp(sp1);
 
-	// code that may call sp1.reset() or may not
+// code that may call sp1.reset() or may not
 
-	if (!wp.expired()) { /* can use the resource */}
+if (!wp.expired()) { /* can use the resource */}
 
-	shared_ptr<point> sp2 = wp.lock();
-	if (sp2 != nullptr) { /* can use the resource */}
+shared_ptr<point> sp2 = wp.lock();
+if (sp2 != nullptr) { /* can use the resource */}
 
-	try
-	{
-		shared_ptr<point> sp3(wp);
-		// use the pointer
-	}
-	catch(bad_weak_ptr& e)
-	{
-		// dangling weak pointer
-	}
+try
+{
+	shared_ptr<point> sp3(wp);
+	// use the pointer
+}
+catch(bad_weak_ptr& e)
+{
+	// dangling weak pointer
+}
 
 
 // 类模板
@@ -1724,11 +1976,11 @@ T& simple_array<N,T>::operator[](int idx)
 }
 
 // have default values for template parameters
-template<int N, typename T=int> class simple_array
+template<int N, typename T=int>
+class simple_array
 {
 	// same as before
 };
-
 
 // have a specific implementation for a template parameter
 template<int N> 
@@ -1753,7 +2005,6 @@ public:
 通过特殊化，你不能从类模板中获得任何代码；你必须实现类模板的所有方法
 
 
-
 // composition and inheritance （组合和继承）
 class os_file
 {
@@ -1775,11 +2026,8 @@ public:
 };
 
 尽管子类对象包含基类数据成员，但它们只能由基类方法进行更改
-
 创建派生对象时，必须先创建基对象（使用适当的构造函数），同样，销毁派生对象时，也必须先销毁对象的派生部分（通过派生类的析构函数），然后再调用基类的析构函数
-
 如果没有明确调用基类构造函数，那么编译器将调用基类的默认构造函数作为派生类构造函数的第一个动作。如果成员列表初始化了数据成员，那么这些成员将在基类构造函数被调用后被初始化。
-
 派生类继承了基类的功能（取决于方法的访问级别），因此基类方法可以通过派生类对象调用。
 
 struct base
@@ -2144,9 +2392,8 @@ void call_it2(abstract_base& r)
 	r.f();
 }
 
-通过声明 pure virtual function 把该类成为 abstract class ，意味着不能创建该类的实例，但是可以创建该类的指针或者引用并对其进行代码调用
-使用抽象类的唯一方法就是继承该抽象类并且实现纯虚函数
-
+// 通过声明 pure virtual function 把该类成为 abstract class ，意味着不能创建该类的实例，但是可以创建该类的指针或者引用并对其进行代码调用
+// 使用抽象类的唯一方法就是继承该抽象类并且实现纯虚函数
 struct derived1 : abstract_base
 {
 	virtual void f() override { cout << "derived1::f" << endl; }
@@ -2176,8 +2423,7 @@ struct derived : abstract_base
 
 
 
-Runtime Type Information (RTTI) 用于在运行时获取对象的类型信息
-
+// Runtime Type Information (RTTI) 用于在运行时获取对象的类型信息
 string str = "hello";
 const type_info& ti = typeid(str);
 cout << ti.name() << endl;
@@ -2360,8 +2606,7 @@ impl do something
 mixin something else
 
 
-标准库下的 container
-
+// 标准库下的 container
 template <typename T1, typename T2>
 struct pair
 {
@@ -2708,7 +2953,7 @@ for_each(middle, vec.end(), [](int i) {cout << i << " "; });
 cout << endl; // 67 90 45 64 44
 
 
-数学库函数
+// 数学库函数
 double radius_nm = 10.0;
 double volume_nm = pow(radius_nm, 3) * 3.1415 * 4.0 / 3.0;
 cout << "for " << radius_nm << "nm "
@@ -5417,8 +5662,7 @@ Adapters that provide alternative access sequential & associative containers
 	m1.insert(2, 200);
 
 
-	// 委托构造函数
-	委托构造函数允许使用同一个类中的一个构造函数调用其它的构造函数，从而简化相关变量的初始化
+	// 委托构造函数, 允许使用同一个类中的一个构造函数调用其它的构造函数，从而简化相关变量的初始化
 	class Test
 	{
 	public:
@@ -5466,7 +5710,6 @@ Adapters that provide alternative access sequential & associative containers
 
 
 	// 继承构造函数可以让派生类直接使用基类的构造函数，而无需自己再写构造函数，尤其是在基类有很多构造函数的情况下，可以极大地简化派生类构造函数的编写
-
 	class Base
 	{
 	public:
@@ -5621,329 +5864,6 @@ Adapters that provide alternative access sequential & associative containers
 		cout << val << " ";
 	}
 	cout << endl;
-
-
-	可调用对象
-	1.函数指针
-	int print(int i)
-	{
-		cout << i << endl;
-		return 0;
-	}
-
-	// int (*func)(int) = &print;
-	int (*func)(int) = print;
-
-	func(1);
-
-	2.具有operator()成员函数的类对象（仿函数）
-	struct MyClass
-	{
-		// ()操作符重载
-		void operator()(string msg)
-		{
-			cout << "msg: " << msg << endl;
-		}
-	};
-
-
-	MyClass obj;
-	obj("我是要成为海贼王的男人!!!");	// 仿函数
-
-	3.可被转换为函数指针的类对象
-	using func_ptr = void(*)(int, string);
-	struct MyClass
-	{
-		static void print(int a, string b)
-		{
-			cout << "name: " << b << ", age: " << a << endl;
-		}
-
-		// 将类对象转换为函数指针
-		operator func_ptr()
-		{
-			return print;
-		}
-	};
-
-
-	MyClass obj;
-	// 对象转换为函数指针, 并调用
-	obj(19, "Monkey D. Luffy");
-
-	4.是类成员函数指针或者类成员指针
-	struct Test
-	{
-		void print(int a, string b)
-		{
-			cout << "name: " << b << ", age: " << a << endl;
-		}
-		int m_num;
-	};
-
-	// 定义类成员函数指针指向类成员函数
-	void (Test::*func_ptr)(int, string) = &Test::print;
-	// 类成员指针指向类成员变量
-	int Test::*obj_ptr = &Test::m_num;
-
-	Test t;
-	// 通过类成员函数指针调用类成员函数
-	(t.*func_ptr)(19, "Monkey D. Luffy");
-	// 通过类成员指针初始化类成员变量
-	t.*obj_ptr = 1;
-
-	由此可见，C++中的可调用类型虽然具有比较统一的操作形式，但定义方式五花八门，因此，C++11通过提供std::function 和 std::bind统一了可调用对象的各种操作。
-	使用std::function作为函数的传入参数，可以将定义方式不相同的可调用对象进行统一的传递，这样大大增加了程序的灵活性
-
-
-	std::function是可调用对象的包装器
-
-	int add(int a, int b)
-	{
-		cout << a << " + " << b << " = " << a + b << endl;
-		return a + b;
-	}
-
-	class T1
-	{
-	public:
-		static int sub(int a, int b)
-		{
-			cout << a << " - " << b << " = " << a - b << endl;
-			return a - b;
-		}
-	};
-
-	class T2
-	{
-	public:
-		int operator()(int a, int b)
-		{
-			cout << a << " * " << b << " = " << a * b << endl;
-			return a * b;
-		}
-	};
-
-
-	// 绑定一个普通函数
-	function<int(int, int)> f1 = add;
-	// 绑定一个静态类成员函数
-	function<int(int, int)> f2 = T1::sub;
-	// 绑定一个仿函数
-	T2 t;
-	function<int(int, int)> f3 = t;
-
-	// 函数调用
-	f1(9, 3);
-	f2(9, 3);
-	f3(9, 3);
-
-	std::function作为回调函数使用
-	class A
-	{
-	public:
-		// 构造函数参数是一个包装器对象
-		A(const function<void()>& f) : callback(f)
-		{
-		}
-
-		void notify()
-		{
-			callback(); // 调用通过构造函数得到的函数指针
-		}
-	private:
-		function<void()> callback;
-	};
-
-	class B
-	{
-	public:
-		void operator()()
-		{
-			cout << "我是要成为海贼王的男人!!!" << endl;
-		}
-	};
-
-	B b;
-	A a(b); // 仿函数通过包装器对象进行包装
-	a.notify();
-
-	std::bind绑定器用来将可调用对象与其参数一起进行绑定。绑定后的结果可以使用std::function进行保存，并延迟调用到任何我们需要的时候
-	它主要有两大作用：
-	1.将可调用对象与其参数一起绑定成一个仿函数。
-	2.将多元（参数个数为n，n>1）可调用对象转换为一元或者（n-1）元可调用对象，即只绑定部分参数。
-
-	std::bind绑定器返回的是一个仿函数类型，得到的返回值可以直接赋值给一个std::function，在使用的时候我们并不需要关心绑定器的返回值类型，使用auto进行自动类型推导就可以了
-
-	可调用对象包装器std::function是不能实现对类成员函数指针或者类成员指针的包装的，但是通过绑定器std::bind的配合之后，就可以完美的解决这个问题了
-
-	// 绑定非类成员函数/变量
-	auto f = std::bind(可调用对象地址, 绑定的参数/占位符);
-	// 绑定类成员函/变量
-	auto f = std::bind(类函数/成员地址, 类实例对象地址, 绑定的参数/占位符);
-
-	// 1
-	void callFunc(int x, const function<void(int)>& f)
-	{
-		if (x % 2 == 0)
-		{
-			f(x);
-		}
-	}
-
-	void output(int x)
-	{
-		cout << x << " ";
-	}
-
-	void output_add(int x)
-	{
-		cout << x + 10 << " ";
-	}
-
-
-	// 使用绑定器绑定可调用对象和参数
-	auto f1 = bind(output, placeholders::_1);
-	for (int i = 0; i < 10; ++i)
-	{
-		callFunc(i, f1);
-	}
-	cout << endl;
-
-	auto f2 = bind(output_add, placeholders::_1);
-	for (int i = 0; i < 10; ++i)
-	{
-		callFunc(i, f2);
-	}
-	cout << endl;
-
-	// 2
-	void output(int x, int y)
-	{
-		cout << x << " " << y << endl;
-	}
-
-	// 使用绑定器绑定可调用对象和参数, 并调用得到的仿函数
-	bind(output, 1, 2)();                       // 1 2
-	bind(output, placeholders::_1, 2)(10);      // 10 2
-	bind(output, 2, placeholders::_1)(10);      // 2 10
-
-	// error, 调用时没有第二个参数
-	// bind(output, 2, placeholders::_2)(10);
-	// 调用时第一个参数10被吞掉了，没有被使用
-	bind(output, 2, placeholders::_2)(10, 20);  // 2 20
-
-	bind(output, placeholders::_1, placeholders::_2)(10, 20);   // 10 20
-	bind(output, placeholders::_2, placeholders::_1)(10, 20);   // 20 10
-
-	// 3
-	class Test
-	{
-	public:
-		void output(int x, int y)
-		{
-			cout << "x: " << x << ", y: " << y << endl;
-		}
-		int m_number = 100;
-	};
-
-	Test t;
-	// 绑定类成员函数
-	function<void(int, int)> f1 =  bind(&Test::output, &t, placeholders::_1, placeholders::_2);
-	// 绑定类成员变量(公共)
-	function<int&(void)> f2 = bind(&Test::m_number, &t);
-
-	// 调用
-	f1(520, 1314);
-	f2() = 2333;
-	cout << "t.m_number: " << t.m_number << endl;
-
-
-	Lambda表达式
-	[capture](params) opt -> ret {body;};
-
-	很多时候，lambda表达式的返回值是非常明显的，因此在C++11中允许省略lambda表达式的返回值
-	labmda表达式不能通过列表初始化自动推导出返回值类型
-
-	捕获列表
-	[] - 不捕捉任何变量
-	[&] - 捕获外部作用域中所有变量, 并作为引用在函数体内使用 (按引用捕获)
-	[=] - 捕获外部作用域中所有变量, 并作为副本在函数体内使用 (按值捕获)
-		拷贝的副本在匿名函数体内部是只读的
-	[=, &foo] - 按值捕获外部作用域中所有变量, 并按照引用捕获外部变量 foo
-	[bar] - 按值捕获 bar 变量, 同时不捕获其他变量
-	[&bar] - 按引用捕获 bar 变量, 同时不捕获其他变量
-	[this] - 捕获当前类中的this指针
-		让lambda表达式拥有和当前类成员函数同样的访问权限
-		如果已经使用了 & 或者 =, 默认添加此选项
-
-
-	opt:
-	mutable
-		可以修改按值传递进来的拷贝（注意是能修改拷贝，而不是值本身）
-	exception
-		指定函数抛出的异常，如抛出整数类型的异常，可以使用throw()
-
-	class Test
-	{
-	public:
-		void output(int x, int y)
-		{
-			auto x1 = [] {return m_number; };                      // error
-			auto x2 = [=] {return m_number + x + y; };             // ok
-			auto x3 = [&] {return m_number + x + y; };             // ok
-			auto x4 = [this] {return m_number; };                  // ok
-			auto x5 = [this] {return m_number + x + y; };          // error
-			auto x6 = [this, x, y] {return m_number + x + y; };    // ok
-			auto x7 = [this] {return m_number++; };                // ok
-		}
-		int m_number = 100;
-	};
-
-	int main(void)
-	{
-		int a = 10, b = 20;
-		auto f1 = [] {return a; };                        // error 没有捕获外部变量，因此无法访问变量 a
-		auto f2 = [&] {return a++; };                     // ok 使用引用的方式捕获外部变量，可读写
-		auto f3 = [=] {return a; };                       // ok 使用值拷贝的方式捕获外部变量，可读
-		auto f4 = [=] {return a++; };                     // error 使用值拷贝的方式捕获外部变量，可读不能写
-		auto f5 = [a] {return a + b; };                   // error 使用拷贝的方式捕获了外部变量a，没有捕获外部变量b，因此无法访问变量b
-		auto f6 = [a, &b] {return a + (b++); };           // ok 使用拷贝的方式捕获了外部变量a，只读，使用引用的方式捕获外部变量b，可读写
-		auto f7 = [=, &b] {return a + (b++); };           // ok 使用值拷贝的方式捕获所有外部变量以及b的引用，b可读写，其他只读
-
-		return 0;
-	}
-
-	被mutable修改是lambda表达式就算没有参数也要写明参数列表，并且可以去掉按值捕获的外部变量的只读（const）属性
-
-	int a = 0;
-	auto f1 = [=] {return a++; };              // error, 按值捕获外部变量, a是只读的
-	auto f2 = [=]()mutable {return a++; };     // ok
-
-	为什么通过值拷贝的方式捕获的外部变量是只读的:
-		lambda表达式的类型在C++11中会被看做是一个带operator()的类，即仿函数。
-		按照C++标准，lambda表达式的operator()默认是const的，一个const成员函数是无法修改成员变量值的。
-	mutable选项的作用就在于取消operator()的const属性。
-
-	因为lambda表达式在C++中会被看做是一个仿函数，因此可以使用std::function和std::bind来存储和操作lambda表达式
-		// 包装可调用函数
-		std::function<int(int)> f1 = [](int a) {return a; };
-		// 绑定可调用函数
-		std::function<int(int)> f2 = bind([](int a) {return a; }, placeholders::_1);
-
-		// 函数调用
-		cout << f1(100) << endl;
-		cout << f2(200) << endl;
-
-	对于没有捕获任何变量的lambda表达式，还可以转换成一个普通的函数指针：
-	using func_ptr = int(*)(int);
-	// 没有捕获任何外部变量的匿名函数
-	func_ptr f = [](int a)
-	{
-		return a;  
-	};
-	// 函数调用
-	f(1314);
 
 
 	右值引用
@@ -6467,6 +6387,604 @@ Adapters that provide alternative access sequential & associative containers
 	}
 
 ```
+
+## std::function
+```cpp
+	//可调用对象
+	// 1.函数指针
+	int print(int i)
+	{
+		cout << i << endl;
+		return 0;
+	}
+
+	// int (*func)(int) = &print;
+	int (*func)(int) = print;
+
+	func(1);
+
+	// 2.具有operator()成员函数的类对象（仿函数）
+	struct MyClass
+	{
+		// ()操作符重载
+		void operator()(string msg)
+		{
+			cout << "msg: " << msg << endl;
+		}
+	};
+
+
+	MyClass obj;
+	obj("helloworld");	// 仿函数
+
+	// 3.可被转换为函数指针的类对象
+	using func_ptr = void(*)(int, string);
+	struct MyClass
+	{
+		static void print(int a, string b)
+		{
+			cout << "name: " << b << ", age: " << a << endl;
+		}
+
+		// 将类对象转换为函数指针
+		operator func_ptr()
+		{
+			return print;
+		}
+	};
+
+
+	MyClass obj;
+	// 对象转换为函数指针, 并调用
+	obj(19, "Monkey D. Luffy");
+
+	// 4.是类成员函数指针或者类成员指针
+	struct Test
+	{
+		void print(int a, string b)
+		{
+			cout << "name: " << b << ", age: " << a << endl;
+		}
+		int m_num;
+	};
+
+	// 定义类成员函数指针指向类成员函数
+	void (Test::*func_ptr)(int, string) = &Test::print;
+	// 类成员指针指向类成员变量
+	int Test::*obj_ptr = &Test::m_num;
+
+	Test t;
+	// 通过类成员函数指针调用类成员函数
+	(t.*func_ptr)(19, "Monkey D. Luffy");
+	// 通过类成员指针初始化类成员变量
+	t.*obj_ptr = 1;
+
+	// 由此可见，C++中的可调用类型虽然具有比较统一的操作形式，但定义方式五花八门，因此，C++11通过提供std::function 和 std::bind统一了可调用对象的各种操作。
+	// 使用std::function作为函数的传入参数，可以将定义方式不相同的可调用对象进行统一的传递，这样大大增加了程序的灵活性
+	// std::function是可调用对象的包装器
+	int add(int a, int b)
+	{
+		cout << a << " + " << b << " = " << a + b << endl;
+		return a + b;
+	}
+
+	class T1
+	{
+	public:
+		static int sub(int a, int b)
+		{
+			cout << a << " - " << b << " = " << a - b << endl;
+			return a - b;
+		}
+	};
+
+	class T2
+	{
+	public:
+		int operator()(int a, int b)
+		{
+			cout << a << " * " << b << " = " << a * b << endl;
+			return a * b;
+		}
+	};
+
+
+	// 绑定一个普通函数
+	function<int(int, int)> f1 = add;
+	// 绑定一个静态类成员函数
+	function<int(int, int)> f2 = T1::sub;
+	// 绑定一个仿函数
+	T2 t;
+	function<int(int, int)> f3 = t;
+
+	// 函数调用
+	f1(9, 3);
+	f2(9, 3);
+	f3(9, 3);
+
+	std::function作为回调函数使用
+	class A
+	{
+	public:
+		// 构造函数参数是一个包装器对象
+		A(const function<void()>& f) : callback(f)
+		{
+		}
+
+		void notify()
+		{
+			callback(); // 调用通过构造函数得到的函数指针
+		}
+	private:
+		function<void()> callback;
+	};
+
+	class B
+	{
+	public:
+		void operator()()
+		{
+			cout << "helloworld" << endl;
+		}
+	};
+
+	B b;
+	A a(b); // 仿函数通过包装器对象进行包装
+	a.notify();
+
+	std::bind绑定器用来将可调用对象与其参数一起进行绑定。绑定后的结果可以使用std::function进行保存，并延迟调用到任何我们需要的时候
+	它主要有两大作用：
+	1.将可调用对象与其参数一起绑定成一个仿函数。
+	2.将多元（参数个数为n，n>1）可调用对象转换为一元或者（n-1）元可调用对象，即只绑定部分参数。
+
+	std::bind绑定器返回的是一个仿函数类型，得到的返回值可以直接赋值给一个std::function，在使用的时候我们并不需要关心绑定器的返回值类型，使用auto进行自动类型推导就可以了
+
+	可调用对象包装器std::function是不能实现对类成员函数指针或者类成员指针的包装的，但是通过绑定器std::bind的配合之后，就可以完美的解决这个问题了
+
+	// 绑定非类成员函数/变量
+	auto f = std::bind(可调用对象地址, 绑定的参数/占位符);
+	// 绑定类成员函/变量
+	auto f = std::bind(类函数/成员地址, 类实例对象地址, 绑定的参数/占位符);
+
+	// 1
+	void callFunc(int x, const function<void(int)>& f)
+	{
+		if (x % 2 == 0)
+		{
+			f(x);
+		}
+	}
+
+	void output(int x)
+	{
+		cout << x << " ";
+	}
+
+	void output_add(int x)
+	{
+		cout << x + 10 << " ";
+	}
+
+
+	// 使用绑定器绑定可调用对象和参数
+	auto f1 = bind(output, placeholders::_1);
+	for (int i = 0; i < 10; ++i)
+	{
+		callFunc(i, f1);
+	}
+	cout << endl;
+
+	auto f2 = bind(output_add, placeholders::_1);
+	for (int i = 0; i < 10; ++i)
+	{
+		callFunc(i, f2);
+	}
+	cout << endl;
+
+	// 2
+	void output(int x, int y)
+	{
+		cout << x << " " << y << endl;
+	}
+
+	// 使用绑定器绑定可调用对象和参数, 并调用得到的仿函数
+	bind(output, 1, 2)();                       // 1 2
+	bind(output, placeholders::_1, 2)(10);      // 10 2
+	bind(output, 2, placeholders::_1)(10);      // 2 10
+
+	// error, 调用时没有第二个参数
+	// bind(output, 2, placeholders::_2)(10);
+	// 调用时第一个参数10被吞掉了，没有被使用
+	bind(output, 2, placeholders::_2)(10, 20);  // 2 20
+
+	bind(output, placeholders::_1, placeholders::_2)(10, 20);   // 10 20
+	bind(output, placeholders::_2, placeholders::_1)(10, 20);   // 20 10
+
+	// 3
+	class Test
+	{
+	public:
+		void output(int x, int y)
+		{
+			cout << "x: " << x << ", y: " << y << endl;
+		}
+		int m_number = 100;
+	};
+
+	Test t;
+	// 绑定类成员函数
+	function<void(int, int)> f1 =  bind(&Test::output, &t, placeholders::_1, placeholders::_2);
+	// 绑定类成员变量(公共)
+	function<int&(void)> f2 = bind(&Test::m_number, &t);
+
+	// 调用
+	f1(520, 1314);
+	f2() = 2333;
+	cout << "t.m_number: " << t.m_number << endl;
+
+
+	// Lambda表达式: [capture](params) opt -> ret {body;};
+	// 很多时候，lambda表达式的返回值是非常明显的，因此在C++11中允许省略lambda表达式的返回值
+	// labmda表达式不能通过列表初始化自动推导出返回值类型
+
+	// 捕获列表
+	/*
+	[] - 不捕捉任何变量
+	[&] - 捕获外部作用域中所有变量, 并作为引用在函数体内使用 (按引用捕获)
+	[=] - 捕获外部作用域中所有变量, 并作为副本在函数体内使用 (按值捕获)
+		拷贝的副本在匿名函数体内部是只读的
+	[=, &foo] - 按值捕获外部作用域中所有变量, 并按照引用捕获外部变量 foo
+	[bar] - 按值捕获 bar 变量, 同时不捕获其他变量
+	[&bar] - 按引用捕获 bar 变量, 同时不捕获其他变量
+	[this] - 捕获当前类中的this指针
+		     让lambda表达式拥有和当前类成员函数同样的访问权限
+		     如果已经使用了 & 或者 =, 默认添加此选项
+	*/
+
+
+	opt:
+	mutable	//可以修改按值传递进来的拷贝（注意是能修改拷贝，而不是值本身）
+	exception	// 指定函数抛出的异常，如抛出整数类型的异常，可以使用throw()
+
+	class Test
+	{
+	public:
+		void output(int x, int y)
+		{
+			auto x1 = [] {return m_number; };                      // error
+			auto x2 = [=] {return m_number + x + y; };             // ok
+			auto x3 = [&] {return m_number + x + y; };             // ok
+			auto x4 = [this] {return m_number; };                  // ok
+			auto x5 = [this] {return m_number + x + y; };          // error
+			auto x6 = [this, x, y] {return m_number + x + y; };    // ok
+			auto x7 = [this] {return m_number++; };                // ok
+		}
+		int m_number = 100;
+	};
+
+	int main(void)
+	{
+		int a = 10, b = 20;
+		auto f1 = [] {return a; };                        // error 没有捕获外部变量，因此无法访问变量 a
+		auto f2 = [&] {return a++; };                     // ok 使用引用的方式捕获外部变量，可读写
+		auto f3 = [=] {return a; };                       // ok 使用值拷贝的方式捕获外部变量，可读
+		auto f4 = [=] {return a++; };                     // error 使用值拷贝的方式捕获外部变量，可读不能写
+		auto f5 = [a] {return a + b; };                   // error 使用拷贝的方式捕获了外部变量a，没有捕获外部变量b，因此无法访问变量b
+		auto f6 = [a, &b] {return a + (b++); };           // ok 使用拷贝的方式捕获了外部变量a，只读，使用引用的方式捕获外部变量b，可读写
+		auto f7 = [=, &b] {return a + (b++); };           // ok 使用值拷贝的方式捕获所有外部变量以及b的引用，b可读写，其他只读
+
+		return 0;
+	}
+
+	被mutable修改是lambda表达式就算没有参数也要写明参数列表，并且可以去掉按值捕获的外部变量的只读（const）属性
+
+	int a = 0;
+	auto f1 = [=] {return a++; };              // error, 按值捕获外部变量, a是只读的
+	auto f2 = [=]()mutable {return a++; };     // ok
+
+	为什么通过值拷贝的方式捕获的外部变量是只读的:
+		lambda表达式的类型在C++11中会被看做是一个带operator()的类，即仿函数。
+		按照C++标准，lambda表达式的operator()默认是const的，一个const成员函数是无法修改成员变量值的。
+	mutable选项的作用就在于取消operator()的const属性。
+
+	因为lambda表达式在C++中会被看做是一个仿函数，因此可以使用std::function和std::bind来存储和操作lambda表达式
+		// 包装可调用函数
+		std::function<int(int)> f1 = [](int a) {return a; };
+		// 绑定可调用函数
+		std::function<int(int)> f2 = bind([](int a) {return a; }, placeholders::_1);
+
+		// 函数调用
+		cout << f1(100) << endl;
+		cout << f2(200) << endl;
+
+	对于没有捕获任何变量的lambda表达式，还可以转换成一个普通的函数指针：
+	using func_ptr = int(*)(int);
+	// 没有捕获任何外部变量的匿名函数
+	func_ptr f = [](int a)
+	{
+		return a;  
+	};
+	// 函数调用
+	f(1314);
+
+// std::function 是一个通用的函数包装器，可以存储、复制和调用任何可调用对象（如函数指针、lambda 表达式、函数对象、成员函数指针等）
+// std::function 提供了一个类型安全的接口，用来处理具有可调用性但具体类型未知的对象
+
+// 应用场景
+// 1 回调函数（Callbacks）, std::function 非常适合用于回调机制。当我们需要向某个函数传递回调函数时，std::function 可以灵活地接受不同类型的可调用对象
+#include <iostream>
+#include <functional>
+
+void performOperation(int a, int b, std::function<void(int)> callback) {
+    int result = a + b;
+    callback(result);  // 调用回调函数
+}
+
+int main() {
+    // 使用 lambda 作为回调函数
+    performOperation(5, 3, [](int result) {
+        std::cout << "Result: " << result << std::endl;
+    });
+    return 0;
+}
+
+// 2 函数对象（Functors）存储, std::function 可以存储自定义的函数对象（类重载了 operator()），用于灵活调用不同的行为
+#include <iostream>
+#include <functional>
+
+class Multiply {
+public:
+    int operator()(int a, int b) const {
+        return a * b;
+    }
+};
+
+int main() {
+    std::function<int(int, int)> func;
+
+    // 存储函数对象
+    func = Multiply();
+    std::cout << "Multiply: " << func(5, 6) << std::endl;
+    
+    return 0;
+}
+
+// 3 延迟执行和调度任务, std::function 允许将函数作为参数传递和存储，从而支持延迟执行或任务调度场景。这种机制非常适合线程池、任务调度器等需要传递可执行任务的系统
+#include <iostream>
+#include <functional>
+#include <vector>
+
+void executeTasks(const std::vector<std::function<void()>>& tasks) {
+    for (const auto& task : tasks) {
+        task();  // 执行存储的任务
+    }
+}
+
+int main() {
+    std::vector<std::function<void()>> tasks;
+
+    // 存储 lambda 表达式作为任务
+    tasks.push_back([]() { std::cout << "Task 1 executed." << std::endl; });
+    tasks.push_back([]() { std::cout << "Task 2 executed." << std::endl; });
+
+    executeTasks(tasks);  // 延迟执行所有任务
+    return 0;
+}
+
+// 4 事件驱动编程, 在事件驱动编程中，事件和处理器往往是解耦的。可以使用 std::function 来存储事件处理器，当事件发生时，调用相应的处理器。例如，GUI 事件、网络响应等场景经常使用这种模式
+#include <iostream>
+#include <functional>
+#include <unordered_map>
+#include <string>
+
+class EventDispatcher {
+public:
+    void registerHandler(const std::string& event, std::function<void()> handler) {
+        handlers[event] = handler;
+    }
+
+    void dispatch(const std::string& event) {
+        if (handlers.find(event) != handlers.end()) {
+            handlers[event]();  // 调用对应的处理器
+        }
+    }
+
+private:
+    std::unordered_map<std::string, std::function<void()>> handlers;
+};
+
+int main() {
+    EventDispatcher dispatcher;
+
+    // 注册事件处理器
+    dispatcher.registerHandler("onClick", []() {
+        std::cout << "Button clicked!" << std::endl;
+    });
+
+    dispatcher.registerHandler("onHover", []() {
+        std::cout << "Button hovered!" << std::endl;
+    });
+
+    // 触发事件
+    dispatcher.dispatch("onClick");
+    dispatcher.dispatch("onHover");
+
+    return 0;
+}
+// std::function 用于存储和调用与事件对应的处理器。用户可以为每个事件注册不同的回调函数
+
+// 5 替代函数指针, std::function 可以替代传统的函数指针，提供类型安全且更加灵活的方式来存储和调用函数。例如，std::function 可以存储成员函数指针、lambda 表达式、函数对象等，而不仅限于普通函数指针
+#include <iostream>
+#include <functional>
+
+void printMessage() {
+    std::cout << "Hello from function pointer!" << std::endl;
+}
+
+int main() {
+    // 使用 std::function 存储普通函数指针
+    std::function<void()> func = printMessage;
+    func();  // 调用函数
+    
+    return 0;
+}
+
+// 6 高阶函数, 高阶函数是指可以将一个函数作为参数传递，或者返回一个函数。std::function 可以用来实现这种模式
+#include <iostream>
+#include <functional>
+
+std::function<int(int)> makeMultiplier(int factor) {
+    return [factor](int value) { return value * factor; };
+}
+
+int main() {
+    auto times2 = makeMultiplier(2);
+    auto times3 = makeMultiplier(3);
+
+    std::cout << "5 * 2 = " << times2(5) << std::endl;
+    std::cout << "5 * 3 = " << times3(5) << std::endl;
+
+    return 0;
+}
+
+```
+
+## 智能指针
+```cpp
+// 智能指针（Smart Pointers）是一种自动管理动态内存的工具，帮助开发者避免手动释放内存并防止内存泄漏
+// 智能指针通过 RAII（资源获取即初始化）的方式确保内存管理安全且可靠
+
+// 标准库中的主要智能指针类型有：
+std::unique_ptr：适合独占所有权的场景，使用简单且高效。
+std::shared_ptr：适合多个对象共享所有权的场景，引用计数会自动管理对象的生命周期。
+std::weak_ptr：配合 shared_ptr 使用，避免循环引用，提供对共享对象的弱引用。
+
+std::unique_ptr
+// 基本功能
+/*
+std::unique_ptr 是一种独占所有权的智能指针，意味着同一时间内只有一个 unique_ptr 对象可以指向一个动态分配的对象。
+当 std::unique_ptr 超出作用域时，所指向的对象会自动被销毁
+*/
+
+// 特性
+/*
+独占所有权：一个动态对象只能被一个 unique_ptr 拥有，不能被多个指针共享。
+轻量高效：没有额外的引用计数开销。
+支持转移所有权，可以通过 std::move 将所有权从一个 unique_ptr 移交给另一个
+*/
+
+// 应用场景
+/*
+动态分配的资源的独占所有权。
+使用时，当需要确保某个对象不会被多个指针共享，或者对象生命周期应由单一持有者控制。
+*/
+
+#include <iostream>
+#include <memory>
+
+void process(std::unique_ptr<int> ptr) {
+    std::cout << "Processing: " << *ptr << std::endl;
+}
+
+int main() {
+    std::unique_ptr<int> p1 = std::make_unique<int>(10);  // 创建一个unique_ptr
+    process(std::move(p1));  // 转移所有权到函数中
+    // p1 现在为空，所有权已经转移到 process 函数中的 ptr
+    return 0;
+}
+
+// 使用场景
+/*
+独占的动态对象，例如 RAII 模式中的资源控制，如文件句柄、网络连接等。
+用于表示某个对象生命周期与某个作用域绑定，例如局部变量自动释放对象。
+*/
+
+std::shared_ptr
+// 基本功能
+/*
+std::shared_ptr 是一种引用计数的智能指针，多个 shared_ptr 可以共享同一个动态对象，引用计数会自动跟踪有多少个 shared_ptr 指向该对象
+当最后一个 shared_ptr 离开作用域或被重置时，对象会自动销毁
+*/
+
+// 特性
+/*
+共享所有权：同一动态对象可以被多个 shared_ptr 对象共享。
+引用计数：每次复制一个 shared_ptr，引用计数加1；销毁时，引用计数减1。当引用计数变为0时，释放内存。
+适合需要共享资源的场景，但比 unique_ptr 有额外的引用计数开销
+*/
+
+// 应用场景
+/*
+动态分配的资源需要多个对象共享所有权。
+复杂的数据结构中，多个对象间共享的资源（如图结构、链表、缓存）
+*/
+
+#include <iostream>
+#include <memory>
+
+int main() {
+    std::shared_ptr<int> p1 = std::make_shared<int>(10);  // 创建shared_ptr，引用计数为1
+    {
+        std::shared_ptr<int> p2 = p1;  // 引用计数增加到2
+        std::cout << "p1 use_count: " << p1.use_count() << std::endl;  // 输出2
+    }
+    // p2 离开作用域，引用计数减少到1
+    std::cout << "p1 use_count: " << p1.use_count() << std::endl;  // 输出1
+    return 0;
+}
+
+
+// 使用场景
+/*
+对象需要被多个部分共享，例如多线程环境中的共享资源管理。
+复杂数据结构中，多个节点需要共享访问某些数据时，如树或图的节点
+*/
+
+
+std::weak_ptr
+// 基本功能
+/*
+std::weak_ptr 是为了解决 shared_ptr 的循环引用问题（即两个 shared_ptr 互相引用，导致引用计数永远不会归零，造成内存泄漏）。
+weak_ptr 不影响所指向对象的引用计数，弱引用不会增加引用计数
+*/
+
+// 特性
+/*
+不拥有对象：weak_ptr 只是一种弱引用，不能直接使用所指向的对象，需要通过 lock() 方法转化为 shared_ptr。
+避免循环引用：常用于 shared_ptr 场景下，打破循环引用
+*/
+
+// 应用场景
+/*
+避免 shared_ptr 循环引用的问题，特别是当两个或多个对象相互依赖时（如双向链表、树的父子节点关系）
+*/
+
+#include <iostream>
+#include <memory>
+
+struct Node {
+    std::shared_ptr<Node> next;
+    std::weak_ptr<Node> prev;  // 使用 weak_ptr 避免循环引用
+};
+
+int main() {
+    std::shared_ptr<Node> node1 = std::make_shared<Node>();
+    std::shared_ptr<Node> node2 = std::make_shared<Node>();
+
+    node1->next = node2;
+    node2->prev = node1;  // 使用 weak_ptr 避免循环引用
+
+    return 0;
+}
+
+
+// 使用场景
+/*
+复杂数据结构如双向链表或图，父子关系或兄弟节点关系需要避免循环引用。
+需要临时观察某个对象的存在性，但不需要拥有其生命周期的场景。
+*/
+```
+
 [C++](https://subingwen.cn/categories/C/)  
 [设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)  
 [C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)  
