@@ -310,60 +310,8 @@ int main() {
     return 0;
 }
 ```
-
+## namespace
 ```cpp
-// 在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
-
-std::cout << "hello world" << std::endl;
-// std 表示 std namespace, :: 是 scope resolution operator, std::cout表示cout对象是在std的命名空间下声明的, cout对象是ostream class的一个实例，在main函数调用之前创建
-
-// Pragmas是针对编译器的指令,不同的编译器支持不同的#pragma指令
-
-// Function prototype（函数原型）在不给定函数定义的情况下，向编译器声明调用函数所必须遵循的接口规范
-// 如果函数A调用函数B，则函数B必须在函数A之前定义或者声明，通常将函数名的声明写在一个单独的头文件里，函数的实现写在另外一个源文件里。
-
-// expression(表达式) is a sequence of operators and operands (variables or literals) that results in some value.
-// statement（语句） can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code.
-// A statement ends with a semicolon. 
-// A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
-
-// 表达式要么是lvalue，要么是rvalue, lvalue是一个表达式，它指向特定的内存位置，lvalue可以出现在赋值的左边或者右边，所有变量都是lvalues
-// rvalue是一个临时的值，它的生命周期只存在于使用它的表达式，它有特定的值但是不能接受赋值，所以它只能存在在赋值的右边，典型的rvalue是字面常量
-
-// 变量赋值
-int i = 1;	// 直接赋值
-int j = int(2);	// 调用类型的构造函数
-int k(3);	// 使用函数式语法进行赋值
-
-// 常量:
-const double pi = 3.1415;
-
-// constant expressions（常量表达式）
-constexpr double pi = 3.1415;	// 常量表达式在编译时 evaluate，而非运行时
-constexpr double twopi = 2 * pi;
-
-// constexpr 作用于函数时，表示该函数代码允许编译器在编译期间对代码进行常量优化（evaluated at compile time），如果编译器无法在编译期间确定参数的值，则函数被视普通的函数不进行优化。
-constexpr int triang(int i)
-{
-	return (i == 0) ? 0 : triang(i - 1) + i;
-}
-// 如果一个函数用constexpr进行修饰，则该函数必须只包含一个表达式（A function marked with the constexpr keyword must only have one expression）
-
-
-// enum 的默认类型为 int 类型，但是用户可以在声明时显式指定其类型
-enum suits {clubs, diamonds, hearts, spades};			// 默认为 int 类型
-enum suits : char {clubs, diamonds, hearts, spades};	// 指定 enum 的类型为 char
-
-suits card1 = diamonds;
-suits card2 = suits::diamonds;    // scope it with the name of the enumeration which is better
-
-// 关键字 class 强制用户在使用 enum 的值的时候指定 scope
-enum class suits : char {clubs, diamonds, hearts, spades};	// 强制用户在使用enum的值的时候指定scope
-suits card3 = suits::diamonds;    // scope it with the name of the enumeration which is better
-
-// enum 的第一个值为0，之后依次累加1
-enum ports {ftp=21, ssh, telnet, smtp=25, http=80};
-
 // 命名空间 namespace 是一种模块化组织代码的机制，命名空间使用 scope resolution operator :: 来 label your types, functions, and variables with a unique name  
 
 // 1
@@ -461,7 +409,60 @@ void print_version()
 {
 	std::cout << "Version = " << ::version << std::endl;
 }
+```
+## 基本概念
+```cpp
+// 在C++中如果函数声明了返回值，则必须返回指定类型的值，main函数是唯一的例外，main函数默认返回0
 
+std::cout << "hello world" << std::endl;
+// std 表示 std namespace, :: 是 scope resolution operator, std::cout表示cout对象是在std的命名空间下声明的, cout对象是ostream class的一个实例，在main函数调用之前创建
+
+// Pragmas是针对编译器的指令,不同的编译器支持不同的#pragma指令
+
+// Function prototype（函数原型）在不给定函数定义的情况下，向编译器声明调用函数所必须遵循的接口规范
+// 如果函数A调用函数B，则函数B必须在函数A之前定义或者声明，通常将函数名的声明写在一个单独的头文件里，函数的实现写在另外一个源文件里。
+
+// expression(表达式) is a sequence of operators and operands (variables or literals) that results in some value.
+// statement（语句） can be a declaration of a variable, an expression that evaluates to a value, or it can be a definition of a type. A statement may also be a control structure to affect the flow of the execution through your code.
+// A statement ends with a semicolon. 
+// A semicolon on its own is called a null statement. A null statement does nothing, so having too many semicolons is usually benign.
+
+// 表达式要么是lvalue，要么是rvalue, lvalue是一个表达式，它指向特定的内存位置，lvalue可以出现在赋值的左边或者右边，所有变量都是lvalues
+// rvalue是一个临时的值，它的生命周期只存在于使用它的表达式，它有特定的值但是不能接受赋值，所以它只能存在在赋值的右边，典型的rvalue是字面常量
+
+// 变量赋值
+int i = 1;	// 直接赋值
+int j = int(2);	// 调用类型的构造函数
+int k(3);	// 使用函数式语法进行赋值
+
+// 常量:
+const double pi = 3.1415;
+
+// constant expressions（常量表达式）
+constexpr double pi = 3.1415;	// 常量表达式在编译时 evaluate，而非运行时
+constexpr double twopi = 2 * pi;
+
+// constexpr 作用于函数时，表示该函数代码允许编译器在编译期间对代码进行常量优化（evaluated at compile time），如果编译器无法在编译期间确定参数的值，则函数被视普通的函数不进行优化。
+constexpr int triang(int i)
+{
+	return (i == 0) ? 0 : triang(i - 1) + i;
+}
+// 如果一个函数用constexpr进行修饰，则该函数必须只包含一个表达式（A function marked with the constexpr keyword must only have one expression）
+
+
+// enum 的默认类型为 int 类型，但是用户可以在声明时显式指定其类型
+enum suits {clubs, diamonds, hearts, spades};			// 默认为 int 类型
+enum suits : char {clubs, diamonds, hearts, spades};	// 指定 enum 的类型为 char
+
+suits card1 = diamonds;
+suits card2 = suits::diamonds;    // scope it with the name of the enumeration which is better
+
+// 关键字 class 强制用户在使用 enum 的值的时候指定 scope
+enum class suits : char {clubs, diamonds, hearts, spades};	// 强制用户在使用enum的值的时候指定scope
+suits card3 = suits::diamonds;    // scope it with the name of the enumeration which is better
+
+// enum 的第一个值为0，之后依次累加1
+enum ports {ftp=21, ssh, telnet, smtp=25, http=80};
 
 // vector template is a class that contains items of the type specified in the angle brackets (<>); 
 // vector can be initialized in a special way called "list initialization" which is new to C++11, 
@@ -6849,6 +6850,113 @@ int main() {
 
 ```
 
+## RAII
+```cpp
+RAII（Resource Acquisition Is Initialization，资源获取即初始化）依赖于 C++ 对象的生命周期管理，特别是构造函数和析构函数的自动调用，确保在任何情况下，资源总是能被正确地释放，无论是正常执行还是抛出异常
+RAII（Resource Acquisition Is Initialization）机制的核心思想是：资源的获取和释放由对象的生命周期自动管理。当对象超出其作用域时，资源会通过析构函数自动释放
+智能指针（如 std::unique_ptr 和 std::shared_ptr），是 RAII 的典型实现之一，用来管理动态内存
+
+RAII 的工作原理
+资源的获取与对象的初始化绑定
+	当对象被创建时，构造函数会负责获取并初始化相关的资源（如分配内存、打开文件、加锁等）
+		当对象进入作用域时，构造函数自动执行，资源被分配和初始化。
+		通过在构造函数中获取资源，RAII 保证对象在整个生命周期内拥有这些资源
+资源的释放与对象的销毁绑定
+	对象的生命周期结束时（例如超出作用域、函数返回、异常抛出），C++ 会自动调用对象的析构函数，负责释放对象所占用的资源
+		当对象超出作用域时，析构函数会自动执行，释放资源
+		通过在析构函数中释放资源，RAII 保证资源总是能被正确释放，即使发生异常
+
+// 实例：使用 RAII 管理文件资源
+#include <iostream>
+#include <fstream>
+
+class FileWrapper {
+public:
+    FileWrapper(const std::string& filename) {
+        file.open(filename);
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file");
+        }
+        std::cout << "File opened" << std::endl;
+    }
+
+    ~FileWrapper() {
+        if (file.is_open()) {
+            file.close();
+            std::cout << "File closed" << std::endl;
+        }
+    }
+
+private:
+    std::fstream file;
+};
+
+void someFunction() {
+    FileWrapper file("example.txt");  // 文件在此处被打开
+    // 文件操作
+}  // 作用域结束，文件被自动关闭
+
+C++ 通过对象的生命周期管理和栈（stack）的机制来确保对象在超出作用域时自动调用析构函数，从而释放资源
+栈上对象的管理
+	当一个对象是在栈上（即作为局部变量）创建时，C++ 编译器会在对象的作用域结束时自动销毁该对象。这是通过栈的特性实现的
+编译器的作用
+	C++ 编译器会为每个对象的生命周期进行管理。它通过以下步骤确保析构函数的正确调用
+	对象的构造
+		当一个对象在函数中作为局部变量定义时，编译器会在该对象的构造时分配内存，并生成相应的代码来调用其构造函数
+			void myFunction() {
+				Resource res;  // 这里编译器会生成调用构造函数的代码
+			}
+	对象的销毁
+		当函数执行到结束或者对象的作用域结束时，编译器会自动生成调用对象析构函数的代码，以释放资源
+			void myFunction() {
+				Resource res;  // 作用域结束时，编译器生成代码调用 res 的析构函数
+			}  // 此处 res 超出作用域，编译器生成代码调用析构函数
+作用域控制
+	C++ 的作用域（scope）指的是变量在程序中可见和生效的范围。当一个变量超出作用域时，它的生命周期就结束了，编译器会在此时调用析构函数，例如，函数体、代码块（由花括号 {} 包围）都可以作为一个作用域
+动态内存分配（堆上对象）
+	对于在堆上动态分配的对象，必须手动管理其生命周期。C++ 不会自动为堆上对象调用析构函数，而是需要显式调用 delete 来释放对象
+	不过，通过智能指针（如 std::unique_ptr 和 std::shared_ptr），可以将堆上对象的生命周期也交给 RAII 机制管理
+异常处理和 RAII 的结合
+	RAII 的另一个强大之处在于它与异常处理机制完美结合。即使函数在执行过程中发生异常，只要栈展开（stack unwinding）机制被触发，C++ 编译器也会确保调用所有对象的析构函数，以释放资源
+		void myFunction() {
+			Resource res;  // 创建 res
+			throw std::runtime_error("An error occurred");  // 抛出异常
+		}  // 即使发生异常，res 的析构函数也会被调用，资源被释放
+	当异常被抛出时，栈中的对象会按顺序依次销毁，每个对象的析构函数都会被调用。这个过程称为栈展开（stack unwinding），确保了即使在异常情况下也不会发生资源泄漏
+C++ 如何跟踪对象的生命周期
+	C++ 通过静态和动态存储持续时间的概念来管理对象的生命周期
+		静态存储持续时间：全局变量、静态变量和 namespace 级别的变量具有静态存储持续时间，它们的生命周期在程序开始时初始化，程序结束时销毁。
+		自动存储持续时间：局部变量（栈上对象）具有自动存储持续时间，它们的生命周期由作用域控制，超出作用域时析构函数自动调用。
+		动态存储持续时间：堆上分配的对象具有动态存储持续时间，生命周期由程序员手动管理，通常通过 new 和 delete 来分配和释放。	
+
+C++ 编译器的代码生成示例
+class Resource {
+public:
+    Resource() {
+        std::cout << "Resource acquired\n";
+    }
+    ~Resource() {
+        std::cout << "Resource released\n";
+    }
+};
+
+void someFunction() {
+    Resource res;  // 构造函数被调用
+	// code logic handling
+}  // 作用域结束，析构函数被自动调用
+
+编译器在编译该代码时，会生成类似于以下的汇编代码（以伪代码形式展示）
+
+// 调用 someFunction
+someFunction:
+    call Resource::Resource()  // 调用构造函数
+    // someFunction 代码块执行
+    // ...
+    call Resource::~Resource()  // 在函数结束前调用析构函数
+    return
+
+```
+
 ## 智能指针
 ```cpp
 // 智能指针（Smart Pointers）是一种自动管理动态内存的工具，帮助开发者避免手动释放内存并防止内存泄漏
@@ -6985,6 +7093,261 @@ int main() {
 */
 ```
 
+## 访问修饰符
+```cpp
+// private: 用于隐藏实现细节，确保数据封装
+// protected: 用于允许派生类访问基类的成员，同时对外部代码隐藏
+// public: 用于定义类的接口，允许外部代码与类交互
+
+// public
+/*
+意义
+	public 成员在类的外部是可见的，可以被任何函数或类访问
+用法
+	通常用于类的接口部分，即那些希望外部代码能够访问的成员。
+	类的构造函数和析构函数通常是 public 的，以便外部代码能够创建和销毁对象
+*/
+
+class MyClass {
+public:
+    int publicVar;  // 公有成员变量
+    void publicMethod() {  // 公有成员函数
+        // 可以访问 private 和 protected 成员
+    }
+};
+
+int main() {
+    MyClass obj;
+    obj.publicVar = 10;  // 可以直接访问公有成员
+    obj.publicMethod();  // 可以直接调用公有方法
+    return 0;
+}
+
+// private
+/*
+意义
+	private 成员只能在类的内部访问，外部代码无法直接访问它们
+用法
+	通常用于隐藏类的实现细节，确保数据封装
+	类的成员变量通常是 private 的，以防止外部代码直接修改它们
+*/
+
+class MyClass {
+private:
+    int privateVar;  // 私有成员变量
+    void privateMethod() {  // 私有成员函数
+        // 只能在类内部访问
+    }
+
+public:
+    void setPrivateVar(int value) {
+        privateVar = value;  // 公有方法可以访问私有成员
+    }
+};
+
+int main() {
+    MyClass obj;
+    // obj.privateVar = 10;  // 错误：无法直接访问私有成员
+    obj.setPrivateVar(10);  // 通过公有方法间接访问私有成员
+    return 0;
+}
+
+// protected
+/*
+意义
+	protected 成员在类的内部和派生类中是可见的，但在类的外部不可见
+用法
+	通常用于基类中，允许派生类访问这些成员，同时仍然对类外部隐藏
+	适用于需要继承的场景，派生类可以访问基类的 protected 成员
+*/
+
+class Base {
+protected:
+    int protectedVar;  // 受保护成员变量
+    void protectedMethod() {  // 受保护成员函数
+        // 可以在派生类中访问
+    }
+};
+
+class Derived : public Base {
+public:
+    void accessProtected() {
+        protectedVar = 20;  // 派生类可以访问基类的受保护成员
+        protectedMethod();  // 派生类可以调用基类的受保护方法
+    }
+};
+
+int main() {
+    Derived obj;
+    // obj.protectedVar = 30;  // 错误：无法直接访问受保护成员
+    obj.accessProtected();  // 通过派生类的公有方法间接访问受保护成员
+    return 0;
+}
+
+// 银行账户管理系统 实例
+#include <iostream>
+#include <string>
+
+class BankAccount {
+private:
+    std::string accountNumber;  // 私有成员：账户号码，外部无法直接访问
+    double balance;             // 私有成员：账户余额，外部无法直接访问
+
+protected:
+    // 受保护成员：允许派生类访问
+    void setBalance(double amount) {
+        balance = amount;
+    }
+
+public:
+    // 公有成员：外部可以访问
+    BankAccount(const std::string& accNum, double initialBalance)
+        : accountNumber(accNum), balance(initialBalance) {}
+
+    // 公有方法：获取账户号码
+    std::string getAccountNumber() const {
+        return accountNumber;
+    }
+
+    // 公有方法：获取账户余额
+    double getBalance() const {
+        return balance;
+    }
+
+    // 公有方法：存款
+    void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            std::cout << "Deposited $" << amount << ". New balance: $" << balance << std::endl;
+        } else {
+            std::cout << "Invalid deposit amount." << std::endl;
+        }
+    }
+
+    // 公有方法：取款
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            std::cout << "Withdrew $" << amount << ". New balance: $" << balance << std::endl;
+        } else {
+            std::cout << "Invalid withdrawal amount or insufficient funds." << std::endl;
+        }
+    }
+};
+
+// 派生类：储蓄账户
+class SavingsAccount : public BankAccount {
+private:
+    double interestRate;  // 私有成员：利率，外部无法直接访问
+
+public:
+    // 构造函数
+    SavingsAccount(const std::string& accNum, double initialBalance, double rate)
+        : BankAccount(accNum, initialBalance), interestRate(rate) {}
+
+    // 公有方法：计算利息并添加到余额
+    void applyInterest() {
+        double interest = getBalance() * interestRate / 100;
+        setBalance(getBalance() + interest);  // 使用受保护的 setBalance 方法
+        std::cout << "Interest applied. New balance: $" << getBalance() << std::endl;
+    }
+
+    // 公有方法：获取利率
+    double getInterestRate() const {
+        return interestRate;
+    }
+};
+
+int main() {
+    // 创建一个普通银行账户
+    BankAccount myAccount("123456789", 1000.0);
+    std::cout << "Account Number: " << myAccount.getAccountNumber() << std::endl;
+    std::cout << "Initial Balance: $" << myAccount.getBalance() << std::endl;
+
+    myAccount.deposit(500.0);  // 存款
+    myAccount.withdraw(200.0); // 取款
+
+    // 创建一个储蓄账户
+    SavingsAccount mySavings("987654321", 2000.0, 5.0);
+    std::cout << "\nSavings Account Number: " << mySavings.getAccountNumber() << std::endl;
+    std::cout << "Initial Balance: $" << mySavings.getBalance() << std::endl;
+    std::cout << "Interest Rate: " << mySavings.getInterestRate() << "%" << std::endl;
+
+    mySavings.applyInterest();  // 应用利息
+
+    return 0;
+}
+// private 成员:
+	accountNumber 和 balance 是私有成员，只能在 BankAccount 类内部访问
+	外部代码无法直接修改或访问这些成员，确保了数据的安全性
+// protected 成员:
+	setBalance 是受保护的方法，允许派生类 SavingsAccount 访问和修改 balance
+	外部代码无法直接调用 setBalance
+// public 成员:
+	构造函数、getAccountNumber、getBalance、deposit 和 withdraw 是公有方法，外部代码可以直接调用
+	SavingsAccount 类中的 applyInterest 和 getInterestRate 也是公有方法，外部代码可以直接调用
+```
+
+## auto
+```cpp
+auto 是 C++11 引入的关键字，用于自动推导变量的类型。它可以让编译器根据初始化表达式自动推断变量的类型，从而简化代码并提高可读性
+
+// 基本用法：auto 的基本用法是让编译器根据初始化表达式的类型自动推导变量的类型
+	auto x = 10;       // x 的类型被推导为 int
+	auto y = 3.14;     // y 的类型被推导为 double
+	auto z = "Hello";  // z 的类型被推导为 const char*
+
+// 使用规则
+必须初始化
+	auto 变量必须在声明时初始化，因为编译器需要根据初始化表达式推导类型
+		auto x;  // 错误：无法推导类型，缺少初始化表达式
+类型推导规则
+	auto 会忽略顶层 const 和引用（除非显式声明）
+	如果需要保留 const 或引用属性，需要显式指定
+		const int a = 10;
+		auto b = a;       // b 的类型是 int（忽略顶层 const）
+		const auto c = a; // c 的类型是 const int
+
+		int d = 20;
+		int& ref = d;
+		auto e = ref;     // e 的类型是 int（忽略引用）
+		auto& f = ref;    // f 的类型是 int&（显式保留引用）
+推导数组或函数指针
+	auto 可以推导数组类型为指针
+	auto 可以推导函数类型为函数指针
+		int arr[5] = {1, 2, 3, 4, 5};
+		auto p = arr;  // p 的类型是 int*
+
+		void func(int);
+		auto f = func; // f 的类型是 void(*)(int)
+推导复杂类型
+	auto 可以简化复杂类型的声明，尤其是在模板和迭代器中
+		std::vector<int> vec = {1, 2, 3, 4, 5};
+		for (auto it = vec.begin(); it != vec.end(); ++it) {
+			std::cout << *it << " ";
+		}
+
+// 高级用法
+	auto 与 decltype 结合
+		decltype 可以用于推导表达式的类型，而 auto 可以用于声明变量
+		int x = 10;
+		decltype(x) y = 20;  // y 的类型是 int
+	auto 用于函数返回值
+		C++14 引入了 auto 作为函数返回类型的占位符，编译器会根据 return 语句推导返回值类型
+			auto add(int a, int b) {
+				return a + b;  // 返回值类型推导为 int
+			}
+	auto 用于 lambda 表达式
+		auto 可以用于声明 lambda 表达式的类型
+			auto lambda = [](int x) { return x * 2; };
+			std::cout << lambda(5);  // 输出 10
+	auto 与结构化绑定（C++17）
+		C++17 引入了结构化绑定，auto 可以用于解包元组、数组或结构体
+			std::pair<int, double> p = {1, 3.14};
+			auto [x, y] = p;  // x 是 int，y 是 double
+```
+
+## 参考文档
 [C++](https://subingwen.cn/categories/C/)  
 [设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)  
 [C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)  

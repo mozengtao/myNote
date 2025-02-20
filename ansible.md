@@ -1,1 +1,1 @@
-- [Ansible基础](http://www.yanjun.pro/tags/ansible)
+- [Ansible中文权威指南](https://ansible-tran.readthedocs.io/en/latest/index.html)  

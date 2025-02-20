@@ -1,27 +1,29 @@
-- [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)
-- [Web 开发技术](https://developer.mozilla.org/zh-CN/docs/Web)
-- [**Web technology for developers**](https://developer.mozilla.org/en-US/docs/Web)
+[Javascript Playground](https://playcode.io/)  
 
-- [Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)
+[学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)  
+[Web 开发技术](https://developer.mozilla.org/zh-CN/docs/Web)  
+[**Web technology for developers**](https://developer.mozilla.org/en-US/docs/Web)  
 
-- [Typescript Practices](https://omakoleg.github.io/typescript-practices/)
-- [typescript-eslint Rules](https://typescript-eslint.io/rules/)
+[Practice Your Coding Skills by Building a Program in Different Ways](https://www.freecodecamp.org/news/practice-coding-skills-by-building-a-program-different-ways/)  
 
-- [TypeScript 入门教程](https://ts.xcatliu.com/)
-- [TypeScript 使用指南手册](http://www.patrickzhong.com/TypeScript/PREFACE.html)
-- [TypeScript 教程](https://wangdoc.com/typescript/)
-- [TypeScript Deep Dive](https://basarat.gitbook.io/typescript)
-- [**The TypeScript Handbook**](https://www.typescriptlang.org/docs/handbook/intro.html)
-- [Playground](https://www.typescriptlang.org/)
-- [Learn X in Y minutes](https://learnxinyminutes.com/docs/typescript/)
-- [How Promises Work in JavaScript](https://www.freecodecamp.org/news/guide-to-javascript-promises/)
-- [A guide to async/await in TypeScript](https://blog.logrocket.com/async-await-typescript/)
-- [Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)
-- [async/await support in ES6 targets](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html)
-- [Mastering Async Programming in TypeScript: Promises, Async/Await, and Callbacks](https://dev.to/cliff123tech/mastering-async-programming-in-typescript-promises-asyncawait-and-callbacks-148b)
+[Typescript Practices](https://omakoleg.github.io/typescript-practices/)  
+[typescript-eslint Rules](https://typescript-eslint.io/rules/)  
+
+[TypeScript 入门教程](https://ts.xcatliu.com/)  
+[TypeScript 使用指南手册](http://www.patrickzhong.com/TypeScript/PREFACE.html)  
+[TypeScript 教程](https://wangdoc.com/typescript/)  
+[TypeScript Deep Dive](https://basarat.gitbook.io/typescript)  
+[**The TypeScript Handbook**](https://www.typescriptlang.org/docs/handbook/intro.html)  
+[Playground](https://www.typescriptlang.org/)  
+[Learn X in Y minutes](https://learnxinyminutes.com/docs/typescript/)  
+[How Promises Work in JavaScript](https://www.freecodecamp.org/news/guide-to-javascript-promises/)  
+[A guide to async/await in TypeScript](https://blog.logrocket.com/async-await-typescript/)  
+[Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)  
+[async/await support in ES6 targets](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html)  
+[Mastering Async Programming in TypeScript: Promises, Async/Await, and Callbacks](https://dev.to/cliff123tech/mastering-async-programming-in-typescript-promises-asyncawait-and-callbacks-148b)
 
 
-```ts
+```typescript
 TypeScript（简称 TS）是微软公司开发的一种基于 JavaScript （简称 JS）语言的编程语言
 TypeScript 可以看成是 JavaScript 的超集（superset），即它继承了后者的全部语法，增加了一些自己的语法，TypeScript 的主要功能是为 JavaScript 添加类型系统
 在语法上，JavaScript 属于动态类型语言，TypeScript 引入了一个更强大、更严格的类型系统，属于静态类型语言
