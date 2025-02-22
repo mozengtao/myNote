@@ -1,6 +1,128 @@
 
-bash functions
-[Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)
+[Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
+
+## debug tips
+```bash
+#1 Use set -e for Error Handling
+set -e  # Stop script on error
+set -u  # Treat unset variables as errors
+
+#2 Use "$@" for Handling Arguments, Use "$@" to reference all script arguments correctly, preserving spaces and special characters
+for arg in "$@"; do
+    echo "$arg"
+done
+
+#3 Check Command Success with $?
+cp file1.txt file2.txt
+if [ $? -eq 0 ]; then
+    echo "Copy successful"
+else
+    echo "Copy failed"
+fi
+
+#4 Use Functions to Reuse Code
+greet() {
+    echo "Hello, $1!"
+}
+greet "Alice"  # Outputs: Hello, Alice!
+
+#5 Use [[ for Safer Conditionals: Prefer [[ over [ for conditionals. It handles complex conditions better, especially with strings and regex
+if [[ "$name" == "Alice" ]]; then
+    echo "Hello, Alice!"
+fi
+
+#6 Use trap to Handle Signals: Use trap to clean up resources when the script is interrupted (e.g., on Ctrl + C).
+trap 'echo "Script interrupted"; exit' INT
+
+#7 Use Loops Efficiently: Use for, while, and until loops to process data efficiently
+for file in *.txt; do
+    echo "Processing $file"
+done
+
+#8 Use Parameter Expansion for Defaults: Provide default values for variables using ${VAR:-default}
+name=${1:-"World"}  # If no argument is provided, default to "World"
+echo "Hello, $name"
+
+#9 Debug with set -x or bash -x: Use set -x within a script or run it with bash -x to print each command as it’s executed (great for debugging)
+set -x  # Enable debugging
+# Your code
+set +x  # Disable debugging
+
+#10 Use declare for Typed Variables: Use declare to enforce types on variables (like integers or read-only variables)
+declare -i counter=10  # Integer variable
+declare -r readonly_var="Cannot change me"  # Read-only variable
+
+#11 use local keyword inside of function
+my_function() {
+  local count=5
+  for ((i=1; i<=count; i++)); do
+    echo "Iteration $i"
+  done
+}
+```
+
+## 解析命令行参数
+```bash
+#1 直接解析命令行参数
+echo "script name: $0"
+echo "1st param: $1"
+echo "2st param: $2"
+echo "all params: $@"
+echo "param num: $#"
+
+#2 使用 getopts 解析短选项选项和参数
+# a:表示 -a 选项必须带有一个参数，c 表示 -c 选项不需要参数
+# : 在开头表示静默错误处理模式，可以在 \? 分支中自定义错误处理，否则如果遇到无效选项，getopts 会自动输出错误信息到标准错误流
+while getopts ":a:b:c" opt; do
+  case $opt in
+    a)
+      echo "option -a value: $OPTARG"
+      ;;
+    b)
+      echo "option -b value: $OPTARG"
+      ;;
+    c)
+      echo "option -c enabled"
+      ;;
+    \?)
+      echo "invalid option: -$OPTARG"
+      ;;
+    :)
+      echo "option -$OPTARG needs a param"
+      ;;
+  esac
+done
+
+#3 自定义方式处理长选项
+usage() {
+	echo "usage: $0 [-a value1] [-b value2] [-h]"
+}
+
+while [[ "$1" != "" ]]; do
+    case $1 in
+        -a | --arg1 )
+            shift
+            ARG1=$1
+            ;;
+        -b | --arg2 )
+            shift
+            ARG2=$1
+            ;;
+        -h | --help )
+            usage
+            exit 0
+            ;;
+        * )
+            echo "invalid option: $1"
+            exit 1
+    esac
+    shift
+done
+
+echo "ARG1: $ARG1"
+echo "ARG2: $ARG2"
+```
+
 ```bash
 # locale - get locale-specific information
 morrism@PC24036:~/testdir$ locale -a
@@ -13,7 +135,7 @@ zh_CN.utf8
 morrism@PC24036:~/testdir$ echo $LANG
 en_US.utf8
 
-# 1
+# 1 (not recommended)
 function function_name() {
 # Function code here
 }
@@ -192,40 +314,40 @@ pc2 '1+2*3'
 	  
 	  
 	  ```
-- ```bash
-  使用统一的方式执行命令
-  #!/bin/bash
+```bash
+使用统一的方式执行命令
+#!/bin/bash
+
+startup() {
+		case "$1" in
+				*)
+					"$@"
+					;;
+		esac
+}
+
+startup ls -l /tmp
   
-  startup() {
-          case "$1" in
-                  *)
-                          "$@"
-                          ;;
-          esac
-  }
-  
-  startup ls -l /tmp
-  
-  在bash的提示显示git branch，可以放在~/.bashrc文件里
-  # git prompt
-  function color_my_prompt {
-      local __user_and_host="\[\033[01;32m\]\u@\h"
-      local __cur_location="\[\033[01;34m\]\w"
-      local __git_branch_color="\[\033[31m\]"
-      #local __git_branch="\`ruby -e \"print (%x{git branch 2> /dev/null}.grep(/^\*/).first || '').gsub(/^\* (.+)$/, '(\1) ')\"\`"
-      local __git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
-      local __prompt_tail="\[\033[35m\]$"
-      local __last_color="\[\033[00m\]"
-      export PS1="$__user_and_host $__cur_location $__git_branch_color$__git_branch$__prompt_tail$__last_color "
-  }
-  color_my_prompt
+在bash的提示显示git branch，可以放在~/.bashrc文件里
+# git prompt
+color_my_prompt {
+	local __user_and_host="\[\033[01;32m\]\u@\h"
+	local __cur_location="\[\033[01;34m\]\w"
+	local __git_branch_color="\[\033[31m\]"
+	#local __git_branch="\`ruby -e \"print (%x{git branch 2> /dev/null}.grep(/^\*/).first || '').gsub(/^\* (.+)$/, '(\1) ')\"\`"
+	local __git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
+	local __prompt_tail="\[\033[35m\]$"
+	local __last_color="\[\033[00m\]"
+	export PS1="$__user_and_host $__cur_location $__git_branch_color$__git_branch$__prompt_tail$__last_color "
+}
+color_my_prompt
   ```
 - bash下实现spin功能
 	- ```bash
 	  # bash实现spin功能
 	  #！/usr/bin/bash
 	  SPIN='-\|/'
-	  function spin {
+	  spin {
 	          i=0
 	          while kill -0 $1 2> /dev/null
 	          do
@@ -301,7 +423,7 @@ pc2 '1+2*3'
   }
   
   # 重复执行命令多次
-  function repeat(){
+  repeat(){
     for ((i=0;i<$1;i++)); do
       eval ${*:2}
     done
@@ -533,7 +655,7 @@ pc2 '1+2*3'
 		- In addition to reading the startup files above, non-login shells also inherit the environment from their parent process, usually a login shell
 		- 除了读取以上配置文件，non-login shell也继承父进程的环境变量，通常是一个login shell
 - 流程控制
-	- ```bash
+```bash
 	  # if语句
 	  if commands; then
 	      commands
@@ -654,7 +776,7 @@ pc2 '1+2*3'
 	  
 	  }   # end of system_info
 	  ```
-- 检查命令的退出状态
+检查命令的退出状态
 	- ```bash
 	  # Check the exit status
 	  cd "$some_directory"

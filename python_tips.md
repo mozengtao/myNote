@@ -1,4 +1,268 @@
-- [Python Tips and Trick, You Haven't Already Seen](https://martinheinz.dev/blog/1)
+[Python Cheatsheet](https://www.pythoncheatsheet.org/)  
+[Python Tips and Trick, You Haven't Already Seen](https://martinheinz.dev/blog/1)  
+
+## 解析 YAML 配置文件
+```python
+# pip install pyyaml  # 基础解析库
+# pip install python-dotenv  # 可选，用于环境变量管理
+
+# 实例 1
+config.yaml:
+# 服务器配置
+server:
+  host: "0.0.0.0"
+  port: 8080
+  ssl: true
+  timeout: 30.5
+
+# 数据库配置
+database:
+  adapter: postgresql
+  name: production_db
+  credentials:
+    username: !env DB_USER  # 使用环境变量
+    password: !env DB_PASS
+
+# 功能开关
+features:
+  caching: enabled
+  analytics: disabled
+
+app.py:
+import yaml
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+
+def load_config(file_path='config.yaml'):
+    """安全加载 YAML 配置"""
+    try:
+        # 添加自定义标签解析器
+        def env_var_constructor(loader, node):
+            value = loader.construct_scalar(node)
+            return os.environ.get(value, '')
+        
+        yaml.SafeLoader.add_constructor('!env', env_var_constructor)
+
+        with open(file_path, 'r') as f:
+            return yaml.safe_load(f)
+            
+    except FileNotFoundError:
+        raise Exception(f"Config file not found: {file_path}")
+    except yaml.YAMLError as exc:
+        raise Exception(f"YAML syntax error: {exc}")
+
+def validate_config(config):
+    """配置验证逻辑"""
+    required_sections = ['server', 'database', 'features']
+    for section in required_sections:
+        if section not in config:
+            raise ValueError(f"Missing required section: {section}")
+
+    if not isinstance(config['server']['port'], int):
+        raise TypeError("Server port must be an integer")
+
+if __name__ == "__main__":
+    # 加载配置
+    config = load_config()
+    
+    # 验证配置
+    validate_config(config)
+    
+    # 使用配置
+    print(f"Server will run on {config['server']['host']}:{config['server']['port']}")
+    print(f"Database user: {config['database']['credentials']['username']}")
+
+# 实例2 ：解析 YAML 文件并执行 YAML 文件中指定的 linux 命令
+commands.yaml:
+commands:
+  - ls
+  - echo "Hello, World!"
+  - uname -a
+
+run_commands.py:
+import yaml
+import subprocess
+
+# 定义一个函数来加载和解析 YAML 文件
+def load_yaml(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+
+# 定义一个函数来执行 Linux 命令
+def run_command(command):
+    try:
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(result.stdout.decode('utf-8'))
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {command}\n{e.stderr.decode('utf-8')}")
+
+# 主函数
+def main():
+    # 加载 YAML 文件
+    yaml_file = 'commands.yaml'
+    data = load_yaml(yaml_file)
+
+    # 获取并执行 commands 列表中的命令
+    commands = data.get('commands', [])
+    for command in commands:
+        print(f"Running command: {command}")
+        run_command(command)
+
+if __name__ == "__main__":
+    main()
+
+```
+
+## argparse 解析命令行参数
+```python
+import argparse
+
+def parse_arguments():
+    """Handles command line argument parsing"""
+    parser = argparse.ArgumentParser(description="File processing tool")
+    
+    parser.add_argument("input_file", help="Path to input file")
+    parser.add_argument("-o", "--output", 
+                        default="output.txt",
+                        help="Output file path (default: %(default)s)")
+    parser.add_argument("-l", "--lines",
+                        type=int, 
+                        default=0,
+                        help="Maximum lines to process (0=all)")
+    parser.add_argument("-v", "--verbose",
+                        action="store_true",
+                        help="Enable verbose output mode")
+    
+    return parser.parse_args()
+
+def validate_arguments(args):
+    """Validates input arguments"""
+    if args.lines < 0:
+        raise ValueError("Line count cannot be negative")
+    # Add more validation as needed
+
+def process_file(input_path, output_path, max_lines, verbose=False):
+    """Core file processing logic"""
+    try:
+        if verbose:
+            print(f"Processing: {input_path}")
+            limit_info = f"first {max_lines} lines" if max_lines > 0 else "all lines"
+            print(f"Output: {output_path}, Processing: {limit_info}")
+
+        # Read input
+        with open(input_path, 'r') as f:
+            content = f.readlines()[:max_lines] if max_lines > 0 else f.readlines()
+        
+        # Write output
+        with open(output_path, 'w') as f:
+            f.writelines(content)
+        
+        if verbose:
+            print(f"Processed {len(content)} lines")
+            print(f"Saved to: {output_path}")
+    
+    except FileNotFoundError:
+        print(f"Input file not found: {input_path}")
+    except Exception as e:
+        print(f"Error: {str(e)}")
+
+def main():
+    """Main program execution flow"""
+    args = parse_arguments()
+    validate_arguments(args)
+    
+    # Convert arguments to processing parameters
+    processing_params = {
+        'input_path': args.input_file,
+        'output_path': args.output,
+        'max_lines': args.lines,
+        'verbose': args.verbose
+    }
+    
+    process_file(**processing_params)
+
+if __name__ == "__main__":
+    main()
+```
+
+## best practice
+```python
+# Use List Comprehensions: Instead of loops, try using list comprehensions for concise and readable code
+data = [-3, 7, 2, -5, 0, 8]
+positive_numbers = [num for num in data if num > 0]
+print(positive_numbers)  # Output: [7, 2, 8]
+
+# Use enumerate(): Instead of manually tracking the index in a loop, use enumerate() for cleaner code
+tasks = ['Write code', 'Test program', 'Fix bugs']
+for index, task in enumerate(tasks, start=1):
+    print(f"{index}. {task}")
+# Output:
+# 1. Write code
+# 2. Test program
+# 3. Fix bugs
+
+# Use zip(): Combine two or more iterables easily with zip()
+products = ['apple', 'banana', 'cherry']
+prices = [1.2, 0.5, 2.5]
+product_price_dict = dict(zip(products, prices))
+print(product_price_dict)  # Output: {'apple': 1.2, 'banana': 0.5, 'cherry': 2.5}
+
+# Use F-strings for Formatting: Format strings cleanly and efficiently with f-strings (Python 3.6+)
+name = "John"
+age = 30
+print(f"Hello, {name}! You are {age} years old.")  # Output: Hello, John! You are 30 years old.
+
+# Use *args and **kwargs: These allow functions to accept an arbitrary number of positional and keyword arguments
+def add_numbers(*args):
+    return sum(args)
+
+result = add_numbers(1, 2, 3, 4)
+print(result)  # Output: 10
+
+# Handle Exceptions Gracefully: Always use try-except blocks to handle errors without crashing your program
+def divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return "Error: Division by zero is not allowed."
+
+print(divide(10, 2))  # Output: 5.0
+print(divide(10, 0))  # Output: Error: Division by zero is not allowed.
+
+# Use with for File Handling: It automatically closes the file, even if exceptions occur
+with open('data.txt', 'r') as file:
+    content = file.read()
+print(content)  # File is automatically closed after reading
+
+# Leverage Generators: For memory efficiency, use generators instead of storing large data in lists
+def large_range_gen():
+    for i in range(1, 1000000):
+        yield i
+
+for number in large_range_gen():
+    if number > 10:  # Stop early as an example
+        break
+
+# Use Built-in Functions: Python has many useful built-in functions like sum(), min(), max(), and sorted(). Use them when you can
+temperatures = [22.5, 25.6, 21.3, 28.1, 24.2]
+highest_temp = max(temperatures)
+print(highest_temp)  # Output: 28.1
+
+# Master Dictionary Operations: Use .get(), .keys(), .items() for working with dictionaries
+sentence = "apple banana apple cherry banana apple"
+words = sentence.split()
+word_count = {}
+
+for word in words:
+    word_count[word] = word_count.get(word, 0) + 1  # word_count.get(word, 0) returns default value 0 if the key doesn’t exist
+
+print(word_count)  # Output: {'apple': 3, 'banana': 2, 'cherry': 1}
+
+```
 - 省略号
     ```python
     在Python中，一切皆对象，省略号也不例外
@@ -588,9 +852,6 @@
 - 把模块当做脚本来执行 7 种方法及原理
     ```python
     # 快速搭建一个 HTTP 服务
-    # python2
-    $ python -m SimpleHTTPServer 8888
-    # python3
     $ python3 -m http.server 8888
 
     #快速构建 HTML 帮助文档
@@ -613,7 +874,7 @@
 
     # 原理剖析
     最好的学习方式，莫过于模仿，直接以 pip 和 json 模块为学习对象，看看目录结构和代码都有什么特点
-
+    [pip](https://github.com/pypa/pip/tree/main)
     
     使用 -m 的方式执行模块，有两种方式：
     1.以 -m <package> 的方式执行，只要在 package 下写一个 __main__.py 的文件即可
