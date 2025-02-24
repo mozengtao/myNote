@@ -1,5 +1,14 @@
+[online python](https://www.online-python.com/)  
 [Python Cheatsheet](https://www.pythoncheatsheet.org/)  
 [Python Tips and Trick, You Haven't Already Seen](https://martinheinz.dev/blog/1)  
+
+## type hints (类型提示)
+[Type hints cheat sheet](https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html)  
+[Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  
+[typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
+```python
+
+```
 
 ## 解析 YAML 配置文件
 ```python
