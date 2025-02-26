@@ -1,3 +1,7 @@
+[C++ playground](https://codapi.org/cpp/)  
+[C++ Playground](https://programiz.pro/ide/cpp)  
+
+
 [modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) #github  
 
 [C++ reference](https://en.cppreference.com/w)  
@@ -46,6 +50,207 @@
 [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)  
 [**using**](https://en.cppreference.com/w/cpp/keyword/using)  
 [How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
+
+## 设计模式
+### Composite Pattern(组合模式)
+```cpp
+// 基本思想
+/*
+组合模式（Composite Pattern）是一种结构型设计模式，它允许你将对象组合成树形结构以表示 “部分 - 整体” 的层次关系。该模式使得用户对单个对象和组合对象的使用具有一致性，即客户端代码可以统一地处理单个对象和由多个对象组成的组合对象，而无需关心处理的是单个对象还是组合对象
+
+主要组件:
+1.抽象组件（Component）：这是一个抽象类或接口，定义了组合对象和叶子对象的公共接口。客户端通过这个接口来操作组合结构中的对象。它可以包含一些基本的操作方法，如添加、删除子对象，获取子对象等。
+2.叶子组件（Leaf）：表示树形结构中的叶子节点，即没有子节点的对象。它实现了抽象组件定义的接口，但通常不包含添加、删除子对象等操作，因为它本身没有子对象。
+3.组合组件（Composite）：表示树形结构中的非叶子节点，即包含子节点的对象。它实现了抽象组件定义的接口，并且可以包含添加、删除子对象的操作，用于管理和操作其子对象
+*/
+
+// 应用实例: 文件系统
+/*
+场景描述：
+在文件系统中，文件和目录是两种对象。文件是叶子节点，目录是容器节点。目录可以包含文件和其他目录
+
+实现思路：
+定义一个抽象组件类 FileSystemItem，它有一个 display() 方法用于显示文件或目录的信息
+定义叶子组件类 File，它继承自 FileSystemItem，实现 display() 方法，显示文件的名称等信息
+定义容器组件类 Directory，它也继承自 FileSystemItem，实现 display() 方法，显示目录名称，并且能够遍历其包含的子文件和子目录，调用它们的 display() 方法。同时，Directory 类还提供添加子文件或子目录、删除子文件或子目录等方法
+*/
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+// 抽象组件：文件系统组件
+class FileSystemItem {
+public:
+    virtual void display(int depth = 0) const = 0;
+    virtual ~FileSystemItem() {}
+};
+
+// 叶子组件：文件
+class File : public FileSystemItem {
+private:
+    std::string name;
+public:
+    File(const std::string& name) : name(name) {}
+
+    void display(int depth) const override {
+        for (int i = 0; i < depth; ++i) {
+            std::cout << "  ";
+        }
+        std::cout << "File: " << name << std::endl;
+    }
+};
+
+// 组合组件：文件夹
+class Directory : public FileSystemItem {
+private:
+    std::string name;
+    std::vector<FileSystemItem*> children;
+public:
+    Directory(const std::string& name) : name(name) {}
+
+    void display(int depth = 0) const override {
+        for (int i = 0; i < depth; ++i) {
+            std::cout << "  ";
+        }
+        std::cout << "Directory: " << name << std::endl;
+        for (const auto& child : children) {
+            child->display(depth + 1);
+        }
+    }
+
+    void add(FileSystemItem* item) {
+        children.push_back(item);
+    }
+
+    void remove(FileSystemItem* item) {
+        for (auto it = children.begin(); it != children.end(); ++it) {
+            if (*it == item) {
+                children.erase(it);
+                break;
+            }
+        }
+    }
+
+    ~Directory() override {
+        for (auto child : children) {
+            delete child;
+        }
+    }
+};
+
+int main() {
+    // 创建文件夹和文件
+    Directory* root = new Directory("Root");
+    Directory* subDirectory1 = new Directory("SubDirectory1");
+    Directory* subDirectory2 = new Directory("SubDirectory2");
+    File* file1 = new File("File1.txt");
+    File* file2 = new File("File2.txt");
+    File* file3 = new File("File3.txt");
+
+    // 构建文件系统结构
+    subDirectory1->add(file1);
+    subDirectory2->add(file2);
+    subDirectory2->add(file3);
+    root->add(subDirectory1);
+    root->add(subDirectory2);
+
+    // 显示文件系统结构
+    root->display();
+
+    // 释放内存
+    delete root;
+
+    return 0;
+}
+
+// 应用实例：图形界面组件
+/*
+场景描述:
+  - 在图形界面中，窗口、面板、按钮等都是组件。窗口和面板可以包含其他组件，如按钮、文本框等
+
+实现思路：
+  - 定义一个抽象组件类 `Component`，它有 `draw()` 方法用于绘制组件
+  - 定义叶子组件类，如 `Button`、`TextBox` 等，它们继承自 `Component`，实现 `draw()` 方法，绘制自己的图形
+  - 定义容器组件类，如 `Window`、`Panel` 等，它们也继承自 `Component`，实现 `draw()` 方法，绘制自己的边框等，并且能够遍历其包含的子组件，调用它们的 `draw()` 方法。同时，容器组件类还提供添加子组件、删除子组件等方法
+*/
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+// 抽象组件
+class Component {
+public:
+    virtual void draw() const = 0;
+    virtual ~Component() {}
+};
+
+// 叶子组件 - 按钮
+class Button : public Component {
+private:
+    std::string text;
+public:
+    Button(const std::string& text) : text(text) {}
+    void draw() const override {
+        std::cout << "Button: " << text << std::endl;
+    }
+};
+
+// 叶子组件 - 文本框
+class TextBox : public Component {
+private:
+    std::string content;
+public:
+    TextBox(const std::string& content) : content(content) {}
+    void draw() const override {
+        std::cout << "TextBox: " << content << std::endl;
+    }
+};
+
+// 容器组件 - 窗口
+class Window : public Component {
+private:
+    std::string title;
+    std::vector<Component*> components;
+public:
+    Window(const std::string& title) : title(title) {}
+    void draw() const override {
+        std::cout << "Window: " << title << std::endl;
+        for (const auto& component : components) {
+            component->draw();
+        }
+    }
+    void add(Component* component) {
+        components.push_back(component);
+    }
+    void remove(Component* component) {
+        for (auto it = components.begin(); it != components.end(); ++it) {
+            if (*it == component) {
+                components.erase(it);
+                break;
+            }
+        }
+    }
+};
+
+int main() {
+    Button* button1 = new Button("OK");
+    TextBox* textBox1 = new TextBox("Enter your name");
+    Window* window1 = new Window("Main Window");
+
+    window1->add(button1);
+    window1->add(textBox1);
+
+    window1->draw();
+
+    delete button1;
+    delete textBox1;
+    delete window1;
+
+    return 0;
+}
+```
 
 ## C++ 的线程同步机制
 ```cpp
