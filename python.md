@@ -1,5 +1,10 @@
 [Python Playground](https://programiz.pro/ide/python)  
 
+[String Methods](https://docs.python.org/3/library/stdtypes.html#string-methods)  
+
+[Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)  
+[Python f-string: A Complete Guide](https://www.datacamp.com/tutorial/python-f-string)  
+
 
 [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
 [argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
