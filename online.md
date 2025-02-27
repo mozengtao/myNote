@@ -2,9 +2,14 @@
 [code playground](https://programiz.pro/ide/c)  
 [code playground](https://codapi.org/)  
 
+## 在线不同语言之间的代码转换
+[CodeConvert](https://www.codeconvert.ai/free-converter)  
+
+## 设计模式
+[Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main/docs)  
+
 
 [B 站收藏的“比较有质量”的课程](https://fast.v2ex.com/t/931949)    
-[**CodeConvert**](https://www.codeconvert.ai/free-converter)    
 [Algorithms](https://algs4.cs.princeton.edu/home/)    
 [code2flow](https://app.code2flow.com/)  
 [xmind](https://xmind.works/) #mindmap  在线思维导图  

@@ -1,17 +1,27 @@
+## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
 
+## string 方法
 [String Methods](https://docs.python.org/3/library/stdtypes.html#string-methods)  
 
+## F-string
 [Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)  
 [Python f-string: A Complete Guide](https://www.datacamp.com/tutorial/python-f-string)  
 
-
+## argparse
 [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
 [argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
+
+## python 2 c converter
 [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
+
+
 [The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
+
+## 类型提示
 [typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
 [How to Use Type Hints for Multiple Return Types in Python](https://realpython.com/python-type-hints-multiple-types/)  
+
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
 
