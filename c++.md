@@ -1,13 +1,25 @@
+## C++ 在线环境
 [C++ playground](https://codapi.org/cpp/)  
 [C++ Playground](https://programiz.pro/ide/cpp)  
 
+## 最佳实践
+[Collecting the best C++ practices](https://medium.com/@Code_Analysis/collecting-the-best-c-practices-4b867006849f)  
+[awesome-hpp](https://github.com/p-ranav/awesome-hpp)  
+[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)  
+[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)  
 
-[modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) #github  
-
+## C++标准库参考
 [C++ reference](https://en.cppreference.com/w)  
 [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
 ![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
 [The C++ Standard Library - A Tutorial and Reference source code](http://www.cppstdlib.com/)  
+
+## C++ 在线基础课程
+[LEARN C++](https://www.learncpp.com/)  
+[Learn C++ Programming](https://www.programiz.com/cpp-programming)  
+
+[modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) #github  
+
 [C++ Templates The Complete Guide, 2nd Edition](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%20Templates%20The%20Complete%20Guide%2C%202nd%20Edition%20%5BBooxRack%5D.pdf) #pdf  
 ![C++ Templates: The Complete Guide](./assets/CPlusPlusTemplatesTheCompleteGuide2ndEdition.pdf) #pdf  
 [C++ Templates - The Complete Guide souce code](http://www.tmplbook.com/)  
@@ -21,9 +33,6 @@
 [Storing Callable Objects in C++](https://tech.jocodoma.com/2019/02/26/Storing-Callable-Objects-in-CPP/)  
 
 [Awesome Modern C++](https://awesomecpp.com/)  
-
-[Learn C++ Programming](https://www.programiz.com/cpp-programming)  
-[LEARN C++](https://www.learncpp.com/)  
 [cppbestpractices](https://github.com/cpp-best-practices/cppbestpractices/tree/master)  
 [Effective-Modern-Cpp](https://github.com/downdemo/Effective-Modern-Cpp/tree/master)  
 
@@ -50,6 +59,171 @@
 [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)  
 [**using**](https://en.cppreference.com/w/cpp/keyword/using)  
 [How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
+
+## 不同的构造函数
+### 默认构造函数(Default Constructor)
+```cpp
+// 定义
+	默认构造函数是不带任何参数的构造函数
+// 用途
+	用于在未提供其他信息的情况下初始化对象
+// 特点
+	如果类中没有定义任何构造函数，编译器会隐式生成一个默认构造函数
+	如果类中有未被初始化的变量，它们可能会被赋予随机值，除非构造函数中显式地初始化它们
+// 示例
+class Point {
+public:
+    int x, y;
+
+    Point() {  // 默认构造函数
+        x = 0;
+        y = 0;
+    }
+};
+// 适用场景
+	当对象需要一个默认的初始状态时，例如初始化为零值或空值
+```
+### 带参构造函数(Parameterized Constructor)
+```cpp
+// 定义
+	带参构造函数是带有参数的构造函数
+// 用途
+	用于在对象创建时传入参数以初始化对象
+// 特点
+	参数可以用于初始化类的成员变量
+	支持函数重载，可以定义多个具有不同参数列表的构造函数
+// 示例
+class Person {
+public:
+    std::string name;
+    int age;
+
+    Person(std::string n, int a) {  // 带参构造函数
+        name = n;
+        age = a;
+    }
+};
+// 适用场景
+	当对象需要特定的初始化值时，例如根据用户的输入或配置文件初始化对象
+```
+### 拷贝构造函数(Copy Constructor)
+```cpp
+// 定义
+	拷贝构造函数用于通过一个已存在的对象来初始化另一个对象
+// 特点
+	参数是一个常量引用，通常格式为 Classname(const Classname& other)
+	编译器会隐式生成一个拷贝构造函数，但如果类中包含动态分配的内存或其他需要特殊处理的资源，通常需要显式定义拷贝构造函数以避免浅拷贝的问题
+// 示例
+class Array {
+private:
+    int* data;
+    int size;
+
+public:
+    Array(const Array& other) {  // 拷贝构造函数
+        size = other.size;
+        data = new int[size];
+        for (int i = 0; i < size; ++i) {
+            data[i] = other.data[i];
+        }
+    }
+};
+// 适用场景
+	当需要传递或返回对象的副本时，例如在函数参数或返回值中使用对象
+	当需要确保对象的深度拷贝而不是浅拷贝时
+```
+### 移动构造函数(Move Constructor)
+```cpp
+// 定义
+	移动构造函数用于将资源（如动态内存、文件句柄等）从一个对象转移到另一个对象，而不是复制它们
+// 特点
+	参数是一个右值引用，通常格式为 Classname(Classname&& other)
+	移动构造函数比拷贝构造函数更高效，因为它避免了不必要的资源复制
+	C++11 及更高版本支持移动构造函数
+// 示例
+class Array {
+private:
+    int* data;
+    int size;
+
+public:
+    Array(Array&& other) {  // 移动构造函数
+        data = other.data;
+        size = other.size;
+        other.data = nullptr;
+        other.size = 0;
+    }
+};
+// 适用场景
+	当需要高效地传递或返回大型对象时，例如在返回临时对象或交换对象资源时
+	当对象包含唯一资源（如文件句柄、网络连接等）时
+```
+### 显式构造函数(Explicit Constructor)
+```cpp
+// 定义
+	显式构造函数用于防止隐式类型转换(使用explicit 关键字禁止编译器使用该构造函数进行隐式类型转换)
+// 特点
+	使用 explicit 关键字声明
+	不允许隐式转换，必须通过直接初始化调用
+// 示例
+class IntWrapper {
+public:
+    explicit IntWrapper(int value) : value(value) {  // 显式构造函数
+    }
+
+public:
+    int value;
+};
+
+void print(IntWrapper iw) {
+    std::cout << iw.value << std::endl;
+}
+
+int main() {
+    // 错误：无法隐式转换，必须显式调用构造函数
+    // print(5);  
+    IntWrapper iw(5);
+    print(iw);
+    return 0;
+}
+
+// 适用场景
+	当希望避免隐式类型转换时，例如防止将一个 int 自动转换为 IntWrapper
+```
+### 重载构造函数(Overloaded Constructor)
+```cpp
+// 定义
+	重载构造函数是具有不同参数列表的多个构造函数
+// 特点
+	允许创建对象时使用不同的初始化方式
+	提供了更高的灵活性
+// 示例
+class Vector {
+public:
+    Vector() {  // 默认构造函数
+        size = 0;
+    }
+
+    Vector(int capacity) {  // 带参构造函数1
+        size = 0;
+        capacity_ = capacity;
+        data = new int[capacity_];
+    }
+
+    Vector(std::initializer_list<int> init) {  // 带参构造函数2
+        size = init.size();
+        data = new int[size];
+        std::copy(init.begin(), init.end(), data);
+    }
+
+private:
+    int size;
+    int capacity_;
+    int* data;
+};
+// 适用场景
+	当需要对象具有多种初始化方式时，例如创建一个空对象或已初始化的对象
+```
 
 ## 设计模式
 ### Composite Pattern(组合模式)
@@ -1095,19 +1269,18 @@ for (int& k : squares)
 
 
 // Ranged "for" for multidimensional arrays
+// 1
 int arr[2][3] { { 2, 3, 4 }, { 5, 6, 7} };
-for (auto row : arr)
+for (auto row : arr)	// row 的类型被推到为 int* (数组退化为指针)
 {
-	for (auto col : row) // will not compile
+	for (auto col : row) // will not compile (int* 类型没有定义 begin() 和 end() 方法，因此无法直接被范围 for 循环遍历)
 	{
 		cout << col << " " << endl;
 	}
 }
-// Ranged "for" 使用迭代器对象即使 begin 和 end 来创建 元素对象，因此对于外层循环 每个元素的类型为 int[3] array ，因此外层循环尝试创建 int[3] 类型的元素拷贝，但是对于 array 类型不支持此类拷贝，因此编译器提供的是指向第一个元素的指针，即 int* 给内层循环使用，编译器尝试获取 int* 类型的 iterator 但是是不可能成功的因为 int* 没有任何它所指向多少个元素的信息，int[3] 有对应的 begin 和 end，但是 int* 却没有。
 
-
-// 外层循环的元素类型为 int (&)[3], 即 int[3] 类型的引用 (括号用来表明是 int[3] 类型的引用，而不是 int& 类型的数组)
-for (auto& row : arr)	
+// 2
+for (auto& row : arr)	// row 的类型被推到为 int (&)[3]
 {
 	for (auto col : row)
 	{
@@ -1511,7 +1684,7 @@ cout << (p1 != p2) << endl; // false
 
 // lambda expression（lambda 表达式）, C++11 provides a mechanism to get the compiler to determine the function objects that are required and bind parameters to them. These are called lambda expressions. lambda 表达式用来在函数对象被用到的地方创建匿名函数
 
-auto less_than_10 = [](int a) {return a < 10; };	// [] 被称作 captrue list，用于捕获lambda 表达式之外的变量，该示例中没有捕捉任何变量所以为空
+auto less_than_10 = [](int a) { return a < 10; };	// [] 被称作 captrue list，用于捕获lambda 表达式之外的变量，该示例中没有捕捉任何变量所以为空
 bool b = less_than_10(4);
 
 // captured by a reference (use [&]) 
@@ -1519,7 +1692,7 @@ bool b = less_than_10(4);
 
 // 1
 int limit = 99;
-auto less_than = [limit](int a) {return a < limit; };
+auto less_than = [limit](int a) { return a < limit; };
 
 // 2
 auto incr = [] { static int i; return ++i; };

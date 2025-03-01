@@ -135,17 +135,17 @@ zh_CN.utf8
 morrism@PC24036:~/testdir$ echo $LANG
 en_US.utf8
 
-# 1 (not recommended)
-function function_name() {
-# Function code here
-}
-
-# 2 (preferred)
+# 1 (preferred)
 function_name() {
 # Function code here
 }
 
-Bash Function Arguments
+# 2 (not recommended)
+function function_name() {
+# Function code here
+}
+
+# 函数参数
 Argument						Role
 $0								Reserves the function's name when defined in the terminal. When defined in a bash script, $0 returns the script's name and location.
 $1, $2, etc.					Corresponds to the argument's position after the function name.
@@ -261,63 +261,56 @@ echo '1+2*3' | pc1
 pc2 '1+2*3'
 ```
 
-
-- `getopts`
-	- ```bash
-	  #!/bin/bash
-	  
-	  # Echo usage if something isn't right.
-	  usage() { 
-	      echo "Usage: $0 [-p <80|443>] [-h <string>] [-f]" 1>&2; exit 1; 
-	  }
-	  
-	  while getopts ":p:h:f" o; do
-	      case "${o}" in
-	          p)
-	              PORT=${OPTARG}
-	              [[ $PORT != "80" && $PORT != "443" ]] && usage
-	              ;;
-	          h)
-	              HOST=${OPTARG}
-	              ;;
-	          f)  
-	              FORCE=1
-	              ;;
-	          :)  
-	              echo "ERROR: Option -$OPTARG requires an argument"
-	              usage
-	              ;;
-	          \?)
-	              echo "ERROR: Invalid option -$OPTARG"
-	              usage
-	              ;;
-	      esac
-	  done
-	  shift $((OPTIND-1))
-	  
-	  # Check required switches exist
-	  if [ -z "${PORT}" ] || [ -z "${HOST}" ]; then
-	      usage
-	  fi
-	  
-	  echo "p = ${PORT}"
-	  echo "h = ${HOST}"
-	  ```
-- `functions.bash`
-	- ```bash
-	  check_root () {
-	    if [[ $EUID -ne 0 ]]; then
-	      echo "This script must be run as root" 
-	      exit 1
-	    fi
-	  }
-	  
-	  
-	  ```
 ```bash
-使用统一的方式执行命令
 #!/bin/bash
 
+# getopts
+usage() { 
+	echo "Usage: $0 [-p <80|443>] [-h <string>] [-f]" 1>&2
+	exit 1
+}
+
+while getopts ":p:h:f" o; do
+	case "${o}" in
+		p)
+			PORT=${OPTARG}
+			[[ $PORT != "80" && $PORT != "443" ]] && usage
+			;;
+		h)
+			HOST=${OPTARG}
+			;;
+		f)  
+			FORCE=1
+			;;
+		:)  
+			echo "ERROR: Option -$OPTARG requires an argument"
+			usage
+			;;
+		\?)
+			echo "ERROR: Invalid option -$OPTARG"
+			usage
+			;;
+	esac
+done
+shift $((OPTIND-1))
+
+# Check required switches exist
+if [ -z "${PORT}" ] || [ -z "${HOST}" ]; then
+	usage
+fi
+
+echo "p = ${PORT}"
+echo "h = ${HOST}"
+
+# check user is root or not
+check_root () {
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run as root" 
+	exit 1
+fi
+}
+
+# 使用统一的方式执行命令
 startup() {
 		case "$1" in
 				*)
@@ -328,8 +321,7 @@ startup() {
 
 startup ls -l /tmp
   
-在bash的提示显示git branch，可以放在~/.bashrc文件里
-# git prompt
+# git prompt (可以放在~/.bashrc文件里)
 color_my_prompt {
 	local __user_and_host="\[\033[01;32m\]\u@\h"
 	local __cur_location="\[\033[01;34m\]\w"
@@ -341,110 +333,105 @@ color_my_prompt {
 	export PS1="$__user_and_host $__cur_location $__git_branch_color$__git_branch$__prompt_tail$__last_color "
 }
 color_my_prompt
-  ```
-- bash下实现spin功能
-	- ```bash
-	  # bash实现spin功能
-	  #！/usr/bin/bash
-	  SPIN='-\|/'
-	  spin {
-	          i=0
-	          while kill -0 $1 2> /dev/null
-	          do
-	                  i=$(( (i+1)%4 ))
-	                  printf "\b${SPIN:$i:1}"
-	                  sleep .1
-	          done
-	          printf "\bDONE\n"
-	  }
-	  
-	  echo 1
-	  sleep 20 &
-	  spin $!
-	  
-	  echo 2
-	  sleep 20 &
-	  spin $!
-	  
-	  echo 3
-	  sleep 20 &
-	  spin $!
-	  
-	  使用场景：
-	  Untaring build/macfie-powerpc.tgz ---> DONE
-	  Untaring build/nms-ccap-en.tgz ---> DONE
-	  .......
-	  
-	  
-	  # ($!) Expands to the process ID of the job most recently placed into the background, 
-	  whether executed as an asynchronous command or using the bg builtin
-	  ```
-- ```bash
-  # while true
-  SPIN='-\|/'
+
+# bash实现spin功能
+SPIN='-\|/'
+spin {
+		i=0
+		while kill -0 $1 2> /dev/null
+		do
+				i=$(( (i+1)%4 ))
+				printf "\b${SPIN:$i:1}"
+				sleep .1
+		done
+		printf "\bDONE\n"
+}
+
+echo 1
+sleep 20 &
+spin $!
+
+echo 2
+sleep 20 &
+spin $!
+
+echo 3
+sleep 20 &
+spin $!
+
+使用场景：
+Untaring build/macfie-powerpc.tgz ---> DONE
+Untaring build/nms-ccap-en.tgz ---> DONE
+.......
+
+# ($!) Expands to the process ID of the job most recently placed into the background,  whether executed as an asynchronous command or using the bg builtin
+
+
+# while true
+SPIN='-\|/'
+
+i=0
+# while true
+while :
+do
+		i=$(( (i+1)%4 ))
+		printf "\b${SPIN:$i:1}"
+		sleep .1
+done
   
-  i=0
-  #while true
-  while :
-  do
-          i=$(( (i+1)%4 ))
-          printf "\b${SPIN:$i:1}"
-          sleep .1
-  done
+# turn on extended globbing
+shopt -s extglob 
+$ ls
+a.jpg  b.gif  c.png  d.pdf ee.pdf
+$ ls ?(*.jpg|*.gif)
+a.jpg  b.gif
+
+$ ls !(*.jpg|*.gif)  # not a jpg or a gif
+c.png d.pdf ee.pdf
   
-   # turn on extended globbing
-  shopt -s extglob 
-  $ ls
-  a.jpg  b.gif  c.png  d.pdf ee.pdf
-  $ ls ?(*.jpg|*.gif)
-  a.jpg  b.gif
-  
-  $ ls !(*.jpg|*.gif)  # not a jpg or a gif
-  c.png d.pdf ee.pdf
-  
-  # 分别根据路径获取目录和文件名
-  dirname /path/to/file.txt
-  basename /path/to/file.txt
-  
-  #Bash自动产生的变量 Bash automatically assigns variables that provide information about the current user 
-  # about the current user
-  UID, EUID, GROUPS
-  # aout the current host
-  HOSTTYPE, OSTYPE, MACHTYPE, and HOSTNAME
-  # about the instance of Bash that is running
-  BASH, BASH_VERSION, and BASH_VERSINFO
-  
-  # 检查当前用户是否为root
-  check_root () {
-    if [[ $EUID -ne 0 ]]; then
-      echo "This script must be run as root" 
-      exit 1
-    fi
-  }
-  
-  # 重复执行命令多次
-  repeat(){
-    for ((i=0;i<$1;i++)); do
-      eval ${*:2}
-    done
-  }
-  # usage: repeat 5 echo "1 2 3"
-  
-  # 获取当前执行脚本的路径
-  MY_PATH=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
-  PYTHON_PATH=${MY_PATH}/../cathcart-utils/python
-  export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
-  
-  #遍历bash脚本的参数
-  i=1;
-  j=$;
-  while [ $i -le $j ] 
-  do
-      echo "Username - $i: $1";
-      i=$((i + 1));
-      shift 1;
-  done
-  ```
+# 分别根据路径获取目录和文件名
+dirname /path/to/file.txt
+basename /path/to/file.txt
+
+#Bash自动产生的变量 Bash automatically assigns variables that provide information about the current user 
+# about the current user
+UID, EUID, GROUPS
+# aout the current host
+HOSTTYPE, OSTYPE, MACHTYPE, and HOSTNAME
+# about the instance of Bash that is running
+BASH, BASH_VERSION, and BASH_VERSINFO
+
+# 检查当前用户是否为root
+check_root () {
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run as root" 
+	exit 1
+fi
+}
+
+# 重复执行命令多次
+repeat(){
+for ((i=0;i<$1;i++)); do
+	eval ${*:2}
+done
+}
+# usage: repeat 5 echo "1 2 3"
+
+# 获取当前执行脚本的路径
+MY_PATH=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+PYTHON_PATH=${MY_PATH}/../cathcart-utils/python
+export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
+
+#遍历bash脚本的参数
+i=1;
+j=$;
+while [ $i -le $j ] 
+do
+	echo "Username - $i: $1";
+	i=$((i + 1));
+	shift 1;
+done
+```
 - **BASH_SOURCE**
 	- ``` bash
 	  BASH_SOURCE
@@ -497,23 +484,41 @@ color_my_prompt
 	  
 	  UPDATE=false
 	  BDIR=""
-	  while [ 0 -ne $# ]; do
+	  while [ $# -gt 0 ]; do
 	      case "$1" in
-	      -u)             UPDATE=true; shift 1;;
-	      --update)       UPDATE=true; shift 1;;
-	      -d)             BDIR="$2"; shift 2;;
-	      --directory)    BDIR="$2"; shift 2;;
-	      -l)             LAYER="$2"; shift 2;;
-	      --layer)        LAYER="$2"; shift 2;;
-	      -o)             DL_DIR="$2"; shift 2;;
-	      --download)     DL_DIR="$2"; shift 2;;
-	      -s)             SSTATE_DIR="$2"; shift 2;;
-	      --sstate)       SSTATE_DIR="$2"; shift 2;;
-	      -m)             MANIFEST="$2"; shift 2;;
-	      --manifest)     MANIFEST="$2"; shift 2;;
-	      -h)             usage; return;;
-	      --help)         usage; return;;
-	      *)              echo "Unrecognized Argument: $1"; usage; return;;
+			-u | --update)
+				UPDATE=true
+				shift 1
+				;;
+			-d | --directory)
+				BDIR="$2"
+				shift 2
+				;;
+			-l | --layer) 
+				LAYER="$2"
+				shift 2
+				;;
+			-o | --download) 
+				DL_DIR="$2"
+				shift 2
+				;;
+			-s | --sstate)
+				SSTATE_DIR="$2"
+				shift 2
+				;;
+			-m | --manifest) 
+				MANIFEST="$2"
+				shift 2
+				;;
+			-h | --help)  
+				usage;
+				return
+				;;
+			*)   
+				echo "Unrecognized Argument: $1"
+				usage; 
+				return
+				;;
 	      esac
 	  done
 	  
@@ -680,7 +685,9 @@ color_my_prompt
 	  
 	  # case语句
 	  case word in
-	      patterns ) commands ;;
+	      patterns )
+		  	commands
+			;;
 	  esac
 	  
 	  # case示例
@@ -711,16 +718,20 @@ color_my_prompt
 	  
 	  while [ "$1" != "" ]; do
 	      case $1 in
-	          -f | --file )           shift
-	                                  filename="$1"
-	                                  ;;
-	          -i | --interactive )    interactive=1
-	                                  ;;
-	          -h | --help )           usage
-	                                  exit
-	                                  ;;
-	          * )                     usage
-	                                  exit 1
+	          -f | --file )
+			  		shift
+					filename="$1"
+					;;
+	          -i | --interactive )
+			  		interactive=1
+					;;
+	          -h | --help )
+			  		usage
+					exit
+					;;
+	          * )
+			  		usage
+					exit 1
 	      esac
 	      shift
 	  done
@@ -866,8 +877,7 @@ color_my_prompt
 	  ```
 - 自定义函数
 	- ```bash
-	  function myadd()
-	  {
+	  myadd() {
 	  	echo $(($1 + $2))
 	  }
 	  
@@ -1091,16 +1101,14 @@ color_my_prompt
 		  With no options, indicate how each name would be interpreted if used as a command name.  If the -t option is used, type prints a string which is  one  of  alias,  keyword,  function, builtin, or file if name is an alias, shell reserved word, function, builtin, or disk file, respectively.
 		  
 		  假设~/.bashrc里有如下函数定义
-		  function foo()
-		  {
+		  foo() {
 		  	echo "foo function"
 		  }
 		  
 		  则type命令有如下返回结果
 		  morrism@localhost /tmp/x $ type foo
 		  foo is a function
-		  foo ()
-		  {
+		  foo() {
 		      echo "foo"
 		  }
 		  morrism@localhost /tmp/x $ type -t foo
@@ -1142,30 +1150,29 @@ color_my_prompt
 		- [Pattern Matching](https://www.gnu.org/software/bash/manual/bash.html#Pattern-Matching)
 		- [Pattern Matching In Bash](https://www.linuxjournal.com/content/pattern-matching-bash)
 		- [Special Parameters](https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters)
-- [阮一峰 Bash 脚本教程](https://www.bookstack.cn/books/bash-tutorial)
-- [Unix Shell I/O重定向](https://m24y.com/index.php/2022/04/03/unix-shell-i-o%e9%87%8d%e5%ae%9a%e5%90%91/)
-- [Unix Shell I/O重定向](http://teaching.idallen.com/cst8207/12w/notes/270_redirection.txt)
-- [Bash scripting cheatsheet](https://devhints.io/bash)
-- [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/)
-- [Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
-- [syntax brackets](https://ss64.com/bash/syntax-brackets.html)
-- [Shell Scripting Primer](https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004268)
-- [bash style guide](https://github.com/bahamas10/bash-style-guide) #github
-- [coding standards](https://linuxcommand.org/lc3_adv_standards.php)
-- [Shell 编程范例](https://www.cntofu.com/book/44/index.html)
-- [man sh](https://linux.die.net/man/1/sh)
-- [编写健壮的 Shell 脚本](https://morven.life/posts/how-to-write-robust-shell-script/)
-- [ANSI Escape Sequences  颜色输出](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)
-- [Everything you never wanted to know about ANSI escape codes](https://notes.burke.libbey.me/ansi-escape-codes/)
-- [ANSI escape code generator](https://ansi.gabebanks.net/)
-- [explain shell](https://explainshell.com/) #online
-- [Find the Script’s Filename Within the Same Script in Bash](https://www.baeldung.com/linux/find-bash-script-filename)
-- [Changing the Default Shell in Linux](https://www.baeldung.com/linux/change-default-shell)
-- [Include Files in a Bash Shell Script With source Command](https://www.baeldung.com/linux/source-include-files)
-- [Bash Source Command](https://linuxize.com/post/bash-source-command/)
-- [BASH TIPS & TRICKS](https://tecadmin.net/category/bash-tips-tricks/)
-- [tldr](https://tldr.inbrowser.app/) #online
-- [bash-utility](https://github.com/labbots/bash-utility) #online #github
-- [Google Style Guides](https://google.github.io/styleguide/) #online
-- [pure-sh-bible](https://github.com/dylanaraps/pure-sh-bible)
-- [Understanding 2>&1 in Bash: A Beginner’s Guide](https://tecadmin.net/io-redirection-operator-in-bash/)
+[阮一峰 Bash 脚本教程](https://www.bookstack.cn/books/bash-tutorial)  
+[Unix Shell I/O重定向](https://m24y.com/index.php/2022/04/03/unix-shell-i-o%e9%87%8d%e5%ae%9a%e5%90%91/)  
+[Unix Shell I/O重定向](http://teaching.idallen.com/cst8207/12w/notes/270_redirection.txt)  
+[Bash scripting cheatsheet](https://devhints.io/bash)  
+[Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/)  
+[Shell Style Guide](https://google.github.io/styleguide/shellguide.html)  
+[syntax brackets](https://ss64.com/bash/syntax-brackets.html)  
+[Shell Scripting Primer](https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/Introduction/Introduction.html#//apple_ref/doc/uid/TP40004268)  
+[bash style guide](https://github.com/bahamas10/bash-style-guide) #github  
+[coding standards](https://linuxcommand.org/lc3_adv_standards.php)  
+[man sh](https://linux.die.net/man/1/sh)  
+[编写健壮的 Shell 脚本](https://morven.life/posts/how-to-write-robust-shell-script/)  
+[ANSI Escape Sequences  颜色输出](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)  
+[Everything you never wanted to know about ANSI escape codes](https://notes.burke.libbey.me/ansi-escape-codes/)  
+[ANSI escape code generator](https://ansi.gabebanks.net/)  
+[explain shell](https://explainshell.com/) #online  
+[Find the Script’s Filename Within the Same Script in Bash](https://www.baeldung.com/linux/find-bash-script-filename)  
+[Changing the Default Shell in Linux](https://www.baeldung.com/linux/change-default-shell)  
+[Include Files in a Bash Shell Script With source Command](https://www.baeldung.com/linux/source-include-files)  
+[Bash Source Command](https://linuxize.com/post/bash-source-command/)  
+[BASH TIPS & TRICKS](https://tecadmin.net/category/bash-tips-tricks/)  
+[tldr](https://tldr.inbrowser.app/) #online  
+[bash-utility](https://github.com/labbots/bash-utility) #online #github  
+[Google Style Guides](https://google.github.io/styleguide/) #online  
+[pure-sh-bible](https://github.com/dylanaraps/pure-sh-bible)  
+[Understanding 2>&1 in Bash: A Beginner’s Guide](https://tecadmin.net/io-redirection-operator-in-bash/)  

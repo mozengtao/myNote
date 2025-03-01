@@ -25,26 +25,26 @@
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
 
-	```python
-	def greeting(name: str) -> str:
-		return 'Hello ' + name
+```python
+def greeting(name: str) -> str:
+	return 'Hello ' + name
 
-	# Type aliases are useful for simplifying complex type signatures. For example:
-	from collections.abc import Sequence
+# Type aliases are useful for simplifying complex type signatures. For example:
+from collections.abc import Sequence
 
-	type ConnectionOptions = dict[str, str]
-	type Address = tuple[str, int]
-	type Server = tuple[Address, ConnectionOptions]
+type ConnectionOptions = dict[str, str]
+type Address = tuple[str, int]
+type Server = tuple[Address, ConnectionOptions]
 
-	def broadcast_message(message: str, servers: Sequence[Server]) -> None:
-		...
+def broadcast_message(message: str, servers: Sequence[Server]) -> None:
+	...
 
-	# The static type checker will treat the previous type signature as
-	# being exactly equivalent to this one.
-	def broadcast_message(
-			message: str,
-			servers: Sequence[tuple[tuple[str, int], dict[str, str]]]) -> None:
-	```
+# The static type checker will treat the previous type signature as
+# being exactly equivalent to this one.
+def broadcast_message(
+		message: str,
+		servers: Sequence[tuple[tuple[str, int], dict[str, str]]]) -> None:
+```
 - [Python Tips](https://book.pythontips.com/en/latest/index.html#) #online
 - [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)
 - [Python: Context Manager to Simplify Resource Handling](https://pravash-techie.medium.com/python-context-manager-to-simplify-resource-handling-5959a36a0f58)
@@ -845,7 +845,7 @@
 	  ```
 - contextlib
 	```python
-	context manager: 在一个类里，实现了__enter__和__exit__的方法，这个类的实例就是一个上下文管理器
+	# context manager: 在一个类里，实现了__enter__和__exit__的方法，这个类的实例就是一个上下文管理器
 	class Resource():
 		def __enter__(self):
 			print('===connect to resource===')
@@ -859,7 +859,7 @@
 	with Resource() as res:
 		res.operate()
 
-	// 使用 contextlib 大大简化了上下文管理器的实现
+	# 使用 contextlib 简化上下文管理器的实现
 	import contextlib
 
 	@contextlib.contextmanager
@@ -871,9 +871,9 @@
 	with operate() as o:
 		print(o)
 
-	为什么需要context manager
-	1.可以以一种更加优雅的方式，操作（创建/获取/释放）资源，如文件操作、数据库连接；
-	2.可以以一种更加优雅的方式，处理异2
+	# 为什么需要context manager
+		# 1.可以以一种更加优雅的方式，操作（创建/获取/释放）资源，如文件操作、数据库连接；
+		# 2.可以以一种更加优雅的方式，处理异常
 	class Resource():
 		def __enter__(self):
 			print('===connect to resource===')
@@ -896,7 +896,7 @@
 	exc_tb：异常的错误栈信息
 	当主逻辑代码没有报异常时，这三个参数将都为None
 
-	contextlib是一个装饰器，你只要按照它的代码协议来实现函数内容，就可以将这个函数对象变成一个上下文管理器
+	# contextlib是一个装饰器，你只要按照它的代码协议来实现函数内容，就可以将这个函数对象变成一个上下文管理器
 	import contextlib
 
 	@contextlib.contextmanager
@@ -916,11 +916,11 @@
 	with open_func('/Users/MING/mytest.txt') as file_in:
 		for line in file_in:
 			print(line)
-	被装饰函数里，必须是一个生成器（带有yield）
-	yield之前的代码，就相当于__enter__里的内容
-	yield 之后的代码，就相当于__exit__ 里的内容
+	# 被装饰函数里，必须是一个生成器（带有yield）
+		#1 yield之前的代码，就相当于__enter__里的内容
+		#2 yield 之后的代码，就相当于__exit__ 里的内容
 
-	处理异常
+	# 处理异常
 	import contextlib
 
 	@contextlib.contextmanager
