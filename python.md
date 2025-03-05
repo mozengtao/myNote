@@ -22,6 +22,9 @@
 [typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
 [How to Use Type Hints for Multiple Return Types in Python](https://realpython.com/python-type-hints-multiple-types/)  
 
+## Python for Network Automation
+[Python for Network Automation](https://python-automation-book.readthedocs.io/en/stable/index.html)  
+
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
 

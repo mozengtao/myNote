@@ -1,6 +1,41 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## 检查进程是否存在
+```bash
+# kill -0 pid 会向进程发送一个信号 0。这个信号不会被进程识别或处理，它只是用来测试进程是否存在
+# 如果进程存在，kill -0 pid 的退出状态（exit status）为 0；如果进程不存在或当前用户没有权限发送信号给该进程，退出状态为非零值
+if kill -0 $PID 2>/dev/null; then
+    echo "进程 $PID 正在运行"
+else
+    echo "进程 $PID 已停止或不存在"
+fi
+```
+
+## 进程替换
+```bash
+# <(...) 是 进程替换（process substitution） 的语法, 命令 ... 的输出被视为一个临时文件，<(...) 生成一个文件名（通常是 /dev/fd/<fd> 的形式）
+# CMD < <(...) 该命令的作用是将 <(...) 生成的文件作为输入传递给前一个 <, 即前一个 < 是输入重定向的符号
+
+##  应用：等待所有后台作业完成
+
+# 启动两个后台作业
+echo "Starting job 1..."
+sleep 3 &  # 后台作业1
+pid1=$!
+
+echo "Starting job 2..."
+sleep 6 &   # 后台作业2
+pid2=$!
+
+# 等待所有后台作业完成
+wait < <(jobs -p)	# 命令 jobs -p 用于返回所有后台进程的 PID，wait 命令用于等待当前shell下所指定的后台进程结束（如果不指定参数，则代表所有的后台进程）
+# wait $pid1 $pid2
+# wait %1 %2
+
+echo "All background jobs are done!"
+```
+
 ## debug tips
 ```bash
 #1 Use set -e for Error Handling
@@ -231,7 +266,7 @@ ALT+f               # 向前（右边）移动一个单词
 ALT+t               # 交换单词
 ```
 
-bash脚本中调用python返回的结果
+## bash脚本中调用python返回的结果
 ```bash
 #!/usr/bin/bash
 pc1()
@@ -262,8 +297,6 @@ pc2 '1+2*3'
 ```
 
 ```bash
-#!/bin/bash
-
 # getopts
 usage() { 
 	echo "Usage: $0 [-p <80|443>] [-h <string>] [-f]" 1>&2
@@ -378,16 +411,7 @@ do
 		printf "\b${SPIN:$i:1}"
 		sleep .1
 done
-  
-# turn on extended globbing
-shopt -s extglob 
-$ ls
-a.jpg  b.gif  c.png  d.pdf ee.pdf
-$ ls ?(*.jpg|*.gif)
-a.jpg  b.gif
 
-$ ls !(*.jpg|*.gif)  # not a jpg or a gif
-c.png d.pdf ee.pdf
   
 # 分别根据路径获取目录和文件名
 dirname /path/to/file.txt
@@ -410,10 +434,10 @@ fi
 }
 
 # 重复执行命令多次
-repeat(){
-for ((i=0;i<$1;i++)); do
-	eval ${*:2}
-done
+repeat() {
+	for ((i=0;i<$1;i++)); do
+		eval ${*:2}
+	done
 }
 # usage: repeat 5 echo "1 2 3"
 
@@ -422,18 +446,8 @@ MY_PATH=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
 PYTHON_PATH=${MY_PATH}/../cathcart-utils/python
 export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
 
-#遍历bash脚本的参数
-i=1;
-j=$;
-while [ $i -le $j ] 
-do
-	echo "Username - $i: $1";
-	i=$((i + 1));
-	shift 1;
-done
 ```
-- **BASH_SOURCE**
-	- ``` bash
+``` bash
 	  BASH_SOURCE
 	   An  array  variable  whose  members  are  the source filenames where the corresponding shell 
 	   function names in the FUNCNAME array variable are defined.  The shell function ${FUNCNAME[$i]}
@@ -454,8 +468,7 @@ done
 		str=$(ls)	Save ls output as a string
 		arr=( $(ls) )	Save ls output as an array of files
 		${arr[@]:s:n}	Retrieve n elements starting at index s
-	  
-	  ```
+```
 [An introduction to Bash arrays](https://opensource.com/article/18/5/you-dont-know-bash-intro-bash-arrays)
 - [[bash string]]
 - Bash环境下执行脚本的不同方式
@@ -967,91 +980,23 @@ done
 	  month=("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")
 	  echo ${month[3]}
 	  ```
-- 参数处理
-	- ```bash
-	  # ./xxx  -u john -a 23 -f 'John Smith'
-	  if [ $# -lt 1 ]
-	  then
-	  	echo "Usage: $0 xxx"
-	  	exit
-	  fi
-	  
-	  while getopts u:a:f: flag
-	  do
-	  	case "${flag}" in
-	  		u) usename=${OPTARG};;
-	  		a) age=${OPTARG};;
-	  		f) fullname=${OPTARG};;
-	  	esac
-	  done
-	  
-	  echo "Username: $usename"
-	  echo "Age: $age"
-	  echo "Full Name: $fullname"
-	  ```
-	- ```sh
-	  ./xxx john matt bill
-	  i=1
-	  for user in "$@"
-	  do
-	  	echo "Username - $i: $user";
-	  	i=$((i + 1))
-	  done
-	  ```
-	- shift命令
-		- shift 命令左移未知参数，同时修改 $# 和 $@
-		- ```bash
-		  # ./xxx 1 2 3 4
-		  sum=0
-		  until [ $# -eq 0 ]
-		  do
-		  	sum=$((sum + $1))
-		  	shift
-		  done
-		  
-		  echo "sum: $sum"
-		  ```
-- 常用命令
-	- split
-	- cat
-	- [[realpath]]
-	  background-color:: red
-		- 获取文件的绝对路径
-	- [[pgrep]]
-		- 基于名称或者其他条件查找进程
-	- [[exec]]
-		- 不创建subshell，而是用命令替换当前shell执行
-	- [[stat]]
-		- 获取文件状态信息
-	- [[env]]
-		- 打印环境变量或者在不修改当前环境的情况下在新环境下运行应用
-	- [[lsof]]
-		- 列举打开的文件
-	- [[fuser]]
-		- > identify processes using files or sockets
-	- [[timeout]]
-		- > run a command with a time limit
-	- [[column]]
-		- > columnate lists
-	- tldr([tldr online](https://tldr.inbrowser.app/))
-		- Too Long; Didn't Read
-			- ```bash
-			  tldr grep
 
-			  tldr mount
-			  man mount
-			  mount --help
-			  ```
-	- man
-		- 获取命令或函数参考手册
-			- ```bash
-			  man dash
-			  man builtin
-			  man set
-			  ```
-	- [[ln]]
-	- [[kill]]
-	- [[cmp]]
+- tldr([tldr online](https://tldr.inbrowser.app/))
+	- Too Long; Didn't Read
+		- ```bash
+			tldr grep
+
+			tldr mount
+			man mount
+			mount --help
+			```
+- man
+	- 获取命令或函数参考手册
+		- ```bash
+			man dash
+			man builtin
+			man set
+			```
 - shell脚本格式检查
 	- [shellcheck online](https://www.shellcheck.net/)
 - Bash带颜色输出
@@ -1076,80 +1021,109 @@ done
 		  
 		  3.在脚本的开头可以指定 #!/bin/bash -xv
 		  ```
-- Tips
-	- if条件判断
-		```bash
-		  [ is POSIX
-		  [[ is a Bash extension inspired from Korn shell
-		  
-		  Recommendation: always use []
-		  
-		  If you use [[ ]] you:
-		  lose portability
-		  force the reader to learn the intricacies of another bash extension. 
-		  [ is just a regular command with a weird name, no special semantics are involved.
-		  
-		  优先使用double bracket进行条件判断，即 if [[ $var = "xxx" ]]，因为在[[]]里面，单词分割
-		  和路径名扩展不会应用到单词上
-		  
-		  如果使用[]进行条件判断，必须把变量用双引号引用起来，即 if [[ "$var" != "xxx" ]]，否则如果$var
-		  为null的话，判断条件变为 [ != "xxx" ]，此时会有"[: !=: unary operator expected"的语法错误
-		```
-	- 使用type命令查看bash函数，别名等定义
-		```bash
-		type [-aftpP] name [name ...]
-		  With no options, indicate how each name would be interpreted if used as a command name.  If the -t option is used, type prints a string which is  one  of  alias,  keyword,  function, builtin, or file if name is an alias, shell reserved word, function, builtin, or disk file, respectively.
-		  
-		  假设~/.bashrc里有如下函数定义
-		  foo() {
-		  	echo "foo function"
-		  }
-		  
-		  则type命令有如下返回结果
-		  morrism@localhost /tmp/x $ type foo
-		  foo is a function
-		  foo() {
-		      echo "foo"
-		  }
-		  morrism@localhost /tmp/x $ type -t foo
-		  function
-		```
-	- bash函数返回值
-		- > `echo` generates *output*. A command substitution like`$(...)` captures that output, but if you run a command without it, that output will go to the terminal.
-		  `return` sets *exit status*. This is what's used to determine which branch is taken when running `if your_function; then ...`, or to populate `$?`.
-		- `echo` 用来产生输出内容，之后可以用 `$(...)` 用来捕获函数输出内容, 如果函数单独执行的话，输出内容将显示在终端上
-		- `return` 用来设置退出状态，它用来决定当运行`if your_function; then ...`条件判断时执行哪一个分支，或者用来设置`$?`
-		- `$?`的取值范围为`0 ~ 255`，如果return的取值大于255，则会转换为`uint8`类型进行函数退出状态的设置
-- 参考文档
-	- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)
-	- [How to Declare and Access Associative Array in Bash](https://phoenixnap.com/kb/bash-associative-array)
-	- [Bash Scripting – Associative Array Explained With Examples](https://ostechnix.com/bash-associative-array/)
-	- [Take control of your data with associative arrays in Bash](https://opensource.com/article/20/6/associative-arrays-bash)
-	- [Bash shift builtin command](https://www.computerhope.com/unix/bash/shift.htm)
-	- [A Complete Guide On How To Use Bash Arrays](https://www.shell-tips.com/bash/arrays/#gsc.tab=0)
-	- [**How to Use Command Line Arguments in a Bash Script**](https://www.baeldung.com/linux/use-command-line-arguments-in-bash-script)
-	- [pure bash bible](https://github.com/dylanaraps/pure-bash-bible?tab=readme-ov-file)
-	- [Bash getopts builtin command](https://www.computerhope.com/unix/bash/getopts.htm)
-	- [Parsing bash script options with getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/)
-	- [Parse Command Line Arguments in Bash](https://www.baeldung.com/linux/bash-parse-command-line-arguments)
-	- [Double Quotes](https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html)
-		```bash
-		  Enclosing characters in double quotes " preserves the literal value of all characters within the quotes, with the exception of $, `, \, and, when history expansion is enabled, !. 
-		```
-	- [Single Quotes](https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html)
-		```bash
-	 	 Enclosing characters in single quotes ' preserves the literal value of each character within the quotes.
-	  	```
-	- [bash(1)](https://manpages.org/bash)
-		- BASHPID
-	- [前后台进程、孤儿进程和 daemon 类进程的父子关系](https://www.cnblogs.com/f-ck-need-u/p/17718649.html)
-	- [GNU Bash Reference Manual](https://www.linuxtopia.org/online_books/bash_reference_guide/index.html)
-	- [Advanced Bash-Scripting Guide](https://www.linuxtopia.org/online_books/advanced_bash_scripting_guide/index.html) #online
-	- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html#)
-		- [The set Command in Linux](https://www.baeldung.com/linux/set-command)
-		- [Pattern Matching](https://www.gnu.org/software/bash/manual/bash.html#Pattern-Matching)
-		- [Pattern Matching In Bash](https://www.linuxjournal.com/content/pattern-matching-bash)
-		- [Special Parameters](https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters)
+```bash
+## 条件判断
+# if 语句
+num=10
+if [[ $num -lt 5 ]]; then
+    echo "The number is less than 5."
+elif [[ $num -gt 15 ]]; then
+    echo "The number is greater than 15."
+else
+    echo "The number is between 5 and 15."
+fi
+# if [[ "$var" != "xxx" ]]	# 使用双引号，否则如果 $var 为null的话，判断条件变为 [ != "xxx" ]
+
+# case 语句
+fruit="apple"
+case $fruit in
+    "apple")
+        echo "It's an apple."
+        ;;
+    "banana")
+        echo "It's a banana."
+        ;;
+    *)
+        echo "It's something else."
+        ;;
+esac
+
+## type 用来 判断命令类型， 查看命令来源，检查命令可用性(type -P command_name)
+morrism@PC24036:~$ type ls
+ls is aliased to `ls --color=auto'
+
+morrism@PC24036:~$ type -t ls
+alias
+
+morrism@PC24036:~$ type -p python3
+/usr/bin/python3
+
+morrism@PC24036:~$ type -a ls
+ls is aliased to `ls --color=auto'
+ls is /usr/bin/ls
+ls is /bin/ls
+```
+## 函数返回值
+```bash
+#1 使用return语句返回退出状态码0-255(0表示成功， 1表示失败)
+my_function() {
+    if [ "$1" -gt 0 ]; then
+        return 0  # 成功
+    else
+        return 1  # 失败
+    fi
+}
+
+# usage 1
+my_function 5
+echo $?
+
+# usage 2
+if my_function 5; then
+	echo "True"
+else
+	echo "False"
+fi
+
+#2 通过 echo 输出返回值 (最常用)
+my_function() {
+    echo "Hello, $1"
+}
+
+result=$(my_function "World")
+echo "$result"  # 输出：Hello, World
+
+#3 通过全局变量返回
+my_function() {
+    result="Hello, $1"
+}
+
+my_function "World"
+echo "$result"  # 输出：Hello, World
+```
+
+[Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)  
+[How to Declare and Access Associative Array in Bash](https://phoenixnap.com/kb/bash-associative-array)  
+[Bash Scripting – Associative Array Explained With Examples](https://ostechnix.com/bash-associative-array/)  
+[Take control of your data with associative arrays in Bash](https://opensource.com/article/20/6/associative-arrays-bash)  
+[Bash shift builtin command](https://www.computerhope.com/unix/bash/shift.htm)  
+[A Complete Guide On How To Use Bash Arrays](https://www.shell-tips.com/bash/arrays/#gsc.tab=0)  
+[**How to Use Command Line Arguments in a Bash Script**](https://www.baeldung.com/linux/use-command-line-arguments-in-bash-script)  
+[pure bash bible](https://github.com/dylanaraps/pure-bash-bible?tab=readme-ov-file)  
+[Bash getopts builtin command](https://www.computerhope.com/unix/bash/getopts.htm)  
+[Parsing bash script options with getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/)  
+[Parse Command Line Arguments in Bash](https://www.baeldung.com/linux/bash-parse-command-line-arguments)  
+[Double Quotes](https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html)  
+[Single Quotes](https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html)  
+[bash(1)](https://manpages.org/bash)  
+[前后台进程、孤儿进程和 daemon 类进程的父子关系](https://www.cnblogs.com/f-ck-need-u/p/17718649.html)  
+[GNU Bash Reference Manual](https://www.linuxtopia.org/online_books/bash_reference_guide/index.html)  
+[Advanced Bash-Scripting Guide](https://www.linuxtopia.org/online_books/advanced_bash_scripting_guide/index.html) #online  
+[Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html#)  
+[The set Command in Linux](https://www.baeldung.com/linux/set-command)  
+[Pattern Matching](https://www.gnu.org/software/bash/manual/bash.html#Pattern-Matching)  
+[Pattern Matching In Bash](https://www.linuxjournal.com/content/pattern-matching-bash)  
+[Special Parameters](https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters)  
 [阮一峰 Bash 脚本教程](https://www.bookstack.cn/books/bash-tutorial)  
 [Unix Shell I/O重定向](https://m24y.com/index.php/2022/04/03/unix-shell-i-o%e9%87%8d%e5%ae%9a%e5%90%91/)  
 [Unix Shell I/O重定向](http://teaching.idallen.com/cst8207/12w/notes/270_redirection.txt)  
