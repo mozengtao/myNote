@@ -1,6 +1,11 @@
 ## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
 
+## Python Projects
+[python beginner projects](https://github.com/Mrinank-Bhowmick/python-beginner-projects/tree/main)  
+[Python Projects You Can Build](https://realpython.com/tutorials/projects/)  
+[python mini projects](https://github.com/Python-World/python-mini-projects/tree/master)  
+
 ## string 方法
 [String Methods](https://docs.python.org/3/library/stdtypes.html#string-methods)  
 
@@ -25,6 +30,7 @@
 ## Python for Network Automation
 [Python for Network Automation](https://python-automation-book.readthedocs.io/en/stable/index.html)  
 
+## modules
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
 
