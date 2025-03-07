@@ -29,7 +29,7 @@
 ## iterator
 [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)  
 [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)  
-
+[Python for Loops: The Pythonic Way](https://realpython.com/python-for-loop/)  
 
 ## exceptions
 [Python Exceptions: An Introduction](https://realpython.com/python-exceptions/)  
@@ -72,6 +72,66 @@
 [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
 [argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
 
+## configparser
+[INI文件格式简介](https://programming-note-sylarliu.readthedocs.io/zh-cn/latest/data_format/INI/ini_brief.html)  
+[Python ConfigParser: A Comprehensive Guide](https://medium.com/nerd-for-tech/python-configparser-a-comprehensive-guide-%EF%B8%8F-36331be5244f)  
+[Configuring Like a Pro! A Comprehensive Guide to Python’s configparser](https://towardsdev.com/configuring-like-a-pro-a-comprehensive-guide-to-pythons-configparser-26c49b898629)  
+```python
+# hostConfig.ini:
+; section 1
+[SFTP_SERVER1]
+; name = value
+host = 10.120.98.12
+port = 22
+username = tester
+password = password
+
+; section 2
+[SFTP_SERVER2]
+host = 10.120.98.12
+port = 23
+username = tester
+password = password
+
+# hostParser.py
+import configparser
+
+class HostConfig:
+    def __init__(self, configFile):
+        self.configFile= configFile
+        self.config= configparser.ConfigParser()
+        
+    def readConfig(self):
+        # Reading the config file
+        self.config.read(self.configFile)
+    
+    def getServers(self):
+        # Returning all the sections defined in the config file
+        return self.config.sections()
+    
+    def getData(self, host, key):
+        # Getting the values from the particular section (host) 
+        # by using the key       
+        return self.config[host][key]
+    
+    def getHostDetails(self, host):
+        # Getting all the values defined under the given section (host).
+        # Assuming the keys are known and fixed.
+        hostdata= self.config[host]
+        return hostdata['host'],hostdata['port'],hostdata['username'],hostdata['password']
+
+hostConfig= HostConfig('tempConfig.ini')  # creating object of HostConfig
+hostConfig.readConfig()                   # Reading config file 
+
+Servers= hostConfig.getServers()       # Getting the list of sections (servers)
+print("Servers: ",Servers)
+
+print("Server 0 data: \n",hostConfig.getHostDetails(Servers[0]))  # Getting items for Section No 0
+
+print("Server1: Host ",hostConfig.getData(Servers[1], 'host'))  # Getting item for Section No 1
+print("Server1: Port ",hostConfig.getData(Servers[1], 'port'))  # Getting item for Section No 1
+```
+
 ## python 2 c converter
 [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
 
@@ -86,6 +146,7 @@
 [Python for Network Automation](https://python-automation-book.readthedocs.io/en/stable/index.html)  
 
 ## modules
+[Python Module of the Week](https://pymotw.com/2/contents.html)  
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
 
