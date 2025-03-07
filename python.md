@@ -1,7 +1,27 @@
 ## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
 
+## 最佳实践
+[Defining Main Functions in Python](https://realpython.com/python-main-function/)  
+[Python Modules and Packages – An Introduction](https://realpython.com/python-modules-packages/)  
+[Python import: Advanced Techniques and Tips](https://realpython.com/python-import/)  
+[Absolute vs Relative Imports in Python](https://realpython.com/absolute-vs-relative-python-imports/)  
+[What's a Python Namespace Package, and What's It For?](https://realpython.com/python-namespace-package/)  
+[Using PyInstaller to Easily Distribute Python Applications](https://realpython.com/pyinstaller-python/)  
+
+## 数据库
+[Introduction to Python SQL Libraries](https://realpython.com/python-sql-libraries/)  
+
+## GUI
+[Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)  
+[Python GUI Programming With Tkinter](https://realpython.com/python-gui-tkinter/)  
+
+## DSA
+[Learn Python Programming](https://www.programiz.com/python-programming)  
+[Getting Started with DSA](https://www.programiz.com/dsa/getting-started)  
+
 ## 面向对象
+[self in Python, Demystified](https://www.programiz.com/article/python-self-why)  
 [Namespaces and Scope in Python](https://realpython.com/python-namespaces-scope/)  
 [Object-Oriented Programming (OOP) in Python 3](https://realpython.com/python3-object-oriented-programming/)  
 [Python Classes: The Power of Object-Oriented Programming](https://realpython.com/python-classes/)  
@@ -15,12 +35,246 @@
 [Python Projects You Can Build](https://realpython.com/tutorials/projects/)  
 [python mini projects](https://github.com/Python-World/python-mini-projects/tree/master)  
 
+## 文件操作
+[Working With Files in Python](https://realpython.com/working-with-files-in-python/)  
+[Reading and Writing Files in Python (Guide)](https://realpython.com/read-write-files-python/)  
+[Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)  
+[Working With JSON Data in Python](https://realpython.com/python-json/)  
+
+
+## 远程登录
+```python
+import paramiko
+import time
+import re
+from datetime import datetime
+from typing import List, Tuple, Dict, Optional
+
+EVC_NAME = "evc-cooker-zhisheng"
+VMC_NAME = "vmc-1-cooker"
+CM_MAC = "74:9b:e8:5c:bb:50"
+
+class SSHSession:
+    """
+    SSH 会话管理类，用于封装 SSH 连接和命令执行
+    """
+    
+    def __init__(self, hostname: str, username: str, password: str = None, 
+                 port: int = 22, key_file: str = None, timeout: float = 10):
+        """
+        初始化 SSH 会话
+        
+        Args:
+            hostname: 目标主机名或 IP
+            username: 用户名
+            password: 密码（可选，如果使用密钥则不需要）
+            port: SSH 端口，默认 22
+            key_file: 私钥文件路径（可选）
+            timeout: 连接超时时间
+        """
+        self.hostname = hostname
+        self.username = username
+        self.password = password
+        self.port = port
+        self.key_file = key_file
+        self.timeout = timeout
+        
+        self.client = paramiko.SSHClient()
+        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.channel = None
+        self.is_connected = False
+
+    def connect(self) -> None:
+        """建立 SSH 连接并创建交互式 shell"""
+        try:
+            if self.key_file:
+                private_key = paramiko.RSAKey.from_private_key_file(self.key_file)
+                self.client.connect(
+                    hostname=self.hostname,
+                    port=self.port,
+                    username=self.username,
+                    pkey=private_key,
+                    timeout=self.timeout
+                )
+            else:
+                self.client.connect(
+                    hostname=self.hostname,
+                    port=self.port,
+                    username=self.username,
+                    password=self.password,
+                    timeout=self.timeout
+                )
+            
+            self.channel = self.client.invoke_shell()
+            self.is_connected = True
+            time.sleep(1)  # 等待 shell 初始化
+            print(f"Connected to {self.hostname}")
+            
+        except paramiko.AuthenticationException as e:
+            raise Exception(f"Authentication failed: {e}")
+        except paramiko.SSHException as e:
+            raise Exception(f"SSH connection failed: {e}")
+
+    def disconnect(self) -> None:
+        """关闭 SSH 连接"""
+        if self.is_connected:
+            self.client.close()
+            self.is_connected = False
+            self.channel = None
+            print("SSH connection closed")
+
+    def execute_command(self, command: str, wait_time: float = 2) -> str:
+        """
+        在当前会话中执行单条命令并返回输出
+        
+        Args:
+            command: 要执行的命令
+            wait_time: 等待输出时间
+        Returns:
+            命令执行的输出
+        """
+        if not self.is_connected or not self.channel:
+            raise RuntimeError("No active SSH session. Please connect first.")
+        
+        self.channel.send(f"{command}\n")
+        time.sleep(wait_time)
+        output = self._get_output()
+        print(f"Command '{command}' executed")
+        return output
+
+    def execute_commands(self, commands: List[Tuple[str, float]]) -> Dict[str, str]:
+        """
+        在当前会话中执行多条命令并返回所有输出
+        
+        Args:
+            commands: 包含 (命令, 等待时间) 的列表
+        Returns:
+            命令及其输出的字典
+        """
+        if not self.is_connected or not self.channel:
+            raise RuntimeError("No active SSH session. Please connect first.")
+        
+        results = {}
+        for command, wait_time in commands:
+            results[command] = self.execute_command(command, wait_time)
+        return results
+
+    def _get_output(self) -> str:
+        """从通道读取输出"""
+        output = ""
+        while self.channel.recv_ready():
+            output += self.channel.recv(1024).decode("utf-8")
+            time.sleep(0.5)
+        return output.strip()
+
+    def __enter__(self):
+        """支持上下文管理器"""
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """退出时自动关闭连接"""
+        self.disconnect()
+
+
+class CommandProcessor:
+    """命令处理类"""
+    def __init__(self, session: SSHSession):
+        self.session = session
+
+    def setup_session(self) -> None:
+        """执行初始设置命令"""
+        setup_commands = [
+            (f"nomad alloc exec -task evc -job {EVC_NAME} sh", 1),
+            ("ncs_cli -u admin", 1)
+        ]
+        self.session.execute_commands(setup_commands)
+
+    def get_modem_info(self) -> str:
+        """获取modem信息"""
+        cmd = "show cable modem brief | tab | nomore"
+        return self.session.execute_command(cmd, 2)
+
+    def get_field_after_operational(self, text: str) -> str:
+        # 匹配 operational 后跟一个或多个空格，然后捕获下一个非空字段
+        pattern = r'operational[^\s]*\s+(\S+)'
+        match = re.search(pattern, text)
+        if match:
+            return match.group(1)
+        return "nomatch"
+
+    def set_channel_state(self, channel: str, state: str) -> None:
+        """设置通道状态"""
+        cmd = f"vmc {VMC_NAME} mac-domain 0 ds ds-channels {channel} admin-state {state}"
+        commands = [
+            ("config", 1),
+            (cmd, 1),
+            ("commit", 2),
+            ("top", 1),
+            ("exit", 1)
+        ]
+        self.session.execute_commands(commands)
+
+if __name__ == "__main__":
+    # Configuration
+    HOST = "10.254.25.106"
+    USERNAME = "root"
+    PASSWORD = "Gainsp33"
+    
+    with SSHSession(HOST, USERNAME, PASSWORD) as session:
+        cmd_processor = CommandProcessor(session)
+        cmd_processor.setup_session()
+        
+        pre_primary = ""
+        ds_primary = ""
+        for i in range(5):
+            output = cmd_processor.get_modem_info()
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"{current_time}: {output}")
+            
+            lines = output.split("\n")
+            for line in lines:
+                # match exact mac address and operational status
+                if CM_MAC in line and "operational" in line:
+                    ds_primary = cmd_processor.get_field_after_operational(line)
+                    if ds_primary == "nomatch":
+                        print("get ds primary channel failed")
+                        break
+                    
+                    # modem is still online with the same ds_primary after ds primary channel dowm
+                    if pre_primary and pre_primary == ds_primary:
+                        print(f"pre_primary and ds_primary are the same: {ds_primary}, wait for 60 seconds")
+                        time.sleep(60)
+                        break
+                    
+                    # up the pre_primary
+                    if pre_primary and pre_primary != ds_primary:
+                        cmd_processor.set_channel_state(pre_primary, "up")
+                    
+                    # down the current ds_primary
+                    print(f"ds_primary: {ds_primary}")
+                    cmd_processor.set_channel_state(ds_primary, "down")
+                    
+                    # update pre_primary
+                    print(f"update pre_primary to {ds_primary}")
+                    pre_primary = ds_primary
+                    break
+            
+            time.sleep(10)
+        
+        if pre_primary:
+            cmd_processor.set_channel_state(pre_primary, "up")
+```
+
 ## logging
 [Logging in Python](https://realpython.com/python-logging/)  
 [Python Logging: A Stroll Through the Source Code](https://realpython.com/python-logging-source-code/)  
 
-## socket
+## 网络
+[Python's Requests Library (Guide)](https://realpython.com/python-requests/)  
 [Socket Programming in Python](https://realpython.com/python-sockets/)  
+[Python and REST APIs: Interacting With Web Services](https://realpython.com/api-integration-in-python/)  
+
 
 ## decorator
 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)  
