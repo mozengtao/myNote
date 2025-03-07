@@ -15,8 +15,54 @@
 [Python Projects You Can Build](https://realpython.com/tutorials/projects/)  
 [python mini projects](https://github.com/Python-World/python-mini-projects/tree/master)  
 
+## logging
+[Logging in Python](https://realpython.com/python-logging/)  
+[Python Logging: A Stroll Through the Source Code](https://realpython.com/python-logging-source-code/)  
+
+## socket
+[Socket Programming in Python](https://realpython.com/python-sockets/)  
+
+## decorator
+[Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)  
+[Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)  
+
+## iterator
+[Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)  
+[How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)  
+
+
+## exceptions
+[Python Exceptions: An Introduction](https://realpython.com/python-exceptions/)  
+[Python's Built-in Exceptions: A Walkthrough With Examples](https://realpython.com/python-built-in-exceptions/)  
+[Python's raise: Effectively Raising Exceptions in Your Code](https://realpython.com/python-raise-exception/)  
+
 ## string 方法
+[Strings and Character Data in Python](https://realpython.com/python-strings/)  
 [String Methods](https://docs.python.org/3/library/stdtypes.html#string-methods)  
+
+## list, tuple, dict
+[Basic Data Types in Python: A Quick Exploration](https://realpython.com/python-data-types/)  
+[Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)  
+[Python's tuple Data Type: A Deep Dive With Examples](https://realpython.com/python-tuple/)  
+[Lists vs Tuples in Python](https://realpython.com/python-lists-tuples/)  
+[Dictionaries in Python](https://realpython.com/python-dicts/)  
+[Sets in Python](https://realpython.com/python-sets/)  
+[Python Constants: Improve Your Code's Maintainability](https://realpython.com/python-constants/)  
+
+## pathlib
+[Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
+
+## Threading
+[An Intro to Threading in Python](https://realpython.com/intro-to-python-threading/)  
+[Python Thread Safety: Using a Lock and Other Techniques](https://realpython.com/python-thread-lock/)  
+
+## Async IO
+[Speed Up Your Python Program With Concurrency](https://realpython.com/python-concurrency/)  
+[Getting Started With Async Features in Python](https://realpython.com/python-async-features/)  
+[Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)  
+
+## function
+[Defining Your Own Python Function](https://realpython.com/defining-your-own-python-function/)  
 
 ## F-string
 [Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)  
@@ -42,6 +88,7 @@
 ## modules
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
+
 
 ```python
 def greeting(name: str) -> str:
