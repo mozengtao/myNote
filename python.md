@@ -1,6 +1,15 @@
 ## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
 
+## 面向对象
+[Namespaces and Scope in Python](https://realpython.com/python-namespaces-scope/)  
+[Object-Oriented Programming (OOP) in Python 3](https://realpython.com/python3-object-oriented-programming/)  
+[Python Classes: The Power of Object-Oriented Programming](https://realpython.com/python-classes/)  
+
+## 正则匹配
+[Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
+[Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  
+
 ## Python Projects
 [python beginner projects](https://github.com/Mrinank-Bhowmick/python-beginner-projects/tree/main)  
 [Python Projects You Can Build](https://realpython.com/tutorials/projects/)  
@@ -1004,7 +1013,6 @@ def broadcast_message(
 	- [Python for network engineers](https://pyneng.readthedocs.io/en/latest/index.html)
 	- [Python Tricks: The Book](http://www.kalfaoglu.com/ceng113/Python-Programming/pythontricks.pdf)
 	- [Programming in Python 3](https://cs.smu.ca/~porter/csc/227/ProgrammingInPython3.pdf)
-	- [Object-Oriented Programming (OOP) in Python 3](https://realpython.com/python3-object-oriented-programming/)
 	- [Elements of Programming Interviews in Python](https://elementsofprogramminginterviews.com/sample/epilight_python_new.pdf)
 	- [Elements of Programming Interviews in Python](https://github.com/qqqil/ebooks/blob/master/algorithms/Elements%20of%20Programming%20Interviews.pdf)
 	- [PYTHON CRASH COURSE](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/No.Starch.Python.Oct_.2015.ISBN_.1593276036.pdf)
