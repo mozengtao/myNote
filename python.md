@@ -69,6 +69,7 @@
 [Python f-string: A Complete Guide](https://www.datacamp.com/tutorial/python-f-string)  
 
 ## argparse
+[configparser module](https://docs.python.org/3/library/configparser.html)  
 [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
 [argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
 

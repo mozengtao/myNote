@@ -1,7 +1,12 @@
 [C Online Compiler](https://www.programiz.com/c-programming/online-compiler/)  
 [va_list in C: exploring ft_printf](https://medium.com/@turman1701/va-list-in-c-exploring-ft-printf-bb2a19fcd128)  
 
-- [[常用函数]]
+## libraries
+### ini parser
+[iniparser](https://github.com/ndevilla/iniparser/tree/main)  
+[inih](https://github.com/benhoyt/inih)  
+
+## 常用函数
 	- ioctl, fcntl
 	- mmap, munmap
 	- fopen, fread, fwrite, fclose, ferror
