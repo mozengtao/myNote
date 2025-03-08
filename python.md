@@ -2,17 +2,66 @@
 [Python Playground](https://programiz.pro/ide/python)  
 
 ## 最佳实践
+[Structural Pattern Matching in Python](https://realpython.com/structural-pattern-matching/)  
+[Operators and Expressions in Python](https://realpython.com/python-operators-expressions/)  
+[Variables in Python: Usage and Best Practices](https://realpython.com/python-variables/)  
+[Python's Built-in Functions: A Complete Exploration](https://realpython.com/python-built-in-functions/)  
+[How to Flatten a List of Lists in Python](https://realpython.com/python-flatten-list/)  
+[Getters and Setters: Manage Attributes in Python](https://realpython.com/python-getter-setter/)  
 [Defining Main Functions in Python](https://realpython.com/python-main-function/)  
 [Python Modules and Packages – An Introduction](https://realpython.com/python-modules-packages/)  
 [Python import: Advanced Techniques and Tips](https://realpython.com/python-import/)  
 [Absolute vs Relative Imports in Python](https://realpython.com/absolute-vs-relative-python-imports/)  
 [What's a Python Namespace Package, and What's It For?](https://realpython.com/python-namespace-package/)  
 [Using PyInstaller to Easily Distribute Python Applications](https://realpython.com/pyinstaller-python/)  
+[Python Keywords: An Introduction](https://realpython.com/python-keywords/)  
+[Python Protocols: Leveraging Structural Subtyping](https://realpython.com/python-protocol/)  
+[Pydantic: Simplifying Data Validation in Python](https://realpython.com/python-pydantic/)  
+[Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  
+[Build a Hash Table in Python With TDD](https://realpython.com/python-hash-table/)  
+[How to Use Python Lambda Functions](https://realpython.com/python-lambda/)  
+[Python's map(): Processing Iterables Without a Loop](https://realpython.com/python-map-function/)  
+[Python's reduce(): From Functional to Pythonic Style](https://realpython.com/python-reduce-function/)  
+[Sorting Algorithms in Python](https://realpython.com/sorting-algorithms-python/)  
+[Python Stacks, Queues, and Priority Queues in Practice](https://realpython.com/queue-in-python/)  
+[Linked Lists in Python: An Introduction](https://realpython.com/linked-lists-python/)  
+[Duck Typing in Python: Writing Flexible and Decoupled Code](https://realpython.com/duck-typing-python/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+## unittest
+[Python's unittest: Writing Unit Tests for Your Code](https://realpython.com/python-unittest/)  
+[Getting Started With Testing in Python](https://realpython.com/python-testing/)  
+[Effective Python Testing With pytest](https://realpython.com/pytest-python-testing/)  
+[Write Unit Tests for Your Python Code With ChatGPT](https://realpython.com/chatgpt-unit-tests-python/)  
 
 ## 数据库
+[Handling SQL Databases With PyQt: The Basics](https://realpython.com/python-pyqt-database/)  
+[Data Management With Python, SQLite, and SQLAlchemy](https://realpython.com/python-sqlite-sqlalchemy/)  
 [Introduction to Python SQL Libraries](https://realpython.com/python-sql-libraries/)  
 
+## 图像处理
+Image Processing With the Python Pillow Library](https://realpython.com/image-processing-with-the-python-pillow-library/)  
+
 ## GUI
+[PythonGUIs](https://www.pythonguis.com/pyqt6-tutorial/)  
 [Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)  
 [Python GUI Programming With Tkinter](https://realpython.com/python-gui-tkinter/)  
 
@@ -25,6 +74,7 @@
 [Namespaces and Scope in Python](https://realpython.com/python-namespaces-scope/)  
 [Object-Oriented Programming (OOP) in Python 3](https://realpython.com/python3-object-oriented-programming/)  
 [Python Classes: The Power of Object-Oriented Programming](https://realpython.com/python-classes/)  
+[Python's Magic Methods: Leverage Their Power in Your Classes](https://realpython.com/python-magic-methods/)  
 
 ## 正则匹配
 [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
@@ -290,9 +340,17 @@ if __name__ == "__main__":
 [Python's Built-in Exceptions: A Walkthrough With Examples](https://realpython.com/python-built-in-exceptions/)  
 [Python's raise: Effectively Raising Exceptions in Your Code](https://realpython.com/python-raise-exception/)  
 
-## string 方法
+## string 操作
+[String Interpolation in Python: Exploring Available Tools](https://realpython.com/python-string-interpolation/)  
 [Strings and Character Data in Python](https://realpython.com/python-strings/)  
 [String Methods](https://docs.python.org/3/library/stdtypes.html#string-methods)  
+[A Guide to Modern Python String Formatting Tools](https://realpython.com/python-formatted-output/)  
+[Python String Formatting: Available Tools and Their Features](https://realpython.com/python-string-formatting/)  
+[Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)  
+[Python f-string: A Complete Guide](https://www.datacamp.com/tutorial/python-f-string)  
+[How to Replace a String in Python](https://realpython.com/replace-string-python/)  
+[How to Join Strings in Python](https://realpython.com/python-join-string/)  
+[How to Split a String in Python](https://realpython.com/python-split-string/)  
 
 ## list, tuple, dict
 [Basic Data Types in Python: A Quick Exploration](https://realpython.com/python-data-types/)  
@@ -302,6 +360,10 @@ if __name__ == "__main__":
 [Dictionaries in Python](https://realpython.com/python-dicts/)  
 [Sets in Python](https://realpython.com/python-sets/)  
 [Python Constants: Improve Your Code's Maintainability](https://realpython.com/python-constants/)  
+[How to Remove Items From Lists in Python](https://realpython.com/remove-item-from-list-python/)  
+[]()  
+[]()  
+[]()  
 
 ## pathlib
 [Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
@@ -317,10 +379,6 @@ if __name__ == "__main__":
 
 ## function
 [Defining Your Own Python Function](https://realpython.com/defining-your-own-python-function/)  
-
-## F-string
-[Python's F-String for String Interpolation and Formatting](https://realpython.com/python-f-strings/)  
-[Python f-string: A Complete Guide](https://www.datacamp.com/tutorial/python-f-string)  
 
 ## argparse
 [configparser module](https://docs.python.org/3/library/configparser.html)  
