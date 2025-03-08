@@ -1,7 +1,27 @@
+## Real Python Tutorials
+[All Python Tutorial Topics](https://realpython.com/tutorials/all/)  
+
+
 ## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
 
+
+## 设计模式
+[The Factory Method Pattern and Its Implementation in Python](https://realpython.com/factory-method-python/)  
+[Implementing an Interface in Python](https://realpython.com/python-interface/)  
+[Inheritance and Composition: A Python OOP Guide](https://realpython.com/inheritance-composition-python/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 ## 最佳实践
+[Your Guide to the Python print() Function](https://realpython.com/python-print/)  
+[The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
+[Python args and kwargs: Demystified](https://realpython.com/python-kwargs-and-args/)  
 [Structural Pattern Matching in Python](https://realpython.com/structural-pattern-matching/)  
 [Operators and Expressions in Python](https://realpython.com/python-operators-expressions/)  
 [Variables in Python: Usage and Best Practices](https://realpython.com/python-variables/)  
@@ -26,10 +46,12 @@
 [Python Stacks, Queues, and Priority Queues in Practice](https://realpython.com/queue-in-python/)  
 [Linked Lists in Python: An Introduction](https://realpython.com/linked-lists-python/)  
 [Duck Typing in Python: Writing Flexible and Decoupled Code](https://realpython.com/duck-typing-python/)  
-[]()  
-[]()  
-[]()  
-[]()  
+[When Should You Use .__repr__() vs .__str__() in Python?](https://realpython.com/python-repr-vs-str/)  
+[Python Class Constructors: Control Your Object Instantiation](https://realpython.com/python-class-constructor/)  
+[Build Enumerations of Constants With Python's Enum](https://realpython.com/python-enum/)  
+[Python mmap: Improved File I/O With Memory Mapping](https://realpython.com/python-mmap/)  
+[Python eval(): Evaluate Expressions Dynamically](https://realpython.com/python-eval-function/)  
+[Python's exec(): Execute Dynamically Generated Code](https://realpython.com/python-exec/)  
 []()  
 []()  
 []()  
@@ -61,20 +83,30 @@
 Image Processing With the Python Pillow Library](https://realpython.com/image-processing-with-the-python-pillow-library/)  
 
 ## GUI
+[Build a Contact Book With Python, PyQt, and SQLite](https://realpython.com/python-contact-book/)  
 [PythonGUIs](https://www.pythonguis.com/pyqt6-tutorial/)  
 [Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)  
 [Python GUI Programming With Tkinter](https://realpython.com/python-gui-tkinter/)  
+[Handling SQL Databases With PyQt: The Basics](https://realpython.com/python-pyqt-database/)  
+[Python and PyQt: Creating Menus, Toolbars, and Status Bars](https://realpython.com/python-menus-toolbars/)  
+[PyQt Layouts: Create Professional-Looking GUI Applications](https://realpython.com/python-pyqt-layout/)  
+[Qt Designer and Python: Build Your GUI Applications Faster](https://realpython.com/qt-designer-python/)  
+[]()  
+[]()  
+[]()  
 
 ## DSA
 [Learn Python Programming](https://www.programiz.com/python-programming)  
 [Getting Started with DSA](https://www.programiz.com/dsa/getting-started)  
 
 ## 面向对象
+[Python's property(): Add Managed Attributes to Your Classes](https://realpython.com/python-property/)  
 [self in Python, Demystified](https://www.programiz.com/article/python-self-why)  
 [Namespaces and Scope in Python](https://realpython.com/python-namespaces-scope/)  
 [Object-Oriented Programming (OOP) in Python 3](https://realpython.com/python3-object-oriented-programming/)  
 [Python Classes: The Power of Object-Oriented Programming](https://realpython.com/python-classes/)  
 [Python's Magic Methods: Leverage Their Power in Your Classes](https://realpython.com/python-magic-methods/)  
+[Supercharge Your Classes With Python super()](https://realpython.com/python-super/)  
 
 ## 正则匹配
 [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
@@ -326,16 +358,47 @@ if __name__ == "__main__":
 [Python and REST APIs: Interacting With Web Services](https://realpython.com/api-integration-in-python/)  
 
 
-## decorator
+## 装饰器
+[Python Descriptors: An Introduction](https://realpython.com/python-descriptors/)  
 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)  
 [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)  
+```python
+class SimpleClass:
+    def __init__(self):
+        print("__init__")
 
-## iterator
+    def simple_method(self):
+        print("simple_method")
+
+    def _finalize(self):
+        print("_finalize")
+    
+    def __enter__(self):
+        print("__enter__")
+        return self
+    
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        print("__exit__")
+        self._finalize()
+
+
+with SimpleClass() as sc:
+    sc.simple_method()
+
+Output:
+__init__
+__enter__
+simple_method
+__exit__
+_finalize
+```
+
+## 迭代器
 [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)  
 [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)  
 [Python for Loops: The Pythonic Way](https://realpython.com/python-for-loop/)  
 
-## exceptions
+## 异常处理
 [Python Exceptions: An Introduction](https://realpython.com/python-exceptions/)  
 [Python's Built-in Exceptions: A Walkthrough With Examples](https://realpython.com/python-built-in-exceptions/)  
 [Python's raise: Effectively Raising Exceptions in Your Code](https://realpython.com/python-raise-exception/)  
@@ -352,7 +415,7 @@ if __name__ == "__main__":
 [How to Join Strings in Python](https://realpython.com/python-join-string/)  
 [How to Split a String in Python](https://realpython.com/python-split-string/)  
 
-## list, tuple, dict
+## 列表，元组和字典
 [Basic Data Types in Python: A Quick Exploration](https://realpython.com/python-data-types/)  
 [Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)  
 [Python's tuple Data Type: A Deep Dive With Examples](https://realpython.com/python-tuple/)  
@@ -368,11 +431,11 @@ if __name__ == "__main__":
 ## pathlib
 [Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
 
-## Threading
+## 多线程
 [An Intro to Threading in Python](https://realpython.com/intro-to-python-threading/)  
 [Python Thread Safety: Using a Lock and Other Techniques](https://realpython.com/python-thread-lock/)  
 
-## Async IO
+## 异步 IO
 [Speed Up Your Python Program With Concurrency](https://realpython.com/python-concurrency/)  
 [Getting Started With Async Features in Python](https://realpython.com/python-async-features/)  
 [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)  
@@ -380,12 +443,12 @@ if __name__ == "__main__":
 ## function
 [Defining Your Own Python Function](https://realpython.com/defining-your-own-python-function/)  
 
-## argparse
+## argparse 模块
 [configparser module](https://docs.python.org/3/library/configparser.html)  
 [Build Command-Line Interfaces With Python's argparse](https://realpython.com/command-line-interfaces-python-argparse/)  
 [argparse](https://docs.python.org/3/library/argparse.html#module-argparse)  
 
-## configparser
+## configparser 模块
 [INI文件格式简介](https://programming-note-sylarliu.readthedocs.io/zh-cn/latest/data_format/INI/ini_brief.html)  
 [Python ConfigParser: A Comprehensive Guide](https://medium.com/nerd-for-tech/python-configparser-a-comprehensive-guide-%EF%B8%8F-36331be5244f)  
 [Configuring Like a Pro! A Comprehensive Guide to Python’s configparser](https://towardsdev.com/configuring-like-a-pro-a-comprehensive-guide-to-pythons-configparser-26c49b898629)  
@@ -449,7 +512,6 @@ print("Server1: Port ",hostConfig.getData(Servers[1], 'port'))  # Getting item f
 [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
 
 
-[The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
 
 ## 类型提示
 [typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
@@ -462,6 +524,9 @@ print("Server1: Port ",hostConfig.getData(Servers[1], 'port'))  # Getting item f
 [Python Module of the Week](https://pymotw.com/2/contents.html)  
 [Python Module Index](https://docs.python.org/3/py-modindex.html)  
 [NCS Python API](https://developer.cisco.com/docs/nso/api/ncs/#package-ncs)  
+
+## subprocess 模块
+[The subprocess Module: Wrapping Programs With Python](https://realpython.com/python-subprocess/)  
 
 
 ```python
@@ -485,7 +550,6 @@ def broadcast_message(
 		servers: Sequence[tuple[tuple[str, int], dict[str, str]]]) -> None:
 ```
 - [Python Tips](https://book.pythontips.com/en/latest/index.html#) #online
-- [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)
 - [Python: Context Manager to Simplify Resource Handling](https://pravash-techie.medium.com/python-context-manager-to-simplify-resource-handling-5959a36a0f58)
 - [contextlib   — Utilities for   with -statement contexts](https://docs.python.org/3/library/contextlib.html)
 - 常用环境变量
@@ -1405,71 +1469,48 @@ def broadcast_message(
 	2.提高代码的优雅度；
 	3.提高代码的可读性；
 	```
-	- [using an assignment expression](https://www.pythonmorsels.com/reading-binary-files-in-python/)
-- 参考文档
-	- [www.python.org](https://www.python.org/)
-	- [Python 标准库](https://docs.python.org/zh-cn/3/library/)
-	- [**The Python Standard Library**](https://docs.python.org/3/library/)
-	- [**Python黑魔法手册**](https://magic.iswbm.com/index.html)
-	- [**Python 3 Trinkets(python3 online)**](https://trinket.io/features/python3)
-	- [online python](https://www.online-python.com/)
-	- [Online Compiler](https://www.programiz.com/python-programming/online-compiler/)
-	- [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online
-	- [Python args and kwargs: Demystified](https://realpython.com/python-kwargs-and-args/)
-	- [How to Use the Unpacking Operators (*, **) in Python?](https://geekflare.com/python-unpacking-operators/)
-	- [Python Code Examples](https://www.programcreek.com/python/)
-	- [**20-python-libraries-you-arent-using-but-should.pdf**](https://github.com/ffisk/books/blob/master/20-python-libraries-you-arent-using-but-should.pdf)
-	- [Python 3 Cheat Sheet](https://perso.limsi.fr/pointal/_media/python:cours:mementopython3-english.pdf)
-	- [pythoncheatsheet](https://www.pythoncheatsheet.org/) #online
-	- [The Hitchhiker’s Guide to Python!](https://docs.python-guide.org/)
-	- [Python 101](https://www.python101.pythonlibrary.org/index.html#) #online
-	- [python101code](https://github.com/driscollis/python101code) #github
-	- [python201bookcode](https://github.com/driscollis/python201bookcode) #github
-	- [wxpythoncookbookcode](https://github.com/driscollis/wxpythoncookbookcode) #github
-	- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/)
-	- [阿尔法的Python笔记](https://segmentfault.com/blog/alpha94511)
-	- [realpython](https://realpython.com/tutorials/all/)
-	- [python3 cookbook](https://python3-cookbook.readthedocs.io/zh_CN/latest/index.html)
-	- [Python Documentation contents](https://docs.python.org/3/contents.html)
-	- [Python for network engineers](https://pyneng.readthedocs.io/en/latest/index.html)
-	- [Python Tricks: The Book](http://www.kalfaoglu.com/ceng113/Python-Programming/pythontricks.pdf)
-	- [Programming in Python 3](https://cs.smu.ca/~porter/csc/227/ProgrammingInPython3.pdf)
-	- [Elements of Programming Interviews in Python](https://elementsofprogramminginterviews.com/sample/epilight_python_new.pdf)
-	- [Elements of Programming Interviews in Python](https://github.com/qqqil/ebooks/blob/master/algorithms/Elements%20of%20Programming%20Interviews.pdf)
-	- [PYTHON CRASH COURSE](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/No.Starch.Python.Oct_.2015.ISBN_.1593276036.pdf)
-	- [The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online
-	- [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)
-	- [Logging in Python](https://realpython.com/python-logging/)
-	- [Logging HOWTO](https://docs.python.org/3/howto/logging.html)
-	- [The subprocess Module: Wrapping Programs With Python](https://realpython.com/python-subprocess/)
-	- [Awesome_Python_Scripts](https://prathimacode-hub.github.io/Awesome_Python_Scripts/) #github
-	- [Simple Way of Python's subprocess.Popen with a Timeout Option](https://www.gungorbudak.com/blog/2015/08/30/simple-way-of-pythons-subprocesspopen/)
-	- [Python 101: How to timeout a subprocess](https://www.blog.pythonlibrary.org/2016/05/17/python-101-how-to-timeout-a-subprocess/)
-	- [Python 101: How to Timeout a Subprocess](https://dzone.com/articles/python-101-how-to-timeout-a-subprocess)
-	- [Python eval(): Evaluate Expressions Dynamically](https://realpython.com/python-eval-function/)
-	- [Your Guide to the Python print() Function](https://realpython.com/python-print/)
-	- [Python's map(): Processing Iterables Without a Loop](https://realpython.com/python-map-function/)
-	- [Working With JSON Data in Python](https://realpython.com/python-json/)
-	- [How to Use the JSON Module in Python](https://www.freecodecamp.org/news/how-to-use-the-json-module-in-python/)
-- [Python mmap: Improved File I/O With Memory Mapping](https://realpython.com/python-mmap/)
-- [Understanding Python re(gex)?](https://learnbyexample.github.io/py_regular_expressions/cover.html)
-- [python projects](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/Python-Projects.pdf)
-- [The big book of small python projects](https://edu.anarcho-copy.org/Programming%20Languages/Python/BigBookSmallPythonProjects.pdf)
-- [learning Python](https://cfm.ehu.es/ricardo/docs/python/Learning_Python.pdf)
-- [practice_python_projects](https://github.com/learnbyexample/practice_python_projects)
-- [How to use decorators Part 2](https://pythonforthelab.com/blog/how-to-use-decorators-part-2/)
-- [How to Use Decorators to Validate Input](https://pythonforthelab.com/blog/how-to-use-decorators-to-validate-input/)
-- [A Primer on Classes in Python](https://pythonforthelab.com/blog/a-primer-on-classes-in-python/)
-- [Implementing Threads for Measurements](https://pythonforthelab.com/blog/implementing-threads-for-measurements/)
-- [Learning (not) to Handle Exceptions](https://pythonforthelab.com/blog/learning-not-to-handle-exceptions/)
-- [Storing Binary Data and Serializing](https://pythonforthelab.com/blog/storing-binary-data-and-serializing/)
-- [What are Hashable Objects](https://pythonforthelab.com/blog/what-are-hashable-objects/)
-- [The with command and custom classes](https://pythonforthelab.com/blog/the-with-command-and-custom-classes/)
-- [What are args and kwargs and when to use them](https://pythonforthelab.com/blog/what-are-args-and-kwargs-and-when-to-use-them/)
-- [Introduction to Python Lambda Functions](https://pythonforthelab.com/blog/intro-to-python-lambda-functions/)
-- [Python and PyQt: Building a GUI Desktop Calculator](https://realpython.com/python-pyqt-gui-calculator/)
-- [PEP](https://peps.python.org/)
-- [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)
+
+[www.python.org](https://www.python.org/)  
+[Python 标准库](https://docs.python.org/zh-cn/3/library/)  
+[**The Python Standard Library**](https://docs.python.org/3/library/)  
+[**Python黑魔法手册**](https://magic.iswbm.com/index.html)  
+[**Python 3 Trinkets(python3 online)**](https://trinket.io/features/python3)  
+[The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online  
+[How to Use the Unpacking Operators (*, **) in Python?](https://geekflare.com/python-unpacking-operators/)  
+[Python Code Examples](https://www.programcreek.com/python/)  
+[**20-python-libraries-you-arent-using-but-should.pdf**](https://github.com/ffisk/books/blob/master/20-python-libraries-you-arent-using-but-should.pdf)  
+[Python 3 Cheat Sheet](https://perso.limsi.fr/pointal/_media/python:cours:mementopython3-english.pdf)  
+[pythoncheatsheet](https://www.pythoncheatsheet.org/) #online  
+[The Hitchhiker’s Guide to Python!](https://docs.python-guide.org/)  
+[Python 101](https://www.python101.pythonlibrary.org/index.html#) #online  
+[python101code](https://github.com/driscollis/python101code) #github  
+[python201bookcode](https://github.com/driscollis/python201bookcode) #github  
+[wxpythoncookbookcode](https://github.com/driscollis/wxpythoncookbookcode) #github  
+[Automate the Boring Stuff with Python](https://automatetheboringstuff.com/)  
+[阿尔法的Python笔记](https://segmentfault.com/blog/alpha94511)  
+[python3 cookbook](https://python3-cookbook.readthedocs.io/zh_CN/latest/index.html)  
+[Python Documentation contents](https://docs.python.org/3/contents.html)  
+[Python for network engineers](https://pyneng.readthedocs.io/en/latest/index.html)  
+[Python Tricks: The Book](http://www.kalfaoglu.com/ceng113/Python-Programming/pythontricks.pdf)  
+[Programming in Python 3](https://cs.smu.ca/~porter/csc/227/ProgrammingInPython3.pdf)  
+[Elements of Programming Interviews in Python](https://elementsofprogramminginterviews.com/sample/epilight_python_new.pdf)  
+[Elements of Programming Interviews in Python](https://github.com/qqqil/ebooks/blob/master/algorithms/Elements%20of%20Programming%20Interviews.pdf)  
+[PYTHON CRASH COURSE](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/No.Starch.Python.Oct_.2015.ISBN_.1593276036.pdf)  
+[The Big Book of Small Python Projects](https://inventwithpython.com/bigbookpython/) #online  
+[Logging HOWTO](https://docs.python.org/3/howto/logging.html)  
+[Awesome_Python_Scripts](https://prathimacode-hub.github.io/Awesome_Python_Scripts/) #github  
+[Simple Way of Python's subprocess.Popen with a Timeout Option](https://www.gungorbudak.com/blog/2015/08/30/simple-way-of-pythons-subprocesspopen/)  
+[Python 101: How to timeout a subprocess](https://www.blog.pythonlibrary.org/2016/05/17/python-101-how-to-timeout-a-subprocess/)  
+[Python 101: How to Timeout a Subprocess](https://dzone.com/articles/python-101-how-to-timeout-a-subprocess)  
+[Understanding Python re(gex)?](https://learnbyexample.github.io/py_regular_expressions/cover.html)  
+[python projects](https://bedford-computing.co.uk/learning/wp-content/uploads/2015/10/Python-Projects.pdf)  
+[The big book of small python projects](https://edu.anarcho-copy.org/Programming%20Languages/Python/BigBookSmallPythonProjects.pdf)  
+[learning Python](https://cfm.ehu.es/ricardo/docs/python/Learning_Python.pdf)  
+[practice_python_projects](https://github.com/learnbyexample/practice_python_projects)  
+[Implementing Threads for Measurements](https://pythonforthelab.com/blog/implementing-threads-for-measurements/)  
+[Storing Binary Data and Serializing](https://pythonforthelab.com/blog/storing-binary-data-and-serializing/)  
+[What are Hashable Objects](https://pythonforthelab.com/blog/what-are-hashable-objects/)  
+[PEP](https://peps.python.org/)  
 	```python
 	在python中，generator functions是一类特殊的函数，它返回一个 lazy iterator(delays the evaluation of an expression until its value is needed),lazy iterators不在内存中保存它们的内容
 	应用场景：
