@@ -682,9 +682,6 @@ print("Server1: Port ",hostConfig.getData(Servers[1], 'port'))  # Getting item f
 import subprocess
 
 class ShellCmdClient:
-    def __init__(self):
-        pass
-
     def run_cmd(self, cmd: str) -> str:
         """执行 shell 命令并返回输出"""
         try:
@@ -694,21 +691,15 @@ class ShellCmdClient:
             else:
                 return result.stderr
         except subprocess.CalledProcessError as e:
-            return f"Command \"{cmd}\" failed with err: {e.stderr}"
+            return f"Command \"{cmd}\" failed with error: {e.stderr}"
         except Exception as e:
             return f"Unexpected error: {e}"
 
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
 if __name__ == "__main__":
     try:
-        with ShellCmdClient() as shell:
-            output = shell.run_cmd("ls -l")
-            print(f"Command output:\n{output}")
+        shell = ShellCmdClient()
+        output = shell.run_cmd("ls -l")
+        print(f"Command output:\n{output}")
     except Exception as e:
         print(f"Unexpected error: {e}")
 ```
