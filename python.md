@@ -363,6 +363,64 @@ if __name__ == "__main__":
 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)  
 [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)  
 ```python
+# 示例：timer 装饰器用来统计函数的执行时间
+import time
+# 装饰器内部的wrapper函数中的参数*args, **kwargs保证了其可以处理所有的参数类型，保证了参数传递的统一，使得装饰器的实现成为可能
+# python程序解释器在运行时会解析函数所提供的参数，根据函数签名进行参数匹配，*args用于捕捉未匹配的位置参数（除了required parameters），**kwargs用于捕捉未匹配的关键字参数
+# 当wrapper函数调用真正的函数被时，*args和**kwargs会被unpack，即*args展开为对应的位置参数，**kwargs展开为对应的关键字参数
+def timer(func):
+    def wrapper(*args, **kwargs):
+        print("positional args:", args)
+        print("keyword args:", kwargs)
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end - start:.4f} seconds")
+        print("-" * 20)
+        return result
+    return wrapper
+
+@timer
+def no_args():
+    time.sleep(0.1)
+    print("no args here")
+
+@timer
+def with_positional(num):
+    time.sleep(0.2)
+    print(f"with positional arg {num}")
+
+@timer
+def with_keyword(name, age=18):
+    time.sleep(0.3)
+    print(f"with keyword, name:{name}, age:{age}")
+
+
+no_args()
+with_positional(1)
+with_keyword(name="Alice")
+
+
+Output:
+positional args: ()
+keyword args: {}
+no args here
+no_args took 0.1002 seconds
+--------------------
+positional args: (1,)
+keyword args: {}
+with positional arg 1
+with_positional took 0.2002 seconds
+--------------------
+positional args: ()
+keyword args: {'name': 'Alice'}
+with keyword, name:Alice, age:18
+with_keyword took 0.3003 seconds
+--------------------
+
+
+
+# with ...
 class SimpleClass:
     def __init__(self):
         print("__init__")
@@ -397,6 +455,69 @@ _finalize
 [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)  
 [How to Use Generators and yield in Python](https://realpython.com/introduction-to-python-generators/)  
 [Python for Loops: The Pythonic Way](https://realpython.com/python-for-loop/)  
+```python
+# 使用 yield 的函数被称为生成器函数
+# 当调用生成器函数时，它不会立即执行并返回结果，而是返回一个生成器对象（generator object）, 该生成器对象是一个迭代器，可以通过 next() 调用逐步执行，每次遇到 yield 时暂停并返回值，下次调用时从暂停处继续
+
+# 底层机制：生成器对象和状态保存
+1.生成器对象：一个封装了执行状态的结构体
+2.字节码：控制执行流程的指令
+3.调用帧（frame）：保存局部变量和执行位置
+
+#a 生成器对象
+当你调用 gen() 时，Python 不直接执行函数体，而是返回一个 PyGenObject（生成器对象）
+这个对象包含：
+1.代码对象（gi_code）：函数编译后的字节码（gen.__code__）
+2.执行帧（gi_frame）：一个 PyFrameObject，保存当前执行状态
+3.运行状态（gi_running）：标记生成器是否正在执行
+def gen():
+	yield 1
+	yield 2
+
+g = gen()
+print(g.gi_code.co_code)   # 字节码
+print(g.gi_frame)          # 当前帧
+
+#b yield 如何暂停
+当生成器执行到 yield 时：
+1.字节码指令：YIELD_VALUE 指令被触发
+2.暂停执行：解释器将当前值推送到调用者，并暂停生成器的执行
+3.保存状态：当前帧（PyFrameObject）保留下来，而不是被销毁
+
+#c 如何恢复
+调用 next(g) 时：
+1.恢复帧：解释器从 gi_frame 恢复上次的状态。
+2.继续执行：从上次暂停的字节码位置开始运行，直到下个 yield 或函数结束。
+
+# 查看帧状态
+import inspect
+
+def gen():
+    x = 10
+    yield x
+    x += 5
+    yield x
+
+g = gen()
+print(next(g))          # 10
+frame = g.gi_frame
+print(frame.f_locals)   # {'x': 10}
+print(next(g))          # 15
+print(frame.f_locals)   # {'x': 15}
+
+# 内存和性能
+内存：生成器高效是因为它只保存一个帧，而不是整个调用栈的副本。相比列表，内存占用低得多
+性能：暂停和恢复的开销很小，主要是帧切换和栈操作，接近 O(1)
+def infinite():
+    x = 0
+    while True:
+        yield x
+        x += 1
+
+g = infinite()
+print(next(g))  # 0
+print(next(g))  # 1
+```
 
 ## 异常处理
 [Python Exceptions: An Introduction](https://realpython.com/python-exceptions/)  
@@ -439,6 +560,41 @@ _finalize
 [Speed Up Your Python Program With Concurrency](https://realpython.com/python-concurrency/)  
 [Getting Started With Async Features in Python](https://realpython.com/python-async-features/)  
 [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)  
+```python
+# 异步编程
+异步编程是一种并发模型，允许程序在等待某些操作（如 I/O）完成时继续执行其他任务，而不是阻塞线程。它基于事件循环（event loop）和非阻塞调用，特别适合高并发场景
+
+asyncio的核心组件：
+1.事件循环（Event Loop）：调度和运行异步任务
+事件循环是异步编程的核心，负责：
+	a) 调度协程的执行
+	b) 处理 I/O 事件（如网络数据到达）
+	c) 管理任务的暂停和恢复
+2.协程（Coroutines）：用 async def 定义的函数, 调用时返回一个协程对象（coroutine 类型）。它不会立即执行，必须通过事件循环调度
+3.await：暂停协程，将控制权交回事件循环，等待某个 awaitable 对象（协程、任务或 Future）完成
+4.asyncio.sleep:异步的，返回一个 Future，事件循环可以在等待时处理其他任务
+
+import asyncio
+
+async def task(name, delay):
+    await asyncio.sleep(delay)
+    print(f"Task {name} done after {delay}s")
+
+async def main():
+    tasks = [
+        task("A", 1),
+        task("B", 2),
+        task("C", 0.5)
+    ]
+    await asyncio.gather(*tasks)
+
+asyncio.run(main())
+
+# async def：定义一个协程函数，返回协程对象
+# await：暂停协程，等待 asyncio.sleep(1) 完成
+# asyncio.gather：并发运行多个协程
+# asyncio.run：启动事件循环，运行 main()
+```
 
 ## function
 [Defining Your Own Python Function](https://realpython.com/defining-your-own-python-function/)  
