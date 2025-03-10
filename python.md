@@ -615,6 +615,49 @@ asyncio.run(main())
 # await：暂停协程，等待 asyncio.sleep(1) 完成
 # asyncio.gather：并发运行多个协程
 # asyncio.run：启动事件循环，运行 main()
+
+## 示例2
+import asyncio
+import time
+
+# 定义一个异步函数，用于模拟 I/O 操作（如网络请求）
+async def fetch_data(task_name, delay):
+    print(f"{task_name} 开始执行")
+    await asyncio.sleep(delay)  # 模拟 I/O 操作的延迟
+    print(f"{task_name} 完成执行，耗时 {delay} 秒")
+    return f"{task_name} 的结果"
+
+# 定义主函数，用于调度和运行异步任务
+async def main():
+    start_time = time.time()
+
+    # 并发执行三个任务
+    task1 = asyncio.create_task(fetch_data("任务1", 2))
+    task2 = asyncio.create_task(fetch_data("任务2", 3))
+    task3 = asyncio.create_task(fetch_data("任务3", 1))
+
+    # 等待所有任务完成并获取结果
+    results = await asyncio.gather(task1, task2, task3)
+
+    for result in results:
+        print(result)
+
+    print(f"总耗时：{time.time() - start_time:.2f} 秒")
+
+# 运行 asyncio 事件循环
+asyncio.run(main())
+
+Output:
+任务1 开始执行
+任务2 开始执行
+任务3 开始执行
+任务3 完成执行，耗时 1 秒
+任务1 完成执行，耗时 2 秒
+任务2 完成执行，耗时 3 秒
+任务1 的结果
+任务2 的结果
+任务3 的结果
+总耗时：3.01 秒
 ```
 
 ## function
