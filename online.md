@@ -12,7 +12,9 @@
 [DeepSeek](https://chat.deepseek.com/)  
 [hix.ai/](https://hix.ai/)  
 [Ithy](https://ithy.com/)  
-[豆包](https://www.doubao.com/chat/)  
+[字节豆包](https://www.doubao.com/chat/)  
+[腾讯元宝](https://yuanbao.tencent.com/chat/)  
+[阿里通义](https://tongyi.aliyun.com/qianwen/)  
 
 ## 在线不同语言之间的代码转换
 [CodeConvert](https://www.codeconvert.ai/free-converter)  

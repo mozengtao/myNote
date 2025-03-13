@@ -1,6 +1,208 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## 解析配置文件
+```bash
+## 使用 source 直接加载 符合 Bash 语法的配置文件
+config.sh:
+DB_HOST="localhost"
+DB_PORT=3306
+DEBUG=true
+
+main.sh:
+load_config() {
+    local file="$1"
+    if [ ! -f "$file" ]; then
+        echo "Error: config file '$file' does not exist" >&2
+        return 1
+    fi
+    source "$file"
+}
+
+load_config "config.sh"
+echo "Host: $DB_HOST, Port: $DB_PORT, Debug: $DEBUG"
+
+## 解析 JSON 文件
+config.json:
+{
+    "database": {
+        "host": "localhost",
+        "port": 3306
+    },
+    "server": {
+        "debug": true
+    }
+}
+
+main.sh:
+DB_HOST=""
+DB_PORT=""
+DEBUG=""
+
+parse_json() {
+    local file="$1"
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "Error: command jq not found" >&2
+        return 1
+    fi
+    if [ ! -f "$file" ]; then
+        echo "Error: config file '$file' does not exist" >&2
+        return 1
+    fi
+
+    DB_HOST=$(jq -r '.database.host' "$file")
+    DB_PORT=$(jq -r '.database.port' "$file")
+    DEBUG=$(jq -r '.server.debug' "$file")
+    # export DB_HOST DB_PORT DEBUG
+}
+
+parse_json "config.json"
+echo "Host: $DB_HOST, Port: $DB_PORT, Debug: $DEBUG"
+
+## 直接解析键值对文件
+config.env:
+DB_HOST=localhost
+DB_PORT=3306
+DEBUG=true
+
+main.sh:
+parse_config() {
+    local file="$1"
+    if [ ! -f "$file" ]; then
+        echo "Error: config file '$file' does not exist" >&2
+        return 1
+    fi
+
+    while IFS='=' read -r key value; do
+        # 跳过空行和注释
+        [[ -z "$key" || "$key" =~ ^# ]] && continue
+        # 去除首尾空白
+        key=$(echo "$key" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+        value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+		# value=$(echo "$value" | sed 's/^"\(.*\)"$/\1/;s/^'\''\(.*\)'\''$/\1/')	# 对于带双引号的值，去掉双引号
+        export "$key=$value"	# 导出变量
+		# eval "$key=$value"
+    done < "$file"
+}
+
+parse_config "config.env"
+echo "Host: $DB_HOST, Port: $DB_PORT, Debug: $DEBUG"
+```
+
+## 位置参数
+```bash
+$*：将所有位置参数合并为一个字符串，默认以 IFS（内部字段分隔符，通常是空格）连接
+$@：表示所有位置参数的列表，保持每个参数的独立性
+
+使用 $* 的场景：需要将所有参数作为一个整体字符串传递时
+log() {
+    echo "日志: $*" >> log.txt
+}
+log "操作成功" "用户: alice"	# log.txt 内容：日志: 操作成功 用户: alice
+
+使用 $@ 的场景：需要逐个处理参数，或将参数传递给其他命令时
+# 1
+wrapper() {
+    ls "$@"
+}
+wrapper -l dir1 "dir 2"		   # 等价于 ls -l dir1 "dir 2"，保持参数独立
+# 2
+call_cmd() {
+    some_cmd "$@"
+}
+```
+
+## 返回值 和 退出状态
+```bash
+add_nums() {
+    if [ "$#" -lt 2 ]; then
+        echo "Need at least 2 args"
+        return 1
+    fi
+    
+    local sum=0
+    for num in "$@"; do
+        sum=$(( $sum + $num ))
+    done
+    
+    echo $sum		# 使用 echo 捕获返回值
+    return 0		# 使用 return 返回状态码
+}
+
+# 2
+add_nums() {
+    if [ "$#" -lt 2 ]; then
+        echo "Need at least 2 args"
+        return 1
+    fi
+    
+    local sum=0
+    while [ "$#" -gt 0 ]; do
+        sum=$(( $sum + $1 ))
+        shift
+    done
+    
+    echo $sum
+    return 0
+}
+
+result=$(add_nums 2 3)
+echo "Result: $result"
+```
+
+## 最佳实践
+```bash
+## 计算文件行数
+# 参数: $1 - 文件路径
+# 返回: 行数（通过 echo 输出），状态码 0 表示成功
+count_lines() {
+    local file="$1"
+    local count
+
+    if [ ! -f "$file" ]; then
+        echo "错误: 文件 '$file' 不存在" >&2
+        return 1
+    fi
+
+    count=$(wc -l < "$file")
+    echo "$count"
+    return 0
+}
+
+# 主逻辑
+main() {
+    local result
+    result=$(count_lines "test.txt") || {
+        echo "处理失败，退出"
+        exit 1
+    }
+    echo "文件行数: $result"
+}
+
+main "$@"
+```
+
+## BATS(Bash Automated Testing System) 开元测试框架
+```bash
+# sudo apt-get install bats
+
+# deploy.sh
+deploy() {
+        echo "deploy $1"
+}
+
+# test_deploy.bats
+#!/usr/bin/env bats
+
+load 'deploy.sh'
+
+@test "test deploy" {
+        run deploy "server1"
+        [ "$status" -eq 0 ]
+        [ "$output" = "deploy server1" ]
+}
+```
+
 ## 检查进程是否存在
 ```bash
 # kill -0 pid 会向进程发送一个信号 0。这个信号不会被进程识别或处理，它只是用来测试进程是否存在

@@ -126,6 +126,7 @@ Image Processing With the Python Pillow Library](https://realpython.com/image-pr
 
 ## 远程登录
 ```python
+# paramiko
 import paramiko
 import time
 import re
@@ -346,6 +347,152 @@ if __name__ == "__main__":
         
         if pre_primary:
             cmd_processor.set_channel_state(pre_primary, "up")
+
+# pexpect
+import pexpect
+import time
+
+class TelnetClient:
+    def __init__(self, host, username, password, port=23, login_timeout=10, command_timeout=10):
+        """
+        初始化 Telnet 客户端
+        :param host: Telnet 服务器地址
+        :param username: 登录用户名
+        :param password: 登录密码
+        :param port: Telnet 服务器端口号，默认为 23
+        :param login_timeout: 登录超时时间，默认为 10 秒
+        :param command_timeout: 命令执行超时时间，默认为 10 秒
+        """
+        self.host = host
+        self.username = username
+        self.password = password
+        self.port = port
+        self.login_timeout = login_timeout
+        self.command_timeout = command_timeout
+        self.child = None
+
+    def connect(self):
+        """
+        建立 Telnet 连接
+        """
+        try:
+            # 构造 Telnet 连接命令
+            cmd = f'telnet {self.host} {self.port}'
+            self.child = pexpect.spawn(cmd, timeout=self.login_timeout)
+            # 等待登录提示符
+            self.child.expect('User Name :', timeout=self.login_timeout)
+            # 输入用户名
+            self.child.sendline(self.username)
+            # 等待密码提示符
+            self.child.expect('Password  :', timeout=self.login_timeout)
+            # 输入密码
+            self.child.sendline(self.password)
+            # 等待登录成功后的提示符
+            self.child.expect(['apc>'], timeout=self.login_timeout)
+            print(f"Successfully connected to {self.host}:{self.port}")
+            return True
+        except Exception as e:
+            print(f"Failed to connect to {self.host}:{self.port}, error: {e}")
+            return False
+
+    def execute_command(self, command):
+        """
+        执行单条命令
+        :param command: 要执行的命令
+        :return: 命令输出
+        """
+        if not self.child:
+            print("Not connected to a Telnet server.")
+            return None
+
+        try:
+            # 发送命令
+            self.child.sendline(command)
+            # 等待命令输出结束
+            self.child.expect(['apc>'], timeout=self.command_timeout)
+            # 获取命令输出
+            output = self.child.before.decode('utf-8').strip()
+            return output
+        except Exception as e:
+            print(f"Failed to execute command '{command}', error: {e}")
+            return None
+
+    def execute_commands(self, commands):
+        """
+        执行多条命令
+        :param commands: 要执行的命令列表
+        :return: 每条命令的输出列表
+        """
+        outputs = []
+        for cmd in commands:
+            output = self.execute_command(cmd)
+            outputs.append(output)
+        return outputs
+
+    def close(self):
+        """
+        关闭 Telnet 连接
+        """
+        if self.child:
+            self.child.close()
+            self.child = None
+            print("Telnet connection closed")
+
+
+class ApcCmdProcessor:
+    def __init__(self, telnet_client):
+        self.telnet_client = telnet_client
+
+    def get_outlet_status(self, outlet, wait_time=1):
+        command = f"olStatus {outlet}"
+        output = self.telnet_client.execute_command(command)
+        time.sleep(wait_time)
+        return output
+
+    def set_outlet_status(self, outlet, status, wait_time=1):
+        if status not in ["on", "off"]:
+            print("Invalid status. Please use 'on' or 'off'.")
+            return
+        if status == "on":
+            command = f"olOn {outlet}"
+        else:
+            command = f"olOff {outlet}"
+        output = self.telnet_client.execute_command(command)
+        time.sleep(wait_time)
+        return output
+
+if __name__ == "__main__":
+    # Telnet 服务器信息
+    host = "10.254.25.46"
+    port = 23
+    username = "apc"
+    password = "apc"
+
+    # 创建 Telnet 客户端
+    telnet_client = TelnetClient(host, username, password, port)
+
+    # 连接到 Telnet 服务器
+    if telnet_client.connect():
+        # 创建 ApcCmdProcessor 实例
+        apc_processor = ApcCmdProcessor(telnet_client)
+        
+        # 执行单条命令
+        output = apc_processor.get_outlet_status(14)
+        print("Command output:")
+        print(output)
+        
+        # 执行单条命令
+        output = apc_processor.set_outlet_status(14, "off")
+        print("Command output:")
+        print(output)
+        
+        # 执行单条命令
+        output = apc_processor.get_outlet_status(14)
+        print("Command output:")
+        print(output)
+
+        # 关闭连接
+        telnet_client.close()
 ```
 
 ## logging
