@@ -79,7 +79,7 @@ parse_config() {
         # 去除首尾空白
         key=$(echo "$key" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
         value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-		# value=$(echo "$value" | sed 's/^"\(.*\)"$/\1/;s/^'\''\(.*\)'\''$/\1/')	# 对于带双引号的值，去掉双引号
+		# value=$(echo "$value" | sed 's/^"\(.*\)"$/\1/;s/^'\''\(.*\)'\''$/\1/')	# 对于带双引号或者单引号的值，去掉引号
         export "$key=$value"	# 导出变量
 		# eval "$key=$value"
     done < "$file"
@@ -1183,22 +1183,6 @@ export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
 	  echo ${month[3]}
 	  ```
 
-- tldr([tldr online](https://tldr.inbrowser.app/))
-	- Too Long; Didn't Read
-		- ```bash
-			tldr grep
-
-			tldr mount
-			man mount
-			mount --help
-			```
-- man
-	- 获取命令或函数参考手册
-		- ```bash
-			man dash
-			man builtin
-			man set
-			```
 - shell脚本格式检查
 	- [shellcheck online](https://www.shellcheck.net/)
 - Bash带颜色输出
@@ -1223,86 +1207,6 @@ export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
 		  
 		  3.在脚本的开头可以指定 #!/bin/bash -xv
 		  ```
-```bash
-## 条件判断
-# if 语句
-num=10
-if [[ $num -lt 5 ]]; then
-    echo "The number is less than 5."
-elif [[ $num -gt 15 ]]; then
-    echo "The number is greater than 15."
-else
-    echo "The number is between 5 and 15."
-fi
-# if [[ "$var" != "xxx" ]]	# 使用双引号，否则如果 $var 为null的话，判断条件变为 [ != "xxx" ]
-
-# case 语句
-fruit="apple"
-case $fruit in
-    "apple")
-        echo "It's an apple."
-        ;;
-    "banana")
-        echo "It's a banana."
-        ;;
-    *)
-        echo "It's something else."
-        ;;
-esac
-
-## type 用来 判断命令类型， 查看命令来源，检查命令可用性(type -P command_name)
-morrism@PC24036:~$ type ls
-ls is aliased to `ls --color=auto'
-
-morrism@PC24036:~$ type -t ls
-alias
-
-morrism@PC24036:~$ type -p python3
-/usr/bin/python3
-
-morrism@PC24036:~$ type -a ls
-ls is aliased to `ls --color=auto'
-ls is /usr/bin/ls
-ls is /bin/ls
-```
-## 函数返回值
-```bash
-#1 使用return语句返回退出状态码0-255(0表示成功， 1表示失败)
-my_function() {
-    if [ "$1" -gt 0 ]; then
-        return 0  # 成功
-    else
-        return 1  # 失败
-    fi
-}
-
-# usage 1
-my_function 5
-echo $?
-
-# usage 2
-if my_function 5; then
-	echo "True"
-else
-	echo "False"
-fi
-
-#2 通过 echo 输出返回值 (最常用)
-my_function() {
-    echo "Hello, $1"
-}
-
-result=$(my_function "World")
-echo "$result"  # 输出：Hello, World
-
-#3 通过全局变量返回
-my_function() {
-    result="Hello, $1"
-}
-
-my_function "World"
-echo "$result"  # 输出：Hello, World
-```
 
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)  
 [How to Declare and Access Associative Array in Bash](https://phoenixnap.com/kb/bash-associative-array)  
@@ -1347,7 +1251,6 @@ echo "$result"  # 输出：Hello, World
 [Include Files in a Bash Shell Script With source Command](https://www.baeldung.com/linux/source-include-files)  
 [Bash Source Command](https://linuxize.com/post/bash-source-command/)  
 [BASH TIPS & TRICKS](https://tecadmin.net/category/bash-tips-tricks/)  
-[tldr](https://tldr.inbrowser.app/) #online  
 [bash-utility](https://github.com/labbots/bash-utility) #online #github  
 [Google Style Guides](https://google.github.io/styleguide/) #online  
 [pure-sh-bible](https://github.com/dylanaraps/pure-sh-bible)  

@@ -25,6 +25,10 @@
 ## 编程风格
 [Google Style Guides](https://google.github.io/styleguide/)  
 
+## CheatSheets
+[tldr](https://tldr.inbrowser.app/)  
+[Rico's cheatsheets](https://devhints.io/)  
+
 [B 站收藏的“比较有质量”的课程](https://fast.v2ex.com/t/931949)    
 [Algorithms](https://algs4.cs.princeton.edu/home/)    
 [code2flow](https://app.code2flow.com/)  
