@@ -679,3 +679,334 @@ see what units are tied to a target:
 You can modify the system state to transition between targets with the isolate option. This will stop any units that are not tied to the specified target. Be sure that the target you are isolating does not stop any essential services:
     systemctl isolate multi-user.target
 
+### Stopping or Rebooting the Server
+Shortcuts are available for some of the major states that a system can transition to
+
+power off your server
+    systemctl poweroff
+
+reboot the system
+    systemctl reboot
+
+boot into rescue mode
+    systemctl rescue
+
+### Starting and Stopping Services
+
+start a systemd service
+    systemctl start application.service
+or
+    systemctl start application
+
+stop a currently running service
+    sudo systemctl stop application.service
+
+### Restarting and Reloading
+
+restart a running service
+    systemctl restart application.service
+
+If the application in question is able to reload its configuration files (without restarting), you can issue the reload command to initiate that
+process:
+    systemctl reload application.service
+
+If you are unsure whether the service has the functionality to reload its configuration, you can issue the reload-or-restart command. This
+will reload the configuration in-place if available. Otherwise, it will restart the service so the new configuration is picked up:
+    systemctl reload-or-restart application.service
+
+### Enabling and Disabling Services
+
+start a service at boot (Keep in mind that enabling a service does not start it in the current session)
+    systemctl enable application.service
+
+disable the service from starting automatically
+    systemctl disable application.service
+
+### Checking the Status of Services
+
+check the status of a service on your system
+    systemctl status application.service
+
+check to see if a unit is currently active (running)
+    systemctl is-active application.service
+
+see if the unit is enabled
+    systemctl is-enabled application.service
+
+check whether the unit is in a failed state
+    systemctl is-failed application.service
+
+### Listing Current Units
+
+see a list of all of the active units that systemd knows about
+    systemctl list-units
+or
+    systemctl
+
+see all of the units that systemd has loaded (or attempted to load), regardless of whether they are currently active:
+    systemctl list-units --all
+
+use other flags to filter these results, for example:
+    systemctl list-units --all --state=inactive
+
+only display units of the type we are interested in:
+    systemctl list-units --type=service
+
+### Listing All Unit Files
+
+see every available unit file within the systemd paths, including those that systemd has not attempted to load:
+    systemctl list-unit-files
+
+### Displaying a Unit File
+
+see the unit file:
+    systemctl cat atd.service
+
+### Displaying Dependencies
+
+display a hierarchy mapping the dependencies that must be dealt with in order to start the unit in question:
+    systemctl list-dependencies sshd.service
+
+to recursively list all dependencies, include the –all flag:
+    systemctl list-dependencies sshd.service -all
+
+To show reverse dependencies (units that depend on the specified unit), add the –reverse Eag to the command:
+    systemctl list-dependencies sshd.service -reverse
+
+show units that depend on the specified unit starting before and after themselves:
+    systemctl list-dependencies sshd.service -before
+    systemctl list-dependencies sshd.service -after
+
+### Checking Unit Properties
+
+display a list of properties that are set for the specified unit using a key=value format:
+    systemctl show sshd.service
+
+display a single property, you can pass the -p flag with the property name, for example:
+    systemctl show sshd.service -p Conflicts
+    (Output: Conflicts=shutdown.target)
+
+### Masking and Unmasking Units
+
+Systemd also has the ability to mark a unit as completely unstartable, automatically or manually, by linking it to /dev/null. 
+This is called masking the unit, and is possible with the mask command:
+    systemctl mask nginx.service
+
+the service will be listed as masked through command:
+    systemctl list-unit-files
+
+unmask a unit:
+    systemctl unmask nginx.service
+
+### Editing Unit Files
+
+The edit command, by default, will open a unit file snippet for the unit in question:
+    systemctl edit nginx.service
+
+edit the full unit file instead of creating a snippet:
+    systemctl edit --full nginx.service
+
+to remove a snippet:
+    rm -r /etc/systemd/system/nginx.service.d
+
+to remove a full modified unit file:
+    rm /etc/systemd/system/nginx.service
+
+After deleting the file or directory, you should reload the systemd process so that it no longer attempts to reference these files and reverts
+back to using the system copies:
+    systemctl daemon-reload
+
+### Adjusting the System State (Runlevel) with Targets
+
+Targets are special unit les that describe a system state or synchronization point. Targets do not do much themselves, but are instead used to group other units together.
+
+This can be used in order to bring the system to certain states, much like other init systems use runlevels. They are used as a reference for when certain functions are available, allowing you to specify the desired state instead of the individual units needed to produce that state
+
+For instance, there is a swap.target that is used to indicate that swap is ready for use. Units that are part of this process can sync with this target by indicating in their conguration that they are WantedBy= or RequiredBy= the swap.target. Units that require swap to be available can specify this condition using the Wants=, Requires=, and After= specifications to indicate the nature of their relationship.
+
+#### Getting and Setting the Default Target
+
+find the default target for your system:
+    systemctl get-default
+
+set a different default target:
+    systemctl set-default graphical.target
+
+
+#### Listing Available Targets
+
+Unlike runlevels, multiple targets can be active at one time. An active target indicates that systemd has attempted to start all of the units tied to the target and has not tried to tear them down again
+
+get a list of the available targets on your system:
+    systemctl list-unit-files --type=target
+
+see all of the active targets:
+    systemctl list-units --type=target
+
+#### Isolating Targets
+
+It is possible to start all of the units associated with a target and stop all units that are not part of the dependency tree. This is similar to changing the runlevel in other init systems.
+
+For instance, if you are operating in a graphical environment with graphical.target active, you can shut down the graphical system and put the system into a multi-user command line state by isolating the multi-user.target. Since graphical.target depends on multi-user.target but not the other way around, all of the graphical units will be stopped.
+
+You may wish to take a look at the dependencies of the target you are isolating before performing this procedure to ensure that you are not stopping vital services:
+    systemctl list-dependencies multi-user.target
+When you are satisfied with the units that will be kept alive, you can isolate the target:
+    systemctl isolate multi-user.target
+
+### Using Shortcuts for Important Events
+
+There are targets defined for important events like powering off or rebooting. However, systemctl also has some shortcuts that add a bit of additional functionality.
+
+
+put the system into rescue (single-user) mode, you can just use the rescue command instead of isolate rescue.target:
+    systemctl rescue
+This will provide the additional functionality of alerting all logged in users about the event.
+
+halt the system
+    systemctl halt
+
+initiate a full shutdown
+    systemctl poweroff
+
+A restart can be started with the reboot command:
+    systemctl reboot
+
+### View and Manipulate Systemd Logs
+
+Systemd provides a centralized management solution for logging all kernel and userland processes. The system that collects and manages these logs is known as the journal.
+
+The journald daemon collects data from all available sources and stores them in a binary format for easy and dynamic manipulation.
+
+#### Setting the System Time
+
+By default, systemd will display results in local time.
+
+see what timezones are available:
+    timedatectl list-timezones
+
+set timezone for log:
+    sudo timedatectl set-timezone zone
+
+check that your machine is using the correct time now:
+    timedatectl status
+
+#### Basic Log Viewing
+
+display every journal entry that is in the system:
+    journalctl
+
+display the timestamps in UTC:
+    journalctl --utc
+
+#### Journal Filtering by Time
+
+Displaying Logs from the Current Boot:
+    journalctl -b
+
+Past Boots:
+Some distributions enable saving previous boot information by default, while others disable this feature. To enable persistent boot information, you can either create the directory to store the journal:
+    sudo mkdir -p /var/log/journal
+Or you can edit the journal configuration file:
+    sudo vim /etc/systemd/journald.conf
+    Under the [Journal] section, set the Storage= option to “persistent” to enable persistent logging:
+        [Journal]
+        Storage=persistent
+
+see the boots that journald knows about:
+    journalctl --list-boots
+
+To display information from these boots, you can use information from either the first or second column:
+    For instance, to see the journal from the previous boot, use the -1 relative pointer with the -b flag:
+        journalctl -b -1
+    You can also use the boot ID to call back the data from a boot:
+        journalctl -b caf0524a1d394ce0bdbcff75b94444fe
+
+Time Windows:
+    restrict the entries displayed to those after or before the given time:
+        journalctl --since "2015-06-01 01:00:00"
+        journalctl --since "2015-06-01" --until "2015-06-13 15:00"
+        journalctl --since yesterday
+        journalctl --since 09:00 --until "1 hour ago"
+
+#### Filtering by Message Interest
+
+##### By Unit
+    journalctl -u nginx.service
+    journalctl -u nginx.service --since today
+    journalctl -u nginx.service -u php-fpm.service --since today
+
+##### By Process, User, or Group ID
+    journalctl _PID=8088
+    journalctl _UID=33 --since today (user ID can be found through id -u www-data (www-data is user name))
+find out about all of the available journal fields:
+    man systemd.journal-fields
+
+##### By Component Path
+
+find those entries that involve the bash executable:
+    journalctl /usr/bin/bash
+
+##### Displaying Kernel Messages
+    journalctl -k
+    journalctl -k -b -5 (get the messages from five boots ago)
+
+### By Priority
+
+show only entries logged at the error level or above:
+    journalctl -p err -b
+
+### Modifying the Journal Display
+
+Truncate or Expand Output:
+    journalctl --no-full (truncate the output)
+    journalctl -a (o display all of its information)
+
+#### Output to Standard Out
+
+By default, journalctl displays output in a pager for easier consumption. If you are planning on processing the data with text manipulation tools, however, you probably want to be able to output to standard output.
+
+    journalclt --no-pager
+
+This can be piped immediately into a processing utility or redirected into a file on disk, depending on your needs
+
+#### Output Formats
+
+output the journal entries in JSON:
+    journalctl -b -u nginx -o json
+    journalctl -b -u nginx -o json-pretty
+
+### Active Process Monitoring
+#### Displaying Recent Logs
+    journalctl -n (display the most recent 10 entries)
+    journalctl -n 20
+
+    Following Logs:
+        journalctl -f
+
+### Journal Maintenance
+    find out the amount of space that the journal is currently occupying on disk:
+        journalctl --disk-usage
+
+    Deleting Old Logs:
+        1. shrink your journal by indicating a size(remove old entries until the total journal space taken up on disk is at the requested size)
+            sudo journalctl --vacuum-size=1G
+        2. shrink the journal is providing a cutoff time(Any entries beyond that time are deleted)
+            sudo journalctl --vacuum-time=1years
+
+### Limiting Journal Expansion
+You can configure your server to place limits on how much space the journal can take up. This can be done by editing the /etc/systemd/journald.conf file.
+
+The following items can be used to limit the journal growth:
+    SystemMaxUse=: 
+        Specifies the maximum disk space that can be used by the journal in persistent storage.
+    SystemKeepFree=: 
+        Specifies the amount of space that the journal should leave free when adding journal entries to persistent storage.
+    SystemMaxFileSize=: 
+        Controls how large individual journal files can grow to in persistent storage before being rotated.
+    RuntimeMaxUse=: 
+        Specifies the maximum disk space that can be used in volatile storage (within the /run filesystem).
+    RuntimeKeepFree=: 
+        Specifies the amount of space to be set aside for other uses when writing data to volatile storage (within the /run filesystem).
+    RuntimeMaxFileSize=: 
+        Specifies the amount of space that an individual journal file can take up in volatile storage (within the /run filesystem) before being rotated
