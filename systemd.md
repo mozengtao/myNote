@@ -1,3 +1,7 @@
+[systemd.directives](https://www.freedesktop.org/software/systemd/man/latest/systemd.directives.html)  
+[systemd.directives](https://manpages.ubuntu.com/manpages/focal/man7/systemd.directives.7.html)  
+[systemd.directives](https://www.mankier.com/7/systemd.directives)  
+
 [Learning to love systemd](https://opensource.com/article/20/4/systemd)  
 
 [System and Service Manager](https://systemd.io/)  

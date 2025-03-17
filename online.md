@@ -1,3 +1,6 @@
+## man pages
+[Linux man pages](https://www.mankier.com/)  
+
 ## 在线代码运行环境
 [code playground](https://programiz.pro/ide/c)  
 [code playground](https://codapi.org/)  
