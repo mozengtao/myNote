@@ -266,3 +266,11 @@
 		obj-m := simplemodule.o
 
 	```
+
+[Process Groups and Terminal Signaling](https://cs162.org/static/readings/ic221_s16_lec17.html)  
+[File descriptors, pipes, terminals, user sessions, process groups and daemons](https://biriukov.dev/)  
+[Process groups and sessions](https://www.andy-pearce.com/blog/posts/2013/Aug/process-groups-and-sessions/)  
+[Process Groups, Sessions and Daemon Overview](https://klee1611.github.io/en/posts/linux-process-group-sessions-daemon.html/)  
+[CS 162: Operating Systems](https://notes.bencuan.me/cs162/)  
+[]()  
+[]()  

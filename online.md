@@ -29,6 +29,20 @@
 [tldr](https://tldr.inbrowser.app/)  
 [Rico's cheatsheets](https://devhints.io/)  
 
+## 学习资源
+[Operating Systems Principles & Practice (Volume 1, 2, 3)](https://www.kea.nu/files/textbooks/ospp/)  
+![Operating Systems Principles & Practice, Volume 1: Kernels and Processes](./assets/osppv1.pdf)  
+![Operating Systems Principles & Practice, Volume 2: Concurrency](./assets/osppv2.pdf)  
+![Operating Systems Principles & Practice, Volume 3: Memory Management](./assets/osppv3.pdf)  
+![Operating Systems Principles & Practice, Volume 4: Persistent Storage](./assets/osppv4.pdf)  
+![]()  
+![]()  
+![]()  
+[csdiy.wiki](https://csdiy.wiki/en/)  
+
+
+
+
 [B 站收藏的“比较有质量”的课程](https://fast.v2ex.com/t/931949)    
 [Algorithms](https://algs4.cs.princeton.edu/home/)    
 [code2flow](https://app.code2flow.com/)  
