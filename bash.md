@@ -1,6 +1,31 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## 判断命令是否安装
+```bash
+if ! command -v COMMAND &> /dev/null; then
+    echo "Error: COMMAND is not installed. Please install it first."
+    exit 1
+fi
+```
+
+## 等待所有后台作业完成
+```bash
+# 启动两个后台作业
+echo "Starting job 1..."
+sleep 3 &  # 后台作业1
+pid1=$!
+
+echo "Starting job 2..."
+sleep 6 &   # 后台作业2
+pid2=$!
+
+# 等待所有后台作业完成
+wait < <(jobs -p)	# 命令 jobs -p 用于返回所有后台进程的 PID，wait 命令用于等待当前shell下所指定的后台进程结束（如果不指定参数，则代表所有的后台进程）
+# wait $pid1 $pid2
+# wait %1 %2
+```
+
 ## 解析配置文件
 ```bash
 ## 使用 source 直接加载 符合 Bash 语法的配置文件
