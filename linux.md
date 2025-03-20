@@ -1,3 +1,7 @@
+## syscall
+[man 2 syscalls](https://www.mankier.com/2/syscalls)  
+[man 2 syscall](https://www.mankier.com/2/syscall)  
+
 [GNU Binutils](https://www.gnu.org/software/binutils/)
 [LIB BFD, the Binary File Descriptor Library](https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html)
 
