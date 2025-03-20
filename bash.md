@@ -1,6 +1,95 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## howto generate 512-byte disk image file
+```bash
+( echo "eb fe 11 22 33 44" | xxd -r -p; \
+  cat /dev/zero | head -c 504; \
+  echo "55 aa" | xxd -r -p \
+) > minimal.img
+
+# Structure of the Code
+(
+  [Part 1: Hex bytes]  					# Initial Hex Bytes
+  [Part 2: 504 null bytes]  			# Null Padding
+  [Part 3: Final 2-byte signature]		# Boot Signature
+) > minimal.img
+```
+
+## subshell
+```bash
+# 在 Bash 中 subshell 是一个由 parent shell 创建的独立的 child process，用于在隔离的环境下执行 shell 命令
+
+# What a Subshell Does
+1. 创建隔离的运行环境 (Creates an isolated execution environment)
+	Commands inside (...) run in a ​child process, separate from the parent shell
+	Variables, aliases, and shell options modified inside the subshell do not affect the parent shell.
+2. 合并输出 (​Combines output)
+	All output (stdout) from commands inside the subshell is ​merged into a single stream
+
+# subshell 的主要特征
+1. Sequential Execution: subshell 中的命令按顺序执行
+2. Single Redirection: subshell 的所有输出统一重定向到特定的文件
+	( echo "eb fe 11 22 33 44" | xxd -r -p; \
+	cat /dev/zero | head -c 504; \
+	echo "55 aa" | xxd -r -p \
+	) > minimal.img
+
+	等价于
+
+	# Equivalent without a subshell (less efficient):
+	echo "eb fe 11 22 33 44" | xxd -r -p > minimal.img
+	cat /dev/zero | head -c 504 >> minimal.img
+	echo "55 aa" | xxd -r -p >> minimal.img
+3. Process Isolation: subshell 中的变量或者shell state改变不会影响到 parent shell
+	(
+	MY_VAR="changed"
+	echo "Subshell: $MY_VAR"  # Output: Subshell: changed
+	)
+	echo "Parent: $MY_VAR"      # Output: Parent: [empty/unmodified]
+
+# subshell 的主要应用场景
+1. Grouping Commands for Redirection
+# Send all output to a log file
+	(
+	echo "Starting task..."
+	complex_command
+	echo "Finished."
+	) > log.txt
+2. Temporary Environment Changes
+	# Navigate to a directory, run commands, then return
+	(
+	cd /tmp
+	ls -l
+	)  # Parent shell remains in the original directory
+3. Background Execution
+	(
+	command1
+	command2
+	) &
+4. Capturing Output
+	result=$(
+	echo "Hello"
+	echo "World"
+	)
+	echo "$result"  # Output: Hello\nWorld
+
+# Subshell ( ... ) vs. Code Block { ... }
+# subshell
+	1. Runs in a separate process.
+	2. Inherits variables and state from the parent but cannot modify them.
+	3. Suitable for isolated tasks or combining output.
+# code block
+	1. Runs in the ​current shell process.
+	2. Modifications to variables or state affect the parent shell.
+	3. No process overhead (faster).
+
+	{
+	echo "Hello"
+	echo "World"
+	} > output.txt
+```
+
 ## 判断命令是否安装
 ```bash
 if ! command -v COMMAND &> /dev/null; then

@@ -1,3 +1,21 @@
+[GNU make](https://www.gnu.org/software/make/manual/make.html)  
+[man 1 make](https://linux.die.net/man/1/make)  
+
+## dry run
+```bash
+# make -n 主要应用场景
+1. Debug Makefile: 验证 Makefile的执行流程，确保实际执行时符合预期（依赖正确，不会覆写文件等）
+2. Understanding the Build Process：用来学习和理解新项目的编译过程
+3. Testing Changes：在实际运行前，测试新的Makefile修改符合预期
+
+make -nB
+	-n, --just-print, --dry-run, --recon
+		Print the commands that would be executed, but do not execute them (except in certain circumstances).
+
+	-B, --always-make
+		Unconditionally make all targets.
+```
+
 - ```bash
   qstrip=$(strip $(subst ",,$(1)))
   

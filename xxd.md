@@ -1,3 +1,50 @@
+
+[man 1 xxd](https://linux.die.net/man/1/xxd)  
+
+## Options
+```bash
+# Options
+       -p | -ps | -postscript | -plain
+              Output in postscript continuous hexdump style. Also known as plain hexdump style.
+
+       -r | -revert
+              Reverse operation: convert (or patch) hexdump into binary.  If not writing to stdout, xxd writes into its output file without truncating it. Use the combination -r -p to read  plain, hexadecimal dumps without line number information and without a particular column layout. Additional Whitespace and line-breaks are allowed anywhere.
+
+       -l len | -len len
+              Stop after writing <len> octets.			  
+
+       -s [+][-]seek
+              Start at <seek> bytes abs. (or rel.) infile offset.  + indicates that the seek is relative to the current stdin file position (meaningless when not reading from stdin).  - indicates that the seek should be that many characters from the end of the input (or if combined with +: before the current stdin file position).  Without -s option, xxd starts at the current file position.		
+
+       -g bytes | -groupsize bytes
+              Separate  the output of every <bytes> bytes (two hex characters or eight bit-digits each) by a whitespace.  Specify -g 0 to suppress grouping.  <Bytes> defaults to 2 in normal mode, 4 in little-endian mode and 1 in bits mode.  Grouping does not apply to postscript or include style.			  	  
+
+```
+
+## Write Hex Data
+```bash
+# "xxd -r -p" is used to convert plain hex dump (space-separated hex values) into binary data, 
+echo "eb fe 11 22 33 44" | xxd -r -p > test.bin		# Writes the bytes 0xEB 0xFE 0x11 0x22 0x33 0x44 to the output
+
+
+# Common Use Cases
+
+#1 Generate a Hexdump
+xxd file.bin
+
+#2 Create Binary from Hex (Reverse Mode)
+echo "55aa" | xxd -r -p > sector.sig  # Write 0x55 0xAA to a file
+
+#3 Inspect Specific Bytes
+xxd -s 0x1FE -l 2 -p /dev/sda  # Read 2 bytes at offset 510 (0x1FE)
+
+#4 Edit Binary Files
+# Patch byte at offset 0x05 to 0xFF
+echo "000005: FF" | xxd -r - file.bin
+# 
+
+```
+
 - 常用命令
 	- ```bash
 	  xxd -p -c1 file.png > file.png.xxd
