@@ -1,5 +1,6 @@
 
 [man 1 xxd](https://linux.die.net/man/1/xxd)  
+[ManKier](https://www.mankier.com/)  
 
 ## Options
 ```bash
