@@ -1,4 +1,6 @@
 
+[Understanding Hypervisors: Exploring Type-1 vs Type-2 and Full vs Para Virtualization](https://medium.com/@ravipatel.it/understanding-hypervisors-exploring-type-1-vs-type-2-and-full-vs-para-virtualization-71b4dad9abd9)  
+
 [LXD](https://documentation.ubuntu.com/lxd/en/stable-5.21/explanation/)  
 [oVirt](https://www.ovirt.org/)  
 
