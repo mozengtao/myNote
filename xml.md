@@ -1,3 +1,9 @@
+[XML Tutorial](https://www.w3schools.com/xml/)  
+[XML Formatter](https://jsonformatter.org/xml-formatter)  
+[XML Formatter](https://www.freeformatter.com/xml-formatter.html)  
+
+
+
 - xmllint
 	- xml格式化命令
 		- ```bash
