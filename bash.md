@@ -20,16 +20,16 @@
 ```bash
 # 在 Bash 中 subshell 是一个由 parent shell 创建的独立的 child process，用于在隔离的环境下执行 shell 命令
 
-# What a Subshell Does
+## What a Subshell Does
 1. 创建隔离的运行环境 (Creates an isolated execution environment)
 	Commands inside (...) run in a ​child process, separate from the parent shell
 	Variables, aliases, and shell options modified inside the subshell do not affect the parent shell.
 2. 合并输出 (​Combines output)
 	All output (stdout) from commands inside the subshell is ​merged into a single stream
 
-# subshell 的主要特征
-1. Sequential Execution: subshell 中的命令按顺序执行
-2. Single Redirection: subshell 的所有输出统一重定向到特定的文件
+## subshell 的主要特征
+#1. Sequential Execution: subshell 中的命令按顺序执行
+#2. Single Redirection: subshell 的所有输出统一重定向到特定的文件
 	( echo "eb fe 11 22 33 44" | xxd -r -p; \
 	cat /dev/zero | head -c 504; \
 	echo "55 aa" | xxd -r -p \
@@ -41,53 +41,92 @@
 	echo "eb fe 11 22 33 44" | xxd -r -p > minimal.img
 	cat /dev/zero | head -c 504 >> minimal.img
 	echo "55 aa" | xxd -r -p >> minimal.img
-3. Process Isolation: subshell 中的变量或者shell state改变不会影响到 parent shell
+
+#3. Process Isolation: subshell 中的变量或者shell state改变不会影响到 parent shell
 	(
 	MY_VAR="changed"
 	echo "Subshell: $MY_VAR"  # Output: Subshell: changed
 	)
 	echo "Parent: $MY_VAR"      # Output: Parent: [empty/unmodified]
+#4. Parallel Processing: 并行处理
+	(sleep 1 & sleep 2 & wait)  # Runs sleeps in parallel
+	(long_command1) & (long_command2) & wait
 
-# subshell 的主要应用场景
-1. Grouping Commands for Redirection
+## subshell 的主要应用场景
+#1. Grouping Commands for Redirection
 # Send all output to a log file
 	(
 	echo "Starting task..."
 	complex_command
 	echo "Finished."
 	) > log.txt
-2. Temporary Environment Changes
-	# Navigate to a directory, run commands, then return
-	(
-	cd /tmp
-	ls -l
-	)  # Parent shell remains in the original directory
-3. Background Execution
+#2. Temporary Environment Changes
+	(cd /tmp && ls)  # Changing directory only affects the subshell
+#3. Background Execution
 	(
 	command1
 	command2
 	) &
-4. Capturing Output
+#4. Capturing Output
+	contents=$(ls /tmp | grep 'log')
+
 	result=$(
 	echo "Hello"
 	echo "World"
 	)
 	echo "$result"  # Output: Hello\nWorld
+#5. Pipeline stages:
+	generate_data | (process_data; cleanup)
+	cat file.txt | ( while read line; do ...; done )
+#6. Avoid Traps/Signals
+	(trap 'echo Ignored' INT; sleep 10)  # Parent shell's INT trap is unaffected.
 
-# Subshell ( ... ) vs. Code Block { ... }
+#7. Process substitution (<(cmd)) implicitly uses subshells
+	diff <(echo "Hello") <(echo "World")
+
+## Subshell ( ... ) vs. Code Block { ... }
 # subshell
-	1. Runs in a separate process.
-	2. Inherits variables and state from the parent but cannot modify them.
-	3. Suitable for isolated tasks or combining output.
+	#1. Runs in a separate process.
+	#2. Inherits variables and state from the parent but cannot modify them.
+	#3. Suitable for isolated tasks or combining output.
+
 # code block
-	1. Runs in the ​current shell process.
-	2. Modifications to variables or state affect the parent shell.
-	3. No process overhead (faster).
+	#1. Runs in the ​current shell process (Shared environment).
+	#2. Modifications to variables or state affect the parent shell (No isolation).
+	#3. No process overhead (faster).
+	#4. Cannot be backgrounded directly: The entire block runs in sequence
+	#5. Syntax requirements: Commands must end with semicolons or newlines, and there must be spaces around the braces
 
 	{
 	echo "Hello"
 	echo "World"
 	} > output.txt
+
+## Advanced Scenarios
+#1 Chaining Multiple Subshells
+(ls /tmp; (cd /var && ls)) > combined_output.txt
+
+#2 Combining with Functions
+run_in_subshell() {
+    (echo "In subshell: $1"; process_data "$1")
+}
+
+process_data() {
+    echo "Processing $1"
+}
+
+run_in_subshell "example"
+
+#3 Complex Redirection with Code Blocks
+{ 
+    echo "Starting log"; 
+    command1 2>&1; 
+    command2 2>&1; 
+    echo "Ending log"; 
+} | tee logfile.txt
+
+#4 Conditional Execution
+	{ command1 && command2; } || echo "Failed"
 ```
 
 ## 判断命令是否安装
