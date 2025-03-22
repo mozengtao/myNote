@@ -1,6 +1,133 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## Bash Commands Similar to Linux Syscalls
+```bash
+## ​**1. Process Management**
+| Linux Syscall | Bash Equivalent       | Purpose & Example                                        |
+|---------------|-----------------------|----------------------------------------------------------|
+| `fork()`      | `&` operator          | Create subshell/background process:<br>`sleep 10 &`      |
+| `execve()`    | `exec`                | Replace shell process:<br>`exec /bin/zsh`                |
+| `waitpid()`   | `wait`                | Wait for child processes:<br>`wait $pid`                 |
+| `clone()`     | `( )` subshell        | Isolated execution context:<br>`(cd /tmp && ls)`         |
+| `exit()`      | `exit`                | Terminate script:<br>`exit 1`                            |
+
+
+## ​**2. File Operations**
+| Linux Syscall | Bash Equivalent          | Example                                               |
+|---------------|--------------------------|-------------------------------------------------------|
+| `open()`      | `exec` + file descriptors| Persistent FD handling:<br>`exec 3> file.txt`         |
+| `read()`      | `read`                   | Read from FD:<br>`read -u 3 data`                     |
+| `write()`     | `echo` + redirection     | Write to FD:<br>`echo "text" >&3`                     |
+| `close()`     | `exec` + `&-`            | Close FD:<br>`exec 3>&-`                              |
+| `stat()`      | `test`                   | File checks:<br>`if [ -f file.txt ]; then ...`        |
+
+## ​**3. Signal Handling**
+| Linux Syscall  | Bash Equivalent | Example                                                       |
+|----------------|-----------------|---------------------------------------------------------------|
+| `kill()`       | `kill`          | Send signals:<br>`kill -HUP $pid`                             |
+| `sigaction()`  | `trap`          | Signal handlers:<br>`trap 'cleanup' SIGINT`                   |
+## ​**4. Memory Management**
+| Linux Syscall | Bash Feature    | Example                                                                |
+|---------------|-----------------|------------------------------------------------------------------------|
+| `mmap()`      | `/dev/shm`      | Shared memory:<br>`dd if=/dev/zero of=/dev/shm/mem bs=1M count=100`    |
+| `brk()`       | `ulimit`        | Memory limits:<br>`ulimit -v 500000` (500MB virtual memory limit)      |
+
+## ​**5. Network Operations**
+| Linux Syscall | Bash Tool       | Example                                                                |
+|---------------|-----------------|------------------------------------------------------------------------|
+| `socket()`    | `nc` (netcat)   | TCP communication:<br>`nc -l 8080`                                     |
+| `connect()`   | `curl`/`wget`   | HTTP requests:<br>`curl -s http://api.example.com/data.json`           |
+| `bind()`      | `ss`/`netstat`  | Socket monitoring:<br>`ss -tulpn \| grep :443`                         |
+
+## ​**6. Advanced System Interaction**
+| Linux Syscall       | Bash Feature    | Example                                                          |
+|---------------------|-----------------|------------------------------------------------------------------|
+| `ioctl()`           | `stty`          | Terminal control:<br>`stty -echo` (disable input echoing)        |
+| `getpid()`          | `$$` variable   | Process ID:<br>`echo "Script PID: $$"`                           |
+| `gettimeofday()`    | `date`          | Timestamps:<br>`date +%s.%N` (nanosecond precision)              |
+
+
+## Common Patterns
+# File Locking
+	exec 200>/tmp/lockfile
+	flock -n 200 || exit 1
+	# Critical section here
+	flock -u 200
+
+# Signal-Driven Scripts
+	trap 'echo "Exiting cleanly"; rm tempfile' EXIT SIGINT
+
+# Debugging Tools
+	strace -e trace=open,read bash -c 'cat file.txt'
+
+## When to Avoid Bash
+For syscall-intensive tasks, prefer:
+	​C (direct syscall access via <unistd.h>)
+	​Python (os, fcntl, mmap modules)
+	​Rust (memory-safe systems programming)
+```
+
+## exec
+```bash
+##exec 命令主要用途
+	1. replacing the current shell process
+
+	exec command [arguments]
+
+	Behavior:
+		1. Replaces the ​current shell process with the specified command.
+		2. The original shell process is terminated, and the new command takes over its PID.
+		3. After the command exits, the shell session ends (if used interactively) or the script terminates.
+
+		# Script exits after `nginx` finishes (no new process created)
+		#!/bin/bash
+		setup_environment
+		exec nginx -g "daemon off;"
+
+	Use Cases:
+		1. Minimize Resource Usage: Avoid creating a subshell when running a final command in a script.
+		2. Switch Shells: Replace the current shell with another (e.g., exec zsh).
+		3. Run Commands with Environment Changes: Apply new environment variables permanently.
+
+	2. manipulating file descriptors
+
+	exec [n]<file   # Open file for reading on descriptor `n`
+	exec [n]>file   # Open file for writing on descriptor `n`
+	exec [n]>&-     # Close descriptor `n`
+
+	# Redirect All Output
+		exec >script.log 2>&1  # All subsequent output goes to script.log
+
+	# Persistent File Handles
+	exec 3>output.txt
+	echo "Hello" >&3
+	exec 3>&-  # Close descriptor 3	
+
+	# Replace `;` with `+` to pass multiple files to a single process
+	find . -name "*.log" -exec rm {} +
+
+	# Overlay Environment Variables
+	exec env VAR=value /path/to/program
+
+	# Log Entire Script Execution
+	#!/bin/bash
+	exec > >(tee script.log) 2>&1  # Tee output to file and terminal
+	echo "Debug info..."
+
+	# Read Multiple Files Simultaneously
+	exec 3<file1 4<file2
+	read -u 3 line1
+	read -u 4 line2
+	exec 3<&- 4<&-
+
+	# Replace shell process
+	exec zsh
+
+	# Replace `;` with `+` to pass multiple files to a single process
+	find . -name "*.log" -exec rm {} +
+```
+
 ## howto generate 512-byte disk image file
 ```bash
 ( echo "eb fe 11 22 33 44" | xxd -r -p; \
