@@ -867,6 +867,64 @@ System.out.println(sb.toString());
 
 // 仿照 StringBuilder 实现支持链式操作的类
 public class Main {
-	
+	public static void main(String[] args) {
+		Adder adder = new Adder();
+		adder.add(3)
+			 .add(5)
+			 .inc()
+			 .add(10);
+		System.out.println(adder.value());
+	}
 }
+
+class Adder {
+	private int sum = 0;
+
+	public Adder add(int n) {
+		sum += n;
+		return this;
+	}
+
+	public Adder inc() {
+		sum ++;
+		return this;
+	}
+
+	public int value() {
+		return sum;
+	}
+}
+
+// StringJoiner
+StringJoiner 专门用来拼接数组的处理
+
+import java.util.StringJoiner;
+
+public class Main {
+	public static void main(String[] args) {
+		String[] names = {"Bob", "Alice", "Grace"};
+		var sj = new StringJoiner(", ", "Hello ", "!");	// 指定开头和结尾
+		for (String name : names) {
+			sj.add(name);
+		}
+		System.out.println(sj.toString());
+	}
+}
+
+// 不需要指定开头和结尾时，使用 String.join() 更方便
+String[] names = {"Bob", "Alice", "Grace"};
+var s = String.join(", ", names);
+
+// 包装类型
+基本类型	对应的引用类型
+boolean	   java.lang.Boolean
+byte	   java.lang.Byte
+short	   java.lang.Short
+int		   java.lang.Integer
+long	   java.lang.Long
+float	   java.lang.Float
+double	   java.lang.Double
+char	   java.lang.Character
+
+
 ```
