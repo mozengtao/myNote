@@ -1128,22 +1128,194 @@ SecureRandom
 
 Object
 └── Throwable
-    ├── Error
+    ├── Error						// Error 表示严重的错误，程序对此一般无能为力
     │   └── OutOfMemoryError
-    └── Exception
+    └── Exception					// Exception 则是运行时的错误，它可以被捕获并处理
         ├── RuntimeException
         │   ├── NullPointerException
         │   └── IllegalArgumentException
         └── IOException
 
-Error表示严重的错误，程序对此一般无能为力
-Exception则是运行时的错误，它可以被捕获并处理
 
 public byte[] getBytes(String charsetName) throws UnsupportedEncodingException {
     ...
 }
 
-在方法定义的时候，使用throws Xxx表示该方法可能抛出的异常类型。调用方在调用的时候，必须强制捕获这些异常，否则编译器会报错
+在方法定义的时候，使用throws XXX 表示该方法可能抛出的异常类型。调用方在调用的时候，必须强制捕获这些异常，否则编译器会报错
 
+// try...catch
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
+public class Main {
+    public static void main(String[] args) {
+        try {
+            byte[] bs = toGBK("中文");
+            System.out.println(Arrays.toString(bs));
+        } catch (UnsupportedEncodingException e) {
+            System.out.println(e);
+        }
+    }
+
+    static byte[] toGBK(String s) throws UnsupportedEncodingException {
+        // 用指定编码转换String为byte[]:
+        return s.getBytes("GBK");
+    }
+}
+
+// 多 catch 语句
+public static void main(String[] args) {
+    try {
+        process1();
+        process2();
+        process3();
+    } catch (UnsupportedEncodingException e) {		// catch的顺序非常重要：子类必须写在前面
+        System.out.println("Bad encoding");
+    } catch (IOException e) {
+        System.out.println("IO error");
+    }
+}
+
+// finally 语句
+public static void main(String[] args) {
+    try {
+        process1();
+        process2();
+        process3();
+    } catch (UnsupportedEncodingException e) {
+        System.out.println("Bad encoding");
+    } catch (IOException e) {
+        System.out.println("IO error");
+    } finally {										// 无论是否有异常发生，finally 语句都会执行
+        System.out.println("END");
+    }
+}
+
+// 捕获多种异常
+public static void main(String[] args) {
+    try {
+        process1();
+        process2();
+        process3();
+    } catch (IOException | NumberFormatException e) {		// IOException 或 NumberFormatException
+        System.out.println("Bad input");
+    } catch (Exception e) {
+        System.out.println("Unknown error");
+    }
+}
+
+// 异常的传播
+当某个方法抛出了异常时，如果当前方法没有捕获异常，异常就会被抛到上层调用方法，直到遇到某个 try ... catch 被捕获为止
+public class Main {
+    public static void main(String[] args) {
+        try {
+            process1();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void process1() {
+        process2();
+    }
+
+    static void process2() {
+        Integer.parseInt(null); // 会抛出 NumberFormatException
+    }
+}
+
+// 抛出异常
+public class Main {
+    public static void main(String[] args) {
+        try {
+            process1();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void process1() {
+        try {
+            process2();
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException(e);	// 构造异常的时候，把原始的Exception实例传进去，新的Exception就可以持有原始Exception信息，这样才能追踪到完整的异常栈
+        }											// 捕获到异常并再次抛出时，一定要留住原始异常，否则很难定位第一案发现场！
+    }
+
+    static void process2() {
+        throw new NullPointerException();
+    }
+}
+
+// 异常屏蔽
+
+// 自定义异常
+// Java标准库定义的常用异常
+Exception
+├─ RuntimeException
+│  ├─ NullPointerException
+│  ├─ IndexOutOfBoundsException
+│  ├─ SecurityException
+│  └─ IllegalArgumentException
+│     └─ NumberFormatException
+├─ IOException
+│  ├─ UnsupportedCharsetException
+│  ├─ FileNotFoundException
+│  └─ SocketException
+├─ ParseException
+├─ GeneralSecurityException
+├─ SQLException
+└─ TimeoutException
+
+public class BaseException extends RuntimeException {	// 通常建议从RuntimeException派生
+}
+
+public class UserNotFoundException extends BaseException {	// 其他业务类型的异常从BaseException派生
+}
+
+public class LoginFailedException extends BaseException {
+}
+
+// NullPointerException
+
+// 断言 Assertion
+断言用于开发和测试阶段，不能用于可恢复的程序错误，断言失败时会抛出AssertionError，导致程序结束退出
+对于可恢复的程序错误，不应该使用断言，应该抛出异常并在上层捕获
+public static void main(String[] args) {
+    double x = Math.abs(-123.45);
+    assert x >= 0;
+    // assert x >= 0 : "x must >= 0";
+    System.out.println(x);
+}
+
+// java.util.logging
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Hello {
+    public static void main(String[] args) {
+        Logger logger = Logger.getGlobal();
+        logger.info("start process...");
+        logger.warning("memory is running out...");
+        logger.fine("ignored.");
+        logger.severe("process will be terminated...");
+    }
+}
+
+// 第三方日志库 Commons Logging
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+public class Main {
+    public static void main(String[] args) {
+        Log log = LogFactory.getLog(Main.class);
+        log.info("start...");
+        log.warn("end.");
+    }
+}
+
+// 日志框架 Log4j
+
+// Commons Logging -> SLF4J
+// Log4j	-> 	Logback
 ```
