@@ -926,5 +926,224 @@ float	   java.lang.Float
 double	   java.lang.Double
 char	   java.lang.Character
 
+//
+int i = 100;
+Integer n1 = Integer.valueOf(i);		// 通过静态方法valueOf(int)创建Integer实例
+Integer n2 = Integer.valueOf("100");	// 通过静态方法valueOf(String)创建Integer实例
+
+// Auto Boxing
+自动装箱和自动拆箱只发生在编译阶段，目的是为了少写代码。
+
+int i = 100;
+Integer n = Integer.valueOf(i);		// 创建新对象时，优先选用静态工厂方法而不是new操作符
+int x = n.intValue();				// 创建新对象时，优先选用静态工厂方法而不是new操作符
+
+可以简写为
+
+Integer n = 100;	// 编译器自动使用 Integer.valueOf(int)
+int x = n;			// 编译器自动使用 Integer.intValue()
+
+// 不变类
+所有的包装类型都是不变类，即一旦创建了不变类的对象，该对象就是不变的
+
+Integer 源码如下：
+public final class Integer {
+	private final int value;
+}
+
+因此对两个 Integer 实例进行比较时，必须使用 equals() ，因为 Integer 是引用类型
+
+// 进制转换
+int x1 = Integer.parseInt("100");
+int x2 = Integer.parseInt("100", 16);
+
+String s1 = Integer.toString(100);
+String s1 = Integer.toString(100, 36);
+String s1 = Integer.toHexString(100);
+String s1 = Integer.toOctalString(100);
+String s1 = Integer.toBinaryString(100);
+
+// 包装类的常用静态变量
+Boolean t = Boolean.TRUE;
+Boolean f = Boolean.FALSE;
+
+int max = Integer.MAX_VALUE; // 2147483647
+int min = Integer.MIN_VALUE; // -2147483648
+
+int sizeOfLong = Long.SIZE; // 64 (bits)
+int bytesOfLong = Long.BYTES; // 8 (bytes)
+
+Number num = new Integer(999);	// 向上转型为 Number
+// 获取byte, int, long, float, double
+byte b = num.byteValue();
+int n = num.intValue();
+long ln = num.longValue();
+float f = num.floatValue();
+double d = num.doubleValue();
+
+// 无符号类型和有符号类型的转换
+byte x = -1;
+byte y = 127;
+System.out.println(Byte.toUnsignedInt(x)); // 255
+System.out.println(Byte.toUnsignedInt(y)); // 127
+
+// JavaBean
+JavaBean是一种符合命名规范的class，它通过getter和setter来定义属性
+
+// 枚举类
+enum Weekday {
+	SUN, MON, TUE, WED, THU, FRI, SAT;
+}
+
+enum定义的枚举类是一种引用类型，引用类型比较时需要使用 equals() 方法，使用 == 比较的是两个引用类型的变量是否是同一个对象
+由于 enum 类型的每个常量在 JVM 中只有一个唯一的实例，因此可以直接使用 == 进行比较
+if (day == Weekday.FRI) {
+
+}
+
+if (day.equals(Weekday.SUN)) {
+
+}
+
+enum 定义的类型就是 class，它有以下特点:
+	定义的enum类型总是继承自java.lang.Enum，且无法被继承
+	只能定义出enum的实例，而无法通过new操作符创建enum的实例
+	定义的每个实例都是引用类型的唯一实例
+	可以将enum类型用于switch语句
+
+public enum Color {
+	RED, GREEN, BLUE;
+}
+
+编译器编译出的 class 如下所示
+
+public final class Color extends Enum { // 继承自Enum，标记为final class
+    // 每个实例均为全局唯一:
+    public static final Color RED = new Color();
+    public static final Color GREEN = new Color();
+    public static final Color BLUE = new Color();
+    // private构造方法，确保外部无法调用new操作符:
+    private Color() {}
+}
+
+String s = Weekday.SUN.name(); // "SUN"
+int n = Weekday.MON.ordinal(); // 1
+
+// 定义 private 构造方法，给每个枚举常量添加字段
+enum Weekday {
+    MON(1, "星期一"), TUE(2, "星期二"), WED(3, "星期三"), THU(4, "星期四"), FRI(5, "星期五"), SAT(6, "星期六"), SUN(0, "星期日");
+
+    public final int dayValue;
+    private final String chinese;
+
+    private Weekday(int dayValue, String chinese) {
+        this.dayValue = dayValue;
+        this.chinese = chinese;
+    }
+
+    @Override
+    public String toString() {	// toString()可以被覆写，而name()则不行，因此判断枚举常量的名字，要始终使用name()方法，绝不能调用toString()
+        return this.chinese;
+    }
+}
+
+// switch
+public class Main {
+    public static void main(String[] args) {
+        Weekday day = Weekday.SUN;
+        switch(day) {
+        case MON:
+        case TUE:
+        case WED:
+        case THU:
+        case FRI:
+            System.out.println("Today is " + day + ". Work at office!");
+            break;
+        case SAT:
+        case SUN:
+            System.out.println("Today is " + day + ". Work at home!");
+            break;
+        default:
+            throw new RuntimeException("cannot process " + day);
+        }
+    }
+}
+
+enum Weekday {
+    MON, TUE, WED, THU, FRI, SAT, SUN;
+}
+
+// 记录类
+使用 record 定义的是不变类
+可以编写 Compact Constructor 对参数进行验证
+可以定义静态方法
+
+public class Main {
+    public static void main(String[] args) {
+        Point p = new Point(123, 456);
+        System.out.println(p.x());
+        System.out.println(p.y());
+        System.out.println(p);
+    }
+}
+
+record Point(int x, int y) {}	// record关键字，可以非常方便地定义Data Class
+
+// 自定义构造方法 和 静态方法
+public record Point(int x, int y) {
+    public Point {					// 自定义构造函数 (Compact Constructor) 进行参数检查
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static Point of() {		// 一种常用的静态方法是of()方法，用来创建Point
+        return new Point(0, 0);
+    }
+
+    public static Point of(int x, int y) {
+        return new Point(x, y);
+    }
+}
+
+Point p = new Point(123, 456);
+var z = Point.of();
+var p = Point.of(123, 456);
+
+// BigInteger
+BigInteger 用于表示任意大小的整数
+
+// BigDecimal
+BigDecimal 用来表示一个任意大小且精度完全准确的浮点数
+
+// 常用工具类
+Math
+HexFormat
+Random
+SecureRandom
+
+// 异常处理
+异常是一种class，它本身带有类型信息
+异常可以在任何地方抛出，但只需要在上层捕获，这样就和方法调用分离了
+
+Object
+└── Throwable
+    ├── Error
+    │   └── OutOfMemoryError
+    └── Exception
+        ├── RuntimeException
+        │   ├── NullPointerException
+        │   └── IllegalArgumentException
+        └── IOException
+
+Error表示严重的错误，程序对此一般无能为力
+Exception则是运行时的错误，它可以被捕获并处理
+
+public byte[] getBytes(String charsetName) throws UnsupportedEncodingException {
+    ...
+}
+
+在方法定义的时候，使用throws Xxx表示该方法可能抛出的异常类型。调用方在调用的时候，必须强制捕获这些异常，否则编译器会报错
+
 
 ```
