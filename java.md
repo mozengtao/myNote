@@ -1969,5 +1969,197 @@ class IntPair extends Pair<Integer> {
 // 泛型和反射
 
 // 集合
+// Java 集合框架
+Iterable (接口)
+└── Collection (接口)
+    ├── List (接口) → 有序可重复
+    │    ├── ArrayList (数组实现)
+    │    ├── LinkedList (双向链表实现)
+    │    └── Vector (线程安全，已过时)		// deprecated 
+    │         └── Stack (后进先出)		   // deprecated 
+    │
+    ├── Set (接口) → 无序唯一
+    │    ├── HashSet (哈希表实现)
+    │    │    └── LinkedHashSet (维护插入顺序)
+    │    └── SortedSet (接口)
+    │         └── TreeSet (红黑树实现)
+    │
+    └── Queue (接口) → 队列
+         ├── PriorityQueue (优先堆实现)
+         └── Deque (接口) → 双端队列
+              ├── ArrayDeque (数组实现)
+              └── LinkedList (双向链表实现)
 
+Map (接口) → 键值对存储
+├── HashMap (哈希表实现)
+│    └── LinkedHashMap (维护插入顺序)
+├── Hashtable (线程安全，已过时)			// deprecated 
+├── SortedMap (接口)
+│    └── TreeMap (红黑树实现)
+└── ConcurrentHashMap (线程安全高效实现)
+
+// List 接口
+List内部按照放入元素的先后顺序存放，并且每个元素都可以通过索引确定自己的位置
+boolean add(E e)
+boolean add(int index, E e)
+E remove(int index)
+boolean remove(Object e)
+E get(int index)
+int size()
+
+// ArrayList (通常情况下，优先使用ArrayList)
+// LinkedList
+					ArrayList			LinkedList
+获取指定元素	 	 速度很快			  需要从头开始查找元素
+添加元素到末尾	  	 速度很快			  速度很快
+在指定位置添加/删除	  需要移动元素	       不需要移动元素
+内存占用			 少				     较大
+
+List<String> list = new ArrayList<>();
+list.add("apple");
+list.add(null);
+list.add("pear");
+
+// 使用 of() 方法，根据给定元素快速创建List
+List<Integer> list = List.of(1, 2, 5);
+
+// 遍历 List
+
+// 1
+import java.util.Iterator;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = List.of("apple", "pear", "banana");
+        for (Iterator<String> it = list.iterator(); it.hasNext(); ) {
+            String s = it.next();
+            System.out.println(s);
+        }
+    }
+}
+
+// 2: Java编译器会自动把for each循环变成Iterator的调用, 因为Iterable接口定义了一个Iterator<E> iterator()方法，强迫集合类必须返回一个Iterator实例
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = List.of("apple", "pear", "banana");
+        for (String s : list) {
+            System.out.println(s);
+        }
+    }
+}
+
+// List 和 Array 转换
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> list = List.of(12, 34, 56);
+		Integer[] array = list.toArray(Integer[]::new);
+		// Integer[] array = list.toArray(new Integer[list.size()]);
+        // Integer[] array = list.toArray(new Integer[3]);
+        for (Integer n : array) {
+            System.out.println(n);
+        }
+    }
+}
+
+// Array -> List
+Integer[] array = { 1, 2, 3 };
+List<Integer> list = List.of(array);
+
+// contains 和 indexOf
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> list = List.of("A", "B", "C");
+        System.out.println(list.contains("C")); // true
+		System.out.println(list.contains(new String("C")));	// true, 因为List内部并不是通过 == 判断两个元素是否相等，而是使用 equals() 方法判断两个元素是否相等
+        System.out.println(list.contains("X")); // false
+        System.out.println(list.indexOf("C")); // 2
+		System.out.println(list.indexOf(new String("C")));	// 2, 因为List内部并不是通过 == 判断两个元素是否相等，而是使用 equals() 方法判断两个元素是否相等
+        System.out.println(list.indexOf("X")); // -1
+    }
+}
+
+// equals 方法
+	1. 自反性（Reflexive）：对于非null的x来说，x.equals(x)必须返回true
+	2. 对称性（Symmetric）：对于非null的x和y来说，如果x.equals(y)为true，则y.equals(x)也必须为true
+	3. 传递性（Transitive）：对于非null的x、y和z来说，如果x.equals(y)为true，y.equals(z)也为true，那么x.equals(z)也必须为true
+	4. 一致性（Consistent）：对于非null的x和y来说，只要x和y状态不变，则x.equals(y)总是一致地返回true或者false
+	5. 对null的比较：即x.equals(null)永远返回false
+
+// equals()方法的正确编写方法
+	1. 先确定实例“相等”的逻辑，即哪些字段相等，就认为实例相等
+	2. 用instanceof判断传入的待比较的Object是不是当前类型，如果是，继续比较，否则，返回false
+	3. 对引用类型用Objects.equals()比较，对基本类型直接用==比较
+
+public class Person {
+    public String name;
+    public int age;
+}
+
+public boolean equals(Object o) {
+    if (o instanceof Person p) {
+        boolean nameEquals = false;
+        if (this.name == null && p.name == null) {
+            nameEquals = true;
+        }
+        if (this.name != null) {
+            nameEquals = this.name.equals(p.name);
+        }
+        return nameEquals && this.age == p.age;
+    }
+    return false;
+}
+
+使用Objects.equals()静态方法简化引用类型的比较
+
+public boolean equals(Object o) {
+    if (o instanceof Person p) {
+        return Objects.equals(this.name, p.name) && this.age == p.age;
+    }
+    return false;
+}
+
+// Map: Map<K, V>是一种键-值映射表
+
+// 遍历 Map
+// 1
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("apple", 123);
+        map.put("pear", 456);
+        map.put("banana", 789);
+        for (String key : map.keySet()) {			// 遍历 key
+            Integer value = map.get(key);
+            System.out.println(key + " = " + value);
+        }
+    }
+}
+
+// 2
+import java.util.HashMap;
+import java.util.Map;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("apple", 123);
+        map.put("pear", 456);
+        map.put("banana", 789);
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {	// 遍历 key 和 value
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println(key + " = " + value);
+        }
+    }
+}
 ```
