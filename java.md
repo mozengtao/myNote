@@ -1318,4 +1318,656 @@ public class Main {
 
 // Commons Logging -> SLF4J
 // Log4j	-> 	Logback
+
+// 反射 Reflection
+反射是为了解决在运行期，对某个实例一无所知的情况下，如何调用其方法
+反射是通过Class实例获取class信息的方法
+
+class (包括interface) 的本质是数据类型(Type), class 是由 JVM 在执行过程中动态加载的, JVM 在第一次读取到一种 class 类型时，将其加载进内存，每加载一种 class, JVM 就为其创建一个 Class 类型的实例，并关联起来，这里的 Class 类型是一个名叫 Class 的 class
+public final class Class {
+    private Class() {}
+}
+
+以String类为例，当JVM加载String类时，它首先读取 String.class 文件到内存，然后，为 String 类创建一个 Class 实例并关联起来
+Class cls = new Class(String);
+
+JVM 持有的每个 Class 实例都指向一个数据类型
+------------------------------
+| Class Instance			 |	--->	String
+| name = "java.lang.String"  |
+|----------------------------|
+| Class Instance			 |	--->	Random
+| name = "java.lang.Random"  |
+|----------------------------|
+| Class Instance			 |	--->	Runnable
+| name = "java.lang.Runnable"|
+------------------------------
+
+一个Class实例包含了该class的所有完整信息
+┌───────────────────────────┐
+│      Class Instance       │ ────▶ String
+├───────────────────────────┤
+│name = "java.lang.String"  │
+├───────────────────────────┤
+│package = "java.lang"      │
+├───────────────────────────┤
+│super = "java.lang.Object" │
+├───────────────────────────┤
+│interface = CharSequence...│
+├───────────────────────────┤
+│field = value[],hash,...   │
+├───────────────────────────┤
+│method = indexOf()...      │
+└───────────────────────────┘
+
+// 获取一个 class 的 Class 实例 (Class实例在JVM中是唯一的)
+// 1
+Class cls = String.calss;
+
+// 2
+String s = "Hello";
+Class cls = s.getClass();
+
+// 3
+Class cls = Class.forName("java.lang.String");
+
+// instanceof 不但匹配指定类型，还匹配指定类型的子类
+// 用 == 判断 class 实例可以精确的判断数据类型，但不能作子类型比较
+
+// 从Class实例获取获取的基本信息
+public class Main {
+    public static void main(String[] args) {
+        printClassInfo("".getClass());
+        printClassInfo(Runnable.class);
+        printClassInfo(java.time.Month.class);
+        printClassInfo(String[].class);
+        printClassInfo(int.class);
+    }
+
+    static void printClassInfo(Class cls) {
+        System.out.println("Class name: " + cls.getName());
+        System.out.println("Simple name: " + cls.getSimpleName());
+        if (cls.getPackage() != null) {
+            System.out.println("Package name: " + cls.getPackage().getName());
+        }
+        System.out.println("is interface: " + cls.isInterface());
+        System.out.println("is enum: " + cls.isEnum());
+        System.out.println("is array: " + cls.isArray());
+        System.out.println("is primitive: " + cls.isPrimitive());
+    }
+}
+
+// 动态加载
+JVM在执行Java程序的时候，并不是一次性把所有用到的class全部加载到内存，而是第一次需要用到class时才加载
+
+// 访问字段
+Field getField(name)	// 根据字段名获取某个 public 的 field (包括父类)
+Field getDeclaredField(name)	// 根据字段名获取某个 public 的 field (不包括父类)
+Field[] getFields()	// 获取所有 public 的 field (包括父类)
+Field[] getDeclaredFields()	// 获取所有 public 的 field (不包括父类)
+
+public class Main {
+	public static void main(String[] args) throws Exception {
+		Class stdClass = Student.class;
+		System.out.println(stdClass.getField("score"));
+		System.out.println(stdClass.getField("name"));
+		System.out.println(stdClass.getDeclaredField("grade"));
+	}
+}
+
+class Student extends Person {
+	public int score;
+	private int grade;
+}
+
+class Person {
+	public String name;
+}
+
+// 一个 Field 对象包含了一个字段的所有信息
+getName()		// 返回字段名称
+getType()		// 返回字段类型
+getModifiers()	// 返回字段的修饰符 (不同 bit 表示不同的含义)
+
+// 以 String 类的 value 字段为例，它的定义如下
+public final class String {
+	private final byte[] value;
+}
+
+// 通过反射获取该字段的信息
+Field f = String.class.getDeclaredField("value");
+f.getName();
+f.getType();
+int m = f.getModifiers();
+Modifier.isFinal(m);
+Modifier.isPublic(m);
+Modifier.isProtected(m);
+Modifier.isPrivate(m);
+Modifier.isStatic(m);
+
+// 获取字段值
+import java.lang.reflect.Field;
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Object p = new Person("Xiao Ming");
+        Class c = p.getClass();
+        Field f = c.getDeclaredField("name");
+        f.setAccessible(true);	// 正常情况下，Main类无法访问Person类的private字段
+		Object value = f.get(p);
+        System.out.println(value); // "Xiao Ming"
+    }
+}
+
+class Person {
+    private String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+}
+
+// 设置字段值
+import java.lang.reflect.Field;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        Person p = new Person("Xiao Ming");
+        System.out.println(p.getName()); // "Xiao Ming"
+        Class c = p.getClass();
+        Field f = c.getDeclaredField("name");
+        f.setAccessible(true);
+        f.set(p, "Xiao Hong");
+        System.out.println(p.getName()); // "Xiao Hong"
+    }
+}
+
+class Person {
+    private String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+}
+
+// 调用方法
+// 通过Class实例获取所有Method信息
+Method getMethod(name, Class...)			// 获取某个public的Method（包括父类）
+Method getDeclaredMethod(name, Class...)	// 获取当前类的某个Method（不包括父类）
+Method[] getMethods()						// 获取所有public的Method（包括父类）
+Method[] getDeclaredMethods()				// 获取当前类的所有Method（不包括父类）
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Class stdClass = Student.class;
+        System.out.println(stdClass.getMethod("getScore", String.class));
+        System.out.println(stdClass.getMethod("getName"));
+        System.out.println(stdClass.getDeclaredMethod("getGrade", int.class));
+    }
+}
+
+class Student extends Person {
+    public int getScore(String type) {
+        return 99;
+    }
+    private int getGrade(int year) {
+        return 1;
+    }
+}
+
+class Person {
+    public String getName() {
+        return "Person";
+    }
+}
+
+// 一个Method对象包含一个方法的所有信息
+getName()				// 返回方法名称，例如："getScore"；
+getReturnType()			// 返回方法返回值类型，也是一个Class实例，例如：String.class；
+getParameterTypes()		// 返回方法的参数类型，是一个Class数组，例如：{String.class, int.class}；
+getModifiers()			// 返回方法的修饰符，它是一个int，不同的bit表示不同的含义
+
+// 调用方法
+import java.lang.reflect.Method;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String s = "Hello world";
+        Method m = String.class.getMethod("substring", int.class);
+        String r = (String) m.invoke(s, 6);	// 在对应实例上按照参数要求调用方法
+        System.out.println(r); // "world"
+    }
+}
+
+// 调用静态方法
+import java.lang.reflect.Method;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Method m = Integer.class.getMethod("parseInt", String.class);
+        Integer n = (Integer) m.invoke(null, "12345");	// 调用静态方法时，无需指定实例对象，所以invoke方法传入的第一个参数为null
+        System.out.println(n);
+    }
+}
+
+// 调用非public方法
+import java.lang.reflect.Method;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Person p = new Person();
+        Method m = p.getClass().getDeclaredMethod("setName", String.class);
+        m.setAccessible(true);		// 通过Method.setAccessible(true)允许其调用 (如果JVM运行期存在SecurityManager，那么它会根据规则进行检查，有可能阻止setAccessible(true))
+        m.invoke(p, "Bob");
+        System.out.println(p.name);
+    }
+}
+
+class Person {
+    String name;
+    private void setName(String name) {
+        this.name = name;
+    }
+}
+
+// 多态
+import java.lang.reflect.Method;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Method h = Person.class.getMethod("hello");
+        h.invoke(new Student());				// 使用反射调用方法时，仍然遵循多态原则：即总是调用实际类型的覆写方法（如果存在）
+    }
+}
+
+class Person {
+    public void hello() {
+        System.out.println("Person:hello");
+    }
+}
+
+class Student extends Person {
+    public void hello() {
+        System.out.println("Student:hello");
+    }
+}
+
+// 调用构造方法
+// 通过Class实例获取Constructor的方法 (Constructor总是当前类定义的构造方法，和父类无关，因此不存在多态的问题)
+getConstructor(Class...)			// 获取某个public的Constructor
+getDeclaredConstructor(Class...)	// 获取某个Constructor
+getConstructors()					// 获取所有public的Constructor
+getDeclaredConstructors()			// 获取所有Constructor
+
+
+import java.lang.reflect.Constructor;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Constructor cons1 = Integer.class.getConstructor(int.class);
+        Integer n1 = (Integer) cons1.newInstance(123);
+        System.out.println(n1);
+
+        Constructor cons2 = Integer.class.getConstructor(String.class);
+        Integer n2 = (Integer) cons2.newInstance("456");
+        System.out.println(n2);
+    }
+}
+
+// 获取继承关系
+// 获取类的类型
+当我们获取到某个Class对象时，实际上就获取到了一个类的类型
+// 1
+Class cls = String.class; // 获取到String的Class
+// 2
+String s = "";
+Class cls = s.getClass(); // s是String，因此获取到String的Class
+// 3
+Class s = Class.forName("java.lang.String");
+
+这三种方式获取的Class实例都是同一个实例，因为JVM对每个加载的Class只创建一个Class实例来表示它的类型
+
+// 获取父类的 Class
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Class i = Integer.class;
+        Class n = i.getSuperclass();
+        System.out.println(n);
+        Class o = n.getSuperclass();
+        System.out.println(o);
+        System.out.println(o.getSuperclass());
+    }
+}
+
+// 获取 interface
+一个类可能实现一个或多个接口，通过Class查询实现的接口类型
+
+import java.lang.reflect.Method;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Class s = Integer.class;
+        Class[] is = s.getInterfaces();		// getInterfaces()只返回当前类直接实现的接口类型，不包括父类实现的接口类型
+        for (Class i : is) {
+            System.out.println(i);
+        }
+    }
+}
+
+// 继承关系
+// instanceof
+Object n = Integer.valueOf(123);
+boolean isDouble = n instanceof Double; // false
+boolean isInteger = n instanceof Integer; // true
+boolean isNumber = n instanceof Number; // true
+boolean isSerializable = n instanceof java.io.Serializable; // true
+
+// 判断两个 Class 实例向上转型是否成立
+Integer i = ?;
+Integer.class.isAssignableFrom(Integer.class); // true，因为Integer可以赋值给Integer
+Number n = ?;
+Number.class.isAssignableFrom(Integer.class); // true，因为Integer可以赋值给Number
+Object o = ?;
+Object.class.isAssignableFrom(Integer.class); // true，因为Integer可以赋值给Object
+Integer i = ?;
+Integer.class.isAssignableFrom(Number.class); // false，因为Number不能赋值给Integer
+
+// 动态代理
+
+// interface类型的变量总是通过某个实例向上转型并赋值给接口类型变量
+CharSequence cs = new StringBuilder();
+
+// 动态代理 Dynamic Proxy 机制是在运行期动态创建某个 interface 的实例
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+public class Main {
+    public static void main(String[] args) {
+        InvocationHandler handler = new InvocationHandler() {										// InvocationHandler实例负责实现接口的方法调用
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println(method);
+                if (method.getName().equals("morning")) {
+                    System.out.println("Good morning, " + args[0]);
+                }
+                return null;
+            }
+        };
+        Hello hello = (Hello) Proxy.newProxyInstance(			// 创建 interface 实例
+            Hello.class.getClassLoader(), 						// 参数1: 传入ClassLoader
+            new Class[] { Hello.class }, 						// 参数2:传入要实现的接口
+            handler); 											// 参数3:传入处理调用方法的InvocationHandler
+        hello.morning("Bob");					// 将返回的Object强制转型为接口
+    }
+}
+
+interface Hello {
+    void morning(String name);
+}
+
+动态代理实际上是JVM在运行期动态创建class字节码并加载的过程, 上面的动态代理改写为静态实现类大概长这样
+
+public class HelloDynamicProxy implements Hello {
+    InvocationHandler handler;
+    public HelloDynamicProxy(InvocationHandler handler) {
+        this.handler = handler;
+    }
+    public void morning(String name) {
+        handler.invoke(
+           this,
+           Hello.class.getMethod("morning", String.class),
+           new Object[] { name }
+        );
+    }
+}
+
+// 注解 Annotation: 放在Java源码的类、方法、字段、参数前的一种特殊 "注释", 从 JVM 的角度看，注解本身对代码逻辑没有任何影响，如何使用注解完全由工具决定
+
+// 3 类注解:
+1. 编译器使用的注解, 这类注解不会被编译进入.class文件，它们在编译后就被编译器扔掉了
+2. 由工具处理.class文件使用的注解，比如有些工具会在加载class的时候，对class做动态修改，实现一些特殊的功能
+3. 程序运行期能够读取的注解，它们在加载后一直存在于JVM中
+
+// 定义注解
+
+// 处理注解
+
+// 泛型
+泛型是一种 "代码模板"，可以用一套代码套用各种类型
+
+public class ArrayList<T> {
+    private T[] array;
+    private int size;
+    public void add(T e) {...}
+    public void remove(int index) {...}
+    public T get(int index) {...}
+}
+
+// 向上转型
+public class ArrayList<T> implements List<T> {
+    ...
+}
+
+List<String> list = new ArrayList<String>();
+
+// 泛型的继承关系: T不变时，可以向上转型，T本身不能向上转型
+
+  List<Integer>     ArrayList<Number>			// ArrayList<Integer>和ArrayList<Number>两者完全没有继承关系。
+    ▲                            ▲
+    │                            │
+    │                            X
+    │                            │
+ArrayList<Integer>  ArrayList<Integer>
+
+// 不定义泛型类型时，泛型类型实际上就是Object
+List list = new ArrayList();
+相当于
+List list = new ArrayList<Object>();
+
+
+List<String> list = new ArrayList<String>();	// 定义泛型类型<String>后，List<T>的泛型接口变为强类型List<String>
+
+List<Number> list = new ArrayList<Number>();	// 定义泛型类型<Number>后，List<T>的泛型接口变为强类型List<Number>
+
+// 编译器如果能自动推断出泛型类型，就可以省略后面的泛型类型
+List<Number> list = new ArrayList<Number>();
+可以被简写为
+List<Number> list = new ArrayList<>();		// 编译器看到泛型类型List<Number>就可以自动推断出后面的ArrayList<T>的泛型类型必须是ArrayList<Number>
+
+// 泛型接口
+
+// Comparable<T> 泛型接口
+
+public interface Comparable<T> {
+    /**
+     * 返回负数: 当前实例比参数o小
+     * 返回0: 当前实例与参数o相等
+     * 返回正数: 当前实例比参数o大
+     */
+    int compareTo(T o);
+}
+
+// 对 String 数组进行排序
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        String[] ss = new String[] { "Orange", "Apple", "Pear" };
+        Arrays.sort(ss);											// String 实现了 Comparable<String> 接口, 因此可以进行排序
+        System.out.println(Arrays.toString(ss));
+    }
+}
+
+// 自定义类实现 Comparable<String> 接口
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        Person[] ps = new Person[] {
+            new Person("Bob", 61),
+            new Person("Alice", 88),
+            new Person("Lily", 75),
+        };
+        Arrays.sort(ps);
+        System.out.println(Arrays.toString(ps));
+    }
+}
+
+class Person implements Comparable<Person> {
+    String name;
+    int score;
+    Person(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+    public int compareTo(Person other) {			// 实现接口方法
+        return this.name.compareTo(other.name);
+    }
+    public String toString() {
+        return this.name + "," + this.score;
+    }
+}
+
+// 编写泛型, 可以先按照某种特定类型进行编写，之后替换特定类型为泛型
+public class Pair<T> {
+    private T first;
+    private T last;
+    public Pair(T first, T last) {
+        this.first = first;
+        this.last = last;
+    }
+    public T getFirst() {
+        return first;
+    }
+    public T getLast() {
+        return last;
+    }
+}
+
+// 泛型类型<T>不能用于静态方法
+
+public class Pair<T> {
+    private T first;
+    private T last;
+    public Pair(T first, T last) {
+        this.first = first;
+        this.last = last;
+    }
+    public T getFirst() { ... }
+    public T getLast() { ... }
+
+    // 静态泛型方法应该使用另外一个类型进行区分
+    public static <K> Pair<K> create(K first, K last) {
+        return new Pair<K>(first, last);
+    }
+}
+
+// 多个泛型类型
+public class Pair<T, K> {
+    private T first;
+    private K last;
+    public Pair(T first, K last) {
+        this.first = first;
+        this.last = last;
+    }
+    public T getFirst() { ... }
+    public K getLast() { ... }
+}
+
+Pair<String, Integer> p = new Pair<>("test", 123);
+
+// Java使用擦拭法实现泛型，即 Java的泛型是由编译器在编译时实行的，编译器把类型<T>视为Object，编译器根据<T>实现安全的强制转型
+
+编译器看到的代码
+Pair<String> p = new Pair<>("Hello", "world");
+String first = p.getFirst();
+String last = p.getLast();
+
+虚拟机执行的代码
+Pair p = new Pair("Hello", "world");
+String first = (String) p.getFirst();
+String last = (String) p.getLast();
+
+Java泛型的局限性：
+	1. <T>不能是基本类型
+	2. 无法取得带泛型的Class
+	3. 无法判断带泛型的类型
+	4. 不能实例化T类型
+
+// 泛型继承：一个类可以继承自一个泛型类
+public class IntPair extends Pair<Integer> {
+}
+
+IntPair ip = new IntPair(1, 2);
+
+// 在继承了泛型类型的情况下，子类可以获取父类的泛型类型
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
+public class Main {
+    public static void main(String[] args) {
+        Class<IntPair> clazz = IntPair.class;
+        Type t = clazz.getGenericSuperclass();
+        if (t instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) t;
+            Type[] types = pt.getActualTypeArguments(); // 可能有多个泛型类型
+            Type firstType = types[0]; // 取第一个泛型类型
+            Class<?> typeClass = (Class<?>) firstType;
+            System.out.println(typeClass); // Integer
+        }
+    }
+}
+
+class Pair<T> {
+    private T first;
+    private T last;
+    public Pair(T first, T last) {
+        this.first = first;
+        this.last = last;
+    }
+    public T getFirst() {
+        return first;
+    }
+    public T getLast() {
+        return last;
+    }
+}
+
+class IntPair extends Pair<Integer> {
+    public IntPair(Integer first, Integer last) {
+        super(first, last);
+    }
+}
+
+// 因为Java引入了泛型，所以，只用Class来标识类型已经不够了。实际上，Java的类型系统结构
+                       ┌────┐
+                       │Type│
+                       └────┘
+                         ▲
+                         │
+   ┌────────────┬────────┴─────────┬───────────────┐
+   │            │                  │               │
+┌─────┐┌─────────────────┐┌────────────────┐┌────────────┐
+│Class││ParameterizedType││GenericArrayType││WildcardType│
+└─────┘└─────────────────┘└────────────────┘└────────────┘
+
+// extends 通配符
+	<? extends T>允许调用读方法T get()获取T的引用，但不允许调用写方法set(T)传入T的引用（传入null除外）
+// super 通配符
+	<? super T>允许调用写方法set(T)传入T的引用，但不允许调用读方法T get()获取T的引用（获取Object除外）
+// 无限定通配符 <?>
+	不允许调用set(T)方法并传入引用（null除外）
+	不允许调用T get()方法并获取T引用（只能获取Object引用）
+
+// 泛型和反射
+
+// 集合
+
 ```
