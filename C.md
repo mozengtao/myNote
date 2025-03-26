@@ -5,6 +5,7 @@
 ### ini parser
 [iniparser](https://github.com/ndevilla/iniparser/tree/main)  
 [inih](https://github.com/benhoyt/inih)  
+[Notcurses: blingful TUIs and character graphics](https://github.com/dankamongmen/notcurses)  
 
 ## 常用函数
 	- ioctl, fcntl
