@@ -2203,4 +2203,438 @@ map.get("x"); // null
 即对应两个实例a和b：
 	如果a和b相等，那么a.equals(b)一定为true，则a.hashCode()必须等于b.hashCode()
 	如果a和b不相等，那么a.equals(b)一定为false，则a.hashCode()和b.hashCode()尽量不要相等
+
+public class Person {
+    String firstName;
+    String lastName;
+    int age;
+
+    int hashCode() {
+    	return Objects.hash(firstName, lastName, age);	// 借助Objects.hash()
+	}
+}
+
+编写equals()和hashCode()遵循的原则
+	equals()用到的用于比较的每一个字段，都必须在hashCode()中用于计算
+	equals()中没有使用到的字段，绝不可放在hashCode()中计算
+
+HashMap初始化时默认的数组大小只有16, 任何key，无论它的hashCode()有多大，都可以简单地通过如下计算
+int index = key.hashCode() & 0xf; // 0xf = 15
+添加超过一定数量的key-value时，HashMap会在内部自动扩容，每次扩容一倍，即长度为16的数组扩展为长度32，相应地，需要重新确定hashCode()计算的索引位置
+int index = key.hashCode() & 0x1f; // 0x1f = 31
+(由于扩容会导致重新分布已有的key-value，所以，频繁扩容对HashMap的性能影响很大)
+
+// EnumMap：针对 key 的对象是 enum 类型的情况，可以使用 EnumMap，效率更高并且没有额外的空间浪费
+
+import java.time.DayOfWeek;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<DayOfWeek, String> map = new EnumMap<>(DayOfWeek.class);
+        map.put(DayOfWeek.MONDAY, "星期一");
+        map.put(DayOfWeek.TUESDAY, "星期二");
+        map.put(DayOfWeek.WEDNESDAY, "星期三");
+        map.put(DayOfWeek.THURSDAY, "星期四");
+        map.put(DayOfWeek.FRIDAY, "星期五");
+        map.put(DayOfWeek.SATURDAY, "星期六");
+        map.put(DayOfWeek.SUNDAY, "星期日");
+        System.out.println(map);
+        System.out.println(map.get(DayOfWeek.MONDAY));
+    }
+}
+
+// TreeMap
+SortedMap(接口类型)保证遍历时以Key的顺序来进行排序
+       ┌───┐
+       │Map│
+       └───┘
+         ▲
+    ┌────┴─────┐
+    │          │
+┌───────┐ ┌─────────┐
+│HashMap│ │SortedMap│
+└───────┘ └─────────┘
+               ▲
+               │
+          ┌─────────┐
+          │ TreeMap │
+          └─────────┘
+
+// 1
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<Person, Integer> map = new TreeMap<>(new Comparator<Person>() {
+            public int compare(Person p1, Person p2) {
+                return p1.name.compareTo(p2.name);
+            }
+        });
+        map.put(new Person("Tom"), 1);
+        map.put(new Person("Bob"), 2);
+        map.put(new Person("Lily"), 3);
+        for (Person key : map.keySet()) {
+            System.out.println(key);
+        }
+        // {Person: Bob}, {Person: Lily}, {Person: Tom}
+        System.out.println(map.get(new Person("Bob"))); // 2
+    }
+}
+
+class Person {
+    public String name;
+    Person(String name) {
+        this.name = name;
+    }
+    public String toString() {
+        return "{Person: " + name + "}";
+    }
+}
+
+// 2
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Map<Student, Integer> map = new TreeMap<>(new Comparator<Student>() {
+			public int compare(Student p1, Student p2) {
+				if (p1.score == p2.score) {
+					return 0;
+				}
+				return p1.score > p2.score ? -1 : 1;
+			}
+        });
+        map.put(new Student("Tom", 77), 1);
+        map.put(new Student("Bob", 66), 2);
+        map.put(new Student("Lily", 99), 3);
+        for (Student key : map.keySet()) {
+            System.out.println(key);
+        }
+        System.out.println(map.get(new Student("Bob", 66))); // null?
+    }
+}
+
+class Student {
+    public String name;
+    public int score;
+    Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+    public String toString() {
+        return String.format("{%s: score=%d}", name, score);
+    }
+}
+
+// Properties
+配置文件的特点是，它的Key-Value一般都是String-String类型的，因此我们完全可以用Map<String, String>来表示它
+
+// 读取配置文件
+// setting.properties
+last_open_file=/data/hello.txt
+auto_save_interval=60
+
+// read setting.properties
+String f = "setting.properties";
+Properties props = new Properties();
+props.load(new java.io.FileInputStream(f));
+
+String filepath = props.getProperty("last_open_file");
+String interval = props.getProperty("auto_save_interval", "120");
+
+// 从内存读取字节流
+// properties
+import java.io.*;
+import java.util.Properties;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String settings = "# test" + "\n" + "course=Java" + "\n" + "last_open_date=2019-08-07T12:35:01";
+        ByteArrayInputStream input = new ByteArrayInputStream(settings.getBytes("UTF-8"));
+        Properties props = new Properties();
+        props.load(input);
+
+        System.out.println("course: " + props.getProperty("course"));
+        System.out.println("last_open_date: " + props.getProperty("last_open_date"));
+        System.out.println("last_open_file: " + props.getProperty("last_open_file"));
+        System.out.println("auto_save: " + props.getProperty("auto_save", "60"));
+    }
+}
+
+// 写入配置文件
+Properties props = new Properties();
+props.setProperty("url", "http://www.liaoxuefeng.com");
+props.setProperty("language", "Java");
+props.store(new FileOutputStream("C:\\conf\\setting.properties"), "这是写入的properties注释");
+
+
+// Set: 用于存储不重复的元素集合
+       ┌───┐
+       │Set│
+       └───┘
+         ▲
+    ┌────┴─────┐
+    │          │
+┌───────┐ ┌─────────┐
+│HashSet│ │SortedSet│
+└───────┘ └─────────┘
+               ▲
+               │
+          ┌─────────┐
+          │ TreeSet │
+          └─────────┘
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        System.out.println(set.add("abc")); // true
+        System.out.println(set.add("xyz")); // true
+        System.out.println(set.add("xyz")); // false，添加失败，因为元素已存在
+        System.out.println(set.contains("xyz")); // true，元素存在
+        System.out.println(set.contains("XYZ")); // false，元素不存在
+        System.out.println(set.remove("hello")); // false，删除失败，因为元素不存在
+        System.out.println(set.size()); // 2，一共两个元素
+    }
+}
+
+// Queue: 先进先出（FIFO）的队列
+int size()							// 获取队列长度
+boolean add(E)/boolean offer(E)		// 添加元素到队尾, offer()方法来添加元素失败时，不会抛异常，而是返回false
+E remove()/E poll()					// 获取队首元素并从队列中删除
+E element()/E peek()				// 获取队首元素但并不从队列中删除
+
+// PriorityQueue: 出队顺序与元素的优先级有关的Queue，对PriorityQueue调用remove()或poll()方法，返回的总是优先级最高的元素
+// 放入PriorityQueue的元素，必须实现Comparable接口，PriorityQueue会根据元素的排序顺序决定出队的优先级, 如果要放入的元素并没有实现Comparable接口, PriorityQueue允许我们提供一个Comparator对象来判断两个元素的顺序
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public class Main {
+    public static void main(String[] args) {
+        Queue<User> q = new PriorityQueue<>(new UserComparator());
+        // 添加3个元素到队列:
+        q.offer(new User("Bob", "A1"));
+        q.offer(new User("Alice", "A2"));
+        q.offer(new User("Boss", "V1"));
+        System.out.println(q.poll()); // Boss/V1
+        System.out.println(q.poll()); // Bob/A1
+        System.out.println(q.poll()); // Alice/A2
+        System.out.println(q.poll()); // null,因为队列为空
+    }
+}
+
+class UserComparator implements Comparator<User> {
+    public int compare(User u1, User u2) {
+        if (u1.number.charAt(0) == u2.number.charAt(0)) {	// 逻辑错误：A10排在A2的前面
+            // 如果两人的号都是A开头或者都是V开头,比较号的大小:
+            return u1.number.compareTo(u2.number);
+        }
+        if (u1.number.charAt(0) == 'V') {
+            // u1的号码是V开头,优先级高:
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+}
+
+class User {
+    public final String name;
+    public final String number;
+
+    public User(String name, String number) {
+        this.name = name;
+        this.number = number;
+    }
+
+    public String toString() {
+        return name + "/" + number;
+    }
+}
+
+// Dequeue 双端队列
+Deque
+├─ ArrayDeque
+├─ LinkedList
+
+addLast(E e) / offerLast(E e)		// 添加元素到队尾
+E removeFirst() / E pollFirst()		// 取队首元素并删除
+E getFirst() / E peekFirst()		// 取队首元素但不删除
+addFirst(E e) / offerFirst(E e)		// 添加元素到队首
+E removeLast() / E pollLast()		// 取队尾元素并删除
+E getLast() / E peekLast()			// 取队尾元素但不删除
+
+面向抽象编程的一个原则就是：尽量持有接口，而不是具体的实现类
+使用的时候，总是用特定的接口来引用它，这是因为持有接口说明代码的抽象层次更高，而且接口本身定义的方法代表了特定的用途
+// 不推荐的写法:
+LinkedList<String> d1 = new LinkedList<>();
+d1.offerLast("z");
+// 推荐的写法：
+Deque<String> d2 = new LinkedList<>();
+d2.offerLast("z");
+
+// Stack
+push(E)		// 压栈
+pop()		// 出栈
+peek()		// 取栈顶元素但不出栈
+
+// Iterator
+迭代器以统一的方式遍历各种集合类型，而不必关心它们内部的存储结构
+
+Java 的集合类都可以使用 for each 循环
+
+List<String> list = List.of("Apple", "Orange", "Pear");
+for (String s : list) {
+    System.out.println(s);
+}
+
+Java 编译器把 for each循环通过 Iterator 改写为了普通的 for 循环
+
+for (Iterator<String> it = list.iterator(); it.hasNext();) {
+     String s = it.next();
+     System.out.println(s);
+}
+
+// 自定义集合类使用 for each 循环
+	1. 集合类实现Iterable接口，该接口要求返回一个Iterator对象
+	2. 用Iterator对象迭代集合内部数据
+
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ReverseList<String> rlist = new ReverseList<>();
+        rlist.add("Apple");
+        rlist.add("Orange");
+        rlist.add("Pear");
+        for (String s : rlist) {
+            System.out.println(s);
+        }
+    }
+}
+
+class ReverseList<T> implements Iterable<T> {
+    private List<T> list = new ArrayList<>();
+
+    public void add(T t) {
+        list.add(t);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ReverseIterator(list.size());
+    }
+
+    class ReverseIterator implements Iterator<T> {
+        int index;
+
+        ReverseIterator(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index > 0;
+        }
+
+        @Override
+        public T next() {
+            index--;
+            return ReverseList.this.list.get(index);
+        }
+    }
+}
+
+// Collections
+Collections 提供了一系列静态方法，能更方便地操作各种集合
+
+// 创建空集合
+List.of()
+Map.of()
+Set.of()
+
+// 创建元素集合
+List.of(T...)
+Map.of(T...)
+Set.of(T...)
+
+// 排序
+Collections可以对List进行排序。因为排序会直接修改List元素的位置，因此必须传入可变List
+
+// 可变集合封装成不可变集合 (通过创建一个代理对象，拦截掉所有修改方法)
+List<T> unmodifiableList(List<? extends T> list)				// 封装成不可变List
+Set<T> unmodifiableSet(Set<? extends T> set)					// 封装成不可变Set
+Map<K, V> unmodifiableMap(Map<? extends K, ? extends V> m)		// 封装成不可变Map
+
+// 
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> mutable = new ArrayList<>();
+        mutable.add("apple");
+        mutable.add("pear");
+        // 变为不可变集合:
+        List<String> immutable = Collections.unmodifiableList(mutable);
+        // 立刻扔掉mutable的引用:
+        mutable = null;
+        System.out.println(immutable);
+    }
+}
+
+// 线程安全集合 (线程不安全的集合变为线程安全的集合)
+List<T> synchronizedList(List<T> list)		// 变为线程安全的List
+Set<T> synchronizedSet(Set<T> s)			// 变为线程安全的Set
+Map<K,V> synchronizedMap(Map<K,V> m)		// 变为线程安全的Map
+
+// IO: 以内存为中心的 Input/Output
+
+IO流以byte（字节）为最小单位，因此也称为字节流(InputStream/OutputStream)
+
+InputStream:
+╔═══════════╗
+║  Memory   ║
+╚═══════════╝
+      ▲
+      │0x48
+      │0x65
+      │0x6c
+      │0x6c
+      │0x6f
+      │0x21
+╔═══════════╗
+║ Hard Disk ║
+╚═══════════╝
+
+OutputStream:
+╔═══════════╗
+║  Memory   ║
+╚═══════════╝
+      │0x21
+      │0x6f
+      │0x6c
+      │0x6c
+      │0x65
+      │0x48
+      ▼
+╔═══════════╗
+║ Hard Disk ║
+╚═══════════╝
+
+字符流(Reader/Writer) 本质上是一个能自动编解码的InputStream和OutputStream
+// 把char[]数组Hi你好这4个字符用Writer字符流写入文件，并且使用UTF-8编码，得到的最终文件内容是8个字节，英文字符H和i各占一个字节，中文字符你好各占3个字节
+0x48
+0x69
+0xe4bda0
+0xe5a5bd
+
+如果数据源不是文本，就只能使用InputStream，如果数据源是文本，使用Reader更方便一些
+
+// File 对象
+
+
 ```
