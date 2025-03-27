@@ -2636,5 +2636,131 @@ OutputStream:
 
 // File 对象
 
+// 文件路径
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        File f = new File("..");
+        System.out.println(f.getPath());
+        System.out.println(f.getAbsolutePath());
+        System.out.println(f.getCanonicalPath());
+		System.out.println(File.separator);		// 当前平台的路径分隔符
+    }
+}
+
+// 文件 和 目录
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        File f1 = new File("/tmp/t1.txt");
+        System.out.println(f1.isFile());
+        System.out.println(f1.canRead());
+        System.out.println(f1.canWrite());
+        System.out.println(f1.canExecute());
+        System.out.println(f1.length());
+    }
+}
+
+// 创建和删除文件
+// 1
+File file = new File("/path/to/file");
+if (file.createNewFile()) {
+    // TODO:
+    if (file.delete()) {
+        // TODO:
+    }
+}
+
+// 创建临时文件
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        File f = File.createTempFile("tmp-", ".txt"); // 提供临时文件的前缀和后缀
+        f.deleteOnExit(); // JVM退出时自动删除
+        System.out.println(f.isFile());
+        System.out.println(f.getAbsolutePath());
+    }
+}
+
+// 遍历文件和目录
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        File f = new File("/tmp/dir1");
+        File[] fs1 = f.listFiles(); // 列出所有文件和子目录
+        printFiles(fs1);
+        File[] fs2 = f.listFiles(new FilenameFilter() { // 仅列出.exe文件
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".exe"); // 返回true表示接受该文件
+            }
+        });
+        printFiles(fs2);
+    }
+
+    static void printFiles(File[] files) {
+        System.out.println("==========");
+        if (files != null) {
+            for (File f : files) {
+                System.out.println(f);
+            }
+        }
+        System.out.println("==========");
+    }
+}
+
+boolean mkdir()			// 创建当前File对象表示的目录
+boolean mkdirs()		// 创建当前File对象表示的目录，并在必要时将不存在的父目录也创建出来
+boolean delete()		// 删除当前File对象表示的目录，当前目录必须为空才能删除成功
+
+// Path
+需要对目录进行复杂的拼接、遍历等操作，使用Path对象更方便
+import java.io.*;
+import java.nio.file.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        Path p1 = Paths.get(".", "project", "study"); // 构造一个Path对象
+        System.out.println(p1);
+        Path p2 = p1.toAbsolutePath(); // 转换为绝对路径
+        System.out.println(p2);
+        Path p3 = p2.normalize(); // 转换为规范路径
+        System.out.println(p3);
+        File f = p3.toFile(); // 转换为File对象
+        System.out.println(f);
+        for (Path p : Paths.get("..").toAbsolutePath()) { // 可以直接遍历Path
+            System.out.println("  " + p);
+        }
+    }
+}
+
+// InputStream
+// 1
+public void readFile() throws IOException {
+    InputStream input = null;
+    try {
+        input = new FileInputStream("src/readme.txt");
+        int n;
+        while ((n = input.read()) != -1) {
+            System.out.println(n);
+        }
+    } finally {
+        if (input != null) { input.close(); }
+    }
+}
+
+// 推荐写法
+public void readFile() throws IOException {
+    try (InputStream input = new FileInputStream("src/readme.txt")) {
+        int n;
+        while ((n = input.read()) != -1) {
+            System.out.println(n);
+        }
+    } // 编译器看到 try(resource = ...)中的对象实现了java.lang.AutoCloseable接口，一次会自动加上finally语句并调用close()方法
+}
+
 
 ```

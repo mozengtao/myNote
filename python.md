@@ -68,6 +68,25 @@
 []()  
 []()  
 
+## 格式化字符串
+```python
+name = "Alice"
+age = 30
+
+# f-string
+formatted_string = f"My name is {name} and I am {age} years old."
+
+# str.format() method
+formatted_string = "My name is {} and I am {} years old.".format(name, age)
+
+# % operator
+formatted_string = "My name is %s and I am %d years old." % (name, age)
+
+# string.Template
+template = Template("My name is $name and I am $age years old.")
+formatted_string = template.substitute(name=name, age=age)
+```
+
 ## unittest
 [Python's unittest: Writing Unit Tests for Your Code](https://realpython.com/python-unittest/)  
 [Getting Started With Testing in Python](https://realpython.com/python-testing/)  
