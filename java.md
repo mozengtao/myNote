@@ -2762,5 +2762,640 @@ public void readFile() throws IOException {
     } // 编译器看到 try(resource = ...)中的对象实现了java.lang.AutoCloseable接口，一次会自动加上finally语句并调用close()方法
 }
 
+// 缓冲
+一次性读取多个字节到缓冲区
+int read(byte[] b)						// 读取若干字节并填充到byte[]数组，返回读取的字节数
+int read(byte[] b, int off, int len)	// 指定byte[]数组的偏移量和最大填充数
+
+public void readFile() throws IOException {
+    try (InputStream input = new FileInputStream("src/readme.txt")) {
+        byte[] buffer = new byte[1000];
+        int n;
+        while ((n = input.read(buffer)) != -1) {
+            System.out.println("read " + n + " bytes.");
+        }
+    }
+}
+
+// 阻塞
+
+// InputStream 实现类
+// FileInputStream
+// ByteArrayInputStream
+
+// 1
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        byte[] data = { 72, 101, 108, 108, 111, 33 };
+        try (InputStream input = new ByteArrayInputStream(data)) {	// 使用 ByteArrayInputStream 构造 InputStream
+            int n;
+            while ((n = input.read()) != -1) {
+                System.out.println((char)n);
+            }
+        }
+    }
+}
+
+// 从文件中读取所有字节，并转换成char然后拼成一个字符串
+public class Main {
+    public static void main(String[] args) throws IOException {
+        String s;
+        try (InputStream input = new FileInputStream("/tmp/README.txt")) {
+            s = readAsString(input);
+        }
+        System.out.println(s);
+    }
+
+    public static String readAsString(InputStream input) throws IOException {	// 提取为单独的方法，方便测试，因为并不需要真的传入一个 FileInputStream
+        int n;
+        StringBuilder sb = new StringBuilder();
+        while ((n = input.read()) != -1) {
+            sb.append((char) n);
+        }
+        return sb.toString();
+    }
+}
+
+// 测试
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        byte[] data = { 72, 101, 108, 108, 111, 33 };
+        try (InputStream input = new ByteArrayInputStream(data)) {	// 面向抽象编程：接受InputStream抽象类型，而不是具体的FileInputStream类型，使得代码可以处理InputStream的任意实现类
+            String s = readAsString(input);
+            System.out.println(s);
+        }
+    }
+
+    public static String readAsString(InputStream input) throws IOException {
+        int n;
+        StringBuilder sb = new StringBuilder();
+        while ((n = input.read()) != -1) {
+            sb.append((char) n);
+        }
+        return sb.toString();
+    }
+}
+
+// OutputStream
+
+// FileOutputStream
+public void writeFile() throws IOException {
+    try (OutputStream output = new FileOutputStream("out/readme.txt")) {
+        output.write("Hello".getBytes("UTF-8")); // Hello
+    } // 编译器在此自动为我们写入finally并调用close()
+}
+
+// ByteArrayOutputStream
+
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        byte[] data;
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            output.write("Hello ".getBytes("UTF-8"));
+            output.write("world!".getBytes("UTF-8"));
+            data = output.toByteArray();
+        }
+        System.out.println(new String(data, "UTF-8"));
+    }
+}
+
+// 同时操作多个 AutoCloseable 资源
+// 读取input.txt，写入output.txt:
+try (InputStream input = new FileInputStream("input.txt");
+     OutputStream output = new FileOutputStream("output.txt"))
+{
+    input.transferTo(output); // 将输入流 input 中的数据传输到输出流 output
+}
+
+// Filter 模式 (Decorator 模式)
+通过一个 "基础" 组件再叠加各种 "附加" 功能组件的模式, 即通过少量的类来实现各种功能的组合
+                 ┌─────────────┐
+                 │ InputStream │
+                 └─────────────┘
+                       ▲ ▲
+┌────────────────────┐ │ │ ┌─────────────────┐
+│  FileInputStream   │─┤ └─│FilterInputStream│
+└────────────────────┘ │   └─────────────────┘
+┌────────────────────┐ │     ▲ ┌───────────────────┐
+│ByteArrayInputStream│─┤     ├─│BufferedInputStream│
+└────────────────────┘ │     │ └───────────────────┘
+┌────────────────────┐ │     │ ┌───────────────────┐
+│ ServletInputStream │─┘     ├─│  DataInputStream  │
+└────────────────────┘       │ └───────────────────┘
+                             │ ┌───────────────────┐
+                             └─│CheckedInputStream │
+                               └───────────────────┘
+
+                  ┌─────────────┐
+                  │OutputStream │
+                  └─────────────┘
+                        ▲ ▲
+┌─────────────────────┐ │ │ ┌──────────────────┐
+│  FileOutputStream   │─┤ └─│FilterOutputStream│
+└─────────────────────┘ │   └──────────────────┘
+┌─────────────────────┐ │     ▲ ┌────────────────────┐
+│ByteArrayOutputStream│─┤     ├─│BufferedOutputStream│
+└─────────────────────┘ │     │ └────────────────────┘
+┌─────────────────────┐ │     │ ┌────────────────────┐
+│ ServletOutputStream │─┘     ├─│  DataOutputStream  │
+└─────────────────────┘       │ └────────────────────┘
+                              │ ┌────────────────────┐
+                              └─│CheckedOutputStream │
+                                └────────────────────┘
+
+// 自定义 CountInputStream, 实现对输入的字节进行计数
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        byte[] data = "hello, world!".getBytes("UTF-8");
+        try (CountInputStream input = new CountInputStream(new ByteArrayInputStream(data))) {	// 最外层的InputStream关闭时, 内层的InputStream的close()方法也会被自动调用
+            int n;
+            while ((n = input.read()) != -1) {
+                System.out.println((char)n);
+            }
+            System.out.println("Total read " + input.getBytesRead() + " bytes");
+        }
+    }
+}
+
+class CountInputStream extends FilterInputStream {
+    private int count = 0;
+
+    CountInputStream(InputStream in) {
+        super(in);
+    }
+
+    public int getBytesRead() {
+        return this.count;
+    }
+
+    public int read() throws IOException {
+        int n = in.read();
+        if (n != -1) {
+            this.count ++;
+        }
+        return n;
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException {
+        int n = in.read(b, off, len);
+        if (n != -1) {
+            this.count += n;
+        }
+        return n;
+    }
+}
+						   
+// ZipInputStream
+// ZipOutputStream
+
+// 读取 classpath 资源
+try (InputStream input = getClass().getResourceAsStream("/default.properties")) {	// 从classpath读取文件就可以避免不同环境下文件路径不一致的问题
+    if (input != null) {
+        // TODO:
+    }
+}
+
+// 序列化 和 反序列化
+序列化是指把一个Java对象变成二进制内容，本质上就是一个 byte[] 数组, 序列化后可以把 byte[] 保存到文件中，或者把 byte[] 通过网络传输到远程
+
+Java 对象要序列化必须实现一个特殊的 java.io.Serializable 接口
+
+public interface Serializable {	// Serializable接口没有定义任何方法，它是一个空接口。我们把这样的空接口称为 "标记接口"（Marker Interface）
+}
+
+// 序列化
+import java.io.*;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try (ObjectOutputStream output = new ObjectOutputStream(buffer)) {	// ObjectOutputStream 将 Java 对象写入字节流
+            output.writeInt(12345);
+            output.writeUTF("Hello");
+            output.writeObject(Double.valueOf(123.456));
+        }
+        System.out.println(Arrays.toString(buffer.toByteArray()));
+    }
+}
+
+// 反序列化
+try (ObjectInputStream input = new ObjectInputStream(...)) {
+    int n = input.readInt();
+    String s = input.readUTF();
+    Double d = (Double) input.readObject();		// readObject()返回一个Object对象, 针对特定类型，必须强制转换
+}
+
+
+// Reader
+InputStream 是一个字节流, 以 byte 为单位读取
+Reader 是一个字符流, 以 char 为单位读取
+
+public void readFile() throws IOException {
+    try (Reader reader = new FileReader("src/readme.txt", StandardCharsets.UTF_8)) {
+        char[] buffer = new char[1000];
+        int n;
+        while ((n = reader.read(buffer)) != -1) {
+            System.out.println("read " + n + " chars.");
+        }
+    }
+}
+
+// CharArrayReader
+CharArrayReader 在内存中模拟一个Reader，作用是把一个char[]数组变成一个Reader
+try (Reader reader = new CharArrayReader("Hello".toCharArray())) {
+}
+
+// StringReader
+try (Reader reader = new StringReader("Hello")) {
+}
+
+// InputStreamReader
+把任何InputStream转换为Reader
+try (Reader reader = new InputStreamReader(new FileInputStream("src/readme.txt"), "UTF-8")) {
+    // TODO:
+}
+
+// Writer
+Reader 是带编码转换器的 InputStream,Writer 是带编码转换器的 OutputStream
+
+// FileWriter
+try (Writer writer = new FileWriter("readme.txt", StandardCharsets.UTF_8)) {
+    writer.write('H'); // 写入单个字符
+    writer.write("Hello".toCharArray()); // 写入char[]
+    writer.write("Hello"); // 写入String
+}
+
+// CharArrayWriter
+try (CharArrayWriter writer = new CharArrayWriter()) {
+    writer.write(65);
+    writer.write(66);
+    writer.write(67);
+    char[] data = writer.toCharArray(); // { 'A', 'B', 'C' }
+}
+
+// StringWriter
+
+// OutputStreamWriter
+将任意的OutputStream转换为Writer
+try (Writer writer = new OutputStreamWriter(new FileOutputStream("readme.txt"), "UTF-8")) {
+    // TODO:
+}
+
+
+// PrintStream
+// PrintWriter
+
+// Files
+封装了读写文件的简单方法, 用于方便的读写小文件
+byte[] data = Files.readAllBytes(Path.of("/path/to/file.txt"));
+String content1 = Files.readString(Path.of("/path/to/file.txt"));	// UTF-8
+String content2 = Files.readString(Path.of("/path", "to", "file.txt"), StandardCharsets.ISO_8859_1);
+List<String> lines = Files.readAllLines(Path.of("/path/to/file.txt"));
+
+byte[] data = ...
+Files.write(Path.of("/path/to/file.txt"), data);
+Files.writeString(Path.of("/path/to/file.txt"), "文本内容...", StandardCharsets.ISO_8859_1);
+List<String> lines = ...
+Files.write(Path.of("/path/to/file.txt"), lines);
+
+// 日期和时间
+// Date
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // 获取当前时间:
+        Date date = new Date();
+        System.out.println(date.getYear() + 1900);
+        System.out.println(date.getMonth() + 1);
+        System.out.println(date.getDate());
+        System.out.println(date.toString());
+        System.out.println(date.toGMTString());
+        System.out.println(date.toLocaleString());
+    }
+}
+
+// 自定义格式输出
+// 1
+import java.text.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Date date = new Date();
+        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(date));
+    }
+}
+
+// 2
+import java.text.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Date date = new Date();
+        var sdf = new SimpleDateFormat("E MMM dd, yyyy");
+        System.out.println(sdf.format(date));
+    }
+}
+
+// Calender
+
+// 1
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Calendar c = Calendar.getInstance();
+        int y = c.get(Calendar.YEAR);
+        int m = 1 + c.get(Calendar.MONTH);
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        int w = c.get(Calendar.DAY_OF_WEEK);
+        int hh = c.get(Calendar.HOUR_OF_DAY);
+        int mm = c.get(Calendar.MINUTE);
+        int ss = c.get(Calendar.SECOND);
+        int ms = c.get(Calendar.MILLISECOND);
+        System.out.println(y + "-" + m + "-" + d + " " + w + " " + hh + ":" + mm + ":" + ss + "." + ms);
+    }
+}
+
+// 设置新的日期和时间
+import java.text.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Calendar c = Calendar.getInstance();
+        c.clear();
+        c.set(Calendar.YEAR, 2019);
+        c.set(Calendar.MONTH, 8);
+        c.set(Calendar.DATE, 2);
+        c.set(Calendar.HOUR_OF_DAY, 21);
+        c.set(Calendar.MINUTE, 22);
+        c.set(Calendar.SECOND, 23);
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime()));
+    }
+}
+
+// TimeZone
+
+// 1
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        TimeZone tzDefault = TimeZone.getDefault();
+        TimeZone tzGMT9 = TimeZone.getTimeZone("GMT+09:00");
+        TimeZone tzNY = TimeZone.getTimeZone("America/New_York");
+        System.out.println(tzDefault.getID());
+        System.out.println(tzGMT9.getID());
+        System.out.println(tzNY.getID());
+    }
+}
+
+// 2
+import java.text.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Calendar c = Calendar.getInstance();
+        c.clear();
+        c.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        c.set(2019, 10 /* 11月 */, 20, 8, 15, 0);
+        var sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        System.out.println(sdf.format(c.getTime()));
+    }
+}
+
+// LocalDateTime
+import java.time.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // LocalDate d = LocalDate.now();
+        // LocalTime t = LocalTime.now();
+        // LocalDateTime dt = LocalDateTime.now();
+		LocalDateTime dt = LocalDateTime.now();	// 保证时间一致
+		LocalDate d = dt.toLocalDate();
+		LocalTime t = dt.toLocalTime();
+
+        System.out.println(d);
+        System.out.println(t);
+        System.out.println(dt);
+    }
+}
+
+// DateTimeFormatter
+// Duration
+// Period
+
+// ZonedDateTime
+// DateTimeFormatter
+
+// Instant
+┌─────────────┐
+│LocalDateTime│────┐
+└─────────────┘    │    ┌─────────────┐
+                   ├───▶│ZonedDateTime│
+┌─────────────┐    │    └─────────────┘
+│   ZoneId    │────┘           ▲
+└─────────────┘      ┌─────────┴─────────┐
+                     │                   │
+                     ▼                   ▼
+              ┌─────────────┐     ┌─────────────┐
+              │   Instant   │◀──▶│    long     │
+              └─────────────┘     └─────────────┘
+
+//
+import java.time.*;
+import java.time.format.*;
+import java.util.Locale;
+
+public class Main {
+    public static void main(String[] args) {
+        long ts = 1574208900000L;
+        System.out.println(timestampToString(ts, Locale.CHINA, "Asia/Shanghai"));
+        System.out.println(timestampToString(ts, Locale.US, "America/New_York"));
+    }
+
+    static String timestampToString(long epochMilli, Locale lo, String zoneId) {
+        Instant ins = Instant.ofEpochMilli(epochMilli);
+        DateTimeFormatter f = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT);
+        return f.withLocale(lo).format(ZonedDateTime.ofInstant(ins, ZoneId.of(zoneId)));
+    }
+}
+
+// 单元测试
+JUnit是一个开源的Java语言的单元测试框架
+
+// FactorialTest.java
+public class Factorial {
+    public static long fact(long n) {
+        long r = 1;
+        for (long i = 1; i <= n; i++) {
+            r = r * i;
+        }
+        return r;
+    }
+}
+
+// FactorialTest.java
+package com.itranswarp.learnjava;
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class FactorialTest {
+
+    @Test										// 带有@Test的方法被JUnit识别为测试方法
+    void testFact() {
+        assertEquals(1, Factorial.fact(1));
+        assertEquals(2, Factorial.fact(2));
+        assertEquals(6, Factorial.fact(3));
+        assertEquals(3628800, Factorial.fact(10));
+        assertEquals(2432902008176640000L, Factorial.fact(20));
+    }
+}
+
+// Fixture
+编写测试前准备、测试后清理的固定代码
+
+// Calculator.java
+public class Calculator {
+    private long n = 0;
+
+    public long add(long x) {
+        n = n + x;
+        return n;
+    }
+
+    public long sub(long x) {
+        n = n - x;
+        return n;
+    }
+}
+
+// CalculatorTest.java
+public class CalculatorTest {
+
+    Calculator calculator;
+
+    @BeforeEach
+    public void setUp() {
+        this.calculator = new Calculator();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        this.calculator = null;
+    }
+
+    @Test
+    void testAdd() {
+        assertEquals(100, this.calculator.add(100));
+        assertEquals(150, this.calculator.add(50));
+        assertEquals(130, this.calculator.add(-20));
+    }
+
+    @Test
+    void testSub() {
+        assertEquals(-100, this.calculator.sub(100));
+        assertEquals(-150, this.calculator.sub(50));
+        assertEquals(-130, this.calculator.sub(-20));
+    }
+}
+
+// 异常测试
+// 条件测试
+排除某些@Test方法
+// 参数化测试
+把测试数据组织起来，用不同的测试数据调用相同的测试方法
+
+
+// 正则表达式
+// 1
+public class Main {
+    public static void main(String[] args) {
+        String re = "learn\\s(java|php|go)";
+        System.out.println("learn java".matches(re));
+        System.out.println("learn Java".matches(re));
+        System.out.println("learn php".matches(re));
+        System.out.println("learn Go".matches(re));
+    }
+}
+
+// 2
+import java.util.regex.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("(\\d{3,4})\\-(\\d{7,8})");
+        pattern.matcher("010-12345678").matches(); // true
+        pattern.matcher("021-123456").matches(); // false
+        pattern.matcher("022#1234567").matches(); // false
+        // 获得Matcher对象:
+        Matcher matcher = pattern.matcher("010-12345678");
+        if (matcher.matches()) {
+            String whole = matcher.group(0); // "010-12345678", 0表示匹配的整个字符串
+            String area = matcher.group(1); // "010", 1表示匹配的第1个子串
+            String tel = matcher.group(2); // "12345678", 2表示匹配的第2个子串
+            System.out.println(area);
+            System.out.println(tel);
+        }
+    }
+}
+
+// 分割
+"a b c".split("\\s"); // { "a", "b", "c" }
+"a b  c".split("\\s"); // { "a", "b", "", "c" }
+"a, b ;; c".split("[\\,\\;\\s]+"); // { "a", "b", "c" }
+
+
+// 搜索
+import java.util.regex.*;
+
+public class Main {
+    public static void main(String[] args) {
+        String s = "the quick brown fox jumps over the lazy dog.";
+        Pattern p = Pattern.compile("\\wo\\w");
+        Matcher m = p.matcher(s);
+        while (m.find()) {
+            String sub = s.substring(m.start(), m.end());
+            System.out.println(sub);
+        }
+    }
+}
+
+// 替换
+public class Main {
+    public static void main(String[] args) {
+        String s = "The     quick\t\t brown   fox  jumps   over the  lazy dog.";
+        String r = s.replaceAll("\\s+", " ");
+        System.out.println(r); // "The quick brown fox jumps over the lazy dog."
+    }
+}
+
+// 反向引用
+// regex
+public class Main {
+    public static void main(String[] args) {
+        String s = "the quick brown fox jumps over the lazy dog.";
+        String r = s.replaceAll("\\s([a-z]{4})\\s", " <b>$1</b> ");
+        System.out.println(r);
+    }
+}
+
 
 ```
