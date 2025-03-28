@@ -1,3 +1,7 @@
+[Linux Kernel Teaching](https://linux-kernel-labs.github.io/refs/heads/master/)  
+[The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
+[A journey into the Linux proc filesystem](https://fernandovillalba.substack.com/p/a-journey-into-the-linux-proc-filesystem)  
+
 ## syscall
 [man 2 syscalls](https://www.mankier.com/2/syscalls)  
 [man 2 syscall](https://www.mankier.com/2/syscall)  
