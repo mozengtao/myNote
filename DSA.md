@@ -1,3 +1,6 @@
+
+[Learn Data Structures and Algorithms](https://www.programiz.com/dsa)  
+
 [Data Structures Reference](https://www.interviewcake.com/data-structures-reference)  
 [Data Structures](https://www.hackerearth.com/practice/data-structures)  
 [Data Structures Tutorial](https://www.geeksforgeeks.org/data-structures/)  
@@ -7,3 +10,9 @@
 [LeetCode](https://github.com/mazhuowen/LeetCode/tree/master) #github  
 [LeetCodeAnimation](https://github.com/MisterBooo/LeetCodeAnimation) #github  
 [Algorithm Visualizer](https://algorithm-visualizer.org/)  
+[数据结构](https://songwell1024.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/)  
+[设计模式](https://songwell1024.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)  
+[Hash Tables](https://craftinginterpreters.com/hash-tables.html)  
+[Hash Tables](https://www.eecs.umich.edu/courses/eecs380/ALG/niemann/s_man.htm)  
+
+[Data-Structures-Using-C](https://github.com/GauravWalia19/Free-Algorithms-Books/blob/main/Library/src/C/Data-Structures-Using-C-2nd-edition.pdf)  
