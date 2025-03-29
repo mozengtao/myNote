@@ -3,6 +3,8 @@
 
 [Learn Data Structures and Algorithms](https://www.programiz.com/dsa)  
 
+![Grokking Algorithms](./assets/grokking-algorithms.pdf) #pdf  
+
 [Data Structures Reference](https://www.interviewcake.com/data-structures-reference)  
 [Data Structures](https://www.hackerearth.com/practice/data-structures)  
 [Data Structures Tutorial](https://www.geeksforgeeks.org/data-structures/)  
@@ -18,3 +20,6 @@
 [Hash Tables](https://www.eecs.umich.edu/courses/eecs380/ALG/niemann/s_man.htm)  
 
 [Data-Structures-Using-C](https://github.com/GauravWalia19/Free-Algorithms-Books/blob/main/Library/src/C/Data-Structures-Using-C-2nd-edition.pdf)  
+
+
+[8 Great Data Structure & Algorithms Books](https://www.tableau.com/learn/articles/books-about-data-structures-algorithms)  
