@@ -1,6 +1,7 @@
 ## Real Python Tutorials
 [All Python Tutorial Topics](https://realpython.com/tutorials/all/)  
-
+[Common Python Data Structures](https://realpython.com/python-data-structures/)  
+[Build a Hash Table in Python With TDD](https://realpython.com/python-hash-table/)  
 
 ## python 在线环境
 [Python Playground](https://programiz.pro/ide/python)  
