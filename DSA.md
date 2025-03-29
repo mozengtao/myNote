@@ -1,4 +1,6 @@
 
+[awesome-algorithms](https://github.com/tayllan/awesome-algorithms) #github  
+
 [Learn Data Structures and Algorithms](https://www.programiz.com/dsa)  
 
 [Data Structures Reference](https://www.interviewcake.com/data-structures-reference)  
