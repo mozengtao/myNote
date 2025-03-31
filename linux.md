@@ -2,6 +2,11 @@
 [The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
 [A journey into the Linux proc filesystem](https://fernandovillalba.substack.com/p/a-journey-into-the-linux-proc-filesystem)  
 
+## concepts
+[initramfs](https://wiki.gentoo.org/wiki/Initramfs)  
+[About initramfs](https://www.linuxfromscratch.org/blfs/view/cvs/postlfs/initramfs.html)  
+
+
 ## syscall
 [man 2 syscalls](https://www.mankier.com/2/syscalls)  
 [man 2 syscall](https://www.mankier.com/2/syscall)  
