@@ -463,6 +463,65 @@ add_nums() {
 
 result=$(add_nums 2 3)
 echo "Result: $result"
+
+# 3 (return multiple values via Array)
+my_function() {
+    echo "John Doe 30"
+}
+
+read name surname age < <(my_function)
+echo "Name: $name, Surname: $surname, Age: $age"
+
+# return both value and exit code
+divide_numbers() {
+    local num1=$1
+    local num2=$2
+
+    if [[ $num2 -eq 0 ]]; then
+        echo "Error: Division by zero"
+        return 1  # Exit code 1 for error
+    fi
+
+    echo "$((num1 / num2))"
+    return 0  # Exit code 0 for success
+}
+
+result=$(divide_numbers 10 2)
+exit_code=$?
+
+if [[ $exit_code -eq 0 ]]; then
+    echo "Result: $result"
+else
+    echo "Failed: $result"
+fi
+
+# use associative arrays for key-value pairs
+declare -A user_info
+
+get_user_info() {
+    user_info[name]="Alice"
+    user_info[age]=28
+    user_info[city]="New York"
+}
+
+get_user_info
+
+echo "Name: ${user_info[name]}, Age: ${user_info[age]}, City: ${user_info[city]}"
+
+# return JSON data
+get_user_json() {
+    echo '{"name": "Alice", "age": 28, "city": "New York"}'
+}
+
+json_result=$(get_user_json)
+echo "User JSON: $json_result"
+
+# Extract values using jq (requires jq package)
+name=$(echo "$json_result" | jq -r '.name')
+age=$(echo "$json_result" | jq -r '.age')
+
+echo "Extracted Name: $name, Age: $age"
+
 ```
 
 ## 最佳实践
