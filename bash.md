@@ -1,6 +1,41 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## 重定向
+```bash
+command > file							# 标准输出重定向
+command >> file							# 追加输出重定向
+command 2> file							# 标准错误重定向
+command > file 2>&1 (command &> file)	# 标准输出和标准错误同时重定向
+command < file							# 标准输入重定向 (从文件读取输入，而非终端)
+command << delimiterXXX
+delimiterXXX							# Here 文档 (将输入数据嵌入到命令中，直到遇到指定分隔符)
+command <<< string						# Here 字符串 (将字符串作为命令的输入)
+
+# 1
+mail -s "Report" user@example.com <<END
+This is the body of the email.
+Line 2.
+END
+
+# 2
+wc -w <<< "Hello World"  # 统计字符串中的单词数（输出 2）
+
+# 3
+exec 3> data.txt  # 创建文件描述符 3 并写入 data.txt
+echo "Custom FD" >&3  # 通过 FD 3 写入文件
+exec 3>&-  # 关闭文件描述符 3
+
+# 4
+script.sh > output.log 2> errors.log  # 输出和错误分开记录
+
+# 5 生成配置文件
+cat > config.conf <<EOF
+[Settings]
+debug = false
+EOF
+```
+
 ## Bash Commands Similar to Linux Syscalls
 ```bash
 ## ​**1. Process Management**
@@ -1511,8 +1546,6 @@ export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
 [Pattern Matching In Bash](https://www.linuxjournal.com/content/pattern-matching-bash)  
 [Special Parameters](https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters)  
 [阮一峰 Bash 脚本教程](https://www.bookstack.cn/books/bash-tutorial)  
-[Unix Shell I/O重定向](https://m24y.com/index.php/2022/04/03/unix-shell-i-o%e9%87%8d%e5%ae%9a%e5%90%91/)  
-[Unix Shell I/O重定向](http://teaching.idallen.com/cst8207/12w/notes/270_redirection.txt)  
 [Bash scripting cheatsheet](https://devhints.io/bash)  
 [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/)  
 [Shell Style Guide](https://google.github.io/styleguide/shellguide.html)  
@@ -1534,4 +1567,3 @@ export PYTHONPATH=${PYTHON_PATH}:${PYTHONPATH}
 [bash-utility](https://github.com/labbots/bash-utility) #online #github  
 [Google Style Guides](https://google.github.io/styleguide/) #online  
 [pure-sh-bible](https://github.com/dylanaraps/pure-sh-bible)  
-[Understanding 2>&1 in Bash: A Beginner’s Guide](https://tecadmin.net/io-redirection-operator-in-bash/)  
