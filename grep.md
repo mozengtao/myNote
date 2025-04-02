@@ -11,9 +11,9 @@ grep -o '([^)]*)'  # 如果单行有多个括号，用于多个匹配的多个�
 ```
 ## 匹配行上下文打印
 ```bash
-grep -A NUM file
-grep -B NUM file
-grep -C NUM file
+grep -A NUM file	# After
+grep -B NUM file	# Before
+grep -C NUM file	# Center
 ```
 
 ## 常用选项

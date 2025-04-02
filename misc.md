@@ -1,3 +1,18 @@
+InfluxDB
+> InfluxDB 是一款专为时间序列数据设计的开源数据库，旨在高效存储和查询具有时间戳的连续数据, 适合大规模数据存储和分析
+
+Telegraf
+> Telegraf 是一款开源的、插件驱动的数据采集工具，由 InfluxData 开发，主要用于从各种数据源收集、处理、聚合和传输指标与事件数据。它是 TICK Stack（Telegraf、InfluxDB、Chronograf、Kapacitor）的核心组件，也能与 Grafana、Prometheus 等工具集成
+
+Grafana
+> Grafana 是一款开源的数据可视化与分析平台，专为监控、告警和洞察设计，尤其擅长处理时间序列数据，侧重于可视化工具，需配合数据源（如 Prometheus）使用
+
+Prometheus
+> Prometheus 是一个开源的系统监控与警报工具，专注于时间序列数据的收集、存储和查询, 侧重监控和警报
+
+Kafka
+> Kafka 是一款开源的分布式流处理平台，它以高吞吐量、低延迟、可扩展性和持久性著称，核心功能是 实时处理和传输大规模数据流，常被用于构建实时数据管道和流分析应用
+
 - [**getdocs**](https://getdocs.org/Main_Page)
 
 - [**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)

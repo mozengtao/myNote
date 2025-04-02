@@ -1,9 +1,13 @@
+[elfcat](https://github.com/rbakbashev/elfcat) #github
+> elfcat - ELF visualizer. Generates HTML files from ELF binaries.
+
 - [[Binary Analysis]]
 - Executable and Linkable Format
 - elf文件的双重属性，elf文件是一系列segments和headers的集合
 	- 内核看到是segments，内核使用mmap(2)将segments映射到虚拟地址空间
 	- 链接器看到的是sections，它将sections合并为可执行文件或者共享目标文件
 	- ![image.png](../assets/image_1672822000165_0.png)
+
 - elf文件类型
 	- 可执行文件executables (ET_EXEC)
 		- 可执行程序，必须包含segments
@@ -15,37 +19,40 @@
 	- core文件(ET_CORE)
 		- 当进程收到SIGABRT等信号时产生
 		- 不包含sections，只包含segments(PT_LOAD/PT_NOTE)
-- 分析elf文件的工具
-	- [[addr2line]]
-		- convert addresses into file names and line numbers.
-	- size
-		- list section sizes and total size.
-	- [[strings]]
-		- print the strings of printable characters in files.
-	- [[strip]]
-		- Discard symbols from object files.
-	- [[od]]
-		- dump files in octal and other formats
-			- od -Ax -t x1 -N 52 main
-	- [[hexdump]]
-		- display file contents in hexadecimal, decimal, octal, or ascii
-	- file
-		- determine file type
-	- [[readelf]]
-		- Displays information about ELF files.
-	- [[ldd]]
-		- print shared object dependencies
-	- pldd
-		- display dynamic shared objects linked into a process
-	- nm
-		- list symbols from object files
-	- objdump
-		- display information from object files.
-	- strace
-		- trace system calls and signals
-	- [[xxd]]
-		- make a hexdump or do the reverse
-			- xxd -s +12636 -l 1657 main
+
+## elf分析工具
+```bash
+addr2line
+	convert addresses into file names and line numbers.
+size
+	list section sizes and total size.
+strings
+	print the strings of printable characters in files.
+strip
+	Discard symbols from object files.
+od
+	dump files in octal and other formats
+	od -Ax -t x1 -N 52 main
+hexdump
+	display file contents in hexadecimal, decimal, octal, or ascii
+file
+	determine file type
+readelf
+	Displays information about ELF files.
+ldd
+	print shared object dependencies
+pldd
+	display dynamic shared objects linked into a process
+nm
+	list symbols from object files
+objdump
+	display information from object files.
+strace
+	trace system calls and signals
+xxd
+	make a hexdump or do the reverse
+	xxd -s +12636 -l 1657 main
+```
 - ```bash
     
   type ElfHeader struct {
@@ -184,76 +191,76 @@
 		- .strtab     string table
 		- .init/.fini    executable insns, initialization code
 		- .{init,fini}_array     array of function pointers to init functions
-- 参考文档
-	- [Executable and Linkable Format (ELF)](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf)
-	- [ELF Header](https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html)
-	- [System V Application Binary Interface](https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html)
-	- [Executable And Linking Format (ELF)](https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/elf-generic.html)
-	- [The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)
-	- [10 ways to analyze binary files on Linux](https://opensource.com/article/20/4/linux-binary-analysis)
-	- [man 5 elf](https://man7.org/linux/man-pages/man5/elf.5.html)
-	- [The ELF file format](https://www.gabriel.urdhr.fr/2015/09/28/elf-file-format/)
-	- [ELF loading and dynamic linking](https://www.gabriel.urdhr.fr/2015/01/22/elf-linking/)
-	- [Linkers and Loaders](https://www.wh0rd.org/books/linkers-and-loaders/linkers_and_loaders.pdf)
-	- [Introduction to ELF](https://people.redhat.com/mpolacek/src/devconf2012.pdf)
-	- [Acronyms relevant to Executable and Linkable Format](https://stevens.netmeister.org/631/elf.html)
-	- [anatomy-of-a-binary-executable](https://oswalt.dev/2020/11/anatomy-of-a-binary-executable/)
-	- [GNU Binutils: A Collection of Binary Tools](https://www.opensourceforu.com/2011/10/gnu-binutils-collection-of-binary-tools/)
-	- [Understanding ELF, the Executable and Linkable Format](https://www.opensourceforu.com/2020/02/understanding-elf-the-executable-and-linkable-format/)
-	- [Elements of Parsing an ELF Header](https://course.ccs.neu.edu/cs7680sp17/elf-parser/)
-	- [Special Sections](https://refspecs.linuxfoundation.org/LSB_1.3.0/gLSB/gLSB/specialsections.html)
-	- [GNU Binutils: the ELF Swiss Army Knife](https://interrupt.memfault.com/blog/gnu-binutils#gnu-binutil-command-examples)
-	- [Linking](https://people.cs.pitt.edu/~xianeizhang/notes/Linking.html#top)
-	- [ELF](https://students.mimuw.edu.pl/ZSO/PUBLIC-SO/2017-2018/_build/html/03_elf/index-en.html)
-	- [GNU Binary Utilities](https://docs.adacore.com/live/wave/binutils-stable/html/binutils/binutils.html#Top)
-	- [A ToC of the 20 part linker essay](https://lwn.net/Articles/276782/)
-	- [Special sections in Linux binaries](https://lwn.net/Articles/531148/)
 
-	[ELF Format Cheatsheet](https://gist.github.com/x0nu11byt3/bcb35c3de461e5fb66173071a2379779)
-	[Executable and Linkable Format (ELF)](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf)
-	[Practical Binary Analysis](https://terrorgum.com/tfox/books/practicalbinaryanalysis.pdf)
-	[Tool Interface Standard (TIS) Portable Formats Specification](https://refspecs.linuxfoundation.org/elf/TIS1.1.pdf)
-	[Tool Interface Standard (TIS) Executable and Linking Format (ELF) Specification](https://refspecs.linuxfoundation.org/elf/elf.pdf)
-	[The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)
-	[readelf elf文件格式分析](https://linuxtools-rst.readthedocs.io/zh-cn/latest/tool/readelf.html)
-	[打造史上最小可执行ELF文件(45字节)](https://tinylab-1.gitbook.io/cbook/02-chapter8)
-	[ELF转二进制](https://tinylab.org/elf2bin-part1/)
 
-	[Go elf package](https://pkg.go.dev/debug/elf)
+[Executable and Linkable Format (ELF)](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf)  
+[ELF Header](https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html)  
+[System V Application Binary Interface](https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html)  
+[Executable And Linking Format (ELF)](https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/elf-generic.html)  
+[The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)  
+[10 ways to analyze binary files on Linux](https://opensource.com/article/20/4/linux-binary-analysis)  
+[man 5 elf](https://man7.org/linux/man-pages/man5/elf.5.html)  
+[The ELF file format](https://www.gabriel.urdhr.fr/2015/09/28/elf-file-format/)  
+[ELF loading and dynamic linking](https://www.gabriel.urdhr.fr/2015/01/22/elf-linking/)  
+[Linkers and Loaders](https://www.wh0rd.org/books/linkers-and-loaders/linkers_and_loaders.pdf)  
+[Introduction to ELF](https://people.redhat.com/mpolacek/src/devconf2012.pdf)  
+[Acronyms relevant to Executable and Linkable Format](https://stevens.netmeister.org/631/elf.html)  
+[anatomy-of-a-binary-executable](https://oswalt.dev/2020/11/anatomy-of-a-binary-executable/)  
+[GNU Binutils: A Collection of Binary Tools](https://www.opensourceforu.com/2011/10/gnu-binutils-collection-of-binary-tools/)  
+[Understanding ELF, the Executable and Linkable Format](https://www.opensourceforu.com/2020/02/understanding-elf-the-executable-and-linkable-format/)  
+[Elements of Parsing an ELF Header](https://course.ccs.neu.edu/cs7680sp17/elf-parser/)  
+[Special Sections](https://refspecs.linuxfoundation.org/LSB_1.3.0/gLSB/gLSB/specialsections.html)  
+[GNU Binutils: the ELF Swiss Army Knife](https://interrupt.memfault.com/blog/gnu-binutils#gnu-binutil-command-examples)  
+[Linking](https://people.cs.pitt.edu/~xianeizhang/notes/Linking.html#top)  
+[ELF](https://students.mimuw.edu.pl/ZSO/PUBLIC-SO/2017-2018/_build/html/03_elf/index-en.html)  
+[GNU Binary Utilities](https://docs.adacore.com/live/wave/binutils-stable/html/binutils/binutils.html#Top)  
+[A ToC of the 20 part linker essay](https://lwn.net/Articles/276782/)  
+[Special sections in Linux binaries](https://lwn.net/Articles/531148/)  
 
-	[Shared libraries with GCC on Linux](https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html)
-	[When to actually use dlopen()? Does dlopen() means dynamic loading?](https://stackoverflow.com/questions/63306734/when-to-actually-use-dlopen-does-dlopen-means-dynamic-loading)
-	```c
-	#include <stdlib.h>
-	#include <stdio.h>
-	#include <dlfcn.h>
+[ELF Format Cheatsheet](https://gist.github.com/x0nu11byt3/bcb35c3de461e5fb66173071a2379779)  
+[Executable and Linkable Format (ELF)](https://www.cs.cmu.edu/afs/cs/academic/class/15213-f00/docs/elf.pdf)  
+[Practical Binary Analysis](https://terrorgum.com/tfox/books/practicalbinaryanalysis.pdf)  
+[Tool Interface Standard (TIS) Portable Formats Specification](https://refspecs.linuxfoundation.org/elf/TIS1.1.pdf)  
+[Tool Interface Standard (TIS) Executable and Linking Format (ELF) Specification](https://refspecs.linuxfoundation.org/elf/elf.pdf)  
+[The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)  
+[readelf elf文件格式分析](https://linuxtools-rst.readthedocs.io/zh-cn/latest/tool/readelf.html)  
+[打造史上最小可执行ELF文件(45字节)](https://tinylab-1.gitbook.io/cbook/02-chapter8)  
+[ELF转二进制](https://tinylab.org/elf2bin-part1/)  
+[Go elf package](https://pkg.go.dev/debug/elf)  
 
-	int main(int argc, char **argv) {
-		void *handle;
-		double (*cosine)(double);
-		char *error;
+[Shared libraries with GCC on Linux](https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html)  
+[When to actually use dlopen()? Does dlopen() means dynamic loading?](https://stackoverflow.com/questions/63306734/when-to-actually-use-dlopen-does-dlopen-means-dynamic-loading)  
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <dlfcn.h>
 
-		handle = dlopen ("/lib/libm.so.6", RTLD_LAZY);
-		if (!handle) {
-			fputs (dlerror(), stderr);
-			exit(1);
-		}
+int main(int argc, char **argv) {
+	void *handle;
+	double (*cosine)(double);
+	char *error;
 
-		cosine = dlsym(handle, "cos");
-		if ((error = dlerror()) != NULL)  {
-			fputs(error, stderr);
-			exit(1);
-		}
-
-		printf ("%f\n", (*cosine)(2.0));
-		dlclose(handle);
+	handle = dlopen ("/lib/libm.so.6", RTLD_LAZY);
+	if (!handle) {
+		fputs (dlerror(), stderr);
+		exit(1);
 	}
 
-	# gcc -rdynamic -o progdl progdl.c -ldl
-	```
+	cosine = dlsym(handle, "cos");
+	if ((error = dlerror()) != NULL)  {
+		fputs(error, stderr);
+		exit(1);
+	}
 
-	[A programmer's guide to GNU C Compiler](https://opensource.com/article/22/5/gnu-c-compiler)
-	[Dynamically linking libraries while compiling code](https://opensource.com/article/22/5/compile-code-ldlibrarypath)
-	[Anyone can compile open source code in these three simple steps](https://opensource.com/article/21/11/compiling-code)
-	[How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)
-	[How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)
+	printf ("%f\n", (*cosine)(2.0));
+	dlclose(handle);
+}
+
+# gcc -rdynamic -o progdl progdl.c -ldl
+```
+
+[A programmer's guide to GNU C Compiler](https://opensource.com/article/22/5/gnu-c-compiler)  
+[Dynamically linking libraries while compiling code](https://opensource.com/article/22/5/compile-code-ldlibrarypath)  
+[Anyone can compile open source code in these three simple steps](https://opensource.com/article/21/11/compiling-code)  
+[How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)  
+[How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)  
