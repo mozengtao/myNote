@@ -1,6 +1,48 @@
 [C Online Compiler](https://www.programiz.com/c-programming/online-compiler/)  
 [va_list in C: exploring ft_printf](https://medium.com/@turman1701/va-list-in-c-exploring-ft-printf-bb2a19fcd128)  
 
+## 动态链接 和 静态链接
+[Program Library HOWTO](https://tldp.org/HOWTO/Program-Library-HOWTO/index.html)  
+[How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)  
+[How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)  
+```c
+// 动态链接
+// Locating a shared object during compilation
+gcc -I ./include -c src/demo.c				// -I option: adds a directory to GCC's search path for header files
+
+gcc -L`pwd`/lib -o myDemo demo.o -lexample	// -L option: adds an additional library path to GCC's search locations. 
+											// -l: sets the name of the library you want to link against
+
+ldd ./myDemo								// ldd: prints shared object dependencies
+        linux-vdso.so.1 (0x00007ffe151df000)
+        libexample.so => not found
+        libc.so.6 => /lib64/libc.so.6 (0x00007f514b60a000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f514b839000)
+
+LD_LIBRARY_PATH=`pwd`/lib ldd ./			// LD_LIBRARY_PATH: the environment variable which defines the path to libraries
+   linux-vdso.so.1 (0x00007ffe515bb000)
+   libexample.so => /tmp/Demo/lib/libexample.so (0x0000...
+   libc.so.6 => /lib64/libc.so.6 (0x00007eff037ee000)
+   /lib64/ld-linux-x86-64.so.2 (0x00007eff03a22000)
+
+LD_LIBRARY_PATH=`pwd`/lib ./myDemo			// 
+
+// When to use LD_LIBRARY_PATH
+/*
+	1. compiling software that needs to link against a library that itself has just been compiled and has not yet been installed
+	2. bundling software that's designed to run out of a single directory, with no install script or an install script that places libraries in non-standard directories
+*/
+
+// 静态链接
+A static library is an archive (ar) of object files
+
+file libmy_static.a		// libmy_static.a: current ar archive
+
+ar -t libmy_static.a 	// look into the archive
+
+ar -x libmy_static.a	// extract the archive's files
+```
+
 ## libraries
 ### ini parser
 [iniparser](https://github.com/ndevilla/iniparser/tree/main)  
@@ -948,26 +990,27 @@ int main() {
 			  		perror("uname() error");
 			  }
 			  ```
-- 参考文档
-	- [**Extensions to the C Language Family**](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/C-Extensions.html)
-	- [GNU C Language Manual](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/index.html#SEC_Contents)
-	- [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)
-	- [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html)
-	- [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)
-	- [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online
-	-[**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)
-	- [c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)
-	- [POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)
-	- [C standard](https://www.open-std.org/jtc1/sc22/wg14/www/standards.html)
-	- [**glibc source code**](https://elixir.bootlin.com/glibc/latest/source) #sourcecode
-	- [The GNU C Library](https://www.gnu.org/software/libc/manual/html_mono/libc.html)
-	- [Memory Layout Of A C Program](https://hackthedeveloper.com/memory-layout-c-program/)
-	- [C Program Compilation Process](https://hackthedeveloper.com/c-program-compilation-process/)
-	- [C 语言常见问题集](https://c-faq-chn.sourceforge.net/ccfaq/ccfaq.html)
-	- [Notes for C and C++ Programming](https://www.codeinsideout.com/blog/c-cpp/notes/)
-	- [c for dummies](https://c-for-dummies.com/)
-	- [C and C++ Projects](https://www.codewithc.com/c-projects-with-source-code/)
-	- [How to split/tokenize a string? (strtok() string tokenizer)](https://www.equestionanswers.com/c/c-strtok.php)
+
+[**Extensions to the C Language Family**](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/C-Extensions.html)  
+[GNU C Language Manual](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/index.html#SEC_Contents)  
+[Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
+[The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html)  
+[C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)  
+[**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online  
+[**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)  
+[c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)  
+[POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)  
+[C standard](https://www.open-std.org/jtc1/sc22/wg14/www/standards.html)  
+[**glibc source code**](https://elixir.bootlin.com/glibc/latest/source) #sourcecode  
+[The GNU C Library](https://www.gnu.org/software/libc/manual/html_mono/libc.html)  
+[Memory Layout Of A C Program](https://hackthedeveloper.com/memory-layout-c-program/)  
+[C Program Compilation Process](https://hackthedeveloper.com/c-program-compilation-process/)  
+[C 语言常见问题集](https://c-faq-chn.sourceforge.net/ccfaq/ccfaq.html)  
+[Notes for C and C++ Programming](https://www.codeinsideout.com/blog/c-cpp/notes/)  
+[c for dummies](https://c-for-dummies.com/)  
+[C and C++ Projects](https://www.codewithc.com/c-projects-with-source-code/)  
+[How to split/tokenize a string? (strtok() string tokenizer)](https://www.equestionanswers.com/c/c-strtok.php)  
+
 	- 柔性数组成员
 		- flexible array memeber
 			- [declaring a flexible array member](https://wiki.sei.cmu.edu/confluence/display/c/DCL38-C.+Use+the+correct+syntax+when+declaring+a+flexible+array+member)
@@ -989,25 +1032,25 @@ int main() {
 				return 0;
 			}
 			```
-- [Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) #github
-- [C](https://github.com/marcotrosi/C)
-- [**Programming in C**](https://users.cs.cf.ac.uk/dave/C/)
-- [HOWTO: Use Address Sanitizer](https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer)
-- [Clang 19.0.0git documentation](https://clang.llvm.org/docs/index.html)
-- [Signal Handling](https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html)
-- [Introduction To Unix Signals Programming](https://www.cs.kent.edu/~ruttan/sysprog/lectures/signals.html)
-- [CS 43203 : System Programming](https://www.cs.kent.edu/~ruttan/sysprog/)
- - [Unix Pthreads tutorial](https://www.cs.kent.edu/~ruttan/sysprog/)
- - [C program to implement linked list](https://www.programmingsimplified.com/c/data-structures)
- - [Using Templates and Generics in C](https://levelup.gitconnected.com/using-templates-and-generics-in-c-968da223154d)
- - [Tutorial: Generics in C](https://itnext.io/tutorial-generics-in-c-b3362b3376a3)
- - [Generic Programming in C](https://cs.boisestate.edu/~amit/teaching/253/handouts/07-c-generic-coding-handout.pdf)
- - [void * and Function Pointers](https://web.stanford.edu/class/archive/cs/cs107/cs107.1202/lab4/)
- - [Functional Pointer and Callback in C++](https://primerpy.medium.com/functional-pointer-and-callback-in-c-86c208df6b2f)
- - [C and C++ Language Syntax Reference](https://www.cprogramming.com/reference/)
- - [Understanding the LD_LIBRARY_PATH Environment Variable](https://tecadmin.net/understanding-the-ld_library_path-environment-variable/)
- - [Arrays of Length Zero](https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html)
- - [Bounded Flexible Arrays in C](https://people.kernel.org/kees/bounded-flexible-arrays-in-c)
- - [Flexible Array Members for C++](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1039r0.html)
- - [Zero-length arrays in C have to go at the end of the struct](https://shivankaul.com/blog/zero-length-arrays)
- - [How to Use typeof, Statement Expressions and Block-Scope Label Names](https://www.oracle.com/solaris/technologies/c-type.html)
+[Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) #github  
+[C](https://github.com/marcotrosi/C)  
+[**Programming in C**](https://users.cs.cf.ac.uk/dave/C/)  
+[HOWTO: Use Address Sanitizer](https://www.osc.edu/resources/getting_started/howto/howto_use_address_sanitizer)  
+[Clang 19.0.0git documentation](https://clang.llvm.org/docs/index.html)  
+[Signal Handling](https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html)  
+[Introduction To Unix Signals Programming](https://www.cs.kent.edu/~ruttan/sysprog/lectures/signals.html)  
+[CS 43203 : System Programming](https://www.cs.kent.edu/~ruttan/sysprog/)  
+[Unix Pthreads tutorial](https://www.cs.kent.edu/~ruttan/sysprog/)  
+[C program to implement linked list](https://www.programmingsimplified.com/c/data-structures)  
+[Using Templates and Generics in C](https://levelup.gitconnected.com/using-templates-and-generics-in-c-968da223154d)  
+[Tutorial: Generics in C](https://itnext.io/tutorial-generics-in-c-b3362b3376a3)  
+[Generic Programming in C](https://cs.boisestate.edu/~amit/teaching/253/handouts/07-c-generic-coding-handout.pdf)  
+[void * and Function Pointers](https://web.stanford.edu/class/archive/cs/cs107/cs107.1202/lab4/)  
+[Functional Pointer and Callback in C++](https://primerpy.medium.com/functional-pointer-and-callback-in-c-86c208df6b2f)  
+[C and C++ Language Syntax Reference](https://www.cprogramming.com/reference/)  
+[Understanding the LD_LIBRARY_PATH Environment Variable](https://tecadmin.net/understanding-the-ld_library_path-environment-variable/)  
+[Arrays of Length Zero](https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html)  
+[Bounded Flexible Arrays in C](https://people.kernel.org/kees/bounded-flexible-arrays-in-c)  
+[Flexible Array Members for C++](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1039r0.html)  
+[Zero-length arrays in C have to go at the end of the struct](https://shivankaul.com/blog/zero-length-arrays)  
+[How to Use typeof, Statement Expressions and Block-Scope Label Names](https://www.oracle.com/solaris/technologies/c-type.html)  
