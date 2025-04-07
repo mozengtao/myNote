@@ -1,6 +1,48 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## Tips
+```bash
+# colorize output in the terminal
+red='\e[0;31m'
+blue='\e[0;34m'
+green='\e[0;32m'
+endColor='\e[0m'
+
+printf "%bhello world%b\n" ${red} ${endColor}
+
+# 利用 eval 命令结合其他linux命令(例如 awk)获取所需要的信息的变量定义
+: <<'COMMENT'
+基本思想：
+	1. 利用 awk 中的 BEGIN block进行必要的初始化等 setup 准备工作
+	2. 根据 awk 的输入，结合{}中的代码逻辑进行针对逐行的相关计算
+	3. 在 awk 的 END block中利用 printf等输出语句生成bash中的变量初始化操作的语句
+	4. 利用 bash 下的 eval 命令完成变量的真正初始化操作
+COMMENT
+
+eval $(
+    awk 'BEGIN {
+            printf("VAR=\"");
+            printf("1");				# awk 中的 ; 用于 分隔语句 或 结束表达式
+            printf("\";");				# bash中 ; 用于分隔同一行的多个命令
+        }'
+)
+
+echo $VAR
+
+# 
+```
+
+## 常用命令
+```bash
+man builtins
+
+: [arguments]
+		No effect; the command does nothing beyond expanding arguments and performing any specified redirections.  The return status is zero.
+
+
+```
+
 ## 重定向
 ```bash
 command > file							# 标准输出重定向
@@ -1095,16 +1137,6 @@ echo ${dec2bin[25]}
 month=("Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")
 echo ${month[3]}
 ```
-
-- Bash带颜色输出
-	- ```bash
-	  red='\e[0;31m'
-	  blue='\e[0;34m'
-	  green='\e[0;32m'
-	  endColor='\e[0m'
-	  
-	  printf "%bhello world%b\n" ${red} ${endColor}
-	  ```
 
 
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents)  

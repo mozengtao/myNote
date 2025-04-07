@@ -1,4 +1,34 @@
 
+## Tips
+```bash
+# 函数调用的一般规则​ (除 getline 函数外，所有函数调用建议始终加括号)
+1. 对于内置函数的调用，推荐始终加括号​​ 以增强可读性和兼容性
+2. 对于自定义函数的调用，必须加括号
+3. 对于数学函数的调用，必须加括号
+4. getline 函数语法特殊，不需要加括号
+
+sub(/old/, "new", $0)
+gsub(/[0-9]/, "#", $0)
+
+x = sqrt(100)
+y = sin(3.14)
+
+n = length($0)
+
+while (getline line < "file.txt") { ... }
+
+# AWK 是弱类型语言，会根据上下文自动转换数据类型
+1. 字符串转数字​​：如果字符串以数字开头（如 "123"），会转换为对应的数字；否则转换为 0
+​2. ​数字转字符串​​：在需要字符串的上下文中，数字会自动转为字符串形式
+
+awk 'BEGIN {print "123abc" + 0}				# 123
+awk 'BEGIN {print "" + 0}'					# 0
+awk 'BEGIN {if ("hello") print "true"}'		# true
+
+awk '{total += $1 + 0} END {print total}' data.txt				# 处理可能含非数字的字段
+awk '{if ($1 + 0 == $1) print "Valid number:", $1}' data.txt	# 过滤非数字数据
+```
+
 ## sed 和 awk
 ```bash
 ## sed 的适用场景: 以 行 为单位的快速文本转换
