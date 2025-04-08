@@ -1,8 +1,69 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
-## Tips
+## 在条件判断中进行正则表达式匹配
 ```bash
+[[ 字符串 =~ 正则表达式 ]]	# 1. ​​必须使用双方括号  2. 正则表达式无需引号​​
+
+# 1
+if [[ "abc123" =~ ^[a-z]+[0-9]+$ ]]; then
+    echo "字符串以字母开头，数字结尾"
+fi
+
+# 2
+[[ "hello world" =~ ^hello\ world$ ]]      # 正确（转义空格）
+[[ "example.com" =~ ^example\.com$ ]]      # 正确（转义 .）
+
+# 3
+pattern="^[a-z]+[0-9]+$"
+if [[ "abc123" =~ $pattern ]]; then
+    echo "匹配成功"
+fi
+
+# 捕获分组
+BASH_REMATCH 数组保存匹配结果
+	BASH_REMATCH[0]：整个匹配内容
+	BASH_REMATCH[1]：第一个捕获分组，依此类推
+
+if [[ "Date: 2023-10-30" =~ ([0-9]{4}-[0-9]{2}-[0-9]{2}) ]]; then
+    echo "日期为：${BASH_REMATCH[1]}"
+fi
+```
+
+## source
+```bash
+bash内置的 source 命令用来读取并执行脚本文件的内容
+
+当使用 source 命令执行脚本时，它是在当前 source 它的 shell 环境下执行的，因此，脚本可以访问当前 source 它的 shell 下的所有变量，另一方面，source 命令执行完成后，脚本文件中的所有定义(包括变量和函数)在脚本的 parent shell 变得可用，因此通过 source 命令可以用来在不同脚本之间共享内容
+
+而当通过脚本名称或者bash命令执行脚本时，它是在一个新的 shell 下运行的，因此，脚本只能访问 parent shell 中的通过 export 导出的变量或者函数，并且，该脚本下所有的子 shell 中的定义在该脚本退出时都不复存在
+```
+## eval
+```bash
+# 利用 eval 命令结合其他linux命令(例如 awk)获取所需要的信息的变量定义
+: <<'COMMENT'
+基本思想：
+	1. 利用 awk 中的 BEGIN block进行必要的初始化等 setup 准备工作
+	2. 根据 awk 的输入，结合{}中的代码逻辑进行针对逐行的相关计算
+	3. 在 awk 的 END block中利用 printf等输出语句生成bash中的变量初始化操作的语句
+	4. 利用 bash 下的 eval 命令完成变量的真正初始化操作
+COMMENT
+
+eval $(
+    awk 'BEGIN {
+            printf("VAR=\"");
+            printf("1");				# awk 中的 ; 用于 分隔语句 或 结束表达式
+            printf("\";");				# bash中 ; 用于分隔同一行的多个命令
+        }'
+)
+
+echo $VAR
+```
+
+## colorize terminal output
+[ANSI Escape Sequences  颜色输出](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)  
+```bash
+
 # colorize output in the terminal
 ANSI codes are standardized sequences to control text formatting (color, style, etc.).
 Bash 中输出带颜色的字符串到终端，通过 ​​ANSI 转义码​​（ANSI Escape Codes）实现
@@ -48,35 +109,15 @@ log_ok()    { echo "${GREEN}[OK]${RESET} $*"; }
 log_error "服务启动失败" Error code: 123
 log_ok "备份完成"
 
-# 利用 eval 命令结合其他linux命令(例如 awk)获取所需要的信息的变量定义
-: <<'COMMENT'
-基本思想：
-	1. 利用 awk 中的 BEGIN block进行必要的初始化等 setup 准备工作
-	2. 根据 awk 的输入，结合{}中的代码逻辑进行针对逐行的相关计算
-	3. 在 awk 的 END block中利用 printf等输出语句生成bash中的变量初始化操作的语句
-	4. 利用 bash 下的 eval 命令完成变量的真正初始化操作
-COMMENT
-
-eval $(
-    awk 'BEGIN {
-            printf("VAR=\"");
-            printf("1");				# awk 中的 ; 用于 分隔语句 或 结束表达式
-            printf("\";");				# bash中 ; 用于分隔同一行的多个命令
-        }'
-)
-
-echo $VAR
-
 # 
 ```
 
-## 常用命令
+## builtins
 ```bash
 man builtins
 
 : [arguments]
 		No effect; the command does nothing beyond expanding arguments and performing any specified redirections.  The return status is zero.
-
 
 ```
 
@@ -1187,10 +1228,7 @@ echo ${month[3]}
 [Bash getopts builtin command](https://www.computerhope.com/unix/bash/getopts.htm)  
 [Parsing bash script options with getopts](https://sookocheff.com/post/bash/parsing-bash-script-arguments-with-shopts/)  
 [Parse Command Line Arguments in Bash](https://www.baeldung.com/linux/bash-parse-command-line-arguments)  
-[Double Quotes](https://www.gnu.org/software/bash/manual/html_node/Double-Quotes.html)  
-[Single Quotes](https://www.gnu.org/software/bash/manual/html_node/Single-Quotes.html)  
 [bash(1)](https://manpages.org/bash)  
-[前后台进程、孤儿进程和 daemon 类进程的父子关系](https://www.cnblogs.com/f-ck-need-u/p/17718649.html)  
 [GNU Bash Reference Manual](https://www.linuxtopia.org/online_books/bash_reference_guide/index.html)  
 [Advanced Bash-Scripting Guide](https://www.linuxtopia.org/online_books/advanced_bash_scripting_guide/index.html) #online  
 [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html#)  
@@ -1208,7 +1246,6 @@ echo ${month[3]}
 [coding standards](https://linuxcommand.org/lc3_adv_standards.php)  
 [man sh](https://linux.die.net/man/1/sh)  
 [编写健壮的 Shell 脚本](https://morven.life/posts/how-to-write-robust-shell-script/)  
-[ANSI Escape Sequences  颜色输出](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)  
 [Everything you never wanted to know about ANSI escape codes](https://notes.burke.libbey.me/ansi-escape-codes/)  
 [ANSI escape code generator](https://ansi.gabebanks.net/)  
 [explain shell](https://explainshell.com/) #online  
