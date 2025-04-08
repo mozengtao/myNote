@@ -4,12 +4,33 @@
 ## Tips
 ```bash
 # colorize output in the terminal
-red='\e[0;31m'
-blue='\e[0;34m'
-green='\e[0;32m'
-endColor='\e[0m'
+ANSI codes are standardized sequences to control text formatting (color, style, etc.).
+Bash 中输出带颜色的字符串到终端，通过 ​​ANSI 转义码​​（ANSI Escape Codes）实现
 
-printf "%bhello world%b\n" ${red} ${endColor}
+# 1
+echo -e "\e[STYLE;FG;BGmTEXT\e[0m"
+	\e[ starts the escape sequence.
+	STYLE, FG (foreground), and BG (background) are numeric codes.
+	\e[0m resets formatting
+
+echo -e "\e[1;31;47mHello World\e[0m"
+
+# 2
+The tput command interacts with your terminal’s capabilities via the terminfo database. It’s more readable and avoids hardcoding ANSI values.
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+echo "${BOLD}${RED}Error: Something went wrong.${RESET}"
+
+# 3
+RED="\e[31m"
+GREEN="\e[32m"
+BOLD="\e[1m"
+RESET="\e[0m"
+
+printf "%bhello world%b\n" ${RED} ${RESET}
 
 # 利用 eval 命令结合其他linux命令(例如 awk)获取所需要的信息的变量定义
 : <<'COMMENT'
