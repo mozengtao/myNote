@@ -32,6 +32,22 @@ RESET="\e[0m"
 
 printf "%bhello world%b\n" ${RED} ${RESET}
 
+# 4
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+log_error() { echo "${RED}${BOLD}[ERROR]${RESET} $*"; }
+log_warn()  { echo "${YELLOW}[WARN]${RESET} $*"; }
+log_info()  { echo "${BLUE}[INFO]${RESET} $*"; }
+log_ok()    { echo "${GREEN}[OK]${RESET} $*"; }
+
+log_error "服务启动失败" Error code: 123
+log_ok "备份完成"
+
 # 利用 eval 命令结合其他linux命令(例如 awk)获取所需要的信息的变量定义
 : <<'COMMENT'
 基本思想：

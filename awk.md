@@ -1,6 +1,14 @@
 
 ## Tips
 ```bash
+# 打印进程的环境变量
+awk '{print $0}' FS="=" RS="\000" /proc/1648/environ
+
+# gawk 支持 正则RS (传统的 awk 不支持 正则RS)
+data.txt:
+Name:Alice,Age:30;Name:Bob,Age:25
+awk 'BEGIN { RS = "[,;]"; FS=":" } { print "Record:", NR, "-> Name:", $2, "Age:", $4 }' data.txt
+
 # 函数调用的一般规则​ (除 getline 函数外，所有函数调用建议始终加括号)
 1. 对于内置函数的调用，推荐始终加括号​​ 以增强可读性和兼容性
 2. 对于自定义函数的调用，必须加括号
