@@ -441,7 +441,7 @@
   func myFunc(a, b, arg ...int) {}
 
   func Greeting(prefix string, who ...string)
-  Greeting("hello:", "Joe", "Anna", "Eileen")   // who 的值为 []string{"Joe", "Anna", "Eileen"}
+  Greeting("hello:", "Joe", "Anna", "Eileen")   // who 的值为 切片 []string{"Joe", "Anna", "Eileen"}
   如果参数被存储在一个 slice 类型的变量 slice 中，则可以通过 slice... 的形式来传递参数，调用变参函数
   
   func min(s ...int) int {
