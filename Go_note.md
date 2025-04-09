@@ -1,4 +1,64 @@
-- ```go
+## slice
+[How Slices Work in Go](https://dev.to/jpoly1219/how-slices-work-in-go-47nc)  
+```go
+// array (Arrays are basically containers with fixed sizes)
+
+myArray := [3]int{0, 1, 2}
+myArray := [...]string{"apple", "banana"}
+
+// slice (Slices are implemented using arrays much but more powerful than arrays, because of their dynamic nature)
+
+// 1 use make() and specify type, length, and capacity
+mySlice := make([]int, 4, 4)
+mySlice[0] = 0
+
+// 2 declare a struct literal
+mySlice := []int{0, 1, 2, 3}
+
+// 3 create an empty slice and append to it
+mySlice := []int{}
+mySlice = append(mySlice, 0, 1, 2, 3)
+
+// how slices work
+a slice is a header that contains a pointer to an underlying array
+
+type SliceHeader struct {
+    Data uintptr
+    Len int
+    Cap int
+}
+
+// how slices "grow"
+/*
+1. It will check that the current length is equal to the capacity.
+2. If appending over-capacity, a new slice with double the original slice's capacity will be created.
+3. The original slice will be copied over to the new slice.
+4. The new element will be appended at the end.
+5. The resulting slice will be returned.
+*/
+
+// how slicing works
+/*
+1. It will point to a new location in the same underlying array.
+2. Length and capacity will be adjusted.
+*/
+
+// 变长参数 (函数的变长参数（variadic parameters）在内部是通过 切片（slice） 来保存的)
+func sum(nums ...int) int {
+    total := 0
+    for _, num := range nums {
+        total += num
+    }
+    return total
+}
+
+fmt.Println(sum(1, 2, 3))
+
+nums := []int{1, 2, 3}
+fmt.Println(sum(nums...))
+```
+
+```go
   // package
   每个 Go 文件都属于且仅属于一个包。一个包可以由许多以 .go 为扩展名的源文件组成,必须在源文件中非注释的第一行指明这个文件属于哪个包，如：package main, package main表示一个可独立执行的程序，每个 Go 应用程序都包含一个名为 main 的包, 所有的包名都应该使用小写字母
   
