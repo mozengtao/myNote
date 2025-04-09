@@ -1,3 +1,8 @@
+[The Go Programming Language Specification](https://go.dev/ref/spec)  
+[Go 101](https://go101.org/article/101.html)  
+[Let's dive: a tour of sync.Pool internals](https://unskilled.blog/posts/lets-dive-a-tour-of-sync.pool-internals/)  
+
+
 ## slice
 [How Slices Work in Go](https://dev.to/jpoly1219/how-slices-work-in-go-47nc)  
 ```go
@@ -56,6 +61,212 @@ fmt.Println(sum(1, 2, 3))
 
 nums := []int{1, 2, 3}
 fmt.Println(sum(nums...))
+```
+
+## strings
+[strings](https://pkg.go.dev/strings)  
+```go
+ // 字符串
+  Go 中的字符串是根据长度限定，而非特殊字符\0
+  
+  //  字符串拼接
+  str := "Beginning of the string " +
+  	"second part of the string"
+  
+  s := "hel" + "lo,"
+  s += "world!"
+  fmt.Println(s) //输出 “hello, world!”
+  
+  // 拼接字符串更高效的方法
+  strings.Join()
+  bytes.Buffer
+  
+  
+  // string operations
+  strings.HasPrefix(s, prefix string) bool
+  strings.HasSuffix(s, suffix string) bool
+  strings.Contains(s, substr string) bool
+  strings.Index(s, str string) int
+  strings.LastIndex(s, str string) int
+  strings.IndexRune(s string, r rune) int  //查询非 ASCII 编码的字符在父字符串中的位置
+  trings.Replace(str, old, new, n) string
+  strings.Count(s, str string) int
+  strings.Repeat(s, count int) string
+  strings.ToLower(s) string
+  strings.ToUpper(s) string
+  strings.TrimSpace(s)
+  strings.Trim(s, "cut")
+  strings.TrimLeft (s, "cut")
+  strings.TrimRight(s, "cut")
+  strings.Fields(s)
+  strings.Split(s, sep)
+  strings.Join(sl []string, sep string) string
+  函数 strings.NewReader(str) 用于生成一个 Reader 并读取字符串中的内容，然后返回指向该 Reader 的指针
+  从其它类型读取内容的函数还有：
+  Read() 从 []byte 中读取内容
+  ReadByte() 和 ReadRune() 从字符串中读取下一个 byte 或者 rune
+  
+  //  字符串转换为其它类型 strconv
+  strconv.IntSize  // 平台下 int 类型所占的位数
+  // type to string
+  strconv.Itoa(i int) string
+  strconv.FormatFloat(f float64, fmt byte, prec int, bitSize int) string
+  // string to other type
+  strconv.Atoi(s string) (i int, err error)
+  strconv.ParseFloat(s string, bitSize int) (f float64, err error)
+```
+
+## defer
+[Mastering defer, panic, and recover in Go: A Comprehensive Guide](https://medium.com/hprog99/mastering-defer-panic-and-recover-in-go-a-comprehensive-guide-677020697136)  
+[Deconstructing Go's magical defer](https://unskilled.blog/posts/deconstructing-gos-magical-defer/)  
+
+```go
+/*
+defer, panic, and recover are used to control program flow and handle unexpected situations.
+
+defer
+    Ensures certain functions will be executed after the surrounding function completes, regardless of whether it exited normally or due to a runtime panic.
+    A defer statement in Go schedules a function (or method) call to be run immediately before the surrounding function returns. 
+    Defer statements get executed in reverse order. 
+
+    Use Cases:
+    1. Resource Cleanup (Files, Network Connections)
+    2. Database Transactions
+    3. Timers and Benchmarking
+
+panic
+    Signals an error so severe that the normal flow of execution cannot continue.
+
+    Use Cases:
+    1. Handling Non-Recoverable States
+    2. Defensive Programming in Library Code
+
+recover
+    Allows you to catch and handle panics gracefully, potentially restoring normal flow.
+    Must be called within a deferred function: If you call recover outside a defer, it returns nil.
+    Typically at the top level of a goroutine: A common pattern is to wrap goroutine logic inside a function that defers a recover to avoid a crash from an unexpected panic.
+*/
+
+// defer
+// 1
+func readFile(filename string) error {
+    file, err := os.Open(filename)
+    if err != nil {
+        return err
+    }
+    defer file.Close()
+
+    // Perform file operations...
+    // The file will definitely be closed when this function returns.
+    return nil
+}
+// 2
+func performDBOperations(db *sql.DB) error {
+    tx, err := db.Begin()
+    if err != nil {
+        return err
+    }
+    defer tx.Rollback()
+
+    // Execute some queries
+    _, err = tx.Exec("INSERT INTO ...")
+    if err != nil {
+        return err
+    }
+
+    // If all goes well, commit
+    err = tx.Commit()
+    if err != nil {
+        return err
+    }
+    return nil
+}
+// 3
+func measureExecutionTime() {
+    start := time.Now()
+    defer func() {
+        elapsed := time.Since(start)
+        fmt.Printf("Execution took %s\n", elapsed)
+    }()
+
+    // Some time-consuming logic
+    time.Sleep(2 * time.Second)
+}
+
+// how defer works under the hood
+Each time a “defer” statement executes, the function value and parameters to the call are evaluated as usual and saved anew but the actual function is not invoked.
+
+Under the hood, deferred function calls are pushed onto a local defer stack. When the defer statement is made, the call stack is prepared, including the function parameters. When the surrounding function is ready to return, deferred functions are popped and executed one by one out of the defer stack, in a last-in-first-out (LIFO) order. This means they are executed in the reverse order they were deferred.
+
+These deferred functions are actually closures executed in the context of the sourrounding function. What does this mean? It means that they have access to the surrounding function’s variables, even if they are not passed as parameters
+
+// 1
+func somefunc() int {
+    var birdsPerSquareMeter int
+    
+    defer fmt.Printf("birdsIndicator=%d\n", birdsPerSquareMeter)    // 0
+
+    birdsPerSquareMeter = 42
+    return birdsPerSquareMeter
+}
+
+// 2
+func somefunc() int {
+    var birdsPerSquareMeter int
+    
+    defer func() {
+        fmt.Printf("birdsIndicator=%d\n", birdsPerSquareMeter)    // 42
+    }()
+
+    birdsPerSquareMeter = 42
+    return birdsPerSquareMeter
+}
+
+//  how Go's SSA (Static Single Assignment) IR handles a defer call
+
+// test functions with defer
+func test() {
+    defer fmt.Println("deferred")
+    fmt.Println("normal")
+}
+// what the SSA looks like conceptually
+func test():
+entry:
+    t0 = "deferred"
+    t1 = &fmt.Println
+    t2 = makeDefer(t1, t0)        // <-- allocate defer (under the hood runtime.deferproc is called which creates a defer record)
+    t3 = "normal"
+    call fmt.Println(t3)
+    callDefer(t2)                 // <-- execute deferred call (at function return or panic, the compiler inserts a runtime.deferreturn call which executes the deferred functions)
+    return
+
+
+// panic
+func mustParseURL(urlStr string) *url.URL {
+    parsed, err := url.Parse(urlStr)
+    if err != nil {
+        panic("Invalid URL provided: " + err.Error())
+    }
+    return parsed
+}
+
+// recover
+func safeHandler(h http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        defer func() {
+            if err := recover(); err != nil {
+                log.Printf("Handler panic: %v", err)
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+            }
+        }()
+        h(w, r)
+    }
+}
+```
+
+## Goroutines
+[Coroutines in Go](https://unskilled.blog/posts/coroutines-in-go/)  
+```go
 ```
 
 ```go
@@ -290,54 +501,6 @@ fmt.Println(sum(nums...))
   unicode.IsDigit(ch)
   unicode.IsSpace(ch)
   
-  // 字符串
-  Go 中的字符串是根据长度限定，而非特殊字符\0
-  
-  //  字符串拼接
-  str := "Beginning of the string " +
-  	"second part of the string"
-  
-  s := "hel" + "lo,"
-  s += "world!"
-  fmt.Println(s) //输出 “hello, world!”
-  
-  // 拼接字符串更高效的方法
-  strings.Join()
-  bytes.Buffer
-  
-  
-  // string operations
-  strings.HasPrefix(s, prefix string) bool
-  strings.HasSuffix(s, suffix string) bool
-  strings.Contains(s, substr string) bool
-  strings.Index(s, str string) int
-  strings.LastIndex(s, str string) int
-  strings.IndexRune(s string, r rune) int  //查询非 ASCII 编码的字符在父字符串中的位置
-  trings.Replace(str, old, new, n) string
-  strings.Count(s, str string) int
-  strings.Repeat(s, count int) string
-  strings.ToLower(s) string
-  strings.ToUpper(s) string
-  strings.TrimSpace(s)
-  strings.Trim(s, "cut")
-  strings.TrimLeft (s, "cut")
-  strings.TrimRight(s, "cut")
-  strings.Fields(s)
-  strings.Split(s, sep)
-  strings.Join(sl []string, sep string) string
-  函数 strings.NewReader(str) 用于生成一个 Reader 并读取字符串中的内容，然后返回指向该 Reader 的指针
-  从其它类型读取内容的函数还有：
-  Read() 从 []byte 中读取内容
-  ReadByte() 和 ReadRune() 从字符串中读取下一个 byte 或者 rune
-  
-  //  字符串转换为其它类型 strconv
-  strconv.IntSize  // 平台下 int 类型所占的位数
-  // type to string
-  strconv.Itoa(i int) string
-  strconv.FormatFloat(f float64, fmt byte, prec int, bitSize int) string
-  // string to other type
-  strconv.Atoi(s string) (i int, err error)
-  strconv.ParseFloat(s string, bitSize int) (f float64, err error)
   
   // time and date
   pkg time
@@ -484,142 +647,6 @@ fmt.Println(sum(nums...))
   // call by value vs call by reference
   
   // 空白符（blank identifier）
-
-  // ex1
-  func main() {
-  	var i1 int
-  	var f1 float32
-  	i1, _, f1 = ThreeValues()
-  	fmt.Printf("The int: %d, the float: %f \n", i1, f1)
-      
-    func ThreeValues() (int, int, float32) {
-  	    return 5, 6, 7.5
-    }
-  
-  
-  // 变长参数
-  func myFunc(a, b, arg ...int) {}
-
-  func Greeting(prefix string, who ...string)
-  Greeting("hello:", "Joe", "Anna", "Eileen")   // who 的值为 切片 []string{"Joe", "Anna", "Eileen"}
-  如果参数被存储在一个 slice 类型的变量 slice 中，则可以通过 slice... 的形式来传递参数，调用变参函数
-  
-  func min(s ...int) int {
-  	if len(s)==0 {
-  		return 0
-  	}
-  	min := s[0]
-  	for _, v := range s {
-  		if v < min {
-  			min = v
-  		}
-  	}
-  	return min
-  }
-  
-  // defer 和追踪
-  关键字 defer 允许我们推迟到函数返回之前（或任意位置执行 return 语句之后）一刻才执行某个语句或函数
-  关键字 defer 的用法类似于面向对象编程语言 Java 和 C 的 finally 语句块，它一般用于释放某些已分配的资源
-  多个 defer 行为被注册时，它们会以逆序执行（类似栈，即后进先出）
-  
-  func function1() {
-  	fmt.Printf("In function1 at the top\n")
-  	defer function2()
-  	fmt.Printf("In function1 at the bottom!\n")
-  }
-  
-  func function2() {
-  	fmt.Printf("Function2: Deferred until the end of the calling function!")
-  }
-  
-  关键字 defer 允许我们进行一些函数执行完成后的收尾工作，例如：
-  defer file.Close()    // 关闭文件流
-  
-  mu.Lock()  
-  defer mu.Unlock()     // 解锁一个加锁的资源
-  
-  printHeader()         // 打印最终报告
-  defer printFooter()
-  
-  // open a database connection  
-  defer disconnectFromDB()  // 关闭数据库链接
-  
-  
-  // e.g
-  func trace(s string) { fmt.Println("entering:", s) }
-  func untrace(s string) { fmt.Println("leaving:", s) }
-  // ex1
-  package main
-  
-  import "fmt"
-  
-  func trace(s string)   { fmt.Println("entering:", s) }
-  func untrace(s string) { fmt.Println("leaving:", s) }
-  
-  func a() {
-  	trace("a")
-  	defer untrace("a")
-  	fmt.Println("in a")
-  }
-  
-  func b() {
-  	trace("b")
-  	defer untrace("b")
-  	fmt.Println("in b")
-  	a()
-  }
-  
-  func main() {
-  	b()
-  }
-
-  // e.g improved
-  package main
-  
-  import "fmt"
-  
-  func trace(s string) string {
-  	fmt.Println("entering:", s)
-  	return s
-  }
-  
-  func un(s string) {
-  	fmt.Println("leaving:", s)
-  }
-  
-  func a() {
-  	defer un(trace("a"))
-  	fmt.Println("in a")
-  }
-  
-  func b() {
-  	defer un(trace("b"))
-  	fmt.Println("in b")
-  	a()
-  }
-  
-  func main() {
-  	b()
-  }
-  
-  // 使用 defer 语句来记录函数的参数与返回值
-  package main
-  
-  import (
-  	"io"
-  	"log"
-  )
-  
-  func func1(s string) (n int, err error) {
-  	defer func() {
-  		log.Printf("func1(%q) = %d, %v", s, n, err)
-  	}()
-  	return 7, io.EOF
-  }
-  
-  func main() {
-  	func1("Go")
-  }
   
   // 内置函数
   close
