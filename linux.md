@@ -1,6 +1,24 @@
-[Linux Kernel Teaching](https://linux-kernel-labs.github.io/refs/heads/master/)  
+[**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
+[**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
 [The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
 [A journey into the Linux proc filesystem](https://fernandovillalba.substack.com/p/a-journey-into-the-linux-proc-filesystem)  
+
+## Linux Tracing Technologies
+[Process Tracing / Count system calls with ptrace](https://medium.com/@bjammal/process-tracing-system-call-analysis-with-ptrace-685a8844dbfa)  
+[Write yourself an strace in 70 lines of code](https://blog.nelhage.com/2010/08/write-yourself-an-strace-in-70-lines-of-code/)  
+[Playing with ptrace, Part I](https://www.linuxjournal.com/article/6100)  
+[Playing with ptrace, Part II](https://www.linuxjournal.com/article/6210)  
+[Playing with ptrace() for fun](https://actes.sstic.org/SSTIC06/Playing_with_ptrace/SSTIC06-article-Bareil-Playing_with_ptrace.pdf)  
+[Linux Tracing Technologies](https://docs.kernel.org/trace/index.html)  
+[TRACE-CMD](https://www.trace-cmd.org/)  
+[ftrace - Function Tracer](https://docs.kernel.org/trace/ftrace.html)  
+
+
+## signals
+[LINUX Signals](https://faculty.cs.niu.edu/~hutchins/csci480/signals.htm)  
+[signal(7)](https://man7.org/linux/man-pages/man7/signal.7.html) # Execution of signal handlers  
+[sigreturn(2)](https://man7.org/linux/man-pages/man2/sigreturn.2.html)   
+
 
 ## 常用shell命令
 ```bash
@@ -23,6 +41,7 @@ pgrep
 ## syscall
 [man 2 syscalls](https://www.mankier.com/2/syscalls)  
 [man 2 syscall](https://www.mankier.com/2/syscall)  
+[Syscalls](https://aquasecurity.github.io/tracee/dev/docs/events/builtin/syscalls/)  
 
 [GNU Binutils](https://www.gnu.org/software/binutils/)
 [LIB BFD, the Binary File Descriptor Library](https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html)

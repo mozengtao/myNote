@@ -1,4 +1,8 @@
 [The Go Programming Language Specification](https://go.dev/ref/spec)  
+[**Practical Go Lessons**](https://www.practical-go-lessons.com/)  
+
+[Go Type System Overview](https://go101.org/article/type-system-overview.html)  
+
 [Go 101](https://go101.org/article/101.html)  
 [Let's dive: a tour of sync.Pool internals](https://unskilled.blog/posts/lets-dive-a-tour-of-sync.pool-internals/)  
 
