@@ -273,6 +273,7 @@ func safeHandler(h http.HandlerFunc) http.HandlerFunc {
 ```go
 ```
 
+## TODO
 ```go
   // package
   每个 Go 文件都属于且仅属于一个包。一个包可以由许多以 .go 为扩展名的源文件组成,必须在源文件中非注释的第一行指明这个文件属于哪个包，如：package main, package main表示一个可独立执行的程序，每个 Go 应用程序都包含一个名为 main 的包, 所有的包名都应该使用小写字母
@@ -526,20 +527,20 @@ func safeHandler(h http.HandlerFunc) http.HandlerFunc {
   }
 
   // switch
-  switch var1 {
-  	case val1:
-  		...
-  	case val2:
-  		...
-  	default:
-  		...
-  }
+    switch var1 {
+    case val1:
+        ...
+    case val2:
+        ...
+    default:
+        ...
+    }
   
-  switch i {
-  	case 0: fallthrough
-  	case 1:
-  		f() // 当 i == 0 时函数也会被调用
-  }
+    switch i {
+    case 0: fallthrough
+    case 1:
+        f() // 当 i == 0 时函数也会被调用
+    }
   
   //
   package main
@@ -570,11 +571,11 @@ func safeHandler(h http.HandlerFunc) http.HandlerFunc {
   }
   
   // 2
-  switch a, b := x[i], y[j]; {
-  	case a < b: t = -1
-  	case a == b: t = 0
-  	case a > b: t = 1
-  }
+    switch a, b := x[i], y[j]; {
+    case a < b: t = -1
+    case a == b: t = 0
+    case a > b: t = 1
+    }
   
   // for
   for i := 0; i < 5; i++ {
@@ -955,9 +956,9 @@ func safeHandler(h http.HandlerFunc) http.HandlerFunc {
   	for i:=0; i < len(a) && i < len(b); i++ {
   	    switch {
   	    case a[i] > b[i]:
-  		return 1
+  		    return 1
   	    case a[i] < b[i]:
-  		return -1
+  		    return -1
   	    }
   	}
   	// 数组的长度可能不同
