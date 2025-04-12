@@ -1,6 +1,28 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## Bash brace expansion
+```bash
+{start..end}
+{start..end..increment}
+{pattern1,pattern2,pattern3}
+
+echo {1..10}
+echo {5..1}
+echo {1..10..2}
+
+echo {a..z}
+echo {A..Z}
+
+touch file{a,b,c}.txt
+touch file{1..5}.txt
+
+echo {a,b}{1,2,3}
+echo {a..c}{1..3}
+
+echo {2020..2023}-{01..12}
+```
+
 ## Bash 命令分隔符
 ```bash
 1. 分号 ;
