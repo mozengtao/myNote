@@ -1,6 +1,33 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## Bash 命令分隔符
+```bash
+1. 分号 ;
+command1; command2	# 顺序执行命令，无论前一个命令是否成功
+
+2. 逻辑运算符 && 和 ||
+command1 && command2				# command2 仅在 command1 成功后执行
+command1 || command2  				# command2 仅在 command1 失败后执行
+command1 && command2 || command3  	# command1 成功执行 command2，否则执行 command3
+
+3. 管道 | 和 |&
+command1 | command2        # command1 的 stdout 传递给 command2
+command1 |& command2       # command1 的 stdout 和 stderr 均传递给 command2
+
+4. 后台符号 & (隐含命令终止的作用)
+command1 & command2  	   			# command1 后台运行，command2 立即执行
+for i in {1..3}; do sleep $i & done	# 后台符号 & 隐含命令终止的作用
+
+5. 换行符
+command1
+command2  # 等同于 command1; command2
+
+6. 命令分组 {} 和 ()
+{ command1; command2; }    # 注意末尾分号和空格
+(command1; command2)       # 在子 Shell 中执行，变量修改不影响父 Shell
+```
+
 ## 在条件判断中进行正则表达式匹配
 ```bash
 [[ 字符串 =~ 正则表达式 ]]	# 1. ​​必须使用双方括号  2. 正则表达式无需引号​​
