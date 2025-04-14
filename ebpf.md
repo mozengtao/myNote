@@ -1,6 +1,7 @@
 [Introduction and practice of eBPF](https://www.sobyte.net/post/2022-04/ebpf/)  
 [eBPF Tutorial by Example: Learning CO-RE eBPF Step by Step](https://eunomia.dev/tutorials/)  
 [BPF and XDP Reference Guide](https://docs.cilium.io/en/stable/reference-guides/bpf/index.html)  
+[eBPF 完全入门指南.pdf（万字长文）](https://mp.weixin.qq.com/s/zCjk5WmnwLD0J3J9gC4e0Q)  
 
 
 
