@@ -1,3 +1,9 @@
+[Introduction and practice of eBPF](https://www.sobyte.net/post/2022-04/ebpf/)  
+[eBPF Tutorial by Example: Learning CO-RE eBPF Step by Step](https://eunomia.dev/tutorials/)  
+[BPF and XDP Reference Guide](https://docs.cilium.io/en/stable/reference-guides/bpf/index.html)  
+
+
+
 [bpf-developer-tutorial](https://github.com/eunomia-bpf/bpf-developer-tutorial/tree/main)  
 [eBPF 开发者教程](https://github.com/eunomia-bpf/bpf-developer-tutorial/blob/main/README.zh.md)  
 [bpftrace(8)](https://github.com/bpftrace/bpftrace/blob/master/man/adoc/bpftrace.adoc)  
@@ -8,6 +14,8 @@
 [BPF and XDP Reference Guide](https://docs.cilium.io/en/latest/bpf/)  
 
 [bcc](https://github.com/iovisor/bcc)  
+[BCC to libbpf conversion guide](https://nakryiko.com/posts/bcc-to-libbpf-howto-guide/)  
+
 
 [eBPF Tutorial by Example](https://eunomia.dev/tutorials/)  
 [TIL: eBPF is awesome](https://filipnikolovski.com/posts/ebpf/)  
