@@ -49,7 +49,7 @@ ar -x libmy_static.a	// extract the archive's files
 [inih](https://github.com/benhoyt/inih)  
 [Notcurses: blingful TUIs and character graphics](https://github.com/dankamongmen/notcurses)  
 
-## 结构体中函数指针的应用场景
+## 函数指针的应用场景
 ```c
 // 1 回调机制
 #include <stdio.h>
@@ -70,6 +70,14 @@ int main() {
     }
     return 0;
 }
+
+// callback function
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+qsort(array, size, sizeof(int), compare);
+
 
 // 2 策略模式
 #include <stdio.h>
@@ -169,6 +177,50 @@ int main() {
     states[1].handleInput('A');  // 状态机在不同状态间的转换
     return 0;
 }
+
+//
+#include <stdio.h>
+
+typedef enum {
+    STATE_RED,
+    STATE_GREEN,
+    STATE_YELLOW,
+    STATE_COUNT
+} TrafficLightState;
+
+typedef TrafficLightState (*StateFunction)();
+
+TrafficLightState red_state() {
+    printf("State: RED\n");
+    return STATE_GREEN;
+}
+
+TrafficLightState green_state() {
+    printf("State: GREEN\n");
+    return STATE_YELLOW;
+}
+
+TrafficLightState yellow_state() {
+    printf("State: YELLOW\n");
+    return STATE_RED;
+}
+
+int main() {
+    StateFunction state_table[STATE_COUNT] = {
+        red_state,
+        green_state,
+        yellow_state
+    };
+
+    TrafficLightState current_state = STATE_RED;
+
+    for (int i = 0; i < 10; ++i) {
+        current_state = state_table[current_state]();
+    }
+
+    return 0;
+}
+
 
 // 5 对象模拟
 #include <stdio.h>
@@ -318,6 +370,37 @@ int main() {
     dlclose(handle);
     return 0;
 }
+
+// jump tables
+void add() { printf("Add\n"); }
+void subtract() { printf("Subtract\n"); }
+
+void (*operation_table[2])() = { add, subtract };
+operation_table[op_index]();  // Dynamically invoke the correct operation
+
+// Plugin-like Architecture / Dynamic Behavior
+typedef struct {
+    void (*init)();
+    void (*process)();
+} Module;
+
+void mod1_init() { printf("Mod1 Init\n"); }
+void mod1_process() { printf("Mod1 Process\n"); }
+
+Module mod1 = { mod1_init, mod1_process };
+mod1.init();
+mod1.process();
+
+// Encapsulating Behavior in Data Structures
+typedef struct {
+    void (*draw)(void*);
+} Shape;
+
+void draw_circle(void* s) { printf("Drawing Circle\n"); }
+
+Shape circle = { draw_circle };
+circle.draw(&circle);
+
 ```
 
 ## 常用函数

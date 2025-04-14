@@ -1,17 +1,22 @@
-- [eBPF Documentation](https://ebpf.io/what-is-ebpf/)
-- [BPF and XDP Reference Guide](https://docs.cilium.io/en/latest/bpf/)
+[bpf-developer-tutorial](https://github.com/eunomia-bpf/bpf-developer-tutorial/tree/main)  
+[eBPF 开发者教程](https://github.com/eunomia-bpf/bpf-developer-tutorial/blob/main/README.zh.md)  
+[bpftrace(8)](https://github.com/bpftrace/bpftrace/blob/master/man/adoc/bpftrace.adoc)  
 
-- [bcc](https://github.com/iovisor/bcc)
+[bpftrace(8)](https://www.mankier.com/8/bpftrace)  
 
-- [eBPF Tutorial by Example](https://eunomia.dev/tutorials/)
-- [eBPF 开发者教程](https://github.com/eunomia-bpf/bpf-developer-tutorial/blob/main/README.zh.md)
-- [TIL: eBPF is awesome](https://filipnikolovski.com/posts/ebpf/)
+[eBPF Documentation](https://ebpf.io/what-is-ebpf/)  
+[BPF and XDP Reference Guide](https://docs.cilium.io/en/latest/bpf/)  
 
-- [Linux kernel profiling with perf](https://perf.wiki.kernel.org/index.php/Tutorial)
+[bcc](https://github.com/iovisor/bcc)  
 
-- [The art of writing eBPF programs: a primer](https://sysdig.com/blog/the-art-of-writing-ebpf-programs-a-primer/)
+[eBPF Tutorial by Example](https://eunomia.dev/tutorials/)  
+[TIL: eBPF is awesome](https://filipnikolovski.com/posts/ebpf/)  
 
-- [0x00C - eBPF](https://unzip.dev/0x00c-ebpf/)
+[Linux kernel profiling with perf](https://perf.wiki.kernel.org/index.php/Tutorial)  
+
+[The art of writing eBPF programs: a primer](https://sysdig.com/blog/the-art-of-writing-ebpf-programs-a-primer/)  
+
+[0x00C - eBPF](https://unzip.dev/0x00c-ebpf/)  
     > How does it work? 
     > 
     > With eBPF you can interact with the Kernel from User space in a way that keeps security and stability without patching the Kernel.
@@ -28,7 +33,7 @@
     > 
     > The traditional way of achieving many of the eBPF use cases was using an LKM (a kernel module). The drawbacks of an LKM are plenty: Kernel releases often break your module. New Kernel versions mean you need to rewrite your LKM. Lastly, there is a good chance you’ll crash the kernel - there are no safeties in place. The only other option is to get code into the Linux kernel directly, which could take a few years and might not be approved.
 
-- [Linux Socket Filtering aka Berkeley Packet Filter (BPF)](https://www.kernel.org/doc/Documentation/networking/filter.txt)
-- [perf Examples](https://www.brendangregg.com/perf.html)
-- [FlameGraph](https://github.com/brendangregg/FlameGraph)
-- [The Flame Graph](https://queue.acm.org/detail.cfm?id=2927301)
+[Linux Socket Filtering aka Berkeley Packet Filter (BPF)](https://www.kernel.org/doc/Documentation/networking/filter.txt)  
+[perf Examples](https://www.brendangregg.com/perf.html)  
+[FlameGraph](https://github.com/brendangregg/FlameGraph)  
+[The Flame Graph](https://queue.acm.org/detail.cfm?id=2927301)  
