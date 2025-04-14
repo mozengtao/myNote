@@ -7,6 +7,33 @@
 [fork, exec, wait and exit](https://percona.community/blog/2021/01/04/fork-exec-wait-and-exit/)  
 [Disillusioning the Magic of the fork System Call](https://blog.codingconfessions.com/p/the-magic-of-fork)  
 
+[eXpOS Documentation](https://exposnitc.github.io/documentation.html)  
+
+
+## fork, execve, mmap, exit
+[fork(2)](https://www.mankier.com/2/fork)  
+[The fork() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/create.html)  
+[Fork System Call](https://www.scaler.com/topics/fork-system-call/)  
+[Fork() System Call](https://www.naukri.com/code360/library/fork-system-call)  
+[The Difference Between fork(), vfork(), exec() and clone()](https://www.baeldung.com/linux/fork-vfork-exec-clone)  
+
+[execve(2)](https://www.mankier.com/2/execve)  
+[fork and exec system calls in Linux](https://www.softprayog.in/programming/creating-processes-with-fork-and-exec-in-linux)  
+[The Exec Family of Functions](https://www.baeldung.com/linux/exec-functions)  
+
+[mmap(2)](https://www.mankier.com/2/mmap)  
+[Linux: mmap() System Call — Part I](https://www.diskodev.com/posts/linux-mmap-part-1/)  
+[Linux: mmap() System Call — Part II](https://www.diskodev.com/posts/linux-mmap-part-2/)  
+
+[exit](https://www.mankier.com/3/exit)  
+[wait](https://www.mankier.com/2/wait)  
+
+
+[Linux: Pipes - Part I](https://www.diskodev.com/posts/pipes-part-i-linux/)  
+[Linux: File Descriptor Data Structures](https://www.diskodev.com/posts/linux-fd-data-structures/)  
+[Linux: Page Cache](https://www.diskodev.com/posts/linux-page-cache/)  
+[Linux: Process In Memory](https://www.diskodev.com/posts/linux-process-in-memory/)  
+
 
 ## CS 131: Fundamentals of Computer Systems
 [l01](https://cs.brown.edu/courses/csci1310/2020/notes/l01.html)  
@@ -74,6 +101,7 @@ pgrep
 
 
 ## syscall
+[Linux: Anatomy of a System Call](https://www.diskodev.com/posts/linux-system-calls/)  
 [man 2 syscalls](https://www.mankier.com/2/syscalls)  
 [man 2 syscall](https://www.mankier.com/2/syscall)  
 [Syscalls](https://aquasecurity.github.io/tracee/dev/docs/events/builtin/syscalls/)  
@@ -81,6 +109,7 @@ pgrep
 [system call table for x86](https://filippo.io/linux-syscall-table/)  
 [man 2 syscall](https://man7.org/linux/man-pages/man2/syscall.2.html#NOTES)  
 [User-space, Kernel-space, and System Calls](https://www.codeinsideout.com/blog/linux/system-call/)  
+[Anatomy of a Syscall](https://www.chromium.org/nativeclient/reference/anatomy-of-a-sys/)  
 
 [GNU Binutils](https://www.gnu.org/software/binutils/)
 [LIB BFD, the Binary File Descriptor Library](https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html)
