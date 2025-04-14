@@ -28,6 +28,11 @@
 [exit](https://www.mankier.com/3/exit)  
 [wait](https://www.mankier.com/2/wait)  
 
+[strerror](https://www.mankier.com/3/strerror)  
+[perror](https://www.mankier.com/3/perror)  
+
+[fdopen](https://www.mankier.com/3/fopen)  
+
 
 [Linux: Pipes - Part I](https://www.diskodev.com/posts/pipes-part-i-linux/)  
 [Linux: File Descriptor Data Structures](https://www.diskodev.com/posts/linux-fd-data-structures/)  
