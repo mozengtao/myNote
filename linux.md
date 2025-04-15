@@ -11,6 +11,8 @@
 
 
 ## fork, execve, mmap, exit
+[Introduction to system calls](https://how.dev/answers/introduction-to-system-calls)  
+
 [fork(2)](https://www.mankier.com/2/fork)  
 [The fork() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/create.html)  
 [Fork System Call](https://www.scaler.com/topics/fork-system-call/)  
@@ -18,18 +20,28 @@
 [The Difference Between fork(), vfork(), exec() and clone()](https://www.baeldung.com/linux/fork-vfork-exec-clone)  
 
 [execve(2)](https://www.mankier.com/2/execve)  
+[Executing a File](https://www.gnu.org/software/libc/manual/html_mono/libc.html)  
 [fork and exec system calls in Linux](https://www.softprayog.in/programming/creating-processes-with-fork-and-exec-in-linux)  
 [The Exec Family of Functions](https://www.baeldung.com/linux/exec-functions)  
+[What is the execvp() function in C?](https://how.dev/answers/what-is-the-execvp-function-in-c)  
+[Environment Variables](https://www.gnu.org/software/libc/manual/html_node/Environment-Variables.html)  
 
 [mmap(2)](https://www.mankier.com/2/mmap)  
 [Linux: mmap() System Call — Part I](https://www.diskodev.com/posts/linux-mmap-part-1/)  
 [Linux: mmap() System Call — Part II](https://www.diskodev.com/posts/linux-mmap-part-2/)  
 
-[exit](https://www.mankier.com/3/exit)  
-[wait](https://www.mankier.com/2/wait)  
+[exit(3)](https://www.mankier.com/3/exit)  
+[wait/waitpid(2)](https://www.mankier.com/2/wait)  
+[The wait() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/wait.html)  
+[What is the waitpid() system call?](https://how.dev/answers/what-is-the-waitpid-system-call)  
+[wait() vs waitpid() in C](https://how.dev/answers/wait-vs-waitpid-in-c)  
+
+[What is a pipe in C?](https://how.dev/answers/what-is-a-pipe-in-c)  
 
 [strerror](https://www.mankier.com/3/strerror)  
 [perror](https://www.mankier.com/3/perror)  
+[What is perror in C?](https://how.dev/answers/what-is-perror-in-c)  
+
 
 [fdopen](https://www.mankier.com/3/fopen)  
 
