@@ -9,7 +9,8 @@ static const struct printer_i printer_interface = {
 	.print = (printer_print_fn)color_printer_print,
 };
 
-struct color_printer *color_printer_new(const char *color_command)
+struct color_printer*
+color_printer_new(const char *color_command)
 {
 	struct color_printer *self;
 	self = malloc(sizeof(struct color_printer));
@@ -25,13 +26,15 @@ struct color_printer *color_printer_new(const char *color_command)
 	return self;
 }
 
-void color_printer_cleanup(struct color_printer *self)
+void
+color_printer_cleanup(struct color_printer *self)
 {
 	free(self->buf);
 	free(self);
 }
 
-void color_printer_print(struct color_printer *self, const char *str)
+void
+color_printer_print(struct color_printer *self, const char *str)
 {
 	if(self->enable_color) {
 		printf("%s%s\033[0m", self->color_command, str);
@@ -40,12 +43,14 @@ void color_printer_print(struct color_printer *self, const char *str)
 	}
 }
 
-void color_printer_disable_color(struct color_printer *self)
+void
+color_printer_disable_color(struct color_printer *self)
 {
 	self->enable_color = 0;
 }
 
-void color_printer_enable_color(struct color_printer *self)
+void
+color_printer_enable_color(struct color_printer *self)
 {
 	self->enable_color = 1;
 }
