@@ -25,6 +25,7 @@
 [The Exec Family of Functions](https://www.baeldung.com/linux/exec-functions)  
 [What is the execvp() function in C?](https://how.dev/answers/what-is-the-execvp-function-in-c)  
 [Environment Variables](https://www.gnu.org/software/libc/manual/html_node/Environment-Variables.html)  
+[Environment Access](https://www.gnu.org/software/libc/manual/html_node/Environment-Access.html)  
 
 [mmap(2)](https://www.mankier.com/2/mmap)  
 [Linux: mmap() System Call — Part I](https://www.diskodev.com/posts/linux-mmap-part-1/)  
