@@ -1,6 +1,24 @@
-[eBPF Documentation](https://ebpf.io/what-is-ebpf/)  
-
+[**eBPF Documentation**](https://ebpf.io/what-is-ebpf/)  
+[An eBPF overview, part 1: Introduction](https://www.collabora.com/news-and-blog/blog/2019/04/05/an-ebpf-overview-part-1-introduction/)  
 [**Introduction and practice of eBPF**](https://www.sobyte.net/post/2022-04/ebpf/)  
+
+## arXiv
+> arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics.
+
+[The eBPF Runtime in the Linux Kernel](https://arxiv.org/abs/2410.00026)  
+[bpftime: userspace eBPF Runtime for Uprobe, Syscall and Kernel-User Interactions](https://arxiv.org/abs/2311.07923)  
+[Programmable System Call Security with eBPF](https://arxiv.org/abs/2302.10366)  
+[Beyond socket options: making the Linux TCP stack truly extensible](https://arxiv.org/abs/1901.01863)  
+[Leveraging eBPF for programmable network functions with IPv6 Segment Routing](https://arxiv.org/abs/1810.10247)  
+[COP2: Continuously Observing Protocol Performance](https://arxiv.org/abs/1902.04280)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 [eBPF Tutorial by Example: Learning CO-RE eBPF Step by Step](https://eunomia.dev/tutorials/)  
 [BPF and XDP Reference Guide](https://docs.cilium.io/en/stable/reference-guides/bpf/index.html)  
 [eBPF 完全入门指南.pdf（万字长文）](https://mp.weixin.qq.com/s/zCjk5WmnwLD0J3J9gC4e0Q)  
@@ -13,7 +31,6 @@
 
 [bpftrace(8)](https://www.mankier.com/8/bpftrace)  
 
-[eBPF Documentation](https://ebpf.io/what-is-ebpf/)  
 [BPF and XDP Reference Guide](https://docs.cilium.io/en/latest/bpf/)  
 
 [bcc](https://github.com/iovisor/bcc)  
