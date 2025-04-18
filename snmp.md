@@ -1,2 +1,5 @@
-- 参考文档
-	- [Global OID reference database](https://oidref.com/)
+[Global OID reference database](https://oidref.com/)  
+[Object Identifiers](https://www.alvestrand.no/objectid/)  
+[]()  
+[]()  
+[]()  

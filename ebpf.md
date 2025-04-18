@@ -1,6 +1,45 @@
+![ebpf components](./assets/ebpf_components.png)  
+[eBPF For Humans | 00 | Intro](https://medium.com/@ilaygilman/ebpf-for-humans-00-intro-b36dc04fefe9)  
+[First eBPF program](https://prateek-singh.hashnode.dev/first-ebpf-program)  
+[Dive into eBPF: An Introduction](https://medium.com/@sumant1122/dive-into-ebpf-an-introduction-d367d29bf145)  
+[Bottom-up eBPF](https://medium.com/@phylake/bottom-up-ebpf-d7ca9cbe8321)  
+[BPF and XDP Reference Guide](https://docs.cilium.io/en/stable/reference-guides/bpf/#bpf-guide)  
+
+[eBPF Major Applications](https://ebpf.io/applications/)  
+
+
+![Learning eBPF](./assets/Learning_eBPF.pdf) #pdf  
+![Buzzing-across-space-illustrated-childrens-guide-to-ebpf](./assets/buzzing-across-space-illustrated-childrens-guide-to-ebpf.pdf) #pdf  
+
+[eBPF Docs](https://docs.ebpf.io/)  
 [**eBPF Documentation**](https://ebpf.io/what-is-ebpf/)  
+[BPF Documentation](https://docs.kernel.org/bpf/index.html)  
 [An eBPF overview, part 1: Introduction](https://www.collabora.com/news-and-blog/blog/2019/04/05/an-ebpf-overview-part-1-introduction/)  
 [**Introduction and practice of eBPF**](https://www.sobyte.net/post/2022-04/ebpf/)  
+
+[**Building BPF applications with libbpf-bootstrap**](https://nakryiko.com/posts/libbpf-bootstrap/)  
+[libbpf-bootstrap](https://github.com/libbpf/libbpf-bootstrap)  
+
+[Linux Observability with BPF](https://www.oreilly.com/library/view/linux-observability-with/9781492050193/) #pdf  
+[Linux Observability with BPF](https://github.com/bpftools/linux-observability-with-bpf) #github  
+[BPF Performance Tools](https://www.oreilly.com/library/view/bpf-performance-tools/9780136588870/)  
+
+[libbpf](https://docs.ebpf.io/ebpf-library/libbpf/)  
+[libbpf](https://libbpf.readthedocs.io/en/latest/index.html)  
+[libbpf](https://github.com/libbpf/libbpf) #github  
+
+
+[eBPF-Guide](https://github.com/mikeroyal/eBPF-Guide)  
+[A Deep Dive into eBPF: Writing an Efficient DNS Monitoring](https://medium.com/@nurkholish.halim/a-deep-dive-into-ebpf-writing-an-efficient-dns-monitoring-2c9dea92abdf)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ## arXiv
 > arXiv is a free distribution service and an open-access archive for nearly 2.4 million scholarly articles in the fields of physics, mathematics, computer science, quantitative biology, quantitative finance, statistics, electrical engineering and systems science, and economics.
@@ -11,8 +50,6 @@
 [Beyond socket options: making the Linux TCP stack truly extensible](https://arxiv.org/abs/1901.01863)  
 [Leveraging eBPF for programmable network functions with IPv6 Segment Routing](https://arxiv.org/abs/1810.10247)  
 [COP2: Continuously Observing Protocol Performance](https://arxiv.org/abs/1902.04280)  
-[]()  
-[]()  
 []()  
 []()  
 []()  
@@ -45,21 +82,6 @@
 [The art of writing eBPF programs: a primer](https://sysdig.com/blog/the-art-of-writing-ebpf-programs-a-primer/)  
 
 [0x00C - eBPF](https://unzip.dev/0x00c-ebpf/)  
-    > How does it work? 
-    > 
-    > With eBPF you can interact with the Kernel from User space in a way that keeps security and stability without patching the Kernel.
-    > 
-    > An abstraction over eBPF could be bpftrace, but if you want to create an eBPF program from scratch you’d need to:
-    > 
-    > 1. Write your eBPF program (C/Rust while user-space code can be written via high-level language bindings like python) including a kernel hook (eBPF programs are event-driven) using helpers.
-    > 2. Compile your eBPF program into bytecode the Kernel can run.
-    > 3. Then your eBPF is loaded and verified (important step, as eBPF exposes a path for unprivileged users to execute in ring0).
-    > 4. Attaching the program to its hook - eBPF programs execute when they get an event.
-    > 5. Interact back with user-space programs via eBPF maps - the main way to communicate back with user-space.
-    > 
-    > Originally, BPF (no “e”, sometimes called cBPF) was used for networking-related tasks (used for tcpdump). eBPF extended this functionality by extending out from the networking subsystem allowing you to attach programs to a tracepoint or a kprobe, uprobes, and more… - which opened the door to many other use cases other than networking.
-    > 
-    > The traditional way of achieving many of the eBPF use cases was using an LKM (a kernel module). The drawbacks of an LKM are plenty: Kernel releases often break your module. New Kernel versions mean you need to rewrite your LKM. Lastly, there is a good chance you’ll crash the kernel - there are no safeties in place. The only other option is to get code into the Linux kernel directly, which could take a few years and might not be approved.
 
 [Linux Socket Filtering aka Berkeley Packet Filter (BPF)](https://www.kernel.org/doc/Documentation/networking/filter.txt)  
 [perf Examples](https://www.brendangregg.com/perf.html)  
