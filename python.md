@@ -20,6 +20,7 @@
 []()  
 
 ## 最佳实践
+[100 Days of Python](https://martinxpn.medium.com/100-days-of-python-9dd04d0995f1)  
 [Your Guide to the Python print() Function](https://realpython.com/python-print/)  
 [The Python return Statement: Usage and Best Practices](https://realpython.com/python-return-statement/)  
 [Python args and kwargs: Demystified](https://realpython.com/python-kwargs-and-args/)  
@@ -120,6 +121,8 @@ Image Processing With the Python Pillow Library](https://realpython.com/image-pr
 [Getting Started with DSA](https://www.programiz.com/dsa/getting-started)  
 
 ## 面向对象
+[Python’s ABC: Understanding the Basics of Abstract Base Classes](https://geekpython.in/abc-in-python)  
+[How to Write Cleaner Python Code Using Abstract Classes](https://blog.teclado.com/python-abc-abstract-base-classes/)  
 [Python's property(): Add Managed Attributes to Your Classes](https://realpython.com/python-property/)  
 [self in Python, Demystified](https://www.programiz.com/article/python-self-why)  
 [Namespaces and Scope in Python](https://realpython.com/python-namespaces-scope/)  
