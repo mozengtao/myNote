@@ -9,6 +9,7 @@
 
 
 ![Learning eBPF](./assets/Learning_eBPF.pdf) #pdf  
+[learning-ebpf](https://github.com/lizrice/learning-ebpf/tree/main) #github  
 ![Buzzing-across-space-illustrated-childrens-guide-to-ebpf](./assets/buzzing-across-space-illustrated-childrens-guide-to-ebpf.pdf) #pdf  
 
 [eBPF Docs](https://docs.ebpf.io/)  
