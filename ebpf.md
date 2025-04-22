@@ -1,4 +1,27 @@
-![ebpf components](./assets/ebpf_components.png)  
+![eBPF architecture](./assets/ebpf_components.png)  
+- eBPF programs
+    These are the programs that are written in a subset of the C programming language and compiled into a bytecode format. eBPF programs can be attached to various points in the kernel, such as packet filters, system calls, or trace points.
+
+- eBPF bytecode
+    This is the compiled form of an eBPF program, which is a sequence of instructions that can be executed by the eBPF virtual machine (eBPF VM).
+
+- eBPF virtual machine (eBPF VM)
+    This is the runtime environment that executes eBPF bytecode. The eBPF VM is implemented in the Linux kernel, and it runs in a secure environment inside the kernel.
+
+- eBPF maps
+    These are data structures that can be used to store and retrieve data from within an eBPF program. eBPF maps can be used to pass data between eBPF programs or to store data that needs to be accessed by multiple eBPF programs.
+
+- eBPF verifier
+    This is a static analysis tool that is used to verify the safety and correctness of eBPF programs before they are loaded into the kernel. The eBPF verifier checks the eBPF bytecode for any potential issues, such as memory access violations or infinite loops, and it ensures that the eBPF program adheres to the eBPF sandboxing rules.
+
+- eBPF loader
+    This is the component that is responsible for loading eBPF programs into the kernel and attaching them to the appropriate kernel functions or data structures. The eBPF loader is responsible for ensuring that the eBPF program is loaded safely and securely, and it manages the lifetime of the eBPF program within the kernel.
+
+- eBPF infrastructure
+    This includes the various kernel functions and data structures that are used to support eBPF, such as tracepoints, kprobes, and perf events. The eBPF infrastructure provides the hooks and interfaces that eBPF programs can use to interact with the kernel.
+
+
+
 [eBPF For Humans | 00 | Intro](https://medium.com/@ilaygilman/ebpf-for-humans-00-intro-b36dc04fefe9)  
 [First eBPF program](https://prateek-singh.hashnode.dev/first-ebpf-program)  
 [Dive into eBPF: An Introduction](https://medium.com/@sumant1122/dive-into-ebpf-an-introduction-d367d29bf145)  
@@ -68,6 +91,7 @@
 [bpftrace(8)](https://github.com/bpftrace/bpftrace/blob/master/man/adoc/bpftrace.adoc)  
 
 [bpftrace(8)](https://www.mankier.com/8/bpftrace)  
+[bpftrace](https://bpftrace.org/)  
 
 [BPF and XDP Reference Guide](https://docs.cilium.io/en/latest/bpf/)  
 
@@ -80,6 +104,7 @@
 
 [Linux kernel profiling with perf](https://perf.wiki.kernel.org/index.php/Tutorial)  
 
+[Sysdig and Falco now powered by eBPF](https://sysdig.com/blog/sysdig-and-falco-now-powered-by-ebpf/)  
 [The art of writing eBPF programs: a primer](https://sysdig.com/blog/the-art-of-writing-ebpf-programs-a-primer/)  
 
 [0x00C - eBPF](https://unzip.dev/0x00c-ebpf/)  
