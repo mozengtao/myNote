@@ -1,3 +1,9 @@
+[Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
+
+[Various Computer Science Topics](https://azrael.digipen.edu/~mmead/www/)  
+[Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html) #online  
+
+
 [**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
 [**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
 [The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
@@ -8,6 +14,10 @@
 [Disillusioning the Magic of the fork System Call](https://blog.codingconfessions.com/p/the-magic-of-fork)  
 
 [eXpOS Documentation](https://exposnitc.github.io/documentation.html)  
+
+
+[Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
+[Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
 
 ## fork, execve, mmap, exit

@@ -21,6 +21,8 @@
     This includes the various kernel functions and data structures that are used to support eBPF, such as tracepoints, kprobes, and perf events. The eBPF infrastructure provides the hooks and interfaces that eBPF programs can use to interact with the kernel.
 
 
+[Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
+
 
 [eBPF For Humans | 00 | Intro](https://medium.com/@ilaygilman/ebpf-for-humans-00-intro-b36dc04fefe9)  
 [First eBPF program](https://prateek-singh.hashnode.dev/first-ebpf-program)  
