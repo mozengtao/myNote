@@ -3,6 +3,7 @@
 [Various Computer Science Topics](https://azrael.digipen.edu/~mmead/www/)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html) #online  
 
+[The Process Control Block of a Process in Linux](https://www.baeldung.com/linux/pcb)  
 
 [**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
 [**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
@@ -138,6 +139,11 @@ pgrep
 [man 2 syscall](https://man7.org/linux/man-pages/man2/syscall.2.html#NOTES)  
 [User-space, Kernel-space, and System Calls](https://www.codeinsideout.com/blog/linux/system-call/)  
 [Anatomy of a Syscall](https://www.chromium.org/nativeclient/reference/anatomy-of-a-sys/)  
+
+[Linux Context Switching Internals: Part 1 - Process State and Memory](https://blog.codingconfessions.com/p/linux-context-switching-internals)  
+[Context Switching and Performance: What Every Developer Should Know](https://blog.codingconfessions.com/p/context-switching-and-performance)  
+[]()  
+[]()  
 
 [GNU Binutils](https://www.gnu.org/software/binutils/)
 [LIB BFD, the Binary File Descriptor Library](https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html)
