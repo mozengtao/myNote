@@ -1,9 +1,20 @@
 [Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
+[The Linux Kernel](https://tldp.org/LDP/tlk/tlk-toc.html)  
+[The Linux Kernel](https://origin.kernel.org/doc/html/latest/index.html)  
+[(Linux) Kernel Programming](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html)  
+[Understanding the Linux Virtual Memory Manager](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html) #online  
+
+[xv6: a simple, Unix-like teaching operating system](https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf) #pdf  
 
 [Various Computer Science Topics](https://azrael.digipen.edu/~mmead/www/)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html) #online  
 
 [The Process Control Block of a Process in Linux](https://www.baeldung.com/linux/pcb)  
+
+[Processes, as they are in the Linux Kernel](https://puranikvinit.hashnode.dev/linux-processes)  
+[Interrupts: The Clockwork Orchestra of the Linux Kernel](https://puranikvinit.hashnode.dev/linux-interrupts)  
+[CFS Scheduler in the Linux Kernel](https://puranikvinit.hashnode.dev/cfs-scheduler)  
+
 
 [**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
 [**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
