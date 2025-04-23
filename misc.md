@@ -29,35 +29,35 @@
 - [CS 61: Systems Programming and Machine Organization (2018)](https://cs61.seas.harvard.edu/site/2018/)
 
 
-- [Build Your Own x From Scratch Books](https://build-your-own.org/)
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- []()
-- [编译优化之—likely/unlikely](https://blog.yanjingang.com/?p=7074)
-- [CPU流水线和分支预测](https://juejin.cn/post/7022633338452049957)
-- [分支预测 (Branch Prediction)](https://xiangshan-doc.readthedocs.io/zh-cn/latest/frontend/bp/)
-- [浅谈 CPU 分支预测技术](https://matt33.com/2020/04/16/cpu-branch-predictor/)
-- [**OnlineGDB**](https://www.onlinegdb.com/) #online
-- [**Visualize code in Python, JavaScript, C, C++, and Java**](https://pythontutor.com/) #online
-- [tinyexpr](https://github.com/codeplea/tinyexpr) #github
-- [**An online IDE to edit, compile and run code**]https://www.mycompiler.io/)
-- [online compiler](https://rextester.com/)
-- [online compiler](https://www.studytonight.com/code/playground/go/)
-- [online compiler](https://www.programiz.com/golang/online-compiler/)
-- [Try It Online](https://tio.run/#) #a family of online interpreters
-- [learnbyexample](https://learnbyexample.github.io/tags/regular-expressions/)
-- [learnbyexample tips](https://learnbyexample.github.io/tips/)
-- [learnbyexample tags](https://learnbyexample.github.io/tags/)
-- [Structure and Interpretation of Computer Programs](https://web.mit.edu/6.001/6.037/sicp.pdf) #pdf #online
-- [snippet](https://github.com/xgfone/snippet) #online #github
+[Build Your Own x From Scratch Books](https://build-your-own.org/)  
+[]()  
+[]()  
+[]()  
+[31 Days of Refactoring](https://lostechies.com/seanchambers/2009/07/31/31-days-of-refactoring/)  
+![Patterns of Enterprise Application Architecture](./assets/Patterns%20of%20Enterprise%20Application%20Architecture.pdf)  
+[The Twelve-Factor App](https://12factor.net/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[编译优化之—likely/unlikely](https://blog.yanjingang.com/?p=7074)  
+[CPU流水线和分支预测](https://juejin.cn/post/7022633338452049957)  
+[分支预测 (Branch Prediction)](https://xiangshan-doc.readthedocs.io/zh-cn/latest/frontend/bp/)  
+[浅谈 CPU 分支预测技术](https://matt33.com/2020/04/16/cpu-branch-predictor/)  
+[**OnlineGDB**](https://www.onlinegdb.com/) #online  
+[**Visualize code in Python, JavaScript, C, C++, and Java**](https://pythontutor.com/) #online  
+[tinyexpr](https://github.com/codeplea/tinyexpr) #github  
+[**An online IDE to edit, compile and run code**]https://www.mycompiler.io/)  
+[online compiler](https://rextester.com/)  
+[online compiler](https://www.studytonight.com/code/playground/go/)  
+[online compiler](https://www.programiz.com/golang/online-compiler/)  
+[Try It Online](https://tio.run/#) #a family of online interpreters  
+[learnbyexample](https://learnbyexample.github.io/tags/regular-expressions/)  
+[learnbyexample tips](https://learnbyexample.github.io/tips/)  
+[learnbyexample tags](https://learnbyexample.github.io/tags/)  
+[Structure and Interpretation of Computer Programs](https://web.mit.edu/6.001/6.037/sicp.pdf) #pdf #online  
+[snippet](https://github.com/xgfone/snippet) #online #github  
 - eklitzke.org
 	- [Using Ptrace For Fun And Profit](https://eklitzke.org/ptrace)
 - [第4章 ext文件系统机制原理剖析](https://www.cnblogs.com/f-ck-need-u/p/7016077.html)

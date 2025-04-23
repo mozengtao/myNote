@@ -4,6 +4,9 @@
 [LXD](https://documentation.ubuntu.com/lxd/en/stable-5.21/explanation/)  
 [oVirt](https://www.ovirt.org/)  
 
+[Kubernetes Deployment Antipatterns](https://codefresh.io/blog/kubernetes-antipatterns-1/)  
+[Docker anti-patterns](https://codefresh.io/blog/docker-anti-patterns/)  
+
 ## LXD, Docker 和 oVirt
 ```
 LXD(Linux Container Daemon)是一种基于 Linux容器 (LXC) 的系统级容器，提供类似虚拟机的轻量级容器环境，同时保持接近原生的性能，它通过抽象底层 LXC 技术，简化了容器管理的复杂性，并扩展了容器的高级功能
