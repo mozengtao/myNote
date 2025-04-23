@@ -5,7 +5,31 @@ export HTTPS_PROXY="http://135.242.60.169:58080"
 
 ```
 
+[SSH Port Forwarding (SSH Tunneling) Explained](https://phoenixnap.com/kb/ssh-port-forwarding)  
 [How to do SSH Tunneling (Port Forwarding)](https://www.ramkitech.com/2012/04/how-to-do-ssh-tunneling-port-forwarding.html)  
+[SSH local port forwarding](http://michalszalkowski.com/security/pivoting-tunneling-port-forwarding/ssh-local-port-forwarding/)  
+[SSH remote port forwarding](http://michalszalkowski.com/security/pivoting-tunneling-port-forwarding/ssh-remote-port-forwarding/)  
+```bash
+### SSH Port Forwarding
+
+## Local Port Forwarding
+ssh -L local_port:destination_server_ip:remote_port ssh_server_hostname
+
+# all traffic sent to port 5901 on your local host is being forwarded to port 4492 on the remote server located at 188.17.0.5
+ssh -L 5901:188.17.0.5:4492 pnap@ssh.server.com
+
+# Forward one port
+ssh -L 1234:localhost:3306 target@IP	# -L tells the SSH client to request the SSH server to forward all the data we send via the port 1234 to localhost:3306 on the Target server
+# Forward multiple ports
+ssh -L 1234:localhost:3306 8080:localhost:80 target@10.129.202.64
+
+## Remote Port Forwarding
+ssh -R remote_port:localhost:local_port ssh_server_hostname
+
+# instruct the remote server ssh.server.com to forward any connections directed at port 8080 to the local resource listening on port 5534
+# users with access to the SSH server are now able to access resources on the local machine
+ssh –R 8080:localhost:5534 pnap@ssh.server.com
+```
 
 - squid代理的应用场景
 	- 在支持访问外网的主机host上安装squid服务
