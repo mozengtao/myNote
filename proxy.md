@@ -1,3 +1,12 @@
+## 使用代理
+```bash
+export HTTP_PROXY="http://135.242.60.169:58080"
+export HTTPS_PROXY="http://135.242.60.169:58080"
+
+```
+
+[How to do SSH Tunneling (Port Forwarding)](https://www.ramkitech.com/2012/04/how-to-do-ssh-tunneling-port-forwarding.html)  
+
 - squid代理的应用场景
 	- 在支持访问外网的主机host上安装squid服务
 	- 在安装squid服务的主机host上设置ssh端口转发，使得local的computer1流量可以转发到访问外网的主机上
