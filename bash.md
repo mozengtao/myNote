@@ -173,12 +173,19 @@ man builtins
 ## 重定向
 ```bash
 command > file							# 标准输出重定向
+> file									# 等价于 ": > file"，即执行空操作，效果为 file 被打开并截断，无数据写入
+
 command >> file							# 追加输出重定向
+
 command 2> file							# 标准错误重定向
+
 command > file 2>&1 (command &> file)	# 标准输出和标准错误同时重定向
+
 command < file							# 标准输入重定向 (从文件读取输入，而非终端)
+
 command << delimiterXXX
 delimiterXXX							# Here 文档 (将输入数据嵌入到命令中，直到遇到指定分隔符)
+
 command <<< string						# Here 字符串 (将字符串作为命令的输入)
 
 # 1
