@@ -30,6 +30,12 @@
 
 [Mermaid Playground](https://www.mermaidchart.com/)  
 
+[Excalidraw](https://excalidraw.com/)  
+[PlantUML](https://plantuml.com/zh/)  
+[zenuml](https://app.zenuml.com/)  
+[ascii flow](https://asciiflow.com/#/)  
+[processon](https://www.processon.com/support)  
+[diagrams](https://app.diagrams.net/)  
 
 ## Converter
 [Free Formatter](https://www.freeformatter.com/)
@@ -71,3 +77,11 @@
 	- `From Menu bar navigate to "Plugins -> NppExport -> Copy RTF to clipboard"`  
 [texteditor](https://texteditor.com/)  
 [CodVerter](https://codverter.com/src/index)  
+
+
+[latex公式转图片]([http://latex2png.com/](http://latex2png.com/))  
+[软件下载]([https://filehippo.com/zh/](https://filehippo.com/zh/))  
+
+[big o cheat sheet](https://www.bigocheatsheet.com/)  
+[number to binary converter](https://binaryconvert.com/)  
+[文本比较](https://www.fly63.com/tool/textdiff/)  
