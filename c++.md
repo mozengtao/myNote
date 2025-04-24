@@ -1,4 +1,3 @@
-
 ## POP, OOP
 ![Procedure Oriented Programming](./assets/POP.png)  
 Characteristics of procedure oriented programming:
@@ -20,9 +19,9 @@ Features of the Object Oriented programming
 	6. Objects may communicate with each other through functions.
 	7. New data and functions can be easily added.
 	8. Follows bottom-up approach in program design.
-```c++
 
-```
+
+[C++ 内存模型](https://paul.pub/cpp-memory-model/)  
 
 ## C++ 在线环境
 [C++ playground](https://codapi.org/cpp/)  
