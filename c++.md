@@ -1,3 +1,29 @@
+
+## POP, OOP
+![Procedure Oriented Programming](./assets/POP.png)  
+Characteristics of procedure oriented programming:
+	1. Emphasis is on doing things(algorithm)
+	2. Large programs are divided into smaller programs known as functions.
+	3. Most of the functions share global data
+	4. Data move openly around the system from function to function
+	5. Function transforms data from one form to another.
+	6. Employs top-down approach in program design 
+
+![Object Oriented Programing](./assets/OOP.png)  
+Features of the Object Oriented programming
+	1. Emphasis is on doing rather than procedure.
+	2. programs are divided into what are known as objects.
+	3. Data structures are designed such that they characterize the objects.
+	4. Functions that operate on the data of an object are tied together in the data
+	structure.
+	5. Data is hidden and can’t be accessed by external functions.
+	6. Objects may communicate with each other through functions.
+	7. New data and functions can be easily added.
+	8. Follows bottom-up approach in program design.
+```c++
+
+```
+
 ## C++ 在线环境
 [C++ playground](https://codapi.org/cpp/)  
 [C++ Playground](https://programiz.pro/ide/cpp)  
@@ -25,7 +51,8 @@
 [C++ Templates - The Complete Guide souce code](http://www.tmplbook.com/)  
 [C+++Templates+完全导引](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%2BTemplates%2B%E5%AE%8C%E5%85%A8%E5%AF%BC%E5%BC%95.pdf) #pdf  
 [Modern C++ Design: Generic Programming and Design Patterns Applied](https://github.com/lighthousand/books/blob/master/Modern%20C%2B%2B%20Design--Generic%20Programming%20and%20Design%20Patterns%20Applied.pdf) #pdf  
-
+![Programming Abstractions in C++](./assets/Programming%20Abstractions%20in%20C++.pdf) #pdf  
+![A Complete Guide to Programming in C++](./assets/A%20Complete%20Guide%20to%20Programming%20in%20C++.pdf) #pdf  
 
 [深度探索C++对象模型](https://github.com/xuchen-tech/Books/blob/main/%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2C%2B%2B%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B(jb51.net).pdf) #pdf  
 
@@ -7732,3 +7759,12 @@ auto 是 C++11 引入的关键字，用于自动推导变量的类型。它可�
 [C++ std::move() 实现详解](https://gukaifeng.cn/posts/c-stdmove-shi-xian-xiang-jie/)  
 [C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)    
 [Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main)    
+[shared_ptr - basics and internals with examples](https://www.nextptr.com/tutorial/ta1358374985/shared_ptr-basics-and-internals-with-examples)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
