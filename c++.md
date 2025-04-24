@@ -1,3 +1,5 @@
+[hacking C++](https://hackingcpp.com/index.html)  
+
 ## POP, OOP
 ![Procedure Oriented Programming](./assets/POP.png)  
 Characteristics of procedure oriented programming:
@@ -20,6 +22,14 @@ Features of the Object Oriented programming
 	7. New data and functions can be easily added.
 	8. Follows bottom-up approach in program design.
 
+
+## vector
+[C++ Tutorial: A Beginner’s Guide to std::vector](https://www.codeguru.com/cplusplus/c-tutorial-a-beginners-guide-to-stdvector-part-1/)  
+[C++ std::vector 用法](https://shengyu7697.github.io/std-vector/)  
+[C++ Vectors](https://www.programiz.com/cpp-programming/vectors)  
+[C++ Vector – std::vector – A Complete Guide with Examples and Programs](https://www.mycplus.com/tutorials/cplusplus-programming-tutorials/c-vectors-stdvector-containers-library/)  
+[]()  
+[]()  
 
 [C++ 内存模型](https://paul.pub/cpp-memory-model/)  
 
