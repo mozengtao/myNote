@@ -7761,7 +7761,6 @@ auto 是 C++11 引入的关键字，用于自动推导变量的类型。它可�
 			auto [x, y] = p;  // x 是 int，y 是 double
 ```
 
-## 参考文档
 [C++](https://subingwen.cn/categories/C/)  
 [设计模式](https://subingwen.cn/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/)  
 [C++完美转发](https://gukaifeng.cn/posts/c-wan-mei-zhuan-fa/index.html)  
@@ -7769,8 +7768,8 @@ auto 是 C++11 引入的关键字，用于自动推导变量的类型。它可�
 [C++'s most vexing parse](https://gukaifeng.cn/posts/c-zui-ma-fan-de-jie-shi-c-s-most-vexing-parse/)    
 [Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main)    
 [shared_ptr - basics and internals with examples](https://www.nextptr.com/tutorial/ta1358374985/shared_ptr-basics-and-internals-with-examples)  
-[]()  
-[]()  
+[C++ Beyond The Syllabus](https://jaredmil.medium.com/free-links-to-all-c-beyond-the-syllabus-articles-259c26a682c8)  
+[C++ STL Algorithms Tutorial](https://dev.to/sandordargo/the-big-stl-algorithms-tutorial-introduction-2kph)  
 []()  
 []()  
 []()  
