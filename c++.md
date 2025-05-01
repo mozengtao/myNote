@@ -1,4 +1,7 @@
 [hacking C++](https://hackingcpp.com/index.html)  
+[Introduction to C++](https://www.studyplan.dev/intro-to-programming)  
+[Professional C++](https://www.studyplan.dev/pro-cpp)  
+
 
 ## POP, OOP
 ![Procedure Oriented Programming](./assets/POP.png)  
