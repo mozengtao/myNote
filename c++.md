@@ -2,6 +2,12 @@
 [Introduction to C++](https://www.studyplan.dev/intro-to-programming)  
 [Professional C++](https://www.studyplan.dev/pro-cpp)  
 
+[Effective Modern C++](https://ananyapam7.github.io/resources/C++/Scott_Meyers_Effective_Modern_C++.pdf) #pdf  
+[Effective Modern C++中文版](https://github.com/CnTransGroup/EffectiveModernCppChinese) #github
+[Effective Modern C++中文版](https://cntransgroup.github.io/EffectiveModernCppChinese/) #online
+
+[DevTut C++](https://devtut.github.io/cpp/)  
+
 
 ## POP, OOP
 ![Procedure Oriented Programming](./assets/POP.png)  
@@ -98,6 +104,17 @@ Features of the Object Oriented programming
 [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)  
 [**using**](https://en.cppreference.com/w/cpp/keyword/using)  
 [How do C++ using-directives work?](https://quuxplusone.github.io/blog/2020/12/21/using-directive/)  
+```cpp
+// Callable objects
+Callable objects are the collection of all C++ structures which can be used as a function.
+    Function pointers
+    Classes with operator()
+    Classes with implicit conversions
+    References to functions
+    Pointers to member functions
+    Pointers to member data
+    lambdas
+```
 
 ## 不同的构造函数
 ### 默认构造函数(Default Constructor)
