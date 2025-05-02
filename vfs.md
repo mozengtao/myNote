@@ -53,10 +53,10 @@
 					- file_operations是一套较上层的接口，提供给系统调用以及内部模块使用，用于实现各种IO模型以及其他需要进行IO操作的内核功能
 					- address_space_operations负责磁盘与内存之间的数据读写，将文件操作转换为磁盘IO下发给block层。内存侧通常是pagecache，若指定了O_DIRECT方式，也可以是应用提供的内存地址
 					- 例如对于ext4上一次普通的buffer IO read，首先会将磁盘上的数据读到内存pagecache中，再将pagecache中的数据拷贝到用户buf ，大致路径是：系统调用`read() -> file_operations.read_iter() -> generic_file_buffered_read() -> address_space_operations.readpage() -> copy_page_to_iter()`
-- 参考文档
-	- [Linux 文件系统解析](https://blog.csdn.net/qq_32740107/article/details/106566454)
-	- [Linux 文件系统解析2](https://blog.csdn.net/qq_32740107/article/details/106722811?spm=1001.2014.3001.5501)
-	- [Linux 文件系统解析3](https://blog.csdn.net/qq_32740107/article/details/106867342?spm=1001.2014.3001.5501)
-	- [Linux 文件系统解析4](https://blog.csdn.net/qq_32740107/article/details/107057066?spm=1001.2014.3001.5501)
-	- [The Linux Kernel's VFS](http://haifux.org/lectures/119/linux-2.4-vfs/linux-2.4-vfs.html)
-	- [The "Virtual File System" in Linux](https://www.linux.it/~rubini/docs/vfs/vfs.html)
+
+[Linux 文件系统解析](https://blog.csdn.net/qq_32740107/article/details/106566454)  
+[Linux 文件系统解析2](https://blog.csdn.net/qq_32740107/article/details/106722811?spm=1001.2014.3001.5501)  
+[Linux 文件系统解析3](https://blog.csdn.net/qq_32740107/article/details/106867342?spm=1001.2014.3001.5501)  
+[Linux 文件系统解析4](https://blog.csdn.net/qq_32740107/article/details/107057066?spm=1001.2014.3001.5501)  
+[The Linux Kernel's VFS](http://haifux.org/lectures/119/linux-2.4-vfs/linux-2.4-vfs.html)  
+[The "Virtual File System" in Linux](https://www.linux.it/~rubini/docs/vfs/vfs.html)  

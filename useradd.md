@@ -1,12 +1,10 @@
-- # what does useradd do
-	- #+BEGIN_QUOTE
+# what does useradd do
 	  When we run the ‘useradd‘ command in the Linux terminal, it performs the following major things:
 	  
 	  1. It edits /etc/passwd, /etc/shadow, /etc/group, and /etc/gshadow files for the newly created user accounts.
 	  2. Creates and populates a home directory for the new user.
 	  3. Sets permissions and ownerships to the home directory.
-	  #+END_QUOTE
-- ```bash
+```bash
   1. How to Add a New User in Linux
   useradd tecmint
   passwd tecmint
@@ -80,5 +78,5 @@
   15. Add a User without Home Directory, No Shell, No Group, and Custom Comment
   useradd -M -N -r -s /bin/false -c "Disabled TecMint Member" clayton
   ```
-- # 参考
-- [The Complete Guide to “useradd” Command in Linux – 15 Practical Examples](https://www.tecmint.com/add-users-in-linux/)
+
+[The Complete Guide to “useradd” Command in Linux – 15 Practical Examples](https://www.tecmint.com/add-users-in-linux/)  

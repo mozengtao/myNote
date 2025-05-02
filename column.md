@@ -23,5 +23,6 @@
 	  
 	  mount | column –t                   # 默认空格进行制表
 	  cat /etc/passwd | column -t -s:     # 指定冒号进行制表
-- 参考文档
-	- [man column](https://man7.org/linux/man-pages/man1/column.1.html)
+	  ```
+
+[man column](https://man7.org/linux/man-pages/man1/column.1.html)  
