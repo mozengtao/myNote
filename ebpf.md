@@ -20,6 +20,17 @@
 - eBPF infrastructure
     This includes the various kernel functions and data structures that are used to support eBPF, such as tracepoints, kprobes, and perf events. The eBPF infrastructure provides the hooks and interfaces that eBPF programs can use to interact with the kernel.
 
+[ebpf: program types](https://nikonov.tech/0033-bpf-prog-types.html)  
+[BPF: A Tour of Program Types](https://blogs.oracle.com/linux/post/bpf-a-tour-of-program-types)  
+[BPF In Depth: BPF Helper Functions](https://blogs.oracle.com/linux/post/bpf-in-depth-bpf-helper-functions)  
+[How BPF communicates with userspace](https://blogs.oracle.com/linux/post/bpf-in-depth-communicating-with-userspace)  
+[]()  
+[]()  
+
+[bpf-helpers(7)](https://www.mankier.com/7/bpf-helpers)  
+[Helper functions](https://docs.ebpf.io/linux/helper-function/)  
+
+
 [eBPF Tutorial by Example](https://eunomia.dev/tutorials/)  
 [bpf-developer-tutorial](https://github.com/eunomia-bpf/bpf-developer-tutorial/tree/main)  
 [eBPF 开发者教程](https://github.com/eunomia-bpf/bpf-developer-tutorial/blob/main/README.zh.md)  
