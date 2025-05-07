@@ -1,6 +1,59 @@
 
 [**vscode online editor**](https://vscode.dev/)
 
+## shortcuts
+```
+# command palette
+Ctrl + p
+
+# run command
+Ctrl + p
+	>
+
+# search symbol in current file
+Ctrl + p
+	@
+
+Ctrl + Shift + .
+
+# search global symbol
+Ctrl + p
+	#
+
+# go to line
+Ctrl + g
+
+# move word-by-word
+Ctrl + <-
+Ctrl + ->
+
+# find match and edit
+Ctrl + d
+
+# set multiple cursors to edit
+Alt + Click
+
+# move line
+Alt + 向上箭头
+Alt + 向下箭头
+
+# move & copy
+Alt + Shift + 向上箭头
+Alt + Shift + 向下箭头
+
+# highlight line by line
+Ctrl + l
+
+# toggle comments
+Ctrl + /
+
+# toggle terminal
+Ctrl + `
+
+
+
+```
+
 - tips
 	- toggleStickyScroll(鼠标滚动时顶上显示函数名称)
 
