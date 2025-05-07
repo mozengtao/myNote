@@ -147,3 +147,4 @@ derive  / dɪˈraɪv / 获得，取得；起源于，来自；提取，衍生（
 hinder  / ˈhɪndər / 阻碍，妨碍
 segregate   / ˈseɡrɪɡeɪt /  （使）分开，分离
 trampoline  / ˌtræmpəˈliːn /    蹦床（一种体育器械），弹簧垫
+intervention    / ˌɪntərˈvenʃ(ə)n / 干预，介入；调停，斡旋；（为改善情况尤指病痛采取的）措施，做法
