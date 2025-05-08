@@ -1,6 +1,23 @@
 ## online learning
 [DevTut](https://devtut.github.io/)  
 
+## Monit
+> Monit is a utility for managing and monitoring processes, programs, files, directories and filesystems on a Unix system.
+[Monit](https://mmonit.com/monit/)
+
+## makeself
+> A self-extracting archiving tool for Unix systems, in 100% shell script.
+[makeself](https://makeself.io/)  
+[makeself](https://github.com/megastep/makeself) #github  
+
+## vector
+> Vector is a high-performance observability data pipeline that puts organizations in control of their observability data. Collect, transform, and route all your logs, metrics, and traces to any vendors you want today and any other vendors you may want tomorrow. 
+[vector](https://github.com/vectordotdev/vector) #github  
+
+## collectd
+> collectd is a small daemon which collects system information periodically and provides mechanisms to store and monitor the values in a variety of ways.
+[collectd](https://github.com/collectd/collectd)  
+
 
 ## InfluxDB
 > InfluxDB 是一款专为时间序列数据设计的开源数据库，旨在高效存储和查询具有时间戳的连续数据, 适合大规模数据存储和分析
@@ -16,6 +33,8 @@
 
 ## Kafka
 > Kafka 是一款开源的分布式流处理平台，它以高吞吐量、低延迟、可扩展性和持久性著称，核心功能是 实时处理和传输大规模数据流，常被用于构建实时数据管道和流分析应用
+[kafka](https://github.com/apache/kafka) #github  
+
 
 ## SWIG (Simplified Wrapper and Interface Generator)
 > SWIG is a software development tool that connects programs written in C and C++ with a variety of high-level programming languages.

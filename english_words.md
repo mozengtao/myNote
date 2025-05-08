@@ -149,3 +149,4 @@ segregate   / ˈseɡrɪɡeɪt /  （使）分开，分离
 trampoline  / ˌtræmpəˈliːn /    蹦床（一种体育器械），弹簧垫
 intervention    / ˌɪntərˈvenʃ(ə)n / 干预，介入；调停，斡旋；（为改善情况尤指病痛采取的）措施，做法
 throttle    / ˈθrɑːtl / 节流阀，油门；功率，马力；<古>喉咙，气管
+resiliency  / rɪˈzɪlɪjənsi /    弹性；跳回；灵活性
