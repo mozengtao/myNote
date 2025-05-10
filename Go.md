@@ -3,6 +3,13 @@
 [An Introduction to Programming in Go](https://www.golang-book.com/books/intro)  
 [**Playground**](https://goplay.tools/)  
 
+[Code for Network Programming with Go](https://github.com/awoodbeck/gnp) #github  
+[GoBooks](https://github.com/dariubs/GoBooks)  
+[Go tutorials](https://zetcode.com/golang/)  
+[]()  
+[]()  
+
+
 [lensm](https://github.com/loov/lensm)  
 > Go assembly and source viewer  
 
@@ -41,6 +48,13 @@
 sudo apt install golang-go -y
 
 // packages
+[Packages](https://www.cs.ubc.ca/~bestchai/teaching/cs416_2015w2/go1.4.3-docs/pkg/index.html)  
+[An Introduction to Go net Package: Networking and Sockets](https://reintech.io/blog/introduction-to-gos-net-package-networking-and-sockets)  
+[Go: Deep dive into net package learning from TCP server](https://dev.to/hgsgtk/how-go-handles-network-and-system-calls-when-tcp-server-1nbd)  
+[Messing with TCP and System Calls](https://medium.com/@wu.victor.95/tinkering-with-tcp-and-sockets-70255a707fa0)  
+[A Complete Guide to Socket Programming in Go](https://www.kelche.co/blog/go/socket-programming/)  
+[]()  
+
 [strings](https://pkg.go.dev/strings)  
   // Package strings implements simple functions to manipulate UTF-8 encoded strings.   
 [fmt](https://pkg.go.dev/fmt)  
