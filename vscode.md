@@ -10,6 +10,8 @@ Ctrl + p
 Ctrl + p
 	>
 
+Ctrl + Shift + P
+
 # search symbol in current file
 Ctrl + p
 	@
