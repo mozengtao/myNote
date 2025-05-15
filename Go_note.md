@@ -9,11 +9,21 @@
 
 ## slice
 [How Slices Work in Go](https://dev.to/jpoly1219/how-slices-work-in-go-47nc)  
+[Go Slices: usage and internals](https://go.dev/blog/slices-intro)  
+[builtin](https://pkg.go.dev/builtin)  
 ```go
+
+// slice struct (a slice is a header that contains a pointer to an underlying array)
+type slice struct {
+    array unsafe.Pointer
+    len   int
+    cap   int
+}
+
 // array (Arrays are basically containers with fixed sizes)
 
-myArray := [3]int{0, 1, 2}
-myArray := [...]string{"apple", "banana"}
+myArray := [3]int{0, 1, 2}                  // 声明固定长度数组​
+myArray := [...]string{"apple", "banana"}   // 声明​长度由初始化元素数量决定的数组
 
 // slice (Slices are implemented using arrays much but more powerful than arrays, because of their dynamic nature)
 
@@ -27,15 +37,6 @@ mySlice := []int{0, 1, 2, 3}
 // 3 create an empty slice and append to it
 mySlice := []int{}
 mySlice = append(mySlice, 0, 1, 2, 3)
-
-// how slices work
-a slice is a header that contains a pointer to an underlying array
-
-type SliceHeader struct {
-    Data uintptr
-    Len int
-    Cap int
-}
 
 // how slices "grow"
 /*
