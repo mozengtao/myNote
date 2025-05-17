@@ -6,6 +6,10 @@
 [Code for Network Programming with Go](https://github.com/awoodbeck/gnp) #github  
 [GoBooks](https://github.com/dariubs/GoBooks)  
 [Go tutorials](https://zetcode.com/golang/)  
+[Golang Interfaces Explained](https://www.alexedwards.net/blog/interfaces-explained)  
+[Understanding the Power of Go Interfaces: A Comprehensive Guide](https://medium.com/@jamal.kaksouri/understanding-the-power-of-go-interfaces-a-comprehensive-guide-835954101b7e)  
+[Interfaces in Go](https://go101.org/article/interface.html)  
+[]()  
 []()  
 []()  
 
@@ -109,6 +113,9 @@ sudo apt install golang-go -y
     // Package log implements a simple logging package. It defines a type, Logger, with methods for formatting output.   
 [proto](https://pkg.go.dev/google.golang.org/protobuf@v1.36.1/proto)
     // Package proto provides functions operating on protocol buffer messages.
+
+[raymond](https://github.com/aymerick/raymond)
+    // Handlebars for golang with the same features as handlebars.js 3.0
 ```
 
 [project-layout](https://github.com/golang-standards/project-layout) #github  
