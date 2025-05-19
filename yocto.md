@@ -1,5 +1,27 @@
-- Tips
-```bitbake
+[Source Directory Structure](https://docs.yoctoproject.org/ref-manual/structure.html#source-directory-structure)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+```bash
+# recipe-sysroot/sysroot-only 目录
+sysroot-only/ 子目录专门用于存放​​仅需在编译阶段使用、但无需安装到目标设备​​的文件
+
+假设一个配方的构建工作目录为：
+tmp/work/<arch>/<recipe>/<version>/
+该目录下看到的结构如下：
+recipe-sysroot/              # 完整的 sysroot 内容
+├── usr/include/             # 头文件
+├── usr/lib/                 # 动态库、静态库
+└── sysroot-only/            # 仅构建所需的文件（不打包到镜像）
+    ├── usr/lib/libfoo.a     # 静态库（仅编译时使用）
+    └── usr/share/pkgconfig/ # pkg-config 文件（仅编译时使用）
+
+
+
 1.DEPENDS
 Lists a recipe’s build-time dependencies. These are dependencies on other recipes whose contents (e.g. headers and shared libraries) are needed by the recipe at build time.
 
