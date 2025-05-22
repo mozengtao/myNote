@@ -9,8 +9,8 @@
 [Golang Interfaces Explained](https://www.alexedwards.net/blog/interfaces-explained)  
 [Understanding the Power of Go Interfaces: A Comprehensive Guide](https://medium.com/@jamal.kaksouri/understanding-the-power-of-go-interfaces-a-comprehensive-guide-835954101b7e)  
 [Interfaces in Go](https://go101.org/article/interface.html)  
-[]()  
-[]()  
+[Go from the beginning](https://softchris.github.io/golang-book/)  
+[How to use Go Channels: The Complete Guide](https://deadsimplechat.com/blog/how-to-use-go-channels/)  
 []()  
 
 
@@ -24,8 +24,12 @@
 
 [Go 程序员宝典](https://shgopher.github.io/GOFamily/)    
 [go语言](https://www.topgoer.com/)    
+
+## goroutine
 [理解 Golang 中 Goroutine 生命周期](https://www.linpx.com/p/understanding-the-lifecycle-of-gorutine-in-golang.html)    
 [理解 Golang 中 Goroutine 调度机制](https://www.linpx.com/p/understanding-the-goroutine-scheduling-mechanism-in-golang.html)    
+
+## channel
 [Exploring the Depths of Golang Channels: A Comprehensive Guide](https://medium.com/@ravikumar19997/exploring-the-depths-of-golang-channels-a-comprehensive-guide-53e1a97cafe6)  
 [Channels in Go](https://go101.org/article/channel.html)  
 [Goroutines, Deferred Function Calls and Panic/Recover](https://go101.org/article/control-flows-more.html#goroutine)  
