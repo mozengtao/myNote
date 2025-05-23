@@ -460,10 +460,9 @@ func worker(id int, ch chan int) {
 }
 
 func main() {
-    ch := make(chan int, 3) // Create a buffered channel with a capacity of 2
+    ch := make(chan int, 3) // Create a buffered channel with a capacity of 3
     // Start multiple workers
     for i := 1; i <= 3; i++ {
-        ch <- i // Send data to the channel
         go worker(i, ch) // Start a goroutine for each worker
     }
     // Send data to the channel
