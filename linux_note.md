@@ -66,6 +66,23 @@ how Udev mechanism works
  and device ID.                                                                 
  
 ```
+## `/dev/loop-control`
+[Linux loop devices](https://blog.devops.dev/linux-loop-devices-451002bf69d9)  
+[loop(4)](https://www.mankier.com/4/loop)  
+[losetup(8)](https://www.mankier.com/8/losetup)  
+[Access Control Lists](https://wiki.archlinux.org/title/Access_Control_Lists)  
+[]()  
+> ​Loop Device​​ 是一种虚拟块设备，允许将普通文件（如 ISO 镜像、磁盘镜像）作为块设备挂载使用, /dev/loop-control 是 Linux 内核提供的​​动态管理 Loop Device 的字符设备接口​​，主要用于按需分配和释放 Loop 设备号, 用户程序通过 ioctl 系统调用与其交互
+```
+```
+
+## setfacl
+[Mastering Linux: ‘setfacl’ Command Installation Methods](https://ioflood.com/blog/install-setfacl-command-linux/)  
+[Using ‘setfacl’ | A Linux Command for File Access Control](https://ioflood.com/blog/setfacl-linux-command/)  
+[setfacl(1)](https://www.mankier.com/1/setfacl)  
+[getfacl(1)](https://www.mankier.com/1/getfacl)  
+[]()  
+> The setfacl command in Linux is used to set file access control lists, allowing you to manage permissions for different users and groups. A basic syntax template of the setfacl command might look like this: setfacl [arguments] [user_or_group_permissions] filename
 
 
 ## miscs
