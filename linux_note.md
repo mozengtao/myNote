@@ -84,6 +84,17 @@ how Udev mechanism works
 []()  
 > The setfacl command in Linux is used to set file access control lists, allowing you to manage permissions for different users and groups. A basic syntax template of the setfacl command might look like this: setfacl [arguments] [user_or_group_permissions] filename
 
+## sysfs
+> The sysfs filesystem is a pseudo-filesystem which provides an interface to kernel data structures. (More precisely, the files and directories in sysfs provide a view of the kobject structures defined internally within the kernel.) The files under sysfs provide information about devices, kernel modules, filesystems, and other kernel components.
+[sysfs(5)](https://www.mankier.com/5/sysfs)  
+[A complete guide to sysfs — Part 1: introduction to kobject](https://medium.com/@emanuele.santini.88/sysfs-in-linux-kernel-a-complete-guide-part-1-c3629470fc84)  
+[A complete guide to sysfs — Part 2: improving the attributes](https://medium.com/@emanuele.santini.88/a-complete-guide-to-sysfs-part-2-improving-the-attributes-1dbc1fca9b75)  
+[sysfs - _The_ filesystem for exporting kernel objects](https://docs.kernel.org/filesystems/sysfs.html)  
+[Rules on how to access information in sysfs](https://docs.kernel.org/admin-guide/sysfs-rules.html)  
+[]()  
+[]()  
+[]()  
+
 
 ## miscs
 ```bash
