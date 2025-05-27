@@ -3,6 +3,7 @@
 
 ## man pages
 [Linux man pages](https://www.mankier.com/)  
+[tldr](https://tldr.inbrowser.app/)  
 
 ## 在线代码运行环境
 [code playground](https://programiz.pro/ide/c)  
