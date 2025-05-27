@@ -98,13 +98,14 @@ how Udev mechanism works
 ## procfs
 > The directory /proc contains (among other things) one subdirectory for each process running on the system, which is named after the process ID (PID).
 [The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
+[proc(5)](https://www.mankier.com/5/proc)  
 []()  
 []()  
 
 ## debugfs
 [How To Use debugfs](https://linuxlink.timesys.com/docs/wiki/engineering/HOWTO_Use_debugfs)  
-[proc(5)]()  
-[]()  
+[DebugFS](https://docs.kernel.org/filesystems/debugfs.html)  
+[Debugfs kernel debugging](https://developer.ridgerun.com/wiki/index.php/Debugfs_kernel_debugging)  
 []()  
 
 
