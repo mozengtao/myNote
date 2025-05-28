@@ -1023,6 +1023,7 @@ int main()
 [C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)  
 [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online  
 [**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)  
+[**The GNU C Library (glibc) manual**](https://sourceware.org/glibc/manual/)  
 [c函数使用参考实例](https://bytefreaks.net/category/programming-2/c-programming-2)  
 [POXIS Function Reference Example](https://support.sas.com/documentation/onlinedoc/sasc/doc/lr2/lrv2ch20.htm#lr2posix)  
 [C standard](https://www.open-std.org/jtc1/sc22/wg14/www/standards.html)  

@@ -93,6 +93,7 @@ how Udev mechanism works
 [A complete guide to sysfs — Part 2: improving the attributes](https://medium.com/@emanuele.santini.88/a-complete-guide-to-sysfs-part-2-improving-the-attributes-1dbc1fca9b75)  
 [Rules on how to access information in sysfs](https://docs.kernel.org/admin-guide/sysfs-rules.html)  
 [The sysfs Filesystem](https://www.kernel.org/doc/ols/2005/ols2005v1-pages-321-334.pdf)  
+[How sysfs helps in communicating with userspace and kernel space ??](https://medium.com/@vikasv210/how-sysfs-helps-in-communicating-with-userspace-and-kernel-space-8329fab7c9ea)  
 []()  
 
 ## procfs
