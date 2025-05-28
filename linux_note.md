@@ -87,12 +87,12 @@ how Udev mechanism works
 ## sysfs
 > The sysfs filesystem is a pseudo-filesystem which provides an interface to kernel data structures. (More precisely, the files and directories in sysfs provide a view of the kobject structures defined internally within the kernel.) The files under sysfs provide information about devices, kernel modules, filesystems, and other kernel components.
 [sysfs(5)](https://www.mankier.com/5/sysfs)  
+[sysfs](https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt)  
+[sysfs - _The_ filesystem for exporting kernel objects](https://docs.kernel.org/filesystems/sysfs.html)  
 [A complete guide to sysfs — Part 1: introduction to kobject](https://medium.com/@emanuele.santini.88/sysfs-in-linux-kernel-a-complete-guide-part-1-c3629470fc84)  
 [A complete guide to sysfs — Part 2: improving the attributes](https://medium.com/@emanuele.santini.88/a-complete-guide-to-sysfs-part-2-improving-the-attributes-1dbc1fca9b75)  
-[sysfs - _The_ filesystem for exporting kernel objects](https://docs.kernel.org/filesystems/sysfs.html)  
 [Rules on how to access information in sysfs](https://docs.kernel.org/admin-guide/sysfs-rules.html)  
-[]()  
-[]()  
+[The sysfs Filesystem](https://www.kernel.org/doc/ols/2005/ols2005v1-pages-321-334.pdf)  
 []()  
 
 ## procfs
@@ -139,3 +139,4 @@ how Udev mechanism works
 [Input Subsystem](https://www.kernel.org/doc/html/latest/driver-api/input.html)  
 [Creating an input device driver](https://docs.kernel.org/input/input-programming.html)  
 [Input Drivers](http://embeddedlinux.org.cn/essentiallinuxdevicedrivers/final/ch07.html)  
+[Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
