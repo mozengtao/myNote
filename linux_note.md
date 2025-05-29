@@ -153,17 +153,25 @@ device_driver
     */
 bus_type
     表示一种总线类型（如 PCI、USB）
-/**
-
+    /**
+    * A bus is a channel between the processor and one or more devices. For the
+    * purposes of the device model, all devices are connected via a bus, even if
+    * it is an internal, virtual, "platform" bus. Buses can plug into each other.
+    * A USB controller is usually a PCI device, for example. The device model
+    * represents the actual connections between buses and the devices they control.
+    * A bus is represented by the bus_type structure. It contains the name, the
+    * default attributes, the bus' methods, PM operations, and the driver core's
+    * private data.
+    */
 class
     逻辑设备类别（如 block、net、input）
-/*
- * A class is a higher-level view of a device that abstracts out low-level
- * implementation details. Drivers may see a SCSI disk or an ATA disk, but,
- * at the class level, they are all simply disks. Classes allow user space
- * to work with devices based on what they do, rather than how they are
- * connected or how they work.
- */
+    /**
+    * A class is a higher-level view of a device that abstracts out low-level
+    * implementation details. Drivers may see a SCSI disk or an ATA disk, but,
+    * at the class level, they are all simply disks. Classes allow user space
+    * to work with devices based on what they do, rather than how they are
+    * connected or how they work.
+    */
 sysfs
     /sys 中呈现设备模型的接口，由 kobject 驱动
 
