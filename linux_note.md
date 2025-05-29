@@ -111,6 +111,12 @@ how Udev mechanism works
 
 
 ## linux设备驱动模型
+[Driver implementer’s API guide](https://www.kernel.org/doc/html/next/driver-api/index.html)  
+[Core API Documentation](https://www.kernel.org/doc/html/next/core-api/index.html)  
+[Manpages of linux-manual-4.8](https://manpages.debian.org/testing/linux-manual-4.8/index.html)  
+[Linux Device Drivers](https://linuxtv.org/downloads/v4l-dvb-internals/device-drivers/)  
+[The Linux Kernel API](https://docs.huihoo.com/gnu_linux/kernel-api/index.htm)  
+[]()  
 ```c
 // 核心概念
 kobject
