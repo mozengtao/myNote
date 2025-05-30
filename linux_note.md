@@ -730,3 +730,42 @@ sudo ./test_example_dev
 [Creating an input device driver](https://docs.kernel.org/input/input-programming.html)  
 [Input Drivers](http://embeddedlinux.org.cn/essentiallinuxdevicedrivers/final/ch07.html)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
+[Kernel Build System](https://docs.kernel.org/kbuild/index.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+[Linux设备驱动开发详解](https://github.com/kevinwangkk/LDD4.0_note/blob/master/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E8%AF%A6%E8%A7%A3%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%9C%80%E6%96%B0%E7%9A%84Linux4.0%E5%86%85%E6%A0%B8.pdf) #pdf  
+[LinuxDrivers](https://sysplay.github.io/books/LinuxDrivers/book/index.html) #driver  
+[Linux Device Drivers Series](https://www.opensourceforu.com/tag/linux-device-drivers-series/page/2/) #driver  
+[Driver Model](https://www.kernel.org/doc/html/latest/driver-api/driver-model/)  
+[LinuxDrivers](https://sysplay.github.io/books/LinuxDrivers/book/index.html) #driver  
+[Linux Device Driver Tutorials](https://embetronicx.com/linux-device-driver-tutorials/) #driver  
+[DriverPractice](https://github.com/starnight/DriverPractice) #driver #github  
+[lcd驱动应该怎么写](http://www.wujique.com/2021/05/16/lcd%e9%a9%b1%e5%8a%a8%e5%ba%94%e8%af%a5%e6%80%8e%e4%b9%88%e5%86%99%ef%bc%9f/)  
+[linux驱动子系统](https://www.cnblogs.com/lizhuming/tag/%2Flabel%2Flinux/)  
+[驱动程序分层分离概念](http://wiki.100ask.org/images/c/c1/%E9%B1%BC%E6%A0%91%E7%AC%94%E8%AE%B0%E4%B9%8B%E7%AC%AC14%E8%AF%BE%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E5%88%86%E5%B1%82%E5%88%86%E7%A6%BB%E6%A6%82%E5%BF%B5.pdf)
+[Linux-IIC驱动详解](https://cloud.tencent.com/developer/article/1015834?areaSource=104001.229&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux-Nor Flash驱动详解](https://cloud.tencent.com/developer/article/1012379?areaSource=104001.239&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux-块设备驱动(详解)](https://cloud.tencent.com/developer/article/1012375?areaSource=104001.240&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux-块设备驱动之框架详细分析(详解)](https://cloud.tencent.com/developer/article/1012369?areaSource=104001.242&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux-Nand Flash驱动(分析MTD层并制作NAND驱动)](https://cloud.tencent.com/developer/article/1012366?areaSource=104001.243&traceId=x6TfYAuCHtxo8-owGalg1)  
+[linux-LCD层次分析(详解)](https://cloud.tencent.com/developer/article/1012349?areaSource=104001.248&traceId=x6TfYAuCHtxo8-owGalg1)  
+[linux-platform机制实现驱动层分离(详解)](https://cloud.tencent.com/developer/article/1012345?areaSource=104001.251&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux-LCD驱动(详解)](https://cloud.tencent.com/developer/article/1012342?areaSource=104001.252&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Llinux-触摸屏驱动(详解)](https://cloud.tencent.com/developer/article/1012333?areaSource=104001.254&traceId=x6TfYAuCHtxo8-owGalg1)  
+[制作第一个驱动程序](https://cloud.tencent.com/developer/article/1012235?areaSource=104001.275&traceId=x6TfYAuCHtxo8-owGalg1)  
+[Linux设备驱动的软件架构思想](http://www.mrchen.love/Article/ID/28)  
+[Linux设备驱动中的软件架构思想](https://www.cnblogs.com/wanjianjun777/p/10951912.html)  
+[Linux Device Drivers data structures](https://www.linuxtv.org/downloads/v4l-dvb-internals/device-drivers/index.html)  
+[bootlin: Basics of I2C on linux](https://bootlin.com/pub/conferences/2022/elce/ceresoli-basics-of-i2c-on-linux/ceresoli-basics-of-i2c-on-linux.pdf)  
+[Buildroot examples](https://github.com/gvvsnrnaveen/buildroot/tree/main)  
+[Driver implementer’s API guide](https://www.kernel.org/doc/html/latest/driver-api/)  
+[I2C Device Interface](https://www.infradead.org/~mchehab/rst_conversion/i2c/dev-interface.html)  
+[Implementing I2C device drivers](https://docs.kernel.org/i2c/writing-clients.html)  
+[I2C Bus Driver Dummy Linux Device Driver](https://embetronicx.com/tutorials/linux/device-drivers/i2c-bus-driver-dummy-linux-device-driver-using-raspberry-pi/)  
+[Linux Kernel Programming by Examples](http://marcocorvi.altervista.org/games/lkpe/)  
+[I2C overview](https://wiki.st.com/stm32mpu/wiki/I2C_overview)  
+[Linux内核: I2C子系统分析](https://www.cnblogs.com/schips/p/linux-subsystem-i2c-0-about.html)  
+[Linux环境编程：从应用到内核](https://github.com/0voice/linux_kernel_wiki/blob/main/%E7%94%B5%E5%AD%90%E4%B9%A6%E7%B1%8D/Linux%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%BA%94%E7%94%A8%E5%88%B0%E5%86%85%E6%A0%B8%20(Linux%20Unix%E6%8A%80%E6%9C%AF%E4%B8%9B%E4%B9%A6).pdf)  
