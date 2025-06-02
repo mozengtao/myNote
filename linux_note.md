@@ -1,3 +1,13 @@
+## ToLearn
+[C Pointers](https://www.c-pointers.com/contents.html)  
+[Data Structures in the Linux Kernel](https://0xax.gitbooks.io/linux-insides/content/DataStructures/linux-datastructures-1.html)  
+[Kernel API](https://linux-kernel-labs.github.io/refs/pull/222/merge/labs/kernel_api.html)  
+[The Linux Kernel API](https://docs.kernel.org/core-api/kernel-api.html)  
+[Manpages](https://man.cx/list_add)  
+[Kernel Data Structures Linkedlist](https://medium.com/@414apache/kernel-data-structures-linkedlist-b13e4f8de4bf)  
+[]()  
+
+
 ## I/O设备
 > I/O设备 = 一个能与CPU交换数据的接口/控制器
 > 就是 "几组约定好功能的线"（寄存器），通过握手信号从线上读/写数据
@@ -116,6 +126,11 @@ how Udev mechanism works
 [Manpages of linux-manual-4.8](https://manpages.debian.org/testing/linux-manual-4.8/index.html)  
 [Linux Device Drivers](https://linuxtv.org/downloads/v4l-dvb-internals/device-drivers/)  
 [The Linux Kernel API](https://docs.huihoo.com/gnu_linux/kernel-api/index.htm)  
+[The Linux Kernel Module Programming Guide](https://tldp.org/LDP/lkmpg/2.6/html/index.html)  
+[The Linux Kernel Module Programming Guide](https://sysprog21.github.io/lkmpg/)  
+[Linux Loadable Kernel Module HOWTO](https://tldp.org/HOWTO/Module-HOWTO/index.html)  
+[]()  
+[]()  
 []()  
 ```c
 // 核心概念
