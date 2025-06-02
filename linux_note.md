@@ -1,3 +1,7 @@
+[Linux Device Driver Tutorials](https://github.com/Embetronicx/Tutorials/tree/master/Linux/Device_Driver)  
+[Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
+
+
 ## ToLearn
 [C Pointers](https://www.c-pointers.com/contents.html)  
 [Data Structures in the Linux Kernel](https://0xax.gitbooks.io/linux-insides/content/DataStructures/linux-datastructures-1.html)  
@@ -5,6 +9,13 @@
 [The Linux Kernel API](https://docs.kernel.org/core-api/kernel-api.html)  
 [Manpages](https://man.cx/list_add)  
 [Kernel Data Structures Linkedlist](https://medium.com/@414apache/kernel-data-structures-linkedlist-b13e4f8de4bf)  
+[How does the kernel implements Linked Lists?](https://kernelnewbies.org/FAQ/LinkedLists)  
+[The Linked-List Structure](https://litux.nl/mirror/kerneldevelopment/0672327201/app01lev1sec2.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 []()  
 
 
@@ -746,7 +757,7 @@ sudo ./test_example_dev
 [Input Drivers](http://embeddedlinux.org.cn/essentiallinuxdevicedrivers/final/ch07.html)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
 [Kernel Build System](https://docs.kernel.org/kbuild/index.html)  
-[]()  
+[linux kernel development](https://github.com/firmianay/Life-long-Learner/tree/master/linux-kernel-development)  
 []()  
 []()  
 []()  
