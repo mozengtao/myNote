@@ -38,7 +38,213 @@
 (source code)      compile           (byte code)        execute
 Hello.java       ----------->        Hello.class    ------------>       (Run on JVM)
 
+## OOP
+[Object-Oriented-Programming Concepts in Java](https://www.baeldung.com/java-oop)  
+[Abstract Classes in Java](https://www.baeldung.com/java-abstract-class)  
+[Java Interfaces](https://www.baeldung.com/java-interfaces)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 ```java
+// class
+public class Car {
+    // member fields
+    private String type;
+    private String model;
+    private String color;
+    private int speed;
+
+    // constructor
+    public Car(String type, String model, String color) {
+        this.type = type;
+        this.model = model;
+        this.color = color;
+    }
+
+    // member methods
+    public int increaseSpeed(int increment) {
+        this.speed = this,speed + increment;
+        return this.speed;
+    }
+
+    // ....
+}
+
+// object
+Car veyron = new Car("Bugatti", "Veyron", "crimson");
+Car corvette = new Car("Chevrolet", "Corvette", "black");
+
+// abstraction
+If we think about a typical computer, one can only see the external interface, which is most essential for interacting with it, while internal chips and circuits are hidden from the user.
+
+In OOP, abstraction means hiding the complex implementation details of a program, exposing only the API required to use the implementation. In Java, we achieve abstraction by using interfaces and abstract classes.
+
+// encapsulation
+Encapsulation is hiding the state or internal representation of an object from the consumer of an API and providing publicly accessible methods bound to the object for read-write access. This allows for hiding specific information and controlling access to internal implementation.
+
+For example, member fields in a class are hidden from other classes, and they can be accessed using the member methods. One way to do this is to make all data fields private and only accessible by using the public member methods.
+
+// inheritance
+Inheritance is the mechanism that allows one class to acquire all the properties from another class by inheriting the class.
+
+public class Car extends Vehicle {
+    // ...
+}
+
+// polymorphism
+// static or compile-time polymorphism and is also called method overloading
+public class TextFile extends GenericFile {
+    // ...
+
+    public String read() {
+        return this.getContent()
+            .toString();
+    }
+
+    public String read(int limit) {
+        return this.getContent()
+            .toString()
+            .substring(0, limit);
+    }
+
+    public String read(int start, int stop) {
+        return this.getContent()
+            .toString()
+            .substring(start, stop);
+    }
+}
+// dynamic polymorphism (child class overrides the parent's method)
+public class GenericFile {
+    private String name;
+    
+    //...
+
+    public String getFileInfo() {
+        return "Generic File Impl";
+    }
+}
+
+public class ImageFile extends GenericFile {
+    private int height;
+    private int width;
+
+    // ... gettters and setters
+
+    public String getFileInfo() {
+        return "Image File Impl";
+    }
+}
+
+// abstract class
+public abstract class BaseFileReader {
+    
+    protected Path filePath;
+
+    protected BaseFileReader(Path filePath) {
+        this.filePath = filePath;
+    }
+
+    public Path getFilePath() {
+        return filePath;
+    }
+
+    public List<String> readFile() throws IOException {
+        return Files.lines(filePath)
+            .map(this::mapFileLine).collect(Collectors.toList());
+    }
+
+    protected abstract String mapFileLine(String line);
+}
+
+public class LowercaseFileReader extends BaseFileReader {
+    public LowercaseFileReader(Path filePath) {
+        super(filePath);
+    }
+
+    @Override
+    public String mapFileLine(String line) {
+        return line.toLowerCase();
+    }
+}
+
+public class UppercaseFileReader extends BaseFileReader {
+    public UppercaseFileReader(Path filePath) {
+        super(filePath);
+    }
+
+    @Override
+    public String mapFileLine(String line) {
+        return line.toUpperCase();
+    }
+}
+
+@Test
+public void givenLowercaseFileReaderInstance_whenCalledreadFile_thenCorrect() throws Exception {
+    URL location = getClass().getClassLoader().getResource("files/test.txt")
+    Path path = Paths.get(location.toURI());
+    BaseFileReader lowercaseFileReader = new LowercaseFileReader(path);
+        
+    assertThat(lowercaseFileReader.readFile()).isInstanceOf(List.class);   
+}
+
+// interface
+// 1
+public class Employee {
+
+    private double salary;
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+}
+
+public class EmployeeSalaryComparator implements Comparator<Employee> {
+
+    @Override
+    public int compare(Employee employeeA, Employee employeeB) {
+        if (employeeA.getSalary() < employeeB.getSalary()) {
+            return -1;
+        } else if (employeeA.getSalary() > employeeB.getSalary()) { 
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+// 2
+public interface Transform {
+    void transform();
+}
+
+public interface Fly {
+    void fly();
+}
+
+public class Car implements Fly, Transform {
+
+    @Override
+    public void fly() {
+        System.out.println("I can Fly!!");
+    }
+
+    @Override
+    public void transform() {
+        System.out.println("I can Transform!!");
+    }
+}
+
+
+
+
 // 单行注释
 
 /*
