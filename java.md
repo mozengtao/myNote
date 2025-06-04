@@ -241,7 +241,58 @@ public class Car implements Fly, Transform {
         System.out.println("I can Transform!!");
     }
 }
+// 3
+public interface Shape {
+    String name();
+}
 
+public class Circle implements Shape {
+
+    @Override
+    publist String name() {
+        return "Circle";
+    }
+}
+
+public class Square implements Shape {
+
+    @Override
+    publist String name() {
+        return "Square";
+    }
+}
+
+list<Shape> shapes = new ArrayList<>();
+Shape circleShape = new Circle();
+Shape squareShape = new Square();
+
+shapes.add(circleShape);
+shapes.add(squareShape);
+
+for (Shape shape : shapes) {
+    System.out.println(shape.name());
+}
+
+// an interface extends another interface
+public interface HasColor {
+    String getColor();
+}
+
+public interface Box extends HasColor {
+    int getHight();
+}
+
+// an abstract class implements an interface
+public interface Transform {
+
+    void transform();
+    default void printSpecs() {
+        System.out.println("Transform Specification");
+    }
+}
+
+public abstract class Vehicle implements Transform {}
+// the Vehicle class inherits two methods: the abstract transform method and the default printSpecs method
 
 
 
