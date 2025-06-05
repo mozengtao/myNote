@@ -230,7 +230,7 @@
 [The Linux Kernel Module Programming Guide](http://www.embeddedlinux.org.cn/linuxmod/) #lkm  
 [Embedded Linux Primer: A Practical, Real-World Approach](http://www.embeddedlinux.org.cn/EmbeddedLinuxPrimer/) #linux  
 [Embedded Linux Primer](http://www.mosaic-industries.com/embedded-systems/_media/pdfs/white-papers/embedded-linux-primer.pdf) #linux  
-[[Linux 环境编程：从应用到内核]] #linux
+[Linux 环境编程：从应用到内核](https://github.com/0voice/linux_kernel_wiki/blob/main/%E7%94%B5%E5%AD%90%E4%B9%A6%E7%B1%8D/Linux%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%BA%94%E7%94%A8%E5%88%B0%E5%86%85%E6%A0%B8%20(Linux%20Unix%E6%8A%80%E6%9C%AF%E4%B8%9B%E4%B9%A6).pdf) #linux  
 [Understanding the Linux Kernel](https://doc.lagout.org/operating%20system%20/linux/Understanding%20Linux%20Kernel.pdf) #linux  
 [Understanding the Linux Kernel](http://gauss.ececs.uc.edu/Courses/e4022/code/memory/understanding.pdf) #linux  
 [程序员的自我修养：链接、装载与库](https://awesome-programming-books.github.io/others/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB%EF%BC%9A%E9%93%BE%E6%8E%A5%E3%80%81%E8%A3%85%E8%BD%BD%E4%B8%8E%E5%BA%93.pdf)  
@@ -259,3 +259,14 @@
 [KernelNewbies](https://kernelnewbies.org/Linux_Kernel_Newbies)  
 [Linux Kernel Teaching](https://linux-kernel-labs.github.io/refs/heads/master/)  
 [Linux Documentation Project Guides](https://tldp.org/guides.html)  
+[Linux设备驱动开发详解](https://github.com/kevinwangkk/LDD4.0_note/blob/master/Linux%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E8%AF%A6%E8%A7%A3%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%9C%80%E6%96%B0%E7%9A%84Linux4.0%E5%86%85%E6%A0%B8.pdf)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
