@@ -5,6 +5,18 @@
 []()  
 []()  
 
+## Classes
+### rm_work
+> The rm_work class supports deletion of temporary workspace, which can ease your hard drive demands during builds.
+```bash
+# you can enable rm_work by adding the following to your local.conf file, which is found in the Build Directory
+INHERIT += "rm_work"
+
+# To exclude some recipes from having their work directories deleted by rm_work, you can add the names of the recipe or recipes you are working on to the RM_WORK_EXCLUDE variable, which can also be set in your local.conf file. Here is an example
+RM_WORK_EXCLUDE += "busybox glibc"
+or
+RM_WORK_EXCLUDE:append = " busybox glibc"
+```
 
 ```bash
 # recipe-sysroot/sysroot-only 目录
