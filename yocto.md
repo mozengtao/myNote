@@ -1,9 +1,34 @@
+[**A practical guide to BitBake**](https://a4z.gitlab.io/docs/BitBake/guide.html)  
+[**Variables Glossary**](https://docs.yoctoproject.org/ref-manual/variables.html)  
+[**Classes**](https://docs.yoctoproject.org/ref-manual/classes.html#)  
+[Images](https://docs.yoctoproject.org/ref-manual/images.html#images)  
+[Writing a New Recipe](https://docs.yoctoproject.org/dev-manual/new-recipe.html)  
+[Recipe Style Guide](https://docs.yoctoproject.org/contributor-guide/recipe-style-guide.html)  
+
+[BitBake User Manual](https://docs.yoctoproject.org/bitbake/)  
+[BitBake User Manual](https://docs.yoctoproject.org/1.6/bitbake-user-manual/bitbake-user-manual.html)  
 [Source Directory Structure](https://docs.yoctoproject.org/ref-manual/structure.html#source-directory-structure)  
+[Building your own recipes from first principles](https://wiki.yoctoproject.org/wiki/Building_your_own_recipes_from_first_principles)  
+[Writing BitBake Recipes](https://www.multitech.net/developer/software/corecdp/development/writing-bitbake-recipes/)  
+[Understanding and creating your first custom recipe](https://kickstartembedded.com/2022/01/21/yocto-part-6-understanding-and-creating-your-first-custom-recipe/)  
 []()  
 []()  
 []()  
 []()  
 []()  
+[]()  
+
+## bitbake commands
+```
+bitbake -c listtasks <recipe_name>
+
+bitbake -e vmc-device-yang2fxs | grep ^FILE=
+FILE="/home/morrism/workspace/vcmts/vcmos/meta-vcore/meta-vcore-base/recipes-vmc/vmc-device-yang2fxs/vmc-device-yang2fxs.bb"
+
+bitbake -b <path_to_bb_file> -c listtasks
+
+
+```
 
 ## Classes
 ### rm_work
@@ -18,6 +43,7 @@ or
 RM_WORK_EXCLUDE:append = " busybox glibc"
 ```
 
+## Miscs
 ```bash
 # recipe-sysroot/sysroot-only 目录
 sysroot-only/ 子目录专门用于存放​​仅需在编译阶段使用、但无需安装到目标设备​​的文件
@@ -33,57 +59,13 @@ recipe-sysroot/              # 完整的 sysroot 内容
     └── usr/share/pkgconfig/ # pkg-config 文件（仅编译时使用）
 
 
-
-1.DEPENDS
-Lists a recipe’s build-time dependencies. These are dependencies on other recipes whose contents (e.g. headers and shared libraries) are needed by the recipe at build time.
-
-// build-time dependency
-DEPENDS = "bar"
-The practical effect of the previous assignment is that all files installed by bar will be available in the appropriate staging sysroot, given by the STAGING_DIR* variables, by the time the do_configure task for foo runs.
-
- // build 过程需要用到(依赖于) 宿主机 的 utilities
- DEPENDS = "codegen-native"
- DEPENDS can also be used to add utilities that run on the build machine during the build. 
-
- https://docs.yoctoproject.org/ref-manual/variables.html#term-DEPENDS
- https://docs.yoctoproject.org/ref-manual/classes.html#ref-classes-native
 ```
-- [Images](https://docs.yoctoproject.org/ref-manual/images.html#images)
-	- ```bash
-	  #1 bitbake 执行命令时出现 "Resource Temporarily Unavailable"
-	  通过如下命令进行恢复
-	  rm build/bitbake.lock
-	  
-	  #display the list of directories within the Source Directory that contain image recipe files
-	  morrism@morrism-kirkstone ~/vcmos/poky ((HEAD detached at 1520bf97aa)) $ pwd
-	  /home/morrism/vcmos/poky
-	  morrism@morrism-kirkstone ~/vcmos/poky ((HEAD detached at 1520bf97aa)) $ ls meta*/recipes*/images/*.bb
-	  meta-selftest/recipes-test/images/error-image.bb                      meta/recipes-core/images/core-image-tiny-initramfs.bb
-	  meta-selftest/recipes-test/images/oe-selftest-image.bb                meta/recipes-extended/images/core-image-full-cmdline.bb
-	  meta-selftest/recipes-test/images/test-empty-image.bb                 meta/recipes-extended/images/core-image-kernel-dev.bb
-	  meta-selftest/recipes-test/images/wic-image-minimal.bb                meta/recipes-extended/images/core-image-testcontroller-initramfs.bb
-	  meta-skeleton/recipes-multilib/images/core-image-multilib-example.bb  meta/recipes-extended/images/core-image-testcontroller.bb
-	  meta/recipes-core/images/build-appliance-image_15.0.0.bb              meta/recipes-graphics/images/core-image-weston-sdk.bb
-	  meta/recipes-core/images/core-image-base.bb                           meta/recipes-graphics/images/core-image-weston.bb
-	  meta/recipes-core/images/core-image-minimal-dev.bb                    meta/recipes-graphics/images/core-image-x11.bb
-	  meta/recipes-core/images/core-image-minimal-initramfs.bb              meta/recipes-rt/images/core-image-rt-sdk.bb
-	  meta/recipes-core/images/core-image-minimal-mtdutils.bb               meta/recipes-rt/images/core-image-rt.bb
-	  meta/recipes-core/images/core-image-minimal.bb                        meta/recipes-sato/images/core-image-sato-dev.bb
-	  meta/recipes-core/images/core-image-ptest-all.bb                      meta/recipes-sato/images/core-image-sato-sdk.bb
-	  meta/recipes-core/images/core-image-ptest-fast.bb                     meta/recipes-sato/images/core-image-sato.bb
-	  
-	  ```
+
+
 - yocto project
 	- ![image.png](../assets/image_1671676755810_0.png){:height 515, :width 776}
 - 构建系统工作流程
 	- ![_images/yp-how-it-works-new-diagram.png](https://docs.yoctoproject.org/_images/yp-how-it-works-new-diagram.png)
-		- Fetch – 获取源代码
-		- Extract – 解压源代码
-		- Patch – 应用补丁
-		- Configure – 配置编译环境
-		- Build – 编译和链接
-		- Install – 拷贝文件到目标目录
-		- Package – 打包安装文件
 - Yocto项目核心组件
 	- BitBake
 		- 构建引擎，任务调度器，它负责解释配置文件和recipes并执行一系列的任务，来下载，配置，编译特定的应用和文件系统镜像。
@@ -111,13 +93,10 @@ The practical effect of the previous assignment is that all files installed by b
 	- 变量的值是字符串
 	- 可以对变量进行添加，追加和定义
 	- 定义在配置文件(.conf)中的变量具有全局作用域
-	  background-color:: yellow
 	- 定义在Recipe(.bb, .bbappend, .bbclass)中的变量聚有本地作用域
-	  background-color:: yellow
 	- Recipe可以访问全局变量
 	- 所有的变量值可以被`$BUILDDIR/conf/local.conf`覆写或修改
 	- 变量Override
-	  background-color:: red
 		- `<VARIABLE>:<override> = "some_value"`
 		- append override
 			- 变量末尾追加(不包含空格)
@@ -195,7 +174,6 @@ The practical effect of the previous assignment is that all files installed by b
 		- Recipe文件名称通常为`<application-name>_<version>.bb`
 		- Recipe可以包含称为task的函数如fetch, configure, compile…
 		- Recipe自动定义了一些变量
-		  background-color:: pink
 			- PN
 				- package name，在recipe文件名称中指定
 			- BPN
@@ -336,7 +314,8 @@ The practical effect of the previous assignment is that all files installed by b
 			- user
 				- 在新的shell下用户手动解决冲突
 			- 默认在meta-poky下，`PATCHRESOLVE = "noop"`
-- Recipe示例
+
+## Recipe
 	- ```bash
 	  DESCRIPTION = "Hello world program"
 	  HOMEPAGE = "http://example.net/hello/"
@@ -394,7 +373,7 @@ The practical effect of the previous assignment is that all files installed by b
 	  SRC_URI[md5sum] = "2cee42a2ff4f1cd4f9298eeeb2264519"
 	  ```
 - 扩展已有的Recipe
-	- ![image.png](../assets/image_1672021163653_0.png){:height 299, :width 594}
+	- ![image.png](../assets/image_1672021163653_0.png)
 	- recipe扩展文件以.bbappend结尾
 	- recipe扩展文件必须与它要扩展的recipe文件root name相同，但是可以使用通配符
 		- ```bash
@@ -541,72 +520,68 @@ The practical effect of the previous assignment is that all files installed by b
 		- 之后使用buildhistory-diff工具来检查两次构建的差异
 			- `buildhistory-diff`
 	-
-- 配置变量
-	- [BBPATH](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBPATH)
-	- [BBFILES](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBFILES)
-	- [LAYERDIR](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-LAYERDIR)
-	- [BBFILE_COLLECTIONS](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBFILE_COLLECTIONS)
-	-
+
+[BBPATH](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBPATH)  
+[BBFILES](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBFILES)  
+[LAYERDIR](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-LAYERDIR)  
+[BBFILE_COLLECTIONS](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BBFILE_COLLECTIONS)  
+
 ### Anonymous Python Functions
-	- [Anonymous Python Functions](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-metadata.html#anonymous-python-functions)
-	- ```python
-	  Anonymous Python functions always run at the end of parsing, regardless of 
-	  where they are defined. If a recipe contains many anonymous functions, they 
-	  run in the same order as they are defined within the recipe.
-	  
-	  python () {
-	      if d.getVar('SOMEVAR') == 'value':
-	          d.setVar('ANOTHERVAR', 'value2')
-	  }
-	  ```
+[Anonymous Python Functions](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-metadata.html#anonymous-python-functions)
+```python
+# Anonymous Python functions always run at the end of parsing, regardless of  where they are defined. If a recipe contains many anonymous functions, they  run in the same order as they are defined within the recipe.
+
+python () {
+	if d.getVar('SOMEVAR') == 'value':
+		d.setVar('ANOTHERVAR', 'value2')
+}
+```
+
 ### Inline Python Variable Expansion
-	- You can use inline Python variable expansion to set variables, the most common use of this feature is to extract the value of variables from BitBake’s internal data dictionary, d.
-	- ```python
-	  DATE = "${@time.strftime('%Y%m%d',time.gmtime())}"
-	  
-	  PN = "${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[0] or 'defaultpkgname'}"
-	  PV = "${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[1] or '1.0'}"
-	  ```
-- 参考文档
-	- [Poky recipes](https://git.yoctoproject.org/poky/plain/meta/recipes-extended/) #online
-	- [Yocto: Part 1 – A Definitive Introduction](https://kickstartembedded.com/2021/12/19/yocto-part-1-a-definitive-introduction/)
-	- [Debugging Tools and Techniques](https://docs.yoctoproject.org/dev-manual/debugging.html)
-	- [build/tmp/work/](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-structure.html#build-tmp-work)
-	- [Variables Glossary](https://docs.yoctoproject.org/ref-manual/variables.html#variables-glossary)
-	- [OpenEmbedded User Manual](http://www.embeddedlinux.org.cn/OEManual/index.html)
-	- [Yocto Project Reference Manual](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-manual.html)
-	- [Yocto project reference manual in 1 page](https://docs.yoctoproject.org/2.2/ref-manual/ref-manual.html)
-	- [yocto Technical Overview](https://yoctoproject.org/development/technical-overview/#getting-started)
-	- [Using   devtool   in Your SDK Workflow](https://docs.yoctoproject.org/sdk-manual/extensible.html#using-devtool-in-your-sdk-workflow)
-	- [devtool   Quick Reference](https://docs.yoctoproject.org/ref-manual/devtool-reference.html)
-	- [Yocto Source Repositories](https://git.yoctoproject.org/) #online
-	- [poky plain](https://git.yoctoproject.org/poky/plain) #online
-	- [poky source tree](https://git.yoctoproject.org/poky/tree/?h=kirkstone) #online
-	- [Override syntax changes](https://docs.yoctoproject.org/migration-guides/migration-3.4.html#override-syntax-changes)
-	- [Yocto Project Documentation](https://docs.yoctoproject.org/)
-	- [BitBake User Manual](https://docs.yoctoproject.org/bitbake/)
-	- [A practical guide to BitBake](https://a4z.gitlab.io/docs/BitBake/guide.html)
-	- [Variables Glossary](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-variables.html)
-	- [bitbake.conf(常用变量定义的位置)](https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf)
-	- recipe中用到的[[install]]命令
-	- [Building your own recipes from first principles](https://wiki.yoctoproject.org/wiki/Building_your_own_recipes_from_first_principles)
-	- [yocto TipsAndTricks](https://wiki.yoctoproject.org/wiki/TipsAndTricks)
-	- [Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev/dev-manual/index.html)
-	- [Introduction of Yocto Project](https://www.codeinsideout.com/blog/yocto/introduction/)
-	- [What I wish I’d known about Yocto Project](https://docs.yoctoproject.org/what-i-wish-id-known.html)
-	- [bootlin yocto slides](https://bootlin.com/doc/training/yocto/yocto-slides.pdf)
-	- [yocto ref manual](https://docs.yoctoproject.org/ref-manual/index.html)
-	- [poky ref manual](https://docs.yoctoproject.org/1.0/poky-ref-manual/poky-ref-manual.html)
-	- [Beginners Guide to Writing a Recipe](https://www.wolfssl.com/docs/yocto-openembedded-recipe-guide/)
-	- [Directories: Installation variables](http://www.embeddedlinux.org.cn/OEManual/directories_installation.html)
-	- [man install](https://man7.org/linux/man-pages/man1/install.1.html)
-	- [First Yocto Project Build For QEMU (Quick Emulator)](https://tutorialadda.com/yocto/quick-start-your-first-yocto-project-build)
-	- [Yocto Project Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html)
-	- [Yocto Project Linux Kernel Development Manual](https://docs.yoctoproject.org/kernel-dev/index.html#yocto-project-linux-kernel-development-manual)
-	- classes
-		- [autotools class](http://www.embeddedlinux.org.cn/OEManual/chapter_reference.html#autotools_class)
-		- [update-rc.d class](http://www.embeddedlinux.org.cn/OEManual/update-rc-d_class.html)
-			- [[update-rc.d]]
-	- [embedded_linux_projects_using_yocto_project_cookbook](https://digiwiki.eccee.com/_media/digi/arm-embedded/linux/dey/embedded_linux_projects_using_yocto_project_cookbook.pdf) #pdf
-- Vecima
-	- [yocto artifactory](https://artifactory.corp.vecima.com/ui/native/ext-release-local/yocto/downloads/)
+```python
+# You can use inline Python variable expansion to set variables, the most common use of this feature is to extract the value of variables from BitBake’s internal data dictionary, d.
+DATE = "${@time.strftime('%Y%m%d',time.gmtime())}"
+
+PN = "${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[0] or 'defaultpkgname'}"
+PV = "${@bb.parse.vars_from_file(d.getVar('FILE', False),d)[1] or '1.0'}"
+```
+
+[Poky recipes](https://git.yoctoproject.org/poky/plain/meta/recipes-extended/) #online  
+[Yocto: Part 1 – A Definitive Introduction](https://kickstartembedded.com/2021/12/19/yocto-part-1-a-definitive-introduction/)  
+[Debugging Tools and Techniques](https://docs.yoctoproject.org/dev-manual/debugging.html)  
+[build/tmp/work/](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-structure.html#build-tmp-work)  
+[Variables Glossary](https://docs.yoctoproject.org/ref-manual/variables.html#variables-glossary)  
+[OpenEmbedded User Manual](http://www.embeddedlinux.org.cn/OEManual/index.html)  
+[Yocto Project Reference Manual](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-manual.html)  
+[Yocto project reference manual in 1 page](https://docs.yoctoproject.org/2.2/ref-manual/ref-manual.html)  
+[yocto Technical Overview](https://yoctoproject.org/development/technical-overview/#getting-started)  
+[Using   devtool   in Your SDK Workflow](https://docs.yoctoproject.org/sdk-manual/extensible.html#using-devtool-in-your-sdk-workflow)  
+[devtool   Quick Reference](https://docs.yoctoproject.org/ref-manual/devtool-reference.html)  
+[Yocto Source Repositories](https://git.yoctoproject.org/) #online  
+[poky plain](https://git.yoctoproject.org/poky/plain) #online  
+[poky source tree](https://git.yoctoproject.org/poky/tree/?h=kirkstone) #online  
+[Override syntax changes](https://docs.yoctoproject.org/migration-guides/migration-3.4.html#override-syntax-changes)  
+[Yocto Project Documentation](https://docs.yoctoproject.org/)  
+[BitBake User Manual](https://docs.yoctoproject.org/bitbake/)  
+[A practical guide to BitBake](https://a4z.gitlab.io/docs/BitBake/guide.html)  
+[Variables Glossary](https://docs.yoctoproject.org/3.2.3/ref-manual/ref-variables.html)  
+[bitbake.conf(常用变量定义的位置)](https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf)  
+recipe中用到的[[install]]命令  
+[Building your own recipes from first principles](https://wiki.yoctoproject.org/wiki/Building_your_own_recipes_from_first_principles)  
+[yocto TipsAndTricks](https://wiki.yoctoproject.org/wiki/TipsAndTricks)  
+[Yocto Project Development Tasks Manual](https://docs.yoctoproject.org/dev/dev-manual/index.html)  
+[Introduction of Yocto Project](https://www.codeinsideout.com/blog/yocto/introduction/)  
+[What I wish I’d known about Yocto Project](https://docs.yoctoproject.org/what-i-wish-id-known.html)  
+[bootlin yocto slides](https://bootlin.com/doc/training/yocto/yocto-slides.pdf)  
+[yocto ref manual](https://docs.yoctoproject.org/ref-manual/index.html)  
+[poky ref manual](https://docs.yoctoproject.org/1.0/poky-ref-manual/poky-ref-manual.html)  
+[Beginners Guide to Writing a Recipe](https://www.wolfssl.com/docs/yocto-openembedded-recipe-guide/)  
+[Directories: Installation variables](http://www.embeddedlinux.org.cn/OEManual/directories_installation.html)  
+[man install](https://man7.org/linux/man-pages/man1/install.1.html)  
+[First Yocto Project Build For QEMU (Quick Emulator)](https://tutorialadda.com/yocto/quick-start-your-first-yocto-project-build)  
+[Yocto Project Overview and Concepts Manual](https://docs.yoctoproject.org/overview-manual/index.html)  
+[Yocto Project Linux Kernel Development Manual](https://docs.yoctoproject.org/kernel-dev/index.html#yocto-project-linux-kernel-development-manual)  
+[autotools class](http://www.embeddedlinux.org.cn/OEManual/chapter_reference.html#autotools_class)  
+[update-rc.d class](http://www.embeddedlinux.org.cn/OEManual/update-rc-d_class.html)  
+[embedded_linux_projects_using_yocto_project_cookbook](https://digiwiki.eccee.com/_media/digi/arm-embedded/linux/dey/embedded_linux_projects_using_yocto_project_cookbook.pdf) #pdf  
+[yocto artifactory](https://artifactory.corp.vecima.com/ui/native/ext-release-local/yocto/downloads/)  
