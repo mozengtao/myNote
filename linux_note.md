@@ -18,6 +18,24 @@
 []()  
 []()  
 
+## Linux common files on host
+```bash
+# /usr/include/linux/ (linux header files)
+morrism@localhost ~ $ grep -rn "LOOP_CTL_" /usr/include/linux/
+/usr/include/linux/loop.h:122:#define LOOP_CTL_ADD              0x4C80
+/usr/include/linux/loop.h:123:#define LOOP_CTL_REMOVE           0x4C81
+/usr/include/linux/loop.h:124:#define LOOP_CTL_GET_FREE 0x4C82
+
+# /etc/protocols
+morrism@localhost ~ $ cat /etc/protocols
+ip      0       IP              # internet protocol, pseudo protocol number
+
+# /proc/cmdline
+morrism@localhost ~ $ cat /proc/cmdline
+BOOT_IMAGE=(hd0,msdos1)/vmlinuz-4.18.0-305.25.1.el8_4.x86_64 root=/dev/mapper/cl-root ro resume=/dev/mapper/cl-swap rd.lvm.lv=cl/root rd.lvm.lv=cl/swap rhgb quiet
+
+
+```
 
 ## I/O设备
 > I/O设备 = 一个能与CPU交换数据的接口/控制器
