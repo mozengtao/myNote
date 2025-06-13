@@ -13,6 +13,14 @@
 [How to use Go Channels: The Complete Guide](https://deadsimplechat.com/blog/how-to-use-go-channels/)  
 []()  
 
+## Go projects
+[golang-mini-projects](https://github.com/akilans/golang-mini-projects)  
+[project-based-learning](https://github.com/practical-tutorials/project-based-learning)  
+[]()  
+[]()  
+[]()  
+[]()  
+
 
 [Mastering Command-Line Flags in Golang](https://www.kelche.co/blog/go/flag/)  
 
