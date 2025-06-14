@@ -183,8 +183,14 @@ command > file 2>&1 (command &> file)	# 标准输出和标准错误同时重定�
 
 command < file							# 标准输入重定向 (从文件读取输入，而非终端)
 
-command << delimiterXXX
+command <<delimiterXXX
 delimiterXXX							# Here 文档 (将输入数据嵌入到命令中，直到遇到指定分隔符)
+
+cat <<EOF > myfile.conf
+some
+multi-line
+content
+EOF
 
 command <<< string						# Here 字符串 (将字符串作为命令的输入)
 

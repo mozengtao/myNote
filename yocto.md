@@ -18,6 +18,16 @@
 []()  
 []()  
 
+## Variables Glossary
+[**Variables Glossary**](https://docs.yoctoproject.org/ref-manual/variables.html)  
+```bash
+# EXTRA_IMAGE_FEATURES
+    A list of additional features to include in an image. When listing more than one feature, separate them with a space.
+    ""tools-debug" — adds debugging tools such as gdb and strace.
+    ...
+
+```
+
 ## bitbake commands
 ```
 bitbake -c listtasks <recipe_name>

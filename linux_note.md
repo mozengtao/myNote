@@ -1,6 +1,13 @@
 [Linux Device Driver Tutorials](https://github.com/Embetronicx/Tutorials/tree/master/Linux/Device_Driver)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
 
+## Commands
+```bash
+# print all login users
+print $(who | awk '{print 1}' | sort | uniq | sed '/ /,/g')
+
+
+```
 
 ## ToLearn
 [C Pointers](https://www.c-pointers.com/contents.html)  
