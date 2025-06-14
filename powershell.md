@@ -114,4 +114,14 @@ Measure-Command { Get-ChildItem -Recurse | Where Extension -eq '.log' } # 约 45
 [PowerShell 101](https://learn.microsoft.com/en-us/powershell/scripting/learn/ps101/00-introduction?view=powershell-7.4)  
 [PowerShell](https://github.com/lazywinadmin/PowerShell) #github  
 [PowerShell](https://github.com/RamblingCookieMonster/PowerShell)  
--
+[Speeding Up String Manipulation](https://powershell.one/tricks/performance/strings)  
+[PowerShell Documentation](https://learn.microsoft.com/en-us/powershell/)  
+[PowerShell String Manipulation: A Comprehensive Guide](https://www.sharepointdiary.com/2021/11/powershell-string-manipulation-comprehensive-guide.html)  
+[PowerShell-String-Operations](https://gist.github.com/kpatnayakuni/967466627bcd526a60df35d44090f257)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
