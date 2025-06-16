@@ -81,11 +81,25 @@ fi
 
 ## source
 ```bash
-bash内置的 source 命令用来读取并执行脚本文件的内容
+​​特性​​				source script.sh (或 . script.sh)	  c
+​​执行环境​​			当前 Shell 进程						   新建的子 Shell 进程
+​​进程 ID (PID)​​		与当前终端相同						   新建独立 PID
+​​资源消耗​​			较低（无新进程开销）					较高（需要创建新进程）
+​​脚本权限要求​​		无需可执行权限							必须具有可执行权限
 
+
+# source script.sh
+bash内置的 source 命令用来读取并执行脚本文件的内容
 当使用 source 命令执行脚本时，它是在当前 source 它的 shell 环境下执行的，因此，脚本可以访问当前 source 它的 shell 下的所有变量，另一方面，source 命令执行完成后，脚本文件中的所有定义(包括变量和函数)在脚本的 parent shell 变得可用，因此通过 source 命令可以用来在不同脚本之间共享内容
 
+strace ./script.sh
+
+# source script.sh
 而当通过脚本名称或者bash命令执行脚本时，它是在一个新的 shell 下运行的，因此，脚本只能访问 parent shell 中的通过 export 导出的变量或者函数，并且，该脚本下所有的子 shell 中的定义在该脚本退出时都不复存在
+# 直接追踪运行在bash中的进程
+echo $$		# 获取 terminal 1 的 PID
+sudo strace -p xxx	# 在 terminal 2 中 trace terminal 1 对应的 bash 进程，xxx 为 terminal 1 的 PID
+source script.sh	# 在 terminal 1 中 source script.sh，观察 terminal 2 的输出
 ```
 ## eval
 ```bash
