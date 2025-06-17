@@ -1,6 +1,39 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
+## Commands
+```bash
+# 1
+if [ -n "${BASH_SOURCE}" ]; then
+    MYROOT="`dirname ${BASH_SOURCE}`"
+elif [ -n "${ZSH_NAME}" ]; then
+    MYROOT="`dirname $0`"
+else
+    MYROOT="`pwd`"
+fi
+MYROOT="`readlink -f ${MYROOT}`"
+
+for key in ${MYROOT}/gpg/*.key; do
+    cat $key | gpg --quiet --import
+done
+
+# Check for uninitialized submodules
+git -C ${MYROOT} submodule status | while read -r hash submodule extra; do
+    if [ "${hash#-}" != "${hash}" ]; then
+        echo "Submodule ${submodule} not initialized, initializing now"
+        git -C ${MYROOT} submodule init ${submodule}
+        git -C ${MYROOT} submodule update ${submodule}
+    fi
+done
+
+. ${MYROOT}/meta-vcommon/scripts/vcm-yocto-init
+
+# We're done with MYROOT now
+unset MYROOT
+
+# 2
+```
+
 ## Bash brace expansion
 ```bash
 {start..end}
