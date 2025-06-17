@@ -1494,117 +1494,69 @@ fi
 ## expr operations
 ```bash
 ### 1. 数值运算
-#### 加法
 echo $(expr 3 + 2)  # 5
-
-#### 减法
 echo $(expr 5 - 2)  # 3
-
-#### 乘法
 echo $(expr 3 \* 2) # 6
-
-#### 除法
 echo $(expr 6 / 2)  # 3
-
-#### 取余
 echo $(expr 5 % 2)  # 1
 
 ### 2. 字符串操作
-#### 获取字符串长度
 string="hello"
 echo $(expr length "$string")   # 5
-
-#### 提取子字符串
 string="hello world"
 echo $(expr substr "$string" 7 5)   # world
-
-#### 查找子字符串位置
 string="hello world"
 echo $(expr index "$string" "world")    # 3
 
 ### 3. 比较运算
-#### 等于
 echo $(expr 5 = 5)  # 1
-
-#### 不等于
 echo $(expr 5 != 4) # 1
-
-#### 大于
 echo $(expr 5 \> 4) # 1
-
-#### 小于
 echo $(expr 4 \< 5) # 1
-
-#### 大于等于
 echo $(expr 5 \>= 5)    # 1
-
-#### 小于等于
 echo $(expr 4 \<= 5)    # 1
 
 ### 4. 逻辑运算
-
-#### 逻辑与
 echo $(expr 1 \& 1)   # 1
-
-#### 逻辑或
 echo $(expr 0 \| 1)  # 1
 ```
 
 ## arithmetic operations
 ```bash
 ### 1. 使用 `expr`
-# 加法
 echo $(expr 3 + 2)  # 5
-# 减法
 echo $(expr 5 - 2)  # 3
-# 乘法
 echo $(expr 3 \* 2) # 6
-# 除法
 echo $(expr 6 / 2)  # 3
-# 取余
 echo $(expr 5 % 2)  # 1
 
 ### 2. 使用双括号 `(( ))`
-# 加法
 echo $((3 + 2)) # 5
 
 myNum=100
 ((myNum+=200))
 echo $myNum # 300
-# 减法
 echo $((5 - 2)) # 3
-# 乘法
 echo $((3 * 2)) # 6
-# 除法
 echo $((6 / 2)) # 3
-# 取余
 echo $((5 % 2)) # 1
 
 ### 3. 使用 `let`
-# 加法
 let result=3+2
 echo $result    # 5
-# 减法
 let result=5-2
 echo $result    # 3
-# 乘法
 let result=3*2
 echo $result    # 6
-# 除法
 let result=6/2
 echo $result    # 3
-# 取余
 let result=5%2
 echo $result    # 1
 
 ### 4. 使用 `bc` 进行浮点运算
-# 加法
 echo $(echo "3.5 + 2.1" | bc)   # 5.6
-# 减法
 echo $(echo "5.5 - 2.1" | bc)   # 3.4  
-# 乘法
 echo $(echo "3.5 * 2.1" | bc)   # 7.35
-# 除法
 echo $(echo "scale=2; 6.5 / 2.1" | bc)   # 3.09
 ```
 
