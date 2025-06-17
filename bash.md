@@ -2,6 +2,10 @@
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 
 ## Commands
+[How to Get Bash Script’s Own Path](https://www.systutorials.com/how-to-get-bash-scripts-own-path/)  
+[Bash Variables](https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html)  
+[]()  
+[]()  
 ```bash
 # 1
 if [ -n "${BASH_SOURCE}" ]; then
