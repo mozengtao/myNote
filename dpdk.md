@@ -1,6 +1,8 @@
+[**Programmer’s Guide**](https://doc.dpdk.org/guides/prog_guide/index.html)  
+[Quality of Service (QoS) Framework](https://doc.dpdk.org/guides-24.07/prog_guide/qos_framework.html)  
+
 [dpdk](https://github.com/DPDK/dpdk) #github  
 [dpdk 编程指南](https://dpdk-docs.readthedocs.io/en/latest/prog_guide/index.html)  
-[Programmer’s Guide](https://doc.dpdk.org/guides/prog_guide/index.html)  
 [**dpdk source code**](https://elixir.bootlin.com/dpdk/latest/source) #online  
 [DPDK API](https://doc.dpdk.org/api/)  
 
