@@ -100,6 +100,31 @@ strace ./script.sh
 echo $$		# 获取 terminal 1 的 PID
 sudo strace -p xxx	# 在 terminal 2 中 trace terminal 1 对应的 bash 进程，xxx 为 terminal 1 的 PID
 source script.sh	# 在 terminal 1 中 source script.sh，观察 terminal 2 的输出
+
+
+# ​​BASH_SOURCE
+	​​BASH_SOURCE 是一个特殊的数组变量​​，用于追踪脚本的执行来源和调用栈关系
+
+#1 获取当前脚本路径
+if [ -n "${BASH_SOURCE}" ]; then
+    MYROOT="`dirname ${BASH_SOURCE}`"
+elif [ -n "${ZSH_NAME}" ]; then
+    MYROOT="`dirname $0`"
+else
+    MYROOT="`pwd`"
+fi
+MYROOT="`readlink -f ${MYROOT}`"
+
+# echo "Current script: ${BASH_SOURCE[0]}"
+
+#2 判断脚本加载方式
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    echo "运行方式: 直接执行"
+    # 主程序逻辑
+else
+    echo "运行方式: source 加载"
+    # 初始化或函数库逻辑
+fi
 ```
 ## eval
 ```bash
