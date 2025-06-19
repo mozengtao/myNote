@@ -69,6 +69,7 @@
 > Grafana 是一款开源的数据可视化与分析平台，专为监控、告警和洞察设计，尤其擅长处理时间序列数据，侧重于可视化工具，需配合数据源（如 Prometheus）使用
 
 ## Prometheus
+[Prometheus](https://prometheus.io/docs/introduction/overview/)  
 > Prometheus 是一个开源的系统监控与警报工具，专注于时间序列数据的收集、存储和查询, 侧重监控和警报
 
 ## Kafka
