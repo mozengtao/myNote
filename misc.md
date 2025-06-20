@@ -1,3 +1,6 @@
+[Git repositories on chromium](https://chromium.googlesource.com/)  
+
+
 ## Algorithms
 [Understanding the Token Bucket Algorithm](https://medium.com/@keployio/understanding-the-token-bucket-algorithm-3cc47e5b3495)  
 [token-bucket](https://github.com/bbeck/token-bucket/tree/master)  
@@ -8,6 +11,9 @@
 [python token-bucket](https://pypi.org/project/token-bucket/)  
 [Traffic Metering and Token Bucket Mechanism](https://support.huawei.com/enterprise/en/doc/EDOC1000178175/f6e567c8/traffic-metering-and-token-bucket-mechanism)  
 [Token bucket](https://lucia-auth.com/rate-limit/token-bucket)  
+[]()  
+[guava(Google core libraries for Java)](https://github.com/google/guava)  
+[]()  
 []()  
 []()  
 []()  
