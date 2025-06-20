@@ -9,6 +9,23 @@ print $(who | awk '{print 1}' | sort | uniq | sed '/ /,/g')
 
 ```
 
+## Netlink
+[Netlink Handbook](https://docs.kernel.org/userspace-api/netlink/index.html)  
+[rfc3549](https://datatracker.ietf.org/doc/html/rfc3549)  
+[Linux, Netlink, and Go - Part 1: netlink](https://mdlayher.com/blog/linux-netlink-and-go-part-1-netlink/)  
+[netlink(7)](https://www.mankier.com/7/netlink)  
+[Implementing a New Custom Netlink Family Protocol](https://insujang.github.io/2019-02-07/implementing-a-new-custom-netlink-family-protocol/)  
+[Introduction to Generic Netlink, or How to Talk with the Linux Kernel](https://www.yaroslavps.com/weblog/genl-intro/)  
+[generic_netlink_howto](https://wiki.linuxfoundation.org/networking/generic_netlink_howto)  
+[Monitoring Linux networking state using netlink](https://olegkutkov.me/2018/02/14/monitoring-linux-networking-state-using-netlink/)  
+[Linux Kernel Series - 13 - Netlink and Generic Netlink Communication - Part 1](https://www.linkedin.com/pulse/netlink-generic-communication-part-1-naveen-kumar-gutti-gnpee/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## ToLearn
 [C Pointers](https://www.c-pointers.com/contents.html)  
 [Data Structures in the Linux Kernel](https://0xax.gitbooks.io/linux-insides/content/DataStructures/linux-datastructures-1.html)  
@@ -18,7 +35,6 @@ print $(who | awk '{print 1}' | sort | uniq | sed '/ /,/g')
 [Kernel Data Structures Linkedlist](https://medium.com/@414apache/kernel-data-structures-linkedlist-b13e4f8de4bf)  
 [How does the kernel implements Linked Lists?](https://kernelnewbies.org/FAQ/LinkedLists)  
 [The Linked-List Structure](https://litux.nl/mirror/kerneldevelopment/0672327201/app01lev1sec2.html)  
-[]()  
 []()  
 []()  
 []()  
