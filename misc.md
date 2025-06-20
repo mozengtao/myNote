@@ -1,12 +1,27 @@
+## Algorithms
+[Understanding the Token Bucket Algorithm](https://medium.com/@keployio/understanding-the-token-bucket-algorithm-3cc47e5b3495)  
+[token-bucket](https://github.com/bbeck/token-bucket/tree/master)  
+[tokenbucket](https://github.com/ChimeraCoder/tokenbucket)  
+[go tokenbucket pkg](https://pkg.go.dev/github.com/adamdrake/tokenbucket@v0.0.0-20190821004517-0cbf9bea2b82)  
+[traffic_shaping](https://www.sce.carleton.ca/faculty/lambadaris/courses/521/supplementary/traffic_shaping.pdf)  
+[**Token Bucket Rate Limiting**](https://intronetworks.cs.luc.edu/current/uhtml/tokenbucket.html)  
+[python token-bucket](https://pypi.org/project/token-bucket/)  
+[Traffic Metering and Token Bucket Mechanism](https://support.huawei.com/enterprise/en/doc/EDOC1000178175/f6e567c8/traffic-metering-and-token-bucket-mechanism)  
+[Token bucket](https://lucia-auth.com/rate-limit/token-bucket)  
+[]()  
+[]()  
+[]()  
+
+
+
 ## Books
+[**An Introduction to Computer Networks**](https://intronetworks.cs.luc.edu/current/uhtml/index.html)  
 [UML Distilled](https://github.com/GunterMueller/Books-3/blob/master/UML%20Distilled%202nd%20ed.pdf)  
 [Python 3 Object-Oriented Programming](https://github.com/jordaniza/pythondocument/blob/master/Python%203%20Object-oriented%20Programming%2C%202nd%20Edition.pdf)  
 [Python 3 Object-Oriented Programming](https://github.com/PacktPublishing/Python-3-Object-Oriented-Programming-Third-Edition/tree/master) #code  
 [Think Python](https://allendowney.github.io/ThinkPython/)  
 [Object-Oriented Software Construction](https://niexiaolong.github.io/Object%20Oriented%20Software%20Construction.pdf)  
 [Object-Oriented Software Construction](https://github.com/gmoral/Books/blob/master/Object%20Oriented%20Software%20Construction-Meyer.pdf)  
-[]()  
-[]()  
 []()  
 []()  
 []()  

@@ -153,3 +153,5 @@ resiliency  / rɪˈzɪlɪjənsi /    弹性；跳回；灵活性
 shelve  /ʃelv / 将（书等）放置在架子上；搁置，将某事放到一旁不予考虑；将…搁在一边；装搁架于；罢免
 evaporate   /ɪˈvæpəreɪt /  使某物）蒸发，挥发，消失；
 minimize    / ˈmɪnɪmaɪz /   使减少到最低限度；贬低，使显得不重要；（尤指在计算机屏幕上）使最小化
+elastic     / ɪˈlæstɪk /    有弹性的；灵活的
+vibe       / vaɪb /      感应，氛围；
