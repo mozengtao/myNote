@@ -24,7 +24,16 @@ git show main	                  # 显示分支最新提交
 git show v1.0	                  # 显示标签详情
 git show HEAD:README.md	        # 显示历史版本文件内容
 git show HEAD^{tree}	          # 显示目录结构
+
+# git-submodule - Initialize, update or inspect submodules
 ```
 
 [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)  
 [Pro Git](https://git-scm.com/book/zh/v2/)  
+[Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules)  
+[Demystifying git submodules](https://www.cyberdemon.org/2024/03/20/submodules.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
