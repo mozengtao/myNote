@@ -3,6 +3,10 @@
 [An Introduction to Programming in Go](https://www.golang-book.com/books/intro)  
 [**Playground**](https://goplay.tools/)  
 
+[Go Modules Reference](https://go.dev/ref/mod)  
+[How to Write Go Code](https://go.dev/doc/code)  
+
+
 [Code for Network Programming with Go](https://github.com/awoodbeck/gnp) #github  
 [GoBooks](https://github.com/dariubs/GoBooks)  
 [Go tutorials](https://zetcode.com/golang/)  
