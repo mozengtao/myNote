@@ -26,6 +26,41 @@ git show HEAD:README.md	        # 显示历史版本文件内容
 git show HEAD^{tree}	          # 显示目录结构
 
 # git-submodule - Initialize, update or inspect submodules
+
+# git-branch - List, create, or delete branches
+git branch --show-current
+
+# git-commit - Record changes to the repository
+git commit --amend            # 修改最近提交的提交信息
+git commit --amend --no-edit  # 将当前修改追加到上一次提交中，不修改提交信息
+
+# git-checkout - Switch branches or restore working tree files
+git checkout -- <file>  # 撤销工作区修改​​
+
+# git-switch - Switch branches
+git switch -            # 切回上一个分支
+git checkout -          # 切回上一个分支
+
+# git-restore - Restore working tree files
+git restore <file>      # 撤销工作区修改
+git checkout -- <file>  # 撤销工作区修改​​
+
+# git-reflog - Manage reflog information
+git reflog
+
+# git-reset - Reset current HEAD to the specified state
+git reset HEAD <file>         # 将文件移出暂存区，但保留修改
+git reset --hard origin/main  # 强制重置到远程状态​
+
+# git-log - Show commit logs
+git log --graph --oneline --decorate --all
+
+# git-rebase - Reapply commits on top of another base tip
+git rebase -i <commit>    # 交互式变基
+git rebase -i HEAD~3      # 合并最近3个提交
+
+# git-clean - Remove untracked files from the working tree
+git clean -fd           # ​​清理未跟踪文件
 ```
 
 [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)  
