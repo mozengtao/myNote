@@ -7,8 +7,9 @@
 [**Syntax and Operators**](https://docs.yoctoproject.org/bitbake/2.2/bitbake-user-manual/bitbake-user-manual-metadata.html#syntax-and-operators)  
 [Recipe Style Guide](https://docs.yoctoproject.org/contributor-guide/recipe-style-guide.html)  
 
-[BitBake User Manual](https://docs.yoctoproject.org/bitbake/)  
-[BitBake User Manual](https://docs.yoctoproject.org/1.6/bitbake-user-manual/bitbake-user-manual.html)  
+[**BitBake User Manual**](https://docs.yoctoproject.org/bitbake/)  
+[**BitBake User Manual**](https://docs.yoctoproject.org/bitbake/2.2/index.html)  
+[**BitBake User Manual**](https://docs.yoctoproject.org/1.6/bitbake-user-manual/bitbake-user-manual.html)  
 [Source Directory Structure](https://docs.yoctoproject.org/ref-manual/structure.html#source-directory-structure)  
 [Building your own recipes from first principles](https://wiki.yoctoproject.org/wiki/Building_your_own_recipes_from_first_principles)  
 [Writing BitBake Recipes](https://www.multitech.net/developer/software/corecdp/development/writing-bitbake-recipes/)  
@@ -16,13 +17,12 @@
 []()  
 []()  
 []()  
-[]()  
 
 ## Setup BitBake environment
 [Yocto 入门文档](https://pages.openeuler.openatom.cn/embedded/docs/build/html/openEuler-23.09/yocto/getting_started.html)  
 [Hello World Example](https://docs.yoctoproject.org/bitbake/2.0/bitbake-user-manual/bitbake-user-manual-hello.html)  
-[BitBake User Manual](https://docs.yoctoproject.org/bitbake/index.html)  
-[]()  
+[**BitBake User Manual**](https://docs.yoctoproject.org/bitbake/index.html)  
+[Yocto Project Reference Manual](https://docs.yoctoproject.org/ref-manual/index.html)  
 []()  
 []()  
 
