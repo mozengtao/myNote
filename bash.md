@@ -8,6 +8,50 @@
 []()  
 []()  
 
+## bash interactive mode
+```bash
+# 1 使用子 shell
+dirs=(
+#    "/xxx/xxx/path1"
+#    "/xxx/xxx/path2"
+)
+
+for dir in "${dirs[@]}"; do
+    (
+        echo "entering $dir ..."
+        cd -- "$dir" || exit 1			# 使用--避免目录名以-开头的问题
+        
+        # 启动bash的交互式shell, 操作完成后​​，输入exit或按Ctrl+D返回
+        bash -i
+        
+        echo "leaving $dir ..."
+    )
+done
+
+echo "all done!"
+
+# 2 使用pushd/popd
+org_dir=$(pwd)
+
+dirs=(
+    "/home/morrism/x1/dir1"
+    "/home/morrism/x1/dir2"
+)
+
+for dir in "${dirs[@]}"; do
+    pushd "$dir" >/dev/null || exit 1
+    echo "current dir: $(pwd)"
+    
+    # 启动当前用户的默认shell​​(bash, zsh, ...)​，输入exit或按Ctrl+D返回
+    $SHELL
+    
+    popd >/dev/null
+done
+
+# return to org directory
+cd "$org_dir" || exit
+```
+
 ## Utilities
 ### xclip
 [xclip](https://www.mankier.com/1/xclip)  
