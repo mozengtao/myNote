@@ -18,6 +18,14 @@
 []()  
 []()  
 
+## Setup BitBake environment
+[Yocto 入门文档](https://pages.openeuler.openatom.cn/embedded/docs/build/html/openEuler-23.09/yocto/getting_started.html)  
+[Hello World Example](https://docs.yoctoproject.org/bitbake/2.0/bitbake-user-manual/bitbake-user-manual-hello.html)  
+[BitBake User Manual](https://docs.yoctoproject.org/bitbake/index.html)  
+[]()  
+[]()  
+[]()  
+
 ## Variables Glossary
 [**Variables Glossary**](https://docs.yoctoproject.org/ref-manual/variables.html)  
 ```bash
