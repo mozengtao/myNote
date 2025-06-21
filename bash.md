@@ -8,6 +8,29 @@
 []()  
 []()  
 
+## Utilities
+### xclip
+[xclip](https://www.mankier.com/1/xclip)  
+[Copy and paste at the Linux command line with xclip](https://opensource.com/article/19/7/xclip)  
+[]()  
+[]()  
+```bash
+# 复制文本到剪贴板
+xclip -sel clip file_name
+tail -n 30 logfile.log | xclip -sel clip
+
+echo "hello world" | xclip -selection clipboard
+echo "hello world" | xclip -sel c
+
+#
+xclip -selection clipboard -o	# Paste from clipboard to terminal
+xclip -s c -o
+
+# aliases
+alias cbcopy="xclip -selection clipboard"
+alias cbpaste="xclip -selection clipboard -o"
+```
+
 ## Commands
 [How to Get Bash Script’s Own Path](https://www.systutorials.com/how-to-get-bash-scripts-own-path/)  
 [Bash Variables](https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html)  
