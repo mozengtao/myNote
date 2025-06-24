@@ -1,3 +1,16 @@
+[**An Introduction to Computer Networks**](https://intronetworks.cs.luc.edu/current/uhtml/index.html)  
+[**TCP/IP Tutorial and Technical Overview**](https://www.redbooks.ibm.com/redbooks/pdfs/gg243376.pdf)  
+[**TCP-IP_Illustrated**](https://github.com/WeitaoZhu/TCP-IP_Illustrated/tree/master)  
+[TCP/IP FOR DUMMIES](https://edu.anarcho-copy.org/TCP%20IP%20-%20Network/TCP-IP%20For%20Dummies.pdf)  
+[TCP/IP Protocol Suite](https://vaibhav2501.wordpress.com/wp-content/uploads/2012/02/tcp_ip-protocol-suite-4th-ed-b-forouzan-mcgraw-hill-2010-bbs.pdf)  
+[Active Queue Management (AQM)](https://www.excentis.com/blog/blog-6/active-queue-management-aqm-the-key-to-reducing-latency-81)  
+[Awesome Networking](https://github.com/facyber/awesome-networking)  
+[COMPUTER NETWORKS](https://csc-knu.github.io/sys-prog/books/Andrew%20S.%20Tanenbaum%20-%20Computer%20Networks.pdf)  
+[Internet-Routing-Architectures](https://github.com/camoverride/lit/tree/master)  
+[Proportional Integral Controller Enhanced (PIE)](https://datatracker.ietf.org/doc/rfc8033/)  
+[]()  
+
+
 [如何学习 Linux 内核网络协议栈](https://segmentfault.com/a/1190000021227338)  
 [IP Fragmentation](https://homepages.uc.edu/~thomam/Net1/Misc/ip_fragmentation.html)  
 [一文理解 K8s 容器网络虚拟化](https://www.0xffffff.org/2022/03/20/43-k8s/)  
