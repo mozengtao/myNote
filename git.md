@@ -2,6 +2,11 @@
 
 Git管理的是修改，而不是文件
 
+# -C <path>
+Run as if git was started in <path> instead of the current working directory.
+git -C cms status
+git -C topPath -C subModulePath
+
 # git-worktree - Manage multiple working trees
 git worktree add <path> <branch>      	    # 创建新工作树并检出指定分支
 git worktree add <path> -b <new-branch>	    # 创建新工作树并新建分支

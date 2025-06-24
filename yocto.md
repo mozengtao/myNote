@@ -1,4 +1,8 @@
 [Yocto Project Documentation](https://docs.yoctoproject.org/)  
+[Yocto Project Reference Manual](https://docs.yoctoproject.org/ref-manual/index.html)  
+[Using the devtool command-line tool](https://docs.yoctoproject.org/dev-manual/devtool.html)  
+[]()  
+[]()  
 []()  
 []()  
 
