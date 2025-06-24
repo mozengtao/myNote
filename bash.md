@@ -111,8 +111,14 @@ unset MYROOT
 
 # 2
 ```
-
-## Bash brace expansion
+## Shell Expansions
+[Shell Expansions](https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html)  
+[Shell Variables](https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+### Bash brace expansion
 ```bash
 {start..end}
 {start..end..increment}
