@@ -8,12 +8,53 @@
 []()  
 []()  
 
+## 在终端固定位置每秒刷新显示文件内容
+```bash
+# 1
+while true; do
+  # move cursor to top-left corner(0,0) + clear the terminal screen
+  # \033[0;0H moves the cursor to the top-left corner
+  # \033[2J clears the screen
+  printf "\033[0;0H\033[2J"		# ​清除当前屏幕内容并重置光标位置​​
+  
+  # show timestamp
+  echo "[Last updated: $(date +%T)]"
+  cat /path/to/file | grep --color -E 'WARNING|ERROR'
+  
+  sleep 1
+done
+
+# 
+while sleep 1; do
+  # 清屏并重置光标到(0,0)
+  printf "\033[0;0H\033[2J"
+  
+  # 显示文件内容（支持带行号）
+  echo "==== FILE CONTENTS ($(date)) ===="
+  display_lines=$(( $(tput lines) - 3 ))	# tput lines 用来​​获取当前终端的行数（高度）​​，以字符行数为单位
+  cat -n /path/to/file | tail -n ${display_lines}
+done
+
+# 2
+watch -n1 -ct "date +'%H:%M:%S'; cat /path/to/file"
+watch -n1 "grep --color -E 'CRITICAL|Failed' /var/log/syslog"
+
+# 3
+while true; do
+  clear
+  date +'%H:%M:%S';
+  echo "CPU: $(top -bn1 | awk '/Cpu/{print $2}')% | Mem: $(free -m | awk '/Mem/{print $3}')MB"
+  tail -n 5 /var/log/syslog
+  sleep 1
+done
+```
+
 ## bash interactive mode
 ```bash
 # 1 使用子 shell
 dirs=(
-#    "/xxx/xxx/path1"
-#    "/xxx/xxx/path2"
+#    "/path/to/dir1"
+#    "/path/to/dir2"
 )
 
 for dir in "${dirs[@]}"; do
