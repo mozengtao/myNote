@@ -155,3 +155,4 @@ evaporate   /ɪˈvæpəreɪt /  使某物）蒸发，挥发，消失；
 minimize    / ˈmɪnɪmaɪz /   使减少到最低限度；贬低，使显得不重要；（尤指在计算机屏幕上）使最小化
 elastic     / ɪˈlæstɪk /    有弹性的；灵活的
 vibe       / vaɪb /      感应，氛围；
+disruption  / dɪsˈrʌpʃn /   扰乱，中断

@@ -1,9 +1,15 @@
 ## 在线编辑器
 [vscode](https://vscode.dev/)  
 
-## man pages
-[Linux man pages](https://www.mankier.com/)  
+## manuals
+[ManKier(Linux man pages)](https://www.mankier.com/)  
 [tldr](https://tldr.inbrowser.app/)  
+[Rico's cheatsheets](https://devhints.io/)  
+[ReadmeX](https://readmex.com/en-US)  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ## 在线代码运行环境
 [code playground](https://programiz.pro/ide/c)  
@@ -50,9 +56,6 @@
 ## 编程风格
 [Google Style Guides](https://google.github.io/styleguide/)  
 
-## CheatSheets
-[tldr](https://tldr.inbrowser.app/)  
-[Rico's cheatsheets](https://devhints.io/)  
 
 ## 学习资源
 [Operating Systems Principles & Practice (Volume 1, 2, 3)](https://www.kea.nu/files/textbooks/ospp/)  
