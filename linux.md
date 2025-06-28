@@ -31,6 +31,25 @@
 [Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
+## UIO
+[The Userspace I/O HOWTO](https://egeeks.github.io/kernal/uio-howto/index.html)  
+[Userspace I/O (UIO)](https://byu-cpe.github.io/ecen427/documentation/uio/)  
+[The Userspace I/O HOWTO](https://www.kernel.org/doc/html/v4.18/driver-api/uio-howto.html)  
+[UIO: user-space drivers](https://lwn.net/Articles/232575/)  
+[Understanding Linux Provided UIO Kernel Drivers](https://xterra2.avnet.com/uio/understanding-the-linux-uio-framework)  
+[]()  
+[]()  
+[VFIO - “Virtual Function I/O”](https://docs.kernel.org/driver-api/vfio.html)  
+[VFIO](https://doc.dpdk.org/guides-20.08/linux_gsg/linux_drivers.html)  
+[]()  
+[]()  
+[IOMMU introduction](https://terenceli.github.io/%E6%8A%80%E6%9C%AF/2019/08/04/iommu-introduction)  
+[What is IOMMU and how it can be used?](https://blog.3mdeb.com/2021/2021-01-13-iommu/)  
+[IOMMU(input–output memory management unit)](https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit)  
+[Input-Output Memory Management Unit (IOMMU)](https://instinct.docs.amd.com/projects/amdgpu-docs/en/latest/conceptual/iommu.html)  
+[]()  
+[]()  
+[]()  
 
 ## fork, execve, mmap, exit
 [Introduction to system calls](https://how.dev/answers/introduction-to-system-calls)  
