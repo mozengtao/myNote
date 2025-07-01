@@ -378,12 +378,19 @@ man builtins
 # a program foo with the following interface
 foo -c green|red|blue -s low|high -f <file> -h
 
-# source the following file to be used
+# 为名为 foo 的​​自定义命令​​实现了​​智能选项补全​​功能
 function _foo() {
+    # 当前正在输入的词（用户键入但未完成的词）
     local curr=$2
+    # 上一个完成的词（通常是已经输入的选项）
     local prev=$3
 
+    # 命令支持的所有选项列表
     local opts="-c -s -f -h"
+    # COMPREPLY 数组 是 Bash 自动补全机制的核心变量，存储自动补全的建议列表
+    # -W "green red blue"：指定备选词列表
+    # -f：进行文件名补全
+    # -- $curr：只显示与当前输入匹配的候选项
     case $prev in
         -c) COMPREPLY=( $(compgen -W "green red blue" -- $curr) );;
         -s) COMPREPLY=( $(compgen -W "low high" -- $curr) );;
@@ -392,6 +399,7 @@ function _foo() {
     esac
 }
 
+# 指定使用函数 _foo 进行补全目标命令 foo
 complete -F _foo foo
 
 ```
