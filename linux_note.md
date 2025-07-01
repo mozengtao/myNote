@@ -1,6 +1,15 @@
 [Linux Device Driver Tutorials](https://github.com/Embetronicx/Tutorials/tree/master/Linux/Device_Driver)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
 
+[THE INSIDE STORY ON SHARED LIBRARIES AND DYNAMIC LOADING](https://cseweb.ucsd.edu/~gbournou/CSE131/the_inside_story_on_shared_libraries_and_dynamic_loading.pdf)  
+[A look at dynamic linking](https://lwn.net/Articles/961117/)  
+[Shared Libraries: Understanding Dynamic Loading](https://amir.rachum.com/shared-libraries/)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## Commands
 ```bash
 # print all login users

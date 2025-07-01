@@ -1,6 +1,7 @@
 
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 [Shell Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)  
+[Notes](https://johannst.github.io/notes/intro.html#notes)  
 []()  
 []()  
 []()  

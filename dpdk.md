@@ -1,11 +1,14 @@
-[ReadmeX DPDK](https://readmex.com/en-US/DPDK/dpdk/page-18fde8de6-6adc-4a25-8704-31c9f1196d7f)  
+[**dpdk source code**](https://elixir.bootlin.com/dpdk/latest/source) #online  
+[**dpdk**](https://github.com/DPDK/dpdk) #github  
 
 [**Programmer’s Guide**](https://doc.dpdk.org/guides/prog_guide/index.html)  
+[Core Components](https://doc.dpdk.org/guides/prog_guide/overview.html)  
+
+[ReadmeX DPDK](https://readmex.com/en-US/DPDK/dpdk/page-18fde8de6-6adc-4a25-8704-31c9f1196d7f)  
+
 [Quality of Service (QoS) Framework](https://doc.dpdk.org/guides-24.07/prog_guide/qos_framework.html)  
 
-[dpdk](https://github.com/DPDK/dpdk) #github  
 [dpdk 编程指南](https://dpdk-docs.readthedocs.io/en/latest/prog_guide/index.html)  
-[**dpdk source code**](https://elixir.bootlin.com/dpdk/latest/source) #online  
 [DPDK API](https://doc.dpdk.org/api/)  
 
 
@@ -54,12 +57,8 @@ DPDK依赖的主要技术
 [Managing Processors Availability](https://www.baeldung.com/linux/managing-processors-availability)  
 [rte_mbuf.h File Reference](https://doc.dpdk.org/api/rte__mbuf_8h.html)  
 [Mbuf Library](https://doc.dpdk.org/guides/prog_guide/mbuf_lib.html)  
-**An mbuf with One Segment**  
-![../_images/mbuf1.svg](https://doc.dpdk.org/guides/_images/mbuf1.svg)  
-**An mbuf with Three Segments**  
-![../_images/mbuf2.svg](https://doc.dpdk.org/guides/_images/mbuf2.svg)  
 [mbuf和mempool](https://zhuanlan.zhihu.com/p/543676558)  
-**[libmoon](https://github.com/libmoon/libmoon)**  
+[libmoon](https://github.com/libmoon/libmoon)  
 [rte_ring.h File Reference](https://doc.dpdk.org/api/rte__ring_8h.html)  
 [rte_mbuf_dyn.h File Reference](https://doc.dpdk.org/api/rte__mbuf__dyn_8h.html#ac5f25ac463dea2d1b3f452fa8f430650)  
 [librte_net Directory Reference](https://doc.dpdk.org/api-19.11/dir_0c4a44b1891135ef8e3f51c114dfc40e.html)  
