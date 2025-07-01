@@ -360,11 +360,39 @@ log_ok "备份完成"
 ```
 
 ## builtins
+[Bash Builtin Commands](https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtins)  
+[bash-builtins](https://manpages.ubuntu.com/manpages/jammy/man7/bash-builtins.7.html)  
+[complete](https://www.gnu.org/software/bash/manual/bash.html#index-complete)  
+[]()  
 ```bash
 man builtins
 
+## :
 : [arguments]
 		No effect; the command does nothing beyond expanding arguments and performing any specified redirections.  The return status is zero.
+
+## complete
+
+# Skeleton to copy/paste for writing simple completions.
+
+# a program foo with the following interface
+foo -c green|red|blue -s low|high -f <file> -h
+
+# source the following file to be used
+function _foo() {
+    local curr=$2
+    local prev=$3
+
+    local opts="-c -s -f -h"
+    case $prev in
+        -c) COMPREPLY=( $(compgen -W "green red blue" -- $curr) );;
+        -s) COMPREPLY=( $(compgen -W "low high" -- $curr) );;
+        -f) COMPREPLY=( $(compgen -f -- $curr) );;
+        *)  COMPREPLY=( $(compgen -W "$opts" -- $curr) );;
+    esac
+}
+
+complete -F _foo foo
 
 ```
 
