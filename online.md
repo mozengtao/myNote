@@ -29,6 +29,13 @@
 [腾讯元宝](https://yuanbao.tencent.com/chat/)  
 [阿里通义](https://tongyi.aliyun.com/qianwen/)  
 
+## packet decoder
+[Hex Packet Decoder](https://hpd.gasmi.net/)  
+[Packetor](https://packetor.com/)  
+[Packet Hexdump Decoder](http://eon.sadjad.org/phd/)  
+[]()  
+
+
 ## 画图工具
 [Napkin](https://www.napkin.ai/) #根据文字内容转换为可视化的视图
 > Napkin turns your text into visuals so sharing your ideas is quick and effective  
