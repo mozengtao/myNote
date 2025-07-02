@@ -1,15 +1,26 @@
 [Linux Device Driver Tutorials](https://github.com/Embetronicx/Tutorials/tree/master/Linux/Device_Driver)  
 [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
 
+[]()  
+[Class Notes](https://www.cs.fsu.edu/~baker/realtime/restricted/notes/)  
+[How-to-Make-a-Computer-Operating-System](https://github.com/SamyPesse/How-to-Make-a-Computer-Operating-System/tree/master)  
+[]()  
+[Linux Kernel debugging with QEMU](https://blog.memzero.de/kernel-debugging-qemu/)  
+[]()  
+[**Computer Science from the Bottom Up**](https://www.bottomupcs.com/index.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+[System V Application Binary Interface](https://refspecs.linuxbase.org/elf/gabi4+/contents.html)  
+[zSeries ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/zSeries/lzsabi0_zSeries/book1.html)  
+
+## dynamic linking
 [THE INSIDE STORY ON SHARED LIBRARIES AND DYNAMIC LOADING](https://cseweb.ucsd.edu/~gbournou/CSE131/the_inside_story_on_shared_libraries_and_dynamic_loading.pdf)  
 [A look at dynamic linking](https://lwn.net/Articles/961117/)  
 [Shared Libraries: Understanding Dynamic Loading](https://amir.rachum.com/shared-libraries/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[How-to-Make-a-Computer-Operating-System](https://github.com/SamyPesse/How-to-Make-a-Computer-Operating-System/tree/master)  
-
+[Dynamic linking on Linux (x86_64)](https://blog.memzero.de/dynamic-linking-linux-x86-64/)  
+[Dynamic Linking](https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html)  
 
 ## Commands
 ```bash
@@ -30,7 +41,7 @@ print $(who | awk '{print 1}' | sort | uniq | sed '/ /,/g')
 [generic_netlink_howto](https://wiki.linuxfoundation.org/networking/generic_netlink_howto)  
 [Monitoring Linux networking state using netlink](https://olegkutkov.me/2018/02/14/monitoring-linux-networking-state-using-netlink/)  
 [Linux Kernel Series - 13 - Netlink and Generic Netlink Communication - Part 1](https://www.linkedin.com/pulse/netlink-generic-communication-part-1-naveen-kumar-gutti-gnpee/)  
-[]()  
+[Computer Systems A Programmer’s Perspective](https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/books/CSAPP_2016.pdf)  
 []()  
 []()  
 []()  

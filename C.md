@@ -10,6 +10,18 @@
 []()  
 []()  
 
+## pthread
+[Multithreaded Programming (POSIX pthreads Tutorial)](https://randu.org/tutorials/threads/)  
+[POSIX Threads API](https://www.cs.fsu.edu/~baker/realtime/restricted/notes/pthreads.html)  
+[POSIX thread (pthread) libraries](https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## 动态链接 和 静态链接
 [Program Library HOWTO](https://tldp.org/HOWTO/Program-Library-HOWTO/index.html)  
 [How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)  
