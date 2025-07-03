@@ -1,5 +1,12 @@
 [[nvim]]
 
+[Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
+[Vim help files](https://vimhelp.org/#reference_toc)  
+[Mapping keys in Vim](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1))  
+[]()  
+[]()  
+[]()  
+
 ## vim 常用技巧
 ```bash
 ## 从外部缓冲区粘贴
