@@ -3,12 +3,19 @@
 [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
 [Vim help files](https://vimhelp.org/#reference_toc)  
 [Mapping keys in Vim](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1))  
-[]()  
+[vim-unimpaired](https://github.com/tpope/vim-unimpaired/tree/master)  
+[Buffers](https://evantravers.com/articles/series/git-gud-at-vim/)  
+[Complete Guide to Buffers in Vim](https://linuxhandbook.com/vim-buffers/)  
+[Buffers](https://mkaz.blog/working-with-vim/buffers)  
 []()  
 []()  
 
 ## vim 常用技巧
 ```bash
+## VIM cmds
+:r[ead] !{cmd}      # Execute {cmd} and insert its standard output below the cursor or the specified line.
+
+
 ## 从外部缓冲区粘贴
 :set paste
 
