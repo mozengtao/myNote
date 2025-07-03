@@ -1,7 +1,10 @@
 [[nvim]]
 
 [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
+[Learn Vim the Smart Way](https://learnvim.irian.to/)  
 [Vim help files](https://vimhelp.org/#reference_toc)  
+
+
 [Mapping keys in Vim](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1))  
 [vim-unimpaired](https://github.com/tpope/vim-unimpaired/tree/master)  
 [Buffers](https://evantravers.com/articles/series/git-gud-at-vim/)  
@@ -9,12 +12,24 @@
 [Buffers](https://mkaz.blog/working-with-vim/buffers)  
 []()  
 []()  
+[Vim Cheat Sheet](https://vim.rtorr.com/)  
 
 ## vim 常用技巧
 ```bash
 ## VIM cmds
 :r[ead] !{cmd}      # Execute {cmd} and insert its standard output below the cursor or the specified line.
 
+## Session
+A Session keeps the Views for all windows, plus the global settings.
+:mks[ession][!] [file]
+vim -S Session.vim
+or
+:source Session.vim
+
+## viminfo
+The viminfo file can be used to remember that information, which enables you to continue where you left off
+:wv[iminfo][!] [file]
+:rv[iminfo][!] [file]
 
 ## 从外部缓冲区粘贴
 :set paste
