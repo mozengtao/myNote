@@ -1,3 +1,84 @@
+
+## idomatic python
+[Idiomatic Python. Coding the smart way](https://medium.com/the-andela-way/idiomatic-python-coding-the-smart-way-cc560fa5f1d6)  
+[Intermediate and Advanced Software Carpentry](https://intermediate-and-advanced-software-carpentry.readthedocs.io/en/latest/index.html)  
+[Writing Idiomatic Python](https://github.com/xx299x/ebooks/tree/master/favorite)  
+[]()  
+[]()  
+[]()  
+```python
+# Chained comparison operators
+if x <= y <= z:
+  # do something
+
+# Use the Falsy & Truthy Concepts
+(x, y) = (True, 0)
+# x is truthy
+if x:
+  # do something
+else:
+  # do something else
+# y is falsy
+if not y:
+  # do something
+ls = [2, 5]
+if ls:
+  # do something
+
+# Ternary Operator replacement
+a = True
+value = 1 if a else 0
+print(value)
+
+# Use the ‘in’ keyword
+city = 'Nairobi'
+found = city in {'Nairobi', 'Kampala', 'Lagos'}
+
+cities = [‘Nairobi’, ‘Kampala’, ‘Lagos’]
+for city in cities:
+  print(city)
+
+# Use ‘return’ to evaluate expressions, in addition to return values
+def check_equal(x, y):
+  return x == y
+
+# Multiple assignment
+x = y = z = 'foo'
+
+# Formatting Strings
+def user_info(user):
+  return 'Name: {user.name} Age: {user.age}'.format(user=user)
+
+# List comprehension
+ls = [element for element in range(10) if not(element % 2)]
+
+# enumerate(list)
+ls = list(range(10))
+for index, value in enumerate(ls):
+  print(value, index)
+
+# Dictionary Comprehension
+emails = {user.name: user.email for user in users if user.email}
+
+# Sets
+ls1 = [1, 2, 3, 4, 5]
+ls2 = [4, 5, 6, 7, 8]
+elements_in_both = list( set(ls1) & set(ls2) )
+print(elements_in_both)
+
+# Set Comprehension
+elements = [1, 3, 5, 2, 3, 7, 9, 2, 7]
+unique_elements = {element for element in elements}
+print(unique_elements)
+
+# Use the default parameter of ‘dict.get’ to provide default values
+auth = payload.get('auth_token', 'Unauthorized')
+
+# Don’t Repeat Yourself (DRY)
+if user:
+  print('{0}\n{1}\n{0}'.format('-'*30, user))
+```
+
 ## 高级特性
 ```python
 # 切片
@@ -22,7 +103,7 @@ l[:]       # 原样复制一个 list
 iteration 即 给定一个 list 或者 tuple ，通过 for 循环遍历这个 list 或 tuple
 Python 的 的迭代通过 for ... in 来完成，只要是可迭代对象，都可以使用 for ... in 进行迭代
 
-for i in list(rang(4)):
+for i in list(range(4)):
     print(i)
 
 for i in (1, 2, 3):

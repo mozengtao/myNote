@@ -156,3 +156,4 @@ minimize    / ˈmɪnɪmaɪz /   使减少到最低限度；贬低，使显得不
 elastic     / ɪˈlæstɪk /    有弹性的；灵活的
 vibe       / vaɪb /      感应，氛围；
 disruption  / dɪsˈrʌpʃn /   扰乱，中断
+idiomatic   / ɪdiəˈmætɪk /  语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的
