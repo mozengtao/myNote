@@ -10,9 +10,10 @@
 [Buffers](https://evantravers.com/articles/series/git-gud-at-vim/)  
 [Complete Guide to Buffers in Vim](https://linuxhandbook.com/vim-buffers/)  
 [Buffers](https://mkaz.blog/working-with-vim/buffers)  
-[]()  
+[Why I love Vim: It’s the lesser-known features that make it so amazing](https://www.freecodecamp.org/news/learn-linux-vim-basic-features-19134461ab85/)  
 []()  
 [Vim Cheat Sheet](https://vim.rtorr.com/)  
+[]()  
 
 ## vim 常用技巧
 ```bash

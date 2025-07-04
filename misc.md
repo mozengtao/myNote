@@ -6,6 +6,42 @@
 []()  
 []()  
 []()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+## learnbyexample
+[**learnbyexample**](https://github.com/learnbyexample)  
+[learnbyexample books](https://learnbyexample.github.io/books/)  
+[scripting_course](https://github.com/learnbyexample/scripting_course)  
+[learnbyexample.github.io](https://github.com/learnbyexample/learnbyexample.github.io)  
+[Rust By Example](https://github.com/rust-lang/rust-by-example)  
+[Go by Example](https://gobyexample.com/)  
+[Java Coding Samples](https://www.cs.utexas.edu/~scottm/cs307/codingSamples.htm)  
+[C++ By Example](https://cppbyexample.com/)  
+[C by Example](https://www.cbyexample.com/)  
+[Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
+[Learn Vim the Smart Way](https://learnvim.irian.to/)  
+[Learn Programming By Example](https://www.learnbyexample.org/)  
+[Learn X in Y minutes](https://learnxinyminutes.com/)  
+[learn-x-by-doing-y](https://github.com/aquadzn/learn-x-by-doing-y)  
+[learn-x-by-doing-y](https://aquadzn.github.io/learn-x-by-doing-y/)  
+[learngo](https://github.com/inancgumus/learngo/tree/master)  
+[makefiletutorial](https://github.com/chaselambda/makefiletutorial)  
+[Learn Makefiles With the tastiest examples](https://makefiletutorial.com/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 
 
 ## Algorithms
