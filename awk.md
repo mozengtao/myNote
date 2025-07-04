@@ -1,6 +1,101 @@
 
+[GAWK](https://www.gnu.org/software/gawk/manual/gawk.html)  
+[The GNU Awk User's Guide](https://ftp.gnu.org/old-gnu/Manuals/gawk-3.1.1/html_node/)  
+[Effective AWK Programming](https://www.mssl.ucl.ac.uk/swift/om/sw/help/man/gawk.html)  
+[Awk Quick Reference](https://www.grymoire.com/Unix/AwkRef.html)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+[sed & awk](https://docstore.mik.ua/orelly/unix/sedawk/index.htm)  
+[awk reference](https://www3.physnet.uni-hamburg.de/physnet/Tru64-Unix/HTML/APS32DTE/WKXXXXXX.HTM)  
+[awk learnbyexample](https://learnbyexample.github.io/learn_gnuawk/awk-introduction.html)  
+[sed & awk](https://doc.lagout.org/operating%20system%20/linux/Sed%20%26%20Awk.pdf)  
+[CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)  
+[Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
+
 ## Tips
 ```bash
+# structured according to awk’s definition of a program: condition { actions }
+awk '{if ($0 ~ /pattern/) print $0}'	# not idiomatic for awk, so not recommended
+awk '$0 ~ /pattern/ {print $0}'			# condition { actions }
+awk '/pattern/ {print $0}'				# implicitly applies to $0
+awk '/pattern/ {print}'					# print alone, by default, prints $0
+awk '/pattern/'							# the default action is print
+
+awk '(NR%2 && /pattern/) || (!(NR%2) && /anotherpattern/)'
+awk '{sub(/pattern/, "foobar")} 1'		# the same as "sed 's/pattern/foobar/'"
+
+awk 'NR % 6'            # prints all lines except lines 6,12,18...
+awk 'NR > 5'            # prints from line 6 onwards (like tail -n +6, or sed '1,5d')
+awk '$2 == "foo"'       # prints lines where the second field is "foo"
+awk 'NF >= 6'           # prints lines with 6 or more fields
+awk '/foo/ && /bar/'    # prints lines that match /foo/ and /bar/, in any order
+awk '/foo/ && !/bar/'   # prints lines that match /foo/ but not /bar/
+awk '/foo/ || /bar/'    # prints lines that match /foo/ or /bar/ (like grep -e 'foo' -e 'bar')
+awk '/foo/,/bar/'       # prints from line matching /foo/ to line matching /bar/, inclusive
+awk 'NF'                # prints only nonempty lines (or: do not print empty lines, where NF==0)
+awk 'NF--'              # removes last field and prints the line
+awk '$0 = NR" "$0'      # prepends line numbers (assignments are valid in conditions)
+awk '!a[$0]++'          # suppresses duplicated lines! (figure out how it works)
+
+seq 1 30 | awk 'ORS = NR % 5 ? FS : RS'
+
+# Self-assignments
+awk -v FS=';' -v OFS=',' 1   # doesn't work!,  awk does not rebuild $0 (that is, replacing FS with OFS) until some field is modified
+awk -v FS=';' -v OFS=',' '$1=$1'
+awk '$1=$1' FS=\; OFS=,		 # any argument that has a "=" in it is treated as a variable assignment instead of a file to read
+
+# Build strings with separators
+string = string ";" somedata				# not expected
+string = string sep somedata; sep = ";"		# right way to Build strings with separators
+
+$ cat matrix.txt
+a1;a2;a3;a4;a5
+b1;b2;b3;b4;b5
+c1;c2;c3;c4;c5
+
+awk -F\; '{
+for(i=1;i<=NF;i++)
+	r[i]=r[i] sep $i;
+	sep=FS
+}
+END {
+	for(i=1;i<=NF;i++)
+		print r[i]
+}' matrix.txt
+
+# Two-file processing
+awk 'NR == FNR { # some actions; next} # other condition {# other actions}' file1.txt file2.txt
+
+# prints lines that are both in file1.txt and file2.txt (intersection)
+awk 'NR == FNR{a[$0];next} $0 in a' file1.txt file2.txt
+# prints lines that are only in file1.txt and not in file2.txt
+awk 'NR == FNR{a[$0];next} !($0 in a)' file2.txt file1.txt
+# prints lines that are only in fil2.txt and not in file1.txt
+awk 'NR == FNR{a[$0];next} !($0 in a)' file1.txt file2.txt
+
+cat data.txt
+20081010 1123 xxx
+20081011 1234 def
+20081012 0933 xyz
+
+cat map.txt
+def payment
+xyz deposit
+xxx balance
+
+# use information from a map file to modify a data file
+awk 'NR == FNR{a[$1]=$2;next} {$3=a[$3]}1' map.txt data.txt
+
+# replace each number with its difference from the maximum
+awk 'NR == FNR{if($0 > max) max = $0;next} {$0 = max - $0}1' file.txt file.txt
+
+
 # 打印进程的环境变量
 awk '{print $0}' FS="=" RS="\000" /proc/1648/environ
 
@@ -214,53 +309,4 @@ match(string, regexp, array)	# string: 待搜索的字符串, regexp: 字符串�
 array[0]:
 array[1], array[2], ... : 正则表达式中括号对应的子串
 
-# 1
-INPUT: error 404: Not found
-{
-    if (match($0, /error [0-9]+/)) {
-        print "Match Location:", RSTART, "Length:", RLENGTH
-        print "Match Content:", substr($0, RSTART, RLENGTH)
-    }
-}
-Output:
-Match Location: 1 Length: 9
-Match Content: error 404
-
-# 2
-INPUT: error 404: Not found
-{
-    if (match($0, /error ([0-9]+): (.+)/, arr)) {
-        print "Error Code:", arr[1]
-        print "Error Msg:", arr[2]
-    }
-}
-OUTPUT:
-Error Code: 404
-Error Msg: Not found
-
-# 3
-INPUT: username=alice age=30
-{
-    if (match($0, /([a-z]+)=([0-9]+)/, arr)) {
-        print "Key:", arr[1], "Value:", arr[2]
-    }
-}
-OUTPUT:
-Key: age Value: 30
 ```
-
-[GAWK](https://www.gnu.org/software/gawk/manual/gawk.html)  
-
-[AWK: String functions](https://tecadmin.net/awk-string-functions/)  
-
-[Idiomatic awk](https://backreference.org/2010/02/10/idiomatic-awk/index.html)  
-[awk](http://awk.freeshell.org/)  
-[Sed and Awk 101 Hacks](https://vds-admin.ru/sed-and-awk-101-hacks)  
-[AWK实战](https://book.saubcy.com/AwkInAction/HOWTO.html)  
-[The GNU Awk User's Guide](https://ftp.gnu.org/old-gnu/Manuals/gawk-3.1.1/html_node/)  
-[sed & awk](https://docstore.mik.ua/orelly/unix/sedawk/index.htm)  
-[awk reference](https://www3.physnet.uni-hamburg.de/physnet/Tru64-Unix/HTML/APS32DTE/WKXXXXXX.HTM)  
-[awk learnbyexample](https://learnbyexample.github.io/learn_gnuawk/awk-introduction.html)  
-[sed & awk](https://doc.lagout.org/operating%20system%20/linux/Sed%20%26%20Awk.pdf)  
-[CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)  
-[Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
