@@ -1524,9 +1524,16 @@ echo ${month[3]}
 []()  
 []()  
 []()  
-[]()  
-[]()  
+[How to Master Bash Regex Patterns](https://labex.io/tutorials/shell-how-to-master-bash-regex-patterns-390416)  
+[How to Use Regex in Bash Scripting](https://labex.io/tutorials/shell-how-to-use-regex-in-bash-scripting-392579)  
 ```bash
+# ​​语法​​	​                 ​方向​​	​​          示例输入​​	        ​输出​​	​​  说明​
+# ${var%pattern}	    结尾最短匹配	file.txt.bak	file.txt	删除最短匹配后缀
+# ${var%%pattern}	    结尾最长匹配	file.txt.bak	file	    删除最长匹配后缀
+# ${var#pattern}	    开头最短匹配	/usr/bin/ls	    usr/bin/ls	删除最短匹配前缀
+# ${var##pattern}	    开头最长匹配	/usr/bin/ls	    ls	        删除最长匹配前缀
+# ​​${var/%pattern/str}​​	​​结尾精确替换​​	eth1np0	        eth1	    替换结尾匹配部分
+
 ### 1. 获取字符串长度
 string="hello"
 echo ${#string} # 5
@@ -1564,6 +1571,9 @@ echo ${string%.txt} # path/to/file
 #### 从结尾删除最长匹配
 string="path/to/file.txt"
 echo ${string%%/*}  # path
+
+interface="eth0np0"
+base_if=${interface/%np[0-9]/}  # 得到 "eth0"
 
 ### 6. 转换大小写
 #### 转换为小写
