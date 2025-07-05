@@ -1521,9 +1521,9 @@ echo ${month[3]}
 []()  
 []()  
 []()  
-[]()  
-[]()  
-[]()  
+[Regular expressions](https://computing.stat.berkeley.edu/tutorial-using-bash/regex.html)  
+[How to Master String Manipulation in Bash Scripting](https://labex.io/tutorials/shell-how-to-master-string-manipulation-in-bash-scripting-392539)  
+[**Manipulating Strings**](https://tldp.org/LDP/abs/html/string-manipulation.html)  
 [How to Master Bash Regex Patterns](https://labex.io/tutorials/shell-how-to-master-bash-regex-patterns-390416)  
 [How to Use Regex in Bash Scripting](https://labex.io/tutorials/shell-how-to-use-regex-in-bash-scripting-392579)  
 ```bash
