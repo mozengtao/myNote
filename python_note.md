@@ -1,9 +1,26 @@
+[Python Tips](https://book.pythontips.com/en/latest/index.html)  
+[Python Like You Mean It](https://www.pythonlikeyoumeanit.com/index.html)  
+[Python Tutorial | Learn Python Language](https://www.wscubetech.com/resources/python)  
+[How to Learn Python (Step-by-Step)](https://www.dataquest.io/blog/learn-python-the-right-way/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+## generator
+[Python 3: Using "yield from" in Generators - Part 1](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-1.html)  
+[Python 3: Using "yield from" in Generators - Part 2](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-2.html)  
+[Python Generators](https://www.dataquest.io/blog/python-generators-tutorial/)  
+[How to Use Python Generators – Explained With Code Examples](https://www.freecodecamp.org/news/how-to-use-python-generators/)  
+[]()  
+
 
 ## idomatic python
 [Idiomatic Python. Coding the smart way](https://medium.com/the-andela-way/idiomatic-python-coding-the-smart-way-cc560fa5f1d6)  
 [Intermediate and Advanced Software Carpentry](https://intermediate-and-advanced-software-carpentry.readthedocs.io/en/latest/index.html)  
 [Writing Idiomatic Python](https://github.com/xx299x/ebooks/tree/master/favorite)  
-[]()  
 []()  
 []()  
 ```python
