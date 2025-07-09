@@ -97,6 +97,14 @@ BOOT_IMAGE=(hd0,msdos1)/vmlinuz-4.18.0-305.25.1.el8_4.x86_64 root=/dev/mapper/cl
 |   Other Hardware-specific Chips                                     |                                    
 +---------------------------------------------------------------------+        
 
+## memory barriers
+> 内存屏障是一种同步原语，主要用于多处理器和多线程环境中对内存访问的顺序进行控制。内存屏障可以确保特定的内存操作按照预期的顺序执行，防止编译器和处理器对指令进行不符合预期的优化和重排序
+[Linux 内核内存屏障原理](http://www.shiyu.xn--6qq986b3xl/docs/ShiYu-AI/classify005/note069.html)  
+[LINUX KERNEL MEMORY BARRIERS](https://www.kernel.org/doc/Documentation/memory-barriers.txt)  
+[]()  
+[]()  
+[]()  
+
 ## Page Cache
 > Page Cache（页面缓存）​​ 是Linux内核用于缓存磁盘文件数据的内存区域，旨在通过减少磁盘I/O次数来提升系统性能。当应用程序访问文件时，数据首先被加载到Page Cache中，后续的读写操作可直接在内存中完成，从而避免频繁访问低速磁盘
 [The Page Cache and Page Writeback](https://github.com/firmianay/Life-long-Learner/blob/master/linux-kernel-development/chapter-16.md)  

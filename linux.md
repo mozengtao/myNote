@@ -233,8 +233,7 @@ pgrep
 
 [linux performance tool](https://hugh712.gitbooks.io/benchmark/content/chapter1.html)  
 
-- linux kernel
-	```bash
+```bash
 	morrism@localhost ~ $ uname -r
 	4.18.0-305.25.1.el8_4.x86_64
 
@@ -456,8 +455,7 @@ pgrep
 	simplemodule.c
 	Makefile:
 		obj-m := simplemodule.o
-
-	```
+```
 
 [Process Groups and Terminal Signaling](https://cs162.org/static/readings/ic221_s16_lec17.html)  
 [File descriptors, pipes, terminals, user sessions, process groups and daemons](https://biriukov.dev/)  

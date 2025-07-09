@@ -2,6 +2,7 @@
 [**dpdk**](https://github.com/DPDK/dpdk) #github  
 
 [**Programmer’s Guide**](https://doc.dpdk.org/guides/prog_guide/index.html)  
+[Programmer’s Guide](https://doc.dpdk.org/guides-24.07/prog_guide/index.html)  
 [Core Components](https://doc.dpdk.org/guides/prog_guide/overview.html)  
 
 [ReadmeX DPDK](https://readmex.com/en-US/DPDK/dpdk/page-18fde8de6-6adc-4a25-8704-31c9f1196d7f)  
@@ -11,7 +12,10 @@
 [dpdk 编程指南](https://dpdk-docs.readthedocs.io/en/latest/prog_guide/index.html)  
 [DPDK API](https://doc.dpdk.org/api/)  
 
-
+[Link Bonding Poll Mode Driver Library](https://doc.dpdk.org/guides/prog_guide/link_bonding_poll_mode_drv_lib.html)  
+[]()  
+[]()  
+[]()  
 
 ## 基本概念
 EAL(Environment Abstraction Layer)，负责为应用间接访问底层的资源，比如内存空间、线程、设备、定时器等
