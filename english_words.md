@@ -157,3 +157,7 @@ elastic     / ɪˈlæstɪk /    有弹性的；灵活的
 vibe       / vaɪb /      感应，氛围；
 disruption  / dɪsˈrʌpʃn /   扰乱，中断
 idiomatic   / ɪdiəˈmætɪk /  语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的
+revoke  / rɪˈvoʊk / 撤回，撤销；（桥牌、惠斯特等牌戏中）有牌不跟
+retain  / rɪˈteɪn / 保持，保留；保存，储存；记住；付定金聘定（尤指律师）；留用（员工）
+intact  / ɪnˈtækt / 完好无损的
+

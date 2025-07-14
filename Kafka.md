@@ -1,3 +1,4 @@
+[What is Apache Kafka?](https://learn.conduktor.io/kafka/what-is-apache-kafka/)  
 [conduktor](https://www.conduktor.io/)
 [How to Install Apache Kafka on Windows?](https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows/)
 
@@ -7,6 +8,13 @@
 [KSQLDB 101](https://developer.confluent.io/courses/ksqldb/intro/)
 [ksqlDB](https://github.com/confluentinc/ksql) #github
 
+[librdkafka](https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html)  
+[Kafka入门实战教程](https://www.cnblogs.com/edisonchou/p/kafka_study_notes_part1.html)  
+[Kafka 开发快速入门](https://xie.infoq.cn/article/0d832da5558aff98529af397e)  
+[Kafka基本原理](https://blog.csdn.net/weixin_45366499/article/details/106943229)  
+[]()  
+[]()  
+[]()  
 
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统
 -
@@ -429,13 +437,4 @@ kafka-consumer-groups.sh
 
 
 
--
-- 帮助文档
-	- [librdkafka](https://docs.confluent.io/platform/current/clients/librdkafka/html/rdkafka_8h.html)
-	- [Kafka入门实战教程](https://www.cnblogs.com/edisonchou/p/kafka_study_notes_part1.html)
-	- [Kafka 开发快速入门](https://xie.infoq.cn/article/0d832da5558aff98529af397e)
-	- [Kafka基本原理](https://blog.csdn.net/weixin_45366499/article/details/106943229)
-	- []()
-	- []()
-	- []()
-	- []()
+

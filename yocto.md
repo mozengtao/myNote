@@ -85,6 +85,15 @@ recipe-sysroot/              # 完整的 sysroot 内容
     ├── usr/lib/libfoo.a     # 静态库（仅编译时使用）
     └── usr/share/pkgconfig/ # pkg-config 文件（仅编译时使用）
 
+# bitbake-layers
+bitbake-layers show-layers
+    show current configured layers.
+
+bitbake-layers show-recipes
+    Lists available recipes and the layers that provide them.
+
+bitbake -s
+    Show current and preferred versions of all recipes.
 ```
 
 ## Recipe
@@ -101,11 +110,11 @@ S = "${WORKDIR}/git"
 LIC_FILES_CHKSUM = "file://hello.c;beginline=3;endline=21;md5=58e..."
 
 do_compile() {
-oe_runmake
+    oe_runmake
 }
 do_install() {
-install -d ${D}${bindir}
-install -m 0755 hello ${D}${bindir}
+    install -d ${D}${bindir}
+    install -m 0755 hello ${D}${bindir}
 }
 
 # tar.inc
