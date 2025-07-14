@@ -21,6 +21,14 @@
 		- 不包含sections，只包含segments(PT_LOAD/PT_NOTE)
 
 ## elf分析工具
+[GNU Binutils](https://sourceware.org/binutils/docs/binutils/index.html)  
+[Linux nm Command with Practical Examples](https://labex.io/tutorials/linux-linux-nm-command-with-practical-examples-422841)  
+[Figuring out corrupt stacktraces on ARM(addr2line)](https://eocanha.org/blog/2020/10/16/figuring-out-corrupt-stacktraces-on-arm/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 ```bash
 addr2line
 	convert addresses into file names and line numbers.

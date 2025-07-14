@@ -1,126 +1,37 @@
 [**Debugging with GDB**](https://developer.apple.com/library/archive/documentation/DeveloperTools/gdb/gdb/gdb_toc.html)
 [**Debugging with GDB**](https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html#SEC_Contents)
+[gdb(1)](https://www.mankier.com/1/gdb)  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ```bash
+gdb -ex r --args ./a.out --input=data.txt
+
+
 run, r	运行debug程序
-    Start debugged program.
-
 break, brea, bre, br, b		在指定位置设置断点
-    Set breakpoint at specified location.
-    break [PROBE_MODIFIER] [LOCATION] [thread THREADNUM] [-force-condition] [if CONDITION]
-
 next, n			执行下一条语句
-    Step program, proceeding through subroutine calls.
-    Usage: next [N]
-
 list, l			显示指定函数或行号
-    List specified function or line.
-
 print, inspect, p	打印表达式的值
-    Print value of expression EXP.
-    Usage: print [[OPTION]... --] [/FMT] [EXP]
-
 quit, exit, q		退出
-    Exit gdb.
-    Usage: quit [EXPR] or exit [EXPR]
-
 up					选择并打印上一级的栈帧
-    Select and print stack frame that called this one. An argument says how many frames up to go.
-
 down, dow, do		选择并打印下一级的栈帧
-    Select and print stack frame called by this one. An argument says how many frames down to go.
-
 backtrace, where, bt	打印函数调用的栈帧
-    Print backtrace of all stack frames, or innermost COUNT frames.
-    Usage: backtrace [OPTION]... [QUALIFIER]... [COUNT | -COUNT]
-
 display					每次程序停下时打印指定表达式的值
-    Print value of expression EXP each time the program stops.
-    Usage: display[/FMT] EXP
-
 undisplay				取消程序停下时打印指定表达式的值
-    Cancel some expressions to be displayed when program stops.
-    Usage: undisplay [NUM]...
-    Arguments are the code numbers of the expressions to stop displaying.
-    No argument means cancel all automatic-display expressions.
-    "delete display" has the same effect as this command.
-    Do "info display" to see current list of code numbers.
-
 step, s					单步调试
-    Step program until it reaches a different source line.
-    Usage: step [N]
-    Argument N means step N times (or till program stops for another reason).
-
 continue, fg, c			继续执行当前程序
-    Continue program being debugged, after signal or breakpoint.
-    Usage: continue [N]
-
 finish, fin				执行到选定的栈帧结束
-    Execute until selected stack frame returns.
-    Usage: finish
-
 watch					设定观测点
-    Set a watchpoint for EXPRESSION.
-    Usage: watch [-location] EXPRESSION
-    Options:
-    -location
-        This evaluates EXPRESSION and watches the memory to which is refers.
-        -l can be used as a short form of -location.
-    A watchpoint stops execution of your program whenever the value of an expression changes.
-
 info, inf, i			查看程序的debug信息
-    Generic command for showing things about the program being debugged.
-    List of info subcommands:
-    info address -- Describe where symbol SYM is stored.
-    info args -- All argument variables of current stack frame or those matching REGEXPs.
-    info breakpoints, info b -- Status of specified breakpoints (all user-settable breakpoints if no argument).
-......
-
 delete, del, d			删除断点
-    Delete all or some breakpoints.
-    Usage: delete [BREAKPOINTNUM]...
-    Arguments are breakpoint numbers with spaces in between.
-    To delete all breakpoints, give no argument.
-
 whatis					打印表达式数据类型
-    Print data type of expression EXP.
-    Only one level of typedefs is unrolled.  See also "ptype".
-
 target					连接目标机器或进程，例如target record-full可以用来进行reverse debug
-    Connect to a target machine or process.
-    The first argument is the type or protocol of the target machine.
-    Remaining arguments are interpreted by the target protocol.  For more
-    information on the arguments for a particular protocol, type
-    `help target ' followed by the protocol name.
-    List of target subcommands:
-    ......
-        target record-full -- Log program while executing and replay execution from log.
-
-    reverse-next, rn
-    Step program backward, proceeding through subroutine calls.
-    Like the "reverse-step" command as long as subroutine calls do not happen;
-    when they do, the call is treated as one instruction.
-    Argument N means do this N times (or till program stops for another reason).
-
 set						设置变量的值，可用于改变debug的程序的运行时行为
-    Evaluate expression EXP and assign result to variable VAR.
-    Usage: set VAR = EXP
-    This uses assignment syntax appropriate for the current language
-
 disable, disa, dis		禁止断点
-	Disable all or some breakpoints.
-	Usage: disable [BREAKPOINTNUM]...
-	Arguments are breakpoint numbers with spaces in between.
-	To disable all breakpoints, give no argument.
-	A disabled breakpoint is not forgotten, but has no effect until re-enabled.
-	List of disable subcommands:
-		disable breakpoints -- Disable all or some breakpoints.
-		disable display -- Disable some expressions to be displayed when program stops.
-		......
-
 enable, en				使能断点
-	Enable all or some breakpoints.
-	Usage: enable [BREAKPOINTNUM]...
 ```
 
 [7 pro tips for using the GDB step command](https://opensource.com/article/22/12/gdb-step-command)
