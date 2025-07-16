@@ -1,6 +1,13 @@
+[GCC and Make: Compiling, Linking and Building C/C++ Applications](https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html)  
+
 [**GCC online documentation**](https://gcc.gnu.org/onlinedocs/)  
 [Using the GNU Compiler Collection](https://gcc.gnu.org/onlinedocs/gcc/index.html#SEC_Contents)  
 
+[Options for Directory Search](https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html)  
+[Options Controlling the Preprocessor](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html)  
+[Options for Linking](https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html)  
+[]()  
+[]()  
 
 [Standard Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Standard-Predefined-Macros.html)  
 [Common Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Common-Predefined-Macros.html)  
