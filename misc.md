@@ -191,37 +191,9 @@
 [learnbyexample tags](https://learnbyexample.github.io/tags/)  
 [Structure and Interpretation of Computer Programs](https://web.mit.edu/6.001/6.037/sicp.pdf) #pdf #online  
 [snippet](https://github.com/xgfone/snippet) #online #github  
-- eklitzke.org
-	- [Using Ptrace For Fun And Profit](https://eklitzke.org/ptrace)
-- [第4章 ext文件系统机制原理剖析](https://www.cnblogs.com/f-ck-need-u/p/7016077.html)
-- changes `tmpfs` size **without need to unmount partition and hence not disturbing running apps**
-	- ```bash
-	  sudo mount -o remount,size=1048576 /tmp
-	  
-	  root@slot-120:/var/volatile [P2]# cat /etc/fstab
-	  # gainspeed fstab
-	  
-	  /dev/root            /                    auto       defaults              1  1
-	  proc                 /proc                proc       defaults              0  0
-	  devpts               /dev/pts             devpts     mode=0620,gid=5       0  0
-	  usbdevfs             /proc/bus/usb        usbdevfs   noauto                0  0
-	  tmpfs                /run                 tmpfs      mode=0755,nodev,nosuid,strictatime,size=400M 0  0
-	  tmpfs                /var/volatile        tmpfs      defaults,size=400M              0  0
-	  
-	  
-	  root@slot-120:/var/volatile [P2]# df -h
-	  Filesystem      Size  Used Avail Use% Mounted on
-	  ...
-	  tmpfs           400M  143M  258M  36% /var/volatile
-	  ...
-	  
-	  root@slot-120:/var/volatile [P2]# mount -o remount,size=524288000 /var/volatile/
-	  root@slot-120:/var/volatile [P2]# df -h
-	  Filesystem      Size  Used Avail Use% Mounted on
-	  ...
-	  tmpfs           500M  144M  357M  29% /var/volatile
-	  ...
-	  ```
+[Using Ptrace For Fun And Profit](https://eklitzke.org/ptrace)  
+[第4章 ext文件系统机制原理剖析](https://www.cnblogs.com/f-ck-need-u/p/7016077.html)  
+
 # [Essential Programming Books](https://www.programming-books.io/) #online  
 [books](https://github.com/ffisk/books) #online  
 [Programming Books](https://www.theinsaneapp.com/programming) #online  
@@ -251,7 +223,6 @@
 [LINUX阅码场](https://cloud.tencent.com/developer/column/77185)  
 [泰晓科技](https://tinylab.org/categories/)  
 [宋宝华](https://blog.csdn.net/21cnbao?type=blog)  
-[裸机思维](https://cloud.tencent.com/developer/column/88423)  
 [编程珠玑](https://cloud.tencent.com/developer/column/78593) #tolearn  
 [CSAPP](https://wdxtub.com/categories/CSAPP/) #tolearn  
 [linux 相关](https://fanlv.fun/tags/Linux/) #tolearn  
@@ -270,6 +241,10 @@
 [开发者内功修炼](https://github.com/yanfeizhang/coder-kung-fu)  
 
 ## Books
+[Computer Science from the Bottom Up](https://www.cs.swarthmore.edu/~kwebb/cs31/s15/bucs/index.html)  
+[**Computer Science from the Bottom Up**](https://www.bottomupcs.com/index.html)  
+[Operating Systems: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
+[**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)  
 [Linux Kernel Development (3rd Edition)](https://www.doc-developpement-durable.org/file/Projets-informatiques/cours-&-manuels-informatiques/Linux/Linux%20Kernel%20Development,%203rd%20Edition.pdf)  
 [Linux内核完全注释(修正版v3.0)](https://github.com/Yuandong-Chen/Linux-0.11/blob/master/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E6%B3%A8%E9%87%8A(%E4%BF%AE%E6%AD%A3%E7%89%88v3.0).pdf)  
 [嵌入式Linux应用开发完全手册](http://book.100ask.net/) #linux  
@@ -288,15 +263,11 @@
 [LDD3](https://www.iitg.ac.in/asahu/cs421/books/LDD3e.pdf)  
 [Essential C++](http://jxz1.j9p.com/pc/dfhghgh.pdf) #online #pdf  
 [The Linux Programming Interface](https://static1.squarespace.com/static/59c4375b8a02c798d1cce06f/t/59cfb6a032601e11ca5b1cbe/1506784947301/The+Linux+Programming+Interface.pdf) #linux #online
-[Computer Science from the Bottom Up](https://www.cs.swarthmore.edu/~kwebb/cs31/s15/bucs/index.html)  
-[Operating Systems: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
-[**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)  
 [Python 3 Object Oriented Programming](https://psi1.ir/wp-content/uploads/2021/09/Python-3-Object-Oriented-Programming-Dusty-Phillips-2010.pdf) #python  
 [The Object-Oriented Thought Process](https://coddyschool.com/upload/Addison_Wesley_The_Object_Orient.pdf)  
 [Linux内核设计与实现](https://awesome-programming-books.github.io/linux/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89.pdf)  
 [Understanding Linux Network Internals](http://www.embeddedlinux.org.cn/linux_net/0596002556/toc.html) #tcpip  
-[TCP/IP Architecture, Design, and Implementation in Linux](https://www.academia.edu/39957211/TCP_IP_ARCHITECTURE_DESIGN_AND_IMPLEMENTATION_IN_LINUX) #tcpip  
-	- Linux Kernel Networking: Implementation and Theory #tcpip
+[TCP/IP Architecture, Design, and Implementation in Linux](https://www.academia.edu/39957211/TCP_IP_ARCHITECTURE_DESIGN_AND_IMPLEMENTATION_IN_LINUX) Linux Kernel Networking: Implementation and Theory #tcpip
 [The Linux Kernel Module Programming Guide](http://www.embeddedlinux.org.cn/linuxmod/) #lkm  
 [Embedded Linux Primer: A Practical, Real-World Approach](http://www.embeddedlinux.org.cn/EmbeddedLinuxPrimer/) #linux  
 [Embedded Linux Primer](http://www.mosaic-industries.com/embedded-systems/_media/pdfs/white-papers/embedded-linux-primer.pdf) #linux  
@@ -339,7 +310,6 @@
 []()  
 [Linux Kernel Development](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html)  
 [linux-kernel-development](https://github.com/firmianay/Life-long-Learner/tree/master/linux-kernel-development)  
-[**Computer Science from the Bottom Up**](https://www.bottomupcs.com/index.html)  
 [Address Space](https://linux-kernel-labs.github.io/refs/heads/master/lectures/address-space.html)  
 [Deep into Linux and Beyond](https://wxdublin.gitbooks.io/deep-into-linux-and-beyond/content/index.html)  
 [System V Application Binary Interface](https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html)  
