@@ -263,7 +263,6 @@
 [LDD3](https://www.iitg.ac.in/asahu/cs421/books/LDD3e.pdf)  
 [Essential C++](http://jxz1.j9p.com/pc/dfhghgh.pdf) #online #pdf  
 [The Linux Programming Interface](https://static1.squarespace.com/static/59c4375b8a02c798d1cce06f/t/59cfb6a032601e11ca5b1cbe/1506784947301/The+Linux+Programming+Interface.pdf) #linux #online
-[Python 3 Object Oriented Programming](https://psi1.ir/wp-content/uploads/2021/09/Python-3-Object-Oriented-Programming-Dusty-Phillips-2010.pdf) #python  
 [The Object-Oriented Thought Process](https://coddyschool.com/upload/Addison_Wesley_The_Object_Orient.pdf)  
 [Linux内核设计与实现](https://awesome-programming-books.github.io/linux/Linux%E5%86%85%E6%A0%B8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%EF%BC%88%E7%AC%AC%E4%B8%89%E7%89%88%EF%BC%89.pdf)  
 [Understanding Linux Network Internals](http://www.embeddedlinux.org.cn/linux_net/0596002556/toc.html) #tcpip  
@@ -289,8 +288,6 @@
 [How Computers Boot Up](https://manybutfinite.com/post/how-computers-boot-up/)  
 [C语言FAQ](https://c-faq.com/index.html)  
 [Linux Storage](http://linux-training.be/storage/index.html)  
-[Linux工具快速教程](https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html)  
-[Linux 命令大全](https://hezhiqiang.gitbook.io/linux/)  
 [OpenBSD manual page server](https://man.openbsd.org/)  
 [Coreutils](https://www.gnu.org/software/coreutils/) #sourcecode  
 [Decoded: GNU coreutils](https://www.maizure.org/projects/decoded-gnu-coreutils/)  
