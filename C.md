@@ -5,9 +5,9 @@
 [C/C++ Runtime Startup](https://etherealwake.com/2021/09/crt-startup/)  
 [Explanation of crt0, crt1, crt1, and crtn (C- Runtime)](https://thejat.in/learn/explanation-of-crt0-crt1-crt1-and-crtn-c-runtime)  
 [CRT: C Run Time Before Starting main()](https://vishalchovatiya.com/posts/crt-run-time-before-starting-main/)  
-[]()  
-[]()  
-[]()  
+[**Linux-dlsym**](https://lambertxiao.github.io/posts/linux-dlsym/doc/)  
+[真正理解 RTLD_NEXT 的作用](https://csstormq.github.io/)  
+[Dynamic Linking Example](https://vishalchovatiya.com/posts/dynamic-linking-example/)  
 []()  
 []()  
 
