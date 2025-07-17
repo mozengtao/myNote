@@ -1,6 +1,17 @@
 [C Online Compiler](https://www.programiz.com/c-programming/online-compiler/)  
 [va_list in C: exploring ft_printf](https://medium.com/@turman1701/va-list-in-c-exploring-ft-printf-bb2a19fcd128)  
 
+[Understanding the C Runtime: crt0, crt1, crti, and crtn](https://www.inferara.com/en/blog/c-runtime/)  
+[C/C++ Runtime Startup](https://etherealwake.com/2021/09/crt-startup/)  
+[Explanation of crt0, crt1, crt1, and crtn (C- Runtime)](https://thejat.in/learn/explanation-of-crt0-crt1-crt1-and-crtn-c-runtime)  
+[CRT: C Run Time Before Starting main()](https://vishalchovatiya.com/posts/crt-run-time-before-starting-main/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## C library
 [ctl](https://github.com/glouw/ctl)  
 > C TEMPLATE LIBRARY (CTL) is a fast compiling, type safe, header only, template-like library for ISO C99/C11.
