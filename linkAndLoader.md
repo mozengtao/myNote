@@ -1,32 +1,3 @@
-- 程序是如何被执行的
-	- ![image_1669879976428_0.png](../assets/image_1669879976428_0_1674956782349_0.png)
-		-
-- 编译器
-	- 程序编译过程
-		- ![image_1669880285084_0.png](../assets/image_1669880285084_0_1674956847432_0.png)
-			- ![image_1669880432377_0.png](../assets/image_1669880432377_0_1674956902736_0.png)
-	- 链接
-		- [[静态链接]]
-			- 静态库
-		- 动态链接
-			- 共享库
-- 加载器
-	- 加载器从磁盘读取可执行文件并加载到内存
-		- 初始化寄存器，栈，第一个函数的参数
-		- 跳转至程序入口
--
-- 各种工具的作用
-	- Compiler
-		- 链接器产生汇编文件，包括assembly, pseudo-instructions,
-		  directives, etc.
-	- Assembler
-		- 汇编器产生对象文件，包括machine code, missing symbols,
-		  some layout information, etc.
-	- Linker
-		- 链接器链接多个对象文件，生成一个可执行文件
-	- Loader
-		- 加载器负责将程序载入内存，并跳转到程序入口
-
 [Linkers & Loaders](https://www.wh0rd.org/books/linkers-and-loaders/linkers_and_loaders.pdf)  
 [How statically linked programs run on Linux](https://eli.thegreenplace.net/2012/08/13/how-statically-linked-programs-run-on-linux)  
 [Load-time relocation of shared libraries](https://eli.thegreenplace.net/2011/08/25/load-time-relocation-of-shared-libraries)  
@@ -41,3 +12,33 @@
 [Linker scripts](https://users.informatik.haw-hamburg.de/~krabat/FH-Labor/gnupro/5_GNUPro_Utilities/c_Using_LD/ldLinker_scripts.html)  
 [An Introduction to the GNU Compiler and Linker](https://gcc.gnu.org/wiki/Building_Cross_Toolchains_with_gcc?action=AttachFile&do=get&target=billgatliff-toolchains.pdf)
 [Loading the dynamic linker and executable](https://chromium.googlesource.com/native_client/src/native_client/+/master/docs/initial_dynamic_load.md)  
+[Linking & Loading](https://www.cs.fsu.edu/~baker/opsys/notes/linking.html)  
+[Everything You Never Wanted To Know About Linker Script](https://mcyoung.xyz/2021/06/01/linker-script/)  
+[Understanding the Memory Layout of Linux Executables](https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4)  
+[Diving Into Lazy Binding on Linux for DEC Alpha](https://www.aurxenon.io/posts/diving-into-lazy-binding-on-linux-for-dec-alpha/)  
+[All about Procedure Linkage Table](https://maskray.me/blog/2021-09-19-all-about-procedure-linkage-table)  
+[All about Global Offset Table](https://maskray.me/blog/2021-08-29-all-about-global-offset-table)  
+[]()  
+[]()  
+[]()  
+[]()  
+[Linkers 1](https://www.airs.com/blog/archives/38)  
+[Linkers 2](https://www.airs.com/blog/archives/39)  
+[Linkers 3](https://www.airs.com/blog/archives/40)  
+[Linkers 4](https://www.airs.com/blog/archives/41)  
+[Linkers 5](https://www.airs.com/blog/archives/42)  
+[Linkers 6](https://www.airs.com/blog/archives/43)  
+[Linkers 7](https://www.airs.com/blog/archives/44)  
+[Linkers 8](https://www.airs.com/blog/archives/45)  
+[Linkers 9](https://www.airs.com/blog/archives/46)  
+[Linkers 10](https://www.airs.com/blog/archives/47)  
+[Linkers 11](https://www.airs.com/blog/archives/48)  
+[Linkers 12](https://www.airs.com/blog/archives/49)  
+[Linkers 13](https://www.airs.com/blog/archives/50)  
+[Linkers 14](https://www.airs.com/blog/archives/51)  
+[Linkers 15](https://www.airs.com/blog/archives/52)  
+[Linkers 16](https://www.airs.com/blog/archives/53)  
+[Linkers 17](https://www.airs.com/blog/archives/54)  
+[Linkers 18](https://www.airs.com/blog/archives/55)  
+[Linkers 19](https://www.airs.com/blog/archives/56)  
+[Linkers 20](https://www.airs.com/blog/archives/57)  
