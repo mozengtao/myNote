@@ -2,12 +2,157 @@
 [Python Like You Mean It](https://www.pythonlikeyoumeanit.com/index.html)  
 [Python Tutorial | Learn Python Language](https://www.wscubetech.com/resources/python)  
 [How to Learn Python (Step-by-Step)](https://www.dataquest.io/blog/learn-python-the-right-way/)  
+[Python 101](https://python101.pythonlibrary.org/index.html)  
+[**Learn Python Programming**](https://www.programiz.com/python-programming)  
+[]()  
+[]()  
+[**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
+[]()  
+
+## time
+[A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)  
+[time — Time access and conversions](https://docs.python.org/3/library/time.html)  
+[Python Datetime Tutorial: Manipulate Times, Dates, and Time Spans](https://www.dataquest.io/blog/python-datetime-tutorial/)  
 []()  
 []()  
 []()  
+
+
+## subprocess
+[The subprocess Module: Wrapping Programs With Python](https://realpython.com/python-subprocess/)  
+[A Guide to Python Subprocess](https://stackify.com/a-guide-to-python-subprocess/)  
+[subprocess — Subprocess management](https://docs.python.org/3/library/subprocess.html)  
+[shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)  
+[How to Use Python's Subprocess Module](https://earthly.dev/blog/python-subprocess/)  
+[python-and-pipes](https://lyceum-allotments.github.io/series/)  
+[]()  
+```python
+# command execution
+import subprocess
+# Simple command execution
+#result = subprocess.run(['ls', '-l'], capture_output=True, text=True)
+result = subprocess.run(shlex.split("ls -l"), capture_output=True, text=True)
+print(result.stdout)
+
+# With additional parameters
+result = subprocess.run(
+    ['python', 'script.py'],
+    capture_output=True,
+    text=True,
+    timeout=60,
+    check=True
+)
+print(result.stdout)
+
+# How to Pipe Subprocess Outputs to Inputs of Subprocesses
+process1 = subprocess.run(["cat","sample.txt"],capture_output=True,text=True)
+process2 = subprocess.run(["grep","-n","Python"],capture_output=True,text=True,input=process1.stdout)
+print(process_2.stdout)
+
+# example
+import subprocess
+import re
+import sys
+import shlex
+import time
+
+def get_nomad_job_id(job_name="vmc-evc-morris-dentist"):
+    try:
+        cmd = f"nomad job status"
+        job_status = subprocess.run(shlex.split(cmd), capture_output=True, text=True, check=True)
+        my_job_status = subprocess.run(['grep', 'vmc-evc-morris-dentist'], input=job_status.stdout, text=True, capture_output=True, check=True)
+        output = my_job_status.stdout.strip()
+        match = re.search(rf"^({job_name}[^\s]+)", output)
+        if match:
+            return match.group(1)
+    except subprocess.CalledProcessError as e:
+      raise RuntimeError(f"Failed to get Nomad job ID: {e.stderr.strip()}") from e
+    except Exception as e:
+      raise RuntimeError(f"An error occurred while getting Nomad job ID: {str(e)}") from e
+
+def execute_confd_command(job_id, confd_cmd, filter):
+    try:
+        nomad_cmd = (
+          "nomad", "alloc", "exec",
+          "-task", "vmc",
+          "-job", job_id,
+          "sh", "-c", confd_cmd
+        )
+
+        result = subprocess.run(
+            nomad_cmd,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+
+        #return result.stdout.strip()
+        return [line for line in result.stdout.splitlines() if re.search(filter, line)]
+
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Failed to execute confd command: {e.stderr.strip()}") from e
+        sys.exit(1)
+
+def main():
+  try:
+      job_id = get_nomad_job_id()
+      print(f"Nomad Job ID: {job_id}")
+
+      while True:
+          confd_cmd = (
+            "confd_cli -u admin <<EOF\n"
+            "show configuration DOCS-IF3-MIB docsIf3BondingGrpCfgTable | tab\n"
+            "EOF"
+          )
+          mib_output = execute_confd_command(job_id, confd_cmd, 'downstream')
+
+          confd_cmd = (
+            "confd_cli -u admin <<EOF\n"
+            "show ccap docsis docs-mac-domain mac-domain morris-dentist_md1_0 downstream-dynamic-bonding-group | tab\n"
+            "EOF"
+          )
+          cli_output = execute_confd_command(job_id, confd_cmd, 'dsdbg')
+
+          if len(mib_output) == len(cli_output):
+              print("MIB output:")
+              print('\n'.join(mib_output))
+              print("CLI output:")
+              print('\n'.join(cli_output))
+          # Wait for 5 seconds before the next iteration
+          time.sleep(5)
+      return 0
+  except Exception as e:
+      print(f"Error: {e}", file=sys.stderr)
+      return 1
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+## re
+[Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
+[Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  
+[re — Regular expression operations](https://docs.python.org/3/library/re.html)  
+[pythex](https://pythex.org/)  
+[Regular Expression HOWTO](https://docs.python.org/3/howto/regex.html)  
 []()  
 []()  
 []()  
+```python
+import re
+
+prefix = "foo"
+string = "foo123x bar fle"
+
+regex = rf"^({prefix}[^\s]+)"
+re_obj = re.compile(regex)
+
+match = re_obj.search(string)
+if match:
+    print(match.group(1))
+
+```
+
 
 ## generator
 [Python 3: Using "yield from" in Generators - Part 1](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-1.html)  
