@@ -1,3 +1,4 @@
+[Compilation – Assemblers, Linkers, & Loaders](https://www.cs.cornell.edu/courses/cs3410/2025sp/lectures/14-compilation-notes.pdf)  
 [GCC and Make: Compiling, Linking and Building C/C++ Applications](https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html)  
 
 [**GCC online documentation**](https://gcc.gnu.org/onlinedocs/)  
