@@ -32,10 +32,10 @@
 			  morrism@localhost /tmp/x $ ll -d /tmp
 			  drwxrwxrwt. 13 root root 4096 Jul  4 09:52 /tmp
 			  ```
-- 参考文档
-	- [Linux permissions: SUID, SGID, and sticky bit](https://www.redhat.com/sysadmin/suid-sgid-sticky-bit)
-	- [What is SUID, SGID and Sticky bit ?](https://www.thegeekdiary.com/what-is-suid-sgid-and-sticky-bit/)
-	- [How Do I Set Up Setuid, Setgid, and Sticky Bits on Linux?](https://www.liquidweb.com/kb/how-do-i-set-up-setuid-setgid-and-sticky-bits-on-linux/)
-	- [euid, ruid, suid](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/euid-ruid-suid)
-	- [Understanding Unix UIDs](https://dtrugman.medium.com/unraveling-the-unix-uid-conundrum-fbd5b13004fd)
-	- [SetUID Rabbit Hole](https://0xdf.gitlab.io/2022/05/31/setuid-rabbithole.html)
+
+[Linux permissions: SUID, SGID, and sticky bit](https://www.redhat.com/sysadmin/suid-sgid-sticky-bit)  
+[What is SUID, SGID and Sticky bit ?](https://www.thegeekdiary.com/what-is-suid-sgid-and-sticky-bit/)  
+[How Do I Set Up Setuid, Setgid, and Sticky Bits on Linux?](https://www.liquidweb.com/kb/how-do-i-set-up-setuid-setgid-and-sticky-bits-on-linux/)  
+[euid, ruid, suid](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/euid-ruid-suid)  
+[Understanding Unix UIDs](https://dtrugman.medium.com/unraveling-the-unix-uid-conundrum-fbd5b13004fd)  
+[SetUID Rabbit Hole](https://0xdf.gitlab.io/2022/05/31/setuid-rabbithole.html)  

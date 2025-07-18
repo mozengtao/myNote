@@ -9,6 +9,89 @@
 []()  
 []()  
 
+## exec
+- > The Linux `exec` command executes a Shell command without creating a new process. Instead, it replaces the currently open Shell operation. Depending on the command usage, `exec` has different behaviors and use cases.
+```
+使用指定命令替换当前shell执行环境，而不创建subshell，底层系统调用 [[execve]]
+
+当使用exec执行command时，如果想在command中返回shell环境，可以在command的最后执行`sh -l`命令，达到返回shell环境的目的
+
+sh -l
+	Make bash act as if it had been invoked as a login shell (see INVOCATION below)
+
+```
+[The Uses of the Exec Command](https://www.baeldung.com/linux/exec-command-in-shell-script)  
+[Linux exec Command With Examples](https://phoenixnap.com/kb/linux-exec)  
+[man sh](https://linux.die.net/man/1/sh)  
+
+## eval
+- > On Unix-like operating systems, eval is a builtin command of the Bash shell. It concatenates its arguments into a single string, joining the arguments with spaces, then executes that string as a bash command. It's similar to running bash -c "string", but eval executes the command in the current shell environment rather than creating a child shell process.
+```bash
+# 提供给eval命令的字符串可以包含预留关键字，这些关键字会在第一轮被解释，之后别的字符串在第二轮被解释
+	cmd="if true; then echo 1; else echo 0; fi"
+	eval "$cmd"
+# eval 命令可以用来提供额外的间接层引用
+	  cmd1="cmd2"
+	  cmd2="echo Hi!"
+	  eval "\${$cmd1}"
+# eval 在当前 shell 环境下执行，而不是子 shell
+	  cat variables.txt
+	  first=How-to
+	  second=Geek
+	  
+	  eval "$(cat variables.txt)"
+	  echo $first $second			# How-to Geek
+```
+
+## 在 Linux 后台 Shell 脚本中实现动态行为控制
+```bash
+# 1 文件检测控制
+debug_echo() {
+    if [ -f "/tmp/debug_flag" ]; then
+        echo "[DEBUG] $*"
+    fi
+}
+
+main() {
+    debug_echo "$0 starts to execute ..."
+    # ...
+    debug_echo "$0 is finishing ..."
+}
+# touch /tmp/debug_flag
+# rm /tmp/debug_flag
+
+# 2 信号动态控制
+DEBUG=false
+
+trap 'enable_debug" USR1
+trap 'disable_debug" USR2
+
+enable_debug() {
+    DEBUG=true
+    echo "DEBUG enabled at $(date)" >> /var/log/script.log
+}
+
+disable_debug() {
+    DEBUG=false
+    echo "DEBUG disabled at $(date)" >> /var/log/script.log
+}
+
+debug_echo() {
+    if $DEBUG; then
+        echo "[DEBUG] $*" >> /var/log/script.log
+    fi
+}
+
+while true; do
+    debug_echo "$0 starts to execute at $(date)"
+    # ...
+    debug_echo "$0 finished at $(date)"
+done
+
+# kill -USR1 PID
+# kill -USR2 PID
+```
+
 ## 在终端固定位置每秒刷新显示文件内容
 ```bash
 # 1

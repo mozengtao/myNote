@@ -1,2 +1,0 @@
-- 参考文档
-	- [QorIQ SDK v2.0-1703 Documentation](https://docs.nxp.com/bundle/GUID-39A0A446-70E5-4ED7-A580-E7508B61A5F1/page/GUID-081CCB35-9211-4C64-87EA-152426B8E00F.html)

@@ -272,3 +272,14 @@ int main(int argc, char **argv) {
 [Anyone can compile open source code in these three simple steps](https://opensource.com/article/21/11/compiling-code)  
 [How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)  
 [How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)  
+[man readelf](https://man7.org/linux/man-pages/man1/readelf.1.html)  
+
+[Binary analysis tools](https://linuxsecurity.expert/security-tools/binary-analysis-tools)  
+[Linux修改ELF解决glibc兼容性问题](https://zohead.com/archives/mod-elf-glibc/) #elf  
+[LIFE](https://linuxsecurity.expert/tools/lief/)  
+	> LIEF is short for **Library to Instrument Executable Formats**.
+od
+hexdump
+xxd
+strings
+hexedit
