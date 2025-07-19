@@ -1,3 +1,4 @@
+[Python Cheat Sheet](https://www.dataquest.io/cheat-sheet/python-cheat-sheet/)  
 
 [Working With Files in Python](https://realpython.com/working-with-files-in-python/)  
 [Reading and Writing Files in Python (Guide)](https://realpython.com/read-write-files-python/)  
@@ -720,7 +721,9 @@ print(next(g))  # 1
 [Sets in Python](https://realpython.com/python-sets/)  
 [Python Constants: Improve Your Code's Maintainability](https://realpython.com/python-constants/)  
 [How to Remove Items From Lists in Python](https://realpython.com/remove-item-from-list-python/)  
-[]()  
+[Python Dictionaries: A Comprehensive Tutorial (with 52 Code Examples)](https://www.dataquest.io/blog/python-dictionaries/)  
+[Python Datetime Tutorial: Manipulate Times, Dates, and Time Spans](https://www.dataquest.io/blog/python-datetime-tutorial/)  
+[Strings and Character Data in Python](https://realpython.com/python-strings/)  
 []()  
 []()  
 
@@ -925,8 +928,211 @@ id(digits)                      # 4699578112
 3 * ["A", "B", "C"]         # ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C']
 
 letters = ["A", "B", "C"]
-letters *= 3
+letters *= 3            #  mutates the target list in place
 letters                 # ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C']
+
+## reverse and sort lists
+digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+reversed(digits)                     # <list_reverseiterator object at 0x10b261a50>
+list(reversed(digits))               # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+digits                               # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+digits.reverse()                     # reverses a list in place
+digits                               # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+>>> digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> digits[::-1]                    # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+
+>>> numbers = [2, 9, 5, 1, 6]
+>>> sorted(numbers)                 # [1, 2, 5, 6, 9]
+>>> numbers                         # [2, 9, 5, 1, 6]
+
+>>> numbers = [2, 9, 5, 1, 6]
+>>> sorted(numbers, reverse=True)   # [9, 6, 5, 2, 1]
+
+>>> numbers = [2, 9, 5, 1, 6]
+>>> numbers.sort()
+>>> numbers                         # [1, 2, 5, 6, 9]
+
+# traverse lists
+>>> colors = [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "indigo",
+    "violet"
+... ]
+
+>>> for color in colors:
+    print(color)
+
+>>> for i in range(len(colors)):
+    print(colors[i])
+
+>>> for i, color in enumerate(colors):
+    print(f"{i} is the index of '{color}'")
+
+>>> for color in reversed(colors):
+    print(color)
+
+>>> numbers = [2, 9, 5, 1, 6]
+>>> for number in sorted(numbers):
+    print(number)
+
+>>> integers = [1, 2, 3]
+>>> letters = ["a", "b", "c"]
+>>> floats = [4.0, 5.0, 6.0]
+
+>>> for i, l, f in zip(integers, letters, floats):
+    print(i, l, f)
+
+# list comprehension
+>>> numbers = ["2", "9", "5", "1", "6"]
+>>> numbers = [int(number) for number in numbers]
+>>> numbers                                         # [2, 9, 5, 1, 6]
+
+>>> integers = [20, 31, 52, 6, 17, 8, 42, 55]
+>>> even_numbers = [number for number in integers if number % 2 == 0]
+>>> even_numbers                                    # [20, 52, 6, 8, 42]
+
+# process list with functional tools
+>>> numbers = ["2", "9", "5", "1", "6"]
+>>> numbers = list(map(int, numbers))
+>>> numbers                                     # [2, 9, 5, 1, 6]
+
+>>> integers = [20, 31, 52, 6, 17, 8, 42, 55]
+>>> even_numbers = list(filter(lambda number: number % 2 == 0, integers))
+>>> even_numbers                                # [20, 52, 6, 8, 42]
+
+reduce()
+min()
+max()
+sum()
+all()
+any()
+
+# find item in a list
+>>> usernames = ["john", "jane", "bob", "david", "eve"]
+>>> "linda" in usernames                # False
+>>> "linda" not in usernames            # True
+
+>>> usernames = ["john", "jane", "bob", "david", "eve"]
+>>> usernames.index("eve")              # 4
+
+>>> sample = [12, 11, 10, 50, 14, 12, 50]
+>>> sample.count(12)            # 2
+>>> sample.count(11)            # 1
+>>> sample.count(100)           # 0
+
+# get the len, max and min of a list
+>>> grades = [80, 97, 86, 100, 98, 82]
+>>> n = len(grades)
+>>> sum(grades) / n     # 90.5
+
+>>> min([3, 5, 9, 1, -5])       # -5
+>>> max([3, 5, 9, 1, -5])       # 9
+
+# compare lists
+>>> [2, 3] == [2, 3]            # True
+>>> [5, 6] != [5, 6]            # False
+>>> [5, 6, 7] < [7, 5, 6]       # True
+>>> [5, 6, 7] > [7, 5, 6]       # False
+>>> [4, 3, 2] <= [4, 3, 2]      # True
+>>> [4, 3, 2] >= [4, 3, 2]      # True
+>>> [5, 6, 7] < [8]             # True
+>>> [5, 6, 7] == [5]            # False
+
+# remove repeated items from a list
+>>> list(set([2, 4, 5, 2, 3, 5]))   # [2, 3, 4, 5]
+
+# create multidimensional lists
+>>> matrix = []
+>>> for row in range(5):
+    matrix.append([])
+    for _ in range(5):
+        matrix[row].append(0)
+
+>>> matrix
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+]
+
+>>> [[0 for _ in range(5)] for _ in range(5)]
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+]
+
+>>> [[0] * 5 for _ in range(5)]
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+]
+
+>>> matrix = [[0] * 5] * 5
+>>> matrix
+[
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+]
+
+>>> matrix[0][0] = 1
+>>> matrix
+[
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0]
+]
+
+# flaten multidimensional lists
+>>> matrix = [[0, 1, 2], [10, 11, 12], [20, 21, 22]]
+>>> flattened_list = []
+>>> for row in matrix:
+    flattened_list.extend(row)
+>>> flattened_list                  # [0, 1, 2, 10, 11, 12, 20, 21, 22]
+
+# split lists into chunks
+>>> def split_list(list_object, chunk_size):
+    chunks = []
+    for start in range(0, len(list_object), chunk_size):
+        stop = start + chunk_size
+        chunks.append(list_object[start:stop])
+    return chunks
+
+>>> split_list([1, 2, 3, 4, 5, 6, 7, 8, 9], 3)      # [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+# decide whether to use lists
+# when
+Keep your data ordered: Lists maintain the order of insertion of their items.
+Store a sequence of values: Lists are a great choice when you need to store a sequence of related values.
+Mutate your data: Lists are mutable data types that support multiple mutations.
+Access random values by index: Lists allow quick and easy access to elements based on their index.
+
+# when not
+Store immutable data: In this case, you should use a tuple. They’re immutable and more memory efficient.
+Represent database records: In this case, consider using a tuple or a data class.
+Store unique and unordered values: In this scenario, consider using a set or dictionary. Sets don’t allow duplicated values, and dictionaries can’t hold duplicated keys.
+Run many membership tests where item doesn’t matter: In this case, consider using a set. Sets are optimized for this type of operation.
+Run advanced array and matrix operations: In these situations, consider using NumPy’s specialized data structures.
+Manipulate your data as a stack or queue: In those cases, consider using deque from the collections module or Queue, LifoQueue, or PriorityQueue. These data types are thread-safe and optimized for fast inserting and removing on both ends.
 ```
 
 ## pathlib
