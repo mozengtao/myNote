@@ -1,7 +1,7 @@
 [Regular Expressions Cheat Sheet](https://www.dataquest.io/cheat-sheet/regular-expressions-cheat-sheet/)  
 [regex](https://www.rexegg.com/)  
-[]()  
-[]()  
+[Regular Expression HOWTO](https://docs.python.org/3/howto/regex.html)  
+[Regex Cheat Sheet](https://techearl.com/regex-cheat-sheet)  
 []()  
 
 ## 正则表达式在线编辑器
