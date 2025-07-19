@@ -724,6 +724,211 @@ print(next(g))  # 1
 []()  
 []()  
 
+## list
+```python
+# list 的特征
+Ordered: They contain elements or items that are sequentially arranged according to their specific insertion order.
+Zero-based: They allow you to access their elements by indices that start from zero.
+Mutable: They support in-place mutations or changes to their contained elements.
+Heterogeneous: They can store objects of different types.
+Growable and dynamic: They can grow or shrink dynamically, which means that they support the addition, insertion, and removal of elements.
+Nestable: They can contain other lists, so you can have lists of lists.
+Iterable: They support iteration, so you can traverse them using a loop or comprehension while you perform operations on each of their elements.
+Sliceable: They support slicing operations, meaning that you can extract a series of elements from them.
+Combinable: They support concatenation operations, so you can combine two or more lists using the concatenation operators.
+Copyable: They allow you to make copies of their content using various techniques.
+
+## constuct list
+# list literals
+digits = [1, 2, 3]
+# the list() constructor
+digits = list((1, 2, 3))
+# a list comprehension
+digits = [num for num in range(1, 4)]
+
+## access items in a list
+# indexing
+digits[0]    # 1
+digits[-1]   # 3
+
+employees = [
+    ("John", 30, "Software Engineer"),
+    ("Alice", 25, "Web Developer")
+]
+employees[1][0]     # "Alice"
+employees[1][1]     # "25
+employees[1][2]     # "Web Developer"
+
+employees = [
+    {"name": "John", "age": 30, "job": "Software Engineer"},
+    {"name": "Alice", "age": 25, "job": "Web Developer"}
+]
+employees[1]["name"]    # "Alice"
+employees[1]["age"]     # "25
+employees[1]["job"]     # "Web Developer"
+
+## retrieve multiple items from a list: slicing
+list_object[start:stop:step]
+default values:
+    start: 0
+    stop: len(list_object)
+    step: 1
+
+digits = list(range(0, 10))     # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+first_three = digits[:3]        # [0, 1, 2】
+middle_four = digits[3:7]       # [3, 4, 5, 6]
+last_three = digits[-3:]        # [7, 8, 9]
+every_other = digits[::2]       # [0, 2, 4, 6, 8]
+every_three = digits[::3]       # [0, 3, 6, 9]
+
+# Every slicing operation uses a slice object internally. 
+letters = ["A", "a", "B", "b", "C", "c", "D", "d"]
+upper_letters = letters[slice(0, None, 2)]  # ['A', 'B', 'C', 'D']
+lower_letters = letters[slice(1, None, 2)]  # ['a', 'b', 'c', 'd']
+
+## create copies of a list
+# aliases of a list
+countries = ["United States", "Canada", "Poland", "Germany", "Austria"]
+nations = countries
+id(countries) == id(nations)    # True
+
+# A shallow copy of an existing list is a new list containing references to the objects stored in the original list
+# create shallow copies of an existing list
+1. The slicing operator, [:]
+2. The .copy() method
+3. The copy() function from the copy module
+
+countries = ["United States", "Canada", "Poland", "Germany", "Austria"]
+nations = countries[:]
+# nations = countries.copy()
+# from copy import copy
+# nations = copy(countries)
+id(countries) == id(nations)    # False
+id(nations[0]) == id(countries[0])  # True
+id(nations[1]) == id(countries[1])  # True
+
+countries[0] = "United States of America"
+countries                           # ['United States of America', 'Canada', 'Poland', 'Germany', 'Austria']
+nations                             # ['United States', 'Canada', 'Poland', 'Germany', 'Austria']
+id(nations[0]) == id(countries[0])  # False
+id(nations[1]) == id(countries[1])  # True
+
+# deep copy of a list
+build a complete copy of an existing list. In other words, you want a copy that creates a new list object and also creates new copies of the contained elements
+
+from copy import deepcopy
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+id(matrix) == id(matrix_copy)           # False
+id(matrix[0]) == id(matrix_copy[0])     # False
+id(matrix[1]) == id(matrix_copy[1])     # False
+
+# 如果使用浅拷贝，当改变list内部嵌套list时，会改变原来的list
+from copy import copy
+
+matrix_copy = copy(matrix)
+matrix_copy[0][0] = 100
+matrix_copy[0][1] = 200
+matrix_copy[0][2] = 300
+matrix_copy                # [[100, 200, 300], [4, 5, 6], [7, 8, 9]]
+matrix                     # [[100, 200, 300], [4, 5, 6], [7, 8, 9]]
+
+# update items in a list: index assignment, slice assignment
+numbers = [1, 2, 3, 4]
+numbers[0] = "one"
+numbers                 # ['one', 2, 3, 4]
+
+fruits = ["apple", "banana", "orange", "kiwi", "grape"]
+fruits[fruits.index("kiwi")] = "mango"
+fruits                                  # ['apple', 'banana', 'orange', 'mango', 'grape']
+
+numbers = [1, 2, 3, 4, 5, 6, 7]
+numbers[1:4] = [22, 33, 44]
+numbers                                 # [1, 22, 33, 44, 5, 6, 7]
+
+numbers = [1, 5, 6, 7]
+numbers[1:1] = [2, 3, 4]
+numbers                                 # [1, 2, 3, 4, 5, 6, 7]
+
+numbers = [1, 2, 0, 0, 0, 0, 4, 5, 6, 7]
+numbers[2:6] = [3]
+numbers                                 # [1, 2, 3, 4, 5, 6, 7]
+
+# grow and shrink list dynamically
+pets = ["cat", "dog"]
+pets.append("parrot")
+pets                # ['cat', 'dog', 'parrot']
+pets.append(["hamster", "turtle"])  # [..., 'parrot', ["hamster", "turtle"]]
+
+fruits = ["apple", "pear", "peach"]
+fruits.extend(["orange", "mango", "banana"])
+fruits                                          # ['apple', 'pear', 'peach', 'orange', 'mango', 'banana']
+
+letters = ["A", "B", "F", "G"]
+letters.insert(2, "C")
+letters                                         # ['A', 'B', 'C', 'F', 'G']
+
+# delete items from a list
+sample = [12, 11, 10, 42, 14, 12, 42]
+sample.remove(42)
+sample                                          # [12, 11, 10, 14, 12, 42]
+
+nums = [1, 2, 3]
+num = nums.pop()    # 3
+nums                # [1, 2]
+num = nums.pop(0)   # 1
+nums                # [2]
+num = nums.pop(-1)  # 2
+nums                # []
+
+cache = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+cache.clear()
+cache           # []
+
+colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+del colors[1]
+colors                      # ['red', 'yellow', 'green', 'blue', 'indigo', 'violet']
+del colors[-1]
+colors                      # ['red', 'yellow', 'green', 'blue', 'indigo']
+del colors[2:4]
+colors                      # ['red', 'yellow', 'indigo']
+del colors[:]
+colors                      # []
+
+# Considering Performance While Growing Lists
+from sys import getsizeof
+
+numbers = []
+for value in range(100):
+    print(getsizeof(numbers))
+    numbers.append(value)
+...
+56
+88
+88
+...
+
+# concatenate and repeat lists
+# Whenever you use the concatenation operator, you get a new list object as a result
+digits = [0, 1, 2, 3, 4, 5]
+id(digits)                          # 4558758720
+digits = digits + [6, 7, 8, 9]
+id(digits)                          # 4470412224
+
+# the augmented variation mutates the target list in place rather than creating a new list
+digits = [0, 1, 2, 3, 4, 5]
+id(digits)                      # 4699578112
+digits += [6, 7, 8, 9]
+id(digits)                      # 4699578112
+
+
+["A", "B", "C"] * 3         # ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C']
+3 * ["A", "B", "C"]         # ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C']
+
+letters = ["A", "B", "C"]
+letters *= 3
+letters                 # ['A', 'B', 'C', 'A', 'B', 'C', 'A', 'B', 'C']
+```
+
 ## pathlib
 [Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
 
