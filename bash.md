@@ -9,6 +9,70 @@
 []()  
 []()  
 
+## date
+> print or set the system date and time
+[date(1)](https://www.mankier.com/1/date)  
+
+## column
+> columnate lists
+[column(1)](https://www.mankier.com/1/column)  
+
+## chrt
+> manipulate the real-time attributes of a process
+[chrt(1)](https://www.mankier.com/1/chrt)  
+
+## cmp
+> compare two files byte by byte
+[cmp(1)](https://www.mankier.com/1/cmp)
+
+## file
+> determine file type
+[file(1)](https://www.mankier.com/1/file)  
+
+## find
+[find(1)](https://www.mankier.com/1/find)  
+```bash
+find . -name vcmts.cfg -print0 | xargs -0 vim
+find . -name vcmts.cfg -exec vim {} +
+
+# 使用 \; (低效)
+find . -name *.txt -exec echo {} \;
+# 执行过程：
+#   echo file1
+#   echo file2
+#   ... 
+#   echo fileN
+
+# 使用 + (高效)
+find . -name *.txt -exec echo {} +
+# 执行过程：
+#   echo file1 file2 ... fileN
+
+# 正确：{} 必须在命令末尾
+find . -exec cmd {} +
+
+# 错误：{} 不在末尾
+find . -exec {} cmd +  # 无效
+
+# 先备份再编辑
+find . -name *.cfg -exec cp {} {}.bak \; -exec vim {} +
+
+# 仅对修改时间>30天的文件操作
+find /var/log -name *.log -mtime +30 -exec gzip {} +
+
+# 编辑所有找到的配置文件
+find /etc -name "*.conf" -exec vim {} +
+
+# 修复所有脚本权限
+find ~/scripts -name "*.sh" -exec chmod +x {} +
+
+# 在所有 PHP 文件中替换字符串
+find . -name "*.php" -exec sed -i 's/old/new/g' {} +
+
+# 压缩所有旧日志
+find /var/log -name "*.log" -mtime +7 -exec gzip {} +
+```
+
 ## exec
 - > The Linux `exec` command executes a Shell command without creating a new process. Instead, it replaces the currently open Shell operation. Depending on the command usage, `exec` has different behaviors and use cases.
 ```
