@@ -1,6 +1,9 @@
 ## 在线编辑器
 [vscode](https://vscode.dev/)  
 
+## 在线文本比较
+[Text Compare](https://textcompare.io/)  
+
 ## manuals
 [ManKier(Linux man pages)](https://www.mankier.com/)  
 [tldr](https://tldr.inbrowser.app/)  
