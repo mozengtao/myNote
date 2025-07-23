@@ -73,7 +73,47 @@ git clean -fd           # ​​清理未跟踪文件
 [Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules)  
 [Demystifying git submodules](https://www.cyberdemon.org/2024/03/20/submodules.html)  
 []()  
-[]()  
-[]()  
-[]()  
-[]()  
+[Ultimate Guide to Git Commit Message Templates: Best Practices and Examples](https://axolo.co/blog/p/git-commit-messages-best-practices-examples)  
+[How to Write Good Commit Messages: A Practical Git Guide](https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/)  
+[How to Write a Git Commit Message](https://cbea.ms/git-commit/)  
+[Git commit message best practices](https://graphite.dev/guides/git-commit-message-best-practices)  
+```bash
+# format
+subject
+body
+footer
+
+# example
+fix(parser): handle unexpected end-of-file error
+
+Ensure that errors close the socket and reinitialize the connection,
+preventing the client from hanging in an unstable state.
+
+BREAKING CHANGE: env vars now take precedence over config files.
+
+
+# subject format
+<type>(<scope>): <description>
+
+# subject example
+feat(database): add retry logic to data fetch
+
+# Types of commits
+feat: Introduces a new feature.
+fix: Patches a bug.
+docs: Documentation-only changes.
+style: Changes that do not affect the meaning of the code (white-space, formatting, etc).
+refactor: A code change that neither fixes a bug nor adds a feature.
+perf: Improves performance.
+test: Adds missing tests or corrects existing tests.
+chore: Changes to the build process or auxiliary tools and libraries such as documentation generation.
+
+# The seven rules of a great Git commit message
+1. Separate subject from body with a blank line
+2. Limit the subject line to 50 characters
+3. Capitalize the subject line
+4. Do not end the subject line with a period
+5. Use the imperative mood in the subject line
+6. Wrap the body at 72 characters
+7. Use the body to explain what and why vs. how
+```
