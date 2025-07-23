@@ -1,3 +1,6 @@
+[The Algorithms](https://github.com/TheAlgorithms)  
+> Open Source resource for learning Data Structures & Algorithms and their implementation in any Programming Language
+
 [Git repositories on chromium](https://chromium.googlesource.com/)  
 
 [mdBook](https://github.com/rust-lang/mdBook)  
