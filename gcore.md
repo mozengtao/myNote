@@ -1,3 +1,0 @@
-- > gcore - Generate a core file of a running program
-- 参考文档
-	- [man 1 gcore](https://man7.org/linux/man-pages/man1/gcore.1.html)

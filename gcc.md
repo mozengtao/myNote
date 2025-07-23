@@ -8,7 +8,10 @@
 [Options Controlling the Preprocessor](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html)  
 [Options for Linking](https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html)  
 []()  
-[]()  
+[ldd](https://www.mankier.com/1/ldd)  
+[Using ld(The GNU linker)](https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_mono/ld.html)  
+[ld(1)](https://www.mankier.com/1/ld)  
+
 
 [Standard Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Standard-Predefined-Macros.html)  
 [Common Predefined Macros](https://gcc.gnu.org/onlinedocs/gcc-13.2.0/cpp/Common-Predefined-Macros.html)  

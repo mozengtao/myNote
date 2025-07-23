@@ -8,6 +8,91 @@
 []()  
 []()  
 []()  
+[IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
+
+## lsof
+> list open files
+[lsof Command in Linux with Examples](https://phoenixnap.com/kb/lsof-command)  
+[man lsof](https://linux.die.net/man/8/lsof)  
+[Linux lsof Command Examples](https://www.thegeekstuff.com/2012/08/lsof-command-examples/)  
+```bash
+    lsof  -i
+    lsof  -i 6
+    lsof  -iTCP
+    lsof  -i :22
+    lsof  -i@172.16.12.5
+    lsof  -i@172.16.12.5:22
+    lsof  -i -sTCP:LISTEN
+    lsof  -i -sTCP:ESTABLISHED
+    lsof  -u daniel
+    lsof  -u ^daniel
+    kill  -9  `lsof -t -u daniel`
+    lsof  -c syslog-ng
+    lsof  -c ssh -c init
+    lsof  -p 10075
+    lsof  /var/log/messages/
+    lsof  /home/daniel/firewall_whitelist.txt
+    lsof  -u daniel -i @1.1.1.1
+    kill  -HUP `lsof -t -c sshd`
+    lsof  +L1
+    lsof  +d /usr/lib
+    lsof  +D /var/log/
+    lsof  +D /home -u ^mary
+    lsof  -t /usr/share/mime/mime.cache
+    lsof  -u mary -c ssh -a
+    lsof  -u mary -c ssh -a -r5
+    lsof  -i -a -p 932650
+    lsof  -i -a -c ssh
+    lsof  -i tcp:25
+    lsof  -i udp:53
+    lsof  -i :1-1024
+```
+
+
+## ln
+> make links between files
+[ln(1)](https://www.mankier.com/1/ln)  
+
+
+## fuser
+> identify processes using files or sockets
+[fuser(1)](https://www.mankier.com/1/fuser)  
+
+
+## grep
+> print lines that match patterns
+[grep(1)](https://www.mankier.com/1/grep)  
+```bash
+## Grep Multiple Patterns
+grep 'pattern1\|pattern2' fileName_or_filePath
+grep -E 'pattern1|pattern2' fileName_or_filePath
+grep -e pattern1 -e pattern2 fileName_or_filePath
+
+## 只打印匹配行的匹配字段
+grep -o '(.*)'
+grep -o '([^)]*)'  # 如果单行有多个括号，用于多个匹配的多个分行输出
+
+## 匹配行上下文打印
+grep -A NUM file	# After
+grep -B NUM file	# Before
+grep -C NUM file	# Center
+
+## 常用选项
+-E, --extended-regexp
+-q, --quiet, --silent
+-o, --only-matching
+-e PATTERN, --regexp=PATTERN
+-w, --word-regexp
+--color
+```
+
+## strip
+> discard symbols and other data from object files
+[strip(1)](https://www.mankier.com/1/strip)  
+
+## strings
+> print the sequences of printable characters in files
+[strings(1)](https://www.mankier.com/1/strings)  
 
 ## killall
 > kill processes by name
@@ -47,9 +132,58 @@ spin $!
 > manage locks from shell scripts
 [flock(1)](https://www.mankier.com/1/flock)  
 
+## gcore
+> Generate a core file of a running program
+[gcore(1)](https://www.mankier.com/1/gcore)  
+
 ## gstack
 > Print a stack trace of a running program
 [gstack(1)](https://www.mankier.com/1/gstack)  
+
+## xxd
+> make a hex dump or do the reverse.
+[xxd(1)](https://www.mankier.com/1/xxd)  
+```bash
+# Options
+       -p | -ps | -postscript | -plain
+              Output in postscript continuous hexdump style. Also known as plain hexdump style.
+
+       -r | -revert
+              Reverse operation: convert (or patch) hexdump into binary.  If not writing to stdout, xxd writes into its output file without truncating it. Use the combination -r -p to read  plain, hexadecimal dumps without line number information and without a particular column layout. Additional Whitespace and line-breaks are allowed anywhere.
+
+       -l len | -len len
+              Stop after writing <len> octets.			  
+
+       -s [+][-]seek
+              Start at <seek> bytes abs. (or rel.) infile offset.  + indicates that the seek is relative to the current stdin file position (meaningless when not reading from stdin).  - indicates that the seek should be that many characters from the end of the input (or if combined with +: before the current stdin file position).  Without -s option, xxd starts at the current file position.		
+
+       -g bytes | -groupsize bytes
+              Separate  the output of every <bytes> bytes (two hex characters or eight bit-digits each) by a whitespace.  Specify -g 0 to suppress grouping.  <Bytes> defaults to 2 in normal mode, 4 in little-endian mode and 1 in bits mode.  Grouping does not apply to postscript or include style.			  	  
+
+# "xxd -r -p" is used to convert plain hex dump (space-separated hex values) into binary data, 
+echo "eb fe 11 22 33 44" | xxd -revert -plain > test.bin		# Writes the bytes 0xEB 0xFE 0x11 0x22 0x33 0x44 to the output
+
+# Common Use Cases
+
+#1 Generate a Hexdump
+xxd file.bin > file.txt
+xxd -revert file.txt > file.bin
+
+#2 Create Binary from Hex (Reverse Mode)
+echo "55aa" | xxd -revert -plain > sector.sig  # Write 0x55 0xAA to a file
+
+#3 Inspect Specific Bytes
+xxd -seek 0x1FE -len 2 -plain /dev/sda  # Read 2 bytes at offset 510 (0x1FE)
+
+#4 Edit Binary Files
+# Patch byte at offset 0x05 to 0xFF
+echo "000005: FF" | xxd -revert - file.bin
+```
+
+## hexdump
+> display file contents in hexadecimal, decimal, octal, or ascii
+[hexdump(1)](https://www.mankier.com/1/hexdump)  
+[]()
 
 ## od
 > dump files in octal and other formats

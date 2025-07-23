@@ -1,2 +1,0 @@
-- 参考文档
-	- [/etc/network/interfaces](https://manpages.debian.org/stretch/ifupdown/interfaces.5.en.html)
