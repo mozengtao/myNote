@@ -1,3 +1,0 @@
-- [Linux / Unix id Command Examples](https://www.cyberciti.biz/faq/unix-linux-id-command-examples-usage-syntax/)
-- [Get Username by User ID in Linux](https://www.baeldung.com/linux/username-user-id)
-- [id(1)](https://man7.org/linux/man-pages/man1/id.1.html)

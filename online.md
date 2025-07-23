@@ -4,6 +4,9 @@
 ## 在线文本比较
 [Text Compare](https://textcompare.io/)  
 
+## 在线翻译
+[deepl](https://www.deepl.com/en/write)  
+
 ## manuals
 [ManKier(Linux man pages)](https://www.mankier.com/)  
 [tldr](https://tldr.inbrowser.app/)  

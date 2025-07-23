@@ -1,3 +1,0 @@
-- gstack - print a stack trace of a running process
-- 参考文档
-	- [man 1 gstack](https://linux.die.net/man/1/gstack)

@@ -9,6 +9,102 @@
 []()  
 []()  
 
+## killall
+> kill processes by name
+[killall(1)](https://www.mankier.com/1/killall)  
+
+## kill
+> terminate a process
+[kill(1)](https://www.mankier.com/1/kill)  
+[Termination Signals](https://www.gnu.org/software/libc/manual/html_node/Termination-Signals.html)  
+[SIGKILL signal handling](https://stackoverflow.com/questions/15766036/sigkill-signal-handling)  
+[What does a program do when it's sent SIGKILL signal?](https://unix.stackexchange.com/questions/485644/what-does-a-program-do-when-its-sent-sigkill-signal)
+[killall5(8)](https://linux.die.net/man/8/killall5)  
+```bash
+# spin
+SPIN='-\|/'
+function spin {
+        i=0
+        while kill -0 $1 2> /dev/null
+        do
+                i=$(( (i+1)%4 ))
+                printf "\b${SPIN:$i:1}"
+                sleep .1
+        done
+        printf "\bDONE\n"
+}
+
+echo 1
+sleep 20 &
+spin $!
+```
+
+## install
+> copy files and set attributes
+[install(1)](https://www.mankier.com/1/install)  
+
+## flock
+> manage locks from shell scripts
+[flock(1)](https://www.mankier.com/1/flock)  
+
+## gstack
+> Print a stack trace of a running program
+[gstack(1)](https://www.mankier.com/1/gstack)  
+
+## od
+> dump files in octal and other formats
+[od(1)](https://www.mankier.com/1/od)  
+```bash
+# od -Ax -t x1 -j 166 -N 4 main
+    -Ax
+        按照16进制格式输出
+    -t x1
+        输出格式为十六进制单字节显示
+    -j 166
+        从文件开始跳过166(0xa6)个字节
+    -N 4
+        只dump 4字节数据
+```
+
+## id
+> print real and effective user and group IDs
+[id(1)](https://www.mankier.com/1/id)  
+
+## watch
+> execute a program periodically, showing output fullscreen
+[watch(1)](https://www.mankier.com/1/watch)  
+
+## tail
+> output the last part of files
+[tail(1)](https://www.mankier.com/1/tail)  
+
+## head
+> output the first part of files
+[head(1)](https://www.mankier.com/1/head)  
+
+## du
+> estimate file space usage
+[du(1)](https://www.mankier.com/1/du)  
+
+## df
+> report file system space usage
+[df(1)](https://www.mankier.com/1/df)  
+
+## cut
+> https://www.mankier.com/1/cut
+[cut(1)](https://www.mankier.com/1/cut)  
+
+## sort
+> sort lines of text files
+[sort(1)](https://www.mankier.com/1/sort)  
+
+## tr
+[tr(1)](https://www.mankier.com/1/tr)  
+```bash
+tr '\0' '\n' < /proc/40013/environ
+
+```
+
 ## date
 > print or set the system date and time
 [date(1)](https://www.mankier.com/1/date)  

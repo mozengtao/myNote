@@ -122,9 +122,9 @@ echo "000005: FF" | xxd -r - file.bin
 		  	repeat = 1
 		  }' "${@}"
 		  ```
-- 参考链接
-	- [[hexdump]]
-	- [man 1 xxd](https://linux.die.net/man/1/xxd)
-	- [Doing a Reverse Hex Dump](https://www.linuxjournal.com/content/doing-reverse-hex-dump)
-	- [xxd, Binary to ASCII or ASCII to Binary](https://www.real-world-systems.com/docs/xxd.1.html)
-	- [reverse-hexdump](https://github.com/mfleetwo/reverse-hexdump)
+
+[[hexdump]]
+[man 1 xxd](https://linux.die.net/man/1/xxd)  
+[Doing a Reverse Hex Dump](https://www.linuxjournal.com/content/doing-reverse-hex-dump)  
+[xxd, Binary to ASCII or ASCII to Binary](https://www.real-world-systems.com/docs/xxd.1.html)  
+[reverse-hexdump](https://github.com/mfleetwo/reverse-hexdump)  
