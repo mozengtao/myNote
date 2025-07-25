@@ -10,6 +10,10 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## jq
+> Command-line JSON processor
+[jq(1)](https://www.mankier.com/1/jq)  
+
 ## lsof
 > list open files
 [lsof Command in Linux with Examples](https://phoenixnap.com/kb/lsof-command)  
