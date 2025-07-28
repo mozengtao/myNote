@@ -1,3 +1,5 @@
+[**A Heavily Commented Linux kernel Source Code**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
+
 [Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
 [The Linux Kernel](https://tldp.org/LDP/tlk/tlk-toc.html)  
 [The Linux Kernel](https://origin.kernel.org/doc/html/latest/index.html)  
@@ -495,3 +497,14 @@ pgrep
 []()  
 []()  
 []()  
+
+## simulator
+[Bochs User Manual](https://bochs.sourceforge.io/doc/docbook/user/index.html)  
+
+[How To Use QEMU From the Linux Command-Line](https://www.baeldung.com/linux/qemu-from-terminal)  
+[QEMU/Options](https://wiki.gentoo.org/wiki/QEMU/Options)  
+[QEMU’s documentation](https://www.qemu.org/docs/master/)  
+[QEMU](https://wiki.archlinuxcn.org/zh-hans/QEMU)  
+[QEMU User Documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/821395464/QEMU+User+Documentation)  
+[How to create a disk image in QEMU](https://computernewb.com/wiki/How_to_create_a_disk_image_in_QEMU)  
+[QEMU Disk Images](https://qemu-project.gitlab.io/qemu/system/images.html#)  

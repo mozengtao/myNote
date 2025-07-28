@@ -10,6 +10,79 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## curl
+[curl tutorial](https://curl.se/docs/tutorial.html)  
+[curl man page](https://curl.se/docs/manpage.html)  
+[Everything curl](https://ec.haxx.se/index.html)  
+```bash
+if curl -I --connect-timeout 3 --proxy 135.242.60.169:58080 https://www.google.com > /dev/null 2>&1; then
+    echo "ping google successfully"
+fi
+```
+
+## xargs
+[xargs原理剖析及用法详解](https://www.cnblogs.com/f-ck-need-u/p/5925923.html)  
+[man xargs](https://www.man7.org/linux/man-pages/man1/xargs.1.html)  
+[How to Use the xargs Command on Linux](https://www.howtogeek.com/435164/how-to-use-the-xargs-command-on-linux/)  
+[Using xargs in Combination With bash -c to Create Complex Commands](https://www.howtogeek.com/devops/using-xargs-in-combination-with-bash-c-to-create-complex-commands/)  
+```bash
+# Linux 下有些命令(echo, ...)不接受 标准输入 作为参数, xargs 将标准输入转换为命令行参数
+$ ls
+files  txt1  txt2
+
+files:
+txt1
+txt2
+
+txt1:
+1
+
+txt2:
+2
+
+$ cat files | xargs -t cat
+cat txt1 txt2
+1
+2
+
+$ cat files | xargs -t -n 1 cat
+cat txt1
+1
+cat txt2
+2
+
+#
+find /etc -maxdepth 1 -name "*.conf" -print0 | xargs -0 -i grep "hostname" -l {} 
+
+#
+cat files.txt | xargs -I file sh -c 'echo file; touch file'
+
+#
+find /tmp -name "*.tmp" -type f -print0 | xargs -0 /bin/rm -f
+
+#
+pidof sleep | xargs kill -9
+
+#
+sleep 300 &
+pidof sleep | xargs -I{} echo "echo 'The PID of your sleep process was: {}'; kill -9 {}; echo 'PID {} has now been terminated'" | xargs -I{} bash -c "{}"
+The PID of your sleep process was: 42513
+PID 42513 has now been terminated
+[1]+  Killed                  sleep 300
+```
+
+## wget
+> The non-interactive network downloader.
+[wget(1)](https://www.mankier.com/1/wget1)  
+
+## pgrep
+> look up, signal, or wait for processes based on name and other attributes
+[pgrep(1)](https://www.mankier.com/1/pgrep)  
+
+## lrzsz
+>  free x/y/zmodem implementation
+[lrzsz: free x/y/zmodem implementation](https://www.ohse.de/uwe/software/lrzsz.html)  
+
 ## locale
 > get locale-specific information
 [locale(1)](https://www.mankier.com/1/locale)  
