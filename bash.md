@@ -2,13 +2,125 @@
 [Bash Function & How to Use It](https://phoenixnap.com/kb/bash-function)  
 [Shell Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)  
 [Notes](https://johannst.github.io/notes/intro.html#notes)  
+[GNU bash shell tips](http://molk.ch/tips/gnu/bash/index.html)  
 []()  
-[]()  
-[]()  
-[]()  
+[How to Use Regex in Bash Scripting](https://labex.io/tutorials/shell-how-to-use-regex-in-bash-scripting-392579)  
+[Bash Features](https://www.gnu.org/software/bash/manual/html_node/)  
 []()  
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
+
+## BASH_REMATCH
+```bash
+if [[ "hello123" =~ ^([a-z]+)([0-9]+)$ ]]; then
+    echo "完整匹配: ${BASH_REMATCH[0]}"   # hello123
+    echo "字母部分: ${BASH_REMATCH[1]}"   # hello
+    echo "数字部分: ${BASH_REMATCH[2]}"   # 123
+fi
+
+# ${BASH_REMATCH[0]}: The entire string that was matched.
+# ${BASH_REMATCH[1]}: The first parenthesized subexpression match.
+# ${BASH_REMATCH[2]}: The second parenthesized subexpression match.
+
+#
+string="Hello World"
+pattern='(H[a-z]+)\s*(W[a-z]+)'
+if [[ $string =~ $pattern ]]; then
+    echo "Match found!"
+    for i in "${!BASH_REMATCH[@]}"; do
+        echo "$i: ${BASH_REMATCH[$i]}"
+    done
+fi
+```
+
+## while read
+```bash
+# 基础语法
+while IFS= read -r line
+do
+    # process
+done < intput_file
+
+# 文件逐行处理
+count=0
+while IFS= read -r line; do
+    ((count++))
+done < access.log
+echo "Total lines: $count"
+
+# 
+while read -r file; do
+    ((total++))
+done < <(find . -type f)
+echo "Total files: $total"
+
+# 解析结构化数据
+while IFS=, read -r name age city; do
+    echo "$name is $age years old from $city"
+done < users.csv
+
+# 命令输出处理
+df -h | while read -r filesystem size used avail use_percent mount; do
+    if [[ $use_percent > 80% ]]; then
+        echo "WARNING: $filesystem at $use_percent"
+    fi
+done
+
+# 过滤与数据转换
+grep "Failed password" auth.log | while read -r line; do
+    [[ $line =~ [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ ]] && echo "${BASH_REMATCH[0]}"
+done
+
+# 批量文件操作
+find . -name "*.jpg" | while read -r file; do
+    mv "$file" "${file%.jpg}_back.jpg"
+done
+
+# 网络数据处理
+netstat -tun  | while read -r proto recvq sendq local foreign state; do
+    [[ $state == "ESTABLISHED" ]] && echo "Active: $local -> $foreign"
+done
+
+# 进程管理
+ps aux | grep "python"  | while read -r user pid cpu mem vsz rss tty stat start time command; do
+    kill -15 $pid
+    echo "Sent SIGTERM to $pid"
+done
+
+# 配置文件解析
+while read -r line; do
+    [[ $line =~ ^\[(.*)\]$ ]] && section=${BASH_REMATCH[1]}
+    [[ $line =~ ^(.*)=(.*)$ ]] && {
+        key=${BASH_REMATCH[1]}
+        value=${BASH_REMATCH[2]}
+        declare "CONFIG_${section}_${key}=$value"
+    }
+done < config.ini
+
+# 实时日志监控
+tail -f app.log | while read -r line; do
+    case $line in
+        *ERROR*) echo "ALERT: $line" >&2 ;;
+        *WARN*) echo "Warning: $line" ;;
+    esac
+done
+
+# 跨行数据处理
+# 处理多行记录 (使用空行分隔)
+while IFS= read -r line || [[ -n $line ]]; do
+    [[ -z $line ]] && {
+        process_record "$record"
+        record=""
+        continue
+    }
+    record+="$line"$'\n'
+done < multi_line.txt
+
+# 超时控制
+while read -t 5 -r input; do
+    echo "You entered: $input"
+done
+```
 
 ## curl
 [curl tutorial](https://curl.se/docs/tutorial.html)  
@@ -65,10 +177,21 @@ pidof sleep | xargs kill -9
 
 #
 sleep 300 &
-pidof sleep | xargs -I{} echo "echo 'The PID of your sleep process was: {}'; kill -9 {}; echo 'PID {} has now been terminated'" | xargs -I{} bash -c "{}"
+pidof sleep |
+xargs -I{} echo "echo 'The PID of your sleep process was: {}'; kill -9 {}; echo 'PID {} has now been terminated'" |
+xargs -I{} bash -c "{}"
+
 The PID of your sleep process was: 42513
 PID 42513 has now been terminated
 [1]+  Killed                  sleep 300
+
+#
+sleep 300 &
+pgrep -x sleep | while read pid; do
+    echo "The PID of the sleep process was: $pid"
+    kill -9 "$pid" && echo "PID $pid has been terminated" || echo "Failed to terminate PID $pid"
+done
+The PID of the sleep process was: 62020
 ```
 
 ## wget
