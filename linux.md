@@ -2,6 +2,7 @@
 [**A Heavily Commented Linux kernel Source Code(English)**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
 [**A Heavily Commented Linux kernel Source Code(Chinese)**](https://download.oldlinux.org/CLK-5.0-WithCover.pdf)  
 [The little book about OS development](https://littleosbook.github.io/)  
+[CS212 lecture notes](https://www.scs.stanford.edu/25sp-cs212/notes/)  
 
 
 [Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
