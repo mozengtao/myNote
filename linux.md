@@ -1,4 +1,6 @@
-[**A Heavily Commented Linux kernel Source Code**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
+[OldLinux](https://oldlinux.org/)  
+[**A Heavily Commented Linux kernel Source Code(English)**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
+[**A Heavily Commented Linux kernel Source Code(Chinese)**](https://download.oldlinux.org/CLK-5.0-WithCover.pdf)  
 [The little book about OS development](https://littleosbook.github.io/)  
 
 
