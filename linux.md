@@ -1,4 +1,6 @@
 [**A Heavily Commented Linux kernel Source Code**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
+[The little book about OS development](https://littleosbook.github.io/)  
+
 
 [Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
 [The Linux Kernel](https://tldp.org/LDP/tlk/tlk-toc.html)  
@@ -482,7 +484,6 @@ pgrep
 [解决socket在execl之后被自动继承的问题](https://zohead.com/archives/close-socket-after-execl/) #kernel  
 [Linux下fcntl实现建议锁和强制锁](https://zohead.com/archives/linux-fcntl-advisory-mandatory-lock/) #kernel  
 [使用libexslt库将XML转换为JSON](https://zohead.com/archives/libexslt-xml-json/) #kernel  
-[]()  
 []()  
 []()  
 []()  
