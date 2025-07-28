@@ -10,6 +10,10 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## locale
+> get locale-specific information
+[locale(1)](https://www.mankier.com/1/locale)  
+
 ## jq
 > Command-line JSON processor
 [jq(1)](https://www.mankier.com/1/jq)  

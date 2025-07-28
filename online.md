@@ -1,10 +1,13 @@
-## 在线编辑器
+## 编辑器
 [vscode](https://vscode.dev/)  
 
-## 在线文本比较
+## 文本比较
 [Text Compare](https://textcompare.io/)  
 
-## 在线文件格式转换
+## 二进制编辑
+[hexedit online](https://hexed.it/)  
+
+## 文件格式转换
 [Convert TSV to JSON](https://onlinetools.com/json/convert-tsv-to-json#examples)  
 [onlineyamltools](https://onlineyamltools.com/)  
 [YAML Formatter](https://jsonformatter.org/yaml-formatter#Sample)  
@@ -15,7 +18,7 @@
 []()  
 
 
-## 在线翻译
+## 翻译
 [deepl](https://www.deepl.com/en/write)  
 
 ## manuals
@@ -28,7 +31,7 @@
 []()  
 []()  
 
-## 在线代码运行环境
+## 代码运行环境
 [code playground](https://programiz.pro/ide/c)  
 [code playground](https://codapi.org/)  
 [myCompiler](https://www.mycompiler.io/)  
@@ -64,8 +67,8 @@
 [Excalidraw](https://excalidraw.com/)  
 [PlantUML](https://plantuml.com/zh/)  
 [zenuml](https://app.zenuml.com/)  
-[**Textik**](https://textik.com/) #在线text绘图  
-[ascii flow](https://asciiflow.com/#/) #在线text绘图  
+[**Textik**](https://textik.com/) #text绘图  
+[ascii flow](https://asciiflow.com/#/) #text绘图  
 [asciip](https://asciip.dev/)  
 [processon](https://www.processon.com/support)  
 [diagrams](https://app.diagrams.net/)  
@@ -102,7 +105,7 @@
 [B 站收藏的“比较有质量”的课程](https://fast.v2ex.com/t/931949)    
 [Algorithms](https://algs4.cs.princeton.edu/home/)    
 [code2flow](https://app.code2flow.com/)  
-[xmind](https://xmind.works/) #mindmap  在线思维导图  
+[xmind](https://xmind.works/) #mindmap  思维导图  
 [Mindmap Gallery](https://xmind.app/share/)  
 [PlantUML](https://plantuml.com/)  
 [PlantUML zh](https://plantuml.com/zh/)  

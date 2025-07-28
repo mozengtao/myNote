@@ -1,3 +1,0 @@
-- [What Is OpenFlow?](https://info.support.huawei.com/info-finder/encyclopedia/en/OpenFlow.html)
-- [OpenFlow Switch Specification](https://opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf) #online #pdf
--
