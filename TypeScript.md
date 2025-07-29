@@ -1,3 +1,7 @@
+> TypeScript is JavaScript with syntax for types.
+
+## JavaScript高级程序设计(pdf)
+
 [Javascript Playground](https://playcode.io/)  
 
 [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)  
@@ -23,45 +27,30 @@
 [Mastering Async Programming in TypeScript: Promises, Async/Await, and Callbacks](https://dev.to/cliff123tech/mastering-async-programming-in-typescript-promises-asyncawait-and-callbacks-148b)
 
 
-```typescript
-TypeScript（简称 TS）是微软公司开发的一种基于 JavaScript （简称 JS）语言的编程语言
-TypeScript 可以看成是 JavaScript 的超集（superset），即它继承了后者的全部语法，增加了一些自己的语法，TypeScript 的主要功能是为 JavaScript 添加类型系统
-在语法上，JavaScript 属于动态类型语言，TypeScript 引入了一个更强大、更严格的类型系统，属于静态类型语言
+```TS
+// TypeScript(TS) is JavaScript with syntax for types.
+// JavaScript 属于动态类型语言，TypeScript 引入了一个更强大、更严格的类型系统，属于静态类型语言
 
-类型（type）指的是一组具有相同特征的值。如果两个值具有某种共同的特征，就可以说，它们属于同一种类型，类型是人为添加的一种编程约束和用法提示
-
-类型声明
 function toString(num:number):string {
   return String(num);
 }
 
-TypeScript 规定，变量只有赋值后才能使用，否则就会报错
 
-类型推断
-let foo = 123;
-foo = 'hello'; // 报错
+let foo = 123;  // type inference
+foo = 'hello';  // error
 
-// 函数的返回值 类型推断
-function toString(num:number) {
+function toString(num:number) { // function return type inference
   return String(num);
 }
 
+// compile: TypeScript code -> JavaScript code
+// TypeScript 代码只涉及类型，不涉及值。所有跟“值”相关的处理，都由 JavaScript 完成。TypeScript 的编译过程，实际上就是把“类型代码”全部拿掉，只保留“值代码”
 
-TypeScript 项目要想运行，必须先转为 JavaScript 代码，这个代码转换的过程就叫做“编译”（compile）
-TypeScript 官方没有做运行环境，只提供编译器。编译时，会将类型声明和类型相关的代码全部删除，只留下能运行的 JavaScript 代码，并且不会改变 JavaScript 的运行结果
+// tsc: TypeScript -> JavaScript
+// tsc config file: tsconfig.json
 
-TypeScript 代码只涉及类型，不涉及值。所有跟“值”相关的处理，都由 JavaScript 完成。TypeScript 的编译过程，实际上就是把“类型代码”全部拿掉，只保留“值代码”
-
-TypeScript 官方提供的编译器叫做 tsc，可以将 TypeScript 脚本编译成 JavaScript 脚本
-
-TypeScript 允许将tsc的编译参数，写在配置文件tsconfig.json。只要当前目录有这个文件，tsc就会自动读取，所以运行时可以不写参数
-
-any 类型表示没有任何限制，该类型的变量可以赋予任意类型的值,TypeScript 将这种类型称为“顶层类型”（top type），意为涵盖了所有下层
-变量类型一旦设为any，TypeScript 实际上会关闭这个变量的类型检查。即使有明显的类型错误，只要句法正确，都不会报错
-
-any类型主要适用以下两个场合:
-1. 出于特殊原因，需要关闭某些变量的类型检查，就可以把该变量的类型设为any
-2. 为了适配以前老的 JavaScript 项目，让代码快速迁移到 TypeScript，可以把变量类型设为any
+// any type
+// unknown type
 
 unknown 类型 是 严格版的any，unknown可以看作是更安全的any
 unknown类型相较于any类型的几个限制：

@@ -1,6 +1,12 @@
 ## 编辑器
 [vscode](https://vscode.dev/)  
 
+## 游戏
+[toddler(拼图)](https://toddler-games.com/)  
+[sveltepuzzle](https://github.com/bersling/sveltepuzzle)  
+[]()  
+
+
 ## 文本比较
 [Text Compare](https://textcompare.io/)  
 
