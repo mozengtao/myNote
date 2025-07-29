@@ -1,6 +1,12 @@
 [Compilation – Assemblers, Linkers, & Loaders](https://www.cs.cornell.edu/courses/cs3410/2025sp/lectures/14-compilation-notes.pdf)  
 [GCC and Make: Compiling, Linking and Building C/C++ Applications](https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html)  
 
+```bash
+morrism@PC24036:~/x1$ gcc -o main main.c -save-temps
+morrism@PC24036:~/x1$ ls main*
+main  main.c  main.i  main.o  main.s
+```
+
 [**GCC online documentation**](https://gcc.gnu.org/onlinedocs/)  
 [Using the GNU Compiler Collection](https://gcc.gnu.org/onlinedocs/gcc/index.html#SEC_Contents)  
 
