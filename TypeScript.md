@@ -2,6 +2,14 @@
 
 ## JavaScript高级程序设计(pdf)
 
+[HTML DOM for Beginners: What is the Document Object Model?](https://www.fullstackfoundations.com/blog/html-dom)  
+[Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)  
+[JavaScript and HTML DOM](https://www.w3schools.com/jsref/)  
+[]()  
+[]()  
+[]()  
+[]()  
+
 [Javascript Playground](https://playcode.io/)  
 
 [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)  
