@@ -88,3 +88,8 @@ Ctrl + F2	# 文件内变量替换
 	> 如果出现安装了C/C++插件后，仍然出现代码无法跳转的情况，可能的原因是C/C++中的Intelli Sense Engine被关闭了，将其设置为Enable之后应该就正常了，设置方法：File -> Preferences -> Settings，搜索"Intelli Sense Engine"，选择"C Cpp: Intelli Sense Engine(Controls the Intelligence provider)"，选择"**default**". (C++ intellisense插件，在某个版本(至少1.69版本后)已经被弃用了，其功能已经被集成在了C/C++插件中)
 [How to Install Visual Studio Code on Debian 10](https://linuxize.com/post/how-to-install-visual-studio-code-on-debian-10/)  
 [How to Install Visual Studio Code on Ubuntu 20.04](https://linuxize.com/post/how-to-install-visual-studio-code-on-ubuntu-20-04/)  
+[Language Server Extension Guide](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide)  
+[Language Server Protocol](https://microsoft.github.io/language-server-protocol/)  
+[]()  
+[]()  
+[]()  

@@ -102,3 +102,5 @@ Ctrl + d
 [athame](https://github.com/ardagnir/athame)  
 [Use Vim Mode On The Command Line In Bash](https://dev.to/brandonwallace/how-to-use-vim-mode-on-the-command-line-in-bash-fnn)  
 [CSCOPE settings for vim](https://insidelinuxdev.net/~yuanjianpeng/config/cscope_maps.vim)  
+[A guide on Neovim's LSP client](https://vonheikemen.github.io/devlog/tools/neovim-lsp-client-guide/)  
+[使用 LSP 搭建代码补全环境](https://breezetemple.github.io/2019/12/25/vim-lsp/)  
