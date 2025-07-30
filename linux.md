@@ -205,6 +205,8 @@ pgrep
 [**操作系统导论**](https://github.com/gsZhiZunBao/e-books/blob/main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA.pdf)  
 [嵌入式Linux学习目录](https://draapho.github.io/2017/11/23/1734-linux-content/)  
 [[linux内核设计与实现]]  
+**Operating Systems. Design and Implementation** #pdf
+**The Design and Implementation of the FreeBSD Operating System (2nd Edition)** #pdf
 [Memory mapping](https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html)  
 [[Linux Input Subsystem]]  
 [Unix Programming Frequently Asked Questions](http://web.archive.org/web/20120418113033/http://www.steve.org.uk/Reference/Unix/faq_toc.html)  

@@ -1,9 +1,13 @@
 ![Image 4.png](./assets/Image_4_1670374694509_0.png)  
 
-[A beginner's guide to tmux](https://www.redhat.com/en/blog/introduction-tmux-linux)  
+[tmux(1)](https://www.mankier.com/1/tmux)  
+[]()  
+[]()  
+[]()  
 
-## Basic tmux keybindings
-```tmux
+
+## key bindings
+```bash
 Ctrl+B D 			— Detach from the current session.
 Ctrl+B % 			— Split the window into two panes horizontally.
 Ctrl+B " 			— Split the window into two panes vertically.
@@ -35,9 +39,6 @@ CTRL+b  q   		Show pane numbers
 # detach已经存在在另一个session中的tmux session
 	Ctrl+b  Ctrl+b  d
 
-```
-
-```tmux
 # ~/.tmux.conf
 
 bind r source-file ~/.tmux.conf \; display '~/.tmux.conf sourced'
@@ -67,69 +68,67 @@ set-option -g mouse on
 #set -g mouse-select-pane on
 
 setw -g mode-keys vi
+
+#1
+	kill-server
+			Kill the tmux server and clients and destroy all sessions.
+
+	kill-session [-aC] [-t target-session]
+			Destroy the given session, closing any windows linked to it
+			and no other sessions, and detaching all clients attached
+			to it.  If -a is given, all sessions but the specified one
+			is killed.  The -C flag clears alerts (bell, activity, or
+			silence) in all windows linked to the session.
+
+#2 copy mode
+Ctrl b + [
+
+#按照指定格式启动tmux
+tmux new-session -d 'vi ~/.tmux.conf' \; split-window -d \; attach
+
+Ex1:
+#!/usr/bin/bash
+
+: <<COMMENT
+if tmux has-session -t =VCMTS; then
+	tmux kill-session -t =VCMTS
+	echo "kill session VCMTS ..."
+fi
+COMMENT
+
+if ! tmux has-session -t =VCMTS; then
+	# create session
+	tmux new-session -d -s VCMTS
+
+
+	# rename for the default window
+	tmux rename-window -t =VCMTS:0 code
+
+
+	# create new windows(build, vcoreserver)
+	tmux new-window -d -t =VCMTS -n build -c /tmp
+	tmux new-window -d -t =VCMTS -n vcoreserver -c /tmp
+
+
+	# split windows into panes
+	tmux split-window -v -t =VCMTS:=code.0
+	tmux split-window -v -t =VCMTS:=build.0
+	tmux split-window -v -t =VCMTS:=vcoreserver.0
+
+
+	# send commands for specific panes
+	tmux send-keys -t =VCMTS:=code.0 "cd /home/morrism/repos" Enter
+	tmux send-keys -t =VCMTS:=code.1 "cd /home/morrism/repos" Enter
+
+	tmux send-keys -t =VCMTS:=build.0 "cd /home/morrism/code/vcmos" Enter
+	tmux send-keys -t =VCMTS:=build.1 "cd /home/morrism/code/build" Enter
+
+	tmux send-keys -t =VCMTS:=vcoreserver.0 "ssh vcoreserver" Enter
+	tmux send-keys -t =VCMTS:=vcoreserver.1 "ssh vcoreserver" Enter
+fi
+
+tmux attach -t =VCMTS
 ```
-- 常用命令
-	- ```bash
-	  #1
-	       kill-server
-	               Kill the tmux server and clients and destroy all sessions.
-	  
-	       kill-session [-aC] [-t target-session]
-	               Destroy the given session, closing any windows linked to it
-	               and no other sessions, and detaching all clients attached
-	               to it.  If -a is given, all sessions but the specified one
-	               is killed.  The -C flag clears alerts (bell, activity, or
-	               silence) in all windows linked to the session.
-	  
-	  #2 copy mode
-	  Ctrl b + [
-	  
-	  #按照指定格式启动tmux
-	  tmux new-session -d 'vi ~/.tmux.conf' \; split-window -d \; attach
-	  
-	  Ex1:
-		#!/usr/bin/bash
-
-		: <<COMMENT
-		if tmux has-session -t =VCMTS; then
-			tmux kill-session -t =VCMTS
-			echo "kill session VCMTS ..."
-		fi
-		COMMENT
-
-		if ! tmux has-session -t =VCMTS; then
-			# create session
-			tmux new-session -d -s VCMTS
-
-
-			# rename for the default window
-			tmux rename-window -t =VCMTS:0 code
-
-
-			# create new windows(build, vcoreserver)
-			tmux new-window -d -t =VCMTS -n build -c /tmp
-			tmux new-window -d -t =VCMTS -n vcoreserver -c /tmp
-
-
-			# split windows into panes
-			tmux split-window -v -t =VCMTS:=code.0
-			tmux split-window -v -t =VCMTS:=build.0
-			tmux split-window -v -t =VCMTS:=vcoreserver.0
-
-
-			# send commands for specific panes
-			tmux send-keys -t =VCMTS:=code.0 "cd /home/morrism/repos" Enter
-			tmux send-keys -t =VCMTS:=code.1 "cd /home/morrism/repos" Enter
-
-			tmux send-keys -t =VCMTS:=build.0 "cd /home/morrism/code/vcmos" Enter
-			tmux send-keys -t =VCMTS:=build.1 "cd /home/morrism/code/build" Enter
-
-			tmux send-keys -t =VCMTS:=vcoreserver.0 "ssh vcoreserver" Enter
-			tmux send-keys -t =VCMTS:=vcoreserver.1 "ssh vcoreserver" Enter
-		fi
-
-		tmux attach -t =VCMTS
-	  ```
 
 
 [Tmux Manual 1](https://zhauniarovich.com/post/2021/2021-03-tmux/)  
