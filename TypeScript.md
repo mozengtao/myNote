@@ -1,16 +1,27 @@
 > TypeScript is JavaScript with syntax for types.
 
-## JavaScript高级程序设计(pdf)
+# playground
+[Javascript Playground](https://playcode.io/)  
+[**CodePen**](https://codepen.io/)  
+> CodePen is a social development environment for front-end designers and developers.
+[jsfiddle](https://jsfiddle.net/)  
+[HTML-CSS-JS](https://html-css-js.com/)  
+[]()  
 
-[HTML DOM for Beginners: What is the Document Object Model?](https://www.fullstackfoundations.com/blog/html-dom)  
+# tutorials
+[A Beginner's Guide to HTML, CSS, and JavaScript](https://hackernoon.com/a-beginners-guide-to-html-css-and-javascript)  
+[**HTML DOM for Beginners: What is the Document Object Model?**](https://www.fullstackfoundations.com/blog/html-dom)  
+[**Full Stack Foundations**](https://www.fullstackfoundations.com)  
 [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)  
 [JavaScript and HTML DOM](https://www.w3schools.com/jsref/)  
 []()  
-[]()  
+[Learn HTML](https://www.programiz.com/html)  
+[Learn CSS](https://www.programiz.com/css)  
+[Learn JavaScript](https://www.programiz.com/javascript)  
+[Learn TypeScript](https://www.programiz.com/typescript)  
 []()  
 []()  
 
-[Javascript Playground](https://playcode.io/)  
 
 [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)  
 [Web 开发技术](https://developer.mozilla.org/zh-CN/docs/Web)  
@@ -33,6 +44,9 @@
 [Introduction to async/await in TypeScript](https://www.atatus.com/blog/introduction-to-async-await-in-typescript/)  
 [async/await support in ES6 targets](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-7.html)  
 [Mastering Async Programming in TypeScript: Promises, Async/Await, and Callbacks](https://dev.to/cliff123tech/mastering-async-programming-in-typescript-promises-asyncawait-and-callbacks-148b)
+
+## Books
+JavaScript高级程序设计 # pdf
 
 
 ```TS
