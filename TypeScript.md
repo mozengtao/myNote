@@ -21,6 +21,8 @@
 [Learn TypeScript](https://www.programiz.com/typescript)  
 []()  
 []()  
+[TypeScript Types Explained – A Mental Model to Help You Think in Types](https://www.freecodecamp.org/news/a-mental-model-to-think-in-typescript-2/)  
+[]()  
 
 
 [学习 Web 开发](https://developer.mozilla.org/zh-CN/docs/Learn)  
