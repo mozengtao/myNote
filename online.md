@@ -1,24 +1,28 @@
-## 编辑器
+## editor
 [vscode](https://vscode.dev/)  
 
-## compiler
+## code compiler
 [OneCompiler](https://onecompiler.com/)  
 [Programiz](https://www.programiz.com/)  
 []()  
+[code playground](https://programiz.pro/ide/c)  
+[code playground](https://codapi.org/)  
+[myCompiler](https://www.mycompiler.io/)  
+[Practice with our Online Compilers](https://www.programiz.com/)  
 
-## 游戏
+## game
 [toddler(拼图)](https://toddler-games.com/)  
 [sveltepuzzle](https://github.com/bersling/sveltepuzzle)  
 []()  
 
 
-## 文本比较
+## text compare
 [Text Compare](https://textcompare.io/)  
 
-## 二进制编辑
+## hex edit
 [hexedit online](https://hexed.it/)  
 
-## 文件格式转换
+## file format converter
 [Convert TSV to JSON](https://onlinetools.com/json/convert-tsv-to-json#examples)  
 [onlineyamltools](https://onlineyamltools.com/)  
 [YAML Formatter](https://jsonformatter.org/yaml-formatter#Sample)  
@@ -27,9 +31,11 @@
 [JSON to CSV](https://jsonformatter.org/json-to-csv)  
 [JSON to YAML](https://jsonformatter.org/json-to-yaml)  
 []()  
+[Free Formatter](https://www.freeformatter.com/)
+[CodeConvert](https://www.codeconvert.ai/free-converter)  
 
 
-## 翻译
+## translate
 [deepl](https://www.deepl.com/en/write)  
 
 ## manuals
@@ -39,14 +45,10 @@
 [ReadmeX](https://readmex.com/en-US)  
 []()  
 []()  
-[]()  
+[**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html)  
 []()  
 
-## 代码运行环境
-[code playground](https://programiz.pro/ide/c)  
-[code playground](https://codapi.org/)  
-[myCompiler](https://www.mycompiler.io/)  
-[Practice with our Online Compilers](https://www.programiz.com/)  
+
 
 ## AI
 [Grok](https://grok.com/)  
@@ -67,7 +69,7 @@
 []()  
 
 
-## 画图工具
+## drawing tool
 [Napkin](https://www.napkin.ai/) #根据文字内容转换为可视化的视图
 > Napkin turns your text into visuals so sharing your ideas is quick and effective  
 [Excalidraw](https://excalidraw.com/)#白板工具  
@@ -88,14 +90,11 @@
 []()  
 []()  
 
-## Converter
-[Free Formatter](https://www.freeformatter.com/)
-[CodeConvert](https://www.codeconvert.ai/free-converter)  
 
-## 设计模式
+## design pattern
 [Design Patterns In Modern C++ 中文版翻译](https://github.com/liuzengh/design-pattern/tree/main/docs)  
 
-## 编程风格
+## programming style
 [Google Style Guides](https://google.github.io/styleguide/)  
 
 
@@ -127,9 +126,7 @@
 [CodVerter](https://codverter.com/src/index)  
 
 
-[latex公式转图片]([http://latex2png.com/](http://latex2png.com/))  
-[软件下载]([https://filehippo.com/zh/](https://filehippo.com/zh/))  
+[latex公式转图片](http://latex2png.com/)  
 
 [big o cheat sheet](https://www.bigocheatsheet.com/)  
 [number to binary converter](https://binaryconvert.com/)  
-[文本比较](https://www.fly63.com/tool/textdiff/)  
