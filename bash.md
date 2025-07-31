@@ -10,6 +10,16 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## network cmds
+[nslookup](https://www.mankier.com/1/nslookup)  
+> query Internet name servers interactively
+[ss](https://www.mankier.com/8/ss)  
+> another utility to investigate sockets
+[]()  
+[]()  
+[]()  
+
+
 ## BASH_REMATCH
 ```bash
 if [[ "hello123" =~ ^([a-z]+)([0-9]+)$ ]]; then
