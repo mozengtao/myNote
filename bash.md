@@ -15,6 +15,14 @@
 > query Internet name servers interactively
 [ss](https://www.mankier.com/8/ss)  
 > another utility to investigate sockets
+[netcat](https://www.mankier.com/1/netcat)  
+> arbitrary TCP and UDP connections and listens
+[nc Linux Command | The Complete Netcat Usage Guide](https://ioflood.com/blog/nc-linux-command/)  
+[ncat](https://www.mankier.com/1/ncat)  
+> Concatenate and redirect sockets
+[socat command in Linux](https://allcommands.top/os/linux/socat/)  
+[]()  
+[]()  
 []()  
 []()  
 []()  

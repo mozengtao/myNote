@@ -5,6 +5,11 @@
 [Measuring context switching and memory overheads for Linux threads](https://eli.thegreenplace.net/2018/measuring-context-switching-and-memory-overheads-for-linux-threads/)  
 [Basics of Futexes](https://eli.thegreenplace.net/2018/basics-of-futexes/)  
 []()  
+[Using /proc to get a process' current stack trace](https://ops.tips/blog/using-procfs-to-get-process-stack-trace/)  
+[Process resource limits under the hood](https://ops.tips/blog/proc-pid-limits-under-the-hood/)  
+[]()  
+[Demystifying Overlay File Systems](https://influentcoder.com/posts/overlayfs/)  
+[]()  
 []()  
 []()  
 [Class Notes](https://www.cs.fsu.edu/~baker/realtime/restricted/notes/)  
@@ -19,6 +24,27 @@
 []()  
 [System V Application Binary Interface](https://refspecs.linuxbase.org/elf/gabi4+/contents.html)  
 [zSeries ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/zSeries/lzsabi0_zSeries/book1.html)  
+
+## socket
+[GNU C Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  
+[How Linux creates sockets and counts them](https://ops.tips/blog/how-linux-creates-sockets/)  
+[Implementing a TCP server in C](https://ops.tips/blog/a-tcp-server-in-c/)  
+[Using C to inspect Linux syscalls](https://ops.tips/gists/using-c-to-inspect-linux-syscalls/)  
+[Write yourself an strace in 70 lines of code](https://blog.nelhage.com/2010/08/write-yourself-an-strace-in-70-lines-of-code/)  
+[Dmesg under the hood](https://ops.tips/blog/dmesg-under-the-hood/)  
+[booting a fresh linux kernel on qemu](https://ops.tips/notes/booting-linux-on-qemu/)  
+[]()  
+[]()  
+[]()  
+
+
+## namespaces
+[Digging into Linux namespaces - part 1](https://blog.quarkslab.com/digging-into-linux-namespaces-part-1.html)  
+[Digging into Linux namespaces - part 2](https://blog.quarkslab.com/digging-into-linux-namespaces-part-2.html)  
+[A deep dive into Linux namespaces](https://ifeanyi.co/posts/)  
+[Understanding Mounts and Mount Namespaces in Linux](https://influentcoder.com/posts/linux-mount/)  
+[]()  
+
 
 ## dynamic linking
 [THE INSIDE STORY ON SHARED LIBRARIES AND DYNAMIC LOADING](https://cseweb.ucsd.edu/~gbournou/CSE131/the_inside_story_on_shared_libraries_and_dynamic_loading.pdf)  
