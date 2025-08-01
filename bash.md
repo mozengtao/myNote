@@ -10,6 +10,38 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## jq
+[jq](https://www.mankier.com/1/jq)  
+> Command-line JSON processor
+
+
+## ip
+[Guide to IP Layer Network Administration with Linux](http://linux-ip.net/html/index.html)  
+[Virtual Routing and Forwarding (VRF)](https://www.kernel.org/doc/Documentation/networking/vrf.txt)  
+[Working with Linux VRFs](https://www.dasblinkenlichten.com/working-with-linux-vrfs/)  
+[Linux ip Command Examples](https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+```bash
+ip
+	link(l)					Network device
+	address(a, addr)		Protocol (IP or IPv6) address on a device
+	addrlabel(addrl)		Label configuration for protocol address selection
+	neighbour(n, neigh)		ARP or NDISC cache entry
+	route(r)				Routing table entry
+	rule(ru)				Rule in routing policy database
+	maddress(m, maddr)		Multicast address
+	mroute(mr)				Multicast routing cache entry
+	tunnel(t)				Tunnel over IP
+	xfrm(x)					Framework for IPsec protocol
+
+ip link help
+```
+
+
 ## network cmds
 [nslookup](https://www.mankier.com/1/nslookup)  
 > query Internet name servers interactively
