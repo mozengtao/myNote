@@ -38,6 +38,17 @@
 [Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
+
+[Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/)  
+[Sockets and Network Programming in C](https://www.codequoi.com/en/sockets-and-network-programming-in-c/)  
+[Socket Programming in Python (Guide)](https://realpython.com/python-sockets/)  
+[Socket Programming through C](https://www.iiests.ac.in/ckfinder/userfiles/files/sockbookv2_1.pdf)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## UIO
 [The Userspace I/O HOWTO](https://egeeks.github.io/kernal/uio-howto/index.html)  
 [Userspace I/O (UIO)](https://byu-cpe.github.io/ecen427/documentation/uio/)  
