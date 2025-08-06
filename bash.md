@@ -10,6 +10,18 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## remove header lines
+```bash
+# 
+ps aux | tail -n +2
+
+# 
+ps aux | awk 'NR > 1'
+
+#
+ps aux | sed 1d
+```
+
 ## ethtool
 > query or control network driver and hardware settings
 [ethtool](https://www.mankier.com/8/ethtool)  
@@ -26,7 +38,7 @@
 [ip-address](https://www.mankier.com/8/ip-address)  
 [ip-addrlabel](https://www.mankier.com/8/ip-addrlabel)  
 [ip-rule](https://www.mankier.com/8/ip-rule)  
-[Guide to IP Layer Network Administration with Linux](http://linux-ip.net/html/index.html)  
+[**Guide to IP Layer Network Administration with Linux**](http://linux-ip.net/html/index.html)  
 [Virtual Routing and Forwarding (VRF)](https://www.kernel.org/doc/Documentation/networking/vrf.txt)  
 [Working with Linux VRFs](https://www.dasblinkenlichten.com/working-with-linux-vrfs/)  
 [Linux ip Command Examples](https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/)  
@@ -122,7 +134,7 @@ while IFS=, read -r name age city; do
 done < users.csv
 
 # 命令输出处理
-df -h | while read -r filesystem size used avail use_percent mount; do
+df -h | tail -n +2 | while read -r filesystem size used avail use_percent mount; do
     if [[ $use_percent > 80% ]]; then
         echo "WARNING: $filesystem at $use_percent"
     fi
