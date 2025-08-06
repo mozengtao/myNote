@@ -10,6 +10,11 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## ethtool
+> query or control network driver and hardware settings
+[ethtool](https://www.mankier.com/8/ethtool)  
+
+
 ## jq
 [jq](https://www.mankier.com/1/jq)  
 > Command-line JSON processor
@@ -17,10 +22,16 @@
 
 ## ip
 [ip(8)](https://man7.org/linux/man-pages/man8/ip.8.html)  
+[ip-link](https://www.mankier.com/8/ip-link)  
+[ip-address](https://www.mankier.com/8/ip-address)  
+[ip-addrlabel](https://www.mankier.com/8/ip-addrlabel)  
+[ip-rule](https://www.mankier.com/8/ip-rule)  
 [Guide to IP Layer Network Administration with Linux](http://linux-ip.net/html/index.html)  
 [Virtual Routing and Forwarding (VRF)](https://www.kernel.org/doc/Documentation/networking/vrf.txt)  
 [Working with Linux VRFs](https://www.dasblinkenlichten.com/working-with-linux-vrfs/)  
 [Linux ip Command Examples](https://www.cyberciti.biz/faq/linux-ip-command-examples-usage-syntax/)  
+[]()  
+[]()  
 []()  
 []()  
 []()  
@@ -37,6 +48,7 @@ ip
 	mroute(mr)				Multicast routing cache entry
 	tunnel(t)				Tunnel over IP
 	xfrm(x)					Framework for IPsec protocol
+    ...
 
 ip link help
 ```
