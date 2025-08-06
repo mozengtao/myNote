@@ -474,9 +474,29 @@ echo "000005: FF" | xxd -revert - file.bin
 [15 usermod command examples in Linux](https://www.golinuxcloud.com/usermod-command-in-linux/)  
 [usermod Command in Linux | Explained](https://itslinuxfoss.com/usermod-command-linux-explained/)  
 
+## userdel
+> delete a user account and related files
+[userdel](https://www.mankier.com/8/userdel)  
+
 ## groupadd
 > create a new group
 [groupadd](https://www.mankier.com/8/groupadd)  
+
+## groupmod
+> modify a group definition on the system
+[groupmod](https://www.mankier.com/8/groupmod)  
+
+## groupdel
+> delete a group
+[groupdel](https://www.mankier.com/8/groupdel)  
+
+## chsh
+> change your login shell
+[chsh](https://www.mankier.com/1/chsh)  
+
+## passwd
+> change user password
+[passwd](https://www.mankier.com/1/passwd)  
 
 ## stat
 > display file or file system status
