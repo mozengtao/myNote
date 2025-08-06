@@ -457,6 +457,30 @@ echo "000005: FF" | xxd -revert - file.bin
 ## id
 > print real and effective user and group IDs
 [id(1)](https://www.mankier.com/1/id)  
+[ruid, euid, suid usage in Linux](https://mudongliang.github.io/2020/09/17/ruid-euid-suid-usage-in-linux.html)  
+[Linux — Process Permissions](https://tonylixu.medium.com/linux-process-permissions-cf7698d5b08f)  
+[]()  
+[]()  
+
+## useradd
+> create a new user or update default new user information
+[useradd](https://www.mankier.com/8/useradd)  
+[The Complete Guide to “useradd” Command in Linux – 15 Practical Examples](https://www.tecmint.com/add-users-in-linux/)  
+
+## usermod
+> modify a user account
+[usermod](https://www.mankier.com/8/usermod)  
+[A Complete Guide to Usage of ‘usermod’ command – 15 Practical Examples with Screenshots](https://www.tecmint.com/usermod-command-examples/)  
+[15 usermod command examples in Linux](https://www.golinuxcloud.com/usermod-command-in-linux/)  
+[usermod Command in Linux | Explained](https://itslinuxfoss.com/usermod-command-linux-explained/)  
+
+## groupadd
+> create a new group
+[groupadd](https://www.mankier.com/8/groupadd)  
+
+## stat
+> display file or file system status
+[stat](https://www.mankier.com/1/stat)  
 
 ## watch
 > execute a program periodically, showing output fullscreen
