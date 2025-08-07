@@ -12,14 +12,21 @@
 
 ## remove header lines
 ```bash
-# 
 ps aux | tail -n +2
-
-# 
 ps aux | awk 'NR > 1'
-
-#
 ps aux | sed 1d
+```
+
+## trim N characters
+```bash
+# trim first N characters
+cut -c6- file.txt
+awk '{ print substr($0, 6) }' file.txt
+sed 's/^......//' file.txt
+
+# trim last N characters
+awk '{ print substr($0, 1, length($)-5) }' file.txt
+sed 's/......$//' file.txt
 ```
 
 ## ethtool
@@ -547,7 +554,7 @@ echo "000005: FF" | xxd -revert - file.bin
 [df(1)](https://www.mankier.com/1/df)  
 
 ## cut
-> https://www.mankier.com/1/cut
+> remove sections from each line of files
 [cut(1)](https://www.mankier.com/1/cut)  
 
 ## sort
@@ -555,6 +562,7 @@ echo "000005: FF" | xxd -revert - file.bin
 [sort(1)](https://www.mankier.com/1/sort)  
 
 ## tr
+> translate or delete characters
 [tr(1)](https://www.mankier.com/1/tr)  
 ```bash
 tr '\0' '\n' < /proc/40013/environ
