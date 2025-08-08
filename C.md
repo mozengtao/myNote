@@ -35,9 +35,9 @@
 [What does void mean as a function parameter in C?](https://jameshfisher.com/2016/11/27/c-void-params/)  
 [What are lvalue and rvalue in C?](https://jameshfisher.com/2017/01/21/c-lvalue-rvalue/)  
 [What are the domain and type arguments to the socket system call?](https://jameshfisher.com/2017/02/27/socket-types/)  
-[]()  
-[]()  
-[]()  
+[Variadic Function Working in C](https://www.thejat.in/blog/variadic-function-working-in-c)  
+[Understanding Complex C/C++ Declarations](https://www.thejat.in/blog/understanding-complex-cc-declarations)  
+[Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
 
