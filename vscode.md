@@ -10,7 +10,8 @@ Python
 	A Visual Studio Code extension with rich support for the Python language
 Remote - SSH
 	The Remote - SSH extension lets you use any remote machine with a SSH server as your development environment.
-
+C/C++ Extension Pack
+	The best VSCode extensions to for C/C++ programmers in one extension pack.
 
 ## shortcuts
 [**Keyboard shortcuts for Windows**](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)  
