@@ -3,6 +3,9 @@
 [Documentation](https://code.visualstudio.com/docs)  
 [Keyboard shortcuts](https://code.visualstudio.com/docs/configure/keybindings)  
 [User and workspace settings](https://code.visualstudio.com/docs/configure/settings)  
+[Ten VSCode Settings that I Always Use](https://codefinity.com/blog/Ten-VSCode-Settings-that-I-Always-Use)  
+[https://peerlist.io/blog/engineering/vscode-settingsjson-a-complete-guide](https://peerlist.io/blog/engineering/vscode-settingsjson-a-complete-guide)  
+[Best VS Code extensions to use, settings to customize, shortcuts you should know, & more](https://www.software.com/src/top-vs-code-extensions-settings-shortcuts-and-more)  
 []()  
 []()  
 []()  
@@ -18,10 +21,14 @@ Remote - SSH
 	The Remote - SSH extension lets you use any remote machine with a SSH server as your development environment.
 C/C++ Extension Pack
 	The best VSCode extensions to for C/C++ programmers in one extension pack.
+vscode-icons
+Bearded Theme
 
-## shortcuts
-[**Keyboard shortcuts for Windows**](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)  
+
 ```bash
+# settings.json
+editor.renderWhitespace
+
 # command palette
 Ctrl + p
 # run command
