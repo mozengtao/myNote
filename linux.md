@@ -38,16 +38,167 @@
 [Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
-
+## socket
+[Socket programming in C on Linux – The Ultimate Guide for Beginners](https://www.binarytides.com/socket-programming-c-linux-tutorial/)  
 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/)  
-[Sockets and Network Programming in C](https://www.codequoi.com/en/sockets-and-network-programming-in-c/)  
+[Sockets and Network Programming in C](https://www.codequoi.com/en/categories/network/)  
 [Socket Programming in Python (Guide)](https://realpython.com/python-sockets/)  
 [Socket Programming through C](https://www.iiests.ac.in/ckfinder/userfiles/files/sockbookv2_1.pdf)  
+[Socket Programming](https://www.cs.dartmouth.edu/~campbell/cs50/socketprogramming.html)  
+[Sockets Tutorial](https://www.linuxhowtos.org/C_C++/socket.htm)  
+[Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  
+[Socket Programming in C](https://www.geeksforgeeks.org/c/socket-programming-cc/)  
+[Introduction to Socket Programming in C](https://www.techdatabit.com/blog/details/5)  
+[Beginner's Guide to Socket Programming in C: Step-by-Step Explanation](https://evolveasdev.com/blogs/guide/beginners-guide-to-socket-programming-in-c-step-by-step-explanation)  
+[Networking and Socket Programming Tutorial in C](https://www.codeproject.com/Articles/586000/Networking-and-Socket-Programming-Tutorial-in-C)  
+[Socket Programming using TCP in C](https://www.softprayog.in/programming/network-socket-programming-using-tcp-in-c)  
 []()  
-[]()  
-[]()  
-[]()  
+```c
+// Creating and Destroying Sockets
+	int socket(int domain, int type, int protocol);
+		myStreamSocket = socket(AF_INET, SOCK_STREAM, 0);
+		myDgramSocket = socket(AF_INET, SOCK_DGRAM, 0);
+		myRawSocket = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
+	int close(sock);
 
+// Socket Addresses
+	// domain AF_INET
+		struct sockaddr_in 
+		{
+			int16_t sin_family;			// AF_INET for Internet communication
+			uint16_t sin_port;			// port number in network byte order
+			struct in_addr sin_addr;	// 32-bit field that represents an IPv4 Internet address
+			char sin_zero[8];
+		};
+
+		struct in_addr  
+		{
+			uint32_t s_addr;
+		};
+
+		// server (server uses the address to bind to itself as an advertisement)
+		int servsock;
+		struct sockaddr_in servaddr;
+		servsock = socket(AF_INET, SOCK_STREAM, 0);
+		memset(&servaddr, 0, sizeof(servaddr));
+		servaddr.sin_family = AF_INET;
+		servaddr.sin_port = htons(48000);
+		servaddr.sin_addr.s_addr = inet_addr(INADDR_ANY);
+		// client (client uses this information to define to whom it wants to connect)
+		int clisock;
+		struct sockaddr_in servaddr;
+		clisock = socket(AF_INET, SOCK_STREAM, 0);
+		memset(&servaddr, 0, sizeof(servaddr));
+		servaddr.sin_family = AF_INET;
+		servaddr.sin_port = htons(48000);
+		servaddr.sin_addr.s_addr = inet_addr("192.168.1.1");
+
+// Socket Primitives
+int bind( int sock, struct sockaddr *addr, int addrLen );	// provides a local naming capability to a socket
+	 err = bind( servsock, (struct sockaddr *)&servaddr,sizeof(servaddr));
+// bind is used most often in the server case, for client case it isn't used often, because the Sockets API dynamically assigns a port to us
+
+int listen( int sock, int backlog );	// declare the willingness to accept incoming client connections
+										// backlog represents the number of outstanding client connections that might be queued(the number of established connections pending on accept for the application layer protocol for GNU/Linux)
+
+int accept( int sock, struct sockaddr *addr, int *addrLen );	// returns a socket descriptor for a client connection
+	// for the case in which we need to know who connected to us
+	struct sockaddr_in cliaddr;
+	int cliLen;
+	cliLen = sizeof( struct sockaddr_in );
+	clisock = accept( servsock, (struct sockaddr *)cliaddr, &cliLen );	// blocks until a client connection is available
+	// for the case the server application isn't interested in the client information
+	cliSock = accept( servsock, (struct sockaddr *)NULL, NULL );
+
+int connect( int sock, (struct sockaddr *)servaddr, int addrLen );	// used by client Sockets applications to connect to a server
+	int clisock;
+	struct sockaddr_in servaddr;
+	clisock = socket( AF_INET, SOCK_STREAM, 0);
+	memset( &servaddr, 0, sizeof(servaddr) );
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_port = htons( 48000 );
+	servaddr.sin_addr.s_addr = inet_addr( "192.168.1.1" );
+	connect( clisock, (struct sockaddr_in *)&servaddr, sizeof(servaddr) );	// blocks until either an error occurs or the three-way handshake with the server finishes
+
+// Sockets I/O
+// Connected Socket Functions
+int send( int sock, const void *msg, int len, unsigned int flags );
+    strcpy( buf, "Hello\n");
+    send( sock, (void *)buf, strlen(buf), 0);
+
+	send( sock, (void *)buf, strlen(buf), MSG_DONTWAIT);
+int recv( int sock, void *buf, int len, unsigned int flags );
+	#define MAX_BUFFER_SIZE        50
+	char buffer[MAX_BUFFER_SIZE+1];
+	...
+	numBytes = recv( sock, buffer, MAX_BUFFER_SIZE, 0);
+
+	 numBytes = recv( sock, buffer, MAX_BUFFER_SIZE, MSG_PEEK);	// performs a read, but it doesn't consume the data at the socket
+// Unconnected Socket Functions
+int sendto( int sock, const void *msg, int len,unsigned int flags,const struct sockaddr *to, int tolen );
+    struct sockaddr_in destaddr;
+    int sock;
+    char *buf;
+    ...
+    memset( &destaddr, 0, sizeof(destaddr) );
+    destaddr.sin_family = AF_INET;
+    destaddr.sin_port = htons(581);
+    destaddr.sin_addr.s_addr = inet_addr("192.168.1.1");
+    sendto( sock, buf, strlen(buf), 0,(struct sockaddr *)&destaddr, sizeof(destaddr) );
+int recvfrom( int sock, void *buf, int len,unsigned int flags,struct sockaddr *from, int *fromlen );
+    #define MAX_LEN 100
+    struct sockaddr_in fromaddr;
+    int sock, len, fromlen;
+    char buf[MAX_LEN+1];
+    ...
+    fromlen = sizeof(fromaddr);
+    len = recvfrom( sock, buf, MAX_LEN, 0,(struct sockaddr *)&fromaddr, &fromlen );
+
+// Socket Options (permit an application to change some of the modifiable behaviors of sockets and the functions that manipulate them)
+// level defines the level of the socket option that is being applied
+	// SOL_SOCKET for socket-layer options,
+	// IPPROTO_IP for IP layer options, and
+	// IPPROTO_TCP for TCP layer options.
+// optval is used to get or set the option value
+// optlen defines the length of the option
+int getsockopt( int sock, int level, int optname,void *optval, socklen_t *optlen );
+    int sock, size, len;
+    ...
+    getsockopt( sock, SOL_SOCKET, SO_SNDBUF, (void *)&size,
+    (socklen_t *)&len );
+    printf( "Send buffer size is &d\n", size );
+int setsockopt( int sock, int level, int optname,const void *optval, socklen_t optlen );
+    struct linger ling;
+    int sock;
+    ...
+    ling.l_onoff = 1; /* Enable */
+    ling.l_linger = 10; /* 10 seconds */
+    setsockopt( sock, SOL_SOCKET, SO_LINGER,(void *)&ling, sizeof(struct linger) );
+
+// Miscellaneous Functions
+struct hostent *gethostbyname( const char *name );						// resolve a host and domain name
+    struct hostent *hptr;
+    hptr = gethostbyname( "www.microsoft.com");
+    if (hptr == NULL) // can't resolve...
+    else 
+       printf("Binary address is %x\n", hptr-> h_addr_list[0]);
+int getsockname( int sock, struct sockaddr *name, socklen_t*namelen );	// retrieve information about the local socket endpoint
+    int sock;
+    struct sockaddr localaddr;
+    int laddrlen;
+    // Socket for sock created and connected.
+    ...
+    getsockname( sock, (struct sockaddr_in *)&localaddr, &laddrlen );
+    printf( "local port is %d\n", ntohs(localaddr.sin_port) );
+int getpeername( int sock, struct sockaddr *name, socklen_t*namelen );	// gather addressing information about the connected peer socket
+    int sock;
+    struct sockaddr remaddr;
+    int raddrlen;
+    // Socket for sock created and connected.
+    ...
+    getpeername( sock, (struct sockaddr_in *)&remaddr, &raddrlen );
+    printf( "remote port is %d\n", ntohs(remaddr.sin_port) );
+```
 
 ## UIO
 [The Userspace I/O HOWTO](https://egeeks.github.io/kernal/uio-howto/index.html)  
