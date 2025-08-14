@@ -1,5 +1,11 @@
 
 [**vscode online editor**](https://vscode.dev/)
+[Documentation](https://code.visualstudio.com/docs)  
+[Keyboard shortcuts](https://code.visualstudio.com/docs/configure/keybindings)  
+[User and workspace settings](https://code.visualstudio.com/docs/configure/settings)  
+[]()  
+[]()  
+[]()  
 
 ## plugins
 C/C++
