@@ -64,7 +64,7 @@
 [Network Programming in C++: A Comprehensive Guide to Sockets](https://denizhalil.com/2025/01/11/c-plus-plus-network-programming-guide/)  
 [Linux C API 参考手册](https://wizardforcel.gitbooks.io/linux-c-api-ref/content/)  
 [getifaddrs](https://www.mankier.com/3/getifaddrs)  
-[]()  
+[Programming Linux sockets, Part 1: Using TCP/IP](https://developer.ibm.com/tutorials/l-sock/)  
 []()  
 []()  
 ```c
