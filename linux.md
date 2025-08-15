@@ -39,6 +39,14 @@
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
 ## socket
+![TCP IP Sockets in C](./assets/TCP%20IP%20Sockets%20in%20C.pdf)  
+[**libc.pdf**](https://www.gnu.org/software/libc/manual/pdf/)  
+[Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  
+[**C and Linux Socket Topics**](https://www.tenouk.com/cnlinuxsockettutorials.html)  
+[Hands-On Network Programming with C](https://github.com/bilalmohib/ProgrammingBooks)  
+[Hands-On Network Programming with C]https://github.com/codeplea/Hands-On-Network-Programming-with-C)  
+[Networking Programming with C#](https://csharp-networking.com/)  
+[LinuxNetworkProgramming](https://github.com/nguyenchiemminhvu/LinuxNetworkProgramming)  
 [Socket programming in C on Linux – The Ultimate Guide for Beginners](https://www.binarytides.com/socket-programming-c-linux-tutorial/)  
 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/)  
 [Sockets and Network Programming in C](https://www.codequoi.com/en/categories/network/)  
@@ -52,6 +60,12 @@
 [Beginner's Guide to Socket Programming in C: Step-by-Step Explanation](https://evolveasdev.com/blogs/guide/beginners-guide-to-socket-programming-in-c-step-by-step-explanation)  
 [Networking and Socket Programming Tutorial in C](https://www.codeproject.com/Articles/586000/Networking-and-Socket-Programming-Tutorial-in-C)  
 [Socket Programming using TCP in C](https://www.softprayog.in/programming/network-socket-programming-using-tcp-in-c)  
+[Introduction to C Network Programming](https://www.learnforge.io/c-programming/network-programming-in-c/)  
+[Network Programming in C++: A Comprehensive Guide to Sockets](https://denizhalil.com/2025/01/11/c-plus-plus-network-programming-guide/)  
+[Linux C API 参考手册](https://wizardforcel.gitbooks.io/linux-c-api-ref/content/)  
+[getifaddrs](https://www.mankier.com/3/getifaddrs)  
+[]()  
+[]()  
 []()  
 ```c
 // Creating and Destroying Sockets
