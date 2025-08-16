@@ -39,6 +39,7 @@
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
 ## socket
+[Linux Socket Programming](https://theexuberantindian.wordpress.com/2017/04/12/linux-socket-programming/)  
 ![TCP IP Sockets in C](./assets/TCP%20IP%20Sockets%20in%20C.pdf)  
 [**libc.pdf**](https://www.gnu.org/software/libc/manual/pdf/)  
 [Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  

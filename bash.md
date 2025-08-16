@@ -89,7 +89,38 @@ ip link help
 []()  
 []()  
 []()  
+```bash
+#Internet domain sockets
+#Unix domain sockets
+# nc
+# stream socket
+# server side
+nc -lU /tmp/my.sock # -U option of nc uses stream sockets by default
+# client side
+nc -U /tmp/my.sock
 
+ss -xa | grep my.sock   # check the socket type
+
+# datagram socket
+# server side
+nc -lUu /tmp/my.sock
+# client side
+nc -Uu /tmp/my.sock
+
+ss -xa | grep my.sock   # check the socket type
+
+# socat
+# server side
+socat - UNIX-LISTEN:/tmp/my.sock
+# client side
+socat - UNIX-CONNECT:/tmp/my.sock
+
+# socket
+# server side
+socket -s /tmp/my.sock
+# client side
+socket /tmp/my.sock
+```
 
 ## BASH_REMATCH
 ```bash
