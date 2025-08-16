@@ -84,7 +84,7 @@ ip link help
 [ncat](https://www.mankier.com/1/ncat)  
 > Concatenate and redirect sockets
 [socat command in Linux](https://allcommands.top/os/linux/socat/)  
-[]()  
+[Interprocess Communication With Unix Sockets](https://www.baeldung.com/linux/communicate-with-unix-sockets)  
 []()  
 []()  
 []()  

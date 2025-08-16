@@ -39,6 +39,7 @@
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
 ## socket
+[Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)  
 [Linux Socket Programming](https://theexuberantindian.wordpress.com/2017/04/12/linux-socket-programming/)  
 ![TCP IP Sockets in C](./assets/TCP%20IP%20Sockets%20in%20C.pdf)  
 [**libc.pdf**](https://www.gnu.org/software/libc/manual/pdf/)  
@@ -66,6 +67,9 @@
 [Linux C API 参考手册](https://wizardforcel.gitbooks.io/linux-c-api-ref/content/)  
 [getifaddrs](https://www.mankier.com/3/getifaddrs)  
 [Programming Linux sockets, Part 1: Using TCP/IP](https://developer.ibm.com/tutorials/l-sock/)  
+[Socket programming and the C BSD API](https://www.yolinux.com/TUTORIALS/Sockets.html)  
+[socket](https://github.com/davidleitw/socket)  
+[Linux file descriptor 理解](https://davidleitw.github.io/posts/fd/)  
 []()  
 []()  
 ```c
