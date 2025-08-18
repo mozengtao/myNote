@@ -7,6 +7,17 @@
 [Effective Modern C++中文版](https://cntransgroup.github.io/EffectiveModernCppChinese/) #online
 
 [DevTut C++](https://devtut.github.io/cpp/)  
+![Object-Oriented Programming in C++](./assets/Object-Oriented%20Programming%20in%20C++.pdf)  
+![Programming Abstractions in C++](./assets/Programming%20Abstractions%20in%20C++.pdf)  
+
+Computer Programming with C++
+
+[TCP/IP Network Programming Design Patterns in C++](https://vichargrave.github.io/programming/tcp-ip-network-programming-design-patterns-in-cpp/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 
 
 ## POP, OOP
