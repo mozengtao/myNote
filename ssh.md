@@ -202,6 +202,19 @@ ssh -L 5432:127.0.0.1:5432 devuser@203.0.113.10
 # “When I connect to localhost:5432 on my machine, send it through SSH to 203.0.113.10, and from there connect to that host’s own 127.0.0.1:5432 (its local loopback)
 # on local host: psql -h localhost -p 5432 connects to the remote machine’s PostgreSQL
 
+ [Your App] ---> localhost:5432
+                  |
+                  v
+          +-------------------+
+          |    SSH tunnel     |
+          +-------------------+
+                  |
+                  v
+    [Remote host: 203.0.113.10]
+             connects to
+          127.0.0.1:5432 (on remote)
+
+
 ## remote forward (-R)
 # You create a port on the remote machine that forwards traffic through the SSH connection back to a destination reachable from your local machine.
 ssh -R [REMOTE_PORT]:[DEST_HOST]:[DEST_PORT] user@ssh-server
@@ -210,6 +223,19 @@ ssh-server:REMOTE_PORT  -->  localhost  -->  DEST_HOST:DEST_PORT
 ssh -R 9000:127.0.0.1:8080 devuser@203.0.113.10
 # “On the remote server (203.0.113.10), listen on port 9000. Anything connecting there will be tunneled back to my local computer’s 127.0.0.1:8080.”
 # on the remote host: curl localhost:9000 connects back to your local port 8080
+
+ [Remote App] ---> localhost:9000 (on remote)
+                        |
+                        v
+                +-------------------+
+                |    SSH tunnel     |
+                +-------------------+
+                        |
+                        v
+         [Your local machine]
+            connects to
+        127.0.0.1:8080 (on local)
+
 
 
 local port forwarding (主要用于内部私有网络访问远程主机的服务如数据库或者VNC服务)
