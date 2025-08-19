@@ -1,4 +1,5 @@
 [ssh](https://www.mankier.com/1/ssh)  
+[ssh_config](https://www.mankier.com/5/ssh_config)  
 [sshd_config](https://www.mankier.com/5/sshd_config)  
 
 [Restricting and Locking Down SSH Users](https://www.jamieweb.net/blog/restricting-and-locking-down-ssh-users/)  
@@ -14,6 +15,39 @@ type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
 cat ~/.ssh/id_rsa.pub | ssh devuser@203.0.113.10 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 
 ssh devuser@203.0.113.10 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys" < cat ~/.ssh/id_rsa.pub
+
+[Local Machine]                            [Remote Server: 203.0.113.10]
++-------------------+                    +-------------------+
+|                   |                    |                   |
+| ~/.ssh/id_rsa.pub |                    |                   |
+|                   |                    |                   |
+|   [cat]           |                    |                   |
+|   Reads public    |                    |                   |
+|   key             |                    |                   |
+|                   |                    |                   |
+|   | (stdout)      |                    |                   |
+|   v               |                    |                   |
+|   [Pipe] ---------|---- SSH ---------->|                   |
+|                   |  (stdin)           | [Remote Command]  |
+|                   |                    |                   |
+|                   |                    | 1. mkdir -p ~/.ssh|
+|                   |                    |    Creates .ssh   |
+|                   |                    |    directory      |
+|                   |                    |                   |
+|                   |                    |    | (if needed)  |
+|                   |                    |    v              |
+|                   |                    | 2. cat >> ~/.ssh/ |
+|                   |                    |    authorized_keys|
+|                   |                    |    Appends key    |
+|                   |                    |                   |
+|                   |                    |    |              |
+|                   |                    |    v              |
+|                   |                    | 3. chmod 600      |
+|                   |                    |    ~/.ssh/        |
+|                   |                    |    authorized_keys|
+|                   |                    |    Sets perms     |
+|                   |                    |                   |
++-------------------+                    +-------------------+
 
 ssh登陆流程：
 1.远程主机收到用户的登录请求，把自己的公钥发给用户
