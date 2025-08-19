@@ -193,6 +193,25 @@ ssh -F /dev/null user@example.com
 ![local forward 1](image-7.png)
 ![remote forward 1](image-9.png)
 ```bash
+## local forward (-L)
+# You create a port on your local machine that forwards traffic through the SSH connection to some destination (reachable from the remote host).
+ssh -L [LOCAL_PORT]:[DEST_HOST]:[DEST_PORT] user@ssh-server
+localhost:LOCAL_PORT -->  ssh-server  -->  DEST_HOST:DEST_PORT
+
+ssh -L 5432:127.0.0.1:5432 devuser@203.0.113.10
+# “When I connect to localhost:5432 on my machine, send it through SSH to 203.0.113.10, and from there connect to that host’s own 127.0.0.1:5432 (its local loopback)
+# on local host: psql -h localhost -p 5432 connects to the remote machine’s PostgreSQL
+
+## remote forward (-R)
+# You create a port on the remote machine that forwards traffic through the SSH connection back to a destination reachable from your local machine.
+ssh -R [REMOTE_PORT]:[DEST_HOST]:[DEST_PORT] user@ssh-server
+ssh-server:REMOTE_PORT  -->  localhost  -->  DEST_HOST:DEST_PORT
+
+ssh -R 9000:127.0.0.1:8080 devuser@203.0.113.10
+# “On the remote server (203.0.113.10), listen on port 9000. Anything connecting there will be tunneled back to my local computer’s 127.0.0.1:8080.”
+# on the remote host: curl localhost:9000 connects back to your local port 8080
+
+
 local port forwarding (主要用于内部私有网络访问远程主机的服务如数据库或者VNC服务)
 	远程SSH SERVER的 "AllowTcpForwarding" 必须使能
 	ssh -L [LOCAL_IP:]LOCAL_PORT:DESTINATION:DESTINATION_PORT [USER@]SSH_SERVER
@@ -273,26 +292,19 @@ Examples:
 [Permissions for .ssh folder and key files](https://frankindev.com/2020/11/26/permissions-for-.ssh-folder-and-key-files/)  
 [SSH Essentials: Working with SSH Servers, Clients, and Keys](https://www.digitalocean.com/community/tutorials/ssh-essentials-working-with-ssh-servers-clients-and-keys)  
 [Understanding SSH](https://support.huawei.com/hedex/hdx.do?docid=EDOC1100351682&id=EN-US_CONCEPT_0000001563753685)  
-```bash
-SSH working mechanism:
+
+## SSH working mechanism
 1. Connection setup
 	The SSH server listens to port 22 for SSH connections. After the client sends a connection request to the server, a TCP connection is set up between the client and server.
-
 2. Version negotiation
 	The server and client determine which SSH version to use through version negotiation.
-
 3. Algorithm negotiation
 	SSH supports multiple algorithms. Based on their supported algorithms, the server and client negotiate the following algorithms: key exchange algorithm for generating a session key, encryption algorithm for encrypting data, public key algorithm for digital signature and authentication, and hash-based message authentication code (HMAC) algorithm for data integrity protection.
-
 4. Key exchange
 	The server and client dynamically generate a session key to protect data transmission and a session ID to identify the SSH connection through Diffie-Hellman key exchange. The client also authenticates the server during this stage.
-
 5. Client authentication
 	The client sends an authentication request to the server, and the server authenticates the client.
-
 6. Session request
 	After the authentication succeeds, the client sends a session request to the server, requesting the server to provide a certain type of service (STelnet, SFTP, or SCP). That is, the client requests to establish a session with the server.
-
 7. Session interaction
 	After a session is established, the server and client exchange data.
-```
