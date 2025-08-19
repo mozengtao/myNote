@@ -13,6 +13,7 @@
 ## plugins
 C/C++
 	The C/C++ extension adds language support for C/C++ to Visual Studio Code, including editing (IntelliSense) and debugging features.
+	C/C++: Switch Header/Source
 Blockman
 	Highlight Nested Code Blocks
 Python
@@ -23,6 +24,7 @@ C/C++ Extension Pack
 	The best VSCode extensions to for C/C++ programmers in one extension pack.
 vscode-icons
 Bearded Theme
+
 
 
 ```bash
