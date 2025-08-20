@@ -11,5 +11,5 @@
 [Lua for Programmers](https://ebens.me/posts/lua-for-programmers-part-1/)  
 [lua-style-guide](https://github.com/luarocks/lua-style-guide)  
 []()  
-[]()  
+[Lua Programming Gems](https://www.lua.org/gems/)  
 []()  
