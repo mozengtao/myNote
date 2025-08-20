@@ -1,5 +1,9 @@
 [[nvim]]
 
+[**vimllearn**](https://github.com/lymslive/vimllearn)  
+[Builtin functions](https://vimhelp.org/builtin.txt.html)  
+[Write a Vim script](https://vimdoc.sourceforge.net/htmldoc/usr_41.html)  
+
 [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
 [Learn Vim the Smart Way](https://learnvim.irian.to/)  
 [Vim help files](https://vimhelp.org/#reference_toc)  
