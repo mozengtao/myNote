@@ -9,7 +9,7 @@
 [Luai: Lua reference manual helper: all Lua bits](https://pgl.yoyo.org/luai/i/_)  
 [Learn X in Y minutes](https://learnxinyminutes.com/lua/)  
 [Lua for Programmers](https://ebens.me/posts/lua-for-programmers-part-1/)  
-[]()  
+[lua-style-guide](https://github.com/luarocks/lua-style-guide)  
 []()  
 []()  
 []()  

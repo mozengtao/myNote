@@ -4,6 +4,8 @@
 - WonderSwitcher
 - DeepL翻译
 - Weava Highlighter
+- Octotree
+- Octoree Theme
 ### Tips
 按键`/`可以直接跳转至搜索框
 

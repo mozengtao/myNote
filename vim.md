@@ -9,6 +9,14 @@
 [Vim help files](https://vimhelp.org/#reference_toc)  
 
 
+[lsp-zero.nvim](https://lsp-zero.netlify.app/docs/)  
+[Yet Another Neovim Setup Guide](https://vineeth.io/posts/neovim-setup)  
+[How to Install Plugins in Neovim](https://linuxopsys.com/install-plugins-in-neovim)  
+[]()  
+[]()  
+[]()  
+
+
 [Mapping keys in Vim](https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1))  
 [vim-unimpaired](https://github.com/tpope/vim-unimpaired/tree/master)  
 [Buffers](https://evantravers.com/articles/series/git-gud-at-vim/)  
