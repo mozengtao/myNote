@@ -60,7 +60,7 @@ Features of the Object Oriented programming
 ## 最佳实践
 [Collecting the best C++ practices](https://medium.com/@Code_Analysis/collecting-the-best-c-practices-4b867006849f)  
 [awesome-hpp](https://github.com/p-ranav/awesome-hpp)  
-[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)  
+[**Google C++ Style Guide**](https://google.github.io/styleguide/cppguide.html)  
 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)  
 
 ## C++标准库参考

@@ -12,4 +12,6 @@
 [lua-style-guide](https://github.com/luarocks/lua-style-guide)  
 []()  
 [Lua Programming Gems](https://www.lua.org/gems/)  
+[Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
+[]()  
 []()  
