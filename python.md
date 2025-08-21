@@ -1,6 +1,8 @@
 [Built-in Types](https://docs.python.org/3/library/stdtypes.html)  
-[The Python Standard Library](https://docs.python.org/3/library/index.html)  
+[**The Python Standard Library**](https://docs.python.org/3/library/)  
 
+[PyMOTW-3](https://pymotw.com/3/index.html)  
+[The Python 3 Standard Library by Example](https://github.com/bindrat/PYTHON/tree/main)  
 
 [Python Cheat Sheet](https://www.dataquest.io/cheat-sheet/python-cheat-sheet/)  
 [Python Development Tutorials](https://earthly.dev/blog/categories/python/)  
@@ -9,8 +11,6 @@
 [Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
 [How to Work with YAML in Python](https://earthly.dev/blog/yaml-in-python/)  
 [Python argparse: Definition, How to Use, and Best Practices](https://stackify.com/python-argparse-definition-how-to-use-and-best-practices/)  
-[]()  
-[]()  
 []()  
 []()  
 []()  
