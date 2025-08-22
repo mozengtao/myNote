@@ -8,6 +8,47 @@
 [The Little known SSH ForceCommand](https://shaner.life/the-little-known-ssh-forcecommand/)  
 []()  
 []()  
+
+## ssh login process using public key
+```
+ [Client Machine]                           [Remote Server]
++-------------------+                    +-------------------+
+|                   |                    |                   |
+| ~/.ssh/id_rsa     |                    | ~/.ssh/           |
+| (Private Key)     |                    | authorized_keys   |
+|                   |                    | (Public Key)      |
+|                   |                    |                   |
+|   [SSH Client]    |                    |   [SSH Server]    |
+|   1. Initiates    |                    |                   |
+|      ssh devuser@ |---- Connect ------>| 1. Accepts        |
+|      203.0.113.10 |                    |    connection     |
+|                   |                    |                   |
+|   2. Verifies     |<--- Host Key ------| 2. Sends host key |
+|      host key     |                    |                   |
+|                   |                    |                   |
+|   3. Negotiates   |<--- Session Key -->| 3. Negotiates     |
+|      session key  |                    |    session key    |
+|                   |                    |                   |
+|   4. Offers public|---- Offer Auth --->| 4. Checks         |
+|      key auth     |                    |    authorized_keys|
+|                   |                    |                   |
+|   5. Loads private|                    |                   |
+|      key (id_rsa) |                    |                   |
+|                   |                    |                   |
+|   6. Signs        |<--- Challenge -----| 6. Sends challenge|
+|      challenge    |                    |                   |
+|      with private |                    |                   |
+|      key          |                    |                   |
+|                   |---- Signature ---->| 7. Verifies       |
+|                   |                    |    signature with |
+|                   |                    |    public key     |
+|                   |                    |                   |
+|   8. Session      |<-- Access Granted -| 8. Grants access  |
+|      established  |                    |    if valid       |
+|                   |                    |                   |
++-------------------+                    +-------------------+
+```
+
 ```bash
 # 自动远程登陆 under windows terminal(PowerShell)
 type ~\.ssh\id_rsa.pub | ssh user@ipaddr "cat >> .ssh/authorized_keys"
