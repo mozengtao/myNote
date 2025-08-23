@@ -1,6 +1,8 @@
 [Built-in Types](https://docs.python.org/3/library/stdtypes.html)  
 [**The Python Standard Library**](https://docs.python.org/3/library/)  
 
+[Wing Python IDE](https://wingware.com/)  
+
 [PyMOTW-3](https://pymotw.com/3/index.html)  
 [The Python 3 Standard Library by Example](https://github.com/bindrat/PYTHON/tree/main)  
 
@@ -13,11 +15,10 @@
 [Python argparse: Definition, How to Use, and Best Practices](https://stackify.com/python-argparse-definition-how-to-use-and-best-practices/)  
 []()  
 []()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+[30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code)  
+[python-snippets](https://github.com/progrmoiz/python-snippets)  
+[Python-project-Scripts](https://github.com/larymak/Python-project-Scripts)  
+[python-lessons](https://github.com/shannonturner/python-lessons)  
 []()  
 [All Python Tutorial Topics](https://realpython.com/tutorials/all/)  
 [Python Best Practices for More Pythonic Code](https://realpython.com/tutorials/best-practices/page/1/)  

@@ -6,7 +6,226 @@
 [Type hints cheat sheet](https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html)  
 [Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  
 [typing — Support for type hints](https://docs.python.org/3/library/typing.html)  
+
+## code snippets
+[100 Python Code Snippets for Everyday Problems](https://therenegadecoder.com/code/python-code-snippets-for-everyday-problems/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 ```python
+# traverse files in a directory recursively
+import os
+import argparse
+
+def traverse_files(directory, extension=None):
+    """
+    Recursively traverse files in a directory and return a list of file paths.
+    
+    Args:
+        directory (str): The root directory to start traversal.
+        extension (str, optional): Filter files by extension (e.g., '.c').
+    
+    Returns:
+        list: List of absolute file paths.
+    """
+    file_list = []
+    
+    if not os.path.isdir(directory):
+        raise FileNotFoundError(f"Directory not found: {directory}")
+    
+    for dirpath, dirnames, filenames in os.walk(directory):
+        for filename in filenames:
+            # Filter by extension if provided
+            if extension is None or filename.endswith(extension):
+                # Construct absolute path
+                file_path = os.path.join(dirpath, filename)
+                file_list.append(os.path.abspath(file_path))
+    
+    return file_list
+
+def main():
+    parser = argparse.ArgumentParser(description="Recursively traverse files in a directory")
+    parser.add_argument("--directory", required=True, help="Directory to traverse")
+    parser.add_argument("--extension", default=None, help="File extension to filter (e.g., .c)")
+    
+    args = parser.parse_args()
+    
+    try:
+        files = traverse_files(args.directory, args.extension)
+        if not files:
+            print(f"No files found in {args.directory}")
+        else:
+            print(f"Found {len(files)} files:")
+            for file_path in files:
+                print(file_path)
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        exit(1)
+
+if __name__ == "__main__":
+    main()
+
+# reading a file line by line
+with open('filename.txt', 'r') as file:
+    for line in file:
+        print(line.strip())
+
+# write to a file
+with open('filename.txt', 'w') as file:
+    file.write('Hello, World!')
+
+# list comprehension for filtering
+numbers = [1, 2, 3, 4, 5, 6]
+even_numbers = [n for n in numbers if n % 2 == 0]
+
+# lambda function for quick math operations
+add = lambda x, y: x + y
+print(add(3, 5))
+
+# reverse a string
+string = "Python"
+reversed_string = string[::-1]
+
+# merge 2 dicts
+dict1 = {'a': 1, 'b': 2}
+dict2 = {'c': 3, 'd': 4}
+merged_dict = {**dict1, **dict2}
+
+# sort a list of tuples
+tuples = [(2, 'banara'), (1, 'apple'), (3, 'cherry')]
+sorted_typles = sorted(tuples, key=lambda x: x[0])
+
+# fibonacci sequence generator
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+# check for prime number
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
+# remove duplicates from a list
+items = [1, 2, 2, 3, 4, 4, 5]
+uniq_items = list(set(items))
+
+# convert list to string
+items = ['apple', 'banana', 'cherry']
+result = ', '.join(items)
+
+# get current date and time
+from datetime import datetime
+
+now = datetime.now()
+print(now.strftime('%Y-%m-%d %H:%M:%S'))
+
+# random number generation
+import random
+
+print(random.randomint(1, 100))
+
+# select a random elem
+import secrets
+res = secrets.choice(['cat', 'dog', 'horse', 'car'])
+
+# flatem a list of lists
+list_of_lists = [[1, 2], [3, 4], [5, 6]]
+flattened = [item for sublist in list_of_lists for item in sublist]
+
+# calculate factorial using recursion
+def factorial(n):
+    return 1 if n == 0 else n * factorial(n - 1)
+
+# swap 2 variables
+a, b = b, a
+
+# remove whitespace from string
+text = '  Hello, World    '
+clean_text = text.strip()
+
+# find max elem in a list
+numbers = [1, 2, 3, 4, 5]
+max_value = max(numbers)
+
+# check if a string is palindrome
+def is_palidrome(string):
+    return string == string[::-1]
+
+print(is_palindrome('madam))
+
+# count occurrences of an elem in a list
+items = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+count = items.count()
+
+# create a dict from 2 lists
+keys = ['name', 'age', 'job']
+values = ['John', 28, 'Developer']
+dictionary = dict(zip(keys, values))
+
+# shuffle a list
+import random
+
+items = [1, 2, 3, 4, 5]
+random.shuffle(items)
+print(items)
+
+# filter elements using filter()
+numbers = [1, 2, 3, 4, 5, 6]
+even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+
+# measure execution time of a code block
+import time
+
+start_time = time.time()
+# Some code logic
+end_time = time.time()
+print(f"Execution Time: {end_time - start_time} seconds")
+
+# convert dict to json
+import json
+
+data = {'name': 'John', 'age': 30}
+json_data = json.dumps(data)
+print(json_data)
+
+# check if key exists in a dictionary
+person = ['name': 'Alice', 'age': 25]
+if 'name' in person:
+    print('Key exists')
+
+# zip multiple lists
+names = ['Alice', 'Bob', 'Charlie']
+ages = [25, 30, 35]
+zipped = list(zip(names, ages))
+
+# generate list of numbers using range()
+numbers = list(range(1, 11))
+
+# check list is empty
+items = []
+if not items:
+    print("List is empty")
+
+# find all indices of an elem in a list
+list = [1, 2, 3, 'Alice', 'Bob', 'Alice']
+res = [i for i in range(len(lst)) if lst[i] == 'Alice']
+
+# multi arg function
+def test(*arg):
+    print(arg) # (1, 2, 3)
+
+# multi input
+x, y, z = intput("Enter data: ").split()
+
 
 ```
 
@@ -199,6 +418,10 @@ if __name__ == "__main__":
 ```
 
 ## best practice
+[71 Python Code Snippets for Everyday Problems](https://dev.to/therenegadecoder/71-python-code-snippets-for-everyday-problems-1mep)  
+[]()  
+[]()  
+[]()  
 ```python
 # Use List Comprehensions: Instead of loops, try using list comprehensions for concise and readable code
 data = [-3, 7, 2, -5, 0, 8]
@@ -219,6 +442,9 @@ products = ['apple', 'banana', 'cherry']
 prices = [1.2, 0.5, 2.5]
 product_price_dict = dict(zip(products, prices))
 print(product_price_dict)  # Output: {'apple': 1.2, 'banana': 0.5, 'cherry': 2.5}
+
+dict2 = {key:value for key, value in zip(keys_list, values_list)}
+
 
 # Use F-strings for Formatting: Format strings cleanly and efficiently with f-strings (Python 3.6+)
 name = "John"
