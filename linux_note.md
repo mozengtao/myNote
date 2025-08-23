@@ -56,6 +56,14 @@
 [Shared Libraries: Understanding Dynamic Loading](https://amir.rachum.com/shared-libraries/)  
 [Dynamic linking on Linux (x86_64)](https://blog.memzero.de/dynamic-linking-linux-x86-64/)  
 [Dynamic Linking](https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html)  
+[LD_PRELOAD is super fun. And easy!](https://jvns.ca/blog/2014/11/27/ld-preload-is-super-fun-and-easy/)  
+[A ToC of the 20 part linker essay](https://lwn.net/Articles/276782/)  
+[Playing with LD_PRELOAD](https://axcheron.github.io/playing-with-ld_preload/)  
+[Abusing LD_PRELOAD for fun and profit](https://www.sweharris.org/post/2017-03-05-ld-preload/)  
+[A Simple LD_PRELOAD Tutorial](https://catonmat.net/simple-ld-preload-tutorial)  
+[]()  
+[]()  
+[]()  
 
 ## Commands
 ```bash
