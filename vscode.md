@@ -24,12 +24,21 @@ C/C++ Extension Pack
 	The best VSCode extensions to for C/C++ programmers in one extension pack.
 vscode-icons
 Bearded Theme
-
+Bearded Icons
+Bookmarks
+	Mark and Jump
+clangd
 
 
 ```bash
 # settings.json
-editor.renderWhitespace
+"editor.renderWhitespace": "all",
+"editor.cursorBlinking": "smooth",
+"notebook.stickyScroll.enabled": true,
+
+"editor.insertSpaces": false,
+"editor.detectIndentation": false,
+"editor.tabSize": 4,
 
 # command palette
 Ctrl + p

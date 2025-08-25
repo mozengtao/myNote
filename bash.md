@@ -10,6 +10,25 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## identify filesystem and read-only status
+```bash
+$ df -h /etc/ssh/ssh_config
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda4       974M  740K  906M   1% /etc/ssh
+
+$ mount | grep -e /etc/ssh
+/dev/sda4 on /etc/ssh type ext4 (rw,relatime,stripe=128)
+
+$ findmnt /etc/ssh
+TARGET   SOURCE          FSTYPE OPTIONS
+/etc/ssh /dev/sda4[/ssh] ext4   rw,relatime,stripe=128
+
+$ cat /proc/mounts  | grep /etc/ssh
+/dev/sda4 /etc/ssh ext4 rw,relatime,stripe=128 0 0
+
+```
+
+
 ## remove header lines
 ```bash
 ps aux | tail -n +2
