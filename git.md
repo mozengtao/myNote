@@ -2,6 +2,9 @@
 
 Git管理的是修改，而不是文件
 
+# disable the pager for a single git command invocation
+git --no-pager diff
+
 # -C <path>
 Run as if git was started in <path> instead of the current working directory.
 git -C cms status

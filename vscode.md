@@ -28,17 +28,35 @@ Bearded Icons
 Bookmarks
 	Mark and Jump
 clangd
+Prettier - Code formatter
+GitLens — Git supercharged
+vscode-pdf
+Multiple cursor case preserve
+Code Runner
+TODO Highlight
+Todo Tree
+Material Icon Theme
+Code Spell Checker
 
 
 ```bash
 # settings.json
+Bracket Pair Colorization: Enabled
+
 "editor.renderWhitespace": "all",
-"editor.cursorBlinking": "smooth",
+"editor.cursorBlinking": "expand",
 "notebook.stickyScroll.enabled": true,
+"editor.cursorSmoothCaretAnimation": "on",
 
 "editor.insertSpaces": false,
 "editor.detectIndentation": false,
 "editor.tabSize": 4,
+
+#
+Minimap
+
+# enlarge font size
+Ctrl +
 
 # command palette
 Ctrl + p
