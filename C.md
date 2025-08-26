@@ -45,6 +45,22 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## string
+[Library Functions](https://www.ibm.com/docs/en/i/7.4.0?topic=functions-library)  
+[String and Array Utilities](https://www.gnu.org/software/libc/manual/html_node/String-and-Array-Utilities.html)  
+[The String Span Functions](https://c-for-dummies.com/blog/?p=5068)  
+[Parsing Words with the strspn() Function](https://c-for-dummies.com/blog/?p=5072)  
+[Slicing Strings with strsep()](https://c-for-dummies.com/blog/?p=1769)  
+[How to Use strtok and strtok_r in C](https://systems-encyclopedia.cs.illinois.edu/articles/c-strtok/)  
+[strtok](https://icarus.cs.weber.edu/~dab/cs1410/textbook/8.Strings/more_cstring.html)  
+[The Standard C Library for Linux, part 7: String Handling](https://linuxgazette.net/issue76/rogers.html)  
+[C Programming/String manipulation](https://en.wikibooks.org/wiki/C_Programming/String_manipulation)  
+[String Functions in C (Full List With Examples)](https://www.wscubetech.com/resources/c-programming/string-functions)  
+[]()  
+[]()  
+[]()  
+
+
 ## ring buffer
 [Ring-Buffer](https://github.com/AndersKaloer/Ring-Buffer/tree/master)  
 [c-ringbuf](https://github.com/dhess/c-ringbuf/tree/master)  
