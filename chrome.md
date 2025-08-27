@@ -1,9 +1,9 @@
 ## 插件
-### 代理
+- Web Highlights
+- Weava Highlighter
 - SwitchyOmega
 - WonderSwitcher
 - DeepL翻译
-- Weava Highlighter
 - Octotree
 - Octoree Theme
 ### Tips
