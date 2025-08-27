@@ -56,7 +56,7 @@
 [The Standard C Library for Linux, part 7: String Handling](https://linuxgazette.net/issue76/rogers.html)  
 [C Programming/String manipulation](https://en.wikibooks.org/wiki/C_Programming/String_manipulation)  
 [String Functions in C (Full List With Examples)](https://www.wscubetech.com/resources/c-programming/string-functions)  
-[]()  
+[Standard C Library Functions Table, By Name](https://www.ibm.com/docs/en/i/7.5.0?topic=extensions-standard-c-library-functions-table-by-name)  
 []()  
 []()  
 
