@@ -6,7 +6,15 @@
 []()  
 []()  
 
+## debug tips
+```bash
+# run.do_compile
+run.do_compile 文件是 Yocto Bitbake 构建系统在执行 do_compile 时自动生成的一个实际工作脚本，它包含了编译软件包所需要的所有命令和环境变量
+do_compile task 抽象的定义了 "要做什么", run.do_compile 是具体可执行的 Shell 脚本
 
+# bitbake -c devshell my-recipe
+为指定recipe的任务执行环境启动一个交互式Shell终端，使用户处于与该任务完全相同的环境上下文中，方便测试和调试
+```
 
 [**A practical guide to BitBake**](https://a4z.gitlab.io/docs/BitBake/guide.html)  
 [**Variables Glossary**](https://docs.yoctoproject.org/ref-manual/variables.html)  

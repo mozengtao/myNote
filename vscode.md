@@ -37,6 +37,9 @@ TODO Highlight
 Todo Tree
 Material Icon Theme
 Code Spell Checker
+Trailing Spaces
+highlight
+
 
 
 ```bash

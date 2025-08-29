@@ -10,6 +10,79 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## struct of fields
+```bash
+# 1
+#/usr/bin/env bash
+
+declare -A entry1=(
+  [cmd]="echo"
+  [file]="/tmp/file1"
+)
+
+declare -A entry2=(
+  [cmd]="ls"
+  [file]="/tmp/file2"
+)
+
+records=(entry1 entry2)
+
+for rec in "${records[@]}"; do
+  declare -n curr_rec="$rec"
+  cmd=${curr_rec[cmd]}
+  file=${curr_rec[file]}
+  if ! command -v $cmd > /dev/null 2>&1; then
+    echo "$cmd does not exist"
+    exit 1
+  fi
+  $cmd $file
+done
+
+# 2
+#/usr/bin/env bash
+
+records=(
+  "cmd=echo file=/tmp/file1"
+  "cmd=ls file=/tmp/file2"
+)
+
+for rec in "${records[@]}"; do
+  eval "$rec"
+  if ! command -v $cmd > /dev/null 2>&1; then
+    echo "$cmd does not exist"
+    exit 1
+  fi
+  $cmd $file
+done
+
+# 3
+# cmds.json
+[
+  { "cmd": "echo", "file": "/tmp/file1" },
+  { "cmd": "ls",   "file": "/tmp/file2" }
+]
+
+#/usr/bin/env bash
+set -euo pipefail
+
+json_file="cmds.json"
+
+if [[ ! -f "$json_file" ]]; then
+  echo "JSON file '$json_file' not found!"
+  exit 1
+fi
+
+jq -c '.[]' "$json_file" | while read -r entry; do
+  cmd=$(echo "$entry" | jq -r '.cmd')
+  file=$(echo "$entry" | jq -r '.file')
+  if ! command -v $cmd > /dev/null 2>&1; then
+    echo "$cmd does not exist"
+    exit 1
+  fi
+  $cmd $file
+done
+```
+
 ## identify filesystem and read-only status
 ```bash
 $ df -h /etc/ssh/ssh_config
@@ -56,6 +129,11 @@ sed 's/......$//' file.txt
 ## jq
 [jq](https://www.mankier.com/1/jq)  
 > Command-line JSON processor
+[Convert TSV to JSON](https://onlinetools.com/json/convert-tsv-to-json)  
+[jqlang](https://github.com/jqlang)  
+[playground](https://play.jqlang.org/)  
+[manual](https://jqlang.org/manual/)  
+[]()  
 
 
 ## ip

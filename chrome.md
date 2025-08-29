@@ -6,6 +6,15 @@
 - DeepL翻译
 - Octotree
 - Octoree Theme
+- OneTab
+- Chrome Remote Desktop
+- Bookmarks Quick Search
+- Momentum
+- Todoist
+- Video DownloadHelper
+- Sider
+
+
 ### Tips
 按键`/`可以直接跳转至搜索框
 
