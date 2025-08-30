@@ -54,6 +54,10 @@ Bracket Pair Colorization: Enabled
 "editor.insertSpaces": false,
 "editor.detectIndentation": false,
 "editor.tabSize": 4,
+"files.exclude": {
+	"**/.git": true,
+	"**/.svn": true,
+}
 
 #
 Minimap

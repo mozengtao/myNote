@@ -133,8 +133,116 @@ sed 's/......$//' file.txt
 [jqlang](https://github.com/jqlang)  
 [playground](https://play.jqlang.org/)  
 [manual](https://jqlang.org/manual/)  
+[How To Transform JSON Data with jq](https://www.digitalocean.com/community/tutorials/how-to-transform-json-data-with-jq)  
 []()  
+[]()  
+```bash
+# seaCreatures.json
+[
+    { "name": "Sammy", "type": "shark", "clams": 5 },
+    { "name": "Bubbles", "type": "orca", "clams": 3 },
+    { "name": "Splish", "type": "dolphin", "clams": 2 },
+    { "name": "Splash", "type": "dolphin", "clams": 2 }
+]
 
+jq '.' seaCreatures.json
+.   filter, also known as identity operator
+
+jq '.[]' seaCreatures.json  # operate on the values of that array instead of the array itself
+.[] array value iterator
+
+jq '.[] | .name' seaCreatures.json
+|   pipe operator
+# Output
+"Sammy"
+"Bubbles"
+"Splish"
+"Splash"
+
+jq -r '.[] | .name' seaCreatures.json
+-r  raw output
+# Output
+Sammy
+Bubbles
+Splish
+Splash
+
+jq '.[] | .clams' seaCreatures.json
+# Output
+5
+3
+2
+2
+
+jq '[.[] | .clams]' seaCreatures.json   # wrap values in an array
+# Output
+[
+  5,
+  3,
+  2,
+  2
+]
+
+jq 'map(.clams)' seaCreatures.json
+# Output
+[
+  5,
+  3,
+  2,
+  2
+]
+
+jq 'map(.clams) | add' seaCreatures.json
+add filter
+
+jq 'map( (select(.type == "dolphin")) )' seaCreatures.json  #  pair select with map to apply select to every value in an array
+# Output
+[
+  {
+    "name": "Splish",
+    "type": "dolphin",
+    "clams": 2
+  },
+  {
+    "name": "Splash",
+    "type": "dolphin",
+    "clams": 2
+  }
+]
+
+jq 'map(select(.type == "dolphin") .clams)' seaCreatures.json
+# Output
+[
+  2,
+  2
+]
+
+jq 'map(select(.type == "dolphin").clams) | add' seaCreatures.json
+# Output
+4
+
+# Transforming Data to a New Data Structure
+jq '{ creatures: [], totalClams: 0, totalDolphinClams: 0 }' seaCreatures.json
+# Output
+{
+  "creatures": [],
+  "totalClams": 0,
+  "totalDolphinClams": 0
+}
+
+jq '{ creatures: map(.name), totalClams: map(.clams) | add, totalDolphinClams: map(select(.type == "dolphin").clams) | add }' seaCreatures.json
+# Output
+{
+  "creatures": [
+    "Sammy",
+    "Bubbles",
+    "Splish",
+    "Splash"
+  ],
+  "totalClams": 12,
+  "totalDolphinClams": 4
+}
+```
 
 ## ip
 [ip(8)](https://man7.org/linux/man-pages/man8/ip.8.html)  
