@@ -39,6 +39,7 @@ Material Icon Theme
 Code Spell Checker
 Trailing Spaces
 highlight
+Better C++ Syntax
 
 
 
