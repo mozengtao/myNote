@@ -63,6 +63,19 @@ Bracket Pair Colorization: Enabled
 #
 Minimap
 
+# shortcuts
+Ctr + k Ctrl + s
+
+#
+Ctrl + Shift + F
+F4	# next match
+Shift + F4 # last match
+
+#
+Ctrl + F
+F3	# next match
+Shift + F3 # last match
+
 # enlarge font size
 Ctrl +
 

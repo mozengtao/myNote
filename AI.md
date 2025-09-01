@@ -9,10 +9,15 @@
 [Check These 100 Powerful ChatGPT Prompts For Every Situation](https://growthtribe.io/blog/chatgpt-prompts/)  
 [500+ Best Prompts for ChatGPT](https://www.godofprompt.ai/blog/500-best-prompts-for-chatgpt-2024?srsltid=AfmBOorDz97w7PxISB5pLqsCH1hYRaXwd7yqJdi-pBhu8a8UBRZD66mA)  
 []()  
-[How I use Cursor](https://www.builder.io/blog/cursor-tips)  
-[cursor.directory](https://cursor.directory/)  
 []()  
 
 
 [LLM 应用开发实践笔记](https://aitutor.liduos.com/)  
 [面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook/#/)  
+
+## cursor
+[How I use Cursor](https://www.builder.io/blog/cursor-tips)  
+[cursor.directory](https://cursor.directory/)  
+[Rules](https://docs.cursor.com/en/context/rules)  
+[]()  
+[]()  
