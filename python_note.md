@@ -9,6 +9,40 @@
 [**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
 []()  
 
+## python -m
+```bash
+# how 'python -m module_name' works
+Python 解释器 ->   在 sys.path 中查找模块  -->  执行模块的 __main__ 代码  -->  模块作为脚本运行
+
+# list all available modules
+python3 -m pydoc modules
+
+# simple http server
+python3 -m http.server 8000
+
+# 检查模块路径
+python3 -c "import sys; print(sys.path)"
+
+# 添加模块路径
+export PYTHONPATH=/path/to/modules
+
+# ​​项目入口
+# 使用包结构
+python -m myproject
+
+# 依赖管理
+# 使用当前环境的pip
+python -m pip install -r requirements.txt
+
+# 测试运行
+# 执行测试套件
+python -m unittest discover
+
+# 代码质量检查
+python -m pylint mymodule.py
+python -m black mymodule.py
+```
+
 ## time
 [A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)  
 [time — Time access and conversions](https://docs.python.org/3/library/time.html)  
