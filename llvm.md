@@ -1,5 +1,9 @@
 [LLVM](https://llvm.org/)  
 
+[The Architecture of Open Source Applications (Volume 1) LLVM](https://aosabook.org/en/v1/llvm.html)  
+[]()  
+[]()  
+
 [Building an Interpreter Series](https://www.iamtk.co/series/building-an-interpreter)  
 ![Writing An Interpreter In Go](./assets/writing_an_INTERPRETER_in_go.pdf) #pdf  
 ![Writing An Interpreter In Go(code)](./assets/waiig_code_1.0.zip) #code  

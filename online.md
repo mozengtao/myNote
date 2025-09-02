@@ -1,3 +1,10 @@
+[third-bit](https://third-bit.com/)  
+[Software Design by Example](https://third-bit.com/sdxjs/)  
+[Software Design by Example](https://third-bit.com/sdxpy/)  
+[]()  
+[]()  
+[]()  
+
 ## editor
 [vscode](https://vscode.dev/)  
 
