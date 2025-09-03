@@ -10,6 +10,19 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## /usr/bin/env
+```bash
+# Advantage: it doesn't hardcode the interpreter path
+
+#!/usr/bin/env python3
+
+1. env search the PATH for python3
+2. execute it with the script as an argument
+
+
+```
+
+
 ## struct of fields
 ```bash
 # 1

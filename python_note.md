@@ -9,6 +9,20 @@
 [**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
 []()  
 
+## list, tuple, set
+```
+            |   List  |  Tuple |   Set     
+------------|---------|--------|--------
+Syntax      |   [ ]   |   ( )  |   { }                
+------------|---------|--------|--------
+Duplicates? |   Yes   |   Yes  |   No             
+------------|---------|--------|--------
+Ordered?    |   Yes   |   Yes  |   No          
+------------|---------|--------|--------
+Mutable?    |   Yes   |   No   |   Yes      
+------------|---------|--------|--------
+```
+
 ## python -m
 ```bash
 # how 'python -m module_name' works

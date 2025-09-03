@@ -2,6 +2,13 @@
 
 Git管理的是修改，而不是文件
 
+## revert a specific file
+git log <file>
+git restore --source=<hash> -- <file>
+or
+git checkout <hash> -- <file>
+git commit -m "Revert file to old commit <hash>"
+
 # disable the pager for a single git command invocation
 git --no-pager diff
 
