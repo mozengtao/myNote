@@ -14,6 +14,15 @@
 []()  
 []()  
 
+## languages
+[programming notes](https://www3.ntu.edu.sg/home/ehchua/programming/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 ## blogs
 [matklad](https://matklad.github.io/)  
 []()  
@@ -86,19 +95,27 @@
 [Think Python](https://allendowney.github.io/ThinkPython/)  
 [Object-Oriented Software Construction](https://niexiaolong.github.io/Object%20Oriented%20Software%20Construction.pdf)  
 [Object-Oriented Software Construction](https://github.com/gmoral/Books/blob/master/Object%20Oriented%20Software%20Construction-Meyer.pdf)  
+[Operating Systems: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
+[**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)  
+[**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
+[Operating Systems: Three Easy Pieces 中文版](https://github.com/remzi-arpacidusseau/ostep-translations/tree/master/chinese)  
 []()  
 []()  
 []()  
 []()  
 []()  
+[**TCP/IP Illustrated Volume 1**](https://github.com/samlee2015jp/tcp-ip_books/tree/master)  
+[Beautiful C++]()  
+[CppBooks](https://github.com/yuchdev/CppBooks)  
+[C++ Concurrency in Action](https://github.com/huyubing/books-pdf/tree/master)  
+[**C++ Concurrency in Action**](https://github.com/oudream/cpp_concurrency_in_action/tree/main)  
+[C++ Software Design]()  
+[**Inside the Machine**](https://github.com/iceqp/books-1/tree/master)  
 []()  
 []()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+[Hands-On Design Patterns with C++](https://github.com/PacktPublishing/Hands-On-Design-Patterns-with-CPP-Second-Edition/tree/main)  
+[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)  
+[cpp_book](https://github.com/saeed771/cpp_book)  
 []()  
 []()  
 
@@ -163,9 +180,7 @@
 
 - [**getdocs**](https://getdocs.org/Main_Page)
 
-- [**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-- [Operating Systems: Three Easy Pieces 中文版](https://github.com/remzi-arpacidusseau/ostep-translations/tree/master/chinese)
-- [Operating Systems: Three Easy Pieces 中文版](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)
+
 
 - [**Shichao's Notes**](https://notes.shichao.io/toc/)
 
@@ -253,8 +268,6 @@
 ## Books
 [Computer Science from the Bottom Up](https://www.cs.swarthmore.edu/~kwebb/cs31/s15/bucs/index.html)  
 [**Computer Science from the Bottom Up**](https://www.bottomupcs.com/index.html)  
-[Operating Systems: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
-[**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)  
 [Linux Kernel Development (3rd Edition)](https://www.doc-developpement-durable.org/file/Projets-informatiques/cours-&-manuels-informatiques/Linux/Linux%20Kernel%20Development,%203rd%20Edition.pdf)  
 [Linux内核完全注释(修正版v3.0)](https://github.com/Yuandong-Chen/Linux-0.11/blob/master/Linux%E5%86%85%E6%A0%B8%E5%AE%8C%E5%85%A8%E6%B3%A8%E9%87%8A(%E4%BF%AE%E6%AD%A3%E7%89%88v3.0).pdf)  
 [嵌入式Linux应用开发完全手册](http://book.100ask.net/) #linux  
