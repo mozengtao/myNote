@@ -9,8 +9,8 @@
 [Data Structure Visualizations](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)  
 [Legacy JavaScript Algorithms and Data Structures](https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/)  
 [Data Structures and Algorithm Analysis in C++]()  
-[]()  
-[]()  
+[Free-Algorithms-Books](https://github.com/GauravWalia19/Free-Algorithms-Books/tree/main/Library/src)  
+[A First Course on Data Structures in Python]()  
 []()  
 []()  
 
