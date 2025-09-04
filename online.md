@@ -5,6 +5,18 @@
 []()  
 []()  
 
+## manuals
+[**W3cubDocs**](https://docs2.w3cub.com/)  
+[**devdocs**](https://devdocs.io/)  
+[ManKier(Linux man pages)](https://www.mankier.com/)  
+[tldr](https://tldr.inbrowser.app/)  
+[Rico's cheatsheets](https://devhints.io/)  
+[ReadmeX](https://readmex.com/en-US)  
+[]()  
+[]()  
+[**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html)  
+[]()  
+
 ## editor
 [vscode](https://vscode.dev/)  
 
@@ -44,16 +56,6 @@
 
 ## translate
 [deepl](https://www.deepl.com/en/write)  
-
-## manuals
-[ManKier(Linux man pages)](https://www.mankier.com/)  
-[tldr](https://tldr.inbrowser.app/)  
-[Rico's cheatsheets](https://devhints.io/)  
-[ReadmeX](https://readmex.com/en-US)  
-[]()  
-[]()  
-[**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html)  
-[]()  
 
 
 

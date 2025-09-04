@@ -14,10 +14,10 @@
 []()  
 []()  
 
-## languages
+## Learn
 [programming notes](https://www3.ntu.edu.sg/home/ehchua/programming/)  
-[]()  
-[]()  
+[Software Design by Example](https://third-bit.com/)  
+[gvwilson](https://github.com/gvwilson)  
 []()  
 []()  
 []()  
