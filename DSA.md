@@ -1,3 +1,19 @@
+[Learn Data Structures and Algorithms](https://www.programiz.com/dsa)  
+[Common Python Data Structures (Guide)](https://realpython.com/python-data-structures/)  
+[What is Data Structure: Need, Types & Classification](https://www.mygreatlearning.com/blog/data-structure-tutorial-for-beginners/)  
+[Data Structures: A Comprehensive Introduction](https://dev.to/m__mdy__m/data-structures-a-comprehensive-introduction-2o13)  
+[A Simplified Explanation of Merge Sort](https://medium.com/karuna-sehgal/a-simplified-explanation-of-merge-sort-77089fe03bb2)  
+[A Quick Explanation of Quick Sort](https://medium.com/karuna-sehgal/a-quick-explanation-of-quick-sort-7d8e2563629b)  
+[An Introduction to Bucket Sort](https://medium.com/karuna-sehgal/an-introduction-to-bucket-sort-62aa5325d124)  
+[A Quick Explanation of Quick Sort](https://medium.com/@karuna24s)  
+[Data Structure Visualizations](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)  
+[Legacy JavaScript Algorithms and Data Structures](https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/)  
+[Data Structures and Algorithm Analysis in C++]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 
 [awesome-algorithms](https://github.com/tayllan/awesome-algorithms) #github  
 
