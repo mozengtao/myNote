@@ -19,6 +19,42 @@ Computer Programming with C++
 []()  
 []()  
 
+## C++ 在线环境
+[C++ playground](https://codapi.org/cpp/)  
+[C++ Playground](https://programiz.pro/ide/cpp)  
+
+## C++标准库参考
+[C++ reference](https://en.cppreference.com/w)  
+[C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
+![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
+[The C++ Standard Library - A Tutorial and Reference source code](http://www.cppstdlib.com/)  
+
+## API
+```c++
+std::to_string
+	Converts a numeric value to std::string
+	https://docs2.w3cub.com/cpp/string/basic_string/to_string/
+
+std::bind
+	The function template bind generates a forwarding call wrapper for f. Calling this wrapper is equivalent to invoking f with some of its arguments bound to args
+	https://docs2.w3cub.com/cpp/utility/functional/bind/
+
+std::placeholders
+	The std::placeholders namespace contains the placeholder objects [_1, . . . _N] where N is an implementation defined maximum number.
+	https://docs2.w3cub.com/cpp/utility/functional/placeholders/
+
+Concurrency support library
+std::this_thread	(namespace this_thread)
+	https://en.cppreference.com/w/cpp/atomic.html
+	std::this_thread::sleep_for
+
+std::scoped_lock
+	The class scoped_lock is a mutex wrapper that provides a convenient RAII-style mechanism for owning one or more mutexes for the duration of a scoped block.
+	https://docs2.w3cub.com/cpp/thread/scoped_lock/
+
+
+```
+
 ## STL
 [C++ Standard Template Library](https://www.programiz.com/cpp-programming/standard-template-library)  
 [C++ Standard Template Library (STL)](https://www.geeksforgeeks.org/cpp/the-c-standard-template-library-stl/)  
@@ -65,21 +101,11 @@ Features of the Object Oriented programming
 
 [C++ 内存模型](https://paul.pub/cpp-memory-model/)  
 
-## C++ 在线环境
-[C++ playground](https://codapi.org/cpp/)  
-[C++ Playground](https://programiz.pro/ide/cpp)  
-
 ## 最佳实践
 [Collecting the best C++ practices](https://medium.com/@Code_Analysis/collecting-the-best-c-practices-4b867006849f)  
 [awesome-hpp](https://github.com/p-ranav/awesome-hpp)  
 [**Google C++ Style Guide**](https://google.github.io/styleguide/cppguide.html)  
 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)  
-
-## C++标准库参考
-[C++ reference](https://en.cppreference.com/w)  
-[C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
-![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
-[The C++ Standard Library - A Tutorial and Reference source code](http://www.cppstdlib.com/)  
 
 ## C++ 在线基础课程
 [LEARN C++](https://www.learncpp.com/)  
@@ -7308,6 +7334,9 @@ int main() {
 ```
 
 ## RAII
+[Resource Acquisition is Initialisation (RAII) Explained](https://www.tomdalling.com/blog/software-design/resource-acquisition-is-initialisation-raii-explained/)  
+[]()  
+[]()  
 ```cpp
 RAII（Resource Acquisition Is Initialization，资源获取即初始化）依赖于 C++ 对象的生命周期管理，特别是构造函数和析构函数的自动调用，确保在任何情况下，资源总是能被正确地释放，无论是正常执行还是抛出异常
 RAII（Resource Acquisition Is Initialization）机制的核心思想是：资源的获取和释放由对象的生命周期自动管理。当对象超出其作用域时，资源会通过析构函数自动释放

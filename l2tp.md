@@ -1,4 +1,4 @@
-- [Layer Two Tunneling Protocol - Version 3 (L2TPv3)](https://datatracker.ietf.org/doc/html/rfc3931)
+[Layer Two Tunneling Protocol - Version 3 (L2TPv3)](https://datatracker.ietf.org/doc/html/rfc3931)  
 
 - l2tp 通过单独的或者中间3层网络(如Internet)建立二层隧道。
 - l2tp术语
@@ -61,14 +61,14 @@
 				- tunnel建立之后，LAC会周期性的发送keepalive消息给LNS，LNS会做出回应，如果LAC在一定时间内没有收到LNS的回应，它会认为tunnel断连并尝试重新建立tunnel连接。
 	- peer-to-peer 隧道
 		- 通过中间的IP网络建立单独的3层端到端VPN，用来建立端到端的PPP链路
-- 参考文档
-	- [L2TP VPN基本原理](https://cshihong.github.io/2019/08/21/L2TP-VPN%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/)
-	- [L2TPv2 Feature Overview](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)
-	- [L2TPv2 RFC](https://www.rfc-editor.org/rfc/rfc2661.html)
-	- [L2TPv3 RFC](https://www.rfc-editor.org/rfc/rfc3931)
-	- [Cisco ISG Design and Deployment Guide: ATM to ISG LNS Aggregation](https://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/edge_ios/dd_3_6.html)
-	- [Layer Two Tunneling Protocol - Version 3 (L2TPv3)](https://www.tech-invite.com/y35/tinv-ietf-rfc-3931.html)
-	- [L2TPv2 Feature Overview and Configuration Guide](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)
+
+[L2TP VPN基本原理](https://cshihong.github.io/2019/08/21/L2TP-VPN%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/)  
+[L2TPv2 Feature Overview](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)  
+[L2TPv2 RFC](https://www.rfc-editor.org/rfc/rfc2661.html)  
+[L2TPv3 RFC](https://www.rfc-editor.org/rfc/rfc3931)  
+[Cisco ISG Design and Deployment Guide: ATM to ISG LNS Aggregation](https://www.cisco.com/c/en/us/td/docs/ios/solutions_docs/edge_ios/dd_3_6.html)  
+[Layer Two Tunneling Protocol - Version 3 (L2TPv3)](https://www.tech-invite.com/y35/tinv-ietf-rfc-3931.html)  
+[L2TPv2 Feature Overview and Configuration Guide](https://www.alliedtelesis.com/sites/default/files/documents/configuration-guides/l2tp-tunnel_feature_config_guide_rev_c.pdf)  
 
 
 ```

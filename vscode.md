@@ -40,6 +40,7 @@ Code Spell Checker
 Trailing Spaces
 highlight
 Better C++ Syntax
+Protobuf
 
 
 

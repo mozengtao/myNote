@@ -1,3 +1,30 @@
+## Coding Platform
+[Cursor](https://cursor.com/home)  
+[Claude](https://claude.ai/)  
+[Qoder](https://qoder.com/)  
+
+### Cursor
+[How I use Cursor](https://www.builder.io/blog/cursor-tips)  
+[cursor.directory](https://cursor.directory/)  
+[Rules](https://docs.cursor.com/en/context/rules)  
+[]()  
+[]()  
+
+## Online
+[ChatGPT](https://chatgpt.com/)  
+[Grok](https://grok.com/)  
+[KiMi](https://kimi.moonshot.cn/)  
+[Gmini](https://gemini.google.com/app)  
+[DeepSeek](https://chat.deepseek.com/)  
+[hix.ai/](https://hix.ai/)  
+[Ithy](https://ithy.com/)  
+[字节豆包](https://www.doubao.com/chat/)  
+[腾讯元宝](https://yuanbao.tencent.com/chat/)  
+[阿里通义](https://tongyi.aliyun.com/qianwen/)  
+
+
+
+
 [Learn The Art of Prompting](https://www.learnprompt.org/)  
 [A Comprehensive Guide to Using ChatGPT Prompts for Coding Tasks](https://www.learnprompt.org/chat-gpt-prompts-for-coding/)  
 [Unleashing ChatGPT for Programmers](https://www.learnprompt.org/chatgpt-prompts-for-programmers/)  
@@ -14,10 +41,3 @@
 
 [LLM 应用开发实践笔记](https://aitutor.liduos.com/)  
 [面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook/#/)  
-
-## cursor
-[How I use Cursor](https://www.builder.io/blog/cursor-tips)  
-[cursor.directory](https://cursor.directory/)  
-[Rules](https://docs.cursor.com/en/context/rules)  
-[]()  
-[]()  
