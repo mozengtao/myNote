@@ -1,4 +1,5 @@
 ## 插件
+- Text Blaze
 - Web Highlights
 - Weava Highlighter
 - SwitchyOmega
@@ -13,7 +14,9 @@
 - Todoist
 - Video DownloadHelper
 - Sider
-
+- DeepL：人工智能翻译器和写作助手
+- Mate Translate
+- DeepTranslate
 
 ### Tips
 按键`/`可以直接跳转至搜索框
