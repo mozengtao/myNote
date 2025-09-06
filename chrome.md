@@ -28,7 +28,7 @@
 - Copy All URLs (Free)
 - Scientific Calculator
 - Simple Tab Manager
-- 
+- Tab Modifier
 - 
 - 
 - 
