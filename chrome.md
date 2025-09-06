@@ -29,7 +29,7 @@
 - Scientific Calculator
 - Simple Tab Manager
 - Tab Modifier
-- 
+- Rename Tab Title
 - 
 - 
 
