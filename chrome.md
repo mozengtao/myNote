@@ -22,6 +22,14 @@
 - Auto Refresh Plus | Page Monitor
 - Chrono下载管理器
 - 网络绘画 - 页标记和编辑器
+- 书签侧边栏
+- Note Board - Sticky Notes App
+- Bulk URL Opener Extension
+- Copy All URLs (Free)
+- Scientific Calculator
+- Simple Tab Manager
+- 
+- 
 - 
 - 
 
