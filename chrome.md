@@ -17,6 +17,13 @@
 - DeepL：人工智能翻译器和写作助手
 - Mate Translate
 - DeepTranslate
+- Session Buddy
+- Adblock Plus
+- Auto Refresh Plus | Page Monitor
+- Chrono下载管理器
+- 网络绘画 - 页标记和编辑器
+- 
+- 
 
 ### Tips
 按键`/`可以直接跳转至搜索框
