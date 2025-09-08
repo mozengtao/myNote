@@ -10,6 +10,24 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## alias workaround for string which has more than 1 word
+```bash
+git() {
+    if [[ "$1" == "review" ]]; then
+        shift
+        # run git review -t <current branch>
+        command git review -t "$(git branch --show-current | xargs basename)" "$@"
+    else
+        command git "$@"
+    fi
+}
+
+# 2
+git config --global alias.review '!f() { git review -t "$(git branch --show-current | xargs basename)"; }; f'
+
+
+```
+
 ## /usr/bin/env
 ```bash
 # Advantage: it doesn't hardcode the interpreter path

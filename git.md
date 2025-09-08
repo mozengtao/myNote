@@ -2,6 +2,9 @@
 
 Git管理的是修改，而不是文件
 
+# alias
+git config --global alias.review '!f() { git review -t "$(git branch --show-current | xargs basename)"; }; f'
+
 ## revert a specific file
 git log <file>
 git restore --source=<hash> -- <file>

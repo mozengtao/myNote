@@ -1,3 +1,8 @@
+
+[ConfD User Guide](https://manuals.plus/wp-content/sideloads/software-tail-f-confd-user-guide-original.pdf)  
+[Confd User Guide](http://66.218.245.39/doc/html/index.html)
+[C API (Manual Pages)](http://66.218.245.39/doc/html/rn02.html)
+
 - Tail-f公司的ConfD软件是一个运行在设备上的软件系统，用来配置和管理网络设备，主要提供如下功能
 	- NETCONF agent for NETCONF协议
 	- Web server for Web UI
@@ -18,10 +23,5 @@
 
 [ConfD 6.4 Documentation](http://66.218.245.39/doc/)
 
-[Confd User Guide](http://66.218.245.39/doc/html/index.html)
-
-[C API (Manual Pages)](http://66.218.245.39/doc/html/rn02.html)
-
-[ConfD User Guide](https://manuals.plus/wp-content/sideloads/software-tail-f-confd-user-guide-original.pdf)
 
 [[YANG]]
