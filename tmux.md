@@ -36,6 +36,11 @@ CTRL+b  x   		==Close current pane==
 CTRL+b  z   		==Toggle current pane to full screen==
 CTRL+b  q   		Show pane numbers
 
+# send command to another pane
+tmux send -t2 "show cable modem 20:3d:66:0d:41:12 brief | t" C-m
+# Without C-m ---> you’re just typing into the pane.
+# With C-m    ---> you’re typing and then pressing Enter to execute.
+
 # detach已经存在在另一个session中的tmux session
 	Ctrl+b  Ctrl+b  d
 

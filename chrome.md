@@ -1,35 +1,60 @@
 ## 插件
+- iTab新标签页
+- OmniTab 新标签页
+- Extension Manager
+
+- Toby: Tab Management Tool
+- Simple Tab Manager
+- Tab Modifier
+- Rename Tab Title
+- OneTab
+- Session Buddy
+
+- Dark Reader
+
+- Simple Proxy Switcher
+- WonderSwitcher
+- SwitchyOmega
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - Text Blaze
+
 - Web Highlights
 - Weava Highlighter
-- SwitchyOmega
-- WonderSwitcher
+
 - DeepL翻译
 - Octotree
 - Octoree Theme
-- OneTab
-- Chrome Remote Desktop
+
+- Bookmarks(书签侧边栏)
 - Bookmarks Quick Search
+
 - Momentum
 - Todoist
 - Video DownloadHelper
 - Sider
+
 - DeepL：人工智能翻译器和写作助手
 - Mate Translate
 - DeepTranslate
-- Session Buddy
+
 - Adblock Plus
 - Auto Refresh Plus | Page Monitor
-- Chrono下载管理器
+- Chrono Download Manager
 - 网络绘画 - 页标记和编辑器
-- 书签侧边栏
+- 
 - Note Board - Sticky Notes App
+
 - Bulk URL Opener Extension
 - Copy All URLs (Free)
+
 - Scientific Calculator
-- Simple Tab Manager
-- Tab Modifier
-- Rename Tab Title
 - 
 - 
 
@@ -61,6 +86,5 @@ javascript:(function(){
     range.surroundContents(span);
   }
 })();
-
 
 ```
