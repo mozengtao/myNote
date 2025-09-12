@@ -1,5 +1,10 @@
 [GNU make](https://www.gnu.org/software/make/manual/make.html)  
 [man 1 make](https://linux.die.net/man/1/make)  
+[GNU Autoconf](https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.72/index.html)  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ## dry run
 ```bash
