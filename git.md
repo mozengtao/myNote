@@ -2,6 +2,10 @@
 
 Git管理的是修改，而不是文件
 
+# global ignore file
+git config --global core.excludesfile ~/.gitignore_global
+echo ".cache/" >> ~/.gitignore_global
+
 # alias
 git config --global alias.review '!f() { git review -t "$(git branch --show-current | xargs basename)"; }; f'
 
