@@ -20,14 +20,14 @@ int main(void) {
     return 0;
 }
 
-configure.ac:
+configure.ac:	# describes what your project needs and how to generate configure
 AC_INIT([hello], [0.1], [maintainer@example.com])
 AM_INIT_AUTOMAKE
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
-Makefile.am:
+Makefile.am:	# says what to build
 bin_PROGRAMS = hello
 hello_SOURCES = hello.c
 
@@ -38,10 +38,11 @@ clean-local:
         @rm aclocal.m4
         @rm  compile install-sh missing Makefile.in
 
-hello$ autoconf
-hello$ automake
+hello$ aclocal		# gathers macro definitions
+hello$ autoconf		# generates ./configure from configure.ac
+hello$ automake		# generates Makefile.in from Makefile.am
 hello$ automake --add-missing
-hello$ ./configure
+hello$ ./configure	# 1.Checks your system (compiler, libraries, etc.) 2.Substitutes results into the Makefile.in templates 3.Produces real Makefile files that are tailored to your machine
 hello$ make
 hello$ ./hello
 Hello, world!
