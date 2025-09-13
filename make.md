@@ -1,10 +1,65 @@
+[GNU Automake](https://www.gnu.org/software/automake/manual/html_node/index.html)  
+[GNU Automake](https://www.gnu.org/software/automake/manual/automake.html)  
 [GNU make](https://www.gnu.org/software/make/manual/make.html)  
 [man 1 make](https://linux.die.net/man/1/make)  
 [GNU Autoconf](https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.72/index.html)  
+[Using Autotools to Configure, Make, and Install a Program](https://earthly.dev/blog/autoconf/)  
 []()  
 []()  
-[]()  
-[]()  
+
+
+```bash
+# Using Autotools to Configure, Make, and Install a Program
+hello$ ls
+configure.ac  hello.c  Makefile.am
+
+hello.c:
+#include <stdio.h>
+int main(void) {
+    puts("Hello, world!");
+    return 0;
+}
+
+configure.ac:
+AC_INIT([hello], [0.1], [maintainer@example.com])
+AM_INIT_AUTOMAKE
+AC_PROG_CC
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+
+Makefile.am:
+bin_PROGRAMS = hello
+hello_SOURCES = hello.c
+
+clean-local:
+        @rm config.status configure config.log
+        @rm Makefile
+        @rm -r autom4te.cache/
+        @rm aclocal.m4
+        @rm  compile install-sh missing Makefile.in
+
+hello$ autoconf
+hello$ automake
+hello$ automake --add-missing
+hello$ ./configure
+hello$ make
+hello$ ./hello
+Hello, world!
+
+hello$ make dist
+hello$ ls hello-0.1.tar.gz
+hello-0.1.tar.gz
+
+hello$ mkdir test
+hello$ mv hello-0.1.tar.gz test
+hello$ cd test/
+hello/test$ tar zxvf hello-0.1.tar.gz
+hello/test$ cd hello-0.1/
+hello/test/hello-0.1$ ./configure
+hello/test/hello-0.1$ make
+hello/test/hello-0.1$ ./hello
+Hello, world!
+```
 
 ## dry run
 ```bash
