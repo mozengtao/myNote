@@ -9,6 +9,10 @@
 [Rules](https://docs.cursor.com/en/context/rules)  
 []()  
 []()  
+```shortcuts
+Settings
+    Ctrl + Shift + j
+```
 
 ## Online
 [ChatGPT](https://chatgpt.com/)  

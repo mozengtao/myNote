@@ -15,8 +15,8 @@
 - Simple Proxy Switcher
 - WonderSwitcher
 - SwitchyOmega
-- 
-- 
+- Proxy SwitchyOmega Pro
+- Zero Omega
 - 
 - 
 - 
