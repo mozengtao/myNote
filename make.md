@@ -60,6 +60,22 @@ hello/test/hello-0.1$ ./configure
 hello/test/hello-0.1$ make
 hello/test/hello-0.1$ ./hello
 Hello, world!
+
+# autogen.sh is just a convenience script to run all the Autotools (aclocal, autoconf, automake)
+example:
+#!/bin/sh
+
+export WARNINGS="all"
+set -e
+
+run () {
+    test "${V}" = 1 && echo $0: running: "$@"
+    "$@"
+}
+
+run ${ACLOCAL:-aclocal} -I tools
+run ${AUTOCONF:-autoconf} --include=tools
+run ${AUTOHEADER:-autoheader} --include=tools
 ```
 
 ## dry run
