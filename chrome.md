@@ -4,6 +4,7 @@
 - Extension Manager
 
 - Toby: Tab Management Tool
+  / for quick search
 - Simple Tab Manager
 - Tab Modifier
 - Rename Tab Title
