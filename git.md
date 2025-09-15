@@ -8,6 +8,13 @@ echo ".cache/" >> ~/.gitignore_global
 
 # alias
 git config --global alias.review '!f() { git review -t "$(git branch --show-current | xargs basename)"; }; f'
+# test git alias works or not
+git -c alias.review='!f(){ echo git review -t "$(git branch --show-current | xargs basename)"; }; f' review
+# Use a default, override with first param
+git config alias.review '!f(){ git review -t "${1:-$(git branch --show-current | xargs basename)}"; }; f'
+# Usage:
+git review            # uses current branch basename
+git review my-topic   # overrides topic with "my-topic"
 
 ## revert a specific file
 git log <file>

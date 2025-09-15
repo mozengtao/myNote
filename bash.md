@@ -10,6 +10,98 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## command
+```bash
+command cmd args...     # run cmd, skipping aliases/functions
+command -v cmd          # print path or name if found; exit 0/1
+command -V cmd          # verbose “type” info
+command -p cmd args...  # search using a standard PATH
+
+# Bypass an alias or function wrapper
+# alias grep='grep --color=auto' or a grep() function exists
+command grep -n pattern file        # runs real grep, no alias/function
+
+# Check if a command exists
+if ! command -v jq >/dev/null 2>&1; then
+  echo "Please install jq"
+fi
+
+# Get what will actually run
+command -V ls
+# command -V ls       -> ls is aliased to `ls --color=auto'
+
+# Use a predictable PATH (scripts, restricted envs)
+command -p mkdir -p -- "$dest"
+command -p rm -rf -- "$dir"
+
+# Avoid recursive calls inside wrappers
+mv() { echo "logging..."; command mv "$@"; }
+```
+
+## default paramers
+```bash
+#/usr/bin/env bash
+
+# Default if unset or empty
+greet() {
+  local name=${1:-world}
+  echo "Hello, $name"
+}
+# greet         -> Hello, world
+# greet Alice   -> Hello, Alice
+
+# Default only if unset (empty string allowed)
+demo() {
+  local val=${1-DEFAULT}
+  printf '[%s]\n' "$val"
+}
+# demo          -> [DEFAULT]
+# demo ""       -> []
+
+# Multiple defaults
+build() {
+  local target=${1:-all}
+  local jobs=${2:-4}
+  echo "target=$target jobs=$jobs"
+}
+# build          -> target=all jobs=4
+# build clean    -> target=clean jobs=4
+# build new 2    -> target=new jobs=2
+
+# Default from environment, overridable by arg
+run() {
+  local threads=${1:-${THREADS:-4}}
+  echo "threads=$threads"
+}
+# THREADS=8 run       -> threads=8
+# run 16              -> threads=16
+
+# With getopts (flags + defaults)
+deploy() {
+  local env=staging timeout=30
+  while getopts "e:t:" opt; do
+    case $opt in
+      e) env=$OPTARG ;;
+      t) timeout=$OPTARG ;;
+    esac
+  done
+  echo "env=$env timeout=$timeout"
+}
+# deploy                   -> env=staging timeout=30
+# deploy -e prod -t 60     -> env=prod timeout=60
+
+# Default list/array when no args
+process() {
+  local args=("$@")
+  if [ ${#args[@]} -eq 0 ]; then
+    args=(*.txt)
+  fi
+  printf '%s ' "${args[@]}"
+}
+# process                         -> 
+# process file1.txt file2.txt     -> file1.txt file2.txt
+```
+
 ## alias workaround for string which has more than 1 word
 ```bash
 git() {
