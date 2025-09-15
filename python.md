@@ -6,6 +6,16 @@
 [PyMOTW-3](https://pymotw.com/3/index.html)  
 [The Python 3 Standard Library by Example](https://github.com/bindrat/PYTHON/tree/main)  
 
+[Managing Python Projects With uv: An All-in-One Solution](https://realpython.com/python-uv/)  
+[Python UV: The Ultimate Guide to the Fastest Python Package Manager](https://www.datacamp.com/tutorial/python-uv)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 [Python Cheat Sheet](https://www.dataquest.io/cheat-sheet/python-cheat-sheet/)  
 [Python Development Tutorials](https://earthly.dev/blog/categories/python/)  
 [Working With Files in Python](https://realpython.com/working-with-files-in-python/)  
