@@ -5,8 +5,15 @@
 
 - Toby: Tab Management Tool
   / for quick search
+
 - Tabme (新标签页书签和标签管理器)
 - Omni - Bookmark, History, & Tab Manager
+  /tabs: Search your tabs
+  /bookmarks: Search your bookmarks
+  /history: Search your browser history
+  /actions: Search all available actions
+  /remove: Remove a bookmark or close a tab
+
 - Simple Tab Manager
 - Tab Modifier
 - Rename Tab Title
