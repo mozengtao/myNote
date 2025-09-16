@@ -1,7 +1,7 @@
 [[nvim]]
 
 [**vimllearn**](https://github.com/lymslive/vimllearn)  
-[Builtin functions](https://vimhelp.org/builtin.txt.html)  
+[**Builtin functions**](https://vimhelp.org/builtin.txt.html)  
 [Write a Vim script](https://vimdoc.sourceforge.net/htmldoc/usr_41.html)  
 
 [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)  
@@ -26,6 +26,120 @@
 []()  
 [Vim Cheat Sheet](https://vim.rtorr.com/)  
 []()  
+
+## vim + tmux
+```bash
+# 在 Vim 中按下 Ctrl + x 时，将光标所在行的内容通过 xargs 发送到 tmux 会话（第 0 个窗口）
+nmap <C-x> :silent .w !xargs -0ri tmux send -t0 {}<cr>
+
+# non-interactive vimscript to send a line in vim to tmux pane
+let g:tmux_timer = -1
+let g:tmux_target = '0'   " default target pane
+
+" Send current line to a specific tmux pane
+function! SendLineToTmux(target)
+  let l:line = getline('.')
+  call system('tmux send-keys -t' . a:target . ' ' . shellescape(l:line) . ' Enter')
+endfunction
+
+" Start a loop sending to the selected target
+function! StartTmuxLoop(interval_ms, repeat_count, target)
+  if g:tmux_timer != -1
+    echo "Already running"
+    return
+  endif
+  let g:tmux_target = a:target
+  let g:tmux_timer = timer_start(a:interval_ms, { -> SendLineToTmux(g:tmux_target) }, {'repeat': a:repeat_count})
+  echo "Started loop to " . a:target . ": every " . a:interval_ms . "ms, repeat " . a:repeat_count
+endfunction
+
+function! StopTmuxLoop()
+  if g:tmux_timer != -1
+    call timer_stop(g:tmux_timer)
+    let g:tmux_timer = -1
+    echo "Stopped"
+  else
+    echo "Not running"
+  endif
+endfunction
+
+" Key mappings
+nnoremap <C-x> :call SendLineToTmux('0')<CR>
+nnoremap <C-s> :call StartTmuxLoop(3000, -1, '0')<CR>
+nnoremap <C-d> :call StopTmuxLoop()<CR>
+
+Usage:
+| Example                               | Meaning                                       |
+| ------------------------------------- | --------------------------------------------- |
+| `:call SendLineToTmux('0')`           | Send current line to pane 0                   |
+| `:call SendLineToTmux('1.2')`         | Send to window 1, pane 2                      |
+| `:call SendLineToTmux('%3')`          | Send to specific pane ID %3                   |
+| `:call StartTmuxLoop(1000, 5, '1.2')` | Send to pane 1.2 every 1s, 5 times            |
+| `:call StartTmuxLoop(3000, -1, '0')`  | Send to pane 0 every 3s forever (like before) |
+
+
+# interactive vimscript to send a line in vim to tmux pane
+let g:tmux_timer = -1
+
+" Send a specific string to a tmux target
+function! SendStringToTmux(target, text)
+  call system('tmux send-keys -t' . a:target . ' ' . shellescape(a:text) . ' Enter')
+endfunction
+
+function! StartTmuxLoopInteractive()
+  if g:tmux_timer != -1
+    echo "Already running"
+    return
+  endif
+
+  " Ask for parameters
+  let l:target = input('Target pane (e.g. 0, 1.2, %3): ')
+  if empty(l:target) | let l:target = '0' | endif
+
+  let l:interval = input('Interval in ms (e.g. 3000): ')
+  if empty(l:interval) | let l:interval = 3000 | endif
+
+  let l:repeat = input('Repeat count (-1 for forever): ')
+  if empty(l:repeat) | let l:repeat = -1 | endif
+
+  let l:mode = input('Send (l) current line or (c) custom command? [l/c]: ')
+  if l:mode ==# 'c'
+    let l:cmd = input('Enter command to send: ')
+  else
+    let l:cmd = getline('.')
+  endif
+
+  let g:tmux_timer = timer_start(
+        \ str2nr(l:interval),
+        \ { -> SendStringToTmux(l:target, l:cmd) },
+        \ {'repeat': str2nr(l:repeat)}
+        \ )
+
+  echo "Started loop to " . l:target . ": every " . l:interval . "ms, repeat " . l:repeat
+endfunction
+
+function! StopTmuxLoop()
+  if g:tmux_timer != -1
+    call timer_stop(g:tmux_timer)
+    let g:tmux_timer = -1
+    echo "Stopped"
+  else
+    echo "Not running"
+  endif
+endfunction
+
+" Quick mappings
+nnoremap <C-x> :call SendStringToTmux('0', getline('.'))<CR>
+nnoremap <C-s> :call StartTmuxLoopInteractive()<CR>
+nnoremap <C-d> :call StopTmuxLoop()<CR>
+
+Usage:
+Target pane (e.g. 0, 1.2, %3): 1.2
+Interval in ms (e.g. 3000): 1000
+Repeat count (-1 for forever): 5
+Send (l) current line or (c) custom command? [l/c]: c
+Enter command to send: echo "hello from vim"
+```
 
 ## vim 常用技巧
 ```bash
@@ -56,10 +170,6 @@ seq 3 | vim -     # use the - after the vim command to make it read from stdin
 snmpwalk -h |& vim -
 snmpwalk -h  2>&1 | vim -
 
-## vim + tmux
-
-# 在 Vim 中按下 Ctrl + x 时，将光标所在行的内容通过 xargs 发送到 tmux 会话（第 0 个窗口）
-nmap <C-x> :silent .w !xargs -0ri tmux send -t0 {}<cr>
 
 ## 搜索忽略大小写
 /xxx\c
