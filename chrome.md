@@ -6,11 +6,13 @@
 - Toby: Tab Management Tool
   / for quick search
 - Tabme (新标签页书签和标签管理器)
+- Omni - Bookmark, History, & Tab Manager
 - Simple Tab Manager
 - Tab Modifier
 - Rename Tab Title
 - OneTab
 - Session Buddy
+[Toby Alternatives](https://www.producthunt.com/products/toby/alternatives)  
 
 - Dark Reader
 
