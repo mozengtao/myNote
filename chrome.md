@@ -5,6 +5,7 @@
 
 - Toby: Tab Management Tool
   / for quick search
+- Tabme (新标签页书签和标签管理器)
 - Simple Tab Manager
 - Tab Modifier
 - Rename Tab Title
@@ -35,6 +36,7 @@
 
 - Bookmarks(书签侧边栏)
 - Bookmarks Quick Search
+- Better Bookmarks (简化您的收藏夹)
 
 - Momentum
 - Todoist

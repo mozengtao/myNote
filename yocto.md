@@ -11,6 +11,86 @@
 [Source Directory Structure](https://docs.yoctoproject.org/ref-manual/structure.html#source-directory-structure)  
 []()  
 
+## how bitbake handle a recipe(.bb)
+```bash
+1. Parse
+2. do_fetch
+3. do_unpack
+4. do_patch
+5. do_configure
+6. do_compile
+7. do_install
+8. do_package
+9. do_package_write_*
+10. do_rootfs
+11. do_image
+# 所有任务执行都在 tmp/work/<machine>/<recipe>/ 下的隔离目录进行
+```
+
+## yocto directory structure
+```bash
+yocto/
+├── poky/               # Yocto 核心元数据 (包含 oe-init-build-env、bitbake、meta/ 等)
+│   ├── meta/            # Yocto 官方核心层 (core recipes)
+│   ├── meta-poky/       # Poky 发行版配置层
+│   ├── meta-yocto-bsp/  # 官方支持的参考硬件板层
+│   ├── bitbake/         # BitBake 构建工具本体
+│   └── oe-init-build-env
+│
+├── meta-<vendor>/      # 你添加的其他 BSP/应用层 (例如 meta-raspberrypi 等)
+│
+├── build/               # 初始化后自动创建的构建目录 (BUILDDIR)
+│   ├── conf/             # 构建配置文件目录
+│   │   ├── local.conf       # 本地构建配置 (机器、并行度、镜像类型等)
+│   │   └── bblayers.conf    # 启用的各 meta 层列表
+│   │
+│   ├── tmp/              # 构建输出 (非常大)
+│   │   ├── work/              # 每个 recipe 的工作目录
+│   │   ├── deploy/             # 最终输出的镜像、内核、rootfs
+│   │   ├── log/                 # 构建日志
+│   │   └── sysroots/            # 构建 sysroot
+│   │
+│   ├── downloads/        # 下载的源码 tarball、git clone 缓存
+│   └── sstate-cache/     # 共享状态缓存 (增量编译加速)
+│
+└── ...
+```
+
+## variable priority
+```bash
+poky/
+ ├── meta/conf/bitbake.conf
+ ├── meta/mylayer/conf/layer.conf
+ ├── meta/mylayer/classes/myclass.bbclass
+ ├── meta/mylayer/recipes-example/foo/foo.inc
+ ├── meta/mylayer/recipes-example/foo/foo_1.0.bb
+ ├── meta/mylayer/recipes-example/foo/foo_1.0.bbappend
+build/
+ └── conf/local.conf
+
+
+bitbake.conf(Yocto 核心默认配置，优先级最低)
+    |
+    V
+distro.conf / layer.conf(layer的全局配置，用于设置默认值)
+    |
+    V
+  .inc(被 .bb 或 .bbclass 包含的片段)
+    |
+    V
+ .bbclass(.bbclass文件中定义的通用变量，供 .bb 继承使用)
+    |
+    V
+   .bb
+    |
+    V
+.bbappend
+    |
+    V
+local.conf(用户本地构建配置，优先级最高)
+
+```
+
 ## debug tips
 ```bash
 # run.do_compile
