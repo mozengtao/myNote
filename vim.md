@@ -96,8 +96,11 @@ function! StartTmuxLoopInteractive()
   let l:target = input('Target pane (e.g. 0, 1.2, %3): ')
   if empty(l:target) | let l:target = '0' | endif
 
-  let l:interval = input('Interval in ms (e.g. 3000): ')
-  if empty(l:interval) | let l:interval = 3000 | endif
+  "let l:interval = input('Interval in ms (e.g. 3000): ')
+  "if empty(l:interval) | let l:interval = 3000 | endif
+  let l:input = input('Interval (seconds, default 3): ')
+  let l:interval_sec = empty(l:input) ? 3 : str2nr(l:input)
+  let l:interval = l:interval_sec * 1000
 
   let l:repeat = input('Repeat count (-1 for forever): ')
   if empty(l:repeat) | let l:repeat = -1 | endif
@@ -115,7 +118,7 @@ function! StartTmuxLoopInteractive()
         \ {'repeat': str2nr(l:repeat)}
         \ )
 
-  echo "Started loop to " . l:target . ": every " . l:interval . "ms, repeat " . l:repeat
+  echo "Started loop to " . l:target . ": every " . l:interval_sec . "s, repeat " . l:repeat
 endfunction
 
 function! StopTmuxLoop()
