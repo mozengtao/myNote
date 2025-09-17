@@ -41,6 +41,8 @@ Trailing Spaces
 highlight
 Better C++ Syntax
 Protobuf
+Yocto Project BitBake
+VimL (Vim Language, Vim Script)
 
 
 

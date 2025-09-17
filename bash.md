@@ -10,6 +10,12 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## use env var for consistent command usage
+```bash
+export SNMPNAME="snmp-evc-morris-dentist-1"
+nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{print $1}') 2>/dev/null  | awk '/snmp-nsi-port/{print $3}'
+```
+
 ## command
 ```bash
 command cmd args...     # run cmd, skipping aliases/functions
