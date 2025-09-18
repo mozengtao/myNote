@@ -43,6 +43,13 @@ Better C++ Syntax
 Protobuf
 Yocto Project BitBake
 VimL (Vim Language, Vim Script)
+AWK
+Markdown Preview Mermaid Support
+ShellCheck
+Better Shell Syntax
+shell-format
+Shell Script Command Completion
+
 
 
 

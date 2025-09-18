@@ -10,6 +10,17 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## bash regex match
+```bash
+[[ "vmc123" =~ ^vmc ]] && echo true       # true
+[[ "vmc123" =~ "^vmc" ]] || echo false    # false
+
+pattern="^vmc"
+[[ "vmc123" =~ $pattern ]] && echo true       # true
+[[ "vmc123" =~ "$pattern" ]] || echo false    # false
+```
+
+
 ## use env var for consistent command usage
 ```bash
 export SNMPNAME="snmp-evc-morris-dentist-1"

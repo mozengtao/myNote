@@ -20,6 +20,20 @@
 
 ## Tips
 ```bash
+# convert hex str to dec str
+echo "00:11:80:68:48:ee" | awk -F: '{for(i=1;i<=NF;i++){printf "%d%s", strtonum("0x"$i), (i<NF?".":"\n")}}'
+Output:0.17.128.104.72.238
+# script version
+BEGIN {
+	FS = ":"
+}
+
+{
+	for(i = 1; i <= NF; i++) {
+		printf "%d%s", strtonum("0x"$i), (i == NF ? "\n" : ".")
+	}
+}
+
 # structured according to awk’s definition of a program: condition { actions }
 awk '{if ($0 ~ /pattern/) print $0}'	# not idiomatic for awk, so not recommended
 awk '$0 ~ /pattern/ {print $0}'			# condition { actions }
