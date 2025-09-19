@@ -9,6 +9,24 @@
 []()  
 []()  
 
+## run specific command automatically upon login
+```bash
+# 1 (~/.ssh/config)
+Host myserver
+    HostName server.example.com
+    User morris
+    #RemoteCommand /path/to/my/script.sh
+    #RemoteCommand cd /tmp && exec $SHELL -l						# triggered for scp, rsync -e, ...
+    #RemoteCommand test -t 0 || { cd /tmp && exec $SHELL -l; }		# triggered only for interactive sessions
+
+# 2 inline command
+ssh -t myserver 'mycommand && exec $SHELL -l'	# -t forces SSH to allocate a pseudo-terminal (PTY), $SHELL -l then runs as a real login shell and shows a prompt
+ssh myserver 'mycommand && exec $SHELL -l'		# start a shell, but no tty, it waits silently
+ssh myserver 'mycommand'	# one-off, just login to myserver, execute mycommand, then exit login
+
+ssh myserver 'mycommand && $SHELL -i'	# because it’s not a login shell, it does not read the usual startup files like ~/.bash_profile or ~/.profile (for bash)
+```
+
 ## ssh login process using public key
 ```
  [Client Machine]                           [Remote Server]
