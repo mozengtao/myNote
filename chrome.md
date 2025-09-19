@@ -1,4 +1,16 @@
 ## 插件
+
+[The List of Chrome URLs for Internal Built-in Pages](https://winaero.com/the-list-of-chrome-urls-for-internal-built-in-pages/)  
+List of Chrome URLs
+chrome://about/
+chrome://chrome-urls/
+
+set a keyboard shortcut for an extension:
+chrome://extensions/shortcuts
+
+shortcut to search Tabs:
+Ctrl+Shift+A
+
 - iTab新标签页
 - OmniTab 新标签页
 - Extension Manager
