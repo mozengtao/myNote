@@ -9,6 +9,28 @@
 []()  
 []()  
 
+## exec remote cmd which has an interactive cli
+```bash
+# 1 use here-doc
+$ ssh server 'python3 <<EOF
+import os
+print(os.getcwd())
+exit()
+EOF
+'
+# 2 use input file
+# on server
+/tmp/cmds.txt:
+import os
+print(os.getcwd())
+exit()
+# on client
+ssh server 'python3 < /tmp/cmds.txt'
+
+
+# Some interactive CLIs require a TTY to run, in that case use 'ssh -t server'
+```
+
 ## run specific command automatically upon login
 ```bash
 # 1 (~/.ssh/config)

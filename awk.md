@@ -20,6 +20,118 @@
 
 ## Tips
 ```bash
+By default every variable inside a function is global in awk, to avoid name conflicts and bugs, for awk function, we declare them as extra params, this is a standard awk idiom for creating local variables, so the paramters are 2 parts:
+1. the real parameters (you pass them when calling)
+2. the local scratch variables (only used inside the function)
+
+for example:
+function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
+    ...
+}
+str, arr, seps, joinstr are intended parameters you pass when calling
+tmp, raw, i, n, c are local variables
+
+
+# split
+awk '{
+    n = split($0, parts, /[:\-,]/)
+    for (i = 1; i <= n; i++) print parts[i]
+}' <<< "aa:bb-cc,dd"
+
+awk '{
+    n = split($0, parts, /[[:space:],]+/)
+    for (i=1; i<=n; i++) print parts[i]
+}' <<< "one, two   three"
+
+# gsub changes the text in place
+echo "apple banana apple" | awk '{ gsub("apple", "orange"); print }'
+echo "1:2:3" | awk -F: '{ gsub("2","20",$2); print $2 }'
+echo "cat bat mat" | awk '{ gsub(/[bm]at/, "xxx"); print }'
+echo "hello hello world" | awk '{
+    n = gsub(/hello/, "hi")
+    print $0, "→ replaced", n, "times"
+}'
+echo "foo" | awk '{ gsub(/foo/, "[&]"); print }'
+
+# gsub + split (multiple seperators -> one delimiter, then split)
+echo "apple,banana;cherry" | awk '{
+    gsub(/[;,]/, " ", $0)
+    n = split($0, arr, " ")
+    for (i=1; i<=n; i++) print arr[i]
+}'
+
+echo "a   b\t\tc" | awk '{
+    gsub(/[ \t]+/, " ")
+    n = split($0, arr, " ")
+    for (i=1; i<=n; i++) print arr[i]
+}'
+
+echo "k1=v1;k2=v2" | awk '{
+    gsub(";", " ", $0)          # turn ; into spaces
+    n = split($0, pairs, " ")
+    for (i=1; i<=n; i++) {
+        split(pairs[i], kv, "=")
+        print kv[1] " → " kv[2]
+    }
+}'
+
+# use a function for gsub + split
+# Trim helper
+function trim(s) {
+    sub(/^[ \t\r\n]+/, "", s)
+    sub(/[ \t\r\n]+$/, "", s)
+    return s
+}
+
+# msplit:
+#   str      → input string
+#   arr      → output array
+#   seps     → regex for separators
+#   joinstr  → optional join separator (if non-empty returns joined string)
+#
+#   (tmp, raw, i, n, c are locals)
+function msplit(str, arr, seps, joinstr,
+                tmp, raw, i, n, c, joined) {
+
+    tmp = str
+    gsub(seps, " ", tmp)            # replace all separators with space
+    n = split(tmp, raw, " ")
+
+    c = 0
+    for (i = 1; i <= n; i++) {
+        raw[i] = trim(raw[i])
+        if (raw[i] != "") {
+            c++
+            arr[c] = raw[i]
+        }
+    }
+
+    if (joinstr != "") {            # if join requested
+        joined = arr[1]
+        for (i = 2; i <= c; i++) joined = joined joinstr arr[i]
+        return joined
+    }
+
+    return c                         # otherwise return count
+}
+
+echo "apple ;; banana ||| cherry ,, pear" | awk '
+# include msplit & trim here
+{
+    n = msplit($0, parts, "[;|,]")
+    for (i = 1; i <= n; i++) print parts[i]
+}'
+
+echo "apple ;; banana ||| cherry ,, pear" | awk '
+# include msplit & trim here
+{
+    result = msplit($0, parts, "[;|,]", "|")
+    print result
+}'
+
+
+
+
 # convert hex str to dec str
 echo "00:11:80:68:48:ee" | awk -F: '{for(i=1;i<=NF;i++){printf "%d%s", strtonum("0x"$i), (i<NF?".":"\n")}}'
 Output:0.17.128.104.72.238
