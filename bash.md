@@ -10,6 +10,98 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## example: awk + ssh
+```bash
+# proc.awk
+function hexmac2decmac(hexstr, isep, osep,
+					tmp, i, joined) {
+	tmp = hexstr
+	split(tmp, a, isep)
+
+	joined = ""
+	for(i = 1; i <= length(a); i++) {
+		joined = joined (i == 1 ? "" : osep) strtonum("0x"a[i])
+	}
+
+	return joined
+}
+
+function getmodemip(line,
+					tmp, ipblock, n, ips, i, ipv4, ipv6, ipstr) {
+	tmp = line
+	if (match(tmp, /\[[^]]*\]/)) {
+		ipblock = substr(tmp, RSTART+1, RLENGTH-2)
+		n = split(ipblock, ips, " ")
+
+		ipv4 = ""; ipv6 = ""
+		for(i = 1; i <= n; i++) {
+			if (ips[i] ~ /\./) {
+				ipv4 = ips[i]
+			} else if (ips[i] ~ /:/) {
+				ipv6 = ips[i]
+			}
+		}
+	}
+
+	ipstr = ""
+	if(ipv4 == "")
+		ipv4 = "0.0.0.0"
+	ipstr = ipstr " " ipv4
+	if(ipv6 != "") ipstr = ipstr " " ipv6
+
+	return ipstr
+}
+
+/operational/ {
+	print hexmac2decmac($1, ":", ".") " " getmodemip($0)
+}
+
+# script.sh
+#!/usr/bin/env sh
+
+# get modem info
+EVCNAME="evc-morris-dentist"
+nomad alloc exec -task evc -job $EVCNAME sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF
+' > /tmp/modem.list
+
+# get modem mac and ip
+awk -f proc.awk /tmp/modem.list > /tmp/modem_mac_ip.list
+
+# get snmp-nsi-port
+SNMPNAME="snmp-evc-morris-dentist-1"
+SNMP_NSIPORT=$(nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{print $1}') 2>/dev/null \
+			   | awk '/snmp-nsi-port/{print $3}')
+
+# get snmp output
+for line in $(awk '{print $1}' /tmp/modem_mac_ip.list); do
+
+	# modem mac
+	echo $line | awk -F. '{for(i=1;i<=NF;i++) printf "%02x%s", $i,i==NF ? "\n" : ":"}'
+
+	key=$(sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no \
+								-o UserKnownHostsFile=/dev/null \
+								root@10.254.25.42 \
+								2>/dev/null \
+	snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmPtr -M /home/tcao/mibs \
+	| grep $line \
+	| awk '{print $NF}')
+
+	echo $line $key
+
+	sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no \
+								-o UserKnownHostsFile=/dev/null \
+								root@10.254.25.42 \
+								2>/dev/null \
+	snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmStatusTable -M /home/tcao/mibs \
+	| grep $key \
+	| grep IpAddress
+
+	echo -e "\n--------------------------------\n"
+done
+```
+
 ## bash regex match
 ```bash
 [[ "vmc123" =~ ^vmc ]] && echo true       # true
