@@ -20,6 +20,11 @@
 
 ## Tips
 ```bash
+# Rule of Thumb
+Use sed for simple edits (substitution, deletion, insertion).
+Use awk when you need to process fields, add conditions, or compute.
+
+
 By default every variable inside a function is global in awk, to avoid name conflicts and bugs, for awk function, we declare them as extra params, this is a standard awk idiom for creating local variables, so the paramters are 2 parts:
 1. the real parameters (you pass them when calling)
 2. the local scratch variables (only used inside the function)
