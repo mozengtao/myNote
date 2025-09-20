@@ -31,6 +31,90 @@ function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
 str, arr, seps, joinstr are intended parameters you pass when calling
 tmp, raw, i, n, c are local variables
 
+# match
+# how match works
+match(string, regex, array) # array is optional
+1. Looks in string for the first substring matching regex.
+2. If found:
+    Returns the position (1-based) of the match.
+    Sets special variables:
+        RSTART → position of the match.
+        RLENGTH → length of the match.
+    If array is provided, fills it with captured groups.
+3. If no match:
+    Returns 0
+    RSTART = 0, RLENGTH = -1
+
+# Find first match
+echo "hello world" | awk '{
+    if (match($0, /world/)) {
+        print "Found at:", RSTART, "length:", RLENGTH
+    }
+}'
+
+# Extract substring using RSTART and RLENGTH
+echo "user=alice,uid=1001" | awk '{
+    if (match($0, /uid=[0-9]+/)) {
+        print substr($0, RSTART, RLENGTH)
+    }
+}'
+
+# Use array to capture groups
+echo "2025-09-20" | awk '{
+    if (match($0, /([0-9]{4})-([0-9]{2})-([0-9]{2})/, m)) {
+        print "Year:", m[1], "Month:", m[2], "Day:", m[3]
+    }
+}'
+
+# Multiple matches with a loop
+echo "cat dog cat dog" | awk '{
+    str=$0
+    while (match(str, /cat/)) {
+        print "Found cat at:", RSTART
+        str = substr(str, RSTART + RLENGTH)  # move past match
+    }
+}'
+
+# match Search a string with a regex
+# index Find literal substring, no regex.
+# gsub Replace all matches of regex with replacement
+
+# example match + index + gsub
+echo "user=alice uid=1001" | awk '{
+    # match: extract the uid
+    if (match($0, /uid=[0-9]+/))
+        print "match() →", substr($0, RSTART, RLENGTH)
+
+    # index: check where "alice" starts
+    print "index() →", index($0, "alice")
+
+    # gsub: replace alice with bob
+    s=$0
+    gsub(/alice/, "bob", s)
+    print "gsub() →", s
+}'
+
+#
+echo '90:58:51:5c:9c:5c   [ 64.150.41.18 2001:64:150:100::ff:a ]  operational(oA)' \
+| awk '{
+    if (match($0, /\[[^]]*\]/)) {
+        ipblock = substr($0, RSTART+1, RLENGTH-2)  # contents inside [ ]
+        n = split(ipblock, arr, " ")
+
+        ipv4=""; ipv6=""
+        for (i=1; i<=n; i++) {
+            if (arr[i] ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) {
+                ipv4 = arr[i]
+            } else if (arr[i] ~ /:/) {
+                ipv6 = arr[i]
+            }
+        }
+
+        if (ipv4 != "") print "IPv4: " ipv4
+        if (ipv6 != "") print "IPv6: " ipv6
+    }
+}'
+
 
 # split
 awk '{

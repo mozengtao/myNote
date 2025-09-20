@@ -18,6 +18,14 @@ print(os.getcwd())
 exit()
 EOF
 '
+
+#
+nomad alloc exec -task evc <alloc_id> sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF
+'
+
+
 # 2 use input file
 # on server
 /tmp/cmds.txt:
@@ -26,6 +34,10 @@ print(os.getcwd())
 exit()
 # on client
 ssh server 'python3 < /tmp/cmds.txt'
+
+# 
+nomad alloc exec -task evc <alloc_id> sh -c 'ncs_cli -u admin < /path/to/commands.txt'
+
 
 
 # Some interactive CLIs require a TTY to run, in that case use 'ssh -t server'
