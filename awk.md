@@ -31,6 +31,84 @@ function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
 str, arr, seps, joinstr are intended parameters you pass when calling
 tmp, raw, i, n, c are local variables
 
+# how to execute external cmd
+# read one line of output from cmd
+awk 'BEGIN {
+	cmd = "date +%Y-%m-%d"
+	cmd | getline result
+	close(cmd)					# always close the pipe
+	print "Today is:", result
+}'
+
+# just execute cmd, ignore output
+awk 'BEGIN { system("echo hello from system") }'
+
+# capture multiple lines into an array
+awk 'BEGIN {
+    cmd = "ls /etc | head -3"
+
+    n = 0
+    # getline returns >0 while there are lines
+    while ((cmd | getline line) > 0) {
+        files[++n] = line
+    }
+    close(cmd)
+}
+{
+    print $1, " | Sample file:", files[(NR % n) + 1]
+}' /etc/passwd
+
+# send awk output to external cmd
+awk '{ print $0 | "wc -c" }' /etc/passwd
+
+# read multiple files inw awk simultaneously
+# 2 files
+awk 'FNR==NR {			# while reading first file
+	a[$1] = $2			# store 1st col as key, 2nd col as value in array a
+	next				# skip to next line
+}
+{
+	if ($1 in a) {		# while reading second file, check if 1st col exists in array a
+		print $0, a[$1]	# if exists, print the whole line and the corresponding value from array a
+	}
+}' file1.txt file2.txt
+
+# 3 files
+awk '
+# file1
+FNR==NR {
+	arr1[$1]=$2
+	next
+}
+# file2
+FNR!=NR && NR<=FNR+NR1 {
+	arr2[$1]=$2
+	next
+}
+# file3
+{
+	print $1, arr1[$1], arr2[$1], $2
+}
+' file1 file2 file3
+
+# 3 files
+awk '
+# first file
+ARGIND==1 {
+	arr1[$1]=$2
+	next
+}
+# second file
+ARGIND==2 {
+	arr2[$1]=$2
+	next
+}
+# third file
+ARGIND==3 {
+	print $1, arr1[$1], arr2[$1], $2
+}
+' file1.txt file2.txt file3.txt
+
 # match
 # how match works
 match(string, regex, array) # array is optional
