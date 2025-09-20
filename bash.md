@@ -59,8 +59,15 @@ function getmodemip(line,
 # script.sh
 #!/usr/bin/env sh
 
-# get modem info
 EVCNAME="evc-morris-dentist"
+SNMPNAME="snmp-evc-morris-dentist-1"
+DHCP_SERVER="root@10.254.25.42"
+DHCP_SERVER_PASSWORD="vecima@atc"
+MIB_DIR="/home/tcao/mibs"
+MIBTABLE_CMTSCMPTR="DOCS-IF-MIB:docsIfCmtsCmPtr"
+MIBTABLE_CMTSCMSTATUS="DOCS-IF-MIB:docsIfCmtsCmStatusTable"
+
+# get modem info
 nomad alloc exec -task evc -job $EVCNAME sh -c 'ncs_cli -u admin <<EOF
 show cable modem brief | t
 EOF
@@ -70,7 +77,6 @@ EOF
 awk -f proc.awk /tmp/modem.list > /tmp/modem_mac_ip.list
 
 # get snmp-nsi-port
-SNMPNAME="snmp-evc-morris-dentist-1"
 SNMP_NSIPORT=$(nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{print $1}') 2>/dev/null \
 			   | awk '/snmp-nsi-port/{print $3}')
 
@@ -78,25 +84,23 @@ SNMP_NSIPORT=$(nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{pri
 for line in $(awk '{print $1}' /tmp/modem_mac_ip.list); do
 
 	# modem mac
-	echo $line | awk -F. '{for(i=1;i<=NF;i++) printf "%02x%s", $i,i==NF ? "\n" : ":"}'
+	echo "${line}" | awk -F. '{for(i=1;i<=NF;i++) printf "%02x%s", $i,i==NF ? "\n" : ":"}'
 
-	key=$(sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no \
+	key=$(sshpass -p "${DHCP_SERVER_PASSWORD}" ssh -o StrictHostKeyChecking=no \
 								-o UserKnownHostsFile=/dev/null \
-								root@10.254.25.42 \
+								"${DHCP_SERVER}" \
 								2>/dev/null \
-	snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmPtr -M /home/tcao/mibs \
-	| grep $line \
-	| awk '{print $NF}')
+			snmpwalk -On -v2c -c public $SNMP_NSIPORT "${MIBTABLE_CMTSCMPTR}" -M "${MIB_DIR}" \
+			| grep "${line}" \
+			| awk '{print $NF}')
 
-	echo $line $key
-
-	sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no \
+	sshpass -p "${DHCP_SERVER_PASSWORD}" ssh -o StrictHostKeyChecking=no \
 								-o UserKnownHostsFile=/dev/null \
-								root@10.254.25.42 \
+								"${DHCP_SERVER}" \
 								2>/dev/null \
-	snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmStatusTable -M /home/tcao/mibs \
-	| grep $key \
-	| grep IpAddress
+		snmpwalk -On -v2c -c public $SNMP_NSIPORT "${MIBTABLE_CMTSCMSTATUS}" -M "${MIB_DIR}" \
+		| grep "${key}" \
+		| grep "IpAddress"
 
 	echo -e "\n--------------------------------\n"
 done
