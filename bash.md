@@ -133,6 +133,7 @@ sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/d
 # Process each modem
 for mac in "${!modems[@]}"; do
     #4 Convert MAC to proper format
+    # printf "%02x:%02x:%02x:%02x:%02x:%02x\n" $(echo 0c:b9:37:a2:14:40 | sed 's/\([0-9a-fA-F]\+\)/0x\1/g' | tr ':' ' ')
     formatted_mac=$(printf "%02x:%02x:%02x:%02x:%02x:%02x\n" $(echo "$mac" | tr '.' ' '))
 
     key=$(grep "$mac" /tmp/snmp_full.list | awk '{print $NF}')
