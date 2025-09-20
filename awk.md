@@ -31,6 +31,29 @@ function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
 str, arr, seps, joinstr are intended parameters you pass when calling
 tmp, raw, i, n, c are local variables
 
+# write to multiple files based on conditions
+awk '
+{
+    mac = $1
+    status = $4
+
+    # Write full line to status-specific file
+    if (status == "operational") {
+        print $0 >> "operational.txt"
+    } else if (status == "offline") {
+        print $0 >> "offline.txt"
+    }
+
+    # Always write summary to a separate file
+    print mac, status >> "summary.txt"
+
+    # Optional: close files to avoid too many open files
+    close("operational.txt")
+    close("offline.txt")
+    close("summary.txt")
+}
+' input.txt
+
 # how to execute external cmd
 # read one line of output from cmd
 awk 'BEGIN {

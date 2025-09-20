@@ -100,6 +100,46 @@ for line in $(awk '{print $1}' /tmp/modem_mac_ip.list); do
 
 	echo -e "\n--------------------------------\n"
 done
+
+# improved script.sh from ChatGPT
+# improvements
+1.Use Bash instead of sh for modern features
+2.Avoid repeated SSH calls (Each SSH session is slow)
+3.Use associative arrays in Bash
+4.Clean up AWK pipelines
+5.Quote variables consistently
+6.Optional: Use parallel processing
+7.Consider using a centralized SNMP query tool
+
+#!/usr/bin/env bash
+
+#3 Load modems into array
+declare -A modems
+while read -r mac ip; do
+    modems["$mac"]="$ip"
+done < /tmp/modem_mac_ip.list
+
+#2 Fetch SNMP data once
+sshpass -p 'vecima@atc' ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    root@10.254.25.42 \
+    "snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmPtr -M /home/tcao/mibs; \
+     snmpwalk -On -v2c -c public $SNMP_NSIPORT DOCS-IF-MIB:docsIfCmtsCmStatusTable -M /home/tcao/mibs" \
+> /tmp/snmp_full.list 2>/dev/null
+
+# Process each modem
+for mac in "${!modems[@]}"; do
+    #4 Convert MAC to proper format
+    formatted_mac=$(printf "%02x:%02x:%02x:%02x:%02x:%02x\n" $(echo "$mac" | tr '.' ' '))
+
+    key=$(grep "$mac" /tmp/snmp_full.list | awk '{print $NF}')
+    echo "$mac $key"
+
+    #5
+    grep "$key" /tmp/snmp_full.list | grep IpAddress
+
+    echo -e "\n--------------------------------\n"
+done
+
 ```
 
 ## bash regex match
