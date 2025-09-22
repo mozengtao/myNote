@@ -107,6 +107,7 @@ $1 ~ /^[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){5}$/ {
 # proc.sh
 #!/usr/bin/env sh
 
+# customize enviroment info
 EVCNAME="evc"
 SNMPNAME="snmp-evc-1"
 DHCP_SERVER="root@10.254.25.136"
@@ -115,6 +116,13 @@ MIB_DIR="/home/leo/muir-vcmts/env/mibs"
 MIBTABLE_CMTSCMPTR="DOCS-IF-MIB:docsIfCmtsCmPtr"
 MIBTABLE_CMTSCMSTATUS="DOCS-IF-MIB:docsIfCmtsCmStatusTable"
 
+# color for output
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+# tmp file for internal use
 NCS_MODEM_BRIEF_FILE="/tmp/modem_brief.list"
 NCS_MODEM_IP_FILE="/tmp/modem_ip.list"
 SNMP_MIB_RESULT_FILE="/tmp/modem_mib.result"
@@ -178,7 +186,12 @@ for mac in "${!modems[@]}"; do
 	fi
 done
 
-echo "Total modems: ${#modems[@]}, IP matches:$match, IP mismatches:$mismatch"
+COLOR=${GREEN}
+if [[ $mismatch -ne 0 ]]; then
+	COLOR=${RED}
+fi
+echo "${BOLD}${COLOR}Total modems: ${#modems[@]}, IP matches:$match, IP mismatches:$mismatch ${RESET}"
+
 ```
 
 ## example: awk + ssh
@@ -1730,6 +1743,22 @@ echo $VAR
 ANSI codes are standardized sequences to control text formatting (color, style, etc.).
 Bash 中输出带颜色的字符串到终端，通过 ​​ANSI 转义码​​（ANSI Escape Codes）实现
 
+# common colors
+# foreground text colors(30-37)
+# bacground text colors(40-47)
+30  Black
+31  Red
+32  Green
+33  Yellow
+34  Blue
+35  Magenta
+36  Cyan
+37  White
+# Styles
+0   Reset all
+1   Bold
+4   Underline
+
 # 1
 echo -e "\e[STYLE;FG;BGmTEXT\e[0m"
 	\e[ starts the escape sequence.
@@ -1748,6 +1777,9 @@ RESET=$(tput sgr0)
 echo "${BOLD}${RED}Error: Something went wrong.${RESET}"
 
 # 3
+# \e is a Bash escape character shortcut (same as ASCII ESC, code 0x1B)
+# \e[31m → “switch foreground color to red.”
+# Works in Bash, but not POSIX-sh guaranteed.
 RED="\e[31m"
 GREEN="\e[32m"
 BOLD="\e[1m"
@@ -1772,6 +1804,18 @@ log_error "服务启动失败" Error code: 123
 log_ok "备份完成"
 
 # 
+# \033 is an octal escape sequence for ASCII 27 (Escape).
+# More portable (works in Bash, sh, zsh, ksh, etc.).
+# The extra 0; means "reset attributes, then set red text"(0:reset style(normal weight), 31:red)
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+echo -e "${BOLD}${GREEN}Success!${RESET}"
+echo -e "${RED}Error occurred${RESET}"
+
 ```
 
 ## builtins
