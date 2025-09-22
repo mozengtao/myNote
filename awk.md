@@ -36,6 +36,13 @@ function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
 str, arr, seps, joinstr are intended parameters you pass when calling
 tmp, raw, i, n, c are local variables
 
+# substitue
+echo '[ 64.150.80.45 2001:64:150:100:80::3a ]' \
+| awk '{ gsub(/^\[ *| *\]$/, ""); print }'
+
+echo "3c:c4:4f:21:00:88" \
+| awk '/^[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){5}$/ {print}'
+
 # write to multiple files based on conditions
 awk '
 {

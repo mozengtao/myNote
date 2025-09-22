@@ -10,6 +10,177 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+
+## here string
+```bash
+command <<< "some text"
+# sends the contents of a string variable or literal directly to the stdin of the command
+# only works for one string(like single line or varialbe content)
+# cleaner and slightly faster than using echo + pipe
+
+--> equals to
+
+echo "some text" | command
+# connects the stdout of one command to the stdin of another
+# can work with multi-line streams or the output of artitary commands
+# essential when processing files, commands or pipelines
+```
+
+## get first field of a string
+```bash
+line=".1.3.6.1.2.1.10.127.1.3.7.1.2.60.196.79.33.2.199 = INTEGER: 395265"
+
+# 1
+echo "$line" | awk '{if ($1 ~ /196\.79\.33\.2\.199$/) print "MATCH"}'
+# 2
+first_field=$(echo "$line" | cut -d' ' -f1)
+
+if [[ $first_field == *196.79.33.2.199 ]]; then
+    echo "MATCH"
+else
+    echo "NO MATCH"
+fi
+# 3
+set -- $line        # split line into $1, $2...
+first_field=$1
+
+if [[ $first_field == *196.79.33.2.199 ]]; then
+    echo "MATCH"
+fi
+# 4
+```
+
+## check string ends up with a specific string
+```bash
+str="hello_world.txt"
+
+# 1
+if [[ $str == *.txt ]]; then
+    echo "Yes, it ends with .txt"
+fi
+
+# 2
+if [[ $str =~ \.txt$ ]]; then
+    echo "Ends with .txt"
+fi
+
+```
+
+## increase/decrease a number
+```bash
+# 1
+n=10
+n=$((n + 1))
+n=$((n - 1))
+
+# 2
+n=10
+((n++))
+((n--))
+((n+=1))
+((n-=1))
+# 3
+n=10
+let n++
+let n--
+let n+=1
+let n-=1
+# 4
+n=10
+n=$(expr $n + 1)
+n=$(expr $n - 1)
+```
+
+## example 1
+```bash
+# get_modem_ip.awk
+$1 ~ /^[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){5}$/ {
+	if (match($0, /\[[^]]*\]/)) {
+		matchstr = substr($0, RSTART+1, RLENGTH-2)
+		print $1 " " matchstr
+	}
+	else {
+		print $1 " " $5
+	}
+}
+
+# proc.sh
+#!/usr/bin/env sh
+
+EVCNAME="evc"
+SNMPNAME="snmp-evc-1"
+DHCP_SERVER="root@10.254.25.136"
+DHCP_SERVER_PASSWORD="vecima@atc"
+MIB_DIR="/home/leo/muir-vcmts/env/mibs"
+MIBTABLE_CMTSCMPTR="DOCS-IF-MIB:docsIfCmtsCmPtr"
+MIBTABLE_CMTSCMSTATUS="DOCS-IF-MIB:docsIfCmtsCmStatusTable"
+
+NCS_MODEM_BRIEF_FILE="/tmp/modem_brief.list"
+NCS_MODEM_IP_FILE="/tmp/modem_ip.list"
+SNMP_MIB_RESULT_FILE="/tmp/modem_mib.result"
+
+# get  modem cli info
+nomad alloc exec -task evc -job "$EVCNAME" sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF'> "$NCS_MODEM_BRIEF_FILE"
+
+# get snmp-nsi-port
+SNMP_NSIPORT=$(nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{print $1}') 2>/dev/null \
+			   | awk '/snmp-nsi-port/{print $3}')
+
+# get mib result
+sshpass -p "$DHCP_SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no \
+						  -o UserKnownHostsFile=/dev/null \
+						  2>/dev/null "$DHCP_SERVER" \
+		"snmpwalk -On -v2c -c public $SNMP_NSIPORT ${MIBTABLE_CMTSCMPTR} -M ${MIB_DIR}; \
+		snmpwalk -On -v2c -c public $SNMP_NSIPORT ${MIBTABLE_CMTSCMSTATUS} -M ${MIB_DIR}" \
+		2>/dev/null > "$SNMP_MIB_RESULT_FILE"
+
+awk -f get_modem_ip.awk "$NCS_MODEM_BRIEF_FILE" > "$NCS_MODEM_IP_FILE"
+
+declare -A modems
+while read -r mac ip _; do
+	if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+		modems["$mac"]="$ip"
+	else
+		modems["$mac"]="0.0.0.0"
+	fi
+done < "$NCS_MODEM_IP_FILE"
+
+match=0
+mismatch=0
+for mac in "${!modems[@]}"; do
+	decmac=$(printf "%d.%d.%d.%d.%d.%d" $(echo $mac | sed 's/\([0-9a-fA-F]\+\)/0x\1/g' | tr ':' ' '))
+	#echo -e "\n--------------------------------\n"
+	if grep -q "$decmac =" "$SNMP_MIB_RESULT_FILE"; then
+		snmp_key=$(grep "$decmac =" "$SNMP_MIB_RESULT_FILE" | awk '{print $NF}')
+		if grep -q "$snmp_key =" "$SNMP_MIB_RESULT_FILE"; then
+			snmp_ip=$(grep "$snmp_key =" "$SNMP_MIB_RESULT_FILE" | grep "IpAddress" | awk '{print $NF}')
+			#echo "MAC: $mac, IP: ${modems[$mac]}, SNMP IP: ${snmp_ip}"
+			if [[ "${modems[$mac]}" == "$snmp_ip" ]]; then
+				((match++))
+			else
+				((mismatch++))
+				echo "IP mismatch for MAC: $mac, NCS IP: ${modems[$mac]}, SNMP IP: $snmp_ip"
+				echo "NCS modem brief for $mac:"
+				# protects against $mac starting with - (prevents it from being interpreted as an option
+				grep -- "$mac" "$NCS_MODEM_IP_FILE"
+				echo "SNMP mib result for $mac:"
+				grep -- "$decmac =" "$SNMP_MIB_RESULT_FILE"
+				grep -- "$snmp_key =" "$SNMP_MIB_RESULT_FILE" | grep "IpAddress"
+			fi
+		else
+			echo "No SNMP IP for MAC: $mac"
+			((mismatch++))
+		fi
+	else
+		echo "No SNMP key for MAC: $mac"
+	fi
+done
+
+echo "Total modems: ${#modems[@]}, IP matches:$match, IP mismatches:$mismatch"
+```
+
 ## example: awk + ssh
 ```bash
 # proc.awk
@@ -158,9 +329,10 @@ pattern="^vmc"
 ```
 
 
-## use env var for consistent command usage
+## use var or env var for consistent command usage
 ```bash
-export SNMPNAME="snmp-evc-morris-dentist-1"
+SNMPNAME="snmp-evc-morris-dentist-1"
+#export SNMPNAME="snmp-evc-morris-dentist-1"
 nomad alloc status $(nomad job allocs $SNMPNAME | awk '/snmp/{print $1}') 2>/dev/null  | awk '/snmp-nsi-port/{print $3}'
 ```
 
@@ -634,6 +806,29 @@ while IFS= read -r line
 do
     # process
 done < intput_file
+
+# 1 variable number of fields
+while read -r first second rest; do
+    echo "first: $first"
+    echo "second: $second"
+    echo "rest: $rest"
+    echo "----------------"
+done < file.txt
+
+# 2 skip some fields
+while read -r _ _ third rest; do
+    echo "third field: $third"
+    echo "remaining: $rest"
+done < file.txt
+
+# 3 loop through unknown number of fields
+while read -r line; do
+    set -- $line   # split into $1, $2, $3... based on IFS
+    for field; do
+        echo "field: $field"
+    done
+done < file.txt
+
 
 # 文件逐行处理
 count=0
