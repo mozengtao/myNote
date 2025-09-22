@@ -1,17 +1,13 @@
-[The Lua Tutorial](https://dev.to/jd2r/the-lua-tutorial-544b)  
-[Lua中文手册](https://www.dba.cn/book/lua/)  
-[Lua Reference manuals](https://www.lua.org/manual/)  
-[Lua 5.3 参考手册](https://cloudwu.github.io/lua53doc/contents.html)  
-[Lua 5.3 Reference Manual](https://www.lua.org/manual/5.3/)  
-[Lua 5.2 Reference Manual](https://www.lua.org/manual/5.2/)  
+[**Lua Documentation**](https://www.lua.org/docs.html)  
+
 [Programming in Lua](https://www.lua.org/pil/contents.html)  
+
+[The Lua Tutorial](https://dev.to/jd2r/the-lua-tutorial-544b)  
+
 [Lua online](https://www.lua.org/demo.html)  
-[Luai: Lua reference manual helper: all Lua bits](https://pgl.yoyo.org/luai/i/_)  
-[Learn X in Y minutes](https://learnxinyminutes.com/lua/)  
 [Lua for Programmers](https://ebens.me/posts/lua-for-programmers-part-1/)  
 [lua-style-guide](https://github.com/luarocks/lua-style-guide)  
 []()  
 [Lua Programming Gems](https://www.lua.org/gems/)  
 [Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
-[]()  
 []()  
