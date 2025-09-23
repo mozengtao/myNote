@@ -163,3 +163,4 @@ intact  / ɪnˈtækt / 完好无损的
 inhibit / ɪnˈhɪbɪt /    抑制，约束；使拘束，使尴尬；降低（酶等）的活性；禁止（神职人员）司神职
 relinquish  / rɪˈlɪŋkwɪʃ /  <正式>（尤指不情愿地）放弃，交出（权力、职位等）；<正式>（不情愿地）松开
 hash it out 具体讨论
+discrepancy / dɪˈskrepənsi /    差异，不符
