@@ -10,6 +10,42 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## nameref
+```bash
+# declare a nameref
+var="hello"
+declare -n ref=var
+
+echo "$ref" # "hello"
+ref="world"
+echo "$var" # "world"
+
+# using `local -n` in functions
+print_first_element() {
+    local -n arr=$1     # array is a reference to the array named by $1
+    echo "${arr[0]}"
+}
+
+# 
+set_value() {
+    local -n ref=$1   # reference to whatever variable is passed
+    local value=$2
+    ref=$value
+}
+
+# Scalar
+x=""
+set_value x "hello"
+echo "x = $x"   # hello
+
+# Array
+arr=(a b c)
+set_value 'arr[1]' "banana"
+echo "arr = ${arr[@]}"   # a banana c
+
+
+```
+
 ## array
 ```bash
 #!/bin/bash
@@ -47,6 +83,31 @@ for num in "${nums[@]}"; do
   echo "$num"
 done
 
+# delete element by its value
+delete_from_array() {
+    local value=$1      # value to remove
+    shift
+    local -n arr=$1     # nameref to the array (Bash 4.3+ required)
+
+    local i
+    for i in "${!arr[@]}"; do
+        if [[ "${arr[i]}" == "$value" ]]; then
+            unset 'arr[i]'   # remove element by index
+        fi
+    done
+}
+
+delete_from_array() {
+    local value=$1
+    local -n arr=$2
+    for i in "${!arr[@]}"; do
+        if [[ "${arr[i]}" == "$value" ]]; then
+            unset 'arr[i]'
+        fi
+    done
+}
+
+
 # slice array
 slice=("${nums[@]:1:2}")  # From index 1, take 2 elements
 echo "Slice:"
@@ -60,6 +121,21 @@ if [[ -v nums[3] ]]; then
 else
   echo "Index 3 does not exist"
 fi
+
+# in_array needle haystack[@]
+in_array() {
+    local needle=$1
+    shift
+    local haystack=("$@")
+
+    for e in "${haystack[@]}"; do
+        if [[ $e == "$needle" ]]; then
+            return 0  # found
+        fi
+    done
+    return 1  # not found
+}
+
 
 # join array into string
 joined=$(IFS=,; echo "${nums[*]}")
@@ -111,6 +187,173 @@ fi
 # clear entire array
 unset user_ages
 echo "After clearing, number of users: ${#user_ages[@]}"  # Output: 0
+
+# array utilities
+# Check if an element exists in array
+in_array() {
+    local -n arr=$1
+    local val=$2
+    for e in "${arr[@]}"; do
+        [[ $e == "$val" ]] && return 0
+    done
+    return 1
+}
+
+# Append values to array
+append_array() {
+    local -n arr=$1
+    shift
+    arr+=("$@")
+}
+
+# Delete element(s) by value
+delete_value() {
+    local -n arr=$1
+    local val=$2
+    for i in "${!arr[@]}"; do
+        [[ "${arr[i]}" == "$val" ]] && unset 'arr[i]'
+    done
+}
+
+# Print array
+print_array() {
+    local -n arr=$1
+    echo "${arr[@]}"
+}
+
+# Get array length
+array_length() {
+    local -n arr=$1
+    echo "${#arr[@]}"
+}
+
+# Get last element
+array_last() {
+    local -n arr=$1
+    echo "${arr[-1]}"
+}
+
+# Join array with delimiter
+join_array() {
+    local -n arr=$1
+    local IFS="$2"
+    echo "${arr[*]}"
+}
+
+# usage
+fruits=(apple banana cherry)
+
+# 1. Check if in array
+if in_array fruits "banana"; then
+    echo "banana exists"
+fi
+
+# 2. Append
+append_array fruits orange grape
+print_array fruits   # apple banana cherry orange grape
+
+# 3. Delete
+delete_value fruits banana
+print_array fruits   # apple cherry orange grape
+
+# 4. Length
+echo "Length: $(array_length fruits)"   # 4
+
+# 5. Last element
+echo "Last: $(array_last fruits)"       # grape
+
+# 6. Join with comma
+echo "CSV: $(join_array fruits ,)"      # apple,cherry,orange,grape
+
+# Associative Array Utilities
+# Check if a key exists in associative array
+assoc_has_key() {
+    local -n map=$1
+    local key=$2
+    [[ -v map["$key"] ]]
+}
+
+# Get value by key
+assoc_get() {
+    local -n map=$1
+    local key=$2
+    echo "${map[$key]}"
+}
+
+# Set (insert/update) key=value
+assoc_set() {
+    local -n map=$1
+    local key=$2
+    local value=$3
+    map["$key"]="$value"
+}
+
+# Delete entry by key
+assoc_del() {
+    local -n map=$1
+    local key=$2
+    unset 'map[$key]'
+}
+
+# Print all key=value pairs
+assoc_print() {
+    local -n map=$1
+    for k in "${!map[@]}"; do
+        echo "$k=${map[$k]}"
+    done
+}
+
+# Get all keys
+assoc_keys() {
+    local -n map=$1
+    echo "${!map[@]}"
+}
+
+# Get all values
+assoc_values() {
+    local -n map=$1
+    echo "${map[@]}"
+}
+
+# Length (number of pairs)
+assoc_length() {
+    local -n map=$1
+    echo "${#map[@]}"
+}
+
+# usage
+declare -A capitals=(
+    [france]="Paris"
+    [japan]="Tokyo"
+    [canada]="Ottawa"
+)
+
+# 1. Check key
+if assoc_has_key capitals japan; then
+    echo "Japan exists"
+fi
+
+# 2. Get
+echo "Capital of France: $(assoc_get capitals france)"
+
+# 3. Set
+assoc_set capitals germany Berlin
+echo "Capital of Germany: $(assoc_get capitals germany)"
+
+# 4. Delete
+assoc_del capitals canada
+assoc_print capitals
+# france=Paris
+# japan=Tokyo
+# germany=Berlin
+
+# 5. Keys and values
+echo "Keys: $(assoc_keys capitals)"      # france japan germany
+echo "Values: $(assoc_values capitals)"  # Paris Tokyo Berlin
+
+# 6. Length
+echo "Length: $(assoc_length capitals)"  # 3
+
 ```
 
 ## here string
