@@ -10,6 +10,108 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## array
+```bash
+#!/bin/bash
+
+# create array
+nums=(10 20 30)
+
+# access array elements
+echo "${nums[0]}"  # Output: 10
+
+# add/modify elements
+nums[3]=40
+nums[1]=25
+
+# append to array
+nums+=(50 60)
+
+# get array length
+echo "${#nums[@]}"  # Output: 4
+
+# iterate over array
+# loop over values
+for num in "${nums[@]}"; do
+  echo "$num"
+done
+# loop over indices
+for i in "${!nums[@]}"; do
+  echo "Index $i: ${nums[i]}"
+done
+
+# remove element
+unset 'nums[2]'
+echo "After unset:"
+for num in "${nums[@]}"; do
+  echo "$num"
+done
+
+# slice array
+slice=("${nums[@]:1:2}")  # From index 1, take 2 elements
+echo "Slice:"
+for num in "${slice[@]}"; do
+  echo "$num"
+done
+
+# check if an index exists
+if [[ -v nums[3] ]]; then
+  echo "Index 3 exists"
+else
+  echo "Index 3 does not exist"
+fi
+
+# join array into string
+joined=$(IFS=,; echo "${nums[*]}")
+echo "Joined: $joined"  # Output: Joined: 10,25,40
+
+# read array from command output
+# 1.-t removes trailing newlines 2.< <(...) is process substitution, feeding the command’s output.
+mapfile -t files < <(ls /etc)
+echo "Files in /etc:"
+for file in "${files[@]}"; do
+  echo "$file"
+done
+
+# If the command output is space-separated, you can assign it directly
+arr=($(echo "a b c d"))
+echo "${arr[2]}"   # c
+
+# Use read -a with custom IFS for splitting on delimiters.
+mac="6c:ca:08:8b:b9:76"
+IFS=: read -r -a parts <<< "$mac"
+
+# associative array
+declare -A user_ages
+user_ages=(["Alice"]=30 ["Bob"]=25)
+echo "Alice's age: ${user_ages["Alice"]}"
+user_ages["Charlie"]=35
+echo "All users:"
+for user in "${!user_ages[@]}"; do
+  echo "$user is ${user_ages[$user]} years old"
+done
+
+# remove associative array element
+unset 'user_ages["Bob"]'
+echo "After removing Bob:"
+for user in "${!user_ages[@]}"; do
+  echo "$user is ${user_ages[$user]} years old"
+done
+
+# get associative array length
+echo "Number of users: ${#user_ages[@]}"
+
+# check if key exists
+if [[ -v user_ages["Alice"] ]]; then
+  echo "Alice is in the array"
+else
+  echo "Alice is not in the array"
+fi
+
+# clear entire array
+unset user_ages
+echo "After clearing, number of users: ${#user_ages[@]}"  # Output: 0
+```
 
 ## here string
 ```bash
@@ -24,6 +126,20 @@ echo "some text" | command
 # connects the stdout of one command to the stdin of another
 # can work with multi-line streams or the output of artitary commands
 # essential when processing files, commands or pipelines
+
+#
+mac="6c:ca:08:8b:b9:76"
+result=""
+IFS=":" read -ra parts <<< "$mac"
+for i in "${!parts[@]}"; do
+    dec=$((16#${parts[i]}))   # convert hex string to decimal
+    if [[ $i -eq 0 ]]; then
+        result="$dec"
+    else
+        result+=".$dec"
+    fi
+done
+echo "$result"
 ```
 
 ## get first field of a string
@@ -48,6 +164,23 @@ if [[ $first_field == *196.79.33.2.199 ]]; then
     echo "MATCH"
 fi
 # 4
+mac="6c:ca:08:8b:b9:76"
+result=""
+IFS=":" read -ra parts <<< "$mac"
+for i in "${!parts[@]}"; do
+    dec=$((16#${parts[i]}))   # convert hex string to decimal
+    if [[ $i -eq 0 ]]; then
+        result="$dec"
+    else
+        result+=".$dec"
+    fi
+done
+echo "$result"
+
+#
+mac="6c:ca:08:8b:b9:76"
+IFS=: read -ra p <<<"$mac"; 
+printf "%d.%d.%d.%d.%d.%d\n" $((16#${p[0]})) $((16#${p[1]})) $((16#${p[2]})) $((16#${p[3]})) $((16#${p[4]})) $((16#${p[5]}))
 ```
 
 ## check string ends up with a specific string

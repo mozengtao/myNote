@@ -25,6 +25,7 @@ git commit -m "Revert file to old commit <hash>"
 
 # disable the pager for a single git command invocation
 git --no-pager diff
+git --no-pager show -1
 
 # -C <path>
 Run as if git was started in <path> instead of the current working directory.
