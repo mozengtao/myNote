@@ -801,6 +801,8 @@ lua-c
         getvar.lua
         native_factorial.lua
         stack.lua
+        userdata.lua
+        configtable.lua
 	src
 		main.c
 ```
@@ -828,6 +830,19 @@ print("Factorial of " .. num .. " is: " .. native_factorial(num))
 
 -- stack.lua
 -- Not needed (stack is handled in C directly)
+
+-- userdata.lua
+square = create_rectangle(5, 5)
+
+change_rectangle_dimensions(square, 10, 10)
+
+-- configtable.lua
+config_table = {
+	window_width = 800,
+	window_height = 600,
+	num_enemies = 5,
+	num_levels = 10
+}
 ```
 ```c
 // main.c
@@ -959,12 +974,121 @@ void lua_example_lua_call_c_function(void) {
     lua_close(L);
 }
 
+
+struct rectangle {
+    double length;
+    double width;
+};
+
+int create_rectangle(lua_State *L) {
+    double length = luaL_checknumber(L, 1);
+    double width = luaL_checknumber(L, 2);
+
+    struct rectangle *rect = (struct rectangle *)lua_newuserdata(L, sizeof(struct rectangle));
+    rect->length = length;
+    rect->width = width;
+
+    printf("Created rectangle of length: %f and width: %f\n", length, width);
+
+    luaL_getmetatable(L, "RectangleMeta");
+    lua_setmetatable(L, -2);
+
+    return 1;
+}
+
+int change_rectangle_dimensions(lua_State *L) {
+    struct rectangle *rect = (struct rectangle *)luaL_checkudata(L, 1, "RectangleMeta");
+    double new_length = luaL_checknumber(L, 2);
+    double new_width = luaL_checknumber(L, 3);
+
+    rect->length = new_length;
+    rect->width = new_width;
+
+    printf("Changed rectangle dimensions to length: %f and width: %f\n", new_length, new_width);
+
+    return 0;
+}
+
+void lua_example_userdata(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    luaL_newmetatable(L, "RectangleMeta");
+
+    lua_pushstring(L, "__index");
+    lua_newtable(L);
+    lua_settable(L, -3);
+
+    lua_pop(L, 1);
+
+    lua_register(L, "create_rectangle", create_rectangle);
+    lua_register(L, "change_rectangle_dimensions", change_rectangle_dimensions);
+
+    if (luaL_dofile(L, "./scripts/userdata.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+    }
+
+    lua_close(L);
+}
+
+
+void lua_example_load_configtable(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    if (luaL_dofile(L, "./scripts/configtable.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+        lua_close(L);
+        return;
+    }
+
+    lua_getglobal(L, "config_table");
+    if (!lua_istable(L, -1)) {
+        fprintf(stderr, "'config_table' is not a table\n");
+        lua_pop(L, 1);
+        lua_close(L);
+        return;
+    }
+
+    lua_getfield(L, -1, "window_width");
+    int window_width = (int)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_getfield(L, -1, "window_height");
+    int window_height = (int)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_getfield(L, -1, "num_enemies");
+    int num_enemies = (int)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    lua_getfield(L, -1, "num_levels");
+    int num_levels = (int)lua_tointeger(L, -1);
+    lua_pop(L, 1);
+
+    printf("Config Table:\n");
+    printf("Window Width: %d\n", window_width);
+    printf("Window Height: %d\n", window_height);
+    printf("Number of Enemies: %d\n", num_enemies);
+    printf("Number of Levels: %d\n", num_levels);
+
+    lua_pop(L, 1);
+    lua_close(L);
+}
+
 int main() {
     lua_example_dofile();
     lua_example_getvar();
     lua_example_stack();
     lua_example_call_lua_function();
     lua_example_lua_call_c_function();
+    lua_example_userdata();
+    lua_example_load_configtable();
+
     return 0;
 }
 ```
