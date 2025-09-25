@@ -604,7 +604,170 @@ while true do
   end
 end
 
--- #8
--- #9
+-- #8 metatables
+local meta = {}
+local vector3d = {}
 
+---------------------------------------------
+-- Declare a new vector3d constructor
+---------------------------------------------
+function vector3d.new(x, y, z)
+  local v = {x = x, y = y, z = z}
+  setmetatable(v, meta)
+  return v
+end
+
+function vector3d.add(v1, v2)
+  return vector3d.new(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z)
+end
+meta.__add = vector3d.add
+
+function vector3d.tostring(v)
+  return "("..v.x..", "..v.y..", "..v.z..")"
+end
+meta.__tostring = vector3d.tostring
+
+---------------------------------------------
+-- Create 2 vector3d instances
+---------------------------------------------
+local position = vector3d.new(10, 20, 30)
+local velocity = vector3d.new(1, 2, 3)
+
+local result = velocity + position
+
+print(position)   -- prints (10, 20, 30)
+print(velocity)   -- prints (1, 2, 3)
+print(result)     -- prints (11, 22, 33)
+print("Result vector is "..tostring(result)) -- uses __tostring → (11, 22, 33)
+
+-- #9 OOP
+-- Define class table
+local Fighter = {
+  name = "",
+  health = 0,
+  speed = 0
+}
+Fighter.__index = Fighter  -- Set the metatable for the class (modern style)
+
+---------------------------------------------
+-- Declare the class methods
+---------------------------------------------
+function Fighter:light_punch()
+  print("Fighter "..self.name.." performs a light punch!")
+end
+
+function Fighter:heavy_punch()
+  print("Fighter "..self.name.." performs a heavy punch!")
+end
+
+function Fighter:light_kick()
+  print("Fighter "..self.name.." performs a light kick!")
+end
+
+function Fighter:heavy_kick()
+  print("Fighter "..self.name.." performs a heavy kick!")
+end
+
+function Fighter:special_attach()
+  print("Fighter "..self.name.." performs a special attach!")
+end
+
+---------------------------------------------
+-- Declare the class constrictor
+---------------------------------------------
+function Fighter:new(t)
+  t = t or {}
+  setmetatable(t, self)    -- instance uses Fighter as its metatable
+  -- self.__index = self   -- old style, not safe
+  return t
+end
+
+---------------------------------------------
+-- Create 2 Fighter instances
+---------------------------------------------
+--[[
+local blanka = Fighter:new({
+  name = "Blanka",
+  health = 100,
+  speed = 80
+})
+print("Object "..blanka.name.." was created")
+
+local chun_li = Fighter:new({
+  name = "Chun Li",
+  health = 100,
+  speed = 90
+})
+print("Object "..chun_li.name.." was created")
+]]
+
+local blanka = Fighter:new{
+  name = "Blanka",
+  health = 100,
+  speed = 80
+}
+print("Object "..blanka.name.." was created")
+
+local chun_li = Fighter:new{
+  name = "Chun Li",
+  health = 100,
+  speed = 90
+}
+print("Object "..chun_li.name.." was created")
+
+---------------------------------------------
+-- Call object methods
+---------------------------------------------
+blanka:light_punch()
+blanka:heavy_kick()
+blanka:special_attach()
+
+chun_li:light_kick()
+chun_li:heavy_punch()
+chun_li:special_attach()
+
+-- functions as first-class values (higher-order functions)
+--
+local students = {
+  {name = "Alice", age = 20, grade = 90},
+  {name = "Bob", age = 22, grade = 85},
+  {name = "Charlie", age = 21, grade = 95}
+}
+
+local s = table.sort(students, function(a, b)
+  return a.grade > b.grade
+end)
+
+for i, student in ipairs(students) do
+  print(i, student.name, student.age, student.grade)
+end
+
+-- closure
+local function add1(a)
+	local c = 1
+	local function add(b)
+		return a + b + c
+	end
+	return add
+end
+
+local add6 = add1(5)
+print(add6(3))  -- should print 9
+
+-- variadic functions
+local function find_max(...)
+	local n = 0
+	local args = {...}  -- pack all arguments into a table
+	local max = args[1]
+	for i, v in ipairs(args) do
+		if v > max then
+			max = v
+		end
+		n = n + 1
+	end
+	return n, max
+end
+
+local n, max = find_max(3, 5, 2, 8, 1)
+print("The maximum value is "..max.." among "..n.." numbers")
 ```
