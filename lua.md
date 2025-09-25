@@ -1,5 +1,7 @@
 [**Lua Documentation**](https://www.lua.org/docs.html)  
 
+[The Standard Libraries](https://www.lua.org/manual/5.4/manual.html#6)  
+
 [**Programming in Lua**](https://www.lua.org/pil/contents.html)  
 
 [**Lua Directory**](http://lua-users.org/wiki/LuaDirectory)  
@@ -25,6 +27,16 @@
     userdata
     thread
     table
+
+-- multiline string
+users_csv = [[
+  Tom,15
+  Jack,16
+  ...
+]]
+
+-- multiple assignment
+x, y = 0, 0
 
 -- #1 for loop
 math.randomseed(os.time())
@@ -187,7 +199,411 @@ end
 
 print("Exiting the program. Goodbye!")
 
--- #7
+-- #7 table
+-- table as array
+local scores = {88.1, 92.3, 87.4}
+print(scores[1])
+scores[4] = 99.1
+
+-- ipairs returns index-value pairs, in order
+for k,v in ipairs(scores) do
+  print("key: "..k..", value: "..v)
+end
+
+-- table as key-value
+-- local scores = {["miles"] = 88.1, ["john"] = 92.3, ["nina"] = 87.4}
+-- print(scores["miles"])
+-- scores["oscar"] = 99.1
+
+local scores = {miles = 88.1, john = 92.3, nina = 87.4}
+print(scores.miles)
+scores.oscar = 99.1
+
+-- pairs returns key-value pairs, without order
+for k,v in pairs(scores) do
+  print("key: "..k..", value: "..v)
+end
+
+--
+function display_menu()
+  print("+---------------------------------+")
+  print("| Welcome " .. os.date())
+  print("+---------------------------------+")
+  print("| 1.Generate random enemy position")
+  print("| 2.Distance from enemy to player")
+  print("| 3.Get angle from enemy to player")
+  print("| 4.Exit")
+  print("+---------------------------------+")
+end
+
+function get_distance(x1, y1, x2, y2)
+  return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
+math.randomseed(os.time())
+
+-- local player_x, player_y = 400, 300
+local player = {x = 400, y = 300}
+
+-- local enemy_x, enemy_y = , 
+local enemy= {x = 0, y = 0}
+
+local user_option = 0
+
+while user_option ~= 4 do
+  display_menu()
+
+  print("Please select your option: ")
+  user_option = io.read("*n")
+
+  if user_option == 1 then
+--    enemy_x = math.random(0, 800)
+--    enemy_y = math.random(0, 600)
+--    print("Enemy position: (" .. enemy_x .. ", " .. enemy_y .. ")")
+    enemy.x = math.random(0, 800)
+    enemy.y = math.random(0, 600)
+    print("Enemy position: (" .. enemy.x .. ", " .. enemy.y .. ")")
+  end
+
+  if user_option == 2 then
+--     local d = get_distance(enemy_x, enemy_y, player_x, player_y)
+    local d = get_distance(enemy.x, enemy.y, player.x, player.y)
+    print("Distance from enemy to player: " .. d)
+  end
+
+  if user_option == 3 then
+--    local a = math.atan2(player_y - enemy_y, player_x - enemy_x)
+    local a = math.atan2(player.y - enemy.y, player.x - enemy.x)
+--    local a_deg = math.deg(a)
+--    print("Angle from enemy to player: " .. a_deg .. " degrees")
+    print("Angle from enemy to player: " .. math.deg(a) .. " degrees")
+  end
+end
+
+print("Exiting the program. Goodbye!")
+
+-- 
+local prince_codes = {
+  { Page = 1, Line = 2, Word = 2, Code = "W" },
+  { Page = 1, Line = 5, Word = 4, Code = "O" },
+  { Page = 1, Line = 8, Word = 6, Code = "E" },
+  { Page = 1, Line = 10, Word = 6, Code = "S" },
+  { Page = 2, Line = 2, Word = 5, Code = "P" },
+  { Page = 2, Line = 3, Word = 8, Code = "B" },
+  { Page = 2, Line = 6, Word = 6, Code = "Y" },
+  { Page = 2, Line = 1, Word = 2, Code = "S" },
+  { Page = 3, Line = 4, Word = 9, Code = "K" },
+  { Page = 3, Line = 5, Word = 1, Code = "J" },
+  { Page = 3, Line = 6, Word = 3, Code = "T" },
+  { Page = 3, Line = 1, Word = 7, Code = "B" }
+}
+
+print("What is the Page you are looking for?")
+local page = io.read("*n")
+
+print("What is the Line you are looking for?")
+local line = io.read("*n")
+
+print("What is the Word you are looking for?")
+local word = io.read("*n")
+
+local found = false
+
+for _, entry in ipairs(prince_codes) do
+  if entry.Page == page and entry.Line == line and entry.Word == word then
+    print("The code for this combination is: " .. entry.Code)
+    found = true
+  end
+end
+
+if not found then
+  print("Sorry, no code found for this combination.")
+end
+
+-- table as configuration file
+Level1 = {
+    -------------------------------------------
+    -- table to define the map config variables
+    -------------------------------------------
+    map = {
+        textureAssetId = mapTextureAssetId,
+        file = "./assets/tilemaps/jungle.map",
+        scale = 2,
+        tileSize = 32,
+        mapSizeX = 25,
+        mapSizeY = 20
+    }
+
+    -------------------------------------------
+    -- table to define the map config variables
+    -------------------------------------------
+    entities = {
+        [0] = {
+            name = "player",
+            layer = 4,
+            components = {
+                transform = {
+                    position = {
+                        x = 240,
+                        y = 106
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    }
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                spirite = {
+                    textureAssetId = "chopper-texture",
+                    animated = true,
+                    frameCount = 2,
+                    animationSpeed = 90,
+                    hasDirections = true,
+                    fixed = false
+                },
+                collider = {
+                    tag = "PLAYER"
+                },
+                input = {
+                    keyboard = {
+                        up = "w",
+                        left = "a",
+                        down = "s",
+                        right = "d",
+                        shoot = "space"
+                    }
+                }
+            }
+        },
+        [1] = {
+            name = "start",
+            layer = 3,
+            components = {
+                transform = {
+                    position = {
+                        x = 240,
+                        y = 115
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    }
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                spirite = {
+                    textureAssetId = "start-texture",
+                    animated = false
+                }
+            }
+        },
+        [2] = {
+            name = "heliport",
+            layer = 3,
+            components = {
+                transform = {
+                    position = {
+                        x = 1395,
+                        y = 495
+                    },
+                    velocity = {
+                        x = 0,
+                        y = 0
+                    }
+                    width = 32,
+                    height = 32,
+                    scale = 1,
+                    rotation = 0
+                },
+                spirite = {
+                    textureAssetId = "heliport-texture",
+                    animated = false
+                },
+                collider = {
+                    tag = "LEVEL_COMPLETE"
+                }
+            }
+        },
+        -- ......
+    }
+}
+
+-- table as matrices
+local M = {
+  { 3.4, 2.0, 2.0 },
+  { -3.5, 3.3, 0.5 },
+  { 0.1, 0.1, 3.3 }
+}
+
+print(M[1][1])
+print(M[2][2])
+print(M[3][3])
+
+--
+local mat = {}
+
+N = 3
+M = 3
+
+for i = 1, N do
+  mat[i] = {}
+  for j = 1, M do
+    mat[i][j] = i * j
+  end
+end
+
+print(mat[1][1])
+print(mat[2][2])
+print(mat[3][3])
+
+-- Tic-Tac-Toe
+---------------------------------------------
+-- create new table to hold the board matrix
+---------------------------------------------
+local board = {}
+
+---------------------------------------------
+-- clear the board table
+---------------------------------------------
+local function clear_board()
+  for i = 1, 3 do
+    board[i] = {}
+    for j = 1, 3 do
+      board[i][j] = " "
+    end
+  end
+end
+
+---------------------------------------------
+-- display the board table
+---------------------------------------------
+local function display_board()
+  print("\n    1   2   3")
+  for i = 1, 3 do
+    io.write(i.." ")
+    for j = 1, 3 do
+      io.write("["..board[i][j].."] ")
+    end
+    print()
+  end
+  print()
+end
+
+---------------------------------------------
+-- is board full
+---------------------------------------------
+local function board_full()
+  for i = 1, 3 do
+    for j = 1, 3 do
+      if board[i][j] == " " then
+        return false
+      end
+    end
+  end
+  return true
+end
+
+---------------------------------------------
+-- check and return the winner
+---------------------------------------------
+local function check_winner()
+  -- rows
+  for i = 1, 3 do
+    if board[i][1] ~= " " and board[i][1] == board[i][2] and board[i][2] == board[i][3] then
+      return board[i][1]
+    end
+  end
+  -- columns
+  for j = 1, 3 do
+    if board[1][j] ~= " " and board[1][j] == board[2][j] and board[2][j] == board[3][j] then
+      return board[1][j]
+    end
+  end
+  -- diagonals
+  if board[1][1] ~= " " and board[1][1] == board[2][2] and board[2][2] == board[3][3] then
+    return board[1][1]
+  end
+  if board[1][3] ~= " " and board[1][3] == board[2][2] and board[2][2] == board[3][1] then
+    return board[1][3]
+  end
+
+  return nil
+end
+
+---------------------------------------------
+-- switch current player
+---------------------------------------------
+local function switch_player(player)
+  if player == "X" then
+    return "O"
+  else
+    return "X"
+  end
+end
+
+---------------------------------------------
+-- single game session
+---------------------------------------------
+local function play_game()
+  clear_board()
+  local player = "X"
+  local game_over = false
+
+  while not game_over do
+    display_board()
+
+    print("Player "..player..", enter your move (row and column): ")
+
+    io.write("Row (1-3): ")
+    local row = io.read("*n")
+
+    io.write("Column (1-3): ")
+    local col = io.read("*n")
+
+    -- flush newline left in input buffer
+    io.read("*l")
+
+    -- validate input
+    if row and col and row >= 1 and row <= 3 and col >= 1 and col <= 3 and board[row][col] == " " then
+      board[row][col] = player
+
+      -- check winner
+      local winner = check_winner()
+      if winner then
+        display_board()
+        print("🎉 Player "..winner.." wins!")
+        game_over = true
+      elseif board_full() then
+        display_board()
+        print("🤝 It's a draw!")
+        game_over = true
+      else
+        player = switch_player(player)
+      end
+    else
+      print("❌ Invalid move, try again.")
+    end
+  end
+end
+
+---------------------------------------------
+-- replay loop
+---------------------------------------------
+while true do
+  play_game()
+  io.write("Play again? (y/n): ")
+  local answer = io.read("*l")
+  if answer:lower() ~= "y" then
+    print("👋 Thanks for playing Tic-Tac-Toe!")
+    break
+  end
+end
+
 -- #8
 -- #9
 
