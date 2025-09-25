@@ -770,4 +770,201 @@ end
 
 local n, max = find_max(3, 5, 2, 8, 1)
 print("The maximum value is "..max.." among "..n.." numbers")
+
+-- curl -R -O https://www.lua.org/ftp/lua-5.3.5.tar.gz
+--[[
+folder structure:
+lua-c
+	Makefile
+	lib
+		lua         -- lua source code
+			src
+	scripts
+		myscript.lua
+	src
+		main.c
+]]
+
+```
+
+## integrate lua with c/c++
+- folder structure:
+```
+lua-c
+	Makefile
+	lib
+		lua         -- lua source code(curl -R -O https://www.lua.org/ftp/lua-5.3.5.tar.gz)
+			src
+	scripts
+		dofile.lua
+        factorial.lua
+        getvar.lua
+        native_factorial.lua
+        stack.lua
+	src
+		main.c
+```
+- file content:
+```lua
+-- dofile.lua
+print("Hello from dofile.lua")
+
+-- factorial.lua
+function factorial(n)
+  if n == 0 then
+    return 1
+  else
+    return n * factorial(n - 1)
+  end
+end
+
+-- getvar.lua
+somevar = 42
+
+
+-- native_factorial.lua
+local num = 6
+print("Factorial of " .. num .. " is: " .. native_factorial(num))
+
+-- stack.lua
+-- Not needed (stack is handled in C directly)
+```
+```c
+// main.c
+#include <stdio.h>
+#include "../lib/lua/src/lua.h"
+#include "../lib/lua/src/lualib.h"
+#include "../lib/lua/src/lauxlib.h"
+
+void lua_example_dofile(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    if (luaL_dofile(L, "./scripts/dofile.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+    }
+
+    lua_close(L);
+}
+
+void lua_example_getvar(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    // Run getvar.lua which sets somevar
+    if (luaL_dofile(L, "./scripts/getvar.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+    }
+
+    lua_getglobal(L, "somevar");
+    if (lua_isnumber(L, -1)) {
+        int somevar = (int)lua_tointeger(L, -1);
+        printf("somevar: %d\n", somevar);
+    }
+    lua_pop(L, 1);
+
+    lua_close(L);
+}
+
+void lua_example_stack(void) {
+    lua_State *L = luaL_newstate();
+
+    lua_pushnumber(L, 10);
+    lua_pushnumber(L, 20);
+    lua_pushnumber(L, 30);
+
+    int n = lua_gettop(L);
+    printf("Number of elements in stack: %d\n", n);
+
+    while (n > 0) {
+        if (lua_isnumber(L, n)) {
+            double value = lua_tonumber(L, n);
+            printf("Value at index %d: %f\n", n, value);
+        }
+        n--;
+    }
+
+    lua_pop(L, lua_gettop(L));
+    lua_close(L);
+}
+
+void lua_example_call_lua_function(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    if (luaL_dofile(L, "./scripts/factorial.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+        lua_close(L);
+        return;
+    }
+
+    lua_getglobal(L, "factorial");
+    if (!lua_isfunction(L, -1)) {
+        fprintf(stderr, "'factorial' is not a function\n");
+        lua_pop(L, 1);
+        lua_close(L);
+        return;
+    }
+
+    int num = 5;
+    lua_pushinteger(L, num);
+
+    if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error calling 'factorial': %s\n", error_msg);
+        lua_pop(L, 1);
+        lua_close(L);
+        return;
+    }
+
+    if (lua_isnumber(L, -1)) {
+        int result = (int)lua_tointeger(L, -1);
+        printf("Factorial of %d is: %d\n", num, result);
+    }
+
+    lua_pop(L, 1);
+    lua_close(L);
+}
+
+int factorial(int n) {
+    if (n == 0) return 1;
+    return n * factorial(n - 1);
+}
+
+int native_factorial(lua_State *L) {
+    int n = (int)lua_tointeger(L, -1);
+    int result = factorial(n);
+    lua_pushinteger(L, result);
+    return 1;
+}
+
+void lua_example_lua_call_c_function(void) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    lua_register(L, "native_factorial", native_factorial);
+
+    if (luaL_dofile(L, "./scripts/native_factorial.lua") != LUA_OK) {
+        const char *error_msg = lua_tostring(L, -1);
+        fprintf(stderr, "Error: %s\n", error_msg);
+        lua_pop(L, 1);
+    }
+
+    lua_close(L);
+}
+
+int main() {
+    lua_example_dofile();
+    lua_example_getvar();
+    lua_example_stack();
+    lua_example_call_lua_function();
+    lua_example_lua_call_c_function();
+    return 0;
+}
 ```

@@ -10,6 +10,14 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## tree
+```bash
+-d     List directories only.
+
+-L level
+       Max display depth of the directory tree.
+```
+
 ## nameref
 ```bash
 # declare a nameref
