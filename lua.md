@@ -276,6 +276,7 @@ local myWorkflow = Workflow{
 myWorkflow:run()
 ```
 
+## execute command and read/write file
 ```lua
 -- execute external command
 -- run a command without output capture
@@ -363,6 +364,112 @@ f:close()
 print("File content:\n" .. content)
 ```
 
+## wireshark plugin
+[Lua API Reference](https://www.wireshark.org/docs/wsdg_html_chunked/lua_module_Proto.html)  
+```lua
+-- wireshark lua plugin framework
+--[[
+1. Captrue engine                   -- pcap input, live capture, file read
+2. Dissector Pipeline               -- main packet decoding
+    2.1 Built-in dissectors             -- e.g., Ethernet -> IP -> TCP
+    2.2 Lua dissectors                  -- Proto objects you register
+    2.3 Post-dissectors                 -- Lua/C hooks after dissection
+    2.4 Diplay filters/tree             -- TreeItem API, columns
+3. GUI/Output                       -- Packet list, packet details, info
+
+In parrallel:
+Tap listeners                       -- Lua listener objects
+    passive hooks                   -- stats, exporters, counters
+]]
+
+
+-- API layers
+--[[
+1. Proto / ProtoField      →       define protocols & fields.
+2. Dissector function      →       decode packet data.
+3. DissectorTable          →       hook dissectors into Wireshark’s pipeline.
+4. Post-dissector          →       annotate packets after main dissection.
+5. Listener (tap)          →       passively monitor packets for stats/logging.
+6. GUI hooks               →       add menus & tools.
+7. Utilities               →       use built-in dissectors, byte arrays, prefs, etc.
+]]
+
+-- basic lua plugin skeleton
+
+------------------------------------------------------
+-- Foo Protocol Dissector + Postdissector + Listener
+------------------------------------------------------
+
+-- 1. Define a new protocol
+local foo_proto = Proto("foo", "Foo Protocol")
+
+-- Fields
+local f_type   = ProtoField.uint8("foo.type", "Message Type", base.DEC)
+local f_length = ProtoField.uint16("foo.length", "Length", base.DEC)
+local f_data   = ProtoField.string("foo.data", "Payload")
+
+foo_proto.fields = { f_type, f_length, f_data }
+
+------------------------------------------------------
+-- 2. Dissector
+------------------------------------------------------
+function foo_proto.dissector(buffer, pinfo, tree)
+    pinfo.cols.protocol = "FOO"
+
+    local subtree = tree:add(foo_proto, buffer(), "Foo Protocol Data")
+
+    -- Parse fields: 1 byte type, 2 bytes length, rest payload
+    subtree:add(f_type, buffer(0,1))
+    subtree:add(f_length, buffer(1,2))
+    subtree:add(f_data, buffer(3))
+end
+
+-- Register dissector on TCP port 7777
+DissectorTable.get("tcp.port"):add(7777, foo_proto)
+
+------------------------------------------------------
+-- 3. Post-dissector
+------------------------------------------------------
+local foo_post = Proto("foo_post", "Foo Post-Dissector")
+
+function foo_post.dissector(buffer, pinfo, tree)
+    -- Mark large packets
+    if buffer:len() > 100 then
+        pinfo.cols.info:append(" [FOO-LARGE]")
+    end
+end
+
+register_postdissector(foo_post)
+
+------------------------------------------------------
+-- 4. Listener (Tap)
+------------------------------------------------------
+local foo_tap = Listener.new("tcp")
+
+function foo_tap.packet(pinfo, tvb)
+    -- Passive logging of all FOO traffic
+    if pinfo.dst_port == 7777 or pinfo.src_port == 7777 then
+        print(string.format("FOO tap: packet #%d length=%d",
+            pinfo.number, tvb:len()))
+    end
+end
+
+------------------------------------------------------
+-- 5. GUI Tool (optional)
+------------------------------------------------------
+local function foo_tool()
+    new_dialog("Foo Tool", function() end)
+    print("Foo Tool executed from menu")
+end
+
+register_menu("Tools/Foo Tool", foo_tool, MENU_TOOLS_UNSORTED)
+
+------------------------------------------------------
+-- End of plugin
+------------------------------------------------------
+```
+
+## Basics
 ```lua
 -- 8 basic types in Lua: 
     nil

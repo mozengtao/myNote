@@ -2,6 +2,17 @@
 
 Git管理的是修改，而不是文件
 
+# Check if branch exists (returns exit code 0 if exists, 1 if not)
+git show-ref --verify --quiet refs/heads/branch-name
+
+# delete branch
+# delete local branch
+git branch -d feature-branch
+git branch -D feature-branch  # Force delete local branch
+
+# delete remote branch
+git push origin --delete feature-branch
+
 # global ignore file
 git config --global core.excludesfile ~/.gitignore_global
 echo ".cache/" >> ~/.gitignore_global
