@@ -17,6 +17,352 @@
 [Lua Programming Gems](https://www.lua.org/gems/)  
 [Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
 
+## syntactic sugar
+```lua
+-- 1
+object:method(args...)      -- the : automatically passes the table/string as the first argument (self)
+    -- equivalent to
+object.method(object, args...)
+
+--
+local s = "Hello, World"
+print(s:sub(1, 5))          -- prefered
+print(string.sub(s, 1, 5))  -- equivalent
+
+--
+local s = "Lua"
+print(s:upper())            -- perfered
+print(string.upper(s))      -- equivalent
+
+-- 2
+t = {1, 2 ,3}               -- same as t = { [1]=1, [2]=2, [3]=3 }
+t = {name="Tom", age=30}    -- same as t = { ["name"]="Tom", ["age"]=30 }
+t = {"one", "two", foo=42}  -- same as t = { [1]="one", [2]="two", ["foo"]=42}
+
+-- 3
+print "hello"               -- same as print("hello")
+f {x=10, y=20}              -- same as f({x=10, y=20})
+
+-- 4
+s1 = "hello"
+s2 = "world"
+print(s1 .. " " .. s2)      -- .. is sugar for string concatenation
+
+-- 5
+t = {1, 2, 3}
+print(#t)                   -- number of elements (array-like part)
+print(#"Lua")               -- string length
+
+-- 6
+square = function(x) return x*x end
+print(square(5))
+
+table.sort(nums, function(a, b) return a>b end)
+
+-- 7
+if not condition then return end
+local x = condition and v1 or v2    -- lua doesn't have ?:
+
+lcoal status = ok and "success" or "failure"
+
+-- 8
+a + b           __add
+a - b           __sub
+a .. b          __concat
+a == b          __eq
+a < b           __lt
+a()             __call
+a[k]            __index/__newindex
+
+meta = { __add = function(a, b) return a.value + b.value end }
+setmetatable(a, meta)
+setmetatable(b, meta)
+print(a+b)      -- calls meta.__add(a,b)
+
+-- 9
+function sum(...)
+  local s = 0
+  for _, v in ipairs({...}) do
+    s = s + v
+  end
+  return s
+end
+
+-- examples
+-- 1
+local Person = {}
+Person.__index = Person
+
+function Person.new(name, age)
+  return setmetatable({name=name, age=age}, self)           -- {} builds a dict-like table
+end
+
+function Person:speak()
+  print(self.name .. " say hi, I am " .. self.age .. " years old")  -- .. concatenates strings
+end
+
+local p1 = Person:new("Tom", 30)
+p1:speak()                          -- same as p1.speak(p1)
+
+-- 2
+-- server = configure({host="127.0.0.1", port=8080})
+server = configure {        -- no parens needed because it’s a single table argument
+  host = "127.0.0.1",
+  port = 8080
+}
+
+-- 3
+local n = 5
+local parity = (n % 2 == 0) and "even" or "odd"
+print("n is " .. parity)
+
+-- 4
+Vector = {}
+Vector.__index = Vector
+
+function Vector:new(x, y)
+  return setmetatable({x=x, y=y}, self)
+end
+
+function Vector:__add(v)
+  return Vector:new(self.x + v.x, self.y + v.y)
+end
+
+function Vector:__tostring()
+  return "(" .. self.x ..", " .. self.y ..")"
+end
+
+local a = Vector:new(1, 2)
+local b = Vector:new(3, 4)
+print(a+b)
+
+-- 5
+local App = {}
+App.__index = App
+
+-- "call" metamethod makes App { ... } work like a constructor
+setmetatable(App, {
+  __call = function (_, t)
+	return setmetatable(t, App)
+  end
+})
+
+function App:run()
+	print(self.name .. " version " .. self.version .. " is running!")
+end
+
+App {
+	name = "MyApp",
+	version = "1.0"
+}:run()
+
+-- DSL-like config system
+-- Features in this enhanced DSL:
+----Nested workflows — group related tasks together.
+----Conditional execution — skip tasks dynamically.
+----Automatic wrapping — tables are automatically treated as Task or Workflow.
+----Declarative style — still feels like a config file, easy to read and extend.
+----Composable — you can create complex hierarchies of tasks with minimal boilerplate.
+
+-- Helper function to create callable classes
+local function make_callable(class)
+  class.__index = class
+  setmetatable(class, {
+    __call = function(_, t)
+      return setmetatable(t, class)
+    end
+  })
+  return class
+end
+
+-- Base DSL class
+local DSL = make_callable({})
+
+-- Task entity
+local Task = make_callable(setmetatable({}, DSL))
+
+function Task:run(completed)
+  completed = completed or {}
+
+  -- Skip if condition fails
+  if self.condition and not self.condition() then
+    print("Skipping task: " .. (self.name or "<unnamed>"))
+    return
+  end
+
+  -- Check dependencies
+  if self.depends_on then
+    for _, dep in ipairs(self.depends_on) do
+      if not completed[dep] then
+        print("Skipping task: " .. self.name .. " (waiting for " .. dep .. ")")
+        return
+      end
+    end
+  end
+
+  -- Run the action
+  print("Running task: " .. (self.name or "<unnamed>"))
+  if self.action then
+    self.action()
+  end
+
+  -- Mark as completed
+  if self.name then
+    completed[self.name] = true
+  end
+end
+
+-- Workflow entity
+local Workflow = make_callable({})
+-- Override the default __call to handle tasks initialization
+setmetatable(Workflow, {
+  __call = function(_, t)
+    t.tasks = t.tasks or {}
+    return setmetatable(t, Workflow)
+  end
+})
+
+function Workflow:run(completed)
+  completed = completed or {}
+  print("Starting workflow: " .. (self.name or "<unnamed>"))
+  for _, t in ipairs(self.tasks) do
+    -- Handle Task or nested Workflow
+    local mt = getmetatable(t)
+    if mt == Task or mt == Workflow then
+      t:run(completed)
+    else
+      -- Automatically wrap tables
+      if t.tasks then
+        t = Workflow(t)
+      else
+        t = Task(t)
+      end
+      t:run(completed)
+    end
+  end
+end
+
+-- Example workflow with dependencies
+local myWorkflow = Workflow{
+  name = "Daily Jobs",
+  tasks = {
+    Task{name="Backup", action=function()
+      print(" -> Backing up files...")
+    end},
+
+    Task{name="Cleanup", action=function()
+      print(" -> Cleaning temp files...")
+    end, depends_on={"Backup"}},  -- runs only after Backup
+
+    Workflow{
+      name="Reports",
+      tasks={
+        Task{name="Sales Report", action=function()
+          print(" -> Generating sales report...")
+        end, depends_on={"Cleanup"}},  -- waits for Cleanup
+
+        Task{name="Inventory Report", action=function()
+          print(" -> Generating inventory report...")
+        end, depends_on={"Cleanup"}},
+      }
+    },
+
+    Task{name="Notify", action=function()
+      print(" -> Sending notifications...")
+    end, depends_on={"Sales Report", "Inventory Report"}},  -- waits for reports
+  }
+}
+
+myWorkflow:run()
+```
+
+```lua
+-- execute external command
+-- run a command without output capture
+os.execute("ls -l")
+
+-- run a command with output captured
+local handle = io.popen("ls -l", "r")
+local result = handle:read("*a")
+handle:close()
+
+print(result)
+
+-- ssh
+local user = "morrism"
+local host = "135.242.60.169"
+local command = "ls /tmp"
+
+local ssh_cmd = string.format('ssh %s@%s "%s"', user, host, command)
+
+local handle = io.popen(ssh_cmd)
+local result = handle:read("*a")
+handle:close()
+
+print("Output from SSH command:\n" .. result)
+
+-- write to a command(send input)
+local handle = io.popen("grep hello", "w")
+handle:write("hello world\nthis is a test\n")
+handle:close()
+
+-- 
+local success, exit_type, code = os.execute("ls -l")
+print(success, exit_type, code)
+
+-- io.read and file:read
+-- io.read reads from io.stdin
+-- file:read reads from file object opened with io.open
+"*a"        (all)
+"*l"        (line)
+"*n"        (number)
+number      (explicit characters)
+
+--
+print("Enter two numbers:")
+local n1 = io.read("*n")
+local n2 = io.read("*n")
+print("Sum:", n1 + n2)
+
+--
+local f = io.open("data.txt", "r")
+local all = f:read("*a")
+f:close()
+print(all)
+
+--
+local f = io.open("data.txt", "r")
+for line in f:lines() do
+    print(line)
+end
+f:close()
+
+--
+local lines = {}
+
+for line in io.lines("data.txt") do
+  table.insert(lines, line)
+end
+
+for _, line in ipairs(lines) do
+  print(line)
+end
+
+--
+print("Enter a filename:")
+local filename = io.read("*l")
+
+local f = io.open(filename, "r")
+if not f then
+    print("Cound not open file:", filename)
+    return
+end
+
+local content = f:read("*a")
+f:close()
+print("File content:\n" .. content)
+```
+
 ```lua
 -- 8 basic types in Lua: 
     nil
@@ -807,6 +1153,22 @@ lua-c
 		main.c
 ```
 - file content:
+
+```Makefile
+# Makefile
+LUA_SRC = $(filter-out ./lib/lua/src/lua.c ./lib/lua/src/luac.c, $(wildcard ./lib/lua/src/*.c))
+APP_SRC = ./src/main.c
+
+build:
+	gcc -std=c99 -Wall $(LUA_SRC) $(APP_SRC) -lm -o main
+
+clean:
+	rm -f ./main
+
+run:
+	./main
+```
+
 ```lua
 -- dofile.lua
 print("Hello from dofile.lua")
@@ -1091,4 +1453,144 @@ int main() {
 
     return 0;
 }
+```
+
+## lua examples
+```lua
+-- example 1
+#!/usr/bin/env lua
+
+-- Colors
+local RED   = "\27[31m"
+local GREEN = "\27[32m"
+local BOLD  = "\27[1m"
+local RESET = "\27[0m"
+
+-- Config
+local EVCNAME     = "evc-morris-dentist"
+local SNMPNAME    = "snmp-evc-morris-dentist-1"
+local DHCP_SERVER = "root@10.254.25.42"
+local DHCP_SERVER_PASSWORD = "vecima@atc"
+local MIB_DIR     = "/home/tcao/mibs"
+local MIBTABLE_CMTSCMPTR   = "DOCS-IF-MIB:docsIfCmtsCmPtr"
+local MIBTABLE_CMTSCMSTATUS = "DOCS-IF-MIB:docsIfCmtsCmStatusTable"
+
+local NCS_MODEM_BRIEF_FILE = "/tmp/modem_brief.list"
+local NCS_MODEM_IP_FILE    = "/tmp/modem_ip.list"
+local SNMP_MIB_RESULT_FILE = "/tmp/modem_mib.result"
+
+-- Run shell command and capture full output
+local function run_cmd(cmd)
+    local f = io.popen(cmd)
+    local output = f:read("*a")
+    f:close()
+    return output
+end
+
+-- Save string to file
+local function save_file(path, content)
+    local f = io.open(path, "w")
+    f:write(content)
+    f:close()
+end
+
+-- Load lines from file
+local function load_lines(path)
+    local lines = {}
+    for line in io.lines(path) do
+        table.insert(lines, line)
+    end
+    return lines
+end
+
+-- Step 1: get modem brief info
+local cli_cmd = string.format(
+    "nomad alloc exec -task evc -job %s sh -c 'ncs_cli -u admin <<EOF\nshow cable modem brief | t\nEOF'",
+    EVCNAME
+)
+local modem_brief = run_cmd(cli_cmd)
+save_file(NCS_MODEM_BRIEF_FILE, modem_brief)
+
+-- Step 2: get SNMP NSI port
+local allocs = run_cmd("nomad job allocs " .. SNMPNAME)
+local alloc_id = allocs:match("(%S+)%s+snmp")
+local snmp_status = run_cmd("nomad alloc status " .. alloc_id .. " 2>/dev/null")
+local SNMP_NSIPORT = snmp_status:match("snmp%-nsi%-port%s+(%S+)")
+
+-- Step 3: run snmpwalks via ssh
+local snmp_cmd = string.format(
+    "sshpass -p %q ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %s " ..
+    "\"snmpwalk -On -v2c -c public %s %s -M %s; snmpwalk -On -v2c -c public %s %s -M %s\"",
+    DHCP_SERVER_PASSWORD, DHCP_SERVER, SNMP_NSIPORT, MIBTABLE_CMTSCMPTR, MIB_DIR,
+    SNMP_NSIPORT, MIBTABLE_CMTSCMSTATUS, MIB_DIR
+)
+local snmp_result = run_cmd(snmp_cmd)
+save_file(SNMP_MIB_RESULT_FILE, snmp_result)
+
+-- Step 4: emulate get_modem_ip.awk
+local modem_ip_lines = {}
+for _, line in ipairs(load_lines(NCS_MODEM_BRIEF_FILE)) do
+    local mac, bracket = line:match("^(%x%x:%x%x:%x%x:%x%x:%x%x:%x%x).*(%b[])")
+    if mac and bracket then
+        table.insert(modem_ip_lines, mac .. " " .. bracket:sub(2, -2))
+    else
+        local mac2, ip = line:match("^(%x%x:%x%x:%x%x:%x%x:%x%x:%x%x)%s+%S+%s+%S+%s+%S+%s+(%S+)")
+        if mac2 and ip then
+            table.insert(modem_ip_lines, mac2 .. " " .. ip)
+        end
+    end
+end
+save_file(NCS_MODEM_IP_FILE, table.concat(modem_ip_lines, "\n"))
+
+-- Step 5: load modem table
+local modems = {}
+for _, line in ipairs(load_lines(NCS_MODEM_IP_FILE)) do
+    local mac, ip = line:match("^(%S+)%s+(%S+)")
+    if mac then
+        if ip:match("^%d+%.%d+%.%d+%.%d+$") then
+            modems[mac] = ip
+        else
+            modems[mac] = "0.0.0.0"
+        end
+    end
+end
+
+-- Step 6: compare with SNMP results
+local match, mismatch = 0, 0
+for mac, ip in pairs(modems) do
+    -- convert MAC -> decimal dotted
+    local decmac = mac:gsub("(%x%x)", function(h) return tonumber(h, 16) end)
+                       :gsub(":", ".")
+    local snmp_result_lines = load_lines(SNMP_MIB_RESULT_FILE)
+    local found = false
+    for _, l in ipairs(snmp_result_lines) do
+        if l:match("^" .. decmac .. " =") then
+            found = true
+            local snmp_key = l:match("= (%S+)")
+            if snmp_key then
+                for _, l2 in ipairs(snmp_result_lines) do
+                    if l2:match("^" .. snmp_key .. " =") and l2:match("IpAddress") then
+                        local snmp_ip = l2:match("(%d+%.%d+%.%d+%.%d+)$")
+                        print(string.format("MAC: %s, IP: %s, SNMP IP: %s", mac, ip, snmp_ip))
+                        if ip == snmp_ip then
+                            match = match + 1
+                        else
+                            print(string.format("IP mismatch for MAC: %s, NCS IP: %s, SNMP IP: %s", mac, ip, snmp_ip))
+                            mismatch = mismatch + 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+    if not found then
+        print("No SNMP key for MAC: " .. mac)
+    end
+end
+
+-- Step 7: summary
+local COLOR = (mismatch ~= 0) and RED or GREEN
+print(string.format("%s%sTotal modems: %d, IP matches: %d, IP mismatches: %d%s",
+    BOLD, COLOR, #modem_ip_lines, match, mismatch, RESET))
+
 ```
