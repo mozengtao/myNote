@@ -18,6 +18,137 @@
 [CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)  
 [Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
 
+## array
+```bash
+# 1
+awk 'BEGIN {
+    arr["apple"] = 3
+    arr["banana"] = 5
+    arr[10] = "ten"
+    print arr["apple"]
+    print arr[10]
+}'
+
+# 2
+awk 'BEGIN {
+    fruits["apple"] = 3
+    fruits["banana"] = 5
+
+    # odrder is arbitary
+    for (k in fruits) {
+        print k, fruits[k]
+    }
+}'
+
+# 3
+awk 'BEGIN {
+    fruits["apple"] = 3
+    fruits["banana"] = 5
+
+    delete fruits["banana"]
+    for (k in fruits) {
+        print k, fruits[k]
+    }
+}'
+
+# 5
+awk 'BEGIN {
+    fruits["apple"] = 3
+    
+    if ("apple" in fruits)
+        print "apple exists"
+    
+    if(!("banana" in fruits))
+        print "banana missing"
+}'
+
+# 6
+awk 'BEGIN {
+    fruits["apple"] = 3
+    fruits["banana"] = 5
+
+    print length(fruits)
+}'
+
+# 7
+awk 'BEGIN {
+    n = split("read,green,blue", colors, ",")
+    for(i = 1; i <= n; i++)
+        print i, colors[i]
+}'
+
+# 8 (gawk only)
+awk 'BEGIN {
+    arr[1, "x"] = 10
+    arr[2, "y"] = 20
+
+    print arr[1, "x"], arr[2, "y"]
+}'
+
+# example
+awk '
+/^NSI_BOND/ {
+    bond["NSI","RxB"]=$3; bond["NSI","TxB"]=$4
+    bond["NSI","RxP"]=$5; bond["NSI","TxP"]=$6
+}
+/^NSI_SLAVE/ {
+    slave["NSI","RxB"]+=$3; slave["NSI","TxB"]+=$4
+    slave["NSI","RxP"]+=$5; slave["NSI","TxP"]+=$6
+}
+/^SSI_BOND/ {
+    bond["SSI","RxB"]=$3; bond["SSI","TxB"]=$4
+    bond["SSI","RxP"]=$5; bond["SSI","TxP"]=$6
+}
+/^SSI_SLAVE/ {
+    slave["SSI","RxB"]+=$3; slave["SSI","TxB"]+=$4
+    slave["SSI","RxP"]+=$5; slave["SSI","TxP"]+=$6
+}
+END {
+    for (b in bond) {
+        split(b, k, SUBSEP)
+        iface=k[1]; metric=k[2]
+        printf "%s %s: bond=%s slavesum=%s -> %s\n",
+            iface, metric, bond[b], slave[b],
+            (bond[b]==slave[b] ? "OK" : "MISMATCH")
+    }
+}' interfaces.txt
+
+# or
+
+awk '
+# Bond interfaces
+/^NSI_BOND/ {
+    bond["NSI"]["RxB"]=$3; bond["NSI"]["TxB"]=$4
+    bond["NSI"]["RxP"]=$5; bond["NSI"]["TxP"]=$6
+}
+/^SSI_BOND/ {
+    bond["SSI"]["RxB"]=$3; bond["SSI"]["TxB"]=$4
+    bond["SSI"]["RxP"]=$5; bond["SSI"]["TxP"]=$6
+}
+
+# Slave interfaces
+/^NSI_SLAVE/ {
+    slave["NSI"]["RxB"]+=$3; slave["NSI"]["TxB"]+=$4
+    slave["NSI"]["RxP"]+=$5; slave["NSI"]["TxP"]+=$6
+}
+/^SSI_SLAVE/ {
+    slave["SSI"]["RxB"]+=$3; slave["SSI"]["TxB"]+=$4
+    slave["SSI"]["RxP"]+=$5; slave["SSI"]["TxP"]+=$6
+}
+
+END {
+    for (iface in bond) {
+        for (metric in bond[iface]) {
+            printf "%s %s: bond=%s slavesum=%s -> %s\n",
+                iface, metric,
+                bond[iface][metric], slave[iface][metric],
+                (bond[iface][metric]==slave[iface][metric] ? "OK" : "MISMATCH")
+        }
+    }
+}' interfaces.txt
+
+```
+
 ## Tips
 ```bash
 # Rule of Thumb
