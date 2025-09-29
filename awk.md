@@ -147,6 +147,35 @@ END {
     }
 }' interfaces.txt
 
+# or
+awk '
+# Match bond interfaces (anything ending with _BOND)
+$1 ~ /_BOND$/ {
+    prefix = substr($1, 1, length($1)-5)   # remove "_BOND"
+    bond[prefix]["RxB"]=$3; bond[prefix]["TxB"]=$4
+    bond[prefix]["RxP"]=$5; bond[prefix]["TxP"]=$6
+}
+
+# Match slave interfaces (anything starting with same prefix + "_SLAVE")
+$1 ~ /_SLAVE[0-9]*$/ {
+    n = index($1, "_SLAVE")
+    prefix = substr($1, 1, n-1)            # get prefix before "_SLAVE"
+    slave[prefix]["RxB"]+=$3; slave[prefix]["TxB"]+=$4
+    slave[prefix]["RxP"]+=$5; slave[prefix]["TxP"]+=$6
+}
+
+END {
+    for (iface in bond) {
+        for (metric in bond[iface]) {
+            printf "%s %s: bond=%s slavesum=%s -> %s\n",
+                iface, metric,
+                bond[iface][metric], slave[iface][metric],
+                (bond[iface][metric]==slave[iface][metric] ? "OK" : "MISMATCH")
+        }
+    }
+}' interfaces.txt
+
+
 ```
 
 ## Tips
