@@ -17,6 +17,88 @@
 [Lua Programming Gems](https://www.lua.org/gems/)  
 [Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
 
+## metatable
+```lua
+-- A metatable defines various extraneous behaviors for a table
+-- Any table (and userdata) may be assigned a metatable
+
+-- our sample table
+local tab = {}
+-- our metatable
+local metatable = {
+    -- This table is then what holds the metamethods or metafields
+    -- that Lua will read to determine the tables's behavior, eg.
+    __index = function() --[[ ... ]] end
+}
+
+setmetatable(tab, metatable)
+
+-- metatable can be retrieved back
+local metatable = getmetatable(tab)
+
+-- remove a metatable and restore regular functionality
+stmetatable(tab, nil)
+
+-- for signature f(a, b), a and b don't necessarily have to be instances of your metatable. One of them will always be, but not necessarily the first
+
+-- for f(a, b)
+1. check the first operand (even if it is a number) a
+2. if operand a does not define a metamethod for the operation then Lua will check the second operand b
+3. if Lua can find a metamethod for operand b, it calls the metamethod with the two operands as arguments, and the result of the call (adjusted to one value) is the result of the operation
+4. otherwise, if no metamethod is found, Lua raises an error
+
+-- calculation operators
+__add(a, b)
+__sub(a, b)
+__mul(a, b)
+__div(a, b)
+__unm(a)
+__mod(a, b) (Lua 5.1)
+__pow(a, b) (Lua 5.1)
+__idiv(a, b) (Lua 5.3)
+
+-- bitwise operators(Lua 5.3)
+__band(a, b)
+__bor(a, b)
+__bxor(a, b)
+__bnot(a)
+__shl(a, b)
+__shr(a)
+
+-- equation operators
+__eq(a, b)
+__lt(a, b)
+__le(a, b)
+
+-- misc operators
+__concat(a, b)
+—__len(a) (Lua 5.1)
+
+-- behavior methods
+-- indexing
+__index
+__newindex
+
+--calling
+__call(args)
+
+-- garbage collection & memory management
+__mode
+__close(value, err?) (Lua 5.4)
+__gc()
+
+-- misc
+__tostring()
+__metatable
+__name
+__pairs() (Lua 5.2)
+__ipairs() (Lua 5.2 - Lua 5.3)
+
+-- implementation-specific
+__iterator()
+__usedindex()
+```
+
 ## syntactic sugar
 ```lua
 -- 1
@@ -93,7 +175,9 @@ end
 local Person = {}
 Person.__index = Person
 
-function Person.new(name, age)
+-- Note: use : instead of . to allow self to be implicitly passed to the method
+-- function Person.new(self, name, age)
+function Person:new(name, age)
   return setmetatable({name=name, age=age}, self)           -- {} builds a dict-like table
 end
 
@@ -1224,24 +1308,10 @@ end
 local n, max = find_max(3, 5, 2, 8, 1)
 print("The maximum value is "..max.." among "..n.." numbers")
 
--- curl -R -O https://www.lua.org/ftp/lua-5.3.5.tar.gz
---[[
-folder structure:
-lua-c
-	Makefile
-	lib
-		lua         -- lua source code
-			src
-	scripts
-		myscript.lua
-	src
-		main.c
-]]
-
 ```
 
 ## integrate lua with c/c++
-- folder structure:
+**folder structure:**
 ```
 lua-c
 	Makefile
@@ -1259,7 +1329,7 @@ lua-c
 	src
 		main.c
 ```
-- file content:
+**file content:**
 
 ```Makefile
 # Makefile
@@ -1276,6 +1346,7 @@ run:
 	./main
 ```
 
+**lua files**
 ```lua
 -- dofile.lua
 print("Hello from dofile.lua")
@@ -1313,6 +1384,8 @@ config_table = {
 	num_levels = 10
 }
 ```
+
+**c files**
 ```c
 // main.c
 #include <stdio.h>
