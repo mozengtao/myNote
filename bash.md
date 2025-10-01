@@ -10,6 +10,29 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## terminal
+```bash
+# check terminal type
+echo $TERM
+xrdb -query | grep -i xterm
+
+# list available fonts
+fc-list : family
+
+# set a new font
+# temporary
+xterm -fa 'DejaVu Sans Mono' -fs 12
+
+# persistent
+# edit ~/.Xresources
+XTerm*faceName: DejaVu Sans Mono
+XTerm*faceSize: 12
+
+# apply change
+xrdb -merge ~/.Xresources
+
+```
+
 ## tree
 ```bash
 -d     List directories only.

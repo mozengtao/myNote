@@ -17,6 +17,19 @@
 [Lua Programming Gems](https://www.lua.org/gems/)  
 [Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
 
+[middleclass(Object-orientation for Lua)](https://github.com/kikito/middleclass)  
+[]()  
+[]()  
+[Binding Code To Lua](http://lua-users.org/wiki/BindingCodeToLua)  
+[LuaBridge3](https://kunitoki.github.io/LuaBridge3/)  
+[Fun with Lua bindings](https://realmensch.org/2012/02/04/fun-with-lua-bindings/)  
+[Simple Cpp Binding](http://lua-users.org/wiki/SimpleCppBinding)  
+[]()  
+[Using Lua with C++ (and C)](https://edw.is/using-lua-with-cpp/)  
+[Integrating Lua with C](https://marcbalmer.ch/)  
+[[C/C++] A Lua C API Cheat Sheet](https://www.codingwiththomas.com/blog/a-lua-c-api-cheat-sheet)  
+[]()  
+
 ## metatable
 ```lua
 -- A metatable defines various extraneous behaviors for a table
