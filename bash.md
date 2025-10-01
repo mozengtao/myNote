@@ -1144,6 +1144,51 @@ ip
     ...
 
 ip link help
+
+# ip link + addr
+sudo ip link add dummy0 type dummy
+sudo ip addr add 192.168.1.10/24 dev dummy0
+ip route add default via 192.168.1.1 dev dummy0
+sudo ip link set dummy0 up
+ip addr show dummy0
+
+
+# bond
+# Create bond interface in active-backup mode
+sudo ip link add bond0 type bond mode active-backup
+
+# Assign an IP to the bond
+sudo ip addr add 192.168.10.100/24 dev bond0
+
+# Bring bond up
+sudo ip link set bond0 up
+
+# Add slaves
+sudo ip link set eth0 down
+sudo ip link set eth1 down
+sudo ip link set eth0 master bond0
+sudo ip link set eth1 master bond0
+sudo ip link set eth0 up
+sudo ip link set eth1 up
+
+# check bond status
+cat /proc/net/bonding/bond0
+
+# delete a bond
+sudo ip link delete bond0
+
+# bond paramters can also be set through /sys/class/net/bond0/bonding/*
+# e.g
+echo active-backup | sudo tee /sys/class/net/bond0/bonding/mode
+
+# bonding mode
+balance-rr (mode 0): round-robin load balancing.
+active-backup (mode 1): only one active slave, others are backup.
+balance-xor (mode 2): based on source/dest MAC (good for switch support).
+broadcast (mode 3): send packets on all slaves (rare).
+802.3ad (mode 4): IEEE 802.3ad Dynamic Link Aggregation (LACP). Needs switch support.
+balance-tlb (mode 5): adaptive transmit load balancing (no switch support required).
+balance-alb (mode 6): adaptive load balancing (both Tx and Rx).
 ```
 
 
