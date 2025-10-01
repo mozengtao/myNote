@@ -16,6 +16,9 @@
 []()  
 [Lua Programming Gems](https://www.lua.org/gems/)  
 [Lua Style Guide](https://roblox.github.io/lua-style-guide/)  
+[]()  
+[Lua examples](https://tutorial.realtimelogic.com/Lua-Types.lsp)  
+[]()  
 
 [middleclass(Object-orientation for Lua)](https://github.com/kikito/middleclass)  
 []()  
