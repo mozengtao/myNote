@@ -1189,6 +1189,75 @@ broadcast (mode 3): send packets on all slaves (rare).
 802.3ad (mode 4): IEEE 802.3ad Dynamic Link Aggregation (LACP). Needs switch support.
 balance-tlb (mode 5): adaptive transmit load balancing (no switch support required).
 balance-alb (mode 6): adaptive load balancing (both Tx and Rx).
+
+# linux kernel module bonding
+# purpose
+Provides a virtual netework driver that can aggregate multiple NICs into one logical interface(bond0, bond1, etc.)
+It lives in the kernel and interacts with physical NIC drivers
+Responsible for:
+Managing bonded slaves(enslaving/releasing)
+Implementing bonding modes(round-robbin, active-backup, 802.3ad, etc.)
+Handling failover and link monitoring
+Coordinate with switches(for 802.3ad/LACP)
+# load module
+sudo modprobe bonding
+# unload module
+sudo modprobe -r bonding
+# module info
+sudo modinfo bonding
+# configuration
+/sys/class/net/bondX/bonding/{mode,miimon,arp_interval,primary,...}
+# status info
+cat /proc/net/bonding/bond0
+
+# architecture
+Application(user space)
+              |
+              V
+Linux Kernel Networking Stack(ip layer)
+              |
+              V
+Linux Kernel Module bonding(bond0, bond1, ...)
+              |
+    ---------------------------------
+    |                               |
+    V                               V
+Physical NIC Driver        Physical NIC Driver
+      (eth0)                     (eth1)
+        |                           |
+        V                           V
+Network Hardware(switch, router, cables, ...)
+
+# kernel module macvlan
+# purpose
+Allows you to create multiple virtual network interfaces(with unique MAC addresses) on top of a single physical network interface
+Each macvlan interface behaves like an independent NIC, even though they all share the same underlying physical NIC.
+
+# usage
+sudo modprobe macvlan
+
+# Parent NIC is eth0
+sudo ip link add macvlan0 link eth0 type macvlan mode bridge
+sudo ip addr add 192.168.1.100/24 dev macvlan0
+sudo ip link set macvlan0 up
+
+ip addr show macvlan0
+
+# architecture
+Application
+     |
+     V
+Linux Kernel Networking Stack
+     |
+     V
+macvlan Kernel Module
+     |
+     V
+Physical NIC with one real hardware
+interface, shared by multiple macvlans
+     |
+     V
+Physical Network(switch, LAN)
 ```
 
 
