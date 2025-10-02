@@ -348,6 +348,17 @@ echo "cat dog cat dog" | awk '{
     }
 }'
 
+# find all matches
+{
+    text = $0
+    start = 1
+    while ((start = match(text, /[0-9]+/)) > 0) {
+        found = substr(text, start, RLENGTH)
+        print "Found number:", found
+        text = substr(text, start + RLENGTH)
+    }
+}
+
 # match Search a string with a regex
 # index Find literal substring, no regex.
 # gsub Replace all matches of regex with replacement

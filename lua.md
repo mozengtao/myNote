@@ -32,6 +32,80 @@
 [Integrating Lua with C](https://marcbalmer.ch/)  
 [[C/C++] A Lua C API Cheat Sheet](https://www.codingwiththomas.com/blog/a-lua-c-api-cheat-sheet)  
 []()  
+[]()  
+
+[Understanding globals _ENV and _G](https://www.whoop.ee/)  
+[Design patterns in Lua](https://www.whoop.ee/)  
+[]()  
+[]()  
+
+## variable scope
+```lua
+--[[
+1. global variables
+2. local variables
+3. table fields
+]]
+
+-- global
+-- lua keeps all its global variables in a regular table, called the environment
+_G
+
+x = 10  -- This is a global variable
+print(_G.x)   -- 10
+print(x)      -- 10
+print(_G.print(x))  -- 10
+
+-- local
+local x = 10
+function getX()
+  local x = 20
+  return x
+end
+
+print(x)        -- 10
+print(getX())   -- 20
+
+-- every chunk has its own local variables
+local x = 10
+if x == 10 then
+  local x = 20
+end
+
+print(x)    -- 10
+
+-- table fields
+Any table key-value pair is the variable with its own value. Undefined variables in Lua are always nil
+local t = {}
+t.x = 10
+print(t.x)    -- 10
+print(t.y)    -- nil
+print(t.z)    -- nil
+
+-- _ENV
+_ENV table it is a table that defines the environment in which code runs. By assigning a new table to _ENV, you can sandbox or restrict access to globals.
+
+_ENV = { print = print }
+print("hello")              -- works
+math.sqrt(9)                -- Error: math is nil
+
+-- best practice
+1. use local variables whenever possible
+2. explicitly declare globals if needed, e.g. global_x = 10 or gloalX = 10
+3. use _ENV for namespacing or sandboxing only
+local safeENV = {
+  print = print,
+  tostring = tostring
+}
+
+_ENV = safeENV
+
+print(tonumber)   -- nil
+print(type)       -- nil
+print(print)      -- function: 0x00000001
+print(tostring)   -- function: 0x00000001
+
+```
 
 ## metatable
 ```lua
