@@ -9,6 +9,127 @@
 [**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
 []()  
 
+## string
+```python
+cmd1 = "ls -l"
+cmd2 = 'ls -l'
+cmd3 = """ls -l"""      # '''ls -l'''
+cmd4 = f"echo {2 + 3}"
+cmd5 = r"echo C:\path\to\file"
+
+# multiple-line string
+
+#1 use triple-quoted strings for readability
+cmd = f"""\
+nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF' > {TMP_MODEM_LIST}
+"""
+
+#2 parentheses with implicit concatenation
+cmd = (
+    f"nomad alloc status $(nomad job allocs {EVCNAME} "
+    "| awk '/snmp/{{print $1}}') 2>/dev/null "
+    "| awk '/snmp-nsi-port/{{print $3}}'"
+)
+
+#3 for embeded templates
+config_template = """\
+interface {iface}
+ description {desc}
+ ip address {ip} {mask}
+"""
+
+print(config_template.format(iface="eth0", desc="uplink", ip="192.168.1.1", mask="255.255.255.0"))
+
+# use template file
+
+# get_modem_list.template:
+nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF
+' > {OUTPUT_FILE}
+# load and fill the template in python
+from pathlib import Path
+
+TEMPLATE_PATH = Path("templates/get_modem_list.sh")
+
+EVCNAME = "evc-morris-dentist"
+TMP_MODEM_LIST = "/tmp/modem.list"
+
+# Load template
+template = TEMPLATE_PATH.read_text()
+
+# Substitute variables
+cmd = template.format(EVCNAME=EVCNAME, OUTPUT_FILE=TMP_MODEM_LIST)
+
+print(cmd)
+
+# one template file containing multiple command templates
+#1
+# modem_tasks.tpl:
+### CMD:FETCH_MODEM_LIST
+nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF
+' > {OUTPUT_FILE}
+
+### CMD:SNMP_WALK_MODEM
+snmpwalk -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.2.2.1.2 > {OUTPUT_FILE}
+
+### CMD:REBOOT_MODEM
+snmpset -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.69.1.1.3.0 i 1
+
+# python loader:
+from pathlib import Path
+import re
+
+def load_templates(path):
+    text = Path(path).read_text()
+    sections = re.split(r'^### CMD:(\w+)', text, flags=re.M)
+    # sections = ['', 'FETCH_MODEM_LIST', '<body>', 'SNMP_WALK_MODEM', '<body>', ...]
+    templates = {}
+    for i in range(1, len(sections), 2):
+        templates[sections[i]] = sections[i+1].strip()
+    return templates
+
+templates = load_templates("templates/modem_tasks.sh.tpl")
+
+cmd = templates["SNMP_WALK_MODEM"].format(
+    COMMUNITY="public",
+    MODEM_IP="192.168.0.2",
+    OUTPUT_FILE="/tmp/snmp.out"
+)
+
+print(cmd)
+
+#2
+# modem_tasks.yaml:
+FETCH_MODEM_LIST: |
+  nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
+  show cable modem brief | t
+  EOF
+  ' > {OUTPUT_FILE}
+
+SNMP_WALK_MODEM: |
+  snmpwalk -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.2.2.1.2 > {OUTPUT_FILE}
+
+REBOOT_MODEM: |
+  snmpset -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.69.1.1.3.0 i 1
+
+# python loader:
+import yaml
+
+templates = yaml.safe_load(open("templates/modem_tasks.yaml"))
+
+cmd = templates["REBOOT_MODEM"].format(
+    COMMUNITY="public",
+    MODEM_IP="192.168.0.2"
+)
+
+print(cmd)
+```
+
 ## list, tuple, set
 ```
             |   List  |  Tuple |   Set     
