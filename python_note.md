@@ -57,6 +57,165 @@ python -m pylint mymodule.py
 python -m black mymodule.py
 ```
 
+## example
+```python
+#!/usr/bin/env python3
+import subprocess
+import re
+from pathlib import Path
+
+# -------------------------------
+# Configuration
+# -------------------------------
+EVCNAME = "evc-morris-dentist"
+SNMPNAME = "snmp-evc-morris-dentist-1"
+DHCP_SERVER = "root@10.254.25.42"
+DHCP_SERVER_PASSWORD = "vecima@atc"
+MIB_DIR = "/home/tcao/mibs"
+MIBTABLE_CMTSCMPTR = "DOCS-IF-MIB:docsIfCmtsCmPtr"
+MIBTABLE_CMTSCMSTATUS = "DOCS-IF-MIB:docsIfCmtsCmStatusTable"
+
+TMP_MODEM_LIST = Path("/tmp/modem.list")
+TMP_MODEM_MAC_IP_LIST = Path("/tmp/modem_mac_ip.list")
+
+
+# -------------------------------
+# Helpers
+# -------------------------------
+def run_cmd(cmd, capture=True):
+    print(f"[RUN] {cmd}")
+    result = subprocess.run(cmd, shell=True, text=True, capture_output=capture)
+    if capture:
+        return result.stdout.strip()
+    return None
+
+
+def hexmac2decmac(hexstr, isep=":", osep="."):
+    parts = hexstr.split(isep)
+    try:
+        return osep.join(str(int(p, 16)) for p in parts)
+    except ValueError:
+        return ""
+
+
+def getmodemip(line):
+    match = re.search(r"\[([^\]]*)\]", line)
+    ipv4, ipv6 = "", ""
+    if match:
+        for ip in match.group(1).split():
+            if "." in ip:
+                ipv4 = ip
+            elif ":" in ip:
+                ipv6 = ip
+    if not ipv4:
+        ipv4 = "0.0.0.0"
+    return f"{ipv4} {ipv6}".strip()
+
+
+# -------------------------------
+# Nomad data collection
+# -------------------------------
+def get_modem_list():
+    cmd = f"""nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
+show cable modem brief | t
+EOF
+' > {TMP_MODEM_LIST}"""
+    run_cmd(cmd, capture=False)
+
+
+def parse_modem_list():
+    out_lines = []
+    with TMP_MODEM_LIST.open() as fin:
+        for line in fin:
+            if "operational" in line:
+                fields = line.strip().split()
+                if not fields:
+                    continue
+                mac = hexmac2decmac(fields[0])
+                ip = getmodemip(line)
+                out_lines.append(f"{mac} {ip}")
+    TMP_MODEM_MAC_IP_LIST.write_text("\n".join(out_lines))
+    return out_lines
+
+
+def get_snmp_nsiport():
+    cmd = (
+        f"nomad alloc status $(nomad job allocs {SNMPNAME} "
+        "| awk '/snmp/{print $1}') 2>/dev/null | awk '/snmp-nsi-port/{print $3}'"
+    )
+    return run_cmd(cmd)
+
+
+# -------------------------------
+# Optimized SNMP fetching
+# -------------------------------
+def fetch_snmp_data(snmp_port):
+    """Run snmpwalk for both MIB tables once and return text outputs."""
+    base_ssh = (
+        f"sshpass -p '{DHCP_SERVER_PASSWORD}' ssh -o StrictHostKeyChecking=no "
+        f"-o UserKnownHostsFile=/dev/null {DHCP_SERVER} 2>/dev/null"
+    )
+
+    cmd_ptr = f"{base_ssh} snmpwalk -On -v2c -c public {snmp_port} {MIBTABLE_CMTSCMPTR} -M {MIB_DIR}"
+    cmd_status = f"{base_ssh} snmpwalk -On -v2c -c public {snmp_port} {MIBTABLE_CMTSCMSTATUS} -M {MIB_DIR}"
+
+    print("[INFO] Fetching SNMP pointer table once...")
+    cmts_ptr_data = run_cmd(cmd_ptr)
+
+    print("[INFO] Fetching SNMP status table once...")
+    cmts_status_data = run_cmd(cmd_status)
+
+    return cmts_ptr_data.splitlines(), cmts_status_data.splitlines()
+
+
+def run_snmp_analysis(snmp_port):
+    # Step 1: Fetch both SNMP tables once
+    cmts_ptr_lines, cmts_status_lines = fetch_snmp_data(snmp_port)
+
+    # Step 2: Build modem_mac -> key mapping
+    mac_key_map = {}
+    for line in cmts_ptr_lines:
+        parts = line.strip().split()
+        if len(parts) < 2:
+            continue
+        oid_val = parts[-1]
+        for decmac, *_ in (l.split() for l in TMP_MODEM_MAC_IP_LIST.read_text().splitlines()):
+            if decmac in line:
+                mac_key_map[decmac] = oid_val
+
+    # Step 3: For each modem, find its IP entries from status table
+    for decmac, key in mac_key_map.items():
+        mac_hex = ":".join(f"{int(p):02x}" for p in decmac.split("."))
+        print(f"\nMAC (dec): {decmac}")
+        print(f"MAC (hex): {mac_hex}")
+
+        matches = [l for l in cmts_status_lines if key in l and "IpAddress" in l]
+        if matches:
+            print("\n".join(matches))
+        else:
+            print("(No IpAddress found)")
+
+        print("\n--------------------------------\n")
+
+
+# -------------------------------
+# Main flow
+# -------------------------------
+def main():
+    get_modem_list()
+    modem_lines = parse_modem_list()
+    print(f"[INFO] Parsed {len(modem_lines)} modem entries")
+
+    snmp_port = get_snmp_nsiport()
+    print(f"[INFO] SNMP NSI Port: {snmp_port}")
+
+    run_snmp_analysis(snmp_port)
+
+
+if __name__ == "__main__":
+    main()
+```
+
 ## time
 [A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)  
 [time — Time access and conversions](https://docs.python.org/3/library/time.html)  
