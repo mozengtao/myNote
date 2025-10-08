@@ -2,7 +2,11 @@
 [YAML Tutorial : A Complete Language Guide with Examples](https://spacelift.io/blog/yaml)  
 [onlineyamltools](https://onlineyamltools.com/)  
 [YAML Formatter](https://jsonformatter.org/yaml-formatter#Sample)  
-
+[Learn X in Y minutes](https://learnxinyminutes.com/yaml/)  
+[How to Work with YAML in Python](https://earthly.dev/blog/yaml-in-python/)  
+[YAML: The Missing Battery in Python](https://realpython.com/python-yaml/)  
+[]()  
+[]()  
 
 ```yaml
 # YAML三种基本数据结构
