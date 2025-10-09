@@ -847,6 +847,517 @@ register_menu("Tools/Foo Tool", foo_tool, MENU_TOOLS_UNSORTED)
 ------------------------------------------------------
 ```
 
+## lua note
+```lua
+-- first program
+
+local function fact(n)
+	if n == 1 then
+		return 1
+	else
+		return n * fact(n - 1)
+	end
+end
+
+print("Enter a number:")
+local n = io.read("*number")
+print(fact(n))
+
+-- chunk is simply a sequecne of statements
+
+-- file 'lib1.lua'
+function norm(x, y)
+	local n2 = x^2 + y^2
+	return math.sqrt(n2)
+end
+
+-- in interactive mode
+dofile("lib1.lua")
+n = norm(3, 4)
+
+-- global variables
+print(g)	-- nil
+g = 10
+print(g)	-- 10
+
+-- comment
+--[[
+this is
+a comment
+]]
+
+-- types and values
+-- lua is a dynamically typed language, variables have no predefined types, any variable may contain values of any type
+
+print(type("Hello world"))		-- string
+print(type(10.4*3))				-- number
+print(type(print))				-- function
+print(type(type))				-- function
+print(type(true))				-- boolean
+print(type(nil))				-- nil
+print(type(type(X)))			-- string
+
+-- string
+page = [[
+<HTML>
+<HEAD>
+<TITLE>An HTML Page</TITLE>
+</HEAD>
+<BODY>
+	<A HREF="http://www.lua.org">Lua</A>
+</BODY>
+</HTML>
+]]
+
+-- automatic conversions between numbers and strings
+print("10" + 1)		-- 11
+print("10 + 1")		-- 10 + 1
+print("2" * "3")	-- 6
+print("hello" + 1)	-- error (cannot convert "hello")
+print(10 .. 20)		-- 1020
+
+line = io.read()
+n = tonumber(line)
+
+print(tostring(10) == "10")		-- true
+print(10 .. "" == "10")			-- true
+
+-- table: associative array
+-- lua uses table to represent a package, io.read means "the read entry from the io package", for lua it means "index the table io using the string "read" as the key"
+t = {}			-- create a table and stroe its reference in a
+print(t["x"])	-- nil
+
+-- a table is always anonymous, there is no relationship between a varialbe that holds a table and the table itself
+
+--
+t = {}
+t.x = 10		-- same as t["x"] = 10
+print(t.x)		-- same as print(t["x"])
+
+--
+t = {}
+x = "y"
+t[x] = 10		-- put 10 in field "y"
+print(t[x])		-- 10
+print(t.x)		-- nil
+print(t.y)		-- 10
+
+--
+a = {}
+for i=1,10 do
+	a[i] = io.read()
+end
+
+for i,line in ipairs(a) do
+	print(line)
+end
+
+-- function
+-- functions are first-class values in lua
+
+-- userdata
+-- userdata type allows arbitary C data to be stored in lua variables, userdata are used to represent new types created by an application program or a library written in C
+
+-- arithmetic operators
+--[[
++
+-
+*
+/
+-(negation)
+]]
+
+-- relational operators
+--[[
+<
+>
+<=
+>=
+==
+~=
+]]
+
+-- logical operators
+--[[
+and
+or
+not
+]]
+
+-- string concatenation
+print("hello " .. "world")		--> hello world
+print(0 .. 1)					--> 01
+
+-- table constructors
+days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+print(days[1])	--> "Sunday"
+
+a = {x=0, y=0}
+--> equivalent to
+a = {}
+a.x = 0
+a.y = 0
+
+
+--
+w = {x=0, y=0, label="console"}
+x = {sin(0), sin(1), sin(2)}
+w[1] = "another field"
+x.f = w
+print(w["x"])		--> 0
+print(w[1])			--> another field
+print(x.f[1])		--> another field
+w.x = nil			-- remove field "x"
+
+--
+polyline = {
+	color="blue", thickness=2, npoints=4,
+	{x=0,   y=0},
+	{x=-10, y=0},
+	{x=-10, y=1},
+	{x=0,   y=1}
+}
+print(polyline[2].x)		--> -10
+
+t = {x=0, y=0}
+--> equals to
+t = {["x"]=0, ["y"]=0}
+
+t = {"red", "green", "blue"}
+--> equals to
+t = {[1]="red", [2]="green", [3]="blue"}
+
+-- array start at 0 ("Monday" naturally goes to index 1)
+days = {[0]="Sunday", "Monday", "Tuesday", "Wednesday",
+		"Thursday", "Friday", "Saturday"}
+
+a = {[1]="red", [2]="green", [3]="blue",}	-- trailing commas are optional but are always valid
+
+-- you can use a semicolon instead of a comma in a constructor
+-- semicolons are usually used to delimit different sections in a constructor
+t = {x=10, y=45; "one", "two", "three"}
+
+-- assignment
+x, y = 0, 0
+a[i], a[j] = a[j], a[i]		-- swap
+
+-- automatic adjust the number of values to the number of variables
+a, b, c = 0, 1
+print(a, b, c)			-- 0  1  nil
+a, b = a+1, b+1, b+2	-- value of b+2 is ignored
+print(a, b)				-- 1  2
+a, b, c = 0
+print(a, b, c)			-- 0  nil  nil
+a, b = f()
+
+-- local variables and blocks
+j = 10			-- global variable
+local i = 1		-- local variable
+
+--
+x = 10
+local i = 1			-- local to the chunk
+
+while i<=x do
+	local x = i*2	-- local to the while body
+	print(x)
+	i = i + 1
+end
+
+if i > 20 then
+	local x			-- local to the "then" body
+	x = 20
+	print(x + 2)
+else
+	print(x)		--> 10 (the global one)
+end
+
+print(x)			--> 1- (the global one)
+
+-- creates a local variable, foo, and initializes it with the value of the global variable foo
+local foo = foo
+
+-- explicitly delimit a block
+do
+	local a2 = 2*a
+	local d = sqrt(b^2 - 4*a*c)
+	x1 = (-b + d)/a2
+	x2 = (-b - d)/a2
+end							-- scope of a2 and d ends here
+print(x1, x2)
+
+
+-- control structures
+-- if
+if op == "+" then
+	r = a + b
+elseif op == "-" then
+	r = a - b
+elseif op == "*" then
+	r = a * b
+elseif op == "/" then
+	r = a / b
+else
+	error("invalid operation")
+end
+
+-- while
+local i = 1
+while a[i] do
+	print(a[i])
+	i = i + 1
+end
+
+-- repeat
+-- print the first non-empty line
+repeat
+	line = io.read()
+until line ~= ""
+print(line)
+
+-- for
+for i=10,1,-1 do
+	print(i)
+end
+
+-- never change the value of the control variable
+
+-- find a value in a list
+local found = nil
+for i=1,a.n do
+	if a[i] == value then
+		found = i
+		break
+	end
+end
+print(found)
+
+--
+days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
+
+for k in pairs(days) do
+	print(k)
+end
+
+for i,v in ipairs(days) do
+	print(i, v)
+end
+
+revDays = {}
+for i,v in ipairs(days) do
+	revDays[v] = i
+end
+
+-- break, return
+a = {1, 2, 3}
+
+local i = 1
+local v = 2
+while a[i] do
+	if a[i] == v then
+		break
+	end
+	i = i + 1
+end
+print(i)
+
+--
+function foo()
+	do
+		return
+	end
+end
+
+-- functions
+-- If the function has one single argument and this argument is either a literal string or a table constructor, then the parentheses are optional
+print "hello world"		--> print("hello world")
+dofile 'a.lua'			--> dofile('a.lua')
+print [[a multi-line
+ message
+]]
+f{x=10, y=20}			--> f({x=10, y=20})
+type{}					--> type({})
+
+-- syntax for object-oriented calls
+o:foo(x)
+--> equals to
+o.foo(o, x)
+
+-- function parameters work exactly as local varialbes
+-- you can call a function with a number of arguments different from its number of parameters
+
+function f(a, b)
+	return a or b
+end
+
+f(3)			-- a = 3, b = nil
+f(3, 4)			-- a = 3, b = 4
+f(3, 4, 5)		-- a = 3, b = 4 (5 is discarded)
+
+-- default argument
+function incCount(n)
+	n = n or 1
+	count = count + n
+end
+
+-- functions with multiple results
+function foo0()
+end
+
+function foo1()
+	return 'a'
+end
+
+function foo2()
+	return 'a'. 'b'
+end
+
+x,y = foo2()		-- x='a', y='b'
+x= foo2()			-- x='a', 'b' is discarded
+x,y,z = 10,foo2()	-- x=10, y='a', z='b'
+
+x,y = foo0()		-- x=nil, y=nil
+x,y= foo1()			-- x='a', y=nil
+x,y,z = foo2()		-- x=10, y='a', z=nil
+
+-- a function call that is not the last element in the list always produces one result
+x,y = foo2(), 20			-- x='a', y=20
+x,y = foo2(), 20, 30		-- x=nil, y=20, 30 is discarded
+
+-- When a function call is the last (or the only) argument to another call, all results from the first call go as arguments
+print(foo0())			-->
+print(foo1())			-->  a
+print(foo2())			-->  a   b
+print(foo2(), 1)		-->  a   1
+print(foo2() .. "x")	-->  ax (when the function call appears inside an expression, lua adjust the number of results to one)
+
+
+-- a constructor also collects all results from a call, without any adjustments
+a = {foo0()}			-- a = {}  (an empty table)
+a = {foo1()}			-- a = {'a'}
+a = {foo2()}			-- a = {'a', 'b'}
+
+-- a statement like return f() returns all values returned by f
+function foo (i)
+  if i == 0 then return foo0()
+  elseif i == 1 then return foo1()
+  elseif i == 2 then return foo2()
+  end
+end
+
+print(foo(1))		--> a
+print(foo(2))		--> a  b
+print(foo(0))		-- (no results)
+print(foo(3))		-- (no results)
+
+-- force a call to return exactly one result by enclosing it in an extra pair of parentheses
+print((foo0()))		--> nil
+print((foo1()))		--> a
+print((foo2()))		--> a
+
+-- unpack receives an array and returns as results all elements from the array, starting from index 1
+print(unpack{10,20,30})		--> 10   20   30
+a,b = unpack{10,20,30}		-- a=10, b=20, 30 is discarded
+
+-- variable number of arguments
+-- 
+printResult = ""
+
+function print(...)
+	for i,v in ipairs(arg) do
+		printResult = printResult .. tostring(v) .. "\t"
+	end
+	printResult = printResult .. "\n"
+end
+
+-- ... indicate that the function has a variable number of arguments
+-- when function is called, all its arguments are collected in a single table, which the function accesses as a hidden parameter named arg
+-- besides those arguments, the arg table has an extra field, n, with the actual number of arguments collected
+
+-- select a specific return from a function
+function select(n, ...)
+	return arg[n]
+end
+
+--
+function fwrite(fmt, ...)
+	return io.write(string.format(fmt, unpack(arg)))
+end
+
+-- named arguments
+-- lua has no direct support for named arguments
+w = Window{
+  x = 0,
+  y = 0,
+  width = 300,
+  height = 200,
+  title = "Lua",
+  background = "blue",
+  border = true,
+}
+
+function Window(options)
+  -- check mandatory fields
+  if type(options.title) ~= "string" then
+    error("no title")
+  elseif type(options.width) ~= "number" then
+    error("no width")
+  elseif type(options.height) ~= "number" then
+    error("no height")
+  end
+
+  -- default values
+  _Window(options.title,
+          options.x or 0,
+          options.y or 0,
+          options.width,
+          options.height,
+          options.background or "white",
+          options.border  -- default is nil if not given
+  )
+end
+
+-- example
+-- define a function with “named arguments” via table
+function make_person(options)
+  local name = options.name
+  local age = options.age or 0        -- default age = 0
+  local hobby = options.hobby or "none"
+  if type(name) ~= "string" then
+    error("must provide name")
+  end
+  return {
+    name = name,
+    age = age,
+    hobby = hobby
+  }
+end
+
+-- usage:
+local p = make_person{ name = "Alice", hobby = "reading" }
+-- p => { name = "Alice", age = 0, hobby = "reading" }
+
+-- functions are anonymous
+a = {p = print}
+a.p("hello world")		--> hello world
+
+function foo(x)
+	return 2*x
+end
+--> is syntactic sugar for
+foo = function (x)
+	return 2*x
+end
+
+--
+table.sort(network, function (a,b)
+  return (a.name > b.name)
+end)
+
+-- closures
+
+```
+
 ## Basics
 ```lua
 -- 8 basic types in Lua: 
