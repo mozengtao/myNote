@@ -39,6 +39,206 @@
 []()  
 []()  
 
+## lua stack
+```lua
+-- 栈索引
+正索引(positive indexes): 从栈底开始，1为第一个元素
+负索引(negavite indexes): 从栈顶开始，-1为第一个元素
++-----+-----+-----+-----+
+|  1  |  2  |  3  |  4  |   <- 正索引(从底到顶)
+| -1  | -2  | -3  | -4  |   <- 负索引(从顶到底)
++-----+-----+-----+-----+
+
+-- c 调用 lua 函数
+-- lua 函数
+add(10, 20)   -->  30, "success"
+-- c
+lua_getblobal(L, "add")   -- push function on the stack
+lua_pushnumber(L, 10)     -- push first argument
+lua_pushnumber(L, 20)     -- push second argument
+
+栈底 1/-3   栈顶 -1/3
+   |           |
++-----+-----+-----+
+| add | 10  | 20  |
++-----+-----+-----+
+
+lua_pcall(L, 2, 2, 0)
+-- 从栈顶弹出2个参数和1个函数共3个元素，此时栈被清空到调用前的状态
+-- 在 Lua 环境中执行 add(10, 20)
+-- 将函数的2个返回值压栈
+
+栈底 1/-2   栈顶 -1/2
+   |           |
++--------+-----------+
+|   30   | "success" |
++--------+-----------+
+
+double result = lua_tonumber(L, -1);  // Get return value
+
+lua_pop(L, 2)   -- 栈被清空到调用前的状态
+
+
+-- lua 调用 c 函数
+-- c 函数
+multiply(5, 8)    -->   40.0, "ok"
+
+-- lua
+multiply(5, 8)    -- lua虚拟机会自动为c函数准备好栈
+
+
+栈底 1/-2   栈顶 -1/2
+   |           |
++--------+-----------+
+|    5   |     8     |
++--------+-----------+
+
+lua_tonumber(L, 1)    // read arg 1
+lua_tonumber(L, 2)    // read arg 2
+
+-- caculate in c
+
+lua_pushnumber(L, 40.0)   // push result 1
+lua_pushnumber(L, "ok")   // push result 2
+-- c 函数返回 2 （2个返回值）
+-- c 代码不需要清理栈
+
+-- Lua 清理栈并接收返回值
+-- 自动弹出c函数本身和所有参数
+-- 保留c函数压入的返回值
+-- 将返回值移动至栈底(如果需要)
+
+-- 最用的栈状态（对lua脚本可见）
+
+栈底 1/-2   栈顶 -1/2
+   |           |
++--------+-----------+
+|  40.0  |   "ok"    |
++--------+-----------+
+
+-- lua 脚本像使用普通函数的返回值一样使用它们
+
+
+-- c call lua function
+-- script.lua
+functon add(a, b)
+  return a + b
+end
+
+-- c code
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
+int main() {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    luaL_dofile(L, "script.lua");  // Load and run script (defines 'add')
+
+    lua_getglobal(L, "add");       // Push function onto the stack
+    lua_pushnumber(L, 10);         // Push first argument
+    lua_pushnumber(L, 20);         // Push second argument
+
+    // Stack now: [add][10][20]
+    lua_call(L, 2, 1);             // Call add(a,b), 2 args, 1 result
+
+    double result = lua_tonumber(L, -1);  // Get return value
+    printf("Result: %f\n", result);
+
+    lua_pop(L, 1);  // Clean up stack
+    lua_close(L);
+    return 0;
+}
+
+-- lua state stack
++----------------------------------------------+
+|                Lua Stack                     |
++----------------------------------------------+
+| Step 0: load script -> []                    |
+| Step 1: getglobal("add") -> [add]            |
+| Step 2: pushnumber(10) -> [add][10]          |
+| Step 3: pushnumber(20) -> [add][10][20]      |
+| Step 4: lua_call(2,1) -> [30]                |
+| Step 5: read & pop -> []                     |
++----------------------------------------------+
+
+-- lua call c function
+-- script.lua
+-- Lua function called first from C
+function funcA()
+    print("[Lua] funcA called from C")
+    local result = c_func(5)   -- Call into C again
+    print("[Lua] funcA got result:", result)
+    return result * 2
+end
+
+-- Another Lua function that will be called from C later
+function funcB(x)
+    print("[Lua] funcB called from C, x=", x)
+    return x + 1
+end
+
+-- c code
+#include <stdio.h>
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
+// Forward declaration
+int c_func(lua_State *L);
+
+int main() {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    // Load the Lua script
+    luaL_dofile(L, "script.lua");
+
+    // Register C function into Lua
+    lua_pushcfunction(L, c_func);
+    lua_setglobal(L, "c_func");
+
+    // --- Call Lua function funcA() from C ---
+    lua_getglobal(L, "funcA");
+    lua_call(L, 0, 1);
+
+    double finalResult = lua_tonumber(L, -1);
+    printf("[C] Final result = %f\n", finalResult);
+
+    lua_close(L);
+    return 0;
+}
+
+// --- C function called by Lua ---
+int c_func(lua_State *L) {
+    double x = lua_tonumber(L, 1);
+    printf("[C] c_func called from Lua, x=%f\n", x);
+
+    // Call Lua function funcB(x * 10)
+    lua_getglobal(L, "funcB");
+    lua_pushnumber(L, x * 10);
+    lua_call(L, 1, 1);
+
+    double y = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    printf("[C] c_func got result from funcB: %f\n", y);
+    lua_pushnumber(L, y + 100); // Return y+100 back to Lua
+    return 1;                   // tells Lua: 1 return value
+}
+
+-- stack flow
+C(main)
+ └── call funcA (Lua)
+      └── call c_func (C)
+           └── call funcB (Lua)
+           ◄── return 51
+      ◄── return 151
+ ◄── return 302
+
+```
+
 ## variable scope
 ```lua
 --[[
