@@ -1,5 +1,7 @@
 [**Lua Documentation**](https://www.lua.org/docs.html)  
 
+[**Lua 5.4 Reference Manual**](https://www.lua.org/manual/5.4/)  
+
 [The Standard Libraries](https://www.lua.org/manual/5.4/manual.html#6)  
 
 [**Programming in Lua**](https://www.lua.org/pil/contents.html)  
@@ -7,6 +9,8 @@
 [**Lua Directory**](http://lua-users.org/wiki/LuaDirectory)  
 
 [**LuaRocks**](https://luarocks.org/) # package manager  
+
+[Notes on the Implementation of Lua 5.3](https://poga.github.io/lua53-notes/introduction.html)  
 
 [The Lua Tutorial](https://dev.to/jd2r/the-lua-tutorial-544b)  
 
@@ -98,8 +102,8 @@ lua_tonumber(L, 2)    // read arg 2
 
 -- caculate in c
 
-lua_pushnumber(L, 40.0)   // push result 1
-lua_pushnumber(L, "ok")   // push result 2
+lua_pushnumber(L, 40.0)    // push result 1
+lua_pushliteral (L, "ok")  // push result 2
 -- c 函数返回 2 （2个返回值）
 -- c 代码不需要清理栈
 
