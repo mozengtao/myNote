@@ -1355,6 +1355,22 @@ table.sort(network, function (a,b)
 end)
 
 -- closures
+-- a closure is a function plus all it needs to access its upvalues correctly.
+
+names = {"Peter", "Paul", "Mary"}
+grades = {Mary = 10, Paul = 7, Peter = 8}
+
+function sortbygrade(names, grades)
+  table.sort(names, function (n1, n2)
+    return grades[n1] > grades[n2]      -- compare by grades
+  end)
+end
+-- Inside the anonymous function, grades is neither a global variable nor a local variable. We call it an external local variable, or an upvalue
+
+sortbygrade(names, grades)
+for _, v in ipairs(names) do
+  print(v)
+end
 
 ```
 
