@@ -10,6 +10,66 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## 从标准输入（stdin）读取程序或脚本内容并执行
+```bash
+# shell
+bash -s < script.sh  
+sh -s < script.sh    
+dash -s < script.sh  
+zsh -s < script.zsh  
+fish -c 'command'
+
+# script
+python3 - < script.py
+perl - < script.pl   
+ruby - < script.rb   
+php - < script.php   
+lua - < script.lua
+node - < script.js
+awk -f - < script.awk
+sed -f - < script.sed
+
+
+#
+ssh dbhost 'mysql -u root mydb' < query.sql
+
+#
+docker build - < Dockerfile
+
+# 进程替换
+ssh user@host 'bash -s' < <(command)
+
+#
+MYCMD="echo 'Hostname:'; hostname"
+ssh user@host 'bash -s' < <(cat <<EOF
+#!/bin/bash
+echo "Remote info:"
+$MYCMD
+df -h /
+EOF
+)
+
+# 动态脚本
+gen_script() {
+    echo "echo 'Current user:'; whoami"
+    echo "echo 'Current directory:'; pwd"
+}
+ssh user@host 'bash -s' < <(gen_script)
+
+
+# 管道
+cat <<'EOF' | ssh user@host 'bash -s -- arg1 arg2'
+echo "Running remotely with args: $@"
+whoami
+EOF
+
+# summary
+< script.sh
+| ssh ...
+< <( … )
+ssh host 'bash -s -- arg' <<<"..."
+```
+
 ## ssh执行远程命令
 ```bash
 # 1 quick one-liners
