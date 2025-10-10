@@ -10,6 +10,82 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## ssh执行远程命令
+```bash
+# 1 quick one-liners
+ssh user@host 'cd /srv/myapp && git pull && ./deploy.sh arg1 arg2'
+
+# 2 send a local script to run on the remote host
+ssh user@host 'bash -s' < ./local_complex_script.sh
+
+# how it works
+ssh user@host:	Connect to remote host
+'bash -s':	    Start bash(remote), tell it to read commands from stdin
+< script.sh:	Feed the local script file to stdin
+
+#
+ssh user@host 'sh -s' < local_script.sh
+
+#
+ssh user@host 'python3 -' < local_script.py
+
+#
+ssh user@host 'bash -s' <<'END_SCRIPT'
+# commands run on remote
+set -e
+cd /var/www/myapp
+git pull origin main
+./build --prod
+END_SCRIPT
+
+# script.sh expects parameters
+ssh user@host 'bash -s' -- arg1_value arg2_value < script.sh
+
+# how it works
+-- tells bash:
+    "Stop parsing options here; everything that follows is a positional argument."
+
+1.local:  shell reads script and sends its contents to SSH stdin
+2.SSH:    sends that stdin to the remote shell
+3.remote: run 'bash -s -- arg1_value arg2_value', so bash reads the incoming script from stdin and runs it with arg1_value and arg2_value
+
+#
+ssh user@host 'bash -s -- deploy production' <<'EOF'
+#!/bin/bash
+env=$1
+target=$2
+echo "Deploying environment=$env target=$target"
+EOF
+
+#
+ssh user@host "bash -s -- 'My App' 'Release v1.2'" < deploy.sh
+
+#
+env="staging"
+version="v2.3"
+
+ssh user@host "bash -s -- $env $version" < deploy.sh
+
+# debug without running
+cat script.sh | ssh user@host 'cat -n'
+
+
+# 3 use a remote heredoc (write script inline in the local shell but executed remotely)
+ssh user@host <<'REMOTE_EOF'
+export APP_ENV=prod
+cd /opt/service
+./stop.sh
+rm -rf tmp/*
+./start.sh &
+REMOTE_EOF
+
+# 4 running backgrounded tasks
+ssh user@host "nohup bash -lc 'long_running_cmd --args' >/var/log/job.log 2>&1 & disown"
+
+# 5 programmatic SSH from scripts (python: pexpect, paramiko)
+
+```
+
 ## 字符串作为标准输入传递给命令
 ```bash
 # here string: <<<
