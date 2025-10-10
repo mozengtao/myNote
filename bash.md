@@ -10,6 +10,62 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## 字符串作为标准输入传递给命令
+```bash
+# here string: <<<
+用途：传递单个字符串
+cmd <<< "string"
+
+# here document: <<
+用途：传递多行文本
+# cmd << EOF ... EOF
+
+# pipe
+用途：管道连接命令
+
+
+# 输入重定向
+cmd < file.txt
+
+# example
+sh -c
+-c: Read commands from the command_string operand instead of from the standard input.
+
+#1 here string
+sh -c "
+ncs_cli -u admin <<< 'show vmc status | t'
+"
+
+#
+sh -c "
+cmd='show vmc status | t'
+ncs_cli -u admin <<< \$cmd
+"
+# 斜杠 \ 用于防止变量$cmd 在本地 shell 中被提前展开，确保它在远程 shell 中被正确解释
+
+#
+sh -c '
+    cmd="show vmc status | t"
+    ncs_cli -u admin <<< "$cmd"
+'
+
+#2 here document
+sh -c "
+ncs_cli -u admin <<EOF
+show vmc status | t
+EOF
+"
+
+#3 pipe
+sh -c "echo 'show vmc status | t' | ncs_cli -u admin"
+
+#4 输入重定向
+/tmp/cmd.txt：
+show vmc status | t
+
+sh -c "ncs_cli -u admin < /tmp/cmd.txt"
+```
+
 ## here document
 ```bash
 # Here Document 特性
