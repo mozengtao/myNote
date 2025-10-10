@@ -10,6 +10,92 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## awk
+```bash
+#1 (recommend)
+pattern="def"
+echo "abc def gh" | awk -v pat="$pattern" '$0 ~ pat { print $3 }'
+
+#2
+pattern="def"
+echo "abc def gh" | awk '/'"$pattern"'/{print $3}'
+
+#3 (fragile)
+pattern="def"
+echo "abc def gh" | awk "/$pattern/{print \$3}"
+
+```
+
+## background process
+```bash
+# background task pid
+myfunction &
+pid=$!
+
+# wait background task to be completed
+wait $pid   # wait 1
+wait        # wait all
+
+# redirection
+myfunction > output.log 2>&1 &
+myfunction > stdout.log 2> stderr.log &
+
+# with params
+myfunction arg1 arg2 &
+
+# return value
+myfunction &
+pid=$!
+wait $pid
+exitcode=$?
+
+# example
+declare -a pids
+
+for i in {1..5}; do
+    backgroud_task "$i" $((RANDOM%5+1)) &
+    pids+=($!)
+end
+
+for pid in "${pids[@]}"; do
+    wait $pid
+end
+```
+
+## bash function
+```bash
+run_ncs_command() {
+	local command=$1
+	local task="evc"
+	local job="evc-morris-dentist"
+
+	nomad alloc exec -task $task -job $job sh -c '
+ncs_cli -u admin <<EOF
+'"$command"'
+EOF'
+}
+
+terminal() {
+	local task=$1
+
+	case $task in
+		evc)
+			local job="evc-morris-dentist"
+			nomad alloc exec -task $task -job $job sh
+			;;
+		vmc)
+			local output=$(run_ncs_command "show vmc status | t | nomore")
+			local job=$(echo "$output" | awk '/^vmc-morris-dentist/{print $2}')
+			nomad alloc exec -task $task -job $job sh
+			;;
+		*)
+			echo "unknown container type"
+			return 1
+			;;
+	esac
+}
+```
+
 ## terminal
 ```bash
 # check terminal type
@@ -79,7 +165,34 @@ echo "arr = ${arr[@]}"   # a banana c
 
 ## array
 ```bash
-#!/bin/bash
+#1 indexed array
+declare -a fruits=("apple" "banana" "cherry")
+
+echo "${fruits[0]}"   # apple
+echo "${fruits[1]}"   # banana
+echo "${fruits[2]}"   # cherry
+
+fruits[3]="orange"
+fruits+=("grape")     # append automatically at next index
+
+for f in "${fruits[@]}"; do
+  echo "$f"
+done
+
+
+#2 associative array
+declare -A capital
+
+capital["France"]="Paris"
+capital["Japan"]="Tokyo"
+capital["Canada"]="Ottawa"
+
+echo "${capital["Japan"]}"   # Tokyo
+
+for country in "${!capital[@]}"; do
+  echo "$country -> ${capital[$country]}"
+done
+
 
 # create array
 nums=(10 20 30)
