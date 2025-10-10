@@ -10,6 +10,63 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## here document
+```bash
+# Here Document 特性
+​​单引号标记 例如：'REMOTE_SCRIPT'​​：表示内容中的变量和命令​​不会在本地展开​​
+​​内容传输​​：标记之间的所有内容作为标准输入发送给远程Bash
+​​结束标记​​：单独一行只有 REMOTE_SCRIPT时结束输入
+
+#1
+ssh ovirt /bin/bash <<'REMOTE_SCRIPT'
+echo "当前用户: $(whoami)"
+echo "主机名: $(hostname)"
+echo "工作目录: $PWD"
+REMOTE_SCRIPT
+
+#2 带参数的脚本
+remote_user="admin"
+
+ssh ovirt /bin/bash <<REMOTE_SCRIPT
+echo "本地传递的用户: $remote_user"
+echo "远程实际用户: \$(whoami)"
+REMOTE_SCRIPT
+
+#3
+ssh ovirt python3.6 <<'EOF'
+import pexpect
+child = pexpect.spawn("rm -i /tmp/txt1")
+child.expect("remove regular")
+child.sendline("yes")
+child.expect(pexpect.EOF)
+EOF
+
+#4
+ssh ovirt sh <<'REMOTE_SCRIPT'
+
+python3.6 <<'PYTHON_SCRIPT'
+import pexpect
+import sys
+
+try:
+    child = pexpect.spawn("rm -i /tmp/txt1")
+    child.expect("remove regular")
+    child.sendline("yes")
+    child.expect(pexpect.EOF)
+    sys.exit(0)
+except Exception as e:
+    print(f"Error: {e}")
+    sys.exit(1)
+PYTHON_SCRIPT
+
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "fail" >&2
+fi
+REMOTE_SCRIPT
+```
+
 ## awk
 ```bash
 #1 (recommend)
