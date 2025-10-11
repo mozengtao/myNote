@@ -10,6 +10,162 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## examples
+```bash
+#!/usr/bin/env bash
+
+EVC_NAME="evc-morris-dentist"
+PATTERN="^vmc-morris-dentist"
+
+declare -A mib_entry_counts
+
+# run evc ncs_cli command and return output
+run_evc_ncs_cmd() {
+	local cmd=$1
+	local task="evc"
+
+	nomad alloc exec -task "$task" -job "$EVC_NAME" sh -c '
+ncs_cli -u admin <<EOF
+'"$cmd"'
+EOF'
+}
+
+# get the real vmc name from the evc
+output=$(run_evc_ncs_cmd "show vmc status | t | nomore")
+VMC_NAME=$(echo "$output" | awk -v pat="$PATTERN" '$0 ~ pat {print $2}')
+
+run_vmc_confd_cmd() {
+	local cmd=$1
+	local task="vmc"
+
+	nomad alloc exec -task "$task" -job "$VMC_NAME" sh -c '
+confd_cli -u admin <<EOF
+'"$cmd"'
+EOF'
+}
+
+# count entries in docsIf3DsBondingGrpStatusTable
+output=$(run_vmc_confd_cmd "show DOCS-IF3-MIB docsIf3DsBondingGrpStatusTable | tab | nomore")
+echo "$output" | awk '/^[0-9]+/'
+mib_entry_counts["docsIf3DsBondingGrpStatusTable"]=$(echo "$output" | awk '/^[0-9]+/' | wc -l)
+
+# count entries in docsIf3RxChStatusTable
+output=$(run_vmc_confd_cmd "show DOCS-IF3-MIB docsIf3RxChStatusTable | tab | nomore")
+echo "$output" | awk '/^[0-9]+/'
+mib_entry_counts["docsIf3RxChStatusTable"]=$(echo "$output" | awk '/^[0-9]+/' | wc -l)
+
+# print the counts
+for mibtab in "${!mib_entry_counts[@]}"; do
+	echo "$mibtab -> ${mib_entry_counts[$mibtab]}"
+done
+
+# run the python script on the remote evc task
+nomad alloc exec -task evc -job "$EVC_NAME" sh <<'BASH_SCRIPT'
+python3 <<'PYTHON_SCRIPT'
+import pexpect
+import sys
+import time
+import signal
+
+child = pexpect.spawn("ncs_cli -u admin", encoding='utf-8', timeout=20)
+child.logfile = sys.stdout
+
+try:
+    # Wait for initial prompt
+    child.expect(r"admin[@:].*#", timeout=10)
+
+    # Send failover command
+    child.sendline("vmc vmc-morris-dentist failover")
+    child.expect("Are you sure", timeout=10)
+    child.sendline("yes")
+
+    # Wait for either prompt or EOF after failover
+    index = child.expect([
+        r"admin[@:].*#",  # prompt reappears
+        pexpect.EOF,       # CLI exited
+        pexpect.TIMEOUT
+    ], timeout=30)
+
+    if index == 0:
+        print("✅ CLI still alive after failover, closing cleanly")
+    elif index == 1:
+        print("✅ CLI exited after failover")
+    else:
+        print("⚠️ Timeout, closing anyway")
+
+finally:
+    try:
+        child.close(force=True)
+    except Exception:
+        pass
+    # Force kill process if it's still running
+    if child.isalive():
+        child.kill(signal.SIGKILL)
+
+    print("✅ Script finished and control returned to shell.")
+    sys.exit(0)
+PYTHON_SCRIPT
+
+if [ $? -eq 0 ]; then
+    echo "success"
+else
+    echo "fail" >&2
+fi
+
+exit 0
+BASH_SCRIPT
+
+# put the python script in a variable
+PYTHON_SCRIPT=$(cat <<'PYTHON_SCRIPT'
+import pexpect
+import sys
+import time
+import signal
+
+child = pexpect.spawn("ncs_cli -u admin", encoding='utf-8', timeout=20)
+child.logfile = sys.stdout
+
+try:
+    # Wait for initial prompt
+    child.expect(r"admin[@:].*#", timeout=10)
+
+    # Send failover command
+    child.sendline("vmc vmc-morris-dentist failover")
+    child.expect("Are you sure", timeout=10)
+    child.sendline("yes")
+
+    # Wait for either prompt or EOF after failover
+    index = child.expect([
+        r"admin[@:].*#",  # prompt reappears
+        pexpect.EOF,       # CLI exited
+        pexpect.TIMEOUT
+    ], timeout=30)
+
+    if index == 0:
+        print("✅ CLI still alive after failover, closing cleanly")
+    elif index == 1:
+        print("✅ CLI exited after failover")
+    else:
+        print("⚠️ Timeout, closing anyway")
+
+finally:
+    try:
+        child.close(force=True)
+    except Exception:
+        pass
+    # Force kill process if it's still running
+    if child.isalive():
+        child.kill(signal.SIGKILL)
+
+    print("✅ Script finished and control returned to shell.")
+    sys.exit(0)
+PYTHON_SCRIPT
+)
+
+# nomad alloc exec  -task evc -job  evc-morris-dentist sh -c 'python3 -c "print(\"hello\")"'
+
+```
+
 ## 从标准输入（stdin）读取程序或脚本内容并执行
 ```bash
 # shell
