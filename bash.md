@@ -214,6 +214,23 @@ PYTHON_SCRIPT
 
 # nomad alloc exec  -task evc -job  evc-morris-dentist sh -c 'python3 -c "print(\"hello\")"'
 
+# example
+#!/usr/bin/env bash
+
+PYTHON_SCRIPT=$(cat <<'PYTHON_SCRIPT'
+import sys
+print(sys.path)
+PYTHON_SCRIPT
+)
+
+python3 -c "$PYTHON_SCRIPT"
+# or
+python3 <<< "$PYTHON_SCRIPT"
+# or
+python3 <<'PYTHON_SCRIPT'
+import sys
+print(sys.path)
+PYTHON_SCRIPT
 ```
 
 ## 从标准输入（stdin）读取程序或脚本内容并执行
