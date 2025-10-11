@@ -10,6 +10,56 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## split 1 long command into serveral parts
+```bash
+# 1 line concatenation with \
+long_command --option1 value1 \
+             --option2 value2 \
+             --option3 value3
+
+# 2 break lines at logical points
+cat /path/file.txt \
+  | grep "pattern" \
+  | sed 's/foo/bar/g' \
+  > output.txt
+
+[[ -f /path/file.txt ]] \
+  && echo "file exists" \
+  || echo "file not found"
+
+
+# 3 quoted strings across lines
+echo "This is a long message \
+that spans multiple lines but \
+will printed as a single line"
+
+# 4 here document for multi-line input
+cat <<EOF
+This is a long message 
+that spans multiple lines 
+without needing
+blackslashes.
+EOF
+
+# 5 arrays for complex commands
+args=(
+    --verbose
+    --input "/path/file"
+    --output "/another/path"
+)
+
+my_command "${args[@]}"
+
+# full example
+my_command \
+  --arg1 "value" 
+  --arg2 "$(echo "complex value")" \
+    tr ' ' '_')" \
+  && echo "Success" \
+  || echo "Failed"
+
+```
+
 ## examples
 ```bash
 #!/usr/bin/env bash
@@ -3506,6 +3556,20 @@ fi
 ```bash
 # <(...) 是 进程替换（process substitution） 的语法, 命令 ... 的输出被视为一个临时文件，<(...) 生成一个文件名（通常是 /dev/fd/<fd> 的形式）
 # CMD < <(...) 该命令的作用是将 <(...) 生成的文件作为输入传递给前一个 <, 即前一个 < 是输入重定向的符号
+
+#
+diff <(ls /path/dir1) <(ls /path/dir2)
+sort -m <(command1) <(command2)
+paste <(ls -1 dir1) <(ls -1 dir2)
+
+command | tee >(grep "error" > errors.log) >(grep "info" > info.log) > output.log # 将输出同时发送给多个命令
+
+# 避免创建子shell，从而保留变量
+count=0
+while IFS= read -r line; do
+    ((count++))
+done < <(cat /etc/passwd)
+echo "Total lines: $count"
 
 ##  应用：等待所有后台作业完成
 
