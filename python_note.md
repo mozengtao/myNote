@@ -8,6 +8,18 @@
 []()  
 [**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
 []()  
+[Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)  
+[Python Standard Library](https://realpython.com/ref/stdlib/)  
+[Python's property(): Add Managed Attributes to Your Classes](https://realpython.com/python-property/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ## string
 ```python
