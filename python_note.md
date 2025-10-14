@@ -21,6 +21,365 @@
 []()  
 []()  
 
+## cli example
+config file:
+```toml
+[paths]
+work_dir = "/mnt/DATA/morrism/testbed/gen0114"
+
+[names]
+# EVC job name used for exec into controller container
+evc_job = "evc-morris-dentist"
+# Prefix used to parse VMC job name from EVC CLI output
+vmc_prefix = "vmc-morris-dentist"
+# Used to find the running alloc for vmc logs via `nomad status`
+vmc_evc_combined = "vmc-evc-morris-dentist"
+# SNMP job name queried by `nomad job allocs`
+snmp_job = "snmp-evc-morris-dentist-1"
+
+[defaults]
+force = true
+
+[evc]
+host_constraint = "dev5"
+image_path = "artifactory.cn.vecima.com/docker/jenkins/evc/nightly:latest"
+hcl_path = "morris-dentist_evc_container.nomad.hcl"
+
+[kafka]
+service_name_prefix = "morris-dentist"
+image_path = "artifactory.cn.vecima.com/docker/jenkins/kafka/nightly:latest"
+hcl_path = "morris-dentist_kafka_container.nomad.hcl"
+
+[ksqldb]
+service_name = "ksqldb-morris-dentist"
+image_path = "artifactory.cn.vecima.com/docker/jenkins/ksqldb/nightly:latest"
+hcl_path = "morris-dentist_ksqldb_container.nomad.hcl"
+kafka_service_name = "morris-dentist-kafka-bootstrap-server"
+
+[logs]
+# Number of leading characters to strip from lines in `nomad alloc logs` output
+strip_prefix_chars = 45
+```
+python file:
+```python
+#!/usr/bin/env python3
+import argparse
+import subprocess
+import sys
+import os
+import shlex
+from pathlib import Path
+
+try:
+	import tomllib  # Python 3.11+
+except ModuleNotFoundError:
+	import tomli as tomllib  # fallback for <3.11
+
+
+class Config:
+	def __init__(self, data: dict):
+		self.paths = data.get("paths", {})
+		self.names = data.get("names", {})
+		self.defaults = data.get("defaults", {})
+		self.evc = data.get("evc", {})
+		self.kafka = data.get("kafka", {})
+		self.ksqldb = data.get("ksqldb", {})
+		self.logs = data.get("logs", {})
+
+	@property
+	def work_dir(self) -> str:
+		return self.paths.get("work_dir", ".")
+
+	@property
+	def evc_job(self) -> str:
+		return self.names.get("evc_job", "evc-morris-dentist")
+
+	@property
+	def vmc_prefix(self) -> str:
+		return self.names.get("vmc_prefix", "vmc-morris-dentist")
+
+	@property
+	def vmc_evc_combined(self) -> str:
+		return self.names.get("vmc_evc_combined", "vmc-evc-morris-dentist")
+
+	@property
+	def snmp_job(self) -> str:
+		return self.names.get("snmp_job", "snmp-evc-morris-dentist-1")
+
+	@property
+	def force(self) -> bool:
+		return bool(self.defaults.get("force", True))
+
+	@property
+	def evc_host_constraint(self) -> str:
+		return self.evc.get("host_constraint", "dev5")
+
+	@property
+	def evc_image_path(self) -> str:
+		return self.evc.get("image_path", "")
+
+	@property
+	def evc_hcl_path(self) -> str:
+		return self.evc.get("hcl_path", "")
+
+	@property
+	def kafka_service_name_prefix(self) -> str:
+		return self.kafka.get("service_name_prefix", "")
+
+	@property
+	def kafka_image_path(self) -> str:
+		return self.kafka.get("image_path", "")
+
+	@property
+	def kafka_hcl_path(self) -> str:
+		return self.kafka.get("hcl_path", "")
+
+	@property
+	def ksqldb_service_name(self) -> str:
+		return self.ksqldb.get("service_name", "")
+
+	@property
+	def ksqldb_image_path(self) -> str:
+		return self.ksqldb.get("image_path", "")
+
+	@property
+	def ksqldb_hcl_path(self) -> str:
+		return self.ksqldb.get("hcl_path", "")
+
+	@property
+	def kafka_bootstrap_service_name(self) -> str:
+		return self.ksqldb.get("kafka_service_name", "")
+
+	@property
+	def log_strip_prefix_chars(self) -> int:
+		return int(self.logs.get("strip_prefix_chars", 45))
+
+
+def load_config(config_path: str) -> Config:
+	cfg_path = Path(config_path)
+	if not cfg_path.exists():
+		raise FileNotFoundError(f"Config TOML not found: {cfg_path}")
+	with cfg_path.open("rb") as f:
+		data = tomllib.load(f)
+	return Config(data)
+
+
+def run(cmd: str, cwd: str | None = None, capture: bool = False) -> subprocess.CompletedProcess:
+	kwargs = {
+		"shell": True,
+		"cwd": cwd,
+	}
+	if capture:
+		kwargs.update({"stdout": subprocess.PIPE, "stderr": subprocess.PIPE, "text": True})
+	return subprocess.run(cmd, **kwargs)
+
+
+def run_check_output(cmd: str, cwd: str | None = None) -> str:
+	res = run(cmd, cwd=cwd, capture=True)
+	if res.returncode != 0:
+		raise RuntimeError(f"Command failed: {cmd}\nstdout:\n{res.stdout}\nstderr:\n{res.stderr}")
+	return res.stdout
+
+
+def run_ncs_command(cfg: Config, command: str) -> str:
+	task = "evc"
+	job = cfg.evc_job
+	cmd = (
+		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '" \
+		f"ncs_cli -u admin <<EOF\n{command}\nEOF'"
+	)
+	return run_check_output(cmd)
+
+
+def terminal(cfg: Config, task: str) -> int:
+	if task == "evc":
+		job = cfg.evc_job
+		cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
+		return run(cmd).returncode
+	elif task == "vmc":
+		output = run_ncs_command(cfg, "show vmc status | t | nomore")
+		job = ""
+		for line in output.splitlines():
+			if line.startswith(cfg.vmc_prefix):
+				parts = line.split()
+				if len(parts) >= 2:
+					job = parts[1]
+					break
+		if not job:
+			print("unknown container type (vmc job not found)")
+			return 1
+		cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
+		return run(cmd).returncode
+	else:
+		print("unknown container type")
+		return 1
+
+
+def show_snmp_nsi_port(cfg: Config) -> int:
+	job = cfg.snmp_job
+	allocs_cmd = f"nomad job allocs {shlex.quote(job)}"
+	try:
+		out = run_check_output(allocs_cmd)
+	except RuntimeError as e:
+		print(e)
+		return 1
+	alloc_id = ""
+	for line in out.splitlines():
+		if "snmp" in line:
+			alloc_id = line.split()[0]
+			break
+	if not alloc_id:
+		return 1
+	status_cmd = f"nomad alloc status {shlex.quote(alloc_id)} 2>/dev/null | awk '/snmp-nsi-port/{print $3}'"
+	res = run(status_cmd, capture=True)
+	if res.stdout:
+		print(res.stdout.strip())
+	return 0 if res.returncode == 0 else res.returncode
+
+
+def start_event(cfg: Config) -> int:
+	cwd = cfg.work_dir
+	print("starting kafka container")
+	k_cmd = (
+		"nomad job run "
+		f"-var \"force={str(cfg.force).lower()}\" "
+		f"-var \"kafka_service_name_prefix={cfg.kafka_service_name_prefix}\" "
+		f"-var \"image_path={cfg.kafka_image_path}\" "
+		f"{cfg.kafka_hcl_path} > /dev/null 2>&1 &"
+	)
+	run(k_cmd, cwd=cwd)
+
+	print("starting ksqldb container")
+	ks_cmd = (
+		"nomad job run "
+		f"-var \"force={str(cfg.force).lower()}\" "
+		f"-var \"kafka_service_name={cfg.kafka_bootstrap_service_name}\" "
+		f"-var \"ksqldb_service_name={cfg.ksqldb_service_name}\" "
+		f"-var \"image_path={cfg.ksqldb_image_path}\" "
+		f"{cfg.ksqldb_hcl_path} > /dev/null 2>&1 &"
+	)
+	run(ks_cmd, cwd=cwd)
+
+	print("starting evc container")
+	evc_cmd = (
+		"nomad job run "
+		f"-var \"force={str(cfg.force).lower()}\" "
+		f"-var \"host_constraint={cfg.evc_host_constraint}\" "
+		f"-var \"image_path={cfg.evc_image_path}\" "
+		f"-var \"kafka_service_name={cfg.kafka_bootstrap_service_name}\" "
+		f"-var \"ksqldb_service_name={cfg.ksqldb_service_name}\" "
+		f"{cfg.evc_hcl_path} > /dev/null 2>&1 &"
+	)
+	run(evc_cmd, cwd=cwd)
+
+	# wait for background jobs
+	# There is no simple job control via subprocess when using shell=True & background, so we sleep briefly
+	# to give jobs time to submit, mirroring the bash `wait` not strictly necessary here.
+	print("Started kafka, ksqldb and evc container")
+	return 0
+
+
+def start_evc(cfg: Config) -> int:
+	cwd = cfg.work_dir
+	evc_cmd = (
+		"nomad job run "
+		f"-var \"force={str(cfg.force).lower()}\" "
+		f"-var \"host_constraint={cfg.evc_host_constraint}\" "
+		f"-var \"image_path={cfg.evc_image_path}\" "
+		f"{cfg.evc_hcl_path}"
+	)
+	res = run(evc_cmd, cwd=cwd)
+	print("Starting VMC Container")
+	return res.returncode
+
+
+def purge_all() -> int:
+	cmd = "nomad job stop -purge $(nomad status | grep dentist | awk '{print $1}' | xargs)"
+	return run(cmd).returncode
+
+
+def show_log(cfg: Config, container: str) -> int:
+	if container != "vmc":
+		print("Unkonwn container name")
+		return 1
+	cmd = (
+		"nomad alloc logs -f -tail -task vmc -job $(nomad status | grep "
+		f"{cfg.vmc_evc_combined} | awk '/running/{{print $1}}')"
+	)
+	# stream and trim prefix characters similar to awk substr
+	with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as proc:
+		assert proc.stdout is not None
+		strip_n = cfg.log_strip_prefix_chars
+		for line in proc.stdout:
+			line = line.rstrip("\n")
+			if len(line) > strip_n:
+				print(line[strip_n:])
+			else:
+				print("")
+		return proc.wait()
+
+
+def build_parser() -> argparse.ArgumentParser:
+	p = argparse.ArgumentParser(description="Nomad helper")
+	subparsers = p.add_subparsers(dest="cmd", required=True)
+
+	# start
+	ps = subparsers.add_parser("start", help="start evc or event")
+	ps.add_argument("container", choices=["evc", "event"], help="target to start")
+	ps.add_argument("--config", default="/tmp/config.toml")
+
+	# purge
+	pp = subparsers.add_parser("purge", help="purge all")
+	pp.add_argument("container", choices=["all"], help="target to purge")
+	pp.add_argument("--config", default="/tmp/config.toml")
+
+	# terminal
+	pt = subparsers.add_parser("terminal", help="open container shell")
+	pt.add_argument("container", choices=["evc", "vmc"], help="container type")
+	pt.add_argument("--config", default="/tmp/config.toml")
+
+	# log
+	pl = subparsers.add_parser("log", help="stream container logs")
+	pl.add_argument("container", choices=["vmc"], help="container type")
+	pl.add_argument("--config", default="/tmp/config.toml")
+
+	# show
+	pw = subparsers.add_parser("show", help="show info")
+	pw.add_argument("container", choices=["snmp"], help="item to show")
+	pw.add_argument("--config", default="/tmp/config.toml")
+
+	return p
+
+
+def main(argv: list[str]) -> int:
+	parser = build_parser()
+	args = parser.parse_args(argv)
+
+	cfg = load_config(getattr(args, "config"))
+
+	if args.cmd == "start":
+		if args.container == "evc":
+			return start_evc(cfg)
+		elif args.container == "event":
+			return start_event(cfg)
+	elif args.cmd == "purge":
+		return purge_all()
+	elif args.cmd == "terminal":
+		return terminal(cfg, args.container)
+	elif args.cmd == "log":
+		return show_log(cfg, args.container)
+	elif args.cmd == "show":
+		if args.container == "snmp":
+			return show_snmp_nsi_port(cfg)
+
+	return 0
+
+
+if __name__ == "__main__":
+	sys.exit(main(sys.argv[1:]))
+
+```
+
 ## OOP
 OOP is a paradigm that provides a means of structuring programs so that properties and behaviors are bundled into individual objects.
 1.**encapsulation**:bundle data (attributes) and behaviors (methods) within a class to create a cohesive unit, it helps maintain data integrity and promotes modular, secure code
