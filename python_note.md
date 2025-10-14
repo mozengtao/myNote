@@ -230,7 +230,7 @@ def show_snmp_nsi_port(cfg: Config) -> int:
 			break
 	if not alloc_id:
 		return 1
-	status_cmd = f"nomad alloc status {shlex.quote(alloc_id)} 2>/dev/null | awk '/snmp-nsi-port/{print $3}'"
+	status_cmd = f"nomad alloc status {shlex.quote(alloc_id)} 2>/dev/null | awk '/snmp-nsi-port/{{print $3}}'"
 	res = run(status_cmd, capture=True)
 	if res.stdout:
 		print(res.stdout.strip())

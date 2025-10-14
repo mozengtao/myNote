@@ -60,6 +60,976 @@
 []()  
 []()  
 
+## socket
+```c
+//
+#include <sys/types.h>
+#include <sys/socket.h>
+
+/*
+ * domain: specifies an address family.
+ * type: specifies communication semantics.
+ * protocol: specifies a concrete protocol type
+*/
+int socket(int domain, int type, int protocol);
+
+// domain
+/*
+| Macro                  | Description                     | Struct Used               | Typical Use                       |
+| ---------------------- | ------------------------------- | ------------------------- | --------------------------------- |
+| `AF_INET`              | IPv4 Internet protocols         | `struct sockaddr_in`      | IPv4 TCP/UDP communication        |
+| `AF_INET6`             | IPv6 Internet protocols         | `struct sockaddr_in6`     | IPv6 TCP/UDP communication        |
+| `AF_UNIX` / `AF_LOCAL` | Local communication (same host) | `struct sockaddr_un`      | UNIX domain sockets               |
+| `AF_PACKET`            | Raw packet access (Layer 2)     | `struct sockaddr_ll`      | Network sniffers, raw Ethernet    |
+| `AF_NETLINK`           | Kernel-user communication       | `struct sockaddr_nl`      | Routing, Netfilter, kernel events |
+| `AF_BLUETOOTH`         | Bluetooth protocol              | `struct sockaddr_rc` etc. | Bluetooth communication           |
+
+// type
+| Macro            | Description                          | Semantics                          |
+| ---------------- | ------------------------------------ | ---------------------------------- |
+| `SOCK_STREAM`    | Stream-oriented (connection-based)   | Reliable byte stream (TCP)         |
+| `SOCK_DGRAM`     | Datagram-oriented (connectionless)   | Unreliable message (UDP)           |
+| `SOCK_RAW`       | Raw network protocol access          | Direct access to IP layer          |
+| `SOCK_SEQPACKET` | Sequenced, reliable, record-oriented | Used with UNIX domain or Bluetooth |
+| `SOCK_PACKET`    | (Deprecated) raw packets             | Legacy code only                   |
+
+// protocol
+| Domain      | Type          | Protocol           | Meaning                     |
+| ----------- | ------------- | ------------------ | --------------------------- |
+| `AF_INET`   | `SOCK_STREAM` | `IPPROTO_TCP`      | TCP                         |
+| `AF_INET`   | `SOCK_DGRAM`  | `IPPROTO_UDP`      | UDP                         |
+| `AF_INET`   | `SOCK_RAW`    | `IPPROTO_ICMP`     | Raw ICMP socket             |
+| `AF_PACKET` | `SOCK_RAW`    | `htons(ETH_P_ALL)` | Capture all Ethernet frames |
+| `AF_UNIX`   | `SOCK_STREAM` | `0`                | Local stream socket         |
+*/
+
+struct sockaddr {
+    sa_family_t sa_family;
+    char        sa_data[14];
+}
+
+
+
+// ipv4
+struct sockaddr_in {
+    sa_family_t    sin_family; // Address family (AF_INET)
+    in_port_t      sin_port;   // Port number (network byte order)
+    struct in_addr sin_addr;   // IP address
+    unsigned char  sin_zero[8]; // Padding
+};
+
+struct in_addr {
+  uint32_t       s_addr;     /* address in network byte order */
+};
+
+// ipv6
+struct sockaddr_in6 {
+    sa_family_t     sin6_family;   // AF_INET6
+    in_port_t       sin6_port;     // Port number
+    uint32_t        sin6_flowinfo; // Flow information
+    struct in6_addr sin6_addr;     // IPv6 address
+    uint32_t        sin6_scope_id; // Scope ID
+};
+
+struct in6_addr {
+  unsigned char   s6_addr[16];   /* IPv6 address */
+};
+
+// unix domain socket
+struct sockaddr_un {
+    sa_family_t sun_family;              // AF_UNIX
+    char        sun_path[108];           // Pathname
+};
+
+// tcp
+// server.c
+// tcp_server.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    int server_fd, client_fd;
+    struct sockaddr_in addr;
+    char buffer[1024];
+
+    // 1. Create socket
+    server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_fd == -1) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Bind to a port
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(8080);
+    addr.sin_addr.s_addr = INADDR_ANY;
+    if (bind(server_fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        perror("bind");
+        exit(EXIT_FAILURE);
+    }
+
+    // 3. Listen
+    listen(server_fd, 5);
+    printf("Server listening on port 8080...\n");
+
+    // 4. Accept
+    client_fd = accept(server_fd, NULL, NULL);
+    printf("Client connected!\n");
+
+    // 5. Communicate
+    recv(client_fd, buffer, sizeof(buffer), 0);
+    printf("Received: %s\n", buffer);
+    send(client_fd, "Hello Client!", 13, 0);
+
+    close(client_fd);
+    close(server_fd);
+    return 0;
+}
+
+// client.c
+// tcp_client.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    int sock;
+    struct sockaddr_in server;
+    char buffer[1024];
+
+    // 1. Create socket
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Set up server address
+    server.sin_family = AF_INET;
+    server.sin_port = htons(8080);
+    inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
+
+    // 3. Connect
+    if (connect(sock, (struct sockaddr*)&server, sizeof(server)) < 0) {
+        perror("connect");
+        exit(EXIT_FAILURE);
+    }
+
+    // 4. Communicate
+    send(sock, "Hello Server!", 13, 0);
+    recv(sock, buffer, sizeof(buffer), 0);
+    printf("Received: %s\n", buffer);
+
+    close(sock);
+    return 0;
+}
+
+// udp
+// server.c
+// udp_server.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    int sockfd;
+    struct sockaddr_in server_addr, client_addr;
+    char buffer[1024];
+    socklen_t addr_len = sizeof(client_addr);
+
+    // 1. Create socket
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Bind to a port
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(9000);
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+        perror("bind");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("UDP server listening on port 9000...\n");
+
+    // 3. Receive datagram
+    ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer) - 1, 0,
+                         (struct sockaddr*)&client_addr, &addr_len);
+    buffer[n] = '\0';
+    printf("Received from client: %s\n", buffer);
+
+    // 4. Send response
+    sendto(sockfd, "Hello from UDP server!", 23, 0,
+           (struct sockaddr*)&client_addr, addr_len);
+
+    close(sockfd);
+    return 0;
+}
+
+// client.c
+// udp_client.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    int sockfd;
+    struct sockaddr_in server_addr;
+    char buffer[1024];
+    socklen_t addr_len = sizeof(server_addr);
+
+    // 1. Create socket
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Define server
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(9000);
+    inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
+
+    // 3. Send datagram
+    sendto(sockfd, "Hello UDP Server!", 18, 0,
+           (struct sockaddr*)&server_addr, addr_len);
+
+    // 4. Receive response
+    ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer) - 1, 0,
+                         (struct sockaddr*)&server_addr, &addr_len);
+    buffer[n] = '\0';
+    printf("Server reply: %s\n", buffer);
+
+    close(sockfd);
+    return 0;
+}
+
+// unix domain socket
+// server.c
+// unix_server.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
+#define SOCKET_PATH "/tmp/demo_socket"
+
+int main() {
+    int server_fd, client_fd;
+    struct sockaddr_un addr;
+    char buffer[100];
+
+    unlink(SOCKET_PATH); // Remove old socket file
+
+    server_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (server_fd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
+
+    if (bind(server_fd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        perror("bind");
+        exit(EXIT_FAILURE);
+    }
+
+    listen(server_fd, 5);
+    printf("UNIX server listening on %s...\n", SOCKET_PATH);
+
+    client_fd = accept(server_fd, NULL, NULL);
+    read(client_fd, buffer, sizeof(buffer));
+    printf("Received: %s\n", buffer);
+    write(client_fd, "Hi UNIX client!", 15);
+
+    close(client_fd);
+    close(server_fd);
+    unlink(SOCKET_PATH);
+    return 0;
+}
+
+// client.c
+// unix_client.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
+#define SOCKET_PATH "/tmp/demo_socket"
+
+int main() {
+    int sockfd;
+    struct sockaddr_un addr;
+    char buffer[100];
+
+    sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
+
+    if (connect(sockfd, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        perror("connect");
+        exit(EXIT_FAILURE);
+    }
+
+    write(sockfd, "Hello UNIX server!", 19);
+    read(sockfd, buffer, sizeof(buffer));
+    printf("Server says: %s\n", buffer);
+
+    close(sockfd);
+    return 0;
+}
+
+// raw socket (requires root privileges)
+/*
+ * Raw sockets allow user-space programs to:
+ * Capture or send raw Ethernet frames,
+ * Bypass the TCP/UDP/IP stack,
+ * Inspect headers for tools like tcpdump, Wireshark, or custom packet sniffers.
+*/
+// packet_sniffer.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <linux/if_packet.h>
+#include <net/ethernet.h>	// For ETH_P_ALL
+#include <net/if.h>			// For if_nametoindex()
+
+int main() {
+    int sockfd;
+    struct sockaddr_ll sll;
+    unsigned char buffer[2048];
+
+    // 1. Create a raw socket
+    sockfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Bind to a specific network interface (e.g., eth0)
+    memset(&sll, 0, sizeof(sll));
+    sll.sll_family = AF_PACKET;
+    sll.sll_protocol = htons(ETH_P_ALL);
+    sll.sll_ifindex = if_nametoindex("eth0"); // replace with your NIC name
+    if (sll.sll_ifindex == 0) {
+        perror("if_nametoindex");
+        exit(EXIT_FAILURE);
+    }
+
+    if (bind(sockfd, (struct sockaddr*)&sll, sizeof(sll)) < 0) {
+        perror("bind");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Listening on interface eth0 for raw Ethernet frames...\n");
+
+    // 3. Receive packets
+    while (1) {
+        ssize_t n = recvfrom(sockfd, buffer, sizeof(buffer), 0, NULL, NULL);
+        if (n < 0) {
+            perror("recvfrom");
+            break;
+        }
+
+        struct ethhdr *eth = (struct ethhdr *)buffer;
+
+        printf("\n--- Ethernet Frame ---\n");
+        printf("Destination MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
+               eth->h_dest[0], eth->h_dest[1], eth->h_dest[2],
+               eth->h_dest[3], eth->h_dest[4], eth->h_dest[5]);
+        printf("Source MAC: %02x:%02x:%02x:%02x:%02x:%02x\n",
+               eth->h_source[0], eth->h_source[1], eth->h_source[2],
+               eth->h_source[3], eth->h_source[4], eth->h_source[5]);
+        printf("EtherType: 0x%04x\n", ntohs(eth->h_proto));
+        printf("Payload length: %zd bytes\n", n - sizeof(struct ethhdr));
+    }
+
+    close(sockfd);
+    return 0;
+}
+
+// packet_sender.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <linux/if_packet.h>
+#include <net/ethernet.h>
+#include <net/if.h>
+
+int main() {
+    int sockfd;
+    struct sockaddr_ll sll;
+    unsigned char frame[1500];
+
+    // 1. Create raw socket
+    sockfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Get interface index
+    int ifindex = if_nametoindex("eth0"); // replace with your interface
+    if (ifindex == 0) {
+        perror("if_nametoindex");
+        exit(EXIT_FAILURE);
+    }
+
+    // 3. Prepare destination
+    memset(&sll, 0, sizeof(sll));
+    sll.sll_family = AF_PACKET;
+    sll.sll_ifindex = ifindex;
+    sll.sll_halen = ETH_ALEN;
+    sll.sll_addr[0] = 0xff; // Broadcast address
+    sll.sll_addr[1] = 0xff;
+    sll.sll_addr[2] = 0xff;
+    sll.sll_addr[3] = 0xff;
+    sll.sll_addr[4] = 0xff;
+    sll.sll_addr[5] = 0xff;
+
+    // 4. Build Ethernet frame
+    struct ethhdr *eth = (struct ethhdr *)frame;
+    memset(eth->h_dest, 0xff, ETH_ALEN);       // Destination: broadcast
+    memset(eth->h_source, 0x11, ETH_ALEN);     // Fake source
+    eth->h_proto = htons(0x88B5);              // Custom Ethertype
+    strcpy((char *)(frame + sizeof(struct ethhdr)), "Hello Raw World!");
+
+    // 5. Send
+    ssize_t frame_len = sizeof(struct ethhdr) + strlen("Hello Raw World!");
+    if (sendto(sockfd, frame, frame_len, 0, (struct sockaddr*)&sll, sizeof(sll)) < 0) {
+        perror("sendto");
+    } else {
+        printf("Sent raw Ethernet frame (%zd bytes)\n", frame_len);
+    }
+
+    close(sockfd);
+    return 0;
+}
+
+// socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)
+// icmp_ping.c
+// headers
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <netinet/ip_icmp.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <errno.h>
+
+// ICMP Header (as defined in <netinet/ip_icmp.h>)
+struct icmphdr {
+    uint8_t  type;      // e.g., ICMP_ECHO
+    uint8_t  code;
+    uint16_t checksum;
+    uint16_t id;
+    uint16_t sequence;
+};
+
+// ICMP checksum function
+unsigned short checksum(void *b, int len) {
+    unsigned short *buf = b;
+    unsigned int sum = 0;
+    unsigned short result;
+
+    for (sum = 0; len > 1; len -= 2)
+        sum += *buf++;
+    if (len == 1)
+        sum += *(unsigned char*)buf;
+
+    sum = (sum >> 16) + (sum & 0xFFFF);
+    sum += (sum >> 16);
+    result = ~sum;
+    return result;
+}
+
+// ping_raw.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <netinet/ip_icmp.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <errno.h>
+
+unsigned short checksum(void *b, int len) {
+    unsigned short *buf = b;
+    unsigned int sum = 0;
+    unsigned short result;
+    for (sum = 0; len > 1; len -= 2)
+        sum += *buf++;
+    if (len == 1)
+        sum += *(unsigned char*)buf;
+    sum = (sum >> 16) + (sum & 0xFFFF);
+    sum += (sum >> 16);
+    result = ~sum;
+    return result;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: sudo %s <destination IP>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    int sockfd;
+    struct sockaddr_in dest;
+    char packet[64];
+    struct icmphdr *icmp = (struct icmphdr*)packet;
+
+    // 1. Create raw socket for ICMP
+    sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    if (sockfd < 0) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    // 2. Setup destination address
+    memset(&dest, 0, sizeof(dest));
+    dest.sin_family = AF_INET;
+    inet_pton(AF_INET, argv[1], &dest.sin_addr);
+
+    // 3. Build ICMP Echo Request
+    memset(packet, 0, sizeof(packet));
+    icmp->type = ICMP_ECHO;   // 8
+    icmp->code = 0;
+    icmp->un.echo.id = getpid() & 0xFFFF;
+    icmp->un.echo.sequence = 1;
+    icmp->checksum = 0;
+    icmp->checksum = checksum(packet, sizeof(packet));
+
+    // 4. Record time and send
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+
+    if (sendto(sockfd, packet, sizeof(packet), 0,
+               (struct sockaddr*)&dest, sizeof(dest)) <= 0) {
+        perror("sendto");
+        exit(EXIT_FAILURE);
+    }
+
+    // 5. Wait for reply
+    char recvbuf[1024];
+    struct sockaddr_in reply_addr;
+    socklen_t addr_len = sizeof(reply_addr);
+
+    ssize_t n = recvfrom(sockfd, recvbuf, sizeof(recvbuf), 0,
+                         (struct sockaddr*)&reply_addr, &addr_len);
+    if (n < 0) {
+        perror("recvfrom");
+        exit(EXIT_FAILURE);
+    }
+
+    gettimeofday(&end, NULL);
+
+    double rtt = (end.tv_sec - start.tv_sec) * 1000.0 +
+                 (end.tv_usec - start.tv_usec) / 1000.0;
+
+    printf("Reply from %s: bytes=%zd time=%.3f ms\n",
+           argv[1], n, rtt);
+
+    close(sockfd);
+    return 0;
+}
+
+// AF_UNIX (local IPC)
+// server.c
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+
+int main(void) {
+	int fd;
+	struct sockaddr_un addr;
+	const char *path = "/tmp/example.sock";
+	char buf[256];
+	ssize_t n;
+	struct sockaddr_un peer;
+	socklen_t peerlen = sizeof(peer);
+
+	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+	if (fd < 0) return 1;
+
+	unlink(path); // ensure clean
+	memset(&addr, 0, sizeof(addr));
+	addr.sun_family = AF_UNIX;
+	strncpy(addr.sun_path, path, sizeof(addr.sun_path) - 1);
+
+	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+
+	n = recvfrom(fd, buf, sizeof(buf) - 1, 0, (struct sockaddr *)&peer, &peerlen);
+	if (n > 0) {
+		buf[n] = '\0';
+		printf("got: %s\n", buf);
+	}
+	close(fd);
+	unlink(path);
+	return 0;
+}
+
+// client.c
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(void) {
+	int fd;
+	struct sockaddr_un dst;
+	const char *path = "/tmp/example.sock";
+	const char *msg = "hello";
+
+	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+	if (fd < 0) return 1;
+
+	memset(&dst, 0, sizeof(dst));
+	dst.sun_family = AF_UNIX;
+	strncpy(dst.sun_path, path, sizeof(dst.sun_path) - 1);
+
+	sendto(fd, msg, strlen(msg), 0, (struct sockaddr *)&dst, sizeof(dst));
+	close(fd);
+	return 0;
+}
+
+// AF_INET (TCP)
+// server.c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+int main(void) {
+	int s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	struct sockaddr_in addr = {0};
+	int c;
+	if (s < 0) return 1;
+
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	addr.sin_port = htons(8080);
+
+	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+	if (listen(s, 16) < 0) return 1;
+
+	c = accept(s, NULL, NULL);
+	if (c >= 0) {
+		const char *resp = "hi\n";
+		send(c, resp, 3, 0);
+		close(c);
+	}
+	close(s);
+	return 0;
+}
+
+// client.c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
+
+int main(void) {
+	int s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	struct sockaddr_in addr = {0};
+	if (s < 0) return 1;
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(8080);
+	inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+
+	if (connect(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+	send(s, "hello", 5, 0);
+	close(s);
+	return 0;
+}
+
+// AF_INET6 (IPv6 TCP)
+// server.c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <string.h>
+
+int main(void) {
+	int s = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+	struct sockaddr_in6 addr = {0};
+	int v6only = 1;
+
+	if (s < 0) return 1;
+	setsockopt(s, IPPROTO_IPV6, IPV6_V6ONLY, &v6only, sizeof(v6only));
+
+	addr.sin6_family = AF_INET6;
+	addr.sin6_addr = in6addr_any;
+	addr.sin6_port = htons(8080);
+
+	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+	if (listen(s, 16) < 0) return 1;
+
+	int c = accept(s, NULL, NULL);
+	if (c >= 0) close(c);
+	close(s);
+	return 0;
+}
+
+// client.c
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+int main(void) {
+	int s = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+	struct sockaddr_in6 addr = {0};
+	if (s < 0) return 1;
+
+	addr.sin6_family = AF_INET6;
+	addr.sin6_port = htons(8080);
+	inet_pton(AF_INET6, "::1", &addr.sin6_addr);
+
+	if (connect(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+	close(s);
+	return 0;
+}
+
+// AF_NETLINK  (kernel-user communication)
+// receiver.c
+#include <sys/socket.h>
+#include <linux/netlink.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+
+int main(void) {
+	int s = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
+	struct sockaddr_nl addr = {0};
+	char buf[8192];
+	struct nlmsghdr *nlh;
+
+	if (s < 0) return 1;
+
+	addr.nl_family = AF_NETLINK;
+	addr.nl_pid = getpid();      // unique user-space PID
+	addr.nl_groups = RTMGRP_LINK; // subscribe to link events
+
+	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+
+	ssize_t n = recv(s, buf, sizeof(buf), 0);
+	if (n > 0) {
+		nlh = (struct nlmsghdr *)buf;
+		printf("got netlink msg type=%d len=%d\n", nlh->nlmsg_type, nlh->nlmsg_len);
+	}
+	close(s);
+	return 0;
+}
+
+// sender.c
+#include <sys/socket.h>
+#include <linux/netlink.h>
+#include <linux/rtnetlink.h>
+#include <unistd.h>
+#include <string.h>
+
+int main(void) {
+	int s = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
+	struct sockaddr_nl dst = {0};
+	struct {
+		struct nlmsghdr nlh;
+		struct rtgenmsg gen;
+	} req = {0};
+
+	if (s < 0) return 1;
+
+	dst.nl_family = AF_NETLINK;
+
+	req.nlh.nlmsg_len = NLMSG_LENGTH(sizeof(struct rtgenmsg));
+	req.nlh.nlmsg_type = RTM_GETLINK;
+	req.nlh.nlmsg_flags = NLM_F_REQUEST | NLM_F_DUMP;
+	req.gen.rtgen_family = AF_UNSPEC;
+
+	struct iovec iov = { &req, req.nlh.nlmsg_len };
+	struct msghdr msg = {0};
+	msg.msg_name = &dst;
+	msg.msg_namelen = sizeof(dst);
+	msg.msg_iov = &iov;
+	msg.msg_iovlen = 1;
+
+	if (sendmsg(s, &msg, 0) < 0) return 1;
+	close(s);
+	return 0;
+}
+
+// AF_PACKET (link layer, raw Ethernet; requires root)
+// receiver.c
+#include <sys/socket.h>
+#include <netpacket/packet.h>
+#include <net/ethernet.h>
+#include <net/if.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
+
+int main(void) {
+	int s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+	struct sockaddr_ll addr = {0};
+	char buf[2048];
+	ssize_t n;
+
+	if (s < 0) return 1;
+
+	addr.sll_family = AF_PACKET;
+	addr.sll_protocol = htons(ETH_P_ALL);
+	addr.sll_ifindex = if_nametoindex("eth0");
+
+	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) return 1;
+
+	n = recv(s, buf, sizeof(buf), 0);
+	if (n > 0) printf("got %zd bytes\n", n);
+
+	close(s);
+	return 0;
+}
+
+// sender.c
+#include <sys/socket.h>
+#include <netpacket/packet.h>
+#include <net/ethernet.h>
+#include <net/if.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(void) {
+	int s = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_IP));
+	struct sockaddr_ll dst = {0};
+	unsigned char frame[64] = {0}; // fill with valid Ethernet frame
+
+	if (s < 0) return 1;
+
+	dst.sll_family = AF_PACKET;
+	dst.sll_ifindex = if_nametoindex("eth0");
+	dst.sll_halen = ETH_ALEN;
+	// set dst.sll_addr[0..5] to target MAC
+
+	sendto(s, frame, sizeof(frame), 0, (struct sockaddr *)&dst, sizeof(dst));
+	close(s);
+	return 0;
+}
+
+// function prototype for setsockopt
+int setsockopt(int sockfd, int level, int optname,
+               const void *optval, socklen_t optlen);
+
+// SOL_SOCKET: socket level options
+| Option                                |       Value type | Purpose / typical use                                                             |
+| ------------------------------------- | ---------------: | --------------------------------------------------------------------------------- |
+| `SO_REUSEADDR`                        |      `int` (0/1) | Allow binding to an address in `TIME_WAIT`. Common on servers to restart quickly. |
+| `SO_REUSEPORT`                        |      `int` (0/1) | Allow multiple sockets bind same (addr,port) (load-sharing on some kernels).      |
+| `SO_KEEPALIVE`                        |      `int` (0/1) | Enable TCP keepalive probes (basic on/off; details set via TCP_* options).        |
+| `SO_BROADCAST`                        |      `int` (0/1) | Enable sending datagrams to broadcast addresses (UDP).                            |
+| `SO_RCVBUF` / `SO_SNDBUF`             |    `int` (bytes) | Set kernel receive / send buffer sizes.                                           |
+| `SO_RCVTIMEO` / `SO_SNDTIMEO`         | `struct timeval` | Set blocking I/O timeouts for `recv`/`send`.                                      |
+| `SO_LINGER`                           |  `struct linger` | Control close behavior (block until sent or drop).                                |
+| `SO_ERROR`                            |   `int` (output) | Query pending error on socket (use with `getsockopt`).                            |
+| `SO_OOBINLINE`                        |      `int` (0/1) | Receive TCP OOB data inline with normal data.                                     |
+| `SO_ACCEPTCONN`                       |   `int` (output) | Check if socket is listening (from `getsockopt`).                                 |
+| `SO_DOMAIN`, `SO_TYPE`, `SO_PROTOCOL` |   `int` (output) | Query socket properties.                                                          |
+
+// IPPROTO_TCP: TCP level options
+| Option          |      Value type | Purpose                                                                         |
+| --------------- | --------------: | ------------------------------------------------------------------------------- |
+| `TCP_NODELAY`   |     `int` (0/1) | Disable Nagle (send small packets immediately). Useful for low-latency apps.    |
+| `TCP_CORK`      |     `int` (0/1) | Linux: hold back partial frames until cork cleared (for packetization control). |
+| `TCP_KEEPIDLE`  | `int` (seconds) | Idle time before first keepalive probe.                                         |
+| `TCP_KEEPINTVL` | `int` (seconds) | Interval between keepalive probes.                                              |
+| `TCP_KEEPCNT`   |           `int` | Number of probes before declaring connection dead.                              |
+| `TCP_SYNCNT`    |           `int` | Number of SYN retransmits before aborting connect() (Linux).                    |
+| `TCP_QUICKACK`  |           `int` | Control delayed ACK behavior (Linux).                                           |
+
+// IPPROTO_IP / IP: IPv4 level options
+| Option               | Value type / struct       | Purpose                                                  |
+| -------------------- | ------------------------- | -------------------------------------------------------- |
+| `IP_TTL`             | `int`                     | Set IP time-to-live for outgoing packets.                |
+| `IP_MULTICAST_TTL`   | `unsigned char`           | TTL for IPv4 multicast packets.                          |
+| `IP_MULTICAST_LOOP`  | `unsigned char`           | Loopback for multicast (0/1).                            |
+| `IP_MULTICAST_IF`    | `struct in_addr` or `int` | Choose outgoing interface for multicast.                 |
+| `IP_ADD_MEMBERSHIP`  | `struct ip_mreq`          | Join IPv4 multicast group.                               |
+| `IP_DROP_MEMBERSHIP` | `struct ip_mreq`          | Leave multicast group.                                   |
+| `IP_PKTINFO`         | `int`                     | Receive destination address and iface info in `recvmsg`. |
+| `IP_HDRINCL`         | `int` (0/1)               | Include custom IP header when sending (raw sockets).     |
+
+// IPPROTO_IPV6: IPv6 level options
+| Option                |         Value type | Purpose                                                          |
+| --------------------- | -----------------: | ---------------------------------------------------------------- |
+| `IPV6_JOIN_GROUP`     | `struct ipv6_mreq` | Join IPv6 multicast group.                                       |
+| `IPV6_LEAVE_GROUP`    | `struct ipv6_mreq` | Leave group.                                                     |
+| `IPV6_MULTICAST_HOPS` |              `int` | Multicast hop limit (TTL).                                       |
+| `IPV6_V6ONLY`         |              `int` | If set, socket will accept only IPv6 (no IPv4-mapped addresses). |
+| `IPV6_PKTINFO`        |              `int` | Similar to `IP_PKTINFO` for IPv6.                                |
+
+// SOL_SOCKET for advanced use
+SO_ATTACH_FILTER / SO_DETACH_FILTER — attach BPF filter (raw capture) (Linux).
+SO_PASSCRED — get sender credentials on Unix domain sockets.
+SO_TIMESTAMP / SO_TIMESTAMPNS / SO_TIMESTAMPING — enable kernel packet timestamps.
+
+// Typical application usage
+TCP server that wants fast restart
+	SO_REUSEADDR (and sometimes SO_REUSEPORT) before bind().
+High-throughput network app
+	Increase SO_RCVBUF / SO_SNDBUF and tune TCP window scaling.
+Low-latency app (e.g., RPC, games)
+	TCP_NODELAY (disable Nagle) + smaller send batching.
+Long-lived idle connections (NAT/firewall keepalive)
+	SO_KEEPALIVE + TCP_KEEPIDLE / TCP_KEEPINTVL / TCP_KEEPCNT.
+UDP multicast receiver
+	IP_ADD_MEMBERSHIP to join group, IP_MULTICAST_IF to pick interface.
+Raw packet generation
+	IP_HDRINCL if you want to provide the IP header.
+Non-blocking I/O with timeout fallback
+	SO_RCVTIMEO / SO_SNDTIMEO (or set non-blocking + select/poll/epoll).
+Graceful close vs force close
+	SO_LINGER with l_onoff controls whether close() blocks to send pending data.
+
+```
+
 ## hash table
 ```c
 /*
