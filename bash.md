@@ -484,6 +484,7 @@ REMOTE_SCRIPT
 
 ## awk
 ```bash
+# use bash varialbe
 #1 (recommend)
 pattern="def"
 echo "abc def gh" | awk -v pat="$pattern" '$0 ~ pat { print $3 }'
@@ -496,6 +497,38 @@ echo "abc def gh" | awk '/'"$pattern"'/{print $3}'
 pattern="def"
 echo "abc def gh" | awk "/$pattern/{print \$3}"
 
+# get return value from awk
+#1
+if echo "ERROR found" | awk '/ERROR/ { exit 0 } END { exit 1 }'; then
+	echo "ERROR found"
+else
+	echo "ERROR not found"
+fi
+
+#2
+if awk '/ERROR/ { found=1 } END { exit (found ? 0 : 1) }' < <(echo "ERROR found"); then
+	echo "ERROR found"
+else
+	echo "ERROR not found"
+fi
+
+#
+teststr="ERROR found"
+
+if awk '/ERROR/ { found=1 } END { exit (found ? 0 : 1) }' < <(echo "$teststr"); then
+	echo "ERROR found"
+else
+	echo "ERROR not found"
+fi
+
+#3
+teststr="ERROR found"
+
+if awk '/ERROR/ { found=1 } END { exit (found ? 0 : 1) }' <<< "$teststr"; then
+	echo "ERROR found"
+else
+	echo "ERROR not found"
+fi
 ```
 
 ## background process
