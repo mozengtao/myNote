@@ -21,6 +21,232 @@
 []()  
 []()  
 
+## common utility example
+cfg.toml:
+```toml
+[paths]
+work_dir = "/tmp"
+
+[names]
+evc_job = "evc-morris-dentist"
+vmc_job = "vmc-morris-dentist"
+
+[defaults]
+force = true
+```
+x.py:
+```python
+#!/usr/bin/env python3
+
+import sys
+import shlex
+import argparse
+import subprocess
+from pathlib import Path
+from pprint import pprint
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
+class Config:
+    def __init__(self, data: dict):
+        self.paths = data.get("paths", {})
+        self.names = data.get("names", {})
+        self.defaults = data.get("defaults", {})
+    
+    @property
+    def work_dir(self) -> str:
+        return self.paths.get("work_dir", ".")
+
+    @property
+    def evc_job(self) -> str:
+        return self.names.get("evc_job", "evc-job")
+
+    @property
+    def vmc_job(self) -> str:
+        return self.names.get("vmc_job", "vmc-job")
+
+    @property
+    def force(self) -> bool:
+        return self.defaults.get("force", True)
+
+def load_config(config_path: str) -> Config:
+    cfg_path = Path(config_path)
+    if not cfg_path.exists():
+        raise FileNotFoundError(f"Config file not found: {cfg_path}")
+    with open(cfg_path, "rb") as f:
+        data = tomllib.load(f)
+    return Config(data)
+
+def run(cmd: str, cwd: str | None = None, capture: bool = False) -> subprocess.CompletedProcess:
+    kwargs = {
+        "shell": True,
+        "cwd": cwd,
+    }
+    if capture:
+        kwargs.update({
+            "stdout": subprocess.PIPE,
+            "stderr": subprocess.PIPE,
+            "text": True,
+        })
+    #return subprocess.run(cmd, **kwargs)
+    # for test only
+    print(cmd)
+    res = subprocess.run("ls", **kwargs)
+    return res
+
+def run_check_output(cmd: str, cwd: str | None = None) -> str:
+    res = run(cmd, cwd=cwd, capture=True)
+    if res.returncode != 0:
+        raise subprocess.CalledProcessError(f"Command failed: {cmd}\nstdout: {res.stdout}\nstderr: {res.stderr}")
+    return res.stdout
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Nomad helper")
+    subparsers = parser.add_subparsers(dest="cmd")
+
+    # start
+    ps = subparsers.add_parser("start", help="Start EVC or VMC")
+    ps.add_argument("job", choices=["evc", "vmc"], help="Job to start")
+    ps.add_argument("--config", default="cfg.toml", help="Config file")
+
+    # terminal
+    pt = subparsers.add_parser("terminal", help="Terminal EVC or VMC")
+    pt.add_argument("job", choices=["evc", "vmc"], help="Job to terminal")
+    pt.add_argument("--config", default="cfg.toml", help="Config file")
+
+    # purge
+    ps = subparsers.add_parser("purge", help="Purge EVC or VMC")
+    ps.add_argument("job", choices=["evc", "vmc"], help="Job to purge")
+    ps.add_argument("--config", default="cfg.toml", help="Config file")
+
+    return parser
+
+def start_evc(cfg: Config) -> int:
+    cwd = cfg.work_dir
+    evc_cmd = (
+        "nomad job run ",
+        f"-var \"force={str(cfg.force).lower()}\" ",
+        f"{cfg.evc_job}"
+    )
+    res = run(evc_cmd, cwd=cwd)
+    return res.returncode
+
+def run_evc_cli(cfg: Config, command: str) -> str:
+    task = "evc"
+    job = cfg.evc_job
+	cmd = (
+		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '"
+		f"ncs_cli -u admin <<EOF\n{command}\nEOF'"
+	)
+    return run_check_output(cmd)
+
+def start_vmc(cfg: Config) -> int:
+    cwd = cfg.work_dir
+    vmc_cmd = (
+        "nomad job run ",
+        f"-var \"force={str(cfg.force).lower()}\" ",
+        f"{cfg.vmc_job}"
+    )
+    res = run(vmc_cmd, cwd=cwd)
+    return res.returncode
+
+def terminal_evc(cfg: Config) -> int:
+    job = cfg.evc_job
+    task = "evc"
+    cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
+    res = run(cmd, cwd=cfg.work_dir)
+    return res.returncode
+
+def terminal_vmc(cfg: Config) -> int:
+    job = cfg.vmc_job
+    task = "vmc"
+    cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
+    res = run(cmd, cwd=cfg.work_dir)
+    return res.returncode
+
+def purge_evc(cfg: Config) -> int:
+    cwd = cfg.work_dir
+    evc_cmd = (
+        "nomad job stop ",
+        f"{cfg.evc_job}"
+    )
+    return run(evc_cmd, cwd=cwd).returncode
+
+
+def purge_vmc(cfg: Config) -> int:
+    cwd = cfg.work_dir
+    vmc_cmd = (
+        "nomad job stop ",
+        f"{cfg.vmc_job}"
+    )
+    return run(vmc_cmd, cwd=cwd).returncode
+
+def main(argv: list[str]) -> int:
+    parser = build_parser()
+    args = parser.parse_args(argv)
+
+    cfg = load_config(getattr(args, "config", "cfg.toml"))
+```
+    if args.cmd == "start":
+        if args.job == "evc":
+            start_evc(cfg)
+        elif args.job == "vmc":
+            start_vmc(cfg)
+    elif args.cmd == "terminal":
+        if args.job == "evc":
+            terminal_evc(cfg)
+        elif args.job == "vmc":
+            terminal_vmc(cfg)
+    elif args.cmd == "purge":
+        if args.job == "evc":
+            purge_evc(cfg)
+        elif args.job == "vmc":
+            purge_vmc(cfg)
+    else:
+        parser.print_help()
+        return 1
+```
+    match args.cmd:
+        case "start":
+            match args.job:
+                case "evc":
+                    start_evc(cfg)
+                case "vmc":
+                    start_vmc(cfg)
+                case _:
+                    parser.print_help()
+                    return 1
+        case "terminal":
+            match args.job:
+                case "evc":
+                    terminal_evc(cfg)
+                case "vmc":
+                    terminal_vmc(cfg)
+                case _:
+                    parser.print_help()
+                    return 1
+        case "purge":
+            match args.job:
+                case "evc":
+                    purge_evc(cfg)
+                case "vmc":
+                    purge_vmc(cfg)
+                case _:
+                    parser.print_help()
+                    return 1
+        case _:
+            parser.print_help()
+            return 1
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
+```
+
 ## cli example
 config file:
 ```toml
@@ -185,7 +411,7 @@ def run_ncs_command(cfg: Config, command: str) -> str:
 	task = "evc"
 	job = cfg.evc_job
 	cmd = (
-		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '" \
+		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '"
 		f"ncs_cli -u admin <<EOF\n{command}\nEOF'"
 	)
 	return run_check_output(cmd)
