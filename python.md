@@ -2552,185 +2552,431 @@ for entry in target_dir.iterdir():
 
 ## re module
 ```python
-  # Searching Functions
-  re.search()    	Scans a string for a regex match
-  re.match()	    Looks for a regex match at the beginning of a string
-  re.fullmatch()	Looks for a regex match on an entire string
-  re.findall()	Returns a list of all regex matches in a string
-  re.finditer()	Returns an iterator that yields regex matches from a string
-  
-  >>> re.search(r'[a-z]+', '123FOO456', flags=re.IGNORECASE)
-  <_sre.SRE_Match object; span=(3, 6), match='FOO'>
-  
-  >>> re.match(r'\d+', '123foobar')
-  <_sre.SRE_Match object; span=(0, 3), match='123'>
-  
-  >>> re.fullmatch(r'\d+', '123')
-  <_sre.SRE_Match object; span=(0, 3), match='123'>
-  
-  >>> re.findall(r'\w+', '...foo,,,,bar:%$baz//|')
-  ['foo', 'bar', 'baz']
-  >>> re.findall(r'(\w+),(\w+)', 'foo,bar,baz,qux,quux,corge')
-  [('foo', 'bar'), ('baz', 'qux'), ('quux', 'corge')]
-  >>> re.findall(r'(\w+),(\w+),(\w+)', 'foo,bar,baz,qux,quux,corge')
-  [('foo', 'bar', 'baz'), ('qux', 'quux', 'corge')]
-  
-  >>> for i in re.finditer(r'\w+', '...foo,,,,bar:%$baz//|'):
-  ...     print(i)
-  ...
-  <_sre.SRE_Match object; span=(3, 6), match='foo'>
-  <_sre.SRE_Match object; span=(10, 13), match='bar'>
-  <_sre.SRE_Match object; span=(16, 19), match='baz'>
-  
-  
-  # Substitution Functions
-  (If re.sub() doesn’t find any matches, then it always returns <string> unchanged.)
-  re.sub()	Scans a string for regex matches, replaces the matching portions of the string with 
-  			the specified replacement string, and returns the result
-  re.subn()	Behaves just like re.sub() but also returns information regarding the number of 
-  			substitutions made
-  
-  >>> s = 'foo.123.bar.789.baz'
-  >>> re.sub(r'\d+', '#', s)
-  'foo.#.bar.#.baz'
-  >>> re.sub('[a-z]+', '(*)', s)
-  '(*).123.(*).789.(*)'
-  
-  >>> re.sub(r'(\w+),bar,baz,(\w+)',
-  ...        r'\2,bar,baz,\1',
-  ...        'foo,bar,baz,qux')
-  'qux,bar,baz,foo'
-  
-  >>> re.sub(r'(\d+)', r'\g<1>0', 'foo 123 bar')
-  'foo 1230 bar'
-  (\g<1> to refer to the group)
-  
-  >>> re.sub(r'\d+', '/\g<0>/', 'foo 123 bar')
-  'foo /123/ bar'
-  (The backreference \g<0> refers to the text of the entire match)
-  
-  >>> re.sub('x*', '-', 'foo')
-  '-f-o-o-'
-  (If <regex> specifies a zero-length match, then re.sub() will substitute <repl> into every 
-   character position in the string)
-  
-  
-  # Substitution by Function
-  >>> def f(match_obj):
-  ...     s = match_obj.group(0)  # The matching string
-  ...
-  ...     # s.isdigit() returns True if all characters in s are digits
-  ...     if s.isdigit():
-  ...         return str(int(s) * 10)
-  ...     else:
-  ...         return s.upper()
-  ...
-  >>> re.sub(r'\w+', f, 'foo.10.bar.20.baz.30')
-  'FOO.100.BAR.200.BAZ.300'
-  
-  
-  # Utility Functions
-  re.split()	Splits a string into substrings using a regex as a delimiter
-  re.escape()	Escapes characters in a regex
-  
-  >>> re.split('\s*[,;/]\s*', 'foo,bar  ;  baz / qux')
-  ['foo', 'bar', 'baz', 'qux']
-  >>> re.split('(\s*[,;/]\s*)', 'foo,bar  ;  baz / qux')
-  ['foo', ',', 'bar', '  ;  ', 'baz', ' / ', 'qux']
-  
-  This can be useful if you want to split <string> apart into delimited tokens, process the tokens 
-  in some way, then piece the string back together using the same delimiters that originally 
-  separated them:
-  >>> string = 'foo,bar  ;  baz / qux'
-  >>> regex = r'(\s*[,;/]\s*)'
-  >>> a = re.split(regex, string)
-  
-  >>> # List of tokens and delimiters
-  >>> a
-  ['foo', ',', 'bar', '  ;  ', 'baz', ' / ', 'qux']
-  
-  >>> # Enclose each token in <>'s
-  >>> for i, s in enumerate(a):
-  ...
-  ...     # This will be True for the tokens but not the delimiters
-  ...     if not re.fullmatch(regex, s):
-  ...         a[i] = f'<{s}>'
-  ...
-  
-  >>> # Put the tokens back together using the same delimiters
-  >>> ''.join(a)
-  '<foo>,<bar>  ;  <baz> / <qux>'
-  
-  If you need to use groups but don’t want the delimiters included in the return list, then you 
-  can use noncapturing groups:
-  >>> string = 'foo,bar  ;  baz / qux'
-  >>> regex = r'(?:\s*[,;/]\s*)'
-  >>> re.split(regex, string)
-  ['foo', 'bar', 'baz', 'qux']
-  
-  If the optional maxsplit argument is present and greater than zero, then re.split() performs at 
-  most that many splits.
-  >>> s = 'foo, bar, baz, qux, quux, corge'
-  
-  >>> re.split(r',\s*', s)
-  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge']
-  >>> re.split(r',\s*', s, maxsplit=3)
-  ['foo', 'bar', 'baz', 'qux, quux, corge']
-  
-  
-  This is useful if you’re calling one of the re module functions, and the <regex> you’re passing 
-  in has a lot of special characters that you want the parser to take literally instead of as 
-  metacharacters.
-  >>> print(re.match('foo^bar(baz)|qux', 'foo^bar(baz)|qux'))
-  None
-  >>> re.match('foo\^bar\(baz\)\|qux', 'foo^bar(baz)|qux')
-  <_sre.SRE_Match object; span=(0, 16), match='foo^bar(baz)|qux'>
-  
-  >>> re.escape('foo^bar(baz)|qux') == 'foo\^bar\(baz\)\|qux'
-  True
-  >>> re.match(re.escape('foo^bar(baz)|qux'), 'foo^bar(baz)|qux')
-  <_sre.SRE_Match object; span=(0, 16), match='foo^bar(baz)|qux'>
-  
-  
-  # Compiled Regex Objects in Python
-  >>> re.search(r'(\d+)', 'foo123bar')
-  <_sre.SRE_Match object; span=(3, 6), match='123'>
-  
-  >>> re_obj = re.compile(r'(\d+)')
-  >>> re.search(re_obj, 'foo123bar')
-  <_sre.SRE_Match object; span=(3, 6), match='123'>
-  >>> re_obj.search('foo123bar')
-  <_sre.SRE_Match object; span=(3, 6), match='123'>
-  
-  If you use a particular regex in your Python code frequently, then precompiling allows you to 
-  separate out the regex definition from its uses. This enhances modularity.
-  >>> s1, s2, s3, s4 = 'foo.bar', 'foo123bar', 'baz99', 'qux & grault'
-  >>> re_obj = re.compile('\d+')
-  
-  >>> re_obj.search(s1)
-  >>> re_obj.search(s2)
-  <_sre.SRE_Match object; span=(3, 6), match='123'>
-  >>> re_obj.search(s3)
-  <_sre.SRE_Match object; span=(3, 5), match='99'>
-  >>> re_obj.search(s4)
-  
-  
-  # Match Object Methods
-  match.group()		The specified captured group or groups from match
-  match.__getitem__()	A captured group from match
-  match.groups()		All the captured groups from match
-  match.groupdict()	A dictionary of named captured groups from match
-  match.expand()		The result of performing backreference substitutions from match
-  match.start()		The starting index of match
-  match.end()		The ending index of match
-  match.span()		Both the starting and ending indices of match as a tuple
-  # Match Object Attributes
-  match.pos
-  match.endpos	The effective values of the <pos> and <endpos> arguments for the match
-  match.lastindex	The index of the last captured group
-  match.lastgroup	The name of the last captured group
-  match.re	The compiled regular expression object for the match
-  match.string	The search string for the match
+# metachracters
+.	# matches any single character except newline
+^	# 1. anthors a match at the start of a string
+	# 2. complements a character class
+$	# anthors a match at the end of a string
+*	# matches zero or more repetitions
++	# matches one or more repetitions
+?	# 1. matches zero or one repetition
+	# 2. specifies the non-greedy versions of *, +, and ?
+	# 3. introduces a lookahead or lookbehind assertion
+	# 4. creates a named group
+{}	# matches an explicitly specified number of repetitions
+\	# 1. escapes a metacharacter of its special meaning
+	# 2 introduces a special character class
+	# 3 introduces a grouping backreference
+[]	# specifies a character class
+|	# designates alternation
+()	# creates a group
+:	# designate a specialized group
+#
+=
+!
+<>	# creates a named group
+
+# examples
+re.search('ba[artz]', 'foobarqux')
+re.search('[a-z]', 'FOObar')
+re.search('[0-9][0-9]', 'foo123bar')
+re.search('[0-9a-fA-f]', '--- a0 ---')
+re.search('[^0-9]', '12345foo')
+re.search('[#:^]', 'foo^bar:baz#qux')
+
+re.search('[-abc]', '123-456')
+re.search('[abc-]', '123-456')
+re.search('[ab\-c]', '123-456')
+
+re.search('[]]', 'foo[1]')
+re.search('[ab\]cd]', 'foo[1]')
+
+re.search('[)*+|]', '123*456')
+re.search('[)*+|]', '123+456')
+
+re.search('foo.bar', 'fooxbar')
+
+# \w is essentially shorthand for [a-zA-Z0-9_]
+# \W is the opposite. It matches any non-word character and is equivalent to [^a-zA-Z0-9_]
+re.search('\w', '#(.a$@&')
+re.search('\W', 'a_1*3Qb')
+
+# \d matches any decimal digit character
+# \D is the opposite. It matches any character that isn’t a decimal digit
+re.search('\d', 'abc4def')
+re.search('\D', '234Q678')
+
+# \s matches any whitespace character
+# \S is the opposite of \s. It matches any character that isn’t whitespace
+re.search('\s', 'foo\nbar baz')
+re.search('\S', '  \n foo  \n  ')
+
+re.search('[\d\w\s]', '---3---')
+
+re.search('\.', 'foo.bar')
+
+re.search('\\\\', r'foo\bar')
+re.search(r'\\', r'foo\bar')
+
+# ^ or /A anchors a match to the start of <string>
+re.search('^foo', 'foobar')
+re.search('\Afoo', 'foobar')
+
+# $ or \Z anchors a match to the end of <string>
+re.search('bar$', 'foobar')
+re.search('bar\Z', 'foobar')
+re.search('bar$', 'foobar\n')
+
+# \b anchors a match to a word boundary.
+# \B anchors a match to a word that isn’t a word boundary.
+# A word consists of a sequence of alphanumeric characters or underscores ([a-zA-Z0-9_]), the same as for the \w character class
+re.search(r'\bbar', 'foo bar')
+re.search(r'\bbar', 'foo.bar')
+print(re.search(r'\bbar', 'foobar'))	# None
+re.search(r'foo\b', 'foo bar')
+re.search(r'foo\b', 'foo.bar')
+
+re.search(r'\bbar\b', 'foo bar baz')
+re.search(r'\bbar\b', 'foo(bar)baz')
+
+print(re.search(r'\Bfoo\B', 'foo')) # None
+print(re.search(r'\Bfoo\B', '.foo.')) # None
+re.search(r'\Bfoo\B', 'barfoobaz')
+
+# quantifiers
+re.search('foo-*bar', 'foobar')
+re.search('foo-*bar', 'foo-bar')
+re.search('foo-*bar', 'foo--bar')
+re.search('foo.*bar', '# foo $qux@grault % bar #')
+
+re.search('foo-+bar', 'foobar') # None
+re.search('foo-+bar', 'foo-bar')
+re.search('foo-+bar', 'foo--bar')
+
+re.search('foo-?bar', 'foobar')
+re.search('foo-?bar', 'foo-bar')
+re.search('foo-?bar', 'foo--bar') # None
+
+re.match('foo[1-9]*bar', 'foobar')
+re.match('foo[1-9]*bar', 'foo42bar')
+
+re.match('foo[1-9]+bar', 'foobar') # None
+re.match('foo[1-9]+bar', 'foo42bar')
+
+re.match('foo[1-9]?bar', 'foobar')
+print(re.match('foo[1-9]?bar', 'foo42bar')) # None
+
+# *?
+# +?
+# ??
+# non-greedy (or lazy) versions of the *, +, and ? quantifiers
+# when used alone, the quantifier metacharacters *, +, and ? are all greedy, meaning they produce the longest possible match
+re.search('<.*>', '%<foo> <bar> <baz>%')
+re.search('<.*?>', '%<foo> <bar> <baz>%')
+
+re.search('<.+>', '%<foo> <bar> <baz>%')
+re.search('<.+?>', '%<foo> <bar> <baz>%')
+
+re.search('ba?', 'baaaa')
+re.search('ba??', 'baaaa')
+
+print(re.search('x-{3}x', 'x--x')) # None
+re.search('x-{3}x', 'x---x')
+
+# <regex>{m,n}
+# <regex>{,n}	identical to <regex>{0,n}
+# <regex>{m,}	(>=m)
+# <regex>{,}	identical to <regex>{0,} or <regex>*
+for i in range(1, 6):
+	s = f"x{'-' * i}x"
+	print(f'{i}  {s:10}', re.search('x-{2,4}x', s))
+
+# literal string match
+re.search('x{}y', 'x{}y')
+re.search('x{foo}y', 'x{foo}y')
+re.search('x{a:b}y', 'x{a:b}y')
+re.search('x{1,3,5}y', 'x{1,3,5}y')
+re.search('x{foo,bar}y', 'x{foo,bar}y')
+
+# non-greedy (lazy) version of {m,n}
+re.search('a{3,5}', 'aaaaaaaa')
+re.search('a{3,5}?', 'aaaaaaaa')
+
+# grouping and capturing
+# (<regex>) defines a subexpression or group
+re.search('(bar)', 'foo bar baz')
+re.search('bar', 'foo bar baz')
+
+re.search('bar+', 'foo barrr baz')
+re.search('(bar)+', 'foo bar baz')
+re.search('(bar)+', 'foo barbar baz')
+re.search('(bar)+', 'foo barbarbarbar baz')
+
+re.search('(ba[rz]){2,4}(qux)?', 'bazbarbazqux')
+re.search('(ba[rz]){2,4}(qux)?', 'barbar')
+
+re.search('(foo(bar)?)+(\d\d\d)?', 'foofoobar')
+re.search('(foo(bar)?)+(\d\d\d)?', 'foofoobar123')
+re.search('(foo(bar)?)+(\d\d\d)?', 'foofoo123')
+
+# m.groups() returns a tuple containing all the captured groups from a regex match
+m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
+m.groups()
+
+# m.group(<n>) returns a string containing the <n>th captured match.
+m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
+m.groups()
+m.group(1)
+m.group(2)
+m.group(3)
+
+# m.group(0) returns the entire match, and m.group() does the same
+m.group(0)
+m.group()
+
+# m.group(<n1>, <n2>, ...) returns a tuple containing the specified captured matches.
+m.groups()
+m.group(2, 3)
+m.group(3, 2, 1)
+
+m.group(3, 2, 1)
+(m.group(3), m.group(2), m.group(1))
+
+# backreference
+# \<n> matches the contents of a previously captured group.
+regex = r'(\w+),\1'
+m = re.search(regex, 'foo,foo')
+m.group(1)
+
+# (?P<name><regex>) creates a named captured group.
+m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
+
+m = re.search('(?P<w1>\w+),(?P<w2>\w+),(?P<w3>\w+)', 'foo,quux,baz')
+m.groups()
+m.group('1')
+m.group('w1')
+m.group('3')
+m.group('w3')
+m.group('1', '2', '3')
+m.group('w1', 'w2', 'w3')
+
+# (?P=<name>) matches the contents of a previously captured named group.
+m = re.search(r'(\w+),\1', 'foo,foo')
+
+m = re.search(r'(?P<word>\w+),(?P=word)', 'foo,foo')
+m.group('word')
+
+# (?:<regex>) creates a non-capturing group.
+m = re.search('(\w+),(?:\w+),(\w+)', 'foo,quux,baz')
+m.groups()
+m.gropu(1)
+m.gropu(2)
+
+# lookahead and lookbehind assertions
+# (?=<lookahead_regex>) creates a positive lookahead assertion.
+# (?=<lookahead_regex>) asserts that what follows the regex parser’s current position must match <lookahead_regex>
+re.search('foo(?=[a-z])', 'foobar')
+
+# (?!<lookahead_regex>) creates a negative lookahead assertion.
+# (?!<lookahead_regex>) asserts that what follows the regex parser’s current position must not match <lookahead_regex>.
+re.search('foo(?![a-z])', 'foo123')
+
+# (?<=<lookbehind_regex>) creates a positive lookbehind assertion.
+# (?<=<lookbehind_regex>) asserts that what precedes the regex parser’s current position must match <lookbehind_regex>.
+re.search('(?<=foo)bar', 'foobar')
+
+# (?<!<lookbehind_regex>) creates a negative lookbehind assertion.
+# (?<!<lookbehind_regex>) asserts that what precedes the regex parser’s current position must not match <lookbehind_regex>:
+re.search('(?<!qux)bar', 'foobar')
+
+# miscellaneous metacharacters
+# (?#...) specifies a comment.
+re.search('bar(?#This is a comment) *baz', 'foo bar baz qux')
+
+# vertical bar, or pipe (|) specifies a set of alternatives on which to match.
+re.search('foo|bar|baz', 'bar')
+re.search('(foo|bar|baz)+', 'foofoofoo')
+
+# re.search(<regex>, <string>, <flags>)
+# scans a string for a regex match, applying the specified modifier <flags>.
+
+# flags
+Short Name		Long Name			Effect
+re.I			re.IGNORECASE		Makes matching of alphabetic characters case-insensitive
+re.M			re.MULTILINE		Causes start-of-string and end-of-string anchors to match embedded newlines
+re.S			re.DOTALL			Causes the dot metacharacter to match a newline
+re.X			re.VERBOSE			Allows inclusion of whitespace and comments within a regular expression
+----			re.DEBUG			Causes the regex parser to display debugging information to the console
+re.A			re.ASCII			Specifies ASCII encoding for character classification
+re.U			re.UNICODE			Specifies Unicode encoding for character classification
+re.L			re.LOCALE			Specifies encoding for character classification based on the current locale
+
+re.search('a+', 'aaaAAA', re.I)
+re.search('foo.bar', 'fooxbar', re.DEBUG)
+
+
+
+# Searching Functions
+re.search(<regex>, <string>, flags=0)		# Scans a string for a regex match
+re.match(<regex>, <string>, flags=0)		# Looks for a regex match at the beginning of a string
+re.fullmatch(<regex>, <string>, flags=0)	# Looks for a regex match on an entire string
+re.findall(<regex>, <string>, flags=0)		# Returns a list of all regex matches in a string
+re.finditer(<regex>, <string>, flags=0)		# Returns an iterator that yields regex matches from a string
+
+# Substitution Functions
+# (If re.sub() doesn’t find any matches, then it always returns <string> unchanged.)
+re.sub(<regex>, <repl>, <string>, count=0, flags=0)
+# Scans a string for regex matches, replaces the matching portions of the string with the specified replacement string, and returns the result
+# finds the leftmost non-overlapping occurrences of <regex> in <string>, replaces each match as indicated by <repl>, and returns the result. <string> remains unchanged, <repl> can be either a string or a function
+re.subn(<regex>, <repl>, <string>, count=0, flags=0)
+# Behaves just like re.sub() but also returns information regarding the number of substitutions made
+# re.subn() is identical to re.sub(), except that re.subn() returns a two-tuple consisting of the modified string and the number of substitutions made
+
+# Substitution by Function
+# If you specify <repl> as a function, then re.sub() calls that function for each match found.
+def f(match_obj):
+	s = match_obj.group(0)  # The matching string
+
+	# s.isdigit() returns True if all characters in s are digits
+	if s.isdigit():
+		return str(int(s) * 10)
+	else:
+		return s.upper()
+
+re.sub(r'\w+', f, 'foo.10.bar.20.baz.30')		# 'FOO.100.BAR.200.BAZ.300'
+
+
+# Utility Functions
+re.split(<regex>, <string>, maxsplit=0, flags=0)		# Splits a string into substrings using a regex as a delimiter
+re.escape(<regex>)										# Escapes characters in a regex
+
+# Compiled Regex Objects in Python
+re.compile(<regex>, flags=0)							# Compiles a regex into a regular expression object
+# re.compile(<regex>) compiles <regex> and returns the corresponding regular expression object. If you include a <flags> value, then the corresponding flags apply to any searches performed with the object.
+# 1
+re_obj = re.compile(<regex>, <flags>)
+result = re.search(re_obj, <string>)
+# 2
+re_obj = re.compile(<regex>, <flags>)
+result = re_obj.search(<string>)
+
+# Regular Expression Object Methods
+# A compiled regular expression object re_obj supports the following methods
+re_obj.search(<string>[, <pos>[, <endpos>]])
+re_obj.match(<string>[, <pos>[, <endpos>]])
+re_obj.fullmatch(<string>[, <pos>[, <endpos>]])
+re_obj.findall(<string>[, <pos>[, <endpos>]])
+re_obj.finditer(<string>[, <pos>[, <endpos>]])
+
+# Regular Expression Object Attributes
+Attribute				Meaning
+re_obj.flags			Any <flags> that are in effect for the regex
+re_obj.groups			The number of capturing groups in the regex
+re_obj.groupindex		A dictionary mapping each symbolic group name defined by the (?P<name>) construct (if any) to the corresponding group number
+re_obj.pattern			The <regex> pattern that produced this object
+
+# Match Object Methods and Attributes
+# Match Object Methods
+match.group()			# The specified captured group or groups from match
+match.__getitem__()		# A captured group from match
+match.groups()			# All the captured groups from match
+match.groupdict()		# A dictionary of named captured groups from match
+match.expand()			# The result of performing backreference substitutions from match
+match.start()			# The starting index of match
+match.end()				# The ending index of match
+match.span()			# Both the starting and ending indices of match as a tuple
+
+# Match Object Attributes
+match.pos
+match.endpos		# The effective values of the <pos> and <endpos> arguments for the match
+match.lastindex		# The index of the last captured group
+match.lastgroup		# The name of the last captured group
+match.re			# The compiled regular expression object for the match
+match.string		# The search string for the match
+
+re.search(r'[a-z]+', '123FOO456', flags=re.IGNORECASE)		# <_sre.SRE_Match object; span=(3, 6), match='FOO'>
+re.match(r'\d+', '123foobar')								# <_sre.SRE_Match object; span=(0, 3), match='123'>
+re.fullmatch(r'\d+', '123')									# <_sre.SRE_Match object; span=(0, 3), match='123'>
+
+re.findall(r'\w+', '...foo,,,,bar:%$baz//|')					# ['foo', 'bar', 'baz']
+re.findall(r'(\w+),(\w+)', 'foo,bar,baz,qux,quux,corge')		# [('foo', 'bar'), ('baz', 'qux'), ('quux', 'corge')]
+re.findall(r'(\w+),(\w+),(\w+)', 'foo,bar,baz,qux,quux,corge')	# [('foo', 'bar', 'baz'), ('qux', 'quux', 'corge')]
+
+
+for i in re.finditer(r'\w+', '...foo,,,,bar:%$baz//|'):
+	print(i)
+
+# <_sre.SRE_Match object; span=(3, 6), match='foo'>
+# <_sre.SRE_Match object; span=(10, 13), match='bar'>
+# <_sre.SRE_Match object; span=(16, 19), match='baz'>
+
+
+s = 'foo.123.bar.789.baz'
+re.sub(r'\d+', '#', s)			# 'foo.#.bar.#.baz'
+re.sub('[a-z]+', '(*)', s)		# '(*).123.(*).789.(*)'
+
+re.sub(r'(\w+),bar,baz,(\w+)', r'\2,bar,baz,\1', 'foo,bar,baz,qux')		# 'qux,bar,baz,foo'
+
+re.sub(r'(\d+)', r'\g<1>0', 'foo 123 bar') #'foo 1230 bar' (\g<1> to refer to the group)
+re.sub(r'\d+', '/\g<0>/', 'foo 123 bar')	# 'foo /123/ bar' (The backreference \g<0> refers to the text of the entire match)
+re.sub('x*', '-', 'foo')		# '-f-o-o-' (If <regex> specifies a zero-length match, then re.sub() will substitute <repl> into every character position in the string)
+
+
+re.split('\s*[,;/]\s*', 'foo,bar  ;  baz / qux')		# ['foo', 'bar', 'baz', 'qux']
+re.split('(\s*[,;/]\s*)', 'foo,bar  ;  baz / qux')		# ['foo', ',', 'bar', '  ;  ', 'baz', ' / ', 'qux']
+
+# This can be useful if you want to split <string> apart into delimited tokens, process the tokens in some way, then piece the string back together using the same delimiters that originally separated them:
+string = 'foo,bar  ;  baz / qux'
+regex = r'(\s*[,;/]\s*)'
+re.split(regex, string)		# ['foo', ',', 'bar', '  ;  ', 'baz', ' / ', 'qux']
+
+# Enclose each token in <>'s
+for i, s in enumerate(a):
+	# This will be True for the tokens but not the delimiters
+	if not re.fullmatch(regex, s):
+		a[i] = f'<{s}>'
+
+
+# Put the tokens back together using the same delimiters
+''.join(a)		# '<foo>,<bar>  ;  <baz> / <qux>'
+
+# If you need to use groups but don’t want the delimiters included in the return list, then you can use noncapturing groups:
+string = 'foo,bar  ;  baz / qux'
+regex = r'(?:\s*[,;/]\s*)'
+re.split(regex, string)		# ['foo', 'bar', 'baz', 'qux']
+
+# If the optional maxsplit argument is present and greater than zero, then re.split() performs at most that many splits.
+s = 'foo, bar, baz, qux, quux, corge'
+
+re.split(r',\s*', s)				# ['foo', 'bar', 'baz', 'qux', 'quux', 'corge']
+re.split(r',\s*', s, maxsplit=3)	# ['foo', 'bar', 'baz', 'qux, quux, corge']
+
+
+# This is useful if you’re calling one of the re module functions, and the <regex> you’re passing in has a lot of special characters that you want the parser to take literally instead of as metacharacters.
+print(re.match('foo^bar(baz)|qux', 'foo^bar(baz)|qux'))			# None
+re.match('foo\^bar\(baz\)\|qux', 'foo^bar(baz)|qux')			# <_sre.SRE_Match object; span=(0, 16), match='foo^bar(baz)|qux'>
+
+re.escape('foo^bar(baz)|qux') == 'foo\^bar\(baz\)\|qux'			# True
+re.match(re.escape('foo^bar(baz)|qux'), 'foo^bar(baz)|qux')		# <_sre.SRE_Match object; span=(0, 16), match='foo^bar(baz)|qux'>
+
+
+# Compiled Regex Objects in Python
+re.search(r'(\d+)', 'foo123bar')			# <_sre.SRE_Match object; span=(3, 6), match='123'>
+
+re_obj = re.compile(r'(\d+)')
+re.search(re_obj, 'foo123bar')		# <_sre.SRE_Match object; span=(3, 6), match='123'>
+re_obj.search('foo123bar')			# <_sre.SRE_Match object; span=(3, 6), match='123'>
+
+If you use a particular regex in your Python code frequently, then precompiling allows you to 
+separate out the regex definition from its uses. This enhances modularity.
+s1, s2, s3, s4 = 'foo.bar', 'foo123bar', 'baz99', 'qux & grault'
+re_obj = re.compile('\d+')
+
+re_obj.search(s1)
+re_obj.search(s2)		# <_sre.SRE_Match object; span=(3, 6), match='123'>
+re_obj.search(s3)		# <_sre.SRE_Match object; span=(3, 5), match='99'>
+re_obj.search(s4)
+
 ```
 [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
 [Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  
