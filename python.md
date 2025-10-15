@@ -96,6 +96,27 @@
 []()  
 []()  
 
+## design patterns
+[design patterns in python](https://refactoring.guru/design-patterns/python)  
+[Python Design Patterns Tutorial](https://www.geeksforgeeks.org/python/python-design-patterns/)  
+[Python Design Patterns](https://python-patterns.guide/)  
+[python-patterns](https://github.com/faif/python-patterns)  
+[practice of the python pro](https://edu.anarcho-copy.org/Programming%20Languages/Python/Practices%20of%20the%20Python%20Pro.pdf)  
+[Design Patterns in Python: A Series](https://medium.com/@amirm.lavasani/design-patterns-in-python-a-series-f502b7804ae5)  
+[Design Patterns In Python](https://sbcode.net/python/)  
+[Software Design by Example](https://third-bit.com/sdxpy/)  
+[Design-Patterns-In-Python](https://github.com/Sean-Bradley/Design-Patterns-In-Python/tree/master)  
+[Design patterns in Python](https://jellyfish.tech/blog/implementation-of-common-design-patterns-in-python/)  
+[Python 3 Patterns, Recipes and Idioms](https://app.readthedocs.org/projects/python-3-patterns-idioms-test/downloads/pdf/latest/)  
+[Python-Head-First-Design-Patterns](https://github.com/rebuild-123/Python-Head-First-Design-Patterns)  
+[Mastering-Python-Design-Patterns-Second-Edition](https://github.com/PacktPublishing/Mastering-Python-Design-Patterns-Second-Edition)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 
 ## Real Python Tutorials
 [All Python Tutorial Topics](https://realpython.com/tutorials/all/)  
