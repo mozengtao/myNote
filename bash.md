@@ -10,6 +10,78 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## Heredoc
+Here document (Heredoc) is a type of redirection that allows you to pass multiple lines of input to a/an <interactive> command.
+[Bash Heredoc](https://linuxize.com/post/bash-heredoc/)  
+[How to Use Bash HereDoc](https://docs.vultr.com/how-to-use-bash-heredoc)  
+[Heredoc: A Deep Dive](https://medium.com/@oduwoledare/heredoc-a-deep-dive-23c82992e522)  
+[How to Use Heredoc in Shell Scripting](https://www.geeksforgeeks.org/linux-unix/how-to-use-heredoc-in-shell-scripting/)  
+[]()  
+[]()  
+```bash
+# syntax
+"
+[COMMAND] <<[-] 'DELIMITER'
+  HERE-DOCUMENT
+DELIMITER
+"
+"
+1. any string can be used as a delimiting identifier, such as EOF or END
+2. if the delimiting identifier is unquoted, all variables, commands an special characters before passing the here-document lines to the command will be substituted
+3. <<- will cause all leading tab characters to be ignored (leading whitespace characters are not allowed, only tab)
+4 the last line ends with the delimiting identifier, white space in front of the delimiter is not allowed
+"
+# 1
+cat << EOF
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+
+# 2
+cat <<- EOF
+	The current working directory is: $PWD
+	    You are logged in as: $(whoami)
+EOF
+
+# 3
+#cat << "EOF"
+cat << 'EOF'
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+
+#
+cat << EOF > file.txt
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+
+#
+if true; then
+	cat <<- EOF
+	Line with a leading tab.
+	EOF
+fi
+
+#
+cat <<'EOF' | sed 's/l/e/g'
+Hello
+World
+EOF
+
+#
+cat <<'EOF' | sed 's/l/e/g' > file.txt
+Hello
+World
+EOF
+
+#
+ssh -T user@host.com << EOF
+echo "The current local working directory is: $PWD"
+echo "The current remote working directory is: \$PWD"
+EOF
+```
+
 ## split 1 long command into serveral parts
 ```bash
 # 1 line concatenation with \
