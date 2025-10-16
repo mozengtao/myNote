@@ -10,6 +10,31 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+# 文件读取
+```bash
+语法             功能                   效率            特点
+"$(< file)"      读取文件到字符串        ****           高效安全
+"$(cat file)"    读取文件到字符串        **             启动外部进程
+$(< file)        读取文件(无引号)        ***            可能分词
+cat file         直接输出内容            **             不捕获变量
+
+script=""$(< file)""
+
+# 运行脚本
+# 直接执行脚本
+bash file
+chmod +x file && ./file
+
+#从标准输入读取脚本
+bash < file
+bash -s < file
+bash -s -- arg1 arg2 < file
+
+#把文件内容作为命令行参数传递给脚本
+bash -c "$(< file)"
+bash -c "$(< file)" -- arg1 arg2
+```
+
 ## Heredoc
 Here document (Heredoc) is a type of redirection that allows you to pass multiple lines of input to a/an <interactive> command.
 [Bash Heredoc](https://linuxize.com/post/bash-heredoc/)  
