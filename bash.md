@@ -302,6 +302,12 @@ You are logged in as: $(whoami)
 EOF
 
 #
+cat > file.txt << EOF
+The current working directory is: $PWD
+You are logged in as: $(whoami)
+EOF
+
+#
 if true; then
 	cat <<- EOF
 	Line with a leading tab.
