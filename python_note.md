@@ -21,6 +21,67 @@
 []()  
 []()  
 
+## blogs
+[Guides library](https://betterstack.com/community/guides/logging/)  
+[Get Started with Job Scheduling in Python](https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/)  
+[https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/](https://betterstack.com/community/guides/logging/python/python-logging-best-practices/)  
+[A Complete Guide to Pytest Fixtures](https://betterstack.com/community/guides/testing/pytest-fixtures-guide/)  
+[A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)  
+[15 Common Errors in Python and How to Fix Them](https://betterstack.com/community/guides/scaling-python/python-errors/)  
+[A Deep Dive into UV: The Fast Python Package Manager](https://betterstack.com/community/guides/scaling-python/uv-explained/)  
+[A Complete Guide to Timeouts in Python](https://betterstack.com/community/guides/scaling-python/python-timeouts/)  
+[https://betterstack.com/community/guides/scaling-python/python-timeouts/](https://betterstack.com/community/guides/scaling-python/python-debugging/)  
+[A Comprehensive Guide to Profiling in Python](https://betterstack.com/community/guides/scaling-python/profiling-in-python/)  
+[DuckDB for Python: A beginner's guide](https://betterstack.com/community/guides/scaling-python/duckdb-python/)  
+[How To Color Python Logging Output?](https://betterstack.com/community/questions/how-to-color-python-logging-output/)  
+[An Introduction to Python Subprocess](https://betterstack.com/community/guides/scaling-python/python-subprocess/)  
+[Getting Started with Pylint](https://betterstack.com/community/guides/scaling-python/pylint-explained/)  
+[A Complete Guide to Python Type Hints](https://betterstack.com/community/guides/scaling-python/python-type-hints/)  
+[A Comprehensive Guide to Python Logging with Structlog](https://betterstack.com/community/guides/logging/structlog/)  
+[A Comprehensive Guide to Logging in Python](https://betterstack.com/community/guides/logging/how-to-start-logging-with-python/)  
+[Working with YAML Files in Python](https://betterstack.com/community/guides/scaling-python/yaml-files-in-python/)  
+[Working with CSV Files in Python](https://betterstack.com/community/guides/scaling-python/csv-files-in-python/)  
+[Working With JSON Data in Python](https://betterstack.com/community/guides/scaling-nodejs/json-data-in-python/)  
+[Dependency Injection in Python](https://betterstack.com/community/guides/scaling-python/python-dependency-injection/)  
+[Practical Guide to Asynchronous Programming in Python](https://betterstack.com/community/guides/scaling-python/python-async-programming/)  
+[Introduction to Python Generators](https://betterstack.com/community/guides/scaling-python/python-generators/)  
+[]()  
+[]()  
+
+
+
+## pytest
+[pytest](https://docs.pytest.org/en/stable/)  
+[Effective Python Testing With pytest](https://realpython.com/pytest-python-testing/)  
+[A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)  
+[]()  
+[]()  
+
+## match ... case
+[Structural Pattern Matching in Python](https://realpython.com/structural-pattern-matching/)  
+[Structural pattern matching in Python 3.10](https://benhoyt.com/writings/python-pattern-matching/)  
+[]()  
+[]()  
+
+## dataclass
+[Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)  
+[dataclasses](https://docs.python.org/3/library/dataclasses.html)  
+[]()  
+[]()  
+
+## pathlib
+[Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
+[Working With Files in Python](https://realpython.com/working-with-files-in-python/)  
+[pathlib — Object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)  
+[How to Get a List of All Files in a Directory With Python](https://realpython.com/get-all-files-in-directory-python/)  
+[Python's pathlib module](https://www.pythonmorsels.com/pathlib-module/)  
+[A Comprehensive Guide to Using pathlib in Python For File System Manipulation](https://www.datacamp.com/tutorial/comprehensive-tutorial-on-using-pathlib-in-python-for-file-system-manipulation)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## common utility example
 cfg.toml:
 ```toml
