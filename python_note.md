@@ -21,6 +21,30 @@
 []()  
 []()  
 
+## shlex
+[shlex — Parse Shell-style Syntaxes](https://pymotw.com/3/shlex/)  
+[Python 3 Module of the Week](https://pymotw.com/3/index.html#)  
+[shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)  
+[The Python Standard Library](https://docs.python.org/3/library/)  
+[]()  
+```python
+# safely and securely use the subprocess Python module
+subprocess.run(f"mycommand {user} {argument}", shell=True, check=True) # Dangerous
+subprocess.run(shlex.split(f"mycommand {user} {argument}"), shell=True, check=True)
+
+# Python Pipes to Avoid Shells
+def count_lines(website):
+    args = ['curl', website]
+    args2 = ['wc', '-l']
+    process_curl = subprocess.Popen(args, stdout=subprocess.PIPE,
+                                    shell=False)
+    process_wc = subprocess.Popen(args2, stdin=process_curl.stdout,
+                                  stdout=subprocess.PIPE, shell=False)
+    # Allow process_curl to receive a SIGPIPE if process_wc exits.
+    process_curl.stdout.close()
+    return process_wc.communicate()[0]
+```
+
 ## blogs
 [Guides library](https://betterstack.com/community/guides/logging/)  
 [Get Started with Job Scheduling in Python](https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/)  
@@ -1386,8 +1410,39 @@ if __name__ == "__main__":
 [shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)  
 [How to Use Python's Subprocess Module](https://earthly.dev/blog/python-subprocess/)  
 [python-and-pipes](https://lyceum-allotments.github.io/series/)  
+[Working with Python subprocess - Shells, Processes, Streams, Pipes, Redirects and More](https://jimmyg.org/blog/2009/working-with-python-subprocess.html)  
 []()  
 ```python
+"""
+When to use shell=True (and when not to)
+
+1. Default to shell=False: It’s safer, more portable, and avoids shell injection. Pass the command as a list.
+
+2. Use shell=True only when you need shell features:
+	Pipes/redirects/control operators: |, >, <, >>, &&, ||, ;, &
+	Expansions: */? globbing, ~ tilde, $VAR env vars, $(...) command substitution, {} brace expansion
+	Shell builtins/aliases: cd, echo, test, source (POSIX), or Windows builtins like dir, copy, type
+	Platform quirks (Windows): For commands that only exist in cmd.exe, use shell=True or run ['cmd', '/c', '...']
+
+3. Security warning: Never use shell=True with untrusted input. If you must, quote variables (e.g., with shlex.quote)—but prefer avoiding shell=True entirely.
+"""
+
+# safely and securely use the subprocess Python module
+subprocess.run(f"mycommand {user} {argument}", shell=True, check=True) # Dangerous
+subprocess.run(shlex.split(f"mycommand {user} {argument}"), shell=True, check=True)
+
+# Python Pipes to Avoid Shells
+def count_lines(website):
+    args = ['curl', website]
+    args2 = ['wc', '-l']
+    process_curl = subprocess.Popen(args, stdout=subprocess.PIPE,
+                                    shell=False)
+    process_wc = subprocess.Popen(args2, stdin=process_curl.stdout,
+                                  stdout=subprocess.PIPE, shell=False)
+    # Allow process_curl to receive a SIGPIPE if process_wc exits.
+    process_curl.stdout.close()
+    return process_wc.communicate()[0]
+
 # command execution
 import subprocess
 # Simple command execution
