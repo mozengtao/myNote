@@ -2648,6 +2648,8 @@ grep '^[A-Z]' file.txt
 [:digit:]	Digits.
 [:lower:]	Lowercase letters.
 [:upper:]	Uppercase letters.
+[:punct:]
+[:space:]
 
 # quantifiers
 *		Match the preceding item zero or more times.
@@ -2675,11 +2677,41 @@ grep -E 'fatal|error|critical' /var/log/nginx/error.log
 grep -E '(fear)?less' file.txt
 
 # special backslash expressions
-\b		Match a word boundary.
-\<		Match an empty string at the beginning of a word.
-\>		Match an empty string at the end of a word.
-\w		Match a word.
-\s		Match a space.
+\w : Word character [a-zA-Z0-9] OR a _ (underscore)
+\W : [^\w] Inverse of \w, any non-word character
+\s : Spaces, tabs, in some contexts new-lines
+\S : [^\s] Inverse of \s, any non-space character
+\b : Boundary between adjacent word and space, 0-length anchor (Perl regex)
+\B : [^\b] In the middle of a word or multiple spaces, 0-length anchor (Perl regex)
+\< : Boundary at start of word, 0-length anchor
+\> : Boundary at end of word, 0-length anchor
+refer back to an exact copy of a matched (group) using \1, \2, etc..
+
+echo "hello world!" | grep -Po '\<world\>'	# world
+echo "hello world!" | grep -Eo '\<world\>'	# world
+
+echo 'word1 word_2 thirdWord' | grep -E -o '^\w+\s+\w+'	# word1 word_2
+echo 'word1 word_2 thirdWord!?' | grep -E -o '\s\w+\s'	# (space) word_2 (space)
+echo 'word1 word_2 thirdWord!?' | grep -E -o '\S+'		# word1
+														# word_2
+														# thirdWord!?
+echo 'word1 word_2 thirdWord!?' | grep -E -o '.+\<'		# word1 word_2
+
+echo 'word1 word_2 thirdWord!?' | grep -P -o '\b\w+\b'	# word1
+														# word_2
+														# thirdWord
+
+echo 'word1 word_2 thirdWord!?' | grep -E -o '\<\w+\>'	# word1
+														# word_2
+														# thirdWord
+
+echo 'word1 word_2 thirdWord!?' | grep -P -o '\B\w+\B'	# ord
+														# ord_
+														# hirdWor
+
+echo 'blah1 blah2 blah2 blah4?' | grep -E -o '(\w+)\s+\1'				# blah2 blah2
+echo 'blah1 blah2 blah2 blah4?' | grep -E -o '([a-z]+)([0-9])\s+\1\2'	# blah2 blah2
+echo 'ABCDEFGGFEDCBA' | grep -E -o '(\w)(\w)(\w)\3\2\1'					# EFGGFE
 
 # match separate words abject and object
 grep '\b[ao]bject\b' file.txt
