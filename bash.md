@@ -6,9 +6,82 @@
 []()  
 [How to Use Regex in Bash Scripting](https://labex.io/tutorials/shell-how-to-use-regex-in-bash-scripting-392579)  
 [Bash Features](https://www.gnu.org/software/bash/manual/html_node/)  
+[Advanced Bash-Scripting Guide](https://hangar118.sdf.org/p/bash-scripting-guide/)  
+[5 Advanced Bash Scripting Techniques for Linux Users](https://tecadmin.net/advanced-bash-scripting-techniques/)  
+[Advanced Bash Scripting: Part 1](https://www.linode.com/docs/guides/advanced-bash-scripting-1/)  
+[The Ultimate Bash Scripting Tutorial: From Beginner to Advanced](https://dev.to/mohammad1105/the-ultimate-bash-scripting-tutorial-from-beginner-to-advanced-3ipk)  
+[Advanced Bash - More about the Command Line](https://groups.oist.jp/scs/advanced-bash)  
+[12 Advanced Bash Tricks for Writing High-Performance Scripts](https://medium.com/@obaff/12-advanced-bash-tricks-for-writing-high-performance-scripts-d904511be5be)  
+[]()  
+[]()  
+[]()  
 []()  
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
+
+## examples
+[Bash readarray with Examples](https://linuxopsys.com/bash-readarray-with-examples)  
+[]()  
+[]()  
+[]()  
+[]()  
+```bash
+# process substitution
+diff <(ls dir1) <(ls dir2)
+
+# parallel command execution
+cmd1 & cmd 2 & wait
+
+# default value for a variable
+echo "enter your name"
+read name
+name=${name:-Unknown}
+
+# replace if .. then
+[ ! $? -eq 0 ] && { echo "error with rsync"; exit 1; }
+
+# chain multiple conditions
+[[ -z "$v1" && -z "$v2" ]] && { echo "need v1 and v2"; exit 1; }
+
+# use trap to handle script failure
+cleanup() {
+	echo "Cleaning up ..."
+	rm -rf /tmp/tetmpfile
+}
+
+trap cleanup EXIT
+
+# mkfifo for complex IPC
+
+# use readarray instead of manual loops
+readarray -t lines < /var/log/syslog
+for line in "${lines[@]}"; do
+  echo "$line"
+done
+
+#
+readarray -t myArr  < sample.txt
+
+readarray -t myArr < <(seq 5)
+
+readarray myArr  <<< $(cat sample.txt)
+
+config="$(<cfg.toml)"
+
+config="$(cat cfg.toml)"
+
+
+# Use xargs -P for Parallel Execution
+cat hosts.txt | xargs -P 4 -I {} ssh {} 'uptime'
+
+# Avoid cat When You Don’t Need It
+grep "error" file.txt
+
+# Use [[ ... ]] Instead of [ ... ]
+[[ $VAR == "foo" ]]
+
+
+```
 
 # 文件读取
 ```bash
@@ -2539,6 +2612,11 @@ grep -e pattern1 -e pattern2 fileName_or_filePath
 ## 只打印匹配行的匹配字段
 grep -o '(.*)'
 grep -o '([^)]*)'  # 如果单行有多个括号，用于多个匹配的多个分行输出
+
+#
+email="john.doe@example.com"
+domain=$(echo $email | grep -Eo '[^@[:space:]]+\.[^@[:space:]]+$')
+echo "The domain is $domain"	# The domain is example.com
 
 ## 匹配行上下文打印
 grep -A NUM file	# After
