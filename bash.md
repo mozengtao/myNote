@@ -2603,7 +2603,88 @@ The PID of the sleep process was: 62020
 ## grep
 > print lines that match patterns
 [grep(1)](https://www.mankier.com/1/grep)  
+[Regular Expressions in Grep (Regex)](https://linuxize.com/post/regular-expressions-in-grep/)..
+[Regular expressions in grep ( regex ) with examples](https://www.cyberciti.biz/faq/grep-regular-expressions/)..
+[]()..
+[]()..
+[]()..
 ```bash
+## 常用选项
+-E, --extended-regexp
+-q, --quiet, --silent
+-o, --only-matching
+-e PATTERN, --regexp=PATTERN
+-w, --word-regexp
+--color
+i, --ignore-case
+-v, --invert-match
+
+# regex in grep
+3 regular expression syntaxes are supported:
+	1. Basic Regular Expressions (BRE)
+	2. Extended Regular Expressions (ERE)
+	3. Perl Compatible Regular Expressions (PCRE)
+
+# literal match
+grep bash /etc/passwd
+
+# anchoring
+grep '^linux' file.txt
+grep 'linux$' file.txt
+grep '^linux$' file.txt
+
+# match any single character
+grep 'l.nux' file.txt
+
+# match a group of characters
+grep 'l[ai]nux' file.txt
+grep 'co[^l]a' file.txt
+grep '^[A-Z]' file.txt
+
+# predefined classes of characters
+[:alnum:]	Alphanumeric characters.
+[:alpha:]	Alphabetic characters.
+[:blank:]	Space and tab.
+[:digit:]	Digits.
+[:lower:]	Lowercase letters.
+[:upper:]	Uppercase letters.
+
+# quantifiers
+*		Match the preceding item zero or more times.
+?		Match the preceding item zero or one time.
++		Match the preceding item one or more times.
+{n}		Match the preceding item exactly n times.
+{n,}	Match the preceding item at least n times.
+{,m}	Match the preceding item at most m times.
+{n,m}	Match the preceding item from n to m times.
+
+#  match lines that starts with capital letter and ends with either period or comma
+grep -E '^[A-Z].*[.,]$' file.txt
+
+# basci regular expression
+grep 'b\?right' file.txt
+grep 'fatal\|error\|critical' /var/log/nginx/error.log
+
+# extended regular expression
+grep -E 'b?right' file.txt
+grep -E '[[:digit:]]{3,9}' file.txt
+grep -E 'fatal|error|critical' /var/log/nginx/error.log
+
+# group patterns together and reference them as one item
+# match both “fearless” and "less"
+grep -E '(fear)?less' file.txt
+
+# special backslash expressions
+\b		Match a word boundary.
+\<		Match an empty string at the beginning of a word.
+\>		Match an empty string at the end of a word.
+\w		Match a word.
+\s		Match a space.
+
+# match separate words abject and object
+grep '\b[ao]bject\b' file.txt
+
+
 ## Grep Multiple Patterns
 grep 'pattern1\|pattern2' fileName_or_filePath
 grep -E 'pattern1|pattern2' fileName_or_filePath
@@ -2623,13 +2704,23 @@ grep -A NUM file	# After
 grep -B NUM file	# Before
 grep -C NUM file	# Center
 
-## 常用选项
--E, --extended-regexp
--q, --quiet, --silent
--o, --only-matching
--e PATTERN, --regexp=PATTERN
--w, --word-regexp
---color
+grep 'vivek' /etc/passwd
+grep -w '^vivek' /etc/passwd
+grep -i -w 'vivek' /etc/passwd
+grep -E -i -w 'vivek|raj' /etc/passwd
+grep -E -i '^(linux|unix)' filename
+grep '[vV]ivek' filename
+grep '[vV][iI][Vv][Ee][kK]' filename
+grep -w '[vV]ivek[0-9]' filename
+grep 'foo[0-9][0-9]' filename
+grep '[vV]ivek[^0-9]' test
+grep -E '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}' file
+grep --color regex filename
+
+grep '^foo' filename
+grep 'foo$' filename
+grep '^foo$' filename
+grep '^$' filename
 ```
 
 ## strip
