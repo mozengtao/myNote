@@ -1,6 +1,6 @@
 [Python Tips](https://book.pythontips.com/en/latest/index.html)  
 [**14 Advanced Python Features**](https://blog.edward-li.com/tech/advanced-python-features/)  
-[]()  
+[python beginner guide](https://dagster.io/blog/python-type-hinting)  
 []()  
 []()  
 [Python Like You Mean It](https://www.pythonlikeyoumeanit.com/index.html)  
@@ -28,11 +28,217 @@
 []()  
 []()  
 []()  
+
+
+## list, set, dict, tuple
+[Python Data Structures: Lists, Dictionaries, Sets, Tuples](https://www.dataquest.io/blog/data-structures-in-python/)  
+[]()  
+[]()  
+[Sets in Python](https://realpython.com/python-sets/)  
+[]()  
+[]()  
+[Dictionaries in Python](https://realpython.com/python-dicts/)  
+[Python Dictionary Comprehensions: How and When to Use Them](https://realpython.com/python-dictionary-comprehension/)  
+[Python Dictionaries: A Comprehensive Tutorial](https://www.dataquest.io/blog/python-dictionaries/)  
+[]()  
+[]()  
+[Python's tuple Data Type: A Deep Dive With Examples](https://realpython.com/python-tuple/)  
+[Python Tuples: A Step-by-Step Tutorial](https://www.dataquest.io/blog/python-tuples/)  
+[]()  
+[]()  
+[]()  
+[Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)  
+[Python List Tutorial: Lists, Loops, and More!](https://www.dataquest.io/blog/python-list-tutorial/)  
+[Tutorial: Demystifying Python Lists](https://www.dataquest.io/blog/tutorial-demystifying-python-lists/)  
+[]()  
+[]()  
+[Lists vs Tuples in Python](https://realpython.com/python-lists-tuples/)  
+[]()  
+[]()  
+[How to Copy Objects in Python: Shallow vs Deep Copy Explained](https://realpython.com/python-copy/)  
+[]()  
+[]()  
+
+## Enum
+[Build Enumerations of Constants With Python's Enum](https://realpython.com/python-enum/)  
+[enum — Support for enumerations](https://docs.python.org/3/library/enum.html)  
+[Python Enums: Effective Constant Management Techniques](https://arjancodes.com/blog/python-enum-classes-for-managing-constants/)  
 []()  
 []()  
 []()  
 []()  
 []()  
+[]()  
+
+
+## typing
+[Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  
+[Python Union Types: Guide to New & Old Syntax with Examples](https://www.python.digibeatrix.com/en/functions-classes/python-union-type-complete-guide/)  
+[Type Hinting in Python](https://dagster.io/blog/python-type-hinting)  
+[]()  
+[]()  
+
+
+## metaclass
+[Metaprogramming with Metaclasses in Python](https://www.geeksforgeeks.org/python/metaprogramming-metaclasses-python/)  
+[]()  
+[]()  
+[]()  
+
+
+## descriptors
+[Python Descriptors: An Introduction](https://realpython.com/python-descriptors/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
+## protocols
+[Python Protocols: Leveraging Structural Subtyping](https://realpython.com/python-protocol/)  
+[Building Implicit Interfaces in Python with Protocol Classes](https://andrewbrookins.com/technology/building-implicit-interfaces-in-python-with-protocol-classes/)  
+[Protocols in Python](https://til.simonwillison.net/python/protocols)  
+[Protocols: Default Methods, Inheritance, and More](https://www.turingtaco.com/protocols-default-methods-inheritance-and-more/)  
+[]()  
+[]()  
+```python
+# 1
+"""
+protocol_classes.py: An example of using protocol classes.
+"""
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any
+from typing import Protocol
+
+
+class Direction(Enum):
+    N = 'n'
+    E = 'e'
+    S = 's'
+    W = 'w'
+    NE = 'ne'
+    SE = 'se'
+    SW = 'sw'
+    NW = 'nw'
+
+
+@dataclass
+class Movement:
+    """A movement by an object in a direction."""
+    obj: Any
+    distance_meters: int
+    direction: Direction
+
+
+class Waiter(Protocol):
+    def wait(self, actions_spent: int, direction: Direction) -> Movement:
+        """A Waiter can wait"""
+
+
+class Flyer(Protocol):
+    def fly(self, actions_spent: int, direction: Direction) -> Movement:
+        """A Flyer can fly"""
+
+
+class Runner(Protocol):
+    def run(self, actions_spent: int, direction: Direction) -> Movement:
+        """A Runner can run"""
+
+
+class BaseHero:
+    @property
+    def max_speed(self) -> int:
+        return 1
+
+    def wait(self, actions_spent: int, direction: Direction) -> Movement:
+        return Movement(obj=self, distance_meters=0, direction=direction)
+
+
+class RunningHero(BaseHero):
+    """This hero can run, which is better than nothing."""
+    @property
+    def run_speed(self) -> int:
+        return self.max_speed * 2
+
+    def run(self, actions_spent: int, direction: Direction) -> Movement:
+        return Movement(obj=self,
+                        distance_meters=self.run_speed * actions_spent,
+                        direction=direction)
+
+
+class FlyingHero(BaseHero):
+    """This hero can fly, which is BEAST."""
+    @property
+    def fly_speed(self) -> int:
+        return self.max_speed * 5
+
+    def fly(self, actions_spent: int, direction: Direction) -> Movement:
+        return Movement(obj=self,
+                        distance_meters=self.fly_speed * actions_spent,
+                        direction=direction)
+
+
+class Board:
+    """An imaginary game board that doesn't do anything."""
+    def make_wait(self, obj: Waiter, direction: Direction,
+                  actions_spent: int) -> Movement:
+        """Make an object wait.
+
+        ``obj`` is the object to make wait
+        ``actions`` is the number of consecutive actions taken to wait
+
+        Returns the total distance in meters that ``piece`` moved on the board
+        while waiting (could happen...).
+        """
+        return obj.wait(actions_spent, direction)
+
+    def make_run(self, obj: Runner, direction: Direction,
+                 actions_spent: int) -> Movement:
+        """Make an object run.
+
+        ``obj`` is the object to make run
+        ``actions`` is the number of consecutive actions taken to move
+
+        Returns the total distance in meters that ``obj`` moved on the board.
+        """
+        return obj.run(actions_spent, direction)
+
+    def make_fly(self, obj: Flyer, direction: Direction,
+                 actions_spent: int) -> Movement:
+        """Make an object fly.
+
+        ``obj`` is the object to make fly
+        ``actions`` is the number of consecutive actions taken to move
+
+        Returns the total distance in meters that ``obj`` moved on the board.
+        """
+        return obj.fly(actions_spent, direction)
+
+
+def main() -> None:
+    board = Board()
+    waiter_move = board.make_wait(BaseHero(), Direction.N, 2)
+    runner_move = board.make_run(RunningHero(), Direction.NW, 2)
+    flyer_move = board.make_fly(FlyingHero(), Direction.S, 2)
+    heroes = (('Hero', 'Total spaces moved (M)'),
+              ('a waiting hero', waiter_move.distance_meters),
+              ('a running hero', runner_move.distance_meters),
+              ('a flying hero', flyer_move.distance_meters))
+    print('\n')
+    for description, movement in heroes:
+        print("\t{:<22} {:>25}".format(description, movement))
+
+
+if __name__ == '__main__':
+    main()
+
+# 2
+
+```
 
 ## function overloading
 [The Correct Way to Overload Functions in Python](https://martinheinz.dev/blog/50)  
@@ -71,7 +277,9 @@ def count_lines(website):
 ```
 
 ## blogs
-[Guides library](https://betterstack.com/community/guides/logging/)  
+[**Programming Tutorials**](https://krython.com/tutorials/category/python/)  
+[]()  
+[**Guides library**](https://betterstack.com/community/guides/logging/)  
 [Get Started with Job Scheduling in Python](https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/)  
 [https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/](https://betterstack.com/community/guides/logging/python/python-logging-best-practices/)  
 [A Complete Guide to Pytest Fixtures](https://betterstack.com/community/guides/testing/pytest-fixtures-guide/)  
@@ -717,6 +925,12 @@ if __name__ == "__main__":
 ```
 
 ## OOP
+[Python OOP](https://www.pythontutorial.net/python-oop/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 OOP is a paradigm that provides a means of structuring programs so that properties and behaviors are bundled into individual objects.
 1.**encapsulation**:bundle data (attributes) and behaviors (methods) within a class to create a cohesive unit, it helps maintain data integrity and promotes modular, secure code
 2.**inheritance**: allows a class to inherit properties and behaviors from another class, it helps reduce code duplication and promotes code reuse
