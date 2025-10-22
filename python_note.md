@@ -1,3 +1,10 @@
+[**python-course.eu**](https://python-course.eu/)  
+[Python-100-Days](https://github.com/jackfrued/Python-100-Days/tree/master)  
+[100-days-of-code-python](https://github.com/phillipai/100-days-of-code-python/tree/main)  
+[100DaysOfCode](https://github.com/b-tomi/100DaysOfCode/tree/master)  
+[]()  
+[]()  
+
 [Python Tips](https://book.pythontips.com/en/latest/index.html)  
 [**14 Advanced Python Features**](https://blog.edward-li.com/tech/advanced-python-features/)  
 [python beginner guide](https://dagster.io/blog/python-type-hinting)  
@@ -323,6 +330,16 @@ def count_lines(website):
 ## dataclass
 [Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)  
 [dataclasses](https://docs.python.org/3/library/dataclasses.html)  
+[Python Data Classes: A Comprehensive Tutorial](https://www.datacamp.com/tutorial/python-data-classes)  
+[How to Use Python Data Classes (A Beginner’s Guide)](https://www.dataquest.io/blog/how-to-use-python-data-classes/)  
+[dataclasses](https://realpython.com/ref/stdlib/dataclasses/)  
+[Let's Learn More About Python Data Classes](https://earthly.dev/blog/more-on-python-data-classes/)  
+[Customizing dataclass initialization](https://www.pythonmorsels.com/customizing-dataclass-initialization/)  
+[python dataclass 教学：轻松定义资料类别](https://haosquare.com/python-dataclass/)  
+[什么是dataclass](https://www.maxlist.xyz/2022/04/30/python-dataclasses/)  
+[Python Module Tutorial - dataclasses](https://myapollo.com.tw/en/blog/python-dataclasses/)  
+[]()  
+[]()  
 []()  
 []()  
 
