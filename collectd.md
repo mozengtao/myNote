@@ -668,6 +668,618 @@ sudo collectd -C /etc/collectd/collectd.conf -f
 | `simple_write`    | Metric consumption         | `plugin_register_write()`          |
 | `simple_shutdown` | Cleanup                    | `plugin_register_shutdown()`       |
 
+## collectd 的核心运行机制简化版
+| 模块     | 示例函数                         | Collectd 对应逻辑                 |
+| ------  | -------------------------------- | -------------------------------  |
+| 插件管理 | `register_*()`                   | `plugin_register_*()`            |
+| 调度线程 | `scheduler_thread()`             | Collectd 的 `plugin_read_thread` |
+| 采集间隔 | `interval`                       | 每个插件的 `Interval` 设置         |
+| 生命周期 | `init_all()` / `shutdown_all()`  | 插件初始化与退出钩子               |
+| 动态加载 | `dlopen()` + `module_register()` | `plugin_load_all()`              |
+
+- dir structure
+```
+plugin/
+├── main
+├── main.c
+└── plugins
+    ├── plugin_a.c
+    ├── plugin_b.c
+```
+- c code
+```c
+// main.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <dlfcn.h>
+#include <dirent.h>
+#include <sys/stat.h>
+
+typedef void (*init_cb_t)(void);
+typedef void (*read_cb_t)(void);
+typedef void (*write_cb_t)(const char *);
+typedef void (*shutdown_cb_t)(void);
+
+typedef struct plugin_s
+{
+	char name[64];
+	init_cb_t init;
+	read_cb_t read;
+	write_cb_t write;
+	shutdown_cb_t shutdown;
+	int interval; // 采集周期 (秒)
+	time_t last_run;
+	struct plugin_s *next;
+} plugin_t;
+
+static plugin_t *plugins = NULL;
+static int running = 1;
+
+// ---------------- 插件注册接口 ----------------
+void register_read(const char *name, read_cb_t cb)
+{
+	plugin_t *p = malloc(sizeof(plugin_t));
+	memset(p, 0, sizeof(plugin_t));
+	strncpy(p->name, name, sizeof(p->name) - 1);
+	p->read = cb;
+	p->interval = 5; // 默认 5 秒
+	p->next = plugins;
+	plugins = p;
+	printf("[core] Registered read() plugin: %s\n", name);
+}
+
+void register_write(const char *name, write_cb_t cb)
+{
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (strcmp(p->name, name) == 0)
+		{
+			p->write = cb;
+			printf("[core] Registered write() for %s\n", name);
+			return;
+		}
+	}
+}
+
+void register_init(const char *name, init_cb_t cb)
+{
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (strcmp(p->name, name) == 0)
+		{
+			p->init = cb;
+			printf("[core] Registered init() for %s\n", name);
+			return;
+		}
+	}
+}
+
+void register_shutdown(const char *name, shutdown_cb_t cb)
+{
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (strcmp(p->name, name) == 0)
+		{
+			p->shutdown = cb;
+			printf("[core] Registered shutdown() for %s\n", name);
+			return;
+		}
+	}
+}
+
+void register_interval(const char *name, int interval)
+{
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (strcmp(p->name, name) == 0)
+		{
+			p->interval = interval;
+			printf("[core] Set interval=%d for %s\n", interval, name);
+			return;
+		}
+	}
+}
+
+// ---------------- 生命周期阶段 ----------------
+void init_all(void)
+{
+	printf("\n[core] === init_all() ===\n");
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (p->init)
+		{
+			printf("[core] Init plugin: %s\n", p->name);
+			p->init();
+		}
+	}
+}
+
+void shutdown_all(void)
+{
+	printf("\n[core] === shutdown_all() ===\n");
+	for (plugin_t *p = plugins; p; p = p->next)
+	{
+		if (p->shutdown)
+		{
+			printf("[core] Shutdown plugin: %s\n", p->name);
+			p->shutdown();
+		}
+	}
+}
+
+// ---------------- 调度线程 ----------------
+void *scheduler_thread(void *arg)
+{
+	printf("[core] Scheduler thread started.\n");
+	while (running)
+	{
+		time_t now = time(NULL);
+		for (plugin_t *p = plugins; p; p = p->next)
+		{
+			if (!p->read)
+				continue;
+			if (difftime(now, p->last_run) >= p->interval)
+			{
+				printf("[core] Running %s.read()\n", p->name);
+				p->read();
+				p->last_run = now;
+			}
+		}
+		sleep(1);
+	}
+	return NULL;
+}
+
+// ---------------- 动态加载 ----------------
+void load_all_plugins(const char *dirpath)
+{
+	DIR *dir = opendir(dirpath);
+	if (!dir)
+	{
+		perror("opendir");
+		return;
+	}
+
+	struct dirent *ent;
+	while ((ent = readdir(dir)) != NULL)
+	{
+		if (!strstr(ent->d_name, ".so"))
+			continue;
+
+		char path[512];
+		snprintf(path, sizeof(path), "%s/%s", dirpath, ent->d_name);
+
+		struct stat st;
+		if (stat(path, &st) != 0 || !S_ISREG(st.st_mode))
+			continue;
+
+		printf("[core] Loading plugin: %s\n", path);
+		void *handle = dlopen(path, RTLD_NOW | RTLD_GLOBAL);
+		if (!handle)
+		{
+			fprintf(stderr, "dlopen failed: %s\n", dlerror());
+			continue;
+		}
+
+		void (*module_register)(void) = dlsym(handle, "module_register");
+		if (!module_register)
+		{
+			fprintf(stderr, "No module_register() in %s\n", path);
+			dlclose(handle);
+			continue;
+		}
+
+		module_register();
+	}
+	closedir(dir);
+}
+
+// ---------------- 主程序入口 ----------------
+int main(void)
+{
+	printf("[core] Scanning and loading all plugins...\n");
+	load_all_plugins("./plugins");
+
+	init_all();
+
+	pthread_t tid;
+	pthread_create(&tid, NULL, scheduler_thread, NULL);
+
+	// 模拟主线程的 write() 操作
+	for (int i = 0; i < 3; i++)
+	{
+		printf("\n[core] === main loop iteration %d ===\n", i + 1);
+		for (plugin_t *p = plugins; p; p = p->next)
+		{
+			if (p->write)
+				p->write("data from core");
+		}
+		sleep(5);
+	}
+
+	running = 0;
+	pthread_join(tid, NULL);
+
+	shutdown_all();
+	return 0;
+}
+
+// plugins/plugin_a.c
+#include <stdio.h>
+
+void register_init(const char *name, void (*cb)(void));
+void register_read(const char *name, void (*cb)(void));
+void register_write(const char *name, void (*cb)(const char *));
+void register_shutdown(const char *name, void (*cb)(void));
+void register_interval(const char *name, int interval);
+
+static void init_cb(void)
+{
+	printf("[plugin_a] init_cb() setup complete\n");
+}
+
+static void read_cb(void)
+{
+	printf("[plugin_a] read_cb() collecting metrics...\n");
+}
+
+static void write_cb(const char *data)
+{
+	printf("[plugin_a] write_cb() sending: %s\n", data);
+}
+
+static void shutdown_cb(void)
+{
+	printf("[plugin_a] shutdown_cb() cleanup done\n");
+}
+
+void module_register(void)
+{
+	printf("[plugin_a] module_register()\n");
+	register_read("plugin_a", read_cb);
+	register_write("plugin_a", write_cb);
+	register_init("plugin_a", init_cb);
+	register_shutdown("plugin_a", shutdown_cb);
+	register_interval("plugin_a", 3); // 每 3 秒执行一次 read
+}
+
+// plugins/plugin_b.c
+#include <stdio.h>
+
+void register_read(const char *name, void (*cb)(void));
+void register_init(const char *name, void (*cb)(void));
+void register_shutdown(const char *name, void (*cb)(void));
+void register_interval(const char *name, int interval);
+
+static void init_cb(void)
+{
+	printf("[plugin_b] init_cb() ready\n");
+}
+
+static void read_cb(void)
+{
+	printf("[plugin_b] read_cb() periodic task running\n");
+}
+
+static void shutdown_cb(void)
+{
+	printf("[plugin_b] shutdown_cb() finished\n");
+}
+
+void module_register(void)
+{
+	printf("[plugin_b] module_register()\n");
+	register_read("plugin_b", read_cb);
+	register_init("plugin_b", init_cb);
+	register_shutdown("plugin_b", shutdown_cb);
+	register_interval("plugin_b", 5); // 每 5 秒执行一次 read
+}
+```
+
+- compile and run
+```bash
+mkdir -p plugins
+
+gcc -fPIC -shared -o plugins/plugin_a.so plugins/plugin_a.c
+gcc -fPIC -shared -o plugins/plugin_b.so plugins/plugin_b.c
+gcc -rdynamic -o main main.c -ldl -pthread
+
+./main
+
+```
+
+## 增强版本: 插件自定义配置文件驱动（JSON DB）+ 动态注册指标（metrics）机制
+| 模块                               | 对应 Collectd 概念              | 功能说明                 |
+| -------------------------------- | -------------------------------- | ----------------------   |
+| `metrics.db` / JSON              | `types.db` + `collectd.conf`     | 用户配置 metric 类型与周期 |
+| `register_metric()`              | `plugin_register_complex_read()` | 插件动态注册要采集的 metric |
+| `scheduler_thread()`             | Collectd read 调度线程            | 按 interval 执行采集       |
+| JSON 配置文件                     | 各插件独立配置                    | 支持插件自定义配置行为       |
+| `dlopen()` + `module_register()` | 动态插件系统                      | 按需加载模块                |
+
+- dir structure
+```
+plugin/
+├── main.c
+└── plugins
+    ├── plugin_cpu.c
+    ├── plugin_cpu.json
+    ├── plugin_temp.c
+    └── plugin_temp.json
+```
+
+- main.c, plugin_cpu.c, plugin_temp.c
+```c
+// main.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <dlfcn.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <time.h>
+
+typedef void (*read_cb_t)(const char *metric);
+typedef void (*register_metric_cb_t)(const char *plugin, const char *metric, const char *type, int interval);
+
+typedef struct metric_s {
+    char name[64];
+    char plugin[64];
+    char type[32];
+    int interval;
+    time_t last_run;
+    struct metric_s *next;
+} metric_t;
+
+typedef struct plugin_s {
+    char name[64];
+    read_cb_t read;
+    struct plugin_s *next;
+} plugin_t;
+
+static plugin_t *plugins = NULL;
+static metric_t *metrics = NULL;
+static int running = 1;
+
+// ---------------- 注册接口 ----------------
+void register_plugin_read(const char *name, read_cb_t cb) {
+    plugin_t *p = malloc(sizeof(plugin_t));
+    memset(p, 0, sizeof(plugin_t));
+    strncpy(p->name, name, sizeof(p->name) - 1);
+    p->read = cb;
+    p->next = plugins;
+    plugins = p;
+    printf("[core] Registered plugin: %s\n", name);
+}
+
+void register_metric(const char *plugin, const char *metric, const char *type, int interval) {
+    metric_t *m = malloc(sizeof(metric_t));
+    memset(m, 0, sizeof(metric_t));
+    strncpy(m->plugin, plugin, sizeof(m->plugin) - 1);
+    strncpy(m->name, metric, sizeof(m->name) - 1);
+    strncpy(m->type, type, sizeof(m->type) - 1);
+    m->interval = interval;
+    m->next = metrics;
+    metrics = m;
+    printf("[core] Registered metric: %-12s (plugin=%s, type=%s, interval=%d)\n",
+           m->name, m->plugin, m->type, m->interval);
+}
+
+// ---------------- JSON 解析（极简实现） ----------------
+// 因为不引入外部库，我们用简单字符串匹配解析 json 配置
+char *read_file(const char *path) {
+    FILE *f = fopen(path, "r");
+    if (!f) return NULL;
+    fseek(f, 0, SEEK_END);
+    long len = ftell(f);
+    rewind(f);
+    char *buf = malloc(len + 1);
+    fread(buf, 1, len, f);
+    buf[len] = 0;
+    fclose(f);
+    return buf;
+}
+
+void parse_json_and_register(const char *plugin_name, const char *json_path, register_metric_cb_t cb) {
+    char *data = read_file(json_path);
+    if (!data) {
+        fprintf(stderr, "[core] Cannot open %s\n", json_path);
+        return;
+    }
+    printf("[core] Parsing JSON config for %s ...\n", plugin_name);
+
+    char *metrics_array = strstr(data, "\"metrics\"");
+    if (!metrics_array) {
+        free(data);
+        return;
+    }
+
+    char *p = metrics_array;
+    while ((p = strstr(p, "{"))) {
+        char *end = strstr(p, "}");
+        if (!end) break;
+
+        char block[512] = {0};
+        strncpy(block, p, end - p);
+
+        char metric[64] = {0}, type[32] = {0};
+        int interval = 0;
+
+        sscanf(block, "%*[^\"]\"name\"%*[^\"]\"%63[^\"]", metric);
+        sscanf(block, "%*[^\"]\"type\"%*[^\"]\"%31[^\"]", type);
+        sscanf(block, "%*[^\"]\"interval\"%*[^0-9]%d", &interval);
+
+        if (strlen(metric) > 0)
+            cb(plugin_name, metric, type, interval);
+
+        p = end + 1;
+    }
+    free(data);
+}
+
+// ---------------- 调度线程 ----------------
+void *scheduler_thread(void *arg) {
+    printf("[core] Scheduler started.\n");
+    while (running) {
+        time_t now = time(NULL);
+        for (metric_t *m = metrics; m; m = m->next) {
+            if (difftime(now, m->last_run) < m->interval)
+                continue;
+            m->last_run = now;
+
+            for (plugin_t *p = plugins; p; p = p->next) {
+                if (strcmp(p->name, m->plugin) == 0 && p->read) {
+                    printf("[core] Dispatching %s.read(%s)\n", p->name, m->name);
+                    p->read(m->name);
+                }
+            }
+        }
+        sleep(1);
+    }
+    return NULL;
+}
+
+// ---------------- 插件加载 ----------------
+void load_all_plugins(const char *dirpath) {
+    DIR *dir = opendir(dirpath);
+    if (!dir) {
+        perror("opendir");
+        return;
+    }
+
+    struct dirent *ent;
+    while ((ent = readdir(dir)) != NULL) {
+        if (!strstr(ent->d_name, ".so"))
+            continue;
+
+        char so_path[512], json_path[512];
+        snprintf(so_path, sizeof(so_path), "%s/%s", dirpath, ent->d_name);
+        snprintf(json_path, sizeof(json_path), "%s/%.*s.json", dirpath,
+                 (int)(strchr(ent->d_name, '.') - ent->d_name), ent->d_name);
+
+        printf("[core] Loading plugin: %s\n", so_path);
+        void *handle = dlopen(so_path, RTLD_NOW | RTLD_GLOBAL);
+        if (!handle) {
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
+            continue;
+        }
+
+        void (*module_register)(void) = dlsym(handle, "module_register");
+        if (!module_register) {
+            fprintf(stderr, "No module_register() in %s\n", so_path);
+            dlclose(handle);
+            continue;
+        }
+
+        // 调用插件注册函数
+        module_register();
+
+        // 读取对应的 json 配置文件
+        char plugin_name[128];
+        sscanf(ent->d_name, "%127[^.]", plugin_name);
+        parse_json_and_register(plugin_name, json_path, register_metric);
+    }
+    closedir(dir);
+}
+
+// ---------------- 主程序入口 ----------------
+int main(void) {
+    printf("[core] === JSON-driven Plugin Framework ===\n");
+
+    load_all_plugins("./plugins");
+
+    pthread_t tid;
+    pthread_create(&tid, NULL, scheduler_thread, NULL);
+
+    sleep(12);
+    running = 0;
+    pthread_join(tid, NULL);
+
+    printf("[core] === Shutdown complete ===\n");
+    return 0;
+}
+
+// plugins/plugin_cpu.c
+#include <stdio.h>
+#include <string.h>
+
+void register_plugin_read(const char *name, void (*cb)(const char *));
+void register_metric(const char *plugin, const char *metric, const char *type, int interval);
+
+static void cpu_read(const char *metric_name) {
+    if (strcmp(metric_name, "cpu_usage") == 0)
+        printf("[plugin_cpu] metric=%s => %.2f%%\n", metric_name, 42.7);
+    else if (strcmp(metric_name, "mem_free") == 0)
+        printf("[plugin_cpu] metric=%s => %.2fMB\n", metric_name, 2048.0);
+    else
+        printf("[plugin_cpu] Unknown metric: %s\n", metric_name);
+}
+
+void module_register(void) {
+    printf("[plugin_cpu] module_register()\n");
+    register_plugin_read("plugin_cpu", cpu_read);
+}
+
+// plugins/plugin_temp.c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void register_plugin_read(const char *name, void (*cb)(const char *));
+void register_metric(const char *plugin, const char *metric, const char *type, int interval);
+
+static void temp_read(const char *metric_name) {
+    if (strcmp(metric_name, "temp_sensor") == 0)
+        printf("[plugin_temp] metric=%s => %.2f°C\n", metric_name, 25.0 + rand() % 5);
+    else if (strcmp(metric_name, "humidity") == 0)
+        printf("[plugin_temp] metric=%s => %.1f%%\n", metric_name, 40.0 + rand() % 10);
+}
+
+void module_register(void) {
+    printf("[plugin_temp] module_register()\n");
+    register_plugin_read("plugin_temp", temp_read);
+}
+```
+
+- plugin_cpu.json, plugin_temp.json
+``json
+// plugin_cpu.json
+{
+  "plugin": "plugin_cpu",
+  "metrics": [
+    { "name": "cpu_usage", "type": "gauge", "interval": 2, "description": "CPU usage percentage" },
+    { "name": "mem_free",  "type": "gauge", "interval": 5, "description": "Free memory in MB" }
+  ]
+}
+
+// plugin_temp.json
+{
+  "plugin": "plugin_temp",
+  "metrics": [
+    { "name": "temp_sensor", "type": "gauge", "interval": 3, "description": "Temperature in Celsius" },
+    { "name": "humidity", "type": "gauge", "interval": 4, "description": "Relative humidity in %" }
+  ]
+}
+``
+
+- compile and run
+```bash
+mkdir -p plugins
+
+gcc -fPIC -shared -o plugins/plugin_cpu.so plugins/plugin_cpu.c
+gcc -fPIC -shared -o plugins/plugin_temp.so plugins/plugin_temp.c
+gcc -rdynamic -o main main.c -ldl -pthread
+
+./main
+
+```
+
+## collectd 选项
 ```bash
 # collectd -h
 Usage: collectd [OPTIONS]

@@ -2247,10 +2247,39 @@ int main(void)
 
 
 ## 动态链接 和 静态链接
-[Program Library HOWTO](https://tldp.org/HOWTO/Program-Library-HOWTO/index.html)  
+[**Program Library HOWTO**](https://tldp.org/HOWTO/Program-Library-HOWTO/index.html)  
+[C++ dlopen mini HOWTO](https://tldp.org/HOWTO/C++-dlopen/)  
+[Shared libraries with GCC on Linux](https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html)  
+[]()  
+[]()  
 [How dynamic linking for modular libraries works on Linux](https://opensource.com/article/22/5/dynamic-linking-modular-libraries-linux)  
 [How to handle dynamic and static libraries in Linux](https://opensource.com/article/20/6/linux-libraries)  
 ```c
+When we link an application against a shared library, the linker leaves some stubs (unresolved symbols) which need to be filled by dynamic linker at run time or at application loading time.
+
+Loading of a shared library is of two types::
+1. Dynamically linked libraries
+2. Dynamically loaded libraries
+
+// Dynamically linked libraries
+gcc -c -Wall -Werror -fpic foo.c		// Compiling with Position Independent Code
+gcc -shared -o libfoo.so foo.o			// Creating a shared library from an object file
+gcc -L/home/username/foo -Wall -o test main.c -lfoo				// Linking with a shared library
+
+// 1 use LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/username/foo:$LD_LIBRARY_PATH		// Making the library available at runtime
+./test
+
+// 2 use rpath
+unset LD_LIBRARY_PATH
+gcc -L/home/username/foo -Wl,-rpath=/home/username/foo -Wall -o test main.c -lfoo
+./test
+
+//  Dynamically loaded libraries
+Useful for creating a "plug-in" architecture. 
+The program takes full control by calling functions with the library. This is done using dlopen(), dlsym(), dlclose().
+
+
 // 动态链接
 // Locating a shared object during compilation
 gcc -I ./include -c src/demo.c				// -I option: adds a directory to GCC's search path for header files
