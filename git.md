@@ -1,3 +1,114 @@
+## bash example
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [ "$#" -lt 3 ]; then
+  printf 'Usage: %s <JIRA_TYPE(bug|story)> <JIRA_ID> <REPOS(cms, docsis-mac, ...)>\n' "$0" >&2
+  exit 1
+fi
+
+declare -a vcmts_repos=("cms" "meta-vcore")
+
+in_array() {
+    local needle=$1
+    shift
+    local haystack=("$@")
+
+    for e in "${haystack[@]}"; do
+        if [[ $e == "$needle" ]]; then
+            return 0  # found
+        fi
+    done
+    return 1  # not found
+}
+
+JIRA_TYPE="$1"
+JIRA_ID="$2"
+shift
+shift
+if [[ "$JIRA_TYPE" != "bug" && "$JIRA_TYPE" != "story" ]]; then
+  printf 'Invalid JIRA_TYPE: %s. Must be "bug" or "story".\n' "$JIRA_TYPE" >&2
+  exit 1
+fi
+
+# Process repositories
+declare -a repos
+while [[ "$#" -gt 0 ]]; do
+  if ! in_array "$1" "${vcmts_repos[@]}"; then
+      echo "Unsupported repository: $1"
+      exit 1
+  fi
+  repos+=("$1")
+  shift
+done
+
+REPO_DIR="/home/morrism/code"
+REVIEW_BRANCH="morris/story/$JIRA_ID"
+SANDBOX_BRANCH="sandbox/morrism/$JIRA_ID"
+
+for repo in "${repos[@]}"; do
+  # Verify repository exists
+  repo_path="$REPO_DIR/$repo"
+  if [ ! -d "$repo_path" ]; then
+    printf '%s does not exist\n' "$repo_path" >&2
+    exit 1
+  fi
+
+  pushd "$repo_path" > /dev/null
+
+  # Ensure there is no uncommitted changes
+  if ! git diff --quiet --exit-code || ! git diff --cached --quiet --exit-code; then
+    printf 'Uncommitted changes exist in %s. Please commit or stash them before running this script.\n' "$repo"
+    popd > /dev/null
+    exit 1
+  fi
+
+  # Ensure review branch exists locally
+  if ! git rev-parse --verify --quiet "refs/heads/$REVIEW_BRANCH"; then
+    printf 'Review branch %s does not exist in %s\n' "$REVIEW_BRANCH" "$repo"
+    popd > /dev/null
+    exit 1
+  fi
+
+  # Ensure we are on review branch  if not
+  current_branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [ "$current_branch" != "$REVIEW_BRANCH" ]; then
+    printf 'Checking out %s in %s\n' "$REVIEW_BRANCH" "$repo"
+    git checkout "$REVIEW_BRANCH"
+  fi
+
+  # If sandbox branch exists, delete it
+  if git show-ref --verify --quiet "refs/heads/$SANDBOX_BRANCH"; then
+    printf 'Deleting %s and recreating from %s in %s\n' "$SANDBOX_BRANCH" "$REVIEW_BRANCH" "$repo"
+    git branch -D "$SANDBOX_BRANCH"
+  else
+    printf 'Creating %s from %s in %s\n' "$SANDBOX_BRANCH" "$REVIEW_BRANCH" "$repo"
+  fi
+
+  # Create sandbox branch from review branch
+  git checkout -b "$SANDBOX_BRANCH" "$REVIEW_BRANCH"
+
+  # If the intent was to re-create the most recent commit only, a safer approach is:
+  # git reset --mixed HEAD~1
+  # if git diff --quiet --exit-code; then
+  #   git commit --allow-empty -m "$(git log -1 --pretty=%s)"
+  # else
+  #   git commit -am "$(git log -1 --pretty=%s)"
+  # fi
+
+  # re-create the most recent commit
+  commit_msg="$(git log -1 --pretty=%s)"
+  git reset --mixed HEAD~1
+  git commit -am "$commit_msg"
+
+  git push -f origin "$SANDBOX_BRANCH"
+  popd > /dev/null
+done
+```
+
+## Basic
 ```bash
 
 Git管理的是修改，而不是文件
