@@ -51,6 +51,7 @@ memory            used:GAUGE:0:1099511627776, free:GAUGE:0:1099511627776
 if_octets         rx:DERIVE:0:U, tx:DERIVE:0:U
 
 // 格式说明
+data-set ds-name:ds-type:min:max [,...]
 <type_name> <ds_name>:<ds_type>:<min>:<max> [,...]
 
 // 多值 metric

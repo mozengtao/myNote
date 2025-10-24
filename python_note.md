@@ -76,7 +76,75 @@
 []()  
 []()  
 []()  
+```python
+from enum import Enum, auto, unique
 
+# 1
+class Job(Enum):
+    ENGINEER = 1
+    PRODUCT_MANAGER = 2
+    DATA_SCIENTIST = 3
+
+print("1", Job.ENGINEER)
+print("2", type(Job.ENGINEER))
+print("3", Job.ENGINEER.name)
+print("4", Job.ENGINEER.value)
+print("5", Job['ENGINEER'])
+print("6", Job(1))
+print("7", list(Job))
+print("8", Job.ENGINEER == Job.ENGINEER)
+print("9", Job.ENGINEER is Job.ENGINEER)
+print("10", Job.ENGINEER != Job.DATA_SCIENTIST)
+
+# 2
+class Optimize(Enum):
+    DEFAULT = "DEFAULT"
+    OPTIMIZE_FOR_SIZE = "OPTIMIZE_FOR_SIZE"
+    OPTIMIZE_FOR_LATENCY = "OPTIMIZE_FOR_LATENCY"
+    EXPERIMENTAL_SPARSITY = "EXPERIMENTAL_SPARSITY"
+
+print(list(Optimize))
+
+# 3 auto() (建议序号从1开始)
+class Job(Enum):
+    ENGINEER = auto()
+    PRODUCT_MANAGER = auto()
+    DATA_SCIENTIST = auto()
+
+print(list(Job))
+
+# 4 使用 Enum 的语法创建枚举类
+Job = Enum('Job', 'ENGINEER PRODUCT_MANAGER DATA_SCIENTIST')
+print(list(Job))
+
+Job = Enum('Job', ['ENGINEER', 'PRODUCT_MANAGER', 'DATA_SCIENTIST'])
+print(list(Job))
+
+Job = Enum('Job', [('ENGINEER', 1), ('PRODUCT_MANAGER', 2), ('DATA_SCIENTIST', 3)])
+print(list(Job))
+
+# __str__()
+class Job(Enum):
+    ENGINEER = 1
+    PRODUCT_MANAGER = 2
+    DATA_SCIENTIST = 3
+
+    def __str__(self):
+        return ' '.join([x.capitalize() for x in self.name.split('_')])
+
+print(Job.DATA_SCIENTIST)
+print(f"Wilson is a {Job.DATA_SCIENTIST}.")
+
+# unique 避免成员重复
+@unique
+class Job(Enum):
+    ENGINEER = 1
+    PRODUCT_MANAGER = 2
+    DATA_SCIENTIST = 3
+    #DATA_SCIENTIST = 4
+
+print(list(Job))
+```
 
 ## typing
 [Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  

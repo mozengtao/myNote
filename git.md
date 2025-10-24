@@ -5,6 +5,23 @@ Git管理的是修改，而不是文件
 # Check if branch exists (returns exit code 0 if exists, 1 if not)
 git show-ref --verify --quiet refs/heads/branch-name
 
+# show current branch
+git branch --show-current
+
+# get commit message
+git log --oneline -1 | awk '{print}'
+0186ae7 Send upstream channel stats metrics to collectd
+
+# 1 awk (clean and idiomatic)
+git log --oneline -1 | awk '{$1=""; sub(/^ /,""); print}'
+
+# 2
+# -f2- → print from field 2 to end
+git log --oneline -1 | cut -d' ' -f2-
+
+# 3
+git log -1 --pretty=%s
+
 # delete branch
 # delete local branch
 git branch -d feature-branch
