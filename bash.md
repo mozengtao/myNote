@@ -26,6 +26,9 @@
 []()  
 []()  
 ```bash
+#
+dd if=/dev/urandom of=random_10G.bin bs=1M count=10240 status=progress
+
 # process substitution
 diff <(ls dir1) <(ls dir2)
 
