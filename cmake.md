@@ -1,8 +1,8 @@
+[Getting Started with CMake](https://cmake.org/getting-started/)  
 [cmake-commands](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)  
 [**cmake-examples**](https://github.com/ttroy50/cmake-examples/tree/master)  
 [CppUTest manual](https://cpputest.github.io/manual.html)  
 [CMake configure_file: Embedding JSON in C++ file at build step](https://iamsorush.com/posts/cpp-cmake-configure-file/)  
-[]()  
 []()  
 []()  
 []()  
@@ -363,6 +363,177 @@ static void register_all_plugins() {
 cmake .. -DENABLE_WIN_PLUGIN=ON && make
 ./app
 ```
+
+- 示例
+- 目录结构
+```
+demo_configure/
+├── CMakeLists.txt
+├── config.h.in
+└── main.c
+```
+- CMakeLists.txt
+```cmake
+cmake_minimum_required(VERSION 3.10)
+project(demo_configure)
+
+# Variables that will be substituted
+set(PROJECT_NAME "DemoApp")
+set(PROJECT_VERSION "1.0.0")
+
+# Generate config.h from template
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config.h.in
+    ${CMAKE_BINARY_DIR}/config.h
+)
+
+# Add the executable
+add_executable(demo main.c)
+
+# Make sure the generated file is available before building main.c
+target_include_directories(demo PRIVATE ${CMAKE_BINARY_DIR})
+
+```
+- config.h.in
+```c
+/* config.h.in — template file */
+#define PROJECT_NAME "@PROJECT_NAME@"
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+
+```
+- main.c
+```c
+#include <stdio.h>
+#include "config.h"
+
+int main(void) {
+    printf("Project: %s, Version: %s\n", PROJECT_NAME, PROJECT_VERSION);
+    return 0;
+}
+
+```
+- build and run
+```bash
+mkdir build && cd build
+cmake ..
+make
+./demo
+```
+- Edit config.h.in
+```c
+/* config.h.in — template file */
+#define PROJECT_NAME "@PROJECT_NAME@"
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+#define BUILD_TIME "@CMAKE_BUILD_TYPE@"
+
+```
+- change a CMake variable
+```cmake
+/* config.h.in — template file */
+#define PROJECT_NAME "@PROJECT_NAME@"
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+#define BUILD_TIME "@CMAKE_BUILD_TYPE@"
+
+```
+```
+stat config.h
+touch ../CMakeLists.txt
+make
+stat config.h
+```
+- verbose CMake to confirm regeneration
+```bash
+make VERBOSE=1
+
+or
+
+cmake --trace-expand .
+```
+
+- 示例3(增强版)
+- Directory layout
+```
+multi_configure/
+├── CMakeLists.txt
+├── version.h.in
+├── config.json.in
+└── main.c
+```
+
+- Step 1 – Template 1: version.h.in
+```c
+/* version.h.in — auto-generated at configure time */
+#define PROJECT_NAME "@PROJECT_NAME@"
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+#define GIT_COMMIT_HASH "@GIT_COMMIT_HASH@"
+#define BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+```
+
+- Step 2 – Template 2: config.json.in
+```json
+{
+  "project": "@PROJECT_NAME@",
+  "version": "@PROJECT_VERSION@",
+  "commit": "@GIT_COMMIT_HASH@",
+  "build_type": "@CMAKE_BUILD_TYPE@"
+}
+```
+
+- Step 3 – CMakeLists.txt
+```cmake
+cmake_minimum_required(VERSION 3.10)
+project(multi_configure)
+
+# ---- variables used in templates ----
+set(PROJECT_NAME "DemoMulti")
+set(PROJECT_VERSION "3.4.1")
+
+# Get current git commit hash (optional)
+execute_process(
+    COMMAND git rev-parse --short HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_COMMIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# ---- generate multiple files ----
+configure_file(${CMAKE_SOURCE_DIR}/version.h.in ${CMAKE_BINARY_DIR}/version.h @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/config.json.in ${CMAKE_BINARY_DIR}/config.json @ONLY NEWLINE_STYLE UNIX)
+
+# ---- build target ----
+add_executable(demo main.c)
+target_include_directories(demo PRIVATE ${CMAKE_BINARY_DIR})
+
+# ---- install both generated files (optional) ----
+install(FILES
+    ${CMAKE_BINARY_DIR}/version.h
+    ${CMAKE_BINARY_DIR}/config.json
+    DESTINATION share/${PROJECT_NAME}
+)
+```
+
+- Step 4 – main.c
+```c
+#include <stdio.h>
+#include "version.h"
+
+int main(void) {
+    printf("=== Build Info ===\n");
+    printf("Project: %s\n", PROJECT_NAME);
+    printf("Version: %s\n", PROJECT_VERSION);
+    printf("Commit: %s\n", GIT_COMMIT_HASH);
+    printf("Build type: %s\n", BUILD_TYPE);
+    return 0;
+}
+```
+
+- Step 5 – Build and inspect
+```bash
+mkdir build && cd build
+cmake ..
+make
+```
+
 
 
 ## 参考文档

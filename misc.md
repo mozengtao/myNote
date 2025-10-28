@@ -118,6 +118,10 @@
 [cpp_book](https://github.com/saeed771/cpp_book)  
 []()  
 []()  
+[]()  
+[Head First Design Patterns](https://github.com/rahff/Software_book)  
+[Fundamentals of Software Architecture](https://github.com/rahff/Software_book)  
+[]()  
 
 ## online learning
 [DevTut](https://devtut.github.io/)  
