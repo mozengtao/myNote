@@ -3,13 +3,230 @@
 [**cmake-examples**](https://github.com/ttroy50/cmake-examples/tree/master)  
 [CppUTest manual](https://cpputest.github.io/manual.html)  
 [CMake configure_file: Embedding JSON in C++ file at build step](https://iamsorush.com/posts/cpp-cmake-configure-file/)  
+[An Introduction to Modern CMake](https://cliutils.gitlab.io/modern-cmake/README.html)  
+[Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)  
+[CMake Primer](https://llvm.org/docs/CMakePrimer.html)  
+[CMake-Best-Practices](https://github.com/PacktPublishing/CMake-Best-Practices/tree/main)  
+[More Modern CMake](https://hsf-training.github.io/hsf-training-cmake-webpage/aio/index.html)  
+[More Modern CMake](https://hsf-training.github.io/hsf-training-cmake-webpage/)  
 []()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+
+## CMake 核心思想
+1. 配置阶段 (Configure)
+   1. 解析所有 CMakeLists.txt
+   2. 根据项目定义、依赖、编译选项等，生成对应平台的构建描述文件 (如 Makefile)
+2. 生成阶段 (Build/Generate)
+   1. 使用生成的构建文件(Makefile/Ninja)去调用底层编译器(gcc, clang, msvc)
+   2. 完成编译、链接、安装等动作
+
+```
+目标导向：
+现代CMake把每个编译产物(可执行文件/库)看做一个 target , 每个 target 独立管理自己的属性，并让这些目标之间形成依赖关系图 (dependency graph)
+
+target:
+可执行程序：add_executable(my_app main.cpp)
+静态库：add_library(my_lib STATIC lib.cpp)
+动态库：add_library(my_lib SHARED lib.cpp)
+接口目标（不产生文件，仅传播属性）：add_library(my_iface INTERFACE)
+
+target property:
+源文件
+编译选项
+头文件路径
+链接库
+宏定义
+构建类型（Debug/Release）
+
+依赖传播机制(PUBLIC/PRIVATE/INTERFACE)：
+关键字 PUBLIC/PRIVATE/INTERFACE 决定了依赖属性是否传播
+
+target_link_libraries(A PUBLIC B)
+
+| 关键字          | 意义                                       | 谁能继承属性           |
+| -----------    | ----------------------------------------   | --------------------- |
+| `PRIVATE`      | 仅当前 target 使用依赖项的属性               | 只有 A                |
+| `PUBLIC`       | 当前 target 和其依赖的下游 target 都继承属性 | A 和依赖 A 的 target   |
+| `INTERFACE`    | 当前 target 不使用，只传播属性给下游         | 依赖 A 的 target       |
+
+示例：
+libA → libB → libC
+
+# CMakeLists:
+add_library(libC ...)
+target_include_directories(libC PUBLIC include)
+
+add_library(libB ...)
+target_link_libraries(libB PUBLIC libC)
+
+add_library(libA ...)
+target_link_libraries(libA PRIVATE libB)
+
+# 传播效果
+| 目标   | 继承自谁                                        | 包含路径可见性        |
+| ---- | -----------------------------------------        | --------------       |
+| libC | -                                                | 自己有 include 路径   |
+| libB | 链接 libC (PUBLIC) → 继承 include 路径            |                      |
+| libA | 链接 libB (PRIVATE) → 不继承 libC 的 include 路径 |                      |
+
+PRIVATE → 只自己能用
+PUBLIC → 自己和下游能用
+INTERFACE → 自己不用，但传播给别人
+
+# 最佳实践小结
+1. 永远优先使用 target 级命令（如 target_include_directories）
+2. 清晰定义依赖方向（用 PUBLIC/PRIVATE/INTERFACE）
+3. 模块化管理：每个子目录一个独立 CMakeLists.txt
+4. 推荐使用 out-of-source 构建
+5. 使用 find_package() + target_link_libraries() 管理外部库
+
+# find_package()
+作用：找到外部库或模块，并让你可以像使用普通 target 一样使用它
+
+主要进行以下操作：
+定位库文件 (.so, .a, .dll)
+定位头文件目录 (include/)
+设置变量（或导入 target）
+
+# find_package() 两种模式
+1. Module 模式 (老式)
+
+find_package(OpenSSL REQUIRED)
+CMake 会在系统路径（/usr/share/cmake*/Modules/）中搜索 FindOpenSSL.cmake
+执行后会设置一堆变量，例如：
+OPENSSL_FOUND
+OPENSSL_INCLUDE_DIR
+OPENSSL_LIBRARIES
+然后可以这样用:
+include_directories(${OPENSSL_INCLUDE_DIR})
+target_link_libraries(myapp PRIVATE ${OPENSSL_LIBRARIES})
+
+2. Config 模式 (现代)
+第三方库自己安装时会生成 <package>Config.cmake
+CMake 会直接加载这个文件，并自动提供 imported targets
+
+find_package(OpenSSL CONFIG REQUIRED)
+CMake 会在系统路径或你指定路径中查找 OpenSSLConfig.cmake
+之后直接用：
+target_link_libraries(myapp PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+
+这些 OpenSSL::SSL / OpenSSL::Crypto 是 已导入的目标（imported targets），包含了：
+include 路径
+编译选项
+库文件路径
+平台特定配置
+
+# CMake 如何找到包（搜索路径）
+CMake 搜索顺序大致如下：
+1. 环境变量：CMAKE_PREFIX_PATH, CMAKE_MODULE_PATH
+2. 系统安装目录：/usr/lib/cmake/<pkg>/, /usr/share/cmake/<pkg>/
+3. 用户自定义路径：cmake -D<PKG>_DIR=/path/to/config 或者 find_package(MyLib REQUIRED PATHS /opt/mylib)
+
+# target export 与 package config 的生成
+如果你想让 自己的库 也能被 find_package() 找到，就需要：
+1. 导出目标
+add_library(mylib STATIC mylib.cpp)
+install(TARGETS mylib EXPORT mylibTargets)
+2. 安装头文件与配置文件
+install(FILES mylib.h DESTINATION include)
+3. 生成配置文件
+install(
+  EXPORT mylibTargets
+  FILE mylibTargets.cmake
+  NAMESPACE mylib::
+  DESTINATION lib/cmake/mylib
+)
+
+然后提供一个 mylibConfig.cmake 文件（可手写或用 configure_package_config_file() 生成），内容通常是：
+include("${CMAKE_CURRENT_LIST_DIR}/mylibTargets.cmake")
+
+之后别人就能这样使用你的库了：
+find_package(mylib REQUIRED)
+target_link_libraries(their_app PRIVATE mylib::mylib)
+
+# imported target 的工作方式
+它不参与构建（不需要源码）
+但携带完整的编译属性信息
+可直接用于 target_link_libraries()
+
+add_library(OpenSSL::SSL UNKNOWN IMPORTED)
+set_target_properties(OpenSSL::SSL PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
+  IMPORTED_LOCATION "/usr/lib/libssl.so"
+)
+
+实际上就是 find_package(OpenSSL) 自动帮你完成的工作
+
+# 综合例子：使用外部库 + 导出自己库
+myapp/
+├── CMakeLists.txt
+├── lib/
+│   ├── CMakeLists.txt
+│   └── mylib.cpp
+└── main.cpp
+
+# CMakeLists.txt
+cmake_minimum_required(VERSION 3.20)
+project(myapp LANGUAGES CXX)
+
+find_package(OpenSSL REQUIRED)
+
+add_subdirectory(lib)
+
+add_executable(main main.cpp)
+target_link_libraries(main PRIVATE mylib OpenSSL::SSL)
+
+# lib/CMakeLists.txt
+add_library(mylib STATIC mylib.cpp)
+target_include_directories(mylib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+install(TARGETS mylib EXPORT mylibTargets)
+install(EXPORT mylibTargets
+  FILE mylibTargets.cmake
+  NAMESPACE mylib::
+  DESTINATION lib/cmake/mylib)
+
+安装后别人就能：
+find_package(mylib REQUIRED)
+target_link_libraries(their_app PRIVATE mylib::mylib)
+
+# 总结
+| 概念               | 作用                     | 示例                               |
+| ----------------  | ----------------------   | -------------------------------- |
+| `find_package()`  | 查找和加载外部库           | `find_package(OpenSSL REQUIRED)` |
+| Module 模式       | 依赖 `FindXXX.cmake`      | `FindOpenSSL.cmake`              |
+| Config 模式       | 依赖 `<pkg>Config.cmake`  | `OpenSSLConfig.cmake`            |
+| `EXPORT`          | 导出目标供他人使用         | `install(EXPORT …)`              |
+| Imported target   | 外部库的 target 映射      | `OpenSSL::SSL`                   |
+
+```
+
+- 基本目录结构
+```
+project/
+├── CMakeLists.txt       # 根配置文件
+├── src/
+│   ├── main.cpp
+│   └── CMakeLists.txt   # 子目录配置
+└── include/
+    └── ...
+```
+- 配置阶段
+```
+cmake -S . -B build
+
+读取源目录 (-S .) 下所有的 CMakeLists.txt
+检查编译器、系统信息、依赖包
+生成构建系统描述（build/Makefile、build/*.ninja 等）
+(可通过 CMakeCache.txt 缓存配置参数)
+```
+- 构建阶段
+```
+cmake --build build
+
+使用生成的 Makefile 或 Ninja 构建规则
+实际调用 g++、clang++ 等编译器进行编译与链接
+生成最终二进制文件（如 app、.so、.a）
+```
 
 - [CMake tips](https://github.com/sailorhero/cmake_study/blob/master/README.md)
 ```bash

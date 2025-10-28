@@ -1,3 +1,29 @@
+## git commit
+```bash
+# typical(non-merge) case
+A -- B -- C (HEAD)
+
+HEAD^					B
+HEAD~ or HEAD~1			B
+HEAD~2					A
+
+# merge commit case
+       D (feature)
+      /
+A -- B --------- C (HEAD)
+         \
+          E (merged)
+
+C has 2 parents:
+First parent: mainline (usually the branch you were on when you did git merge)
+Second parent: the merged branch
+
+HEAD^ or HEAD^1			B
+HEAD^2					E
+HEAD~1					B
+HEAD~2					A
+```
+
 ## bash example
 ```bash
 #!/usr/bin/env bash
