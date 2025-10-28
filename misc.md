@@ -1,3 +1,9 @@
+[**HSF Training**](https://hepsoftwarefoundation.org/activities/training.html)  
+[HSF Training Center](https://hsf-training.org/training-center/)  
+[]()  
+[]()  
+
+
 [The Algorithms](https://github.com/TheAlgorithms)  
 > Open Source resource for learning Data Structures & Algorithms and their implementation in any Programming Language
 
