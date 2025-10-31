@@ -19,6 +19,32 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## tips
+```bash
+# how command substitution $(...) works
+1. $(...) runs the command in a subshell.
+2. Captures its stdout into the variable.
+
+result=$(get_value)
+
+# run a bash function normally
+1. The function runs in the current shell process ($$ is the same).
+2. Environment variables or shell state changes persist after the function returns.
+
+# run a bash function in the background
+1. The function executes in a subshell (different PID).
+2. Any variable changes inside it do not affect the parent shell.
+3. $VAR is empty after the function returns — because the background job has its own isolated environment.
+
+# example
+f() { VAR=1; echo "f: $VAR"; }
+echo "main: $VAR"
+#f
+f&
+echo "main: $VAR"
+
+```
+
 ## examples
 [Bash readarray with Examples](https://linuxopsys.com/bash-readarray-with-examples)  
 []()  
