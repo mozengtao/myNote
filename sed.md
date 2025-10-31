@@ -240,6 +240,7 @@ sed '$p' file.txt
 
 ```bash
 # 替换
+echo "name=alice" | sed 's/^name=\(.*\)$/The name is \1/'
 sed -i 's/\r$//' INPUTFILE	# remove ^M (CR)
 sed -i 's/SEARCH_REGEX/REPLACEMENT/g' INPUTFILE
 sed -i 's/\bfoo\b/linux/g' file.txt		# use the word-boundary expression (\b) at both ends of the search string. This ensures 
