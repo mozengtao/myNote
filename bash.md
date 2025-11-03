@@ -2978,7 +2978,46 @@ echo "000005: FF" | xxd -revert - file.bin
 > translate or delete characters
 [tr(1)](https://www.mankier.com/1/tr)  
 ```bash
+# tr [OPTION]... STRING1 [STRING2]
+
 tr '\0' '\n' < /proc/40013/environ
+
+
+tr '\0' ' ' < /proc/549/cmdline
+Equivalent to
+cat /proc/549/cmdline | tr '\0' ' '
+
+# 为什么 /proc/xxx/cmdline 用 '\0' 进行分割
+1. 与内核内部表示一致：内核参数是C风格的以NULL结尾的字符串(argv指向一块连续内存:arg0\0arg1\0...)，原样展示最省事，省拷贝，省格式化
+2. 无歧义分隔符：命令行参数可能包含空格，制表，甚至换行符，NULL不可能出现在参数中，用它做分割符最可靠
+3. 面向程序而非人类：/proc 主要是给程序消费的"二进制接口"
+4. 兼容性与效率：沿用Unix/C约定，避免转义/编码，避免本地化问题，同时减少内核做多余的格式化工作
+
+
+tr '\0' ' '  /proc/549/cmdline # it does not work
+# tr expects only two arguments and it reads from stdin (not from a file argument), so we must redirect the file's
+# content into its stdin with < (input redirection), which is more faster thand cleaner than pipe
+
+< file:
+open("file", O_RDONLY);     // open the file
+dup2(fd, 0);                // replace stdin (fd 0) with the file
+execve("command", ...);     // run the command
+
+# variants of redirection
+< file		Read stdin from file							sort < data.txt
+> file		Write stdout to file (overwrite)				ls > out.txt
+>> file		Append stdout to file							echo hi >> log.txt
+2> file		Redirect stderr to file							cmd 2> err.txt
+&>			Redirect both stdout & stderr					cmd &> all.txt
+<(cmd)		Process substitution: use cmd output as file	diff <(ls /a) <(ls /b)
+<<< "text"	Feed a string to stdin							grep foo <<< "foo bar baz"
+
+# read file as input
+tr 'a-z' 'A-Z' < input.txt
+# write output to file
+tr 'a-z' 'A-Z' < input.txt > output.txt
+# read from string directly
+tr 'a-z' 'A-Z' <<< "hello world"
 
 ```
 

@@ -1,3 +1,463 @@
+[CIS198 Rust Programming Slides](https://github.com/cis198-2016s/slides)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+## Basic
+```rust
+// hello_world
+fn main() {
+    println!("Hello, world!");
+}
+
+// variable bindings
+let x = 17;			// bindings are implicitly-typed: the compiler infers based on context
+let x: i16 = 17;	// add type annotations when compiler can't determine variable type
+
+// variables are inherently immutable
+let x = 5;
+x += 1;			// error: variables are inherently immutable
+
+// varialble bindings may be shadowed
+let x =1;
+let x ="hello";		// x is not mutable, but we're able to re-bind it
+					// the shadowed bindings for variable lasts until it goes out of scope
+
+// declare variables using patterns
+let (a, b) = ("foo", 12);
+
+// expressions
+// Everything is an expression: something which returns a value
+	// exception: variable bindings are not expressions
+
+// "unit" is "nothing" type: ()
+	// the type () has only one value: ()
+	// () is the default return type
+
+// appending a semicolon can be used to discard an expression's value, now it returns ()
+fn foo() -> i32 { 5 }
+fn bar() -> () { () }
+fn baz() -> () { 5; }
+fn qux() { 5; }
+
+// we can bind many things to variable names because everything is an expression
+let x = 5;
+let y = if x > 0 { "greater" } else { "less" };
+println!("x = {} is {} than zero", x, y);
+// {} is string interpolation operator
+
+/// types
+// prititive types
+bool: true/false
+char: 'c', '😺' (chars are Unicode)
+i8, i16, i32, i64, isize
+u8, u16, u32, u64, usize
+f32, f64
+isize, usize (size of pointers, machine-dependent)
+// literals
+10i8, 10u16, 10.0f32, 10usize
+// type inference for non-specific literals default to i32 or f64
+10		// i32
+10.0	// f64
+// arrays
+// slices
+// str
+// tuples
+
+// Array
+// arrays are generically of type [T; N], N is a compile-time constant, array can not be resized
+let arr1 = [1, 2, 3];	// array of 3 elements
+let arr2 = [2; 32];		// array of 32 `2`s
+println!("{}", arr1[0])
+println!("{:?}", arr1);
+
+// slices
+// slices are generically of type &[T]
+// A "view" into an array by reference
+// Not created directly, but are borrowed from other variables
+// Mutable or immutable
+let arr = [0, 1, 2, 3, 4, 5];
+let total_slice = &arr;			// slice all of `arr`
+let total_slice = &arr[..]		// Same, but more explicit
+let partial_slice = &arr[2..5]	// [2, 3, 4]
+
+// strings
+// two types of strings: String and &str
+// String i a heap-allocated, growable vector of characters
+// &str is a type that's used to slice into String s
+// string literals like "foo" are of type &str
+let s: &str = "galaxy";
+let s2: String = "galaxy".to_string();
+let s3: String = String:from("galaxy");
+let s4: &str = &s3;
+// str is an unsized type, which doesn't have a compile-time known size, and therefore cannot exist by itself
+
+// tuple
+// fixed-size, ordered, heterogeneous lists
+// indexed into tupes with foo.0, foo.1, etc.
+// can be destructured in let bindings
+let foo: (i32, char, f64) = (72, 'H', 5.1);
+let (x, y, z) = (72, 'H', 5.1);
+let (a, b, c) = foo;	// a = 72, b = 'H', c = 5.1
+
+// casting
+// cast between types with as
+let x: i32 = 100;
+let y: u32 = x as u32;
+
+// vector
+// A Vec<T> is a heap-allocated growable array, T denotes a generic type
+let v0: Vec<i32> = Vec:new();
+
+// v1 and v2 are equal
+let mut v1 = Vec::new();
+v1.push(1);
+v1.push(2);
+v1.push(3);
+
+let v2 = vec![1, 2, 3];
+
+// v3 and v4 are equal
+let v3 = vec![0; 4];
+let v4 = vec![0, 0, 0, 0];
+
+// Vec::new() is namespacing, new is a function defined for Vec struct
+
+let v2 = vec![1, 2, 3];
+let x = v2[2];	// 3
+// you can't index a vector with an i32/i64/etc.
+// you must use a usize because usize is guaranteed to be the same size as a pointer
+// other integers can be cast to usize
+let i: i8 = 2;
+let y = v2[i as usize];
+
+// reference
+let x = 12;
+let ref_x = &x;
+println!("{}", *ref_x);		// 12
+
+// control flow
+// if
+if x > 0 {
+	10
+} else if x == 0 {
+	0
+} else {
+	println!("Not greater than zero!");
+	-10
+}
+// no parens necessary
+// entire if statement evaluates to one expression, so every arm must end with a expression of the same type, that type can be unit ()
+if x <= 0 {
+	println!("Too small!");
+}
+
+// loops
+// while
+let mut x = 0;
+while x < 100 {
+	x += 1;
+	println!("x: {}", x);
+}
+
+// loop
+let mut x = 0;
+loop {
+	x += 1;
+	if x == 10 {
+		break;
+	}
+}
+println!("x: {}", x);
+
+// for
+// loops from 0 to 9
+for x in 0..10 {
+	println!("{}", x);
+}
+
+let xs = [0, 1, 2, 3, 4];
+// loop through elements in a slice of `xs`
+for x in &xs {
+	println!("{}", x);
+}
+
+// functions
+fn foo(x: T, y: U, z: V) -> T {
+	// ...
+}
+// the final expression in a function is its return value
+	// use return for early returns from a function
+
+fn square(n: i32) -> i32 {
+	n * n
+}
+
+fn squareish(n: i32) -> i32 {
+	if n < 5 { return n; }
+	n * n
+}
+
+// compile failed
+fn square_bad(n: i32) -> i32 {
+	n * n;
+}
+
+// function objects
+// function objects: function pointers, closures
+let x: fn(i32) -> i32 = square;
+
+// pass by reference
+fn apply_twice(f: &Fn(i32) -> i32, x: i32) -> i32 {
+	f(f(x))
+}
+
+fn apply_twice<F>(f: F, x: i32) -> i32
+where
+	F: Fn(i32) -> i32,
+{
+	f(f(x))
+}
+
+let y = apply_twice(&square, 5);
+
+// marcos
+// macros generate code at compile time
+// macros are defined with "macro_rules! macro_name" blocks
+// print! & println!
+// {} for general string interpolation, {:?} for debug printing, some types such as array and Vec can only be printed with {:?}
+print!("{}, {}, {}", "foo", 3, true);
+println!("{:?}, {:?}", "foo", [1, 2, 3]);
+
+// format!
+let fmted = format!("{}, {:x}, {:?}", 12, 155, Some("foo"));
+println!("{}", fmted);
+
+// panic!
+if x < 0 {
+	panic!("Oh noes!")
+}
+
+// assert! && assert_eq!
+// assert!(condition) panics if condition is false
+// assert_eq(left, right) panics if left != right
+// used for testing and catching illegal conditions
+#[test]
+fn test_something() {
+	let actual = 1 + 2;
+	assert!(actual == 3);
+	assert_eq!(3, actual);
+}
+
+// unreachable!()
+// used to indicate that some code should not be reached, panic! when reached
+if false {
+	unreachable!();
+}
+
+// unimplemented!()
+// shorthand for panic!("not yet implemented")
+fn sum(x: Vec<i32>) -> i32 {
+	// TODO
+	unimplemented!();
+}
+
+// match statement
+let x = 3;
+
+match x {
+	1 => println!("one fish"),	// comma required
+	2 => {
+		println!("two fish");
+		println!("two fish");
+	},		// comma optional when using braces
+	_ => println!("no fish for you"),	// otherwise case
+}
+
+// match takes an expression and braches on a list of "value => expression" statements
+// the entire match evaluates to one expression. (Like if, all arms must evaluate to the same type)
+// _ is commonly used as a catch-all
+
+let x = 6;
+let y = 1;
+
+match (x, y) {
+	(1, 1) => println!("one"),
+	(2, j) => println!("two, {}", j),
+	(_, 3) => println!("three"),
+	(i, j) if i > 5 && j < 0 => println!("On guard"),
+	(_, _) => println!(":<"),
+}
+
+// the matched expression can be any expression(l-value), including tuples and function calls
+	// matches can bind variables. _ is a throw-away variable name
+// you must write an exhaustive match in order to compile
+// use if-guards to constrain a match to certain conditions
+// pattern can get very complex
+
+// rust environment & tools
+// rustc
+// cargo
+cargo new project_name (binary)
+cargo new project_name --bin (executable)
+cargo build
+cargo test
+// cargo.toml
+// cargo test
+#[test]
+fn it_works() {
+	// ...
+}
+// cargo check
+```
+
+## Ownership
+```rust
+// a variable binding takes ownership of its data
+	// a piece of data can only have one owner at a time
+// when a binding goes out of scope, the bound data is released automatically
+	// for heap-allocated data, this means de-allocation
+// data must be guaranteed to outlive its references
+fn foo() {
+	// creates a Vec object
+	// gives ownership of the Vec object to v1
+	let mut v1 = vec![1, 2, 3];
+
+	v1.pop();
+	v1.push(4);
+	println!("{:?}", v1);
+
+	// at the end of the scope, v1 goes out of scope
+	// v1 still owns the Vec object, so it can be cleaned up
+}
+
+// move semantics
+let v1 = vec![1, 2, 3];
+
+// ownership of  the Vec object moves to v2
+let v2 = v1;
+
+println!("{}", v1[2]); // error: use of moved value "v1"
+
+// borrowing
+// a varialbe's data can be borrowed by taking a reference to the variable; ownership doesn't change
+	// when a reference goes out of scope, the borrow is over
+	// the original variable retains ownership throughout
+let v = vec![1, 2, 3];
+let v_ref = &v;
+assert_eq!(v[1], v_ref[1]);
+
+// how borrowing works
+// you can take a reference to the original variable and use it to access the data
+// when a reference goes out of scope, the borrow is over
+// however, the original variable retains ownership during the borrow and afterwards
+
+let v = vec![1, 2, 3];
+let v_ref = &v;
+// moving ownership to v_new would invalidate v_ref
+// error: cannot move out of "v" because it is borrowed
+let v_new = v;
+
+// ownership cannot be transfered from a variable while references to it exist, that would invalidate the reference
+
+//// 'length' only needs 'vector' temporarily, so it is borrowed
+fn length(vec_ref: &Vec<i32>) -> usize {
+	// vec_ref is auto-dereferenced when you call methods on it
+	vec_ref.len()
+	// you can also explicitly dereference
+	// (*vec_ref).len()
+}
+
+fn main() {
+	let vector = vec![];
+	length(&vector);
+	println("{:?}", vector);
+}
+
+// the type of length: vec_ref is passed by reference, so it's now an &Vec<i32>
+// references, like bindings, are immutable by default
+// the borrow is over after the reference goes out of scope (at the end of length)
+
+/// 'push' needs to modify 'vector' so it is borrowed mutably
+fn push(vec_ref: &mut Vec<i32>, x: i32) {
+	vec_ref.push(x);
+}
+
+fn main() {
+	let mut vector: Vec<i32> = vec![];
+	let vector_ref: &mut Vec<i32> = &mut vector;
+	push(vector_ref, 4);
+	println!("{:?}", vector);
+}
+
+// variable can be borrowed by mutable reference: &mut vec_ref
+	// vec_ref is a reference to a mutable Vec
+	// the type is &mut Vec<i32>, not &Vec<i32>
+
+/// 'push' needs to modify 'vector' so it is borrowed mutably
+fn push2(vec_ref: &mut Vec<i32>, x: i32) {
+	// error: cannot move out of borrowed content
+	let vector = *vec_ref;
+	vector.push(x);
+}
+
+fn main() {
+	let mut vector: Vec<i32> = vec![];
+	push2(&mut vector, 4);
+}
+
+// you cannot dereference vec_ref into a variable binding because that would change the ownership of the data
+
+/// `length` only needs `vector` temporarily, so it is borrowed.
+fn length(vec_ref: &&Vec<i32>) -> usize {
+    // vec_ref is auto-dereferenced when you call methods on it.
+    println!("Length of the vector is: {}", vec_ref.len());
+    vec_ref.len()
+}
+
+fn main() {
+    let vector = vec![];
+    length(&&&&&&&&&&&&vector);
+}
+
+// rust will auto-dereference varialbes
+	// when making method calls on a reference
+	// when passing a reference as a function argument
+
+let mut a = 5;
+let ref_a = &mut a;
+*ref_a = 4;
+println!("{}", *ref_a + 4);
+
+// you have to dereference varialbes
+	// when writing into them
+	// other times that usage may be ambiguous
+
+
+// ref
+let mut vector = vec![0];
+
+{
+	// these are equivalent
+	let ref1 = &vector;
+	let ref ref2 = vector;
+	assert_eq!(ref1, ref2);
+}
+
+let ref mut ref3 = vector;
+ref3.push(1);
+
+println!("{:?}", vector);
+
+// when binding a variable, ref can be applied to make the variable a reference to the assigned value
+	// take a mutable reference with "ref mut"
+// this is most useful in match statements when destructuring patterns.
+```
+
+
 ```rust
 // 打印变量类型
 fn print_type_of<T>(_: &T) {
