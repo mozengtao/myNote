@@ -42,8 +42,6 @@
 [**From (C)Go to Rust**](https://radu-matei.com/blog/from-go-to-rust-static-linking-ffi/)  
 
 ## Examples
-
-### example 1 (hell word)
 ```rust
 fn main() {
     let english = "hello world!";
@@ -53,12 +51,8 @@ fn main() {
         println!("{}", &region);
     }
 }
-```
 
-### rust 基本语法
-```rust
-// Rust 程序入口函数main，该函数目前无返回值
-fn main() {
+fn main() {		// Rust 程序入口函数main，该函数目前无返回值
     let a = 10;     // 1.使用let来声明变量，进行绑定，a是不可变的 2.编译器会默认根据a的值为a推断类型：i32 3.语句的末尾必须以分号结尾
     
     let b: i32 = 20;    // 主动指定b的类型为i32
@@ -73,54 +67,36 @@ fn main() {
 fn add(i: i32, j: i32) -> i32 {
     i + j   // 省略return
 }
-```
 
-#### 变量
-- 变量绑定与所有权
-    ```rust
-    // 任何内存对象都是有主人的，而且一般情况下完全属于它的主人，绑定就是把这个对象绑定给一个变量，让这个变量成为它的主人
-    let s = "hello world"
-    ```
-- Rust 的变量在默认情况下是不可变的, mut 关键字让变量变为可变的
-    - 不可变保证安全
-    - 可变提供了灵活性和性能提升
-- 用下划线作为变量的开头，提示编译器忽略未使用的变量的警告
-    `let _x = 5;`
-- 变量解构
-    ```rust
-    let (a, mut b): (bool, bool) = (true, false);   // a = true 不可变, b = false 可变
-    b = true;
+let s = "hello world";	// variable binding: 任何内存对象都是有主人的，而且一般情况下完全属于它的主人，绑定就是把这个对象绑定给一个变量，让这个变量成为它的主人
 
-    assert!(1, b);
-    ```
-    - 解构式赋值
-        ```rust
-        struct Struct {
-            e: i32
-        }
+let _x = 5;		// 用下划线作为变量的开头，提示编译器忽略未使用的变量的警告
 
-        fn main() {
-            let (a, b, c, d, e);
+let (a, mut b): (bool, bool) = (true, false);   // a = true 不可变, b = false 可变
+b = true;
 
-            (a, b) = (1, 2);
-            [c, .., d, _] = [1, 2, 3, 4, 5];
-            Struct {e, ..} = Struct {e: 5};
+//
+struct Struct {
+	e: i32
+}
 
-            assert_eq!([1, 2, 1, 4, 5], [a, b, c, d, e]);
-        }
-        ```
-### 常量
-- 常量不允许使用mut，常量自始至终不可改变，因为它的值是在编译时期确定的
-- 常量使用const关键字进行声明，并且值的类型必须标注
-    `const MAX_POINTS: u32 = 100_000`
+fn main() {
+	let (a, b, c, d, e);
 
-### 变量遮蔽
-Rust 允许声明相同的变量名，在后面声明的变量会遮蔽掉前面的声明
-- 后面的let 生成了完全不同的新变量，两个变量只是恰好拥有同样的名称，涉及一次内存对象的再分配
-```rust
+	(a, b) = (1, 2);
+	[c, .., d, _] = [1, 2, 3, 4, 5];
+	Struct {e, ..} = Struct {e: 5};
+
+	assert_eq!([1, 2, 1, 4, 5], [a, b, c, d, e]);
+}
+
+// 常量不允许使用mut，常量自始至终不可改变，因为它的值是在编译时期确定的
+// 常量使用const关键字进行声明，并且值的类型必须标注
+const MAX_POINTS: u32 = 100_000;
+
 fn main() {
     let x =  5;
-    let x = x + 1;  // 在main函数的作用域内对之前的x进行遮蔽
+    let x = x + 1;  // 变量遮蔽:在main函数的作用域内对之前的x进行遮蔽
 
     {
         let x = x * 2;  // 在当前的花括号作用域内，对之前的x进行遮蔽
@@ -129,1470 +105,1407 @@ fn main() {
 
     println!("The value of x in the outer scope is: {}", x);
 }
-```
-- 示例
-    ```rust
-    let spaces = "   ";         // 字符串类型
-    let spaces = spaces.len();  // usize数值类型
-
-    // 如下代码编译器会报错
-    let mut spaces = "   ";
-    spaces = spaces.len();
-    ```
-
-### 基本类型
-- 数值类型
-    - 有符号整数(i8, i16, i32, i64, isize)
-    - 无符号整数(u8, u16, u32, u64, usize)
-    - 浮点数(f32, f64)
-    - NaN
-    - 有理数,复数
-
-    - 整形字面量
-        ```rust
-        98_222  // 十进制
-        0xff    // 十六
-        0o77    // 八
-        0b1111_0000 // 二
-        b'A'    // 字节(u8)
-
-        fn main() {
-            let x = (-42.0_f32).sqrt();
-            if x.is_nan() {
-                println!("未定义的数学行为");
-            }
-
-            println!("{:.2}", 18.123);
-
-            let i: u8 = 2;
-            let shift: u8 = 3;
-            println!("(a << b) value is {:08b}", i << shift);
-        }
-        ```
-    - 序列
-        ```rust
-        for i in 'a'..='z' {
-            println!("{}", i)
-        }
-        ```
-- 字符串类型: 字符串字面量和字符串切片 &str
-- 布尔类型: true, false
-- 字符类型: 表示单个 Unicode 字符，存储为4个字节
-    - Rust的字符不仅仅是 ASCII，所有的 Unicode 值都可以作为Rust字符
-        ```rust
-        let c = 'z';
-        let g = '国';
-        ```
-- 单元类型: ()，其唯一的值也是 ()
-    - main 函数返回 ()，println!()的返回值也是()
-    - 没有返回值的函数在Rust中有单独的定义: 发散函数(diverge function)，即无法收敛的函数
-
-- 类型推导与标注
-    - Rust 是一门静态类型语言
-    - Rust 编译器可以根据变量的值和上下文中的使用方式来自动推导出变量的类型
-
-### 语句和表达式
-- 语句会执行一些操作但是不会返回值，语句以分号结尾
-- 表达式会在求值后返回一个值，表达式结尾没有分号
-- Rust是基于表达式的语言
-
-### 函数
-    ```rust
-    fn add(i: i32, j: i32) -> i32 {
-        i + j
-    }
-
-    fn clear(text: &mut String) -> () {
-        *text = String::from("")
-    }
-
-    fn foever() -> ! {  // ! 表示函数永不返回
-        loop {
-            // ..
-        }
-    }
-
-    fn dead_end() -> ! {
-        panic!("panic !")
-    }
-    ```
-### 所有权
-- 所有权原则
-    1. Rust中的每一个值都被一个变量所拥有，该变量称为值的所有者
-    2. 一个值同时只能被一个变量所拥有，或者说一个值只能拥有一个所有者
-    3. 当所有者(变量)离开作用域时，这个值将被丢弃(drop)
-    ```rust
-    // 1
-    let s1 = String::from("hello");
-    let s2 = s1;    // 所有权从s1转移到s2
-
-    // 2
-    let s = String::from("hello");
-    takes_ownership(s); // 所有权转移到函数里
-
-    fn takes_ownership(some_string: String) {
-        println!("{}", some_string);
-    }   // some_string 移出作用域并调用 drop 方法，内存被释放
-    
-    // 3
-    fn gives_ownership() -> String {
-        let some_string = String::from("hello");
-        some_string
-    }
-
-    fn takes_and_gives_back(a_string: String) -> Stirng {
-        a_string
-    }
-    ```
-    - Rust永远也不会自动创建数据的"深拷贝"，任何自动的复制都不是深拷贝，可以被认为对运行性能影响较小
-    - 如果一个类型拥有 Copy 特征，旧的变量赋值给其他变量后仍然可用，即赋值的过程为拷贝的过程
-        - 任何基本类型的组合可以 Copy，不需要分配内存或者某种形式资源的类型是可以Copy的
-            - 所有整数类型
-            - 布尔类型
-            - 所有浮点类型
-            - 字符串类型
-            - 当且仅当元祖包含的类型都是Copy时
-            - 不可变引用 &T
-
-### 引用与借用
-- 获取变量的应用，称之为借用
-- 引用与解引用
-    ```rust
-    let x = 5;
-    let y = &x;
-
-    assert_eq!(5, *y);
-    ```
-- 不可变引用
-    ```rust
-    let s1 = String::from("hello");
-
-    let len = caculate_length(&s1);
-
-    fn caculate_length(s: &String) -> usize {   // & 符号是引用，允许使用值而不获取所有权
-        s.len()
-    }
-    ```
-- 可变引用
-    ```rust
-    let mut s = String::from("hello");
-
-    change(&mut s);
-
-    fn change(some_string: &mut String) {
-        some_string.push_str(", world");
-    }
-    ```
-    - 同一作用域，特定数据只能有一个可变引用
-        ```rust
-        let mut s = String::from("hello");
-
-        let r1 = &mut s;
-        let r2 = &mut s;    // error
-        ```
-    - 可变应用与不可变引用不能同时存在
-        ```rust
-        let mut s = String::from("hello");
-
-        let r1 = &s;
-        let r2 = &s;
-        let r3 = &mut s;    // error
-
-        println!("{}, {}, and {}", r1, r2, r3);
-        ```
-    - 引用作用域的结束位置从花括号到最后一次使用的位置
-        ```rust
-        fn main() {
-            let mut s = String:from("hello");
-
-            let r1 = &s;
-            let r2 = &s;
-            println!("{} and {}", r1, r2);  // r1, r2 作用域在这里结束
-
-            let r3 = &mut s;
-            println!("{}", r3);
-        }   // r3 作用域在这里结束
-        ```
-    > 引用的作用域从创建开始，一直持续到它最后一次使用的地方，这个跟变量的作用域不同，变量的作用域从创建开始持续到花括号结束
-    > 对于这种编译器的优化行为，Rust称为Non-Lexical Lifetimes(NLL)，专门用于找到某个引用在作用域(})结束前就不再被使用的代码位置
-
-## 复合类型
-### 切片
-创建切片：[开始索引..终止索引] (左闭右开)
-- 字符串切片
-    - 字符串切片的类型标识是 `&str`，`&str`是一个不可变引用
-    - 字符串字面量是切片，即 `let s = "hello";` 等价于 `let s: &str = "hello";`
-    ```rust
-    let s = String::from("hello world");
-
-    let hello = &s[0..5];
-    let world = &s[6..11];
-
-    // 1
-    let s = String::from("hello");
-
-    let slice = &s[0..2];
-    let slice = &s[..2];    // 从索引0开始
-
-    // 2
-    let s = String::from("hello");
-
-    let len = s.len();
-
-    let slice = &s[4..len];
-    let slice = &s[4..];    // 包含最后一个字节
-
-    // 3
-    let s = String::from("hello");
-
-    let len = s.len();
-
-    let slice = &s[0..len];
-    let slice = &s[..];     // 完整切片
-
-    // 4
-    fn main() {
-        let mut s = String::from("hello world");
-
-        let word = first_world(&s); // immutable borrow
-
-        s.clear();  // error        // mutable borrow
-
-        println!("the first word is: {}", word);    // immutable borrow
-    }
-
-    fn first_world(s: &String) -> &str {
-        &s[..1]
-    }
-
-    // clear 方法的声明为 `pub fn clear(&mut self)`，它需要一个可变引用
-    // 在 s.clear 处可变引用与不可变引用同时生效，编译无法通过
-    ```
-    > 在对字符串使用切片语法时需要格外小心，切片的索引必须落在字符之间的边界位置，也就是 UTF-8 字符的边界
-    > 例如中文在 UTF-8 中占用三个字节，下面的代码就会崩溃：
-    >> `let s = "中国人";`  
-    >> `let a = &s[0..2];`  
-    >> `println!("{}", a);`  
-
-- 其他切片
-    - 数组切片
-    ```rust
-    let a = [1, 2, 3, 4, 5];
-
-    let slice = &a[1..3];   // 该数组切片的类型为 &[i32]
-
-    assert_eq!(slice, &[2, 3]);
-    ```
-
-### 什么是字符串
-- Rust中的字符是Unicode类型，每个字符占4个字节，而字符串是UTF-8编码，每个字符所占的字节数是变化的(1 - 4)，这样有助于降低字符串所占用的内存空间
-- Rust在语言级别只有一种字符串类型：str，通常是以引用类型出现 &str，即字符串切片。但在标准库里，还有多种不同用途的字符串类型，使用最广的是String类型，还有OsString，OsStr，CsString，CsStr等，以String或者Str结尾，分别对应具有所有权和被借用的变量
-- String 是一个可增长，可改变且具有所有权的UTF-8编码字符串
-
-- String与&str的转换
-    ```rust
-    // &str -> String
-    String::from("hello")
-    "hello".to_string()
-
-    // String -> &str (取引用即可)
-    fn main() {
-        let s = String::from("hello");
-        say_hello(&s);
-        say_hello(&s[..]);
-        say_hello(s.as_str());
-    }
-
-    fn say_hello(s: &str) {
-        println!("{}", s);
-    }
-    ```
-- Rust 不允许取索引字符串，因为对于String类型，需要从0开始去遍历字符串来定位合法字符，性能表现无法达到O(1)
-    ```rust
-    let hello = String::from("中国人");
-    // 字符串的底层的数据存储格式实际上是[ u8 ]，一个字节数组
-    // 该字符串实际占用9个字节的长度，大部分常用汉字在UTF-8中的长度是3个字节，访问&hello[0]没有任何意义
-    let s = &hello[0..2];
-    // 字符串切片无法保证索引的字节刚好落在字符的边界上，导致程序崩溃
-    ```
-
-- 字符创操作
-    ```rust
-    // 追加
-    let mut s = String::from("hello ");
-
-    s.push_str("rust"); // 追加字符串
-    s.push('!');        // 追加字符
-
-    // 插入
-    let mut s = String::from("hello rust!");
-
-    s.insert(5, ' ');           // 插入字符
-    s.insert_str(6, "I like");  // 插入字符串
-
-    // 替换
-    // 1
-    let s = String::from("I like rust");
-    let new_s = s.replace("rust", "RUST");  // 返回新的字符串
-    dbg!(new_s);
-
-    // 2
-    let s = String::from("I like rust, learning rust is good");
-    let new_s = s.replacen("rust", "RUST", 1);  // 返回新的字符串
-    dbg!(new_s);
-
-    // 3
-    let mut s = String::from("I like rust");
-    s.replace_range(7..8, "R");  // 操作原来的字符串
-    dbg!(new_s);
-    
-    // 删除
-    // 1 删除并返回字符串的最后一个字符
-    let mut s = String::from("rust pop 中文!");
-    let p1 = s.pop();
-    let p2 = s.pop();
-    dbg!(p1);
-    dbg!(p2);
-    dbg!(s);
-
-    // 2 删除并返回字符串中指定位置的字符
-    let mut s = String::from("测试remove方法");
-    println!("size of s: ", std::mem::size_of_val(s.as_str()));
-    s.remove(0);
-    s.remove(1);    // error (参数所给的位置不是合法的字符边界)
-
-    // 3 删除字符串中从指定位置开始到结尾的全部字符
-    let mut s = String::from("测试truncate");
-    s.truncate(3);
-    dbg!(s);
-
-    // 连接
-    // 1 使用 + 或者 += 连接字符串，要求右边的参数必须为字符串的切片引用类型(Slice)
-    let s1 = String::from("hello ");
-    let s2 = String::from("rust");
-
-    // 返回新的字符串
-    let result = s1 + &s2; // &s2会自动解引用为 &str
-    let mut result = result + "!";
-    result += "!!!";
-
-    println!("{}", result);
-
-    // 2 使用 format! 连接字符串
-    let s1 = "hello";
-    let s2 = String::from("rust");
-    let s = format!("{} {}!", s1, s2);
-    println!("{}", s)
-    ```
-
-- 字符串转义
-- 操作 UTF-8 字符串
-    ```rust
-    // 字符
-    // 以 Unicode 字符的方式遍历字符串，最好的办法是使用 chars 方法
-    for c in "中国人".chars() {
-        println!("{}", c);
-    }
-
-    // 字节
-    for b in "中国人".bytes() {
-        println!("{}", b);
-    }
-    ```
-
-### 元组
-- 元组由多种类型组合而成，元组长度固定，元组中元素的顺序也是固定的
-    ```rust
-    // 1 创建元组
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
-
-    // 2 用模式匹配解构元组
-    let tup = (500, 6.4, 1);
-    let (x, y, z) = tup;
-
-    // 3 用 . 访问元组
-    let x: (i32, f64, u8) = (500, 6.4, 1);
-    let one = x.2;
-
-    // 4
-    fn main() {
-        let s = String::from("hello");
-
-        let (s2, len) = caculate_length(s1);
-
-        println!("The length of '{}' is {}.", s2, len);
-    }
-
-    fn calculate_length(s: String) -> (String, usize) {
-        let length = s.len();
-
-        (s, length)
-    }
-
-    // (10, 20, 30) 本身不具备任何清晰的含义，因此应该使用 元组结构体
-    ```
-
-### 结构体
-    ```rust
-    struct User {
-        active: bool,
-        username: String,
-        email: String,
-        sign_in_count: u64,
-    }
-
-    // 创建结构体实例
-    let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someone"),
-        active: true,
-        sign_in_count: 1,
-    };
-    user1.email = String::from("anothermainl@example.com")
-    // 1 每个字段都必须进行初始化
-    // 2 初始化字段顺序不需要和结构体定义的顺序一致
-
-    // 简化结构体创建
-    fn build_user(email: String, username: String) -> User {
-        User {
-            email: email,
-            username: username,
-            active: true,
-            sign_in_count: 1,
-        }
-    }
-    // 进一步简化为
-    fn build_user(email: String, username: String) -> User {
-        User {
-            email,
-            username,
-            active: true,
-            sign_in_count: 1,
-        }
-    }
-
-    // 根据已由结构体实例创建新的结构体实例
-    let user2 = User {
-        active: user1.active,
-        username: user1.username,
-        email: String::from("another@example.com"),
-        sign_in_count: user1.sign_ing_count,
-    };
-    // 进一步简化为
-    let user2 = User {
-        email: String::from("another@example.com"),
-        ..user1     // ..user1 必须在结构体尾部
-    };
-    ```
-
-### 单元结构体
-- 单元结构体没有任何字段和属性
-- 如果定义一个类型，但不关心该类型的内容，只关心它的行为，此时可以使用 单元结构体
-    ```rust
-    struct AlwaysEqual;
-
-    let subject = AlwaysEqual;
-
-    impl SomeTrait for AlwaysEqual {
-
-    }
-    ```
-- 使用 #[derive(Debug)] 打印结构体信息
-    - Rust 默认不会为结构体实现 Debug，为了实现，有两种方式
-        1. 手动实现
-        2. 使用 derive 派生实现
-    ```rust
-    #[derive(Debug)]
-    struct Rectangle {
-        width: u32,
-        height: u32,
-    }
-
-    fn main() {
-        let rect1 = Rectangle {
-            width: 30,
-            height: 50,
-        };
-
-        println!("rect1 is {:?}", rect1);
-        println!("rect1 is {:#?}", rect1);
-    }
-
-    // 使用 dbg! 宏输出debug信息，它会拿走表达式的所有权，然后打印出相应的文件名，行号等debug信息，最终会把表达式的所有权返回
-    #[derive(Debug)]
-    struct Rectangle {
-        width: u32,
-        height: u32,
-    }
-
-    fn main() {
-        let scale = 2;
-        let rect1 = Rectangle {
-            width: dbg!(30 * scale),
-            height: 50,
-        };
-
-        dbg!(&rect1);
-    }
-    ```
-### 枚举
-    ```rust
-    // 实现 1
-    enum PokerSuit {
-        Clubs,
-        Spades,
-        Diamonds,
-        Hearts,
-    }
-
-    struct PokerCard {
-        suit: PokerSuit,
-        value: u8
-    }
-
-    fn main() {
-        let c1 = PokerCard {
-            suit: PokerSuit::Clubs,
-            value: 1,
-        };
-        let c2 = PokerCard {
-            suit: PokerSuit::Diamonds,
-            value: 12,
-        };
-    }
-
-    // 改进后的实现
-    enum PokerCard {
-        Clubs(u8),
-        Spades(u8),
-        Diamonds(char),
-        Hearts(char),
-    }
-
-    fn main() {
-        let c1 = PokerCard::Spades(5);
-        let c2 = PokerCard::Diamonds('A');
-    }
-
-    // ex 1
-    struct Ipv4Addr {
-        // snip
-    }
-
-    struct Ipv6Addr {
-        // snip
-    }
-
-    enum IpAddr {
-        V4(Ipv4Addr),
-        V6(Ipv6Addr),
-    }
-
-    // ex 2
-    enum Message {
-        Quit,
-        Move { x: i32, y: i32 },
-        Write(String),
-        ChangeColor(i32, i32, i32),
-    }
-
-    fn main() {
-        let m1 = Message::Quit;
-        let m2 = Message::Move{x:1,y:1};
-        let m1 = Message::ChangeColor(255,255,0);
-    }
-    ```
-- Option 枚举用于处理空值
-    - Option<T> 枚举被包含在了 prelude 之中，不需要显示引入作用域，同时它的成员 Some 和 None 无需使用 Option:: 前缀就可以直接使用
-    ```rust
-    enum Option<T> {    // T 是泛型参数
-        Some(T),        // Some(T)表示该枚举成员的数据类型是T，即 Some 可以包含任何类型的数据
-        None,
-    }
-
-    // 1
-    fn plus_one(x: Option<i32>) -> Option<i32> {
-        match x {
-            None => None,
-            Some(i) => Some(i + 1),
-        }
-    }
-
-    let five = Some(5);
-    let six = plus_one(five);
-    let none = plus_one(None);
-    ```
-### 数组
-- array
-    - 数组的三要素
-        1. 长度固定
-        2. 元素必须有相同的类型
-        3. 一次线性排列
-    ```rust
-    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-    let a1: [i32; 5] = [1, 2, 3, 4, 5];  // 5 是数组长度
-    let a2 = [3; 5];        // 某个值重复出现N次的数组
-    let first = a1[0];      // 数组 a1 的第一个元素
-
-    // 数组类型为非基本类型
-    let array: [String; 8] = std::array::from_fn(|_i| String::from("rust is good!"));
-    println!("{:#?}", array);
-
-    // 数组切片
-    let a: [i32; 5] = [1, 2, 3, 4, 5];
-
-    let slice: &[i32] = &a[1..3];   // slice 的类型为 &[i32]
-
-    assert_eq!(slice, &[2, 3]);
-
-    // 切片的长度可以与数组不同，并不是固定的，而是取决于你使用时指定的起始和节数位置
-    // 创建切片的代价非常小，因为切片只是针对底层数组的一个引用
-    // 切片类型[T]拥有不固定的大小，而切片引用类型 &[T] 则具有固定大小，因为 Rust 很多时候都需要固定大小的数据类型，因此 &[T] 更有用
-
-    // example
-    fn main() {
-        let one = [1, 2, 3];
-        let two: [u8; 3] = [1, 2, 3];
-        let blank1 = [0; 3];
-        let blank2: [u8; 3] = [0; 3];
-
-        let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
-
-        for a in &arrays {
-            print!("{:?}: ", a);
-
-            for n in a.iter() {
-                print!("\t{} + 10 = {}", n, n+10);
-            }
-
-            let mut sum = 0;
-            for i in 0..a.len() {
-                sum += a[i];
-            }
-            println!("\t{:?} = {}", a, sum);
-        }
-    }
-    ```
-
-## 流程控制
-    ```rust
-    // if
-    fn main() {
-        let n = 6;
-
-        if n % 4 == 0 {
-            println!("number is divisible by 4");
-        } else if n % 3 == 0 {
-            println!("number is divisible by 3");
-        } else if n % 2 == 0 {
-            println!("number is divisible by 2");
-        } else {
-            println!("number is not divisible by 4, 3, or 2");
-        }
-    }
-
-    // for
-    // 1
-    for item in collection
-    等价于
-    for item in IntoIterator::into_iter(collection)
-    转移所有权
-    // 2
-    for item in &collection
-    等价于
-    for item in collection.iter()
-    不可变借用
-    // 3
-    for item in &mut collection
-    等价于
-    for item in collection.iter_mut()
-    可变借用
-
-    // ex 1
-    fn main() {
-        let a = [4, 3, 2, 1];
-        for (i, v) in a.iter().enumerate() {
-            println!("The {} element is {}", i + 1, v);
-        }
-    }
-
-    // ex 2
-    for _ in 0..10 {
-        // ....
-    }
-
-    // 两种 for 循环
-    // 1 索引访问是非连续的，存在两次访问之间collection发生变化的可能
-    let collection = [1, 2, 3, 4, 5];
-    for i in 0..collection.len() {
-        let item = collection[i];
-        // ...
-    }
-    // 2 (更安全)
-    for item in collection {
-        // ...
-    }
-
-    // continue
-    for i in 1..4 {
-        if i == 2 {
-            continue;
-        }
-        println!("{}", i);
-    }
-
-    // break
-    for i in 1..4 {
-        if i == 2 {
-            break;
-        }
-        println!("{}", i);
-    }
-
-    // while
-    fn main() {
-        let mut n = 0;
-
-        which n <= 5 {
-            println!("{}!", n);
-
-            n = n + 1;
-        }
-
-        println!("out !");
-    }
-
-    // for 不会使用索引去访问数组，因此更安全也更简介，同时避免运行时的边界检查，性能更好
-    fn main() {
-        let a = [10, 20, 30, 40, 50];
-
-        for element in a.iter() {
-            println!("the value is: {}", element);
-        }
-    }
-
-    // loop
-    fn main() {
-        let mut counter = 0;
-
-        let result = loop {
-            counter += 1;
-
-            if counter == 10 {
-                break counter * 2;
-            }
-        };
-
-        println!("The result is {}", result);
-    }
-    ```
-
-## 模式匹配
-- match
-    1. match 匹配必须要穷举出所有可能，_用来代表未列出的所有可能性
-    2. match 的每一个分支都必须是一个表达式，且所有分支的表达式最终返回值的类型必须相同
-    3. X | Y 代表该分支可以匹配 X 或者 Y
-    ```rust
-    // 1
-    enum Direction {
-        East,
-        West,
-        North,
-        South,
-    }
-
-    fn main() {
-        let dire = Direction::South;
-        match dire {
-            Direction::East => println!("East"),
-            Direction::North | Direction::South => {
-                println!("South or North");
-            },
-            - => println!("West"),
-        };
-    }
-
-    // 2
-    enum Coin {
-        Penny,
-        Nickel,
-        Dime,
-        Quarter,
-    }
-
-    fn value_in_cents(coin: Coin) -> u8 {
-        match coin {
-            Coin::Penny => {
-                println!("Lucky penny!");
-                1
-            },
-            Coin::Nickel => 5,
-            Coin::Dime => 10,
-            Coin::Quarter => 25,
-        }
-    }
-
-    // 3 match 本身也是一个表达式
-    enum IpAddr {
-        Ipv4,
-        Ipv6
-    }
-
-    fn main() {
-        let ip1 = IpAddr::Ipv6;
-        let ip_str = match ip1 {
-            IpAddr::Ipv4 => "127.0.0.1",
-            _ => "::1",
-        };
-
-        println!("{}", ip_str);
-    }
-    ```
-    - 模式绑定
-        ```rust
-        enum Action {
-            Say(String),
-            MoveTo(i32, i32),
-            ChangeColorRGB(u16, u16, u16),
-        }
-
-        fn main() {
-            let actions = [
-                Action::Say("Hello Rust".to_string()),
-                Action::MoveTo(1, 2),
-                Action::ChangeColorRGB(255, 255, 0),
-            ];
-
-            for action in actions {
-                match action {
-                    Action::Say(s) => {
-                        println!("{}", s);
-                    },
-                    Action::MoveTo(x, y) => {
-                        println!("point from (0, 0) move to ({}, {})", x, y);
-                    },
-                    Action::ChangeColorRGB(r, g, _) => {
-                        println!("change color into '(r:{}, g:{}, b:0)', 'b' has been ignored", r, g,
-                        );
-                    }
-                }
-            }
-        }
-        ```
-        - _ 通配符
-        ```rust
-        let some_u8_value = 0u8;
-        match some_u8_value {
-            1 => println!("one"),
-            3 => println!("three"),
-            5 => println!("five"),
-            7 => println!("seven"),
-            _ => (),
-        }
-
-        // 也可以用一个变量承载其他情况
-        #[derive(Debug)]
-        enum Direction {
-            East,
-            West,
-            North,
-            South,
-        }
-
-        fn main() {
-            let dire = Direction::South;
-            match dire {
-                Direction::East => println!("East"),
-                other => println!("other direction: {:?}", other),
-            };
-        }
-        ```
-- if let 匹配
-    - 有时只有一个模式的值需要被处理，其他值直接忽略，用match处理显得略显麻烦
-    - 当你只要匹配一个条件，其忽略其他条件时就用 if let，否则用 match
-    ```rust
-    let v = Some(3u8);
-    match v {
-        Some(3) => println!("three"),
-        _ => (),
-    }
-
-    // 使用 if let
-    if let Some(3) = v {
-        println!("three");
-    }
-    ```
-- matches! 宏
-    - matches! 将一个表达式跟模式进行匹配，然后返回匹配的结果 true 或者 false
-    ```rust
-    // 1 过滤元素
-    enum MyEnum {
-        Foo,
-        Bar
-    }
-
-    fn main() {
-        let v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
-
-        v.iter().fiter(|x| matches!(x, MyEnum::Foo));
-    }
-
-    // 2
-    let foo = 'f';
-    assert!(matches!(foo, 'A'..='Z' | 'a'..='z'));
-
-    let bar = Some(4);
-    assert!(matches!(bar, Some(x) if x > 2))
-    ```
-
-- 变量遮蔽
-    - 无论是 match 还是 if let，这里都是一个新的代码块，而且这里的绑定相当于新变量，如果你使用同名变量，会发生变量遮蔽
-    ```rust
-    fn main() {
-        let age = Some(30);
-        println!("Before match, age is {:?}", age);
-        if let Some(age) = age {
-            println!("Matched age is {}", age);
-        }
-
-        println!("After match, age is {:?}", age);
-    }
-    ```
-
-- 解构 Option
-    ```rust
-    fn plus_one(x: Option<i32>) -> Option<i32> {
-        match x {
-            None => None,
-            Some(i) => Some(i + 1),
-        }
-    }
-
-    let five = Some(5);
-    let six = plus_one(five);
-    let none = plus_one(None);
-    ```
-- 模式 (match的每个分支就是一个模式)
-    - 字面量
-    - 解构的数组，枚举，结构体或者元组
-    - 变量
-    - 通配符
-    - 占位符
-    ```rust
-    // match
-    match VALUE {
-        PATTERN => EXPRESSION,
-        PATTERN => EXPRESSION,
-        _ => EXPRESSION,
-    }
-
-    // if let
-    if let PATTERN = SOME_VALUE {
-
-    }
-
-    // while let
-    let mut stack = Vec::new();
-
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-
-    while let Some(top) = stack.pop() {
-        println!("{}", top);
-    }
-
-    // for
-    let v = vec!['a', 'b', 'c'];
-
-    for (index, value) in v.iter().enumerate() {
-        println!("{} is at index {}", value, index)
-    }
-
-    // let
-    let x = 5;  // x 也是一种模式匹配，代表将匹配的值绑定到变量 x 上，即变量名也是一种模式
-    let (x, y, z) = (1, 2, 3);
-
-    // 函数参数也是模式
-    fn foo(x: i32) {
-        // ...
-    }
-
-    fn print_coordinates(&(x, y): &(i32, i32)) {
-        println!("Current localtion: ({}, {})", x, y);
-    }
-
-    fn main() {
-        let point = (3, 5);
-        print_coordinates(&point);
-    }
-    &(3, 5) 会匹配模式 &(x, y)，因此 x 得到 3， y 得到 5
-
-    // let 和 if let
-    let Some(x) = some_option_value; // error，因为右边的值可能不为 Some，而是 None，这种时候不能进行匹配
-
-    类似 let, for 和 match 都必须要求完全覆盖匹配，才能通过编译(不可驳模式匹配)
-
-    if let 允许匹配一种模式，而忽略其余的模式(可驳模式匹配)
-    if let Some(x) = some_option_value {
-        println!("{}", x);
-    }
-
-    let-else 可使得 let 变为可驳模式，它可以使用 else 分支来处理模式不匹配的情况，但是 else 分支中必须用发散的代码块处理(例如：break, return, panic)
-    ```
-- 全模式列表
-    ```rust
-    // 匹配字面量
-    let x = 1;
-
-    match x {
-        1 => println!("one"),
-        2 => println!("two"),
-        3 => println!("three"),
-        _ => println!("anything"),
-    }
-
-    // 匹配变量名
-    fn main() {
-        let x = Some(50);
-        let y = 10;
-
-        match x {
-            Some(50) => println!("Got 50"),
-            Some(y) => println!("Matched, y = {:?}", y),
-            _ => println!("Default case, x = {:?}", x),
-        }
-
-        println!("at the end: x = {:?}, y = {:?}", x, y);
-    }
-
-    // 单分支多模式
-    let x = 1;
-
-    match x {
-        1 | 2 => println!("one or two"),
-        3 => println!("three"),
-        _ => println!("anything"),
-    }
-
-    // 通过序列 ..= 匹配值的范围
-    // 序列只允许用于数字或字符类型，原因是它们可以连续，同时编译器可以检查该序列是否为空，字符和数字值是Rust中仅有的可以用于判断是否为空的类型
-    let x = 5;
-
-    match x {
-        1..=5 => println!("one through five"),
-        _ => println!("something else"),
-    }
-
-    let x = 'c';
-
-    match x {
-        'a'..='j' => println!("early ASCII letter"),
-        'k'..='z' => println!("late ASCII letter"),
-        _ => println!("something else"),
-    }
-
-    // 解构并分解值
-
-    // 解构结构体
-    struct Point {
-        x: i32,
-        y: i32,
-    }
-
-    fn main() {
-        let p = Point { x: 0, y: 7 };
-
-        let Point { x: a, y: b } = p;   // 模式中的变量名不必与结构体中的字段名一致
-        assert_eq!(0, a);
-        assert_eq!(7, b);
-    }
-
-    // 2
-    fn main() {
-        let p = Point { x: 0, y: 7 };
-
-        match p {
-            Point { x, y: 0 } => println!("On the x axis at {}", x),
-            Point { x: 0, y } => println!("On the y axis at {}", y),
-            Point { x, y: 0 } => println!("On neither x axis: ({}, {})", x, y),
-        }
-    }
-
-    // 解构枚举
-    enum Message {
-        Quit,
-        Move { x: i32, y: i32 },
-        Write(String),
-        ChangeColor(i32, i32, i32),
-    }
-
-    fn main() {
-        let msg = Message::ChangeColor(0, 160, 255);
-
-        match msg {
-            Message::Quit => {
-                println!("The Quit variant has no data to destructure.")
-            }
-            Message::Move { x, y } => {
-                println!(
-                    "Move in the x direction {} and in the y direction {}",
-                    x,
-                    y
-                );
-            }
-            Message::Write(text) => println!("Text message: {}", text),
-            Message::ChangeColor(r, g, b) => {
-                println!(
-                    "Change the color to red {}, green {}, and blue {}",
-                    r,
-                    g,
-                    b
-                )
-            }
-        }
-    }
-
-    // 解构嵌套的结构体和枚举
-    enum Color {
-    Rgb(i32, i32, i32),
-    Hsv(i32, i32, i32),
-    }
-
-    enum Message {
-        Quit,
-        Move { x: i32, y: i32 },
-        Write(String),
-        ChangeColor(Color),
-    }
-
-    fn main() {
-        let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
-
-        match msg {
-            Message::ChangeColor(Color::Rgb(r, g, b)) => {
-                println!(
-                    "Change the color to red {}, green {}, and blue {}",
-                    r,
-                    g,
-                    b
-                )
-            }
-            Message::ChangeColor(Color::Hsv(h, s, v)) => {
-                println!(
-                    "Change the color to hue {}, saturation {}, and value {}",
-                    h,
-                    s,
-                    v
-                )
-            }
-            _ => ()
-        }
-    }
-
-    // 解构结构体和元组
-    struct Point {
-        x: i32,
-        y: i32,
-    }
-
-    let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
-
-    // 解构数组
-    // 定长数组
-    let arr: [u16; 2] = [114, 514];
-    let [x, y] = arr;
-
-    assert_eq!(x, 114);
-    assert_eq!(y, 514);
-
-    // 不定长数组
-    let arr: &[u16] = &[114, 514];
-
-    if let [x, ..] = arr {
-        assert_eq!(x, &114);
-    }
-
-    if let &[.., y] = arr {
-        assert_eq!(y, 514);
-    }
-
-    let arr: &[u16] = &[];
-
-    assert!(matches!(arr, [..]));
-    assert!(!matches!(arr, [x, ..]));
-
-    // 忽略模式中的值
-    // 使用 _ 忽略整个值
-    fn foo(_: i32, y: i32) {
-        println!("This code only uses the y parameter: {}", y);
-    }
-
-    fn main() {
-        foo(3, 4);
-    }
-    // 使用嵌套的 _ 忽略部分值
-    let mut setting_value = Some(5);
-    let new_setting_value = Some(10);
-
-    match (setting_value, new_setting_value) {
-        (Some(_), Some(_)) => {
-            println!("Can't overwrite an existing customized value");
-        }
-        _ => {
-            setting_value = new_setting_value;
-        }
-    }
-
-    println!("setting is {:?}", setting_value);
-
-    // 使用下划线开头忽略未使用的变量
-    fn main() {
-        let _x = 5;
-        let y = 10;
-    }
-    // 用 .. 忽略剩余值
-    struct Point {
-        x: i32,
-        y: i32,
-        z: i32,
-    }
-
-    let origin = Point { x: 0, y: 0, z: 0 };
-
-    match origin {
-        Point { x, .. } => println!("x is {}", x),
-    }
-    // 用 .. 来忽略元组中间的某些值
-    fn main() {
-        let numbers = (2, 4, 8, 16, 32);
-
-        match numbers {
-            (first, .., last) => {
-                println!("Some numbers: {}, {}", first, last);
-            },
-        }
-    }
-
-    // 匹配守卫提供的额外条件
-    // 匹配守卫（match guard）是一个位于 match 分支模式之后的额外 if 条件，它能为分支模式提供更进一步的匹配条件
-    fn main() {
-        let x = Some(5);
-        let y = 10;
-
-        match x {
-            Some(50) => println!("Got 50"),
-            Some(n) if n == y => println!("Matched, n = {}", n),
-            _ => println!("Default case, x = {:?}", x),
-        }
-
-        println!("at the end: x = {:?}, y = {}", x, y);
-    }
-    // 匹配守卫 if n == y 并不是一个模式所以没有引入新变量。这个 y 正是 外部的 y 而不是新的覆盖变量 y，这样就可以通过比较 n 和 y 来表达寻找一个与外部 y 相同的值的概念了
-
-    // 也可以在匹配守卫中使用 或 运算符 | 来指定多个模式，同时匹配守卫的条件会作用于所有的模式
-    let x = 4;
-    let y = false;
-
-    match x {
-        4 | 5 | 6 if y => println!("yes"),
-        _ => println!("no"),
-    }
-    这个匹配条件表明此分支只匹配 x 值为 4、5 或 6 同时 y 为 true 的情况
-    (4 | 5 | 6) if y => ...
-  
-    // @绑定
-    // @（读作 at）运算符允许为一个字段绑定另外一个变量
-    enum Message {
-        Hello { id: i32 },
-    }
-
-    let msg = Message::Hello { id: 5 };
-
-    match msg {
-        Message::Hello { id: id_variable @ 3..=7 } => {
-            println!("Found an id in range: {}", id_variable)
-        },
-        Message::Hello { id: 10..=12 } => {
-            println!("Found an id in another range")
-        },
-        Message::Hello { id } => {
-            println!("Found some other id: {}", id)
-        },
-    }
-
-    // @前绑定后解构(Rust 1.56 新增)
-    #[derive(Debug)]
-    struct Point {
-        x: i32,
-        y: i32,
-    }
-
-    fn main() {
-        // 绑定新变量 `p`，同时对 `Point` 进行解构
-        let p @ Point {x: px, y: py } = Point {x: 10, y: 23};
-        println!("x: {}, y: {}", px, py);
-        println!("{:?}", p);
-
-
-        let point = Point {x: 10, y: 5};
-        if let p @ Point {x: 10, y} = point {
-            println!("x is 10 and y is {} in {:?}", y, p);
-        } else {
-            println!("x was not 10 :(");
-        }
-    }
-    ```
-
-- 方法
-    ```rust
-    // 定义方法
-    struct Circle {
-        x: f64,
-        y: f64,
-        radius: f64,
-    }
-
-    impl Circle {
-        // new 是 Circle 的关联函数，因为它的第一个参数不是 self，且 new 并不是关键字
-        // 这种方法往往用于初始化当前结构体实例
-        fn new(x: f64, y: f64, radius: f64) -> Circle {
-            Circle {
-                x: x,
-                y: y,
-                radius: radius,
-            }
-        }
-
-        // Circle 的方法，&self 表示借用当前的 Circle 结构体
-        fn area(&self) -> f64 {
-            std::f64::consts::PI * (self.radius * self.radius)
-        }
-    }
-
-    // 2
-    #[derive(Debug)]
-    struct Rectangle {
-        fn area(&self) -> u32 {
-            self.width * self.height
-        }
-    }
-
-    fn main() {
-        let rect1 = Rectangle { width: 30, height: 50 };
-
-        println!("The area of the rectangle is {} square pixels.", rect1.area());
-    }
-    ```
-- `self`, `&self` 和 `&mut self`
-    - self 的使用就跟函数参数一样，要严格遵守 Rust 的所有权规则
-    ```rust
-    #[derive(Debug)]
-    struct Rectangle {
-        width: u32,
-        height: u32,
-    }
-
-    impl Rectangle {
-        fn area(&self) -> u32 {
-            self.width * self.height
-        }
-    }
-
-    // 在 area 的签名中，&self 是 self: &Self 的简写，它替代了 rectangle:&Rectangle
-    // 在一个 impl 块内， Self 指代被实现防范的结构体类型，self 指代此类型的实例
-
-    self 的使用就跟函数参数一样，要严格遵守 Rust 的所有权规则
-    1. self 表示 Rectangle 的所有权转移到该方法中，这种形式用的较少
-    2. &self 表示该方法对 Rectangle 的不可变借用
-    3. &mut self 表示可变借用
-
-    使用方法代替函数的好处
-    1. 不用在函数签名中重复书写 self 对应的类型
-    2. 代码的组织性和内聚性更强，对于代码维护和阅读来说，好处巨大
-
-    // 方法名跟结构体字段名相同
-    // 一般来说，方法跟字段同名，往往适用于实现 getter 访问器
-    mod my {
-        pub struct Rectangle {
-            width: u32,
-            pub height: u32,
-        }
-
-        impl Rectangle {
-            pub fn new(width: u32, height: u32) -> Self {
-                Rectangle { width, height }
-            }
-            pub fn width(&self) -> u32 {
-                return self.width;
-            }
-            pub fn height(&self) -> u32 {
-                return self.height;
-            }
-        }
-    }
-
-    当使用 object.something() 调用方法时，Rust 会自动为 object 添加 &、&mut 或 * 以便使 object 与方法签名匹配。也就是说，这些代码是等价的：
-    p1.distance(&p2);
-    (&p1).distance(&p2);
-    ```
-
-    ```rust
-    // 带有多个参数的方法
-    impl Rectangle {
-        fn area(&self) -> u32 {
-            self.width * self.height
-        }
-
-        fn can_hold(&self, other: &Rectangle) -> bool {
-            self.width > other.width && self.height > other.height
-        }
-    }
-
-    // 关联函数 (定义在 impl 中且没有 self 的函数被称之为关联函数)
-    impl Redtangle {
-        fn new(w: u32, h: u32) -> Rectangle {
-            Rectangle { width: w, height: h }
-        }
-    }
-
-    // 多个 impl 定义
-    impl Rectangle {
-        fn area(&self) -> u32 {
-            self.width * self.height
-        }
-    }
-
-    impl Rectangle {
-        fn can_hold(&self, other: &Rectangle) -> bool {
-            self.width > other.width && self.height > other.height
-        }
-    }
-
-    // 为枚举实现方法
-    #![allow(unused)]
-    enum Message {
-        Quit,
-        Move { x: i32, y: i32 },
-        Write(String),
-        ChangeColor(i32, i32, i32),
-    }
-
-    impl Message {
-        fn call(&self) {
-            // ...
-        }
-    }
-
-    fn main() {
-        let m = Message::Write(String::from("hello"));
-        m.call();
-    }
-    ```
-
-## 泛型和特征
-- 结构体中使用泛型
+
+//
+let spaces = "   ";         // 字符串类型
+let spaces = spaces.len();  // usize数值类型
+
+//
+let mut spaces = "   ";
+spaces = spaces.len();	// ERROR: expected `&str`, found `usize`
+
+数值类型
+	有符号整数(i8, i16, i32, i64, isize)
+	无符号整数(u8, u16, u32, u64, usize)
+	浮点数(f32, f64)
+	NaN
+	有理数,复数
+
+整形字面量
+98_222  // 十进制
+0xff    // 十六
+0o77    // 八
+0b1111_0000 // 二
+b'A'    // 字节(u8)
+
+fn main() {
+	let x = (-42.0_f32).sqrt();
+	if x.is_nan() {
+		println!("未定义的数学行为");
+	}
+
+	println!("{:.2}", 18.123);
+
+	let i: u8 = 2;
+	let shift: u8 = 3;
+	println!("(a << b) value is {:08b}", i << shift);
+}
+
+序列
+for i in 'a'..='z' {
+	println!("{}", i)
+}
+
+字符串类型: 字符串字面量和字符串切片 &str
+布尔类型: true, false
+字符类型: 表示单个 Unicode 字符，存储为4个字节
+	Rust的字符不仅仅是 ASCII，所有的 Unicode 值都可以作为Rust字符
+	let c = 'z';
+	let g = '国';
+
+单元类型: ()，其唯一的值也是 ()
+	main 函数返回 ()，println!()的返回值也是()
+	没有返回值的函数在Rust中有单独的定义: 发散函数(diverge function)，即无法收敛的函数
+
+类型推导与标注
+	Rust 是一门静态类型语言
+	Rust 编译器可以根据变量的值和上下文中的使用方式来自动推导出变量的类型
+
+语句和表达式
+	语句会执行一些操作但是不会返回值，语句以分号结尾
+	表达式会在求值后返回一个值，表达式结尾没有分号
+	Rust是基于表达式的语言
+
+函数
+fn add(i: i32, j: i32) -> i32 {
+	i + j
+}
+
+fn clear(text: &mut String) -> () {
+	*text = String::from("")
+}
+
+fn foever() -> ! {  // ! 表示函数永不返回
+	loop {
+		// ..
+	}
+}
+
+fn dead_end() -> ! {
+	panic!("panic !")
+}
+
+所有权原则
+	1. Rust中的每一个值都被一个变量所拥有，该变量称为值的所有者
+	2. 一个值同时只能被一个变量所拥有，或者说一个值只能拥有一个所有者
+	3. 当所有者(变量)离开作用域时，这个值将被丢弃(drop)
+// 1
+let s1 = String::from("hello");
+let s2 = s1;    // 所有权从s1转移到s2
+
+// 2
+let s = String::from("hello");
+takes_ownership(s); // 所有权转移到函数里
+
+fn takes_ownership(some_string: String) {
+	println!("{}", some_string);
+}   // some_string 移出作用域并调用 drop 方法，内存被释放
+
+// 3
+fn gives_ownership() -> String {
+	let some_string = String::from("hello");
+	some_string
+}
+
+fn takes_and_gives_back(a_string: String) -> Stirng {
+	a_string
+}
+
+Rust永远也不会自动创建数据的"深拷贝"，任何自动的复制都不是深拷贝，可以被认为对运行性能影响较小
+如果一个类型拥有 Copy 特征，旧的变量赋值给其他变量后仍然可用，即赋值的过程为拷贝的过程
+	任何基本类型的组合可以 Copy，不需要分配内存或者某种形式资源的类型是可以Copy的
+		所有整数类型
+		布尔类型
+		所有浮点类型
+		字符串类型
+		当且仅当元祖包含的类型都是Copy时
+		不可变引用 &T
+
+引用与借用
+	获取变量的引用，称之为借用
+	引用与解引用
+let x = 5;
+let y = &x;
+assert_eq!(5, *y);
+
+不可变引用
+let s1 = String::from("hello");
+
+let len = caculate_length(&s1);
+
+fn caculate_length(s: &String) -> usize {   // & 符号是引用，允许使用值而不获取所有权
+	s.len()
+}
+
+可变引用
+let mut s = String::from("hello");
+
+change(&mut s);
+
+fn change(some_string: &mut String) {
+	some_string.push_str(", world");
+}
+
+同一作用域，特定数据只能有一个可变引用
+	let mut s = String::from("hello");
+
+	let r1 = &mut s;
+	let r2 = &mut s;    // error
+
+
+可变应用与不可变引用不能同时存在
+	let mut s = String::from("hello");
+
+	let r1 = &s;
+	let r2 = &s;
+	let r3 = &mut s;    // error
+
+	println!("{}, {}, and {}", r1, r2, r3);
+
+引用作用域的结束位置从花括号到最后一次使用的位置
+	fn main() {
+		let mut s = String:from("hello");
+
+		let r1 = &s;
+		let r2 = &s;
+		println!("{} and {}", r1, r2);  // r1, r2 作用域在这里结束
+
+		let r3 = &mut s;
+		println!("{}", r3);
+	}   // r3 作用域在这里结束
+引用的作用域从创建开始，一直持续到它最后一次使用的地方，这个跟变量的作用域不同，变量的作用域从创建开始持续到花括号结束
+对于这种编译器的优化行为，Rust称为Non-Lexical Lifetimes(NLL)，专门用于找到某个引用在作用域(})结束前就不再被使用的代码位置
+
+字符串切片
+	字符串切片的类型标识是 `&str`，`&str`是一个不可变引用
+	字符串字面量是切片，即 `let s = "hello";` 等价于 `let s: &str = "hello";`
+	let s = String::from("hello world");
+
+	let hello = &s[0..5];
+	let world = &s[6..11];
+
+	// 1
+	let s = String::from("hello");
+
+	let slice = &s[0..2];
+	let slice = &s[..2];    // 从索引0开始
+
+	// 2
+	let s = String::from("hello");
+
+	let len = s.len();
+
+	let slice = &s[4..len];
+	let slice = &s[4..];    // 包含最后一个字节
+
+	// 3
+	let s = String::from("hello");
+
+	let len = s.len();
+
+	let slice = &s[0..len];
+	let slice = &s[..];     // 完整切片
+
+	// 4
+	fn main() {
+		let mut s = String::from("hello world");
+
+		let word = first_world(&s); // immutable borrow
+
+		s.clear();  // error        // mutable borrow
+
+		println!("the first word is: {}", word);    // immutable borrow
+	}
+
+	fn first_world(s: &String) -> &str {
+		&s[..1]
+	}
+
+// clear 方法的声明为 `pub fn clear(&mut self)`，它需要一个可变引用
+// 在 s.clear 处可变引用与不可变引用同时生效，编译无法通过
+
+在对字符串使用切片语法时需要格外小心，切片的索引必须落在字符之间的边界位置，也就是 UTF-8 字符的边界
+例如中文在 UTF-8 中占用三个字节，下面的代码就会崩溃：
+	let s = "中国人";
+	let a = &s[0..2];
+	println!("{}", a);
+
+数组切片
+	let a = [1, 2, 3, 4, 5];
+	let slice = &a[1..3];   // 该数组切片的类型为 &[i32]
+	assert_eq!(slice, &[2, 3]);
+
+字符串
+	Rust中的字符是Unicode类型，每个字符占4个字节，而字符串是UTF-8编码，每个字符所占的字节数是变化的(14)，这样有助于降低字符串所占用的内存空间
+	Rust在语言级别只有一种字符串类型：str，通常是以引用类型出现 &str，即字符串切片。但在标准库里，多种不同用途的字符串类型，使用最广的是String类型，还有OsString，OsStr，CsString，CsStr等，以String或者Str结尾，分别对应具有所有权和被借用的变量
+	String 是一个可增长，可改变且具有所有权的UTF-8编码字符串
+
+String与&str的转换
+	// &str -> String
+	String::from("hello")
+	"hello".to_string()
+
+	// String -> &str (取引用即可)
+	fn main() {
+		let s = String::from("hello");
+		say_hello(&s);
+		say_hello(&s[..]);
+		say_hello(s.as_str());
+	}
+
+	fn say_hello(s: &str) {
+		println!("{}", s);
+	}
+
+Rust 不允许取索引字符串，因为对于String类型，需要从0开始去遍历字符串来定位合法字符，性能表现无法达到O(1)
+	let hello = String::from("中国人");
+	// 字符串的底层的数据存储格式实际上是[ u8 ]，一个字节数组
+	// 该字符串实际占用9个字节的长度，大部分常用汉字在UTF-8中的长度是3个字节，访问&hello[0]没有任何意义
+	let s = &hello[0..2];
+	// 字符串切片无法保证索引的字节刚好落在字符的边界上，导致程序崩溃
+
+字符创操作
+	let mut s = String::from("hello ");
+
+	s.push_str("rust"); // 追加字符串
+	s.push('!');        // 追加字符
+
+	// 插入
+	let mut s = String::from("hello rust!");
+
+	s.insert(5, ' ');           // 插入字符
+	s.insert_str(6, "I like");  // 插入字符串
+
+	// 替换
+	// 1
+	let s = String::from("I like rust");
+	let new_s = s.replace("rust", "RUST");  // 返回新的字符串
+	dbg!(new_s);
+
+	// 2
+	let s = String::from("I like rust, learning rust is good");
+	let new_s = s.replacen("rust", "RUST", 1);  // 返回新的字符串
+	dbg!(new_s);
+
+	// 3
+	let mut s = String::from("I like rust");
+	s.replace_range(7..8, "R");  // 操作原来的字符串
+	dbg!(new_s);
+
+	// 删除
+	// 1 删除并返回字符串的最后一个字符
+	let mut s = String::from("rust pop 中文!");
+	let p1 = s.pop();
+	let p2 = s.pop();
+	dbg!(p1);
+	dbg!(p2);
+	dbg!(s);
+
+	// 2 删除并返回字符串中指定位置的字符
+	let mut s = String::from("测试remove方法");
+	println!("size of s: ", std::mem::size_of_val(s.as_str()));
+	s.remove(0);
+	s.remove(1);    // error (参数所给的位置不是合法的字符边界)
+
+	// 3 删除字符串中从指定位置开始到结尾的全部字符
+	let mut s = String::from("测试truncate");
+	s.truncate(3);
+	dbg!(s);
+
+	// 连接
+	// 1 使用 + 或者 += 连接字符串，要求右边的参数必须为字符串的切片引用类型(Slice)
+	let s1 = String::from("hello ");
+	let s2 = String::from("rust");
+
+	// 返回新的字符串
+	let result = s1 + &s2; // &s2会自动解引用为 &str
+	let mut result = result + "!";
+	result += "!!!";
+
+	println!("{}", result);
+
+	// 2 使用 format! 连接字符串
+	let s1 = "hello";
+	let s2 = String::from("rust");
+	let s = format!("{} {}!", s1, s2);
+	println!("{}", s)
+
+字符串转义
+操作 UTF-8 字符串
+	// 字符
+	// 以 Unicode 字符的方式遍历字符串，最好的办法是使用 chars 方法
+	for c in "中国人".chars() {
+		println!("{}", c);
+	}
+
+	// 字节
+	for b in "中国人".bytes() {
+		println!("{}", b);
+	}
+
+元组
+	元组由多种类型组合而成，元组长度固定，元组中元素的顺序也是固定的
+	// 1 创建元组
+	let tup: (i32, f64, u8) = (500, 6.4, 1);
+
+	// 2 用模式匹配解构元组
+	let tup = (500, 6.4, 1);
+	let (x, y, z) = tup;
+
+	// 3 用 . 访问元组
+	let x: (i32, f64, u8) = (500, 6.4, 1);
+	let one = x.2;
+
+	// 4
+	fn main() {
+		let s = String::from("hello");
+
+		let (s2, len) = caculate_length(s1);
+
+		println!("The length of '{}' is {}.", s2, len);
+	}
+
+	fn calculate_length(s: String) -> (String, usize) {
+		let length = s.len();
+
+		(s, length)
+	}
+
+	// (10, 20, 30) 本身不具备任何清晰的含义，因此应该使用 元组结构体
+
+结构体
+	struct User {
+		active: bool,
+		username: String,
+		email: String,
+		sign_in_count: u64,
+	}
+
+	// 创建结构体实例
+	let user1 = User {
+		email: String::from("someone@example.com"),
+		username: String::from("someone"),
+		active: true,
+		sign_in_count: 1,
+	};
+	user1.email = String::from("anothermainl@example.com")
+	// 1 每个字段都必须进行初始化
+	// 2 初始化字段顺序不需要和结构体定义的顺序一致
+
+	// 简化结构体创建
+	fn build_user(email: String, username: String) -> User {
+		User {
+			email: email,
+			username: username,
+			active: true,
+			sign_in_count: 1,
+		}
+	}
+	// 进一步简化为
+	fn build_user(email: String, username: String) -> User {
+		User {
+			email,
+			username,
+			active: true,
+			sign_in_count: 1,
+		}
+	}
+
+	// 根据已由结构体实例创建新的结构体实例
+	let user2 = User {
+		active: user1.active,
+		username: user1.username,
+		email: String::from("another@example.com"),
+		sign_in_count: user1.sign_ing_count,
+	};
+	// 进一步简化为
+	let user2 = User {
+		email: String::from("another@example.com"),
+		..user1     // ..user1 必须在结构体尾部
+	};
+
+单元结构体
+	单元结构体没有任何字段和属性
+	如果定义一个类型，但不关心该类型的内容，只关心它的行为，此时可以使用 单元结构体
+	struct AlwaysEqual;
+
+	let subject = AlwaysEqual;
+
+	impl SomeTrait for AlwaysEqual {
+
+	}
+
+使用 #[derive(Debug)] 打印结构体信息
+	Rust 默认不会为结构体实现 Debug，为了实现，有两种方式
+		1. 手动实现
+		2. 使用 derive 派生实现
+
+#[derive(Debug)]
+	struct Rectangle {
+		width: u32,
+		height: u32,
+	}
+
+	fn main() {
+		let rect1 = Rectangle {
+			width: 30,
+			height: 50,
+		};
+
+		println!("rect1 is {:?}", rect1);
+		println!("rect1 is {:#?}", rect1);
+	}
+
+	// 使用 dbg! 宏输出debug信息，它会拿走表达式的所有权，然后打印出相应的文件名，行号等debug信息，最终会把表达式的所有权返回
+	#[derive(Debug)]
+	struct Rectangle {
+		width: u32,
+		height: u32,
+	}
+
+	fn main() {
+		let scale = 2;
+		let rect1 = Rectangle {
+			width: dbg!(30 * scale),
+			height: 50,
+		};
+
+		dbg!(&rect1);
+	}
+
+枚举
+	// 实现 1
+	enum PokerSuit {
+		Clubs,
+		Spades,
+		Diamonds,
+		Hearts,
+	}
+
+	struct PokerCard {
+		suit: PokerSuit,
+		value: u8
+	}
+
+	fn main() {
+		let c1 = PokerCard {
+			suit: PokerSuit::Clubs,
+			value: 1,
+		};
+		let c2 = PokerCard {
+			suit: PokerSuit::Diamonds,
+			value: 12,
+		};
+	}
+
+	// 改进后的实现
+	enum PokerCard {
+		Clubs(u8),
+		Spades(u8),
+		Diamonds(char),
+		Hearts(char),
+	}
+
+	fn main() {
+		let c1 = PokerCard::Spades(5);
+		let c2 = PokerCard::Diamonds('A');
+	}
+
+	// ex 1
+	struct Ipv4Addr {
+		// snip
+	}
+
+	struct Ipv6Addr {
+		// snip
+	}
+
+	enum IpAddr {
+		V4(Ipv4Addr),
+		V6(Ipv6Addr),
+	}
+
+	// ex 2
+	enum Message {
+		Quit,
+		Move { x: i32, y: i32 },
+		Write(String),
+		ChangeColor(i32, i32, i32),
+	}
+
+	fn main() {
+		let m1 = Message::Quit;
+		let m2 = Message::Move{x:1,y:1};
+		let m1 = Message::ChangeColor(255,255,0);
+	}
+
+Option 枚举用于处理空值
+	Option<T> 枚举被包含在了 prelude 之中，不需要显示引入作用域，同时它的成员 Some 和 None 无需使用 Option:: 前缀就可以直接使用
+	enum Option<T> {    // T 是泛型参数
+		Some(T),        // Some(T)表示该枚举成员的数据类型是T，即 Some 可以包含任何类型的数据
+		None,
+	}
+
+	// 1
+	fn plus_one(x: Option<i32>) -> Option<i32> {
+		match x {
+			None => None,
+			Some(i) => Some(i + 1),
+		}
+	}
+
+	let five = Some(5);
+	let six = plus_one(five);
+	let none = plus_one(None);
+
+数组
+	1. 长度固定
+	2. 元素必须有相同的类型
+	3. 一次线性排列
+	let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+	let a1: [i32; 5] = [1, 2, 3, 4, 5];  // 5 是数组长度
+	let a2 = [3; 5];        // 某个值重复出现N次的数组
+	let first = a1[0];      // 数组 a1 的第一个元素
+
+	// 数组类型为非基本类型
+	let array: [String; 8] = std::array::from_fn(|_i| String::from("rust is good!"));
+	println!("{:#?}", array);
+
+	// 数组切片
+	let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+	let slice: &[i32] = &a[1..3];   // slice 的类型为 &[i32]
+
+	assert_eq!(slice, &[2, 3]);
+
+	// 切片的长度可以与数组不同，并不是固定的，而是取决于你使用时指定的起始和节数位置
+	// 创建切片的代价非常小，因为切片只是针对底层数组的一个引用
+	// 切片类型[T]拥有不固定的大小，而切片引用类型 &[T] 则具有固定大小，因为 Rust 很多时候都需要固定大小的数据类型，因此 &[T] 更有用
+
+	// example
+	fn main() {
+		let one = [1, 2, 3];
+		let two: [u8; 3] = [1, 2, 3];
+		let blank1 = [0; 3];
+		let blank2: [u8; 3] = [0; 3];
+
+		let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
+
+		for a in &arrays {
+			print!("{:?}: ", a);
+
+			for n in a.iter() {
+				print!("\t{} + 10 = {}", n, n+10);
+			}
+
+			let mut sum = 0;
+			for i in 0..a.len() {
+				sum += a[i];
+			}
+			println!("\t{:?} = {}", a, sum);
+		}
+	}
+
+流程控制
+	// if
+	fn main() {
+		let n = 6;
+
+		if n % 4 == 0 {
+			println!("number is divisible by 4");
+		} else if n % 3 == 0 {
+			println!("number is divisible by 3");
+		} else if n % 2 == 0 {
+			println!("number is divisible by 2");
+		} else {
+			println!("number is not divisible by 4, 3, or 2");
+		}
+	}
+
+	// for
+	// 1
+	for item in collection
+	等价于
+	for item in IntoIterator::into_iter(collection)
+	转移所有权
+	// 2
+	for item in &collection
+	等价于
+	for item in collection.iter()
+	不可变借用
+	// 3
+	for item in &mut collection
+	等价于
+	for item in collection.iter_mut()
+	可变借用
+
+	// ex 1
+	fn main() {
+		let a = [4, 3, 2, 1];
+		for (i, v) in a.iter().enumerate() {
+			println!("The {} element is {}", i + 1, v);
+		}
+	}
+
+	// ex 2
+	for _ in 0..10 {
+		// ....
+	}
+
+	// 两种 for 循环
+	// 1 索引访问是非连续的，存在两次访问之间collection发生变化的可能
+	let collection = [1, 2, 3, 4, 5];
+	for i in 0..collection.len() {
+		let item = collection[i];
+		// ...
+	}
+	// 2 (更安全)
+	for item in collection {
+		// ...
+	}
+
+	// continue
+	for i in 1..4 {
+		if i == 2 {
+			continue;
+		}
+		println!("{}", i);
+	}
+
+	// break
+	for i in 1..4 {
+		if i == 2 {
+			break;
+		}
+		println!("{}", i);
+	}
+
+	// while
+	fn main() {
+		let mut n = 0;
+
+		which n <= 5 {
+			println!("{}!", n);
+
+			n = n + 1;
+		}
+
+		println!("out !");
+	}
+
+	// for 不会使用索引去访问数组，因此更安全也更简介，同时避免运行时的边界检查，性能更好
+	fn main() {
+		let a = [10, 20, 30, 40, 50];
+
+		for element in a.iter() {
+			println!("the value is: {}", element);
+		}
+	}
+
+	// loop
+	fn main() {
+		let mut counter = 0;
+
+		let result = loop {
+			counter += 1;
+
+			if counter == 10 {
+				break counter * 2;
+			}
+		};
+
+		println!("The result is {}", result);
+	}
+
+模式匹配
+match
+	1. match 匹配必须要穷举出所有可能，_用来代表未列出的所有可能性
+	2. match 的每一个分支都必须是一个表达式，且所有分支的表达式最终返回值的类型必须相同
+	3. X | Y 代表该分支可以匹配 X 或者 Y
+	// 1
+	enum Direction {
+		East,
+		West,
+		North,
+		South,
+	}
+
+	fn main() {
+		let dire = Direction::South;
+		match dire {
+			Direction::East => println!("East"),
+			Direction::North | Direction::South => {
+				println!("South or North");
+			},
+			- => println!("West"),
+		};
+	}
+
+	// 2
+	enum Coin {
+		Penny,
+		Nickel,
+		Dime,
+		Quarter,
+	}
+
+	fn value_in_cents(coin: Coin) -> u8 {
+		match coin {
+			Coin::Penny => {
+				println!("Lucky penny!");
+				1
+			},
+			Coin::Nickel => 5,
+			Coin::Dime => 10,
+			Coin::Quarter => 25,
+		}
+	}
+
+	// 3 match 本身也是一个表达式
+	enum IpAddr {
+		Ipv4,
+		Ipv6
+	}
+
+	fn main() {
+		let ip1 = IpAddr::Ipv6;
+		let ip_str = match ip1 {
+			IpAddr::Ipv4 => "127.0.0.1",
+			_ => "::1",
+		};
+
+		println!("{}", ip_str);
+	}
+
+模式绑定
+		enum Action {
+			Say(String),
+			MoveTo(i32, i32),
+			ChangeColorRGB(u16, u16, u16),
+		}
+
+		fn main() {
+			let actions = [
+				Action::Say("Hello Rust".to_string()),
+				Action::MoveTo(1, 2),
+				Action::ChangeColorRGB(255, 255, 0),
+			];
+
+			for action in actions {
+				match action {
+					Action::Say(s) => {
+						println!("{}", s);
+					},
+					Action::MoveTo(x, y) => {
+						println!("point from (0, 0) move to ({}, {})", x, y);
+					},
+					Action::ChangeColorRGB(r, g, _) => {
+						println!("change color into '(r:{}, g:{}, b:0)', 'b' has been ignored", r, g,
+						);
+					}
+				}
+			}
+		}
+
+通配符
+	let some_u8_value = 0u8;
+	match some_u8_value {
+		1 => println!("one"),
+		3 => println!("three"),
+		5 => println!("five"),
+		7 => println!("seven"),
+		_ => (),
+	}
+
+	// 也可以用一个变量承载其他情况
+	#[derive(Debug)]
+	enum Direction {
+		East,
+		West,
+		North,
+		South,
+	}
+
+	fn main() {
+		let dire = Direction::South;
+		match dire {
+			Direction::East => println!("East"),
+			other => println!("other direction: {:?}", other),
+		};
+	}
+
+if let 匹配
+	有时只有一个模式的值需要被处理，其他值直接忽略，用match处理显得略显麻烦
+	当你只要匹配一个条件，其忽略其他条件时就用 if let，否则用 match
+	let v = Some(3u8);
+	match v {
+		Some(3) => println!("three"),
+		_ => (),
+	}
+
+	// 使用 if let
+	if let Some(3) = v {
+		println!("three");
+	}
+
+matches! 宏
+	matches! 将一个表达式跟模式进行匹配，然后返回匹配的结果 true 或者 false
+	// 1 过滤元素
+	enum MyEnum {
+		Foo,
+		Bar
+	}
+
+	fn main() {
+		let v = vec![MyEnum::Foo, MyEnum::Bar, MyEnum::Foo];
+
+		v.iter().fiter(|x| matches!(x, MyEnum::Foo));
+	}
+
+	// 2
+	let foo = 'f';
+	assert!(matches!(foo, 'A'..='Z' | 'a'..='z'));
+
+	let bar = Some(4);
+	assert!(matches!(bar, Some(x) if x > 2))
+
+变量遮蔽
+	无论是 match 还是 if let，这里都是一个新的代码块，而且这里的绑定相当于新变量，如果你使用同名变量，会发生变量遮蔽
+	fn main() {
+		let age = Some(30);
+		println!("Before match, age is {:?}", age);
+		if let Some(age) = age {
+			println!("Matched age is {}", age);
+		}
+
+		println!("After match, age is {:?}", age);
+	}
+
+解构 Option
+	fn plus_one(x: Option<i32>) -> Option<i32> {
+		match x {
+			None => None,
+			Some(i) => Some(i + 1),
+		}
+	}
+
+	let five = Some(5);
+	let six = plus_one(five);
+	let none = plus_one(None);
+
+模式 (match的每个分支就是一个模式)
+	字面量
+	解构的数组，枚举，结构体或者元组
+	变量
+	通配符
+	占位符
+	// match
+	match VALUE {
+		PATTERN => EXPRESSION,
+		PATTERN => EXPRESSION,
+		_ => EXPRESSION,
+	}
+
+	// if let
+	if let PATTERN = SOME_VALUE {
+
+	}
+
+	// while let
+	let mut stack = Vec::new();
+
+	stack.push(1);
+	stack.push(2);
+	stack.push(3);
+
+	while let Some(top) = stack.pop() {
+		println!("{}", top);
+	}
+
+	// for
+	let v = vec!['a', 'b', 'c'];
+
+	for (index, value) in v.iter().enumerate() {
+		println!("{} is at index {}", value, index)
+	}
+
+	// let
+	let x = 5;  // x 也是一种模式匹配，代表将匹配的值绑定到变量 x 上，即变量名也是一种模式
+	let (x, y, z) = (1, 2, 3);
+
+	// 函数参数也是模式
+	fn foo(x: i32) {
+		// ...
+	}
+
+	fn print_coordinates(&(x, y): &(i32, i32)) {
+		println!("Current localtion: ({}, {})", x, y);
+	}
+
+	fn main() {
+		let point = (3, 5);
+		print_coordinates(&point);
+	}
+	&(3, 5) 会匹配模式 &(x, y)，因此 x 得到 3， y 得到 5
+
+	// let 和 if let
+	let Some(x) = some_option_value; // error，因为右边的值可能不为 Some，而是 None，这种时候不能进行匹配
+
+	类似 let, for 和 match 都必须要求完全覆盖匹配，才能通过编译(不可驳模式匹配)
+
+	if let 允许匹配一种模式，而忽略其余的模式(可驳模式匹配)
+	if let Some(x) = some_option_value {
+		println!("{}", x);
+	}
+
+	let-else 可使得 let 变为可驳模式，它可以使用 else 分支来处理模式不匹配的情况，但是 else 分支中必须用发散的代码块处理(例如：break, return, panic)
+
+全模式列表
+	// 匹配字面量
+	let x = 1;
+
+	match x {
+		1 => println!("one"),
+		2 => println!("two"),
+		3 => println!("three"),
+		_ => println!("anything"),
+	}
+
+	// 匹配变量名
+	fn main() {
+		let x = Some(50);
+		let y = 10;
+
+		match x {
+			Some(50) => println!("Got 50"),
+			Some(y) => println!("Matched, y = {:?}", y),
+			_ => println!("Default case, x = {:?}", x),
+		}
+
+		println!("at the end: x = {:?}, y = {:?}", x, y);
+	}
+
+	// 单分支多模式
+	let x = 1;
+
+	match x {
+		1 | 2 => println!("one or two"),
+		3 => println!("three"),
+		_ => println!("anything"),
+	}
+
+	// 通过序列 ..= 匹配值的范围
+	// 序列只允许用于数字或字符类型，原因是它们可以连续，同时编译器可以检查该序列是否为空，字符和数字值是Rust中仅有的可以用于判断是否为空的类型
+	let x = 5;
+
+	match x {
+		1..=5 => println!("one through five"),
+		_ => println!("something else"),
+	}
+
+	let x = 'c';
+
+	match x {
+		'a'..='j' => println!("early ASCII letter"),
+		'k'..='z' => println!("late ASCII letter"),
+		_ => println!("something else"),
+	}
+
+	// 解构并分解值
+
+	// 解构结构体
+	struct Point {
+		x: i32,
+		y: i32,
+	}
+
+	fn main() {
+		let p = Point { x: 0, y: 7 };
+
+		let Point { x: a, y: b } = p;   // 模式中的变量名不必与结构体中的字段名一致
+		assert_eq!(0, a);
+		assert_eq!(7, b);
+	}
+
+	// 2
+	fn main() {
+		let p = Point { x: 0, y: 7 };
+
+		match p {
+			Point { x, y: 0 } => println!("On the x axis at {}", x),
+			Point { x: 0, y } => println!("On the y axis at {}", y),
+			Point { x, y: 0 } => println!("On neither x axis: ({}, {})", x, y),
+		}
+	}
+
+	// 解构枚举
+	enum Message {
+		Quit,
+		Move { x: i32, y: i32 },
+		Write(String),
+		ChangeColor(i32, i32, i32),
+	}
+
+	fn main() {
+		let msg = Message::ChangeColor(0, 160, 255);
+
+		match msg {
+			Message::Quit => {
+				println!("The Quit variant has no data to destructure.")
+			}
+			Message::Move { x, y } => {
+				println!(
+					"Move in the x direction {} and in the y direction {}",
+					x,
+					y
+				);
+			}
+			Message::Write(text) => println!("Text message: {}", text),
+			Message::ChangeColor(r, g, b) => {
+				println!(
+					"Change the color to red {}, green {}, and blue {}",
+					r,
+					g,
+					b
+				)
+			}
+		}
+	}
+
+	// 解构嵌套的结构体和枚举
+	enum Color {
+	Rgb(i32, i32, i32),
+	Hsv(i32, i32, i32),
+	}
+
+	enum Message {
+		Quit,
+		Move { x: i32, y: i32 },
+		Write(String),
+		ChangeColor(Color),
+	}
+
+	fn main() {
+		let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
+
+		match msg {
+			Message::ChangeColor(Color::Rgb(r, g, b)) => {
+				println!(
+					"Change the color to red {}, green {}, and blue {}",
+					r,
+					g,
+					b
+				)
+			}
+			Message::ChangeColor(Color::Hsv(h, s, v)) => {
+				println!(
+					"Change the color to hue {}, saturation {}, and value {}",
+					h,
+					s,
+					v
+				)
+			}
+			_ => ()
+		}
+	}
+
+	// 解构结构体和元组
+	struct Point {
+		x: i32,
+		y: i32,
+	}
+
+	let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+
+	// 解构数组
+	// 定长数组
+	let arr: [u16; 2] = [114, 514];
+	let [x, y] = arr;
+
+	assert_eq!(x, 114);
+	assert_eq!(y, 514);
+
+	// 不定长数组
+	let arr: &[u16] = &[114, 514];
+
+	if let [x, ..] = arr {
+		assert_eq!(x, &114);
+	}
+
+	if let &[.., y] = arr {
+		assert_eq!(y, 514);
+	}
+
+	let arr: &[u16] = &[];
+
+	assert!(matches!(arr, [..]));
+	assert!(!matches!(arr, [x, ..]));
+
+	// 忽略模式中的值
+	// 使用 _ 忽略整个值
+	fn foo(_: i32, y: i32) {
+		println!("This code only uses the y parameter: {}", y);
+	}
+
+	fn main() {
+		foo(3, 4);
+	}
+	// 使用嵌套的 _ 忽略部分值
+	let mut setting_value = Some(5);
+	let new_setting_value = Some(10);
+
+	match (setting_value, new_setting_value) {
+		(Some(_), Some(_)) => {
+			println!("Can't overwrite an existing customized value");
+		}
+		_ => {
+			setting_value = new_setting_value;
+		}
+	}
+
+	println!("setting is {:?}", setting_value);
+
+	// 使用下划线开头忽略未使用的变量
+	fn main() {
+		let _x = 5;
+		let y = 10;
+	}
+	// 用 .. 忽略剩余值
+	struct Point {
+		x: i32,
+		y: i32,
+		z: i32,
+	}
+
+	let origin = Point { x: 0, y: 0, z: 0 };
+
+	match origin {
+		Point { x, .. } => println!("x is {}", x),
+	}
+	// 用 .. 来忽略元组中间的某些值
+	fn main() {
+		let numbers = (2, 4, 8, 16, 32);
+
+		match numbers {
+			(first, .., last) => {
+				println!("Some numbers: {}, {}", first, last);
+			},
+		}
+	}
+
+	// 匹配守卫提供的额外条件
+	// 匹配守卫（match guard）是一个位于 match 分支模式之后的额外 if 条件，它能为分支模式提供更进一步的匹配条件
+	fn main() {
+		let x = Some(5);
+		let y = 10;
+
+		match x {
+			Some(50) => println!("Got 50"),
+			Some(n) if n == y => println!("Matched, n = {}", n),
+			_ => println!("Default case, x = {:?}", x),
+		}
+
+		println!("at the end: x = {:?}, y = {}", x, y);
+	}
+	// 匹配守卫 if n == y 并不是一个模式所以没有引入新变量。这个 y 正是 外部的 y 而不是新的覆盖变量 y，这样就可以通过比较 n 和 y 来表达寻找一个与外部 y 相同的值的概念了
+
+	// 也可以在匹配守卫中使用 或 运算符 | 来指定多个模式，同时匹配守卫的条件会作用于所有的模式
+	let x = 4;
+	let y = false;
+
+	match x {
+		4 | 5 | 6 if y => println!("yes"),
+		_ => println!("no"),
+	}
+	这个匹配条件表明此分支只匹配 x 值为 4、5 或 6 同时 y 为 true 的情况
+	(4 | 5 | 6) if y => ...
+
+	// @绑定
+	// @（读作 at）运算符允许为一个字段绑定另外一个变量
+	enum Message {
+		Hello { id: i32 },
+	}
+
+	let msg = Message::Hello { id: 5 };
+
+	match msg {
+		Message::Hello { id: id_variable @ 3..=7 } => {
+			println!("Found an id in range: {}", id_variable)
+		},
+		Message::Hello { id: 10..=12 } => {
+			println!("Found an id in another range")
+		},
+		Message::Hello { id } => {
+			println!("Found some other id: {}", id)
+		},
+	}
+
+	// @前绑定后解构(Rust 1.56 新增)
+	#[derive(Debug)]
+	struct Point {
+		x: i32,
+		y: i32,
+	}
+
+	fn main() {
+		// 绑定新变量 `p`，同时对 `Point` 进行解构
+		let p @ Point {x: px, y: py } = Point {x: 10, y: 23};
+		println!("x: {}, y: {}", px, py);
+		println!("{:?}", p);
+
+
+		let point = Point {x: 10, y: 5};
+		if let p @ Point {x: 10, y} = point {
+			println!("x is 10 and y is {} in {:?}", y, p);
+		} else {
+			println!("x was not 10 :(");
+		}
+	}
+
+方法
+	// 定义方法
+	struct Circle {
+		x: f64,
+		y: f64,
+		radius: f64,
+	}
+
+	impl Circle {
+		// new 是 Circle 的关联函数，因为它的第一个参数不是 self，且 new 并不是关键字
+		// 这种方法往往用于初始化当前结构体实例
+		fn new(x: f64, y: f64, radius: f64) -> Circle {
+			Circle {
+				x: x,
+				y: y,
+				radius: radius,
+			}
+		}
+
+		// Circle 的方法，&self 表示借用当前的 Circle 结构体
+		fn area(&self) -> f64 {
+			std::f64::consts::PI * (self.radius * self.radius)
+		}
+	}
+
+	// 2
+	#[derive(Debug)]
+	struct Rectangle {
+		fn area(&self) -> u32 {
+			self.width * self.height
+		}
+	}
+
+	fn main() {
+		let rect1 = Rectangle { width: 30, height: 50 };
+
+		println!("The area of the rectangle is {} square pixels.", rect1.area());
+	}
+
+`self`, `&self` 和 `&mut self`
+	self 的使用就跟函数参数一样，要严格遵守 Rust 的所有权规则
+	#[derive(Debug)]
+	struct Rectangle {
+		width: u32,
+		height: u32,
+	}
+
+	impl Rectangle {
+		fn area(&self) -> u32 {
+			self.width * self.height
+		}
+	}
+
+	// 在 area 的签名中，&self 是 self: &Self 的简写，它替代了 rectangle:&Rectangle
+	// 在一个 impl 块内， Self 指代被实现防范的结构体类型，self 指代此类型的实例
+
+	self 的使用就跟函数参数一样，要严格遵守 Rust 的所有权规则
+	1. self 表示 Rectangle 的所有权转移到该方法中，这种形式用的较少
+	2. &self 表示该方法对 Rectangle 的不可变借用
+	3. &mut self 表示可变借用
+
+	使用方法代替函数的好处
+	1. 不用在函数签名中重复书写 self 对应的类型
+	2. 代码的组织性和内聚性更强，对于代码维护和阅读来说，好处巨大
+
+	// 方法名跟结构体字段名相同
+	// 一般来说，方法跟字段同名，往往适用于实现 getter 访问器
+	mod my {
+		pub struct Rectangle {
+			width: u32,
+			pub height: u32,
+		}
+
+		impl Rectangle {
+			pub fn new(width: u32, height: u32) -> Self {
+				Rectangle { width, height }
+			}
+			pub fn width(&self) -> u32 {
+				return self.width;
+			}
+			pub fn height(&self) -> u32 {
+				return self.height;
+			}
+		}
+	}
+
+	当使用 object.something() 调用方法时，Rust 会自动为 object 添加 &、&mut 或 * 以便使 object 与方法签名匹配。也就是说，这些代码是等价的：
+	p1.distance(&p2);
+	(&p1).distance(&p2);
+
+带有多个参数的方法
+impl Rectangle {
+	fn area(&self) -> u32 {
+		self.width * self.height
+	}
+
+	fn can_hold(&self, other: &Rectangle) -> bool {
+		self.width > other.width && self.height > other.height
+	}
+}
+
+// 关联函数 (定义在 impl 中且没有 self 的函数被称之为关联函数)
+impl Redtangle {
+	fn new(w: u32, h: u32) -> Rectangle {
+		Rectangle { width: w, height: h }
+	}
+}
+
+// 多个 impl 定义
+impl Rectangle {
+	fn area(&self) -> u32 {
+		self.width * self.height
+	}
+}
+
+impl Rectangle {
+	fn can_hold(&self, other: &Rectangle) -> bool {
+		self.width > other.width && self.height > other.height
+	}
+}
+
+// 为枚举实现方法
+#![allow(unused)]
+enum Message {
+	Quit,
+	Move { x: i32, y: i32 },
+	Write(String),
+	ChangeColor(i32, i32, i32),
+}
+
+impl Message {
+	fn call(&self) {
+		// ...
+	}
+}
+
+fn main() {
+	let m = Message::Write(String::from("hello"));
+	m.call();
+}
+
+泛型和特征
+	结构体中使用泛型
     ```rust
     struct Point<T> {
         x: T,
