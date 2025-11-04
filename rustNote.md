@@ -1,10 +1,125 @@
 [CIS198 Rust Programming Slides](https://github.com/cis198-2016s/slides)  
+[Rust Lifetimes: A Complete Guide to Ownership and Borrowing](https://earthly.dev/blog/rust-lifetimes-ownership-burrowing/)  
+[What are Lifetimes in Rust?](https://www.freecodecamp.org/news/what-are-lifetimes-in-rust-explained-with-code-examples/)  
+[Effective Rust](https://effective-rust.com/title-page.html)  
+[The Rust Programming Language](https://doc.rust-lang.org/book/)  
+[Rust Documentation](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/)  
 []()  
 []()  
 []()  
 []()  
 []()  
-[]()  
+
+## lifetime
+- Lifetimes in Rust are mechanisms for ensuring that all borrows that occur within your code are valid. 
+- A variable's lifetime is how long it lives within the program's execution, starting from when it's initialized and ending when it's destroyed in the program.
+```rust
+max<'a>			// max should live at most as long as 'a
+
+max<'a, 'b>		// max should live at most as long as 'a and 'b
+
+// max should live at most as log as the lifetimes of s1 or s2, it also indicates max returns a reference that lives as long as s1
+fn max<'a>(s1: &'a str, s2: &'a str) -> &'a str {
+	// return the longest string out of the two
+	if s1.len() > s2.len() {
+		s1
+	} else {
+		s2
+	}
+}
+
+// only need to specify lifetimes if a function returns a reference from one of its arguments that is a borrowed reference
+fn print_longest(s1: &str, s2: &str) {
+	if s1.len() > s2.len() {
+		println!("{s1} is longer than {s2}")
+	} else {
+		println!("{s2} is longer than {s1}")
+	}
+}
+
+fn joint_strs(s1: &str, s2: &str) -> String {
+	let mut joint_string = String::from(s1);
+	joint_string.push_str(s2);
+	return joint_string;
+}
+
+// structs require explicit lifetime annotations when any of their fields are references
+// this allows the borrow checker to ensure that the references in the struct's fields live longer than the struct
+struct Strs<'a, 'b> {
+	x: &'a str,
+	y: &'b str,
+}
+
+// lifetime annotations concerning methods can be done as annotations to standalone methods, impl blocks, or traits
+// standalone methods
+ippl Struct {
+	fn max<'a>(self: &Self, s1: &'a str, s2: &'a str) -> &'a str {
+		if s1.len() > s2.len() {
+			s1
+		} else {
+			s2
+		}
+	}
+}
+// impl blocks
+struct Strs<'a> {
+	x: &'a str,
+	y: &'a str,
+}
+
+impl<'a> Strs<'a> {
+	fn max(self: &Self) -> &'a str {
+		if self.y.len() > self.x.len() {
+			self.y
+		} else {
+			self.x
+		}
+	}
+}
+// traits
+// Lifetime annotations in traits are dependent on the methods that the trait defines
+//  A method inside a trait definition can use explicit lifetime annotations as a standalone method, and the trait definition won't require explicit lifetime annotations
+trait Max {
+	fn longest_str<'a>(s1: &'a str, s2: &'a str) -> &'a str;
+}
+
+impl<'a> Max for Struct<'a> {
+	fn longest_str(s1: &'a str, s2: &'a str) {
+		if s1.len() > s2.len() {
+			s1
+		} else {
+			s2
+		}
+	}
+}
+// if a trait method requires references from the struct its associated with, the trait's definition would require explicit lifetime annotations.
+struct Strs<'a> {
+	x: &'a str,
+	y: &'a str,
+}
+
+trait Max<'a> {
+	fn max(self: &Self) -> &'a str;
+}
+
+impl<'a> Max<'a> for Strs<'a> {
+	fn max(self: &Self) ->. &'a str {
+		if self.y.len() > self.x.len() {
+			self.y
+		} else {
+			self.x
+		}
+	}
+}
+
+// lifetime annotations in enums
+enum Either<'a> {
+	Str(String),
+	Ref(&'a String),
+}
+
+
+```
 
 ## Basic
 ```rust
@@ -455,6 +570,482 @@ println!("{:?}", vector);
 // when binding a variable, ref can be applied to make the variable a reference to the assigned value
 	// take a mutable reference with "ref mut"
 // this is most useful in match statements when destructuring patterns.
+
+let mut vectors = (vec![0], vec![1]);
+match vectors {
+	(ref v1, ref mut v2) => {
+		v1.len();
+		v2.push(2);
+	}
+}
+println!("{:?}, {:?}", vectors.0, vectors.1);
+
+// use ref and ref mut when binding variables inside match statements
+
+// copy types
+// copy is a trait that signifies a type may be copied instead whenever it would be moved
+let x: i32 = 12;
+let y = x;		// i32 is 'copy', so it is not moved
+println!("x: {}, y: {}", x, y);
+
+// borrowing rules
+	// you cannot keep borrowing something after it stops existing
+	// one object may have many immutable references to it (&T), or exactly one mutable reference (&mut T)(not both)
+
+let mut vs = vec![1, 2, 3, 4];
+for v in $vs {
+	vs.pop();
+	// ERROR: cannot borrow 'vs' as mutable because it is also borrowed as immutable
+}
+// borrowing prevents: iterator invalidation due to mutating a collection you're iterating over
+
+let y: &i32;
+{
+	let x = 5;
+	y = &x;		// ERROR: 'x' does not live long enough
+}
+// borrowing prevents: use-after-free
+
+// iterate over Vec
+let mut vs = vec![0, 1, 2, 3];
+
+// borrow immutably
+for v in &vs {	// can also write 'for v in vs.iter()'
+	println!("I'm borrowing {}", v);
+}
+
+// borrow mutably
+for v in &mut vs {	// can also write 'for v in vs.into_iter()'
+	*v = *v + 1;
+	println!("I'm mutably borrowing {}", v);
+}
+
+// take ownership of the whole vector
+for v in vs {	// can also write 'for v in vs.into_iter()'
+	println!("I now own {}", v);
+}
+// 'vs' is no longer valid
+
+// structured data
+	// structs
+	// enums
+// structs and enums may have one or more implementation blocks(impl s) which define methods for the data type
+
+// structs
+struct Point {		// by convention, structs have CamelCase names, fields have snake_case names
+	x: i32,			// fields are declared with 'name: type'
+	y: i32,
+}
+
+let origin = Point { x: 0, y: 0 };	// structs may be instantiated with fields fields assigned in braces
+
+// you must assign all fields upon creation, or declare an uninitialized struct that you initialiaze later
+let mut p = Point { x: 1, y: 2 };
+p.x += 1;	// struct fields may be accessed with dot notation
+p.y -= 1;
+
+struct Point {
+	x: i32,
+	mut y: i32,		// Illegal
+}
+// structs donot have field-level mutability
+// mutability is a property of the variable binding, not the type
+// field-level mutability(interior mutability) can be achieved via Cell types
+
+mod foo {
+	pub struct Point {
+		pub x: i32,
+		y: i32,
+	}
+}
+
+fn main() {
+	let b = foo::Point { x: 12, y: 12 };
+	// error: field 'y' of struct 'foo:Point' is private
+}
+
+// structs are namespaced with their module name, ex. foo::Point
+// struct fields are private by default, which may be made public with the pub keyword
+// private fields may only be accessed from within the module where the struct is declared
+
+mod foo {
+    pub struct Point {
+        pub x: i32,
+        y: i32,
+    }
+
+    // create and return a new Point
+    pub fn new(x: i32, y: i32) -> Point {
+        Point { x, y }
+    }
+}
+// new is inside the same module as Point, so accessing private fields is allowed
+
+// struct matching
+pub struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let p = Point { x: 12, y: 13 };
+
+    match p {
+        Point { x, y } => {
+            println!("({}, {})", x, y);
+        }
+    }
+
+    match p {
+        Point { y, .. } => {
+            println!("y = {}", y);
+        }
+    }
+}
+// destructure structs with match statements
+// fields do not need to be in order
+// list fields inside braces to bind struct members to those variable names
+	// use 'struct_field: new_var_binding' to change the variable it's bound to
+// omit fields: use .. to ignore all unnamed fields
+
+#[derive(Debug)]
+struct Foo {
+    a: i32,
+    b: i32,
+    c: i32,
+    d: i32,
+    e: i32
+}
+
+fn main() {
+    let mut x = Foo { a: 1, b: 2, c: 3, d: 4, e: 5 };
+    let x2 = Foo { e: 4, .. x };
+
+    x = Foo { a: 2, b: 2, e: 2, .. x };
+    println!("x = {:?}", x);
+    println!("x2 = {:?}", x2);
+}
+
+// a struct initializer can contain '.. s' to copy some or all fields from s
+// any fields you donot specify in the initializer get copied over from the target struct
+// the struct used must be of the same type as the target struct
+	// No copying same-type fields from different-type structs
+
+// tuple struct
+// variant on structs that has a name, but no named fields
+// have numbered field accessors, like tuples (e.g. x.0, x.1, etc)
+// can also match these
+struct Color(i32, i32, i32);
+
+fn main() {
+    let mut c = Color(0, 0, 0);
+    c.0 = 255;
+    match c {
+        Color(r, g, b) => {
+            println!("r = {}, g = {}, b = {}", r, g, b);
+        }
+    }
+}
+
+// create a new type that's not just an alias
+	// often referred to as the "newtype" pattern
+// these two types are structurely identical, but not equatable
+// not equatable
+struct Meters(i32);
+struct Yards(i32);
+
+// may be compared using the == operator, added with '+', etc.
+type MetersAlias = i32;
+type YardsAlias = i32;
+
+// unit structs (zero-sized types)
+// Structs can be declared to have zero size.
+	// This struct has no fields!
+// We can still instantiate it.
+// It can be used as a "marker" type on other data structures.
+	// Useful to indicate, e.g., the type of data a container is storing.
+struct Unit;
+let u = Unit;
+
+// enums
+// enum is a way to express some data that may be one of several things
+// each enum variant can have
+	// no data (unit variant)
+	// named data (struct variant)
+	// unnamed ordered data (tuple variant)
+enum Resultish {
+	Ok,
+	Warning { code: i32, message: String },
+	Err(String)
+}
+
+match make_request() {
+	Resultish::Ok =>
+		println!("Success!"),
+	Resultish::Warning { code, message } =>
+		println!("Warning: {}!", message),
+	Resultish::Err(s) =>
+		println!("Failed with error: {}", s),
+}
+
+// enum variants are namespaced by enum type: Resultish:Ok
+	// you can import all variants with 'use Resultish::*'
+// enums can be matched on like any other data type
+
+// recursive types
+enum List {
+    Nil,
+    Cons(i32, List),
+}
+// error: invalid recursive enum type
+// help: wrap the inner value in a box to make it representable
+
+// box
+// a box is a general term for one of Rust's ways of allocating data on the heap
+// a Box<T> is a heap pointer with exactly one owner
+	// a Box owns its data (the T) uniquely -- it can bge aliased
+// Box es are automatically destructed when they go out of scope
+let boxed_file = Box::new(5);
+
+enum List {
+	Nil,
+	Cons(i32, Box<List>),	// Ok
+}
+
+// methods
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Point {
+    pub fn distance(&self, other: Point) -> f32 {
+        let (dx, dy) = (self.x - other.x, self.y - other.y);
+        ((dx.pow(2) + dy.pow(2)) as f32).sqrt()
+    }
+}
+
+fn main() {
+    let p = Point { x: 1, y: 2 };
+    let p2 = Point { x: 3, y: 4 };
+    println!("distance = {}", p.distance(p2));
+}
+// methods can be implemented for structs and enums in an 'impl' block
+// like fields, methods may be accessed via dot notation
+// methods can be made public with 'pub'
+	// 'impl' blocks themselves don't need to be made 'pub'
+// works for enums in exactly the same way they do for structs
+
+impl Point {
+    pub fn distance(&self, other: Point) -> f32 {		// distance needs to access but not modify fields
+        let (dx, dy) = (self.x - other.x, self.y - other.y);
+        ((dx.pow(2) + dy.pow(2)) as f32).sqrt()
+    }
+
+    pub fn translate(&mut self, dx: i32, dy: i32) {		// translate modifies the struct fields
+        self.x += dx;
+        self.y += dy;
+    }
+
+    fn mirror_y(self) -> Point {						// mirror_y returns an entirely new struct, consuming the old one
+        Point { x: -self.x, y: self.y }
+    }
+}
+
+// the first argument to a method, named 'self', determines what kind of ownership the method requires
+// &self: the method borrows the value
+	// use this unless you need a different ownership model
+// &mut self: the method mutably borrows the value
+	// the function needs to modify the struct it's called on
+// self: the method takes ownership
+	// the function consumes the value and may return something else
+
+
+// associated functions
+impl Point {
+    fn new(x: i32, y: i32) -> Point {
+        Point { x, y }
+    }
+}
+
+fn main() {
+    let p = Point::new(1, 2);
+}
+// associated function, like a method, but does not take 'self'
+	// called with namespacing syntax: Point::new()
+// a constructor-like function is usually named 'new'
+	// no inherent notion of constructors, no automatic construction
+
+// implementations
+// methods, associated functions, and functions in general may be not overloaded
+	// e.g. Vec::new() and Vec:with_capacity(capacity: usize) are both constructors for Vec
+// methods may not be inherited
+	// strucs & enums must be composed instead
+
+// patterns
+let x = 17;
+
+match x {
+	0 ... 5 => println!("x is between 0 and 5"),
+	_ => println!("x is something else"),
+}
+
+// use '...' to specify a range of values. useful for numerics and chars
+// use '_' to bind against any value (like any variable binding) and discard the binding
+
+let x = 17;
+
+match x {
+    ref x_ref => println!("Of type &i32: {}", x_ref),
+}
+// get a reference to a variable by asking for it with 'ref'
+
+let mut x = 17;
+
+match x {
+    ref x_ref if x == 5 => println!("x is {}", x_ref),
+    ref mut x_mut_ref => *x_mut_ref = 20
+}
+// get a mutable reference with 'ref mut'
+	// only if the variable was declared 'mut'
+
+// if-let statements
+// if you only need a single match arm, it often makes more sense to use 'if-let' construct
+enum Resultish {
+    Ok,
+    Warning { code: i32, message: String },
+    Err(String),
+}
+
+// Suppose we want to report an error but do nothing on Warning s and Ok s.
+match make_request() {
+    Resultish::Err(_) => println!("Total and utter failure."),
+    _ => println!("ok."),
+}
+
+// can be simplified as
+
+let result = make_request();
+
+if let Resultish::Err(s) = result {
+    println!("Total and utter failure: {}", s);
+} else {
+    println!("ok.");
+}
+
+// while-let statements
+// works like 'if-let', but iterates until the condition fails to match
+while let Resultish::Err(s) = make_request() {
+	println!("Total and utter failure: {}", s);
+}
+
+// inner bindings
+// with more complicated data structures, use '@' to create variable bindings for inner elements
+#[derive(Debug)]
+enum A { None, Some(B) }
+#[derive(Debug)]
+enum B { None, Some(i32) }
+
+fn foo(x: A) {
+    match x {
+        a @ A::None              => println!("a is A::{:?}", a),
+        ref a @ A::Some(B::None) => println!("a is A::{:?}", *a),
+        A::Some(b @ B::Some(_))  => println!("b is B::{:?}", b),
+    }
+}
+
+foo(A::None);             // ==> x is A::None
+foo(A::Some(B::None));    // ==> a is A::Some(None)
+foo(A::Some(B::Some(5))); // ==> b is B::Some(5)
+
+// lifetimes
+// ordinarily, references have an implicit lifetime that do don't need to care about
+fn foo(x: &i32) {
+	// ...
+}
+
+// explicitly provide the lifetime
+fn bar<'a>(x: &'a i32) {
+	// ...
+}
+// 'a, pronounced as 'tick-a' or 'the lifetime a' is a named lifetime parameter
+	// <'a> declares generic paramters, including lifetime parameters
+	// the type &'a i32 is a reference to an i32 that lives at least as long as the lifetime 'a
+
+// multiple lifetime paramters
+fn borrow_x_or_y<'a>(x: &'a str, y: &'a str) -> &'a str;
+// all input/output references all have the same lifetime
+	// x and y are borrowed (the reference is alive) as long as the returned reference exists
+
+fn borrow_p<'a, 'b>(p: &'a str, q: &'b str) -> &'a str;
+// the output reference has the same lifetime as p
+	// q has a separate lifetime with no constrained relationship to p
+	// p is borrowed as long as the returned reference exists
+
+// if a reference R has a lifetime 'a, it is guaranteed that it will not outlive the owner of its underlying data (the value at *R)
+// if a reference R has a lifetime 'a, anything else with the lifetime 'a is guaranteed to live as long as R
+
+struct Pizza(Vec<i32>);
+struct PizzaSlice<'a> {
+    pizza: &'a Pizza,  // references in structs must ALWAYS have explicit lifetimes
+    index: u32,
+}
+
+let p1 = Pizza(vec![1, 2, 3, 4]);
+{
+    let s1 = PizzaSlice { pizza: &p1, index: 2 }; // this is okay
+}
+
+let s2;
+{
+    let p2 = Pizza(vec![1, 2, 3, 4]);
+    s2 = PizzaSlice { pizza: &p2, index: 2 };
+    // no good - why?
+}
+// structs (and struct members) can have lifetime parameters
+
+struct Pizza(Vec<i32>);
+struct PizzaSlice<'a> { pizza: &'a Pizza, index: u32 }
+struct PizzaConsumer<'a, 'b: 'a> { // says "b outlives a"
+    slice: PizzaSlice<'a>, // <- currently eating this one
+    pizza: &'b Pizza,      // <- so we can get more pizza
+}
+
+fn get_another_slice(c: &mut PizzaConsumer, index: u32) {
+    c.slice = PizzaSlice { pizza: c.pizza, index: index };
+}
+
+let p = Pizza(vec![1, 2, 3, 4]);
+{
+    let s = PizzaSlice { pizza: &p, index: 1 };
+    let mut c = PizzaConsumer { slice: s, pizza: &p };
+    get_another_slice(&mut c, 2);
+}
+// lifetimes can be constrained to 'outlive' others (<'b: 'a>)
+
+// 'static is one reserved, special lifetime, which means that a reference may be kept(and will be valid) for the lifetime of the entire program (the data referred to will never go out of scope)
+// all &str literals have the 'static lifetime
+let s1: &str = "hello";
+let s2: &'static str = "world";
+
+// any struct or enum that contains a reference must have an explicit lifetime
+// nomral lifetime rules otherwise apply
+struct Foo<'a, 'b> {
+	v: &'a Vec<i32>,
+	s: &'b str,
+}
+
+// lifetimes in 'impl' blocks
+impl<'a, 'b> Foo<'a, 'b> {
+	fn new(v: &'a Vec<i32>, s: &'b str) -> Foo<'a, 'b> {
+		Foo {
+			v: v,
+			s: s,
+		}
+	}
+}
+// implementing methods on Foo struct requires lifetime annotations too
+// the block can be read as "the implementation using the lifetimes 'a and 'b for the struct Foo using the lifetimes 'a and 'b"
 ```
 
 
