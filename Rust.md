@@ -1506,1678 +1506,1630 @@ fn main() {
 
 泛型和特征
 	结构体中使用泛型
-    ```rust
-    struct Point<T> {
-        x: T,
-        y: T,
-    }
-
-    fn main() {
-        let integer = Point { x: 5, y: 10 };
-        let float = Point { x: 1.0, y: 4.0 };
-    }
-    ```
-- 枚举中使用泛型
-    ```rust
-    // Option<T> 是一个拥有泛型 T 的枚举类型，它第一个成员是 Some(T)，存放了一个类型为 T 的值，第二个成员是 None，表示没有值
-    // 用作返回值，判断值的存在与否
-    enum Option<T> {
-        Some(T),
-        None
-    }
-
-    // 用作返回值，判断值的正确与否
-    enum Result<T, E> {
-        Ok(T),
-        Err(E),
-    }
-    ```
-- 方法中使用泛型
-    ```rust
-    struct Point<T> {
-        x: T,
-        y: T,
-    }
-
-    impl<T> Point<T> {
-        fn x(&self) -> &T {
-            &self.x
-        }
-    }
-
-    fn main() {
-        let p = Point { x: 5, y: 10 };
-
-        println!("p.x = {}", p.x());
-    }
-    ```
-    - 为具体的泛型实现方法
-        ```rust
-        // Point<f32> 类型会有方法 distance_from_origin，而其他 T 不是 f32 类型的 Point<T> 实例则没有定义此方法
-        impl Point<f32> {
-            fn distance_from_origin(&self) -> f32 {
-                (self.x.powi(2) + self.y.powi(2)).sqrt()
-            }
-        }
-        ```
-    - const 泛型
-        ```rust
-        // const 泛型是针对值的泛型，可以用来处理数组长度的问题
-        // 1
-        fn display_array(arr: [i32; 3]) {
-            println!("{:?}", arr);
-        }
-
-        fn main() {
-            let arr: [i32; 3] = [1, 2, 3];
-            display_array(arr);
-
-            let arr: [i32; 2] = [1, 2];
-            display_array(arr); // error：[i32; 2] 和 [i32; 3] 属于不同的数据类型，函数的参数类型不匹配
-        }
-
-        // 2 使用数组切片，传入 arr 的不可变引用
-        fn display_array(arr: &[i32]) {
-            println!("{:?}", arr);
-        }
-
-        fn main() {
-            let arr: [i32; 3] = [1, 2, 3];
-            display_array(&arr);
-
-            let arr: [i32; 2] = [1, 2];
-            display_array(&arr);
-        }
-
-        // 3 泛型
-        fn display_array<T: std::fmt::Debug>(arr: &[T]) {   // 需要对 T 加一个限制 std::fmt::Debug，因为 {:?} 形式的格式化输出需要 arr 实现该特征
-            println!("{:?}", arr);
-        }
-
-        fn main() {
-            let arr: [i32; 3] = [1, 2, 3];
-            display_array(&arr);
-
-            let arr: [i32; 2] = [1, 2];
-            display_array(&arr);
-        }
-
-        // 4 利用 const 泛型，即针对值的泛型，处理数组长度的问题
-        fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) { // const 泛型 N ，它基于的值类型是 usize
-            println!("{:?}", arr);
-        }
-
-        fn main() {
-            let arr: [i32; 3] = [1, 2, 3];
-            display_array(arr);
-
-            let arr: [i32; 2] = [1, 2];
-            display_array(arr);
-        }
-        ```
-    - const fn
-        ```rust
-        // const fn 即 常量函数， 允许编译器对函数进行求值，从而实现更高效，更灵活的设计
-        // 1
-        const fn add(a: usize, b: usize) -> usize {
-            a + b
-        }
-
-        const RESULT: usize = add(5, 10);
-
-        fn main() {
-            println!("")
-        }
-        ```
-    - 结合 const fn 与 const 泛型
-        ```rust
-        // 创建固定大小的缓冲区解构，其中缓冲区大小由编译期计算确定
-        struct Buffer<const N: usize> {
-            data: [u8; N],
-        }
-
-        const fn compute_buffer_size(factor: usize) -> usize {
-            factor * 1024
-        }
-
-        fn main() {
-            const SIZE: usize = compute_buffer_size(4);
-            let buffer = Buffer::<SIZE> {
-                data: [0; SIZE],
-            };
-
-            println!("Buffer size: {} bytes", buffer.data.len());
-        }
-        ```
-    - 泛型的性能
-        > Rust 通过在编译时进行泛型代码的单态化(monomorphization)来保证效率，单态化是通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程
-        ```rust
-        对如下代码
-        let integer = Some(5);
-        let float = Some(5.0);
-        编译器生成的单态化版本的代码看起来如下
-        enum Option_i32 {
-            Some(i32),
-            None,
-        }
-
-        enum Option_f64 {
-            Some(f64),
-            None,
-        }
-
-        fn main() {
-            let integer = Option_i32::Some(5);
-            let float = Option_f64::Some(5.0);
-        }
-        ```
-## 特征 trait
-- trait 类似于其他语言中的接口的概念，它定义了一组可以被共享的行为，只要实现了该特征，你就能使用这组行为
-    - 如果不同的类型具有相同的行为，那么就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必须的行为的集合
-    - 特征只定义行为看起来是什么样子，而不定义行为的具体实现，因此特征方法签名的结尾是 ; 而不是 {}
-    - 每一个实现这个特征的类型都需要具体实现该特征的相应方法，编译器也会确保任何实现该特征的类型都拥有与这个签名的定义完全一致的方法
-    ```rust
-    // 1
-    pub trait Summary {
-        fn summarize(&self) -> String;
-    }
-
-    pub struct Post {
-        pub title: String,
-        pub author: String,
-        pub content: String,
-    }
-
-    impl Summary for Post {
-        fn summarize(&self) -> String {
-            format!("title: {}, author: {}", self.title, self.author);
-        }
-    }
-
-    pub struct Weibo {
-        pub username: String,
-        pub content: String,
-    }
-
-    impl Summary for Weibo {
-        fn summarize(&self) -> String {
-            format!("{} posted {}", self.username, self.content)
-        }
-    }
-
-    fn main() {
-        let post = Post { title: "Rust intro".to_string(), author: "Sun".to_string(), content: "Rust is good".to_string() };
-        let weibo = Weibo { username: "Sun".to_string(), content: "Rust is really good".to_string() };
-        
-        println!("{}", post.summarize());
-        pritnln!("{}", weibo.summarize());
-    }
-    ```
-- 特征定义与实现的位置(孤儿规则)
-    - 特征被定义为 pub 时，他人想要使用该特征时，可以引入该特征到他们的保重，然后进行实现
-    - 如果你想为类型 A 实现特征 T，那么 A 或者 T 至少有一个是在当前作用域中定义的
-    - 孤儿规则，可以确保其他人编写的代码不会破坏你的代码，也确保了不会莫名其妙破坏风牛马不相及的代码
-
-- 在特征中定义具有默认实现的方法
-    ```rust
-    pub trait Summary {
-        fn smmarize(&self) -> String {
-            String::from("Read more ... ")
-        }
-    }
-
-    impl Summary for Post {}
-
-    impl Summary for Weibo {
-        fn summarize(&self) -> String {
-            format!("{} posted {}", self.username, self.content)
-        }
-    }
-    ```
-    - 默认实现允许调用相同特征中的其他方法，哪怕这些方法没有默认实现
-        ```rust
-        pub trait Summary {
-            fn summarize_author(&self) -> String;
-
-            fn summarize(&self) -> String {
-                String::from("Read more from {} ... ", self.summarize_author())
-            }
-        }
-        // 为了使用 Summary，只需要实现 summarize_author 方法即可
-        impl Summary for Weibo {
-            fn summarize_author(&self) -> String {
-                format!("@{}", self.username)
-            }
-        }
-
-        println!("1 new webo: {}", weibo.summarize());
-        ```
-    - 使用特征作为函数参数
-        - 可以使用任何实现了该特征的类型作为函数的参数，同时在函数体内，可以调用该特征的方法
-        ```rust
-        pub fn notify(item: &impl Summary) {
-            println!("Breaking news! {}", item.summarize());
-        }
-        ```
-    - 特征约束(trait bound)
-        ```rust
-        impl Trait 这种语法实际上只是一个语法糖
-
-        pub fn notify(item: &impl Summary) {
-            println!("Breaking new! {}", item.summarize());
-        }
-        完整的形式如下：
-        pub fn notify<T: Summary>(item: &T) {
-            println!("Breaking new! {}", item.summarize());
-        }
-        // T: Summary 称为 特征约束
-
-
-        // 一个函数接受两个 impl Summary 的参数
-        pub fn notify(item1: &impl Summary, item2: &impl Summary) {
-            // ...
-        }
-        pub fn notify(item1: &impl Summary1, item2: &impl Summary2) {
-            // ...
-        }
-        // 如果需要强制函数的两个参数是同一类型，则必须使用特征约束
-        pub fn notify<T: Summary>(item1: &T, item2: &T) {
-            // ...
-        }
-        // 泛型类型 T 说明了 item1 和 item2 必须具有同样的类型，同时 T: Summary 说明 T 必须实现 Summary 特征
-        ```
-    - 多重约束
-        ```rust
-        // 语法糖形式
-        pub fn notify(item: &(impl Summary + Display)) {
-            // ...
-        }
-        // 特征约束的形式
-        pub fn notify<T: Summary + Display>(item: &T) {
-            // ...
-        }
-        ```
-    - where 约束
-        ```rust
-        // 当特征约束变得很多时，函数的签名将变得很复杂
-        fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
-
-        }
-        // 通过 where 进行改进
-        fn some_function<T, U>(t: &T, u: &U) -> i32
-            where T: Display + Clone,
-                  U: Clone + Debug
-        {
-            // ...
-        }
-        ```
-    - 使用特征约束有条件的实现方法或特征
-        ```rust
-        // 特征约束可以让我们在指定类型 + 指定特征的条件下去实现方法
-        use std::fmt::Display;
-
-        struct Pair<T> {
-            x: T,
-            y: T,
-        }
-
-        impl<T> Pair<T> {
-            fn new(x: T, y: T) -> Self {
-                Self {
-                    x,
-                    y,
-                }
-            }
-        }
-
-        impl<T: Display + PartialOrd> Pair<T> {
-            fn cmp_display(&self) {
-                if self.x >= self.y {
-                    println!("The largest member is x = {}", self.x);
-                } else {
-                    println!("The largest member is y = {}", self.y);
-
-                }
-            }
-        }
-        // cmp_display 方法并不是所有的 Pari<T> 结构体对象都可以拥有，只有 T 同时实现了 Display + PartialOrd 的 Pair<T> 才可以拥有此方法
-        ```
-        - 有条件的实现特征
-            ```rust
-            例如，标准库为任何实现了 Display 特征的类型实现了 ToString 特征
-            impl<T: Display> ToString for T {
-                // -- snip --
-            }
-            因此我们可以对任何实现了 Display 特征的类型调用由 ToString 定义的 to_string 方法，例如
-            let s = 3.to_string();
-            ```
-    - 函数返回 impl Trait
-        - 通过 impl Trait 来说明一个函数返回了一个类型，该类型实现了某个特征
-        ```rust
-        fn returns_summarizable() -> impl Summary {
-            Weibo {
-                username: String::from("Sun"),
-                content: String::from("Rust is good"),
-            }
-        }
-        // 对于 return_summarizable 的调用者而言，他只知道返回了一个实现了 Summary 特征的对象，但是并不知道返回的具体类型为 Weibo
-
-        // impl Trait 形式的返回值，在一种场景下非常非常有用，那就是返回的真实类型非常复杂，你不知道该怎么声明时(毕竟 Rust 要求你必须标出所有的类型)
-        // 此时就可以用 impl Trait 的方式简单返回
-
-        // impl Trait 形式的返回值的限制：只能有一个具体的类型
-        fn returns_summarizable(switch: bool) -> impl Summary {
-            if switch {
-                Post {
-                    title: String::from(
-                        "Penguins win the Stanley Cup Championship!",
-                    ),
-                    author: String::from("Iceburgh"),
-                    content: String::from(
-                        "The Pittsburgh Penguins once again are the best \
-                        hockey team in the NHL.",
-                    ),
-                }
-            } else {
-                Weibo {
-                    username: String::from("horse_ebooks"),
-                    content: String::from(
-                        "of course, as you probably already know, people",
-                    ),
-                }
-            }
-        }
-        // error: 因为它返回了两个不同的类型 Post 和 Weibo
-
-        //
-        fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
-            let mut largest = list[0];
-
-            for &item in list.iter() {
-                if item > largest {
-                    largest = item;
-                }
-            }
-
-            largest
-        }
-
-        fn main() {
-            let number_list = vec![34, 50, 25, 100, 65];
-
-            let result = largest(&number_list);
-            println!("The largest number is {}", result);
-
-            let char_list = vec!['y', 'm', 'a', 'q'];
-
-            let result = largest(&char_list);
-            println!("The largest char is {}", result);
-        }
-        ```
-    - 通过 derive 派生特征
-        - 形如 `#[derive(Debug)]` 是一种特征派生语法，被 derive 标记的对象会自动实现对应的默认特征代码，继承相应的功能
-        - derive 派生出来的是 Rust 默认给我们提供的特征，简化了手动实现相应特征的需求，如果由必要可以手动重载该实现
-        ```rust
-        例如，Debug 特征有一套默认的代码实现，当标记到一个类型上时，可以使用 println!("{:?}", s) 打印结构体对象
-             Copy 特征也有一套自己的默认代码实现，当标记到一个类型上时，可以让这个类型自动实现 Copy 特征，进而可以调用 copy 方法，进行自我复制
-        ```
-    - 调用方法需要引入特征
-        - 在一些场景中，使用 as 关键字做类型转换会有比较大的限制，因为你想要在类型转换上拥有完全的控制，例如处理转换错误，那么你将需要 TryInto
-        ```rust
-        // 如果你要使用一个特征的方法，那么你需要将该特征引入当前的作用域中
-        use std::convert::TryInto;
-
-        fn main() {
-            let a: i32 = 10;
-            let b: u16 = 100;
-
-            let b_ = b.try_into()
-                      .unwrap();
-            
-            if a < b_ {
-                println!("Ten is less than one hundred");
-            }
-        }
-        // 因为 Rust 把最常用的标准库中的特征通过 std::prelude 模块提前引入到当前作用域，其中包括了 std::converter::TryInto，所以可以不必显示的引入
-        ```
-
-    ```rust
-        // 为自定义类型实现 + 操作
-        use std::ops::Add;
-
-        #[derive(Debug)]
-        struct Point<T: Add<T, Output = T>> {   // 限制类型 T 必须实现了 Add 特征，否则无法进行 + 操作
-            x: T,
-            y: T,
-        }
-
-        impl<T: Add<T, Output = T>> Add for Point<T> {
-            type Output = Point<T>;
-
-            fn add(self, p: Point<T>) -> Point<T> {
-                Point {
-                    x: self.x + p.x,
-                    y: self.y + p.y,
-                }
-            }
-        }
-
-        fn add<T: Add<T, Output = T>>(a: T, b: T) -> T {
-            a + b
-        }
-
-        fn main() {
-            let p1 = Point { x: 1.1f32, y: 1.1f32 };
-            let p2 = Point { x: 2.1f32, y: 2.1f32 };
-            println!("{:?}", add(p1, p2));
-
-            let p3 = Point { x: 1i32, y: 1i32 };
-            let p4 = Point { x: 2i32, y: 2i32 };
-            println!("{:?}", add(p3, p4));
-        }
-
-        // 自定义类型的打印输出，为自定义类型实现 std::fmt::Display 特征
-        #![allow(dead_code)]
-
-        use std::fmt;
-        use std::fmt::{Display};
-
-        #[derive(Debug,PartialEq)]
-        enum FileState {
-            Open,
-            Closed,
-        }
-
-        #[derive(Debug)]
-        struct File {
-            name: String,
-            data: Vec<u8>,
-            state: FileState,
-        }
-
-        impl Display for FileState {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                match *self {
-                    FileState::Open => write!(f, "OPEN"),
-                    FileState::Closed => write!(f, "CLOSED"),
-                }
-            }
-        }
-
-        impl Display for File {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                write!(f, "<{} ({})>",
-                       self.name, self.state)
-            }
-        }
-
-        impl File {
-            fn new(name: &str) -> File {
-                File {
-                    name: String::from(name),
-                    data: Vec::new(),
-                    state: FileState::Closed,
-                }
-            }
-        }
-
-        fn main() {
-            let f1 = File::new("f1.txt");
-            // ...
-            println!("{:?}", f1);
-            println!("{}", f1);
-        }
-    ```
-    - 特征对象
-        - 特征对象是实现了特征的类型的实例，这种映射关系存储在一张表中，可以在运行时通过特征对象找到具体调用的类型方法
-        - 通过 & 引用或者 Box<T> 智能指针的方式来创建特征对象 
-        ```rust
-        pub trait Draw {
-            fn draw(&self);
-        }
-
-        pub struct Button {
-            pub width: u32,
-            pub height: u32,
-            pub label: String,
-        }
-
-        impl Draw for Button {
-            fn draw(&self) {
-                // ...
-            }
-        }
-
-        pub struct SelectBox {
-            pub width: u32,
-            pub height: u32,
-            pub options: Vec<String>,
-        }
-
-        impl Draw for SelectBox {
-            fn draw(&self) {
-                // ...
-            }
-        }
-
-        // 非泛型实现
-        pub struct Screen {
-            pub components: Vec<Box<dyn Draw>>,
-        }
-
-        impl Screen {
-            pub fn run(&self) {
-                for component in self.components.iter() {
-                    component.draw();
-                }
-            }
-        }
-
-        // 泛型实现
-        pub struct Screen<T: Draw> {
-            pub components: Vec<T>,
-        }
-
-        impl<T> Screen<T>
-            where T: Draw {
-            pub fn run(&self) {
-                for component in self.components.iter() {
-                    component.draw();
-                }
-            }
-        }
-
-        fn main() {
-            let screen = Screen {
-                components: vec![
-                    Box::new(SelectBox {
-                        width: 75,
-                        height: 10,
-                        options: vec![
-                            String::from("Yes"),
-                            String::from("Maybe"),
-                            String::from("No"),
-                        ],
-                    }),
-                    Box::new(Button {
-                        width: 50,
-                        height: 10,
-                        label: String::from("OK"),
-                    }),
-                ],
-            };
-
-            screen.run();
-        }
-
-        // 鸭子类型(duck typing)，简单来说，就是只关心值长啥样，而不关心它实际是什么
-        // 使用特征对象和 Rust 类型系统来进行类似鸭子类型操作的优势是，无需在运行时检查一个值是否实现了特定方法或者担心在调用时因为值没有实现方法而产生错误
-        ```
-    - 特征对象的动态分发
-        - 静态分发 static dispatch，在编译期完成，对运行时性能没有任何影响，例如对泛型的处理，编译器会为每一个泛型参数对应的具体类型生成一份代码
-        - 动态分发 dynamic dispatch，直到运行时，才能确定需要调用哪个方法，关键字 `dyn` 强调了 "动态" 这一特点
-            - 当使用特征对象时，Rust必须使用动态分发，因为编译器无法知晓所有可能用于特征对象代码的类型，所以不知道应该调用哪个类型的哪个方法实现
-            ![dynamic dispatch](../assets/dynamic_dispatch.jpg)
-                1. 特征对象大小不固定  
-                2. 几乎总是使用特征对象的引用方式，例如 `&dyn Draw`，`Box<dyn Draw>`  
-                    1. 虽然特征对象没有固定大小，但是它的引用类型的大小时固定的，即由两个指针 `ptr` 和 `vptr` 组成，占用两个指针大小的空间  
-                    2. `ptr` 指向实现了特征的具体类型的实例  
-                    3. `vptr` 指向虚表 vtable，vtable 中保存了类型的实例对于可以调用的实现于特征的方法，当调用方法时，直接从 vtable 中找到方法并调用  
-                    > 简而言之，当类型 Button 实现了特征 Draw 时，类型 Button 的实例对象 btn 可以当作特征 Draw 的特征对象类型来使用，btn 中保存了作为特征对象的数据指针（指向类型 Button 的实例数据）和行为指针（指向 vtable）.  
-                    > 一定要注意，此时的 btn 是 Draw 的特征对象的实例，而不再是具体类型 Button 的实例，而且 btn 的 vtable 只包含了实现自特征 Draw 的那些方法（比如 draw），因此 btn 只能调用实现于特征 Draw 的 draw 方法，而不能调用类型 Button 本身实现的方法和类型 Button 实现于其他特征的方法。也就是说，btn 是哪个特征对象的实例，它的 vtable 中就包含了该特征的方法   
-        - Self 与 self
-            - self 指代当前的实例对象，Self 指代特征或者方法类型的别名
-            ```rust
-            trait Draw {
-                fn draw(&self) -> Self;
-            }
-
-            #[derive(Clone)]
-            struct Button;
-            impl Draw for Button {
-                fn draw(&self) -> Self {
-                    return self.clone()
-                }
-            }
-
-            fn main() {
-                let button = Button;
-                let newbt = button.draw();
-            }
-            ```
-        - 特征对象的限制
-            - 不是所有特征都拥有特征对象，只有对象安全的特征才行
-            - 当一个特征的所有方法都有如下属性时，它的对象才是安全的
-                1. 方法的返回类型不能是 Self  
-                2. 方法没有任何泛型参数  
-            ```rust
-            // 标准库中的 Clone 特征就不符合对象安全的要求
-            pub trait Clone {
-                fn clone(&self) -> Self;    // 返回 Self 类型，因此它时对象不安全的
-            }
-            ```
-    - 深入了解特征
-        - 关联类型
-        > 关联类型是在特征定义的语句块中，申明一个自定义类型，这样就可以在特征的方法签名中使用该类型
-            ```rust
-            // 标准库中的迭代器特征 Iterator
-            pub trait Iterator {
-                type Item;  // Iterator 有一个 Item 关联类型，用于替代遍历的值的类型
-
-                fn next(&mut self) -> Option<Self::Item>;
-            }
-            // Self 指代当前调用者的具体类型，Self::Item 指代该类型实现中定义的 Item 类型
-
-        // 使用关联类型比使用泛型，代码的可读性更强
-        // 使用泛型
-        trait Container<A, B> {
-            fn contains(&self, a: A, b: B) -> bool;
-        }
-
-        fn difference<A, B, C>(container: &C) -> i32
-        where C: Container<A, B> {
-            // ...
-        }
-
-        // 使用关联类型
-        trait Container {
-            type A;
-            type B;
-            fn contains(&self, a: &Self::A, b: &Self::B) -> bool;
-        }
-
-        fn difference<C: Container>(container: &C) {
-            // ...
-        }
-        ```
-    - 默认泛型类型参数
-        - 当使用泛型类型参数时，可以为其指定一个默认的具体类型
-        - 默认参数主要作用
-            1. 减少实现的样板代码  
-            2. 扩展类型但是无需大幅修改现有的代码  
-        ```rust
-        // 标准库中的 std::ops::Add 特征
-        trait Add<RHS=Self> {   // 给泛型参数 RHS 指定了默认值 Self
-            type Output;
-
-            fn add(self, rhs: RHS) -> Self::Output;
-        }
-
-        //
-        use std::ops::Add;
-
-        #[derive(Debug, PartialEq)]
-        struct Point {
-            x: i32,
-            y: i32,
-        }
-
-        impl Add for Point {    // 定义的是两个相同的 Point 类型相加，因此无需指定 RHS
-            type Output = Point;
-
-            fn add(self, other: Point) -> Point {
-                Point {
-                    x: self.x + other.x,
-                    y: self.y + other.y,
-                }
-            }
-        }
-
-        fn main() {
-            assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3},
-                       Point { x: 3, y: 3 });
-        }
-        // Rust 无法为所有运算符进行重载，目前来说，只有定义在 std::ops 中的运算符才能进行重载
-
-        // 定义的是两个不同类型的 + 操作，因此不能再使用默认的 RHS
-        use std::ops::Add;
-
-        struct Millimeters(u32);
-        struct Meters(u32);
-
-        impl Add(Meters) for Millimeters {  // 定义的是两个不同类型的 + 操作，因此不能再使用默认的 RHS
-            type Output = Millimeters;
-
-            fn add(self, other: Meters) -> Millimeters {
-                Millimeters(self.0 + (other.0 * 1000))
-            }
-        }      
-        ```
-    - 调用同名的方法
-        - 完全限定语法
-            ```rust
-            // 语法
-            <Type as Trait>::function(receiver_if_method, next_arg, ...);
-            // 第一个参数是方法接收器 receiver （三种 self），只有方法才拥有，例如关联函数就没有 receiver
-
-            // 完全限定语法可以用于任何函数或方法调用，大多数时候无需使用完全限定语法，原因是 Rust 编译器能根据上下文自动推导出调用的路径。
-            // 只有当存在多个同名函数或方法，且 Rust 无法区分出目标函数时才会用到
-            ```
-        ```rust
-        // 1
-        trait Pilot {
-            fn fly(&self);
-        }
-
-        trait Wizard {
-            fn fly(&self);
-        }
-
-        struct Human;
-
-        impl Pilot for Human {
-            fn fly(&self) {
-                println!("pilot")
-            }
-        }
-
-        impl Wizard for Human {
-            fn fly(&self) {
-                println!("wizard");
-            }
-        }
-
-        impl Human {
-            fn fly(&self) {
-                println!("human");
-            }
-        }
-
-        fn main() {
-            let person = Human;
-            person.fly();   //  调用Human类型自身的方法
-            Pilot::fly(&person);    // 调用Pilot特征上的方法
-            Wizard::fly(&person);    // 调用Wizard特征上的方法
-        }
-
-        // 2
-        trait Animal {
-            fn baby_name() -> String;
-        }
-
-        struct Dog;
-
-        impl Dog {
-            fn baby_name() -> String {  // 关联函数
-                String::from("Spot")
-            }
-        }
-
-        impl Animal for Dog {
-            fn baby_name() -> String {
-                String::from("pubby")
-            }
-        }
-
-        fn main() {
-            println!("A dog is called a {}", Dog::baby_name());
-            println!("A baby dog is called a {}", <Dog as Animal>::baby_name());    // 完全限定语法
-        }        
-        ```
-    - 特征定义中的特征约束
-        - 特征 A 使用另一个特征 B 的功能(另一种形式的特征约束)，此时不仅需要为类型实现特征 A，同时还要为类型实现特征 B (super trait) 
-            ```rust
-            use std::fmt::Display;
-
-            trait OutlinePrint: Display {   // 用于特征定义中的特征约束
-                fn outline_print(&self) {
-                    let output = self.to_string();
-                    let len = output.len();
-                    println!("{}", "*".repeat(len + 4));
-                    println!("*{}*", " ".repeat(len + 2));
-                    println!("* {} *", output);
-                    println!("*{}*", " ".repeat(len + 2));
-                    println!("{}", "*".repeat(len + 4));
-                }
-            }
-            
-            struct Point {
-                x: i32,
-                y: i32,
-            }
-
-            // 
-            impl OutlinePrint for Point {}  // error: Display 特征未实现
-
-            // 
-            use std::fmt;
-
-            impl fmt::Display for Point {
-                fm fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                    write!(f, "({}, {})", self.x, self.y)
-                }
-            }
-            // 为 Point 实现了 Display 特征，to_string 方法将自动实现：最终获得字符创是通过 fmt 方法获得
-            ```
-    - 在外部类型上实现外部特征
-        - 孤儿规则：特征或者类型必需至少有一个是本地的，才能在此类型上定义特征
-        - 为了绕过孤儿规则，需要使用 newtype 模式，即为一个元组结构体创建新类型，该元组结构体封装有一个字段，该字段就是需要实现特征的具体类型，该封装是本地的，因此可以为类型实现外部的特征
-        ```rust
-        // 动态数组类型 Vec<T> 定义在标准库中，特征 Display 也定义在标准库里，无法直接为 Vec<T> 实现 Display 特征
-        use std::fmt;
-
-        struct Wrapper(Vec<String>);
-
-        impl fmt::Display for Wrapper {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                write!(f, "[{}]", self.0.join(", "))    // 先从 Wrapper 中取出数组 self.0 ，然后才能执行 join 方法
-            }
-        }
-
-        fn main() {
-            let w = Wrapper(vec![String::from("hello"), String::from("world")]);
-            println!("w = {}", w);
-        }
-        // Rust 提供了一个特征叫 Deref，实现该特征后，可以自动做一层类似类型转换的操作，可以将 Wrapper 变成 Vec<String> 来使用。这样就会像直接使用数组那样去使用 Wrapper，而无需为每一个操作都添加上 self.0
-        ```
-## 集合类型
-- 动态数组
-    ```rust
-    // 创建
-    // 1
-    let v: Vec<i32> = Vec::new();
-    // 2
-    let mut v = Vec::new();
-    v.push(1);  // 编译器通过 v.push(1) 推断出 v 的类型是 Vec<i32>
-    // 如果预先知道要存储的元素个数，可以使用 Vec::with_capacity(capacity) 创建动态数组
-    // 3
-    let v = vec![1, 2, 3];
-
-    // 更新
-    let mut v = Vec::new();
-    v.push(1);
-
-    // 读取
-    //1. 通过下标 ，数组越界访问会导致程序退出
-    //2. 通过  get 方法，有值的时候返回 Some(T)，无值的时候返回 None，比较安全，例如访问数组的第几个元素取决于用户输入时，非常适合
-    let v = vec![1, 2, 3, 4, 5];
-
-    let third: &i32 = &v[2];
-    println!("The third number is {}", third);
-
-    match v.get(2) {
-        Some(third) => println!("The third number is {third}"),
-        None => println!("None"),
-    }
-
-    // 遍历
-    // 1
-    let v = vec![1, 2, 3];
-    for i in &v {
-        println!("{i}")
-    }
-
-    // 2
-    let mut v = vec![1, 2, 3];
-    for i in &mut v {
-        *i += 10
-    }
-
-    // 存储不同类型的元素
-    // 1 通过使用枚举类型实现不同类型元素的存储
-    #[derive(Debug)]
-    enum IpAddr {
-        V4(String),
-        V6(String),
-    }
-
-    fn main() {
-        let v = vec![
-            IpAddr::V4("127.0.0.1".to_string()),
-            IpAddr::V6("::1".to_string()),
-        ];
-
-        for ip in v {
-            show_addr(ip);
-        }
-    }
-
-    fn show_addr(ip: IpAddr) {
-        println!("{:?}", ip);
-    }
-    // 2 通过使用特征对象实现不同类型元素的存储
-    trait IpAddr {
-        fn display(&self);
-    }
-
-    struct V4(String);
-    impl IpAddr for V4 {
-        fn display(&self) {
-            println!("ipv4: {:?}", self.0);
-        }
-    }
-
-    struct V6(String);
-    impl IpAddr for V6 {
-        fn display(&self) {
-            println!("ipv6: {:?}", self.0);
-        }
-    }
-
-    fn main() {
-        let v: Vec<Box<dyn IpAddr>> = vec![ // Vec<Box<dyn IpAddr>> 表示数组 v 存储的是特征 IpAddr 的对象
-            Box::new(V4("127.0.0.1".to_string()))
-            Box::new(V6("::1".to_string()))
-        ];
-
-        for ip in v {
-            ip.display();
-        }
-    }
-    // 在实际使用中，特征对象比枚举数组常见，因为特征对象非常灵活，而编译器对枚举的限制较多，且无法动态增加类型
-
-    // Vector 常用方法
-    // 1
-    let v = vec![0; 3]; // 默认值为 0，初始长度为 3
-    let v_from = Vec::from([0, 0, 0]);
-    assert_eq!(v, v_from);
-
-    // 增加元素时，如果容量不足会导致 Vector 扩容，频繁扩容会降低程序的性能
-    // 预估容量，减少内存拷贝
-    let mut v = Vec::with_capacity(10);
-    v.extend([1, 2, 3]);
-    println!("The length of v: {}, capacity: {}", v.len(), v.capacity());
-
-    v.reserve(100); // 调整 v 的容量，至少 100
-    println!("The length of v(reserve): {}, capacity: {}", v.len(), v.capacity());
-
-    v.shrink_to_fit();
-    println!("The length of v(shrink_to_fit): {}, capacity: {}", v.len(), v.capacity());
-
-    // 其他常见方法
-    let mut v = vec![1, 2, 3];
-    assert!(!v.is_empty());
-
-    v.insert(2, 3); // 在指定索引插入数据索引值不能大于 v 的长度
-    assert_eq!(v.remove(1), 2); // 移除指定位置元素并返回
-    assert_eq!(v.pop(), Some(3));   // 删除并返回尾部元素
-    assert_eq!(v.pop(), Some(1));
-    assert_eq!(v.pop(), None);
-    v.clear();
-
-    let mut v1 = [11, 22].to_vec(); // append 会导致 v1 清空数据，增加可变声明
-    v.append(&mut v1);              // 将 v1 所有元素附加到 v 中
-    v.truncate(1);                  // 截断到指定位置，其他元素被删除
-    v.retain(|x| *x > 10);          // 保留满足条件的元素，即删除不满足条件的元素
-
-    let mut v = vec![11, 22, 33, 44, 55];
-    // 删除指定范围的元素，同时获取被删除元素的迭代器
-    let mut m: Vec<_> = v.drain(1..=3).collect();
-
-    let v2 = m.split_off(1);    // 指定索引处切分成两个 vec，m: [22]，v2: [33, 44]
-
-    // 切片
-    let v = vec![11, 22, 33, 44, 55];
-    let slice = &v[1..=3];
-    assert_eq!(slice, &[22, 33, 44]);
-
-    // 排序
-    // 稳定排序 sort 和 sort_by
-    // 非稳定排序 sort_unstable 和 sort_unstable_by
-    // 总体而言，非稳定排序的算法的速度会优于稳定排序算法，同时，稳定排序还会额外分配原数组一半的空间
-
-    // 1
-    let mut vec = vec![1, 5, 10, 2, 15];
-    vec.sort_unstable();
-    assert_eq!(vec, vec![1, 2, 5, 10, 15]);
-
-    // 2
-    let mut vec = vec![1.0, 5.6, 10.3, 2.0, 15f32];    
-    vec.sort_unstable();   // error
-    //  在浮点数当中，存在一个 NAN 的值，这个值无法与其他的浮点数进行对比，因此，浮点数类型并没有实现全数值可比较 Ord 的特性，而是实现了部分可比较的特性 PartialOrd
-    assert_eq!(vec, vec![1.0, 2.0, 5.6, 10.3, 15f32]); 
-
-    // 如果确定浮点数数组当中不包含 NAN 值，可以用 partial_cmp 来作为大小判断的依据
-    let mut vec = vec![1.0, 5.6, 10.3, 2.0, 15f32];    
-    vec.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());    
-    assert_eq!(vec, vec![1.0, 2.0, 5.6, 10.3, 15f32]);
-
-    // 对结构体数组进行排序
-    // 1
-    #[derive(Debug)]
-    struct Person {
-        name: String,
-        age: u32,
-    }
-
-    impl Person {
-        fn new(name: String, age: u32) -> Person {
-            Person { name, age }
-        }
-    }
-
-    fn main() {
-        let mut people = vec![
-            Person::new("Zoe".to_string(), 25),
-            Person::new("Al".to_string(), 60),
-            Person::new("John".to_string(), 20),
-        ];
-
-        people.sort_unstable_by(|a, b| b.age.cmp(&a.age));
-
-        println!("{:?}", people);
-    }
-
-    // 排序需要类型实现 Ord 特性，可以为结构体实现 Ord 特性从而实现结构体的排序
-    // 实现 Ord 特征，需要实现 Ord, Eq, PartialEq, PartialOrd 特征，这些特征可以通过 derive 实现
-    #[derive(Debug, Ord, Eq, PartialEq, PartialOrd)]
-    struct Person {
-        name: String,
-        age: u32,
-    }
-
-    impl Person {
-        fn new(name: String, age: u32) -> Person {
-            Person { name, age }
-        }
-    }
-
-    fn main() {
-        let mut people = vec![
-            Person::new("Zoe".to_string(), 25),
-            Person::new("Al".to_string(), 60),
-            Person::new("Al".to_string(), 30),
-            Person::new("John".to_string(), 1),
-            Person::new("John".to_string(), 25),
-        ];
-
-        people.sort_unstable();
-
-        println!("{:?}", people);
-    }
-    // 需要 derive Ord 相关特性，需要确保你的结构体中所有的属性均实现了 Ord 相关特性，否则会发生编译错误
-    // derive 的默认实现会依据属性的顺序依次进行比较，如上述例子中，当 Person 的 name 值相同，则会使用 age 进行比较
-    ```
-- HashMap
-    ```rust
-    // 1 使用 new 方法创建
-    use std::collections::HashMap;
-
-    fn main() {
-        let mut my_gems = HashMap::new();
-
-        my_gems.insert("red stone", 1);
-        my_gems.insert("blue stone", 1);
-        my_gems.insert("nomal tone", 18);
-    }
-
-    // 2 使用迭代器和 collect 方法创建
-    // 1
-    use std::collections::HashMap;
-
-    fn main() {
-        let team_list = vec![
-            ("China".to_string(), 100),
-            ("America".to_string(), 10),
-            ("Japan".to_string(), 50),
-        ];
-
-        let mut teams_map = HashMap::new();
-        for team in &team_list {
-            teams_map.insert(&team.0, team.1);
-        }
-
-        print!("{:?}", teams_map);
-    }
-    // 2
-    use std::collections::HashMap;
-
-    fn main() {
-        let team_list = vec![
-            ("China".to_string(), 100),
-            ("America".to_string(), 10),
-            ("Japan".to_string(), 50),
-        ];
-
-        // 先将 Vec 转为迭代器，接着通过 collect 方法，将迭代器中的元素收集后，转成 HashMap
-        let teams_map: HashMap<_,_> = team_list.into_iter().collect();
-
-        print!("{:?}", teams_map);
-    }
-
-    // HashMap 的所有权规则与其它 Rust 类型没有区别
-    1. 若类型实现 Copy 特征，该类型会被复制进 HashMap，因此无所谓所有权  
-    2. 若没实现 Copy 特征，所有权将被转移给 HashMap 中  
-
-    // 查询
-    // 1
-    use std::collections::HashMap;
-
-    fn main() {
-        // 通过 get 方法获取元素
-        let mut scores = HashMap::new();
-
-        scores.insert(String::from("Blue"), 10);
-        scores.insert(String::from("Yellow"), 50);
-
-        let team_name = String::from("Blue");
-        let score: Option<&i32> = scores.get(&team_name);
-        // 获得 i32 类型的 score
-        let score: i32 = scores.get(&team_name).copied().unwrap_or(0);
-
-        println!("{score}");
-    }
-
-    // 遍历
-    use std::collections::HashMap;
-
-    fn main() {
-        // 遍历 KV 对
-        let mut scores = HashMap::new();
-
-        scores.insert(String::from("Blue"), 10);
-        scores.insert(String::from("Yellow"), 50);
-
-        for (key, value) in &scores {
-            println!("{}: {}", key, value);
-        }
-    }
-
-    // 更新
-    use std::collections::HashMap;
-
-    fn main() {
-        // 更新
-        let mut scores = HashMap::new();
-
-        scores.insert("Blue", 10);
-
-        // 覆盖已有的值
-        let old = scores.insert("Blue", 20);
-        assert_eq!(old, Some(10));
-
-        // 查询新插入的值
-        let new = scores.get("Blue");
-        assert_eq!(new, Some(&20));
-
-        // 查询，不存在则插入新值
-        let v = scores.entry("Yellow").or_insert(5);    // 不存在，则插入
-        assert_eq!(*v, 5);
-
-        // 查询，不存在则插入新值
-        let v = scores.entry("Yellow").or_insert(50);   // 存在，没有插入
-        assert_eq!(*v, 5);
-    }
-
-    // 在已有值的基础上更新
-    use std::collections::HashMap;
-
-    fn main() {
-        // 在已有值的基础上更新
-        let text = "hello world wonderful world";
-
-        let mut map = HashMap::new();
-        for word in text.split_whitespace() {
-            let count = map.entry(word).or_insert(0);
-            *count += 1;
-        }
-
-        println!("{:?}", map);
-    }
-
-    // 哈希函数
-
-    ```rust
-
-## 生命周期
-- 生命周期，简而言之就是引用的有效作用域，主要的作用是避免悬垂引用
-    - 借用检查
-    ```rust
-    {
-        let r;                // ---------+-- 'a
-                              //          |
-        {                     //          |
-            let x = 5;        // -+-- 'b  |
-            r = &x;           //  |       |
-        }                     // -+       |
-                              //          |
-        println!("r: {}", r); //          |
-    }                         // ---------+
-    ```
-    - 函数中的生命周期
-    ```rust
-    fn main() {
-        let string1 = String::from("abcd");
-        let string2 = "xyz";
-
-        let result = longest(string1.as_str(), string2);
-        println!("The longest string is {}", result);
-    }
-
-    fn longest(x: &str, y: &str) -> &str {
-        if x.len() > y.len() {
-            x
-        } else {
-            y
-        }
-    }
-    // error: 编译器无法知道函数的返回值到底引用 x 还是 y，因为编译器需要知道这些来确保函数调用后的引用生命周期分析
-    // 此时，需要手动标注生命周期
-    ```
-    - 生命周期的标注
-        - 声明周期的作用是告诉编译器多个引用之间的关系
-        - 标注语法：以 ' 开头，名称往往是一个单独的小写字母，例如 'a
-        - 在通过函数签名指定生命周期参数时，我们并没有改变传入引用或者返回引用的真实生命周期，而是告诉编译器当不满足此约束条件时，就拒绝编译通过
-        ```rust
-        &i32            // 一个引用
-        &'a i32         // 具有显式生命周期的引用
-        &'a mut i32     // 具有显式生命周期的可变引用
-
-        fn useless<'a>(first: &'a i32, second: &'a i32) {}
-        // first 和 second 具有生命周期 'a，它们至少活得和 'a 一样久
-
-        ```
-    - 函数签名中的生命周期
-        - 函数或者方法中，参数的生命周期被称为 输入生命周期，返回值的生命周期被称为 输出生命周期
-        - 编译器使用三条消除规则来确定哪些场景不需要显式地去标注生命周期
-            1. 每一个引用参数都会获得独自的生命周期  
-            2. 若只有一个输入生命周期（函数参数中只有一个引用类型），那么该生命周期会被赋给所有的输出生命周期，也就是所有返回值的生命周期都等于该输入生命周期  
-            3. 若存在多个输入生命周期，且其中一个是 &self 或 &mut self，则 &self 的生命周期被赋给所有的输出生命周期  
-            ```rust
-            // 1
-            fn foo<'a>(x: &'a i32)                      // 一个引用参数的函数就有一个生命周期标注
-            fn foo<'a, 'b>(x: &'a i32, y: &'b i32)      // 两个引用参数的函数就有两个生命周期标注
-
-            // 2
-            fn foo(x: &i32) -> &i32                     // x 参数的生命周期会被自动赋给返回值 &i32
-            等价于
-            fn foo<'a>(x: &'a i32) -> &'a i32
-
-            // 编译器如何应用这些规则的示例
-            // 1
-            fn first_word(s: &str) -> &str {}
-            // 应用规则 1
-            fn first_word<'a>(s: &'a str) -> &str {}        // 编译器自动为参数添加生命周期
-            // 应用规则 2
-            fn first_word<'a>(s: &'a str) -> &'a str {}     // 编译器自动为返回值添加生命周期
-
-            // 2
-            fn longest(x: &str, y: &str) -> &str {}
-            // 应用规则 1
-            fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {}   // 为每个参数都标注生命周期
-            // 第二条规则无法被使用，因为输入生命周期有两个
-            // 第三条规则也不符合，因为它是函数，不是方法，因此没有 &self 参数
-            // error
-            ```
-        ```rust
-        //
-        // 和泛型一样，使用生命周期参数，需要先声明 <'a>
-        // x，y和返回值至少活得和 'a 一样久
-        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-            if x.len() > y.len() {
-                x
-            } else {
-                y
-            }
-        }
-
-        // 1
-        fn main() {
-            let string1 = String::from("long string is long");
-
-            {
-                let string2 = String::from("xyz");
-                // 'a 是 string1 和 string2 中作用域较小的那个，即 string2 的生命周期
-                // 函数返回的生命周期为 'a，因此函数返回的生命周期也等于 string2 的生命周期
-                let result = longest(string1.as_str(), string2.as_str());
-                println!("The longest string is {}", result);
-            }
-        }
-
-        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-            if x.len() > y.len() {
-                x
-            } else {
-                y
-            }
-        }
-        // 2
-        fn main() {
-            let string1 = String::from("long string is long");
-            let result;
-
-            {
-                let string2 = String::from("xyz");
-                result = longest(string1.as_str(), string2.as_str());   // error: string2 小于它应该具备的生命周期 'a
-            }
-
-            println!("The longest string is {}", result);
-        }
-
-        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-            if x.len() > y.len() {
-                x
-            } else {
-                y
-            }
-        }
-
-        // y 完全没有被使用，因此 y 的生命周期与 x 和返回值的生命周期没有任何关系
-        fn longest<'a>(x: &'a str, y: &str) -> &'a str {
-            x
-        }
-
-        // 函数的返回值如果是一个引用类型，那么它的生命周期只会来源于
-        // 1. 函数参数的生命周期
-        // 2. 函数体中某个新建引用的生命周期
-
-        // 1
-        fn longest<'a>(x: &str, y: &str) -> &'a str {
-            let result  = String::from("really long string");
-            result.as_str() // error: result 在函数结束后就被释放，但是在函数结束后，对 result 的引用依然在继续，悬垂引用
-        }
-
-        // 2 返回内部字符串的所有权，把字符串的所有权转移给调用者
-        fn longest<'a>(_x: &str, _y: &str) -> String {
-            String::from("really long string");
-        }
-
-        fn main() {
-            let s = longest("not", "important");
-        }
-        ```
-    - 结构体中的生命周期
-        - 结构体中使用引用，需要为引用标注生命周期
-        ```rust
-        // 
-        struct ImportantExcerpt<'a> {
-            part: &'a str,  // 结构体所引用的字符串的生命周期需要大于等于该结构体的生命周期
-        }
-
-        fn main() {
-            let novel = String::from("Call me Ishmael. Some years ago...");
-            let first_sentence = novel.split('.').next().expect("Could not find a 'a'");
-            let i = ImportantExcerpt {
-                part: first_sentence,
-            };
-        }
-
-        //
-        #[derive(Debug)]
-        struct ImportantExcerpt<'a> {
-            part: &'a str,  // 结构体所引用的字符串的生命周期需要大于等于该结构体的生命周期
-        }
-
-        fn main() {
-            let i: ImportantExcerpt;
-
-            {
-                let novel = String::from("Call me Ishmael. Some years ago...");
-                let first_sentence = novel.split('.').next().expect("Could not find a 'a'");
-                i = ImportantExcerpt {
-                    part: first_sentence,
-                };
-            }
-
-            println!("{:?}", i);    // error: 结构体比它引用的字符串活得更久
-        }
-        ```
-    - 方法中的生命周期
-    ```rust
-        // 泛型的语法
-        struct Point<T> {
-            x: T,
-            y: T,
-        }
-
-        impl<T> Point<T> {
-            fn x(&self) -> &T {
-                &self.x
-            }
-        }
-
-        // 为具有生命周期的结构体实现方法的语法
-        struct ImportantExcerpt<'a> {
-            part: &'a str,
-        }
-
-        impl<'a> ImportantExcerpt<'a> {
-            fn level(&self) -> i32 {
-                3
-            }
-        }
-        // impl 中必须使用结构体的完整名称，包括 <'a>，因为生命周期标注也是结构体类型的一部分
-        // 方法签名中，往往不需要标注生命周期，得益于生命周期消除的第一和第三规则
-
-        // 第三规则应用的场景
-        impl<'a> ImportantExcerpt<'a> {
-            fn announce_and_return_part(&self, announcement: &str) -> &str {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-        // 应用第一规则，给予每个输入参数一个生命周期
-        impl<'a> ImportantExcerpt<'a> {
-            fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &str {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-        // 应用第三规则，将 &self 的生命周期赋给返回值 &str
-        impl<'a> ImportantExcerpt<'a> {
-            fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'a str {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-
-
-        //
-        impl<'a> ImportantExcerpt<'a> {
-            fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'b str {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-        // error: 编译器无法知道 'a 和 'b 的关系
-
-        // 改进 1
-        impl<'a: 'b, 'b> ImportantExcerpt<'a> {
-            fn announce_and_return_part(&'a self, announcement: &'b str) -> &'b str {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-
-        // 改进 2
-        impl<'a> ImportantExcerpt<'a> {
-            fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'b str
-            where
-                'a: 'b,
-            {
-                println!("Attention please: {}", announcement);
-                self.part
-            }
-        }
-        // 'a: 'b，是生命周期约束语法，跟泛型约束非常相似，用于说明 'a 必须比 'b 活得久
-        // 可以把 'a 和 'b 都在同一个地方声明（如上），或者分开声明但通过 where 'a: 'b 约束生命周期关系
-    ```
-    - 静态生命周期
-        - `'static` 是一个非常特殊的生命周期，拥有该生命周期的引用可以和整个程序活得一样久
-        ```rust
-        // 字符串字面量是被硬编码进 Rust 的二进制文件中，这些字符串变量全部具有 'static 的生命周期
-        let s: &'static str = "hello world";
-
-        // 生命周期 'static 意味着能和程序活得一样久，例如字符串字面量和特征对象
-        // 实在遇到解决不了的生命周期标注问题，可以尝试 T: 'static，有时候它会给你奇迹
-        ```
-    ```rust
-    // 一个复杂例子: 泛型、特征约束
-    use std::fmt::Display;
-
-    fn longest_with_an_announcement<'a, T>(
-        x: &'a str,
-        y: &'a str,
-        ann: T,     // 因为要用格式化 {} 来输出 ann，因此需要它实现 Display 特征
-    ) -> &'a str
-    where
-        T: Display,
-    {
-        println!("Announcement! {}", ann);
-        if x.len() > y.len() {
-            x
-        } else {
-            y
-        }
-    }
-    ```
-## 返回值和错误处理
-- 可恢复错误
-    - 处理用户的访问、操作等错误，不会对系统的全局稳定性产生影响    -> `Result<T, E>`
-    ```rust
-    // Result<T, E>
-    enum Result<T, E> {
-        Ok(T),
-        Err(E),
-    }
-
-    //
-    use std::fs::File;
-    use std::io::ErrorKind;
-
-    fn main() {
-        let f = File::open("hello.txt");
-
-        let f = match f {
-            Ok(file) => file,
-            Err(error) => match error.kind() {
-                ErrorKind::NotFound => match File::create("hello.txt") {
-                    Ok(fc) => fc,
-                    Err(e) => panic!("Problem creating the file: {:?}", e),
-                },
-                other_error => panic!("Problem opening the file: {:?}", other_error),
-            },
-        };
-    }
-    ```
-- 不可恢复错误
-    - 数组越界访问，系统启动时发生了影响启动流程的错误等等，对于系统来说是致命的    -> `panic!`
-    ```rust
-    // panic!
-    // 线程 panic 后，程序是否会终止？
-    // 如果是 main 线程，则程序会终止，如果是其它子线程，该线程会终止，但是不会影响 main 线程
-
-    //
-    fn main() {
-        let v = vec![1, 2, 3];
-
-        println!("{}", v[99]);  // 被动触发 panic!
-    }
-
-    //
-    fn main() {
-        panic!("crash !");  // 主动出发 panic!
-    }
-
-    // 在不需要处理错误的场景，例如写原型、示例时，我们不想使用 match 去匹配 Result<T, E> 以获取其中的 T 值，因为 match 的穷尽匹配特性，你总要去处理下 Err 分支
-    // 简化处理：使用 unwrap 和 expect，如果返回成功，就将 Ok(T) 中的值取出来，如果失败，就直接 panic
-
-    // 1
-    use std::fs::File;
-
-    fn main() {
-        let f = File::open("hello.txt").unwrap();
-    }
-
-    // 2
-    use std::fs::File;
-
-    fn main() {
-        let f = File::open("hello.txt").expect("Failed to open hello.txt");
-    }
-    ```
-- 传播错误
-    ```rust
-    // 1 (代码有些啰嗦)
-    use std::fs::File;
-    use std::io::{self, Read};
-
-    fn main() {
-        let f = File::open("hello2.txt").unwrap();
-    }
-
-    fn read_username_from_file() -> Result<String, io::Error> {
-        let f = File::open("hello.txt");
-
-        let mut f = match f {
-            Ok(file) => file,
-            Err(e) => return Err(e),
-        };
-
-        let mut s = String::new();
-        match f.read_to_string(&mut s) {
-            Ok(_) => Ok(s),
-            Err(e) => Err(e),
-        }
-    }
-
-    // 使用 ? 进行错误传播
-    use std::fs::File;
-    use std::io;
-    use std::io::Read;
-
-    fn read_username_from_file() -> Result<String, io::Error> {
-        let f = File::open("hello.txt");
-        let mut s = String::new();
-        f.read_to_string(&mut s)?;
-        Ok(s)
-    }
-    // ? 本质上是一个宏，它的作用和 match 一样
-    let mut f = match {
-        Ok(file) => file,
-        Err(e) => return Err(e),
-    };
-
-    // ? 可以自动进行类型提升(转换)
-    fn open_file() -> Result<File, Box<dyn std::error::Error>> {
-        let mut f = File::open("hello.txt")?;
-        Ok(f)
-    }
-    // File::open 报错时返回的错误是 std::io::Error 类型
-    // open_file 函数返回的错误类型是 std::error::Error 的特征对象
-    // 错误类型通过 ? 返回后，变成了另一个错误类型
-
-    // 意味着可以用一个大而全的 ReturnError 来覆盖所有错误类型，只需要为各种子错误类型实现这种转换即可
-
-    // ? 的链式调用
-    use std::fs::File;
-    use std::io;
-    use std::io::Read;
-
-    fn read_username_from_file() -> Result<String, io::Error> {
-        let mut s = String::new();
-
-        File::open("hello.txt")?.read_to_string(&mut s)?;
-
-        Ok(s)
-    }
-
-    // 
-    use std::fs;
-    use std::io;
-
-    fn read_username_from_file() -> Result<String, io::Error> {
-        fs::read_to_string("hello.txt")
-    }
-
-    // ? 用于 Option 的返回
-    // Option 的定义
-    pub enum Option<T> {
-        Some(T),
-        None,
-    }
-
-    // Result 通过 ? 返回错误
-    // Option 通过 ? 返回 None
-
-    //
-    fn first(arr: &[i32]) -> Option<&i32> {
-        let v = arr.get(0)?;
-        Some(v)
-    }
-
-    // 更简洁的版本
-    fn first(arr: &[i32]) -> Option<&i32> {
-        arr.get(0)
-    }
-    ```
+	struct Point<T> {
+		x: T,
+		y: T,
+	}
+
+	fn main() {
+		let integer = Point { x: 5, y: 10 };
+		let float = Point { x: 1.0, y: 4.0 };
+	}
+
+枚举中使用泛型
+	// Option<T> 是一个拥有泛型 T 的枚举类型，它第一个成员是 Some(T)，存放了一个类型为 T 的值，第二个成员是 None，表示没有值
+	// 用作返回值，判断值的存在与否
+	enum Option<T> {
+		Some(T),
+		None
+	}
+
+	// 用作返回值，判断值的正确与否
+	enum Result<T, E> {
+		Ok(T),
+		Err(E),
+	}
+
+方法中使用泛型
+	struct Point<T> {
+		x: T,
+		y: T,
+	}
+
+	impl<T> Point<T> {
+		fn x(&self) -> &T {
+			&self.x
+		}
+	}
+
+	fn main() {
+		let p = Point { x: 5, y: 10 };
+
+		println!("p.x = {}", p.x());
+	}
+
+为具体的泛型实现方法
+		// Point<f32> 类型会有方法 distance_from_origin，而其他 T 不是 f32 类型的 Point<T> 实例则没有定义此方法
+		impl Point<f32> {
+			fn distance_from_origin(&self) -> f32 {
+				(self.x.powi(2) + self.y.powi(2)).sqrt()
+			}
+		}
+
+const 泛型
+		// const 泛型是针对值的泛型，可以用来处理数组长度的问题
+		// 1
+		fn display_array(arr: [i32; 3]) {
+			println!("{:?}", arr);
+		}
+
+		fn main() {
+			let arr: [i32; 3] = [1, 2, 3];
+			display_array(arr);
+
+			let arr: [i32; 2] = [1, 2];
+			display_array(arr); // error：[i32; 2] 和 [i32; 3] 属于不同的数据类型，函数的参数类型不匹配
+		}
+
+		// 2 使用数组切片，传入 arr 的不可变引用
+		fn display_array(arr: &[i32]) {
+			println!("{:?}", arr);
+		}
+
+		fn main() {
+			let arr: [i32; 3] = [1, 2, 3];
+			display_array(&arr);
+
+			let arr: [i32; 2] = [1, 2];
+			display_array(&arr);
+		}
+
+		// 3 泛型
+		fn display_array<T: std::fmt::Debug>(arr: &[T]) {   // 需要对 T 加一个限制 std::fmt::Debug，因为 {:?} 形式的格式化输出需要 arr 实现该特征
+			println!("{:?}", arr);
+		}
+
+		fn main() {
+			let arr: [i32; 3] = [1, 2, 3];
+			display_array(&arr);
+
+			let arr: [i32; 2] = [1, 2];
+			display_array(&arr);
+		}
+
+		// 4 利用 const 泛型，即针对值的泛型，处理数组长度的问题
+		fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) { // const 泛型 N ，它基于的值类型是 usize
+			println!("{:?}", arr);
+		}
+
+		fn main() {
+			let arr: [i32; 3] = [1, 2, 3];
+			display_array(arr);
+
+			let arr: [i32; 2] = [1, 2];
+			display_array(arr);
+		}
+
+const fn
+	// const fn 即 常量函数， 允许编译器对函数进行求值，从而实现更高效，更灵活的设计
+	// 1
+	const fn add(a: usize, b: usize) -> usize {
+		a + b
+	}
+
+	const RESULT: usize = add(5, 10);
+
+	fn main() {
+		println!("")
+	}
+
+结合 const fn 与 const 泛型
+	// 创建固定大小的缓冲区解构，其中缓冲区大小由编译期计算确定
+	struct Buffer<const N: usize> {
+		data: [u8; N],
+	}
+
+	const fn compute_buffer_size(factor: usize) -> usize {
+		factor * 1024
+	}
+
+	fn main() {
+		const SIZE: usize = compute_buffer_size(4);
+		let buffer = Buffer::<SIZE> {
+			data: [0; SIZE],
+		};
+
+		println!("Buffer size: {} bytes", buffer.data.len());
+	}
+
+泛型的性能
+> Rust 通过在编译时进行泛型代码的单态化(monomorphization)来保证效率，单态化是通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程
+	对如下代码
+	let integer = Some(5);
+	let float = Some(5.0);
+	编译器生成的单态化版本的代码看起来如下
+	enum Option_i32 {
+		Some(i32),
+		None,
+	}
+
+	enum Option_f64 {
+		Some(f64),
+		None,
+	}
+
+	fn main() {
+		let integer = Option_i32::Some(5);
+		let float = Option_f64::Some(5.0);
+	}
+
+特征 trait
+trait 类似于其他语言中的接口的概念，它定义了一组可以被共享的行为，只要实现了该特征，你就能使用这组行为
+	如果不同的类型具有相同的行为，那么就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必须的行为的集合
+	特征只定义行为看起来是什么样子，而不定义行为的具体实现，因此特征方法签名的结尾是 ; 而不是 {}
+	每一个实现这个特征的类型都需要具体实现该特征的相应方法，编译器也会确保任何实现该特征的类型都拥有与这个签名的定义完全一致的方法
+	// 1
+	pub trait Summary {
+		fn summarize(&self) -> String;
+	}
+
+	pub struct Post {
+		pub title: String,
+		pub author: String,
+		pub content: String,
+	}
+
+	impl Summary for Post {
+		fn summarize(&self) -> String {
+			format!("title: {}, author: {}", self.title, self.author);
+		}
+	}
+
+	pub struct Weibo {
+		pub username: String,
+		pub content: String,
+	}
+
+	impl Summary for Weibo {
+		fn summarize(&self) -> String {
+			format!("{} posted {}", self.username, self.content)
+		}
+	}
+
+	fn main() {
+		let post = Post { title: "Rust intro".to_string(), author: "Sun".to_string(), content: "Rust is good".to_string() };
+		let weibo = Weibo { username: "Sun".to_string(), content: "Rust is really good".to_string() };
+		
+		println!("{}", post.summarize());
+		pritnln!("{}", weibo.summarize());
+	}
+
+特征定义与实现的位置(孤儿规则)
+	特征被定义为 pub 时，他人想要使用该特征时，可以引入该特征到他们的保重，然后进行实现
+	如果你想为类型 A 实现特征 T，那么 A 或者 T 至少有一个是在当前作用域中定义的
+	孤儿规则，可以确保其他人编写的代码不会破坏你的代码，也确保了不会莫名其妙破坏风牛马不相及的代码
+
+在特征中定义具有默认实现的方法
+	pub trait Summary {
+		fn smmarize(&self) -> String {
+			String::from("Read more ... ")
+		}
+	}
+
+	impl Summary for Post {}
+
+	impl Summary for Weibo {
+		fn summarize(&self) -> String {
+			format!("{} posted {}", self.username, self.content)
+		}
+	}
+
+默认实现允许调用相同特征中的其他方法，哪怕这些方法没有默认实现
+	pub trait Summary {
+		fn summarize_author(&self) -> String;
+
+		fn summarize(&self) -> String {
+			String::from("Read more from {} ... ", self.summarize_author())
+		}
+	}
+	// 为了使用 Summary，只需要实现 summarize_author 方法即可
+	impl Summary for Weibo {
+		fn summarize_author(&self) -> String {
+			format!("@{}", self.username)
+		}
+	}
+
+	println!("1 new webo: {}", weibo.summarize());
+
+使用特征作为函数参数
+	可以使用任何实现了该特征的类型作为函数的参数，同时在函数体内，可以调用该特征的方法
+	pub fn notify(item: &impl Summary) {
+		println!("Breaking news! {}", item.summarize());
+	}
+
+特征约束(trait bound)
+	impl Trait 这种语法实际上只是一个语法糖
+
+	pub fn notify(item: &impl Summary) {
+		println!("Breaking new! {}", item.summarize());
+	}
+	完整的形式如下：
+	pub fn notify<T: Summary>(item: &T) {
+		println!("Breaking new! {}", item.summarize());
+	}
+	// T: Summary 称为 特征约束
+
+
+	// 一个函数接受两个 impl Summary 的参数
+	pub fn notify(item1: &impl Summary, item2: &impl Summary) {
+		// ...
+	}
+	pub fn notify(item1: &impl Summary1, item2: &impl Summary2) {
+		// ...
+	}
+	// 如果需要强制函数的两个参数是同一类型，则必须使用特征约束
+	pub fn notify<T: Summary>(item1: &T, item2: &T) {
+		// ...
+	}
+	// 泛型类型 T 说明了 item1 和 item2 必须具有同样的类型，同时 T: Summary 说明 T 必须实现 Summary 特征
+
+多重约束
+	// 语法糖形式
+	pub fn notify(item: &(impl Summary + Display)) {
+		// ...
+	}
+	// 特征约束的形式
+	pub fn notify<T: Summary + Display>(item: &T) {
+		// ...
+	}
+
+where 约束
+	// 当特征约束变得很多时，函数的签名将变得很复杂
+	fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+
+	}
+	// 通过 where 进行改进
+	fn some_function<T, U>(t: &T, u: &U) -> i32
+		where T: Display + Clone,
+				U: Clone + Debug
+	{
+		// ...
+	}
+
+使用特征约束有条件的实现方法或特征
+	// 特征约束可以让我们在指定类型 + 指定特征的条件下去实现方法
+	use std::fmt::Display;
+
+	struct Pair<T> {
+		x: T,
+		y: T,
+	}
+
+	impl<T> Pair<T> {
+		fn new(x: T, y: T) -> Self {
+			Self {
+				x,
+				y,
+			}
+		}
+	}
+
+	impl<T: Display + PartialOrd> Pair<T> {
+		fn cmp_display(&self) {
+			if self.x >= self.y {
+				println!("The largest member is x = {}", self.x);
+			} else {
+				println!("The largest member is y = {}", self.y);
+
+			}
+		}
+	}
+	// cmp_display 方法并不是所有的 Pari<T> 结构体对象都可以拥有，只有 T 同时实现了 Display + PartialOrd 的 Pair<T> 才可以拥有此方法
+
+有条件的实现特征
+	例如，标准库为任何实现了 Display 特征的类型实现了 ToString 特征
+	impl<T: Display> ToString for T {
+		// -- snip --
+	}
+	因此我们可以对任何实现了 Display 特征的类型调用由 ToString 定义的 to_string 方法，例如
+	let s = 3.to_string();
+
+函数返回 impl Trait
+	通过 impl Trait 来说明一个函数返回了一个类型，该类型实现了某个特征
+	fn returns_summarizable() -> impl Summary {
+		Weibo {
+			username: String::from("Sun"),
+			content: String::from("Rust is good"),
+		}
+	}
+	// 对于 return_summarizable 的调用者而言，他只知道返回了一个实现了 Summary 特征的对象，但是并不知道返回的具体类型为 Weibo
+
+	// impl Trait 形式的返回值，在一种场景下非常非常有用，那就是返回的真实类型非常复杂，你不知道该怎么声明时(毕竟 Rust 要求你必须标出所有的类型)
+	// 此时就可以用 impl Trait 的方式简单返回
+
+	// impl Trait 形式的返回值的限制：只能有一个具体的类型
+	fn returns_summarizable(switch: bool) -> impl Summary {
+		if switch {
+			Post {
+				title: String::from(
+					"Penguins win the Stanley Cup Championship!",
+				),
+				author: String::from("Iceburgh"),
+				content: String::from(
+					"The Pittsburgh Penguins once again are the best \
+					hockey team in the NHL.",
+				),
+			}
+		} else {
+			Weibo {
+				username: String::from("horse_ebooks"),
+				content: String::from(
+					"of course, as you probably already know, people",
+				),
+			}
+		}
+	}
+	// error: 因为它返回了两个不同的类型 Post 和 Weibo
+
+	//
+	fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+		let mut largest = list[0];
+
+		for &item in list.iter() {
+			if item > largest {
+				largest = item;
+			}
+		}
+
+		largest
+	}
+
+	fn main() {
+		let number_list = vec![34, 50, 25, 100, 65];
+
+		let result = largest(&number_list);
+		println!("The largest number is {}", result);
+
+		let char_list = vec!['y', 'm', 'a', 'q'];
+
+		let result = largest(&char_list);
+		println!("The largest char is {}", result);
+	}
+
+通过 derive 派生特征
+	形如 `#[derive(Debug)]` 是一种特征派生语法，被 derive 标记的对象会自动实现对应的默认特征代码，继承相应的功能
+	derive 派生出来的是 Rust 默认给我们提供的特征，简化了手动实现相应特征的需求，如果由必要可以手动重载该实现
+	例如，Debug 特征有一套默认的代码实现，当标记到一个类型上时，可以使用 println!("{:?}", s) 打印结构体对象
+			Copy 特征也有一套自己的默认代码实现，当标记到一个类型上时，可以让这个类型自动实现 Copy 特征，进而可以调用 copy 方法，进行自我复制
+
+调用方法需要引入特征
+	在一些场景中，使用 as 关键字做类型转换会有比较大的限制，因为你想要在类型转换上拥有完全的控制，例如处理转换错误，那么你将需要 TryInto
+	// 如果你要使用一个特征的方法，那么你需要将该特征引入当前的作用域中
+	use std::convert::TryInto;
+
+	fn main() {
+		let a: i32 = 10;
+		let b: u16 = 100;
+
+		let b_ = b.try_into()
+					.unwrap();
+		
+		if a < b_ {
+			println!("Ten is less than one hundred");
+		}
+	}
+	// 因为 Rust 把最常用的标准库中的特征通过 std::prelude 模块提前引入到当前作用域，其中包括了 std::converter::TryInto，所以可以不必显示的引入
+
+	// 为自定义类型实现 + 操作
+	use std::ops::Add;
+
+	#[derive(Debug)]
+	struct Point<T: Add<T, Output = T>> {   // 限制类型 T 必须实现了 Add 特征，否则无法进行 + 操作
+		x: T,
+		y: T,
+	}
+
+	impl<T: Add<T, Output = T>> Add for Point<T> {
+		type Output = Point<T>;
+
+		fn add(self, p: Point<T>) -> Point<T> {
+			Point {
+				x: self.x + p.x,
+				y: self.y + p.y,
+			}
+		}
+	}
+
+	fn add<T: Add<T, Output = T>>(a: T, b: T) -> T {
+		a + b
+	}
+
+	fn main() {
+		let p1 = Point { x: 1.1f32, y: 1.1f32 };
+		let p2 = Point { x: 2.1f32, y: 2.1f32 };
+		println!("{:?}", add(p1, p2));
+
+		let p3 = Point { x: 1i32, y: 1i32 };
+		let p4 = Point { x: 2i32, y: 2i32 };
+		println!("{:?}", add(p3, p4));
+	}
+
+	// 自定义类型的打印输出，为自定义类型实现 std::fmt::Display 特征
+	#![allow(dead_code)]
+
+	use std::fmt;
+	use std::fmt::{Display};
+
+	#[derive(Debug,PartialEq)]
+	enum FileState {
+		Open,
+		Closed,
+	}
+
+	#[derive(Debug)]
+	struct File {
+		name: String,
+		data: Vec<u8>,
+		state: FileState,
+	}
+
+	impl Display for FileState {
+		fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			match *self {
+				FileState::Open => write!(f, "OPEN"),
+				FileState::Closed => write!(f, "CLOSED"),
+			}
+		}
+	}
+
+	impl Display for File {
+		fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			write!(f, "<{} ({})>",
+					self.name, self.state)
+		}
+	}
+
+	impl File {
+		fn new(name: &str) -> File {
+			File {
+				name: String::from(name),
+				data: Vec::new(),
+				state: FileState::Closed,
+			}
+		}
+	}
+
+	fn main() {
+		let f1 = File::new("f1.txt");
+		// ...
+		println!("{:?}", f1);
+		println!("{}", f1);
+	}
+
+特征对象
+	特征对象是实现了特征的类型的实例，这种映射关系存储在一张表中，可以在运行时通过特征对象找到具体调用的类型方法
+	通过 & 引用或者 Box<T> 智能指针的方式来创建特征对象 
+	pub trait Draw {
+		fn draw(&self);
+	}
+
+	pub struct Button {
+		pub width: u32,
+		pub height: u32,
+		pub label: String,
+	}
+
+	impl Draw for Button {
+		fn draw(&self) {
+			// ...
+		}
+	}
+
+	pub struct SelectBox {
+		pub width: u32,
+		pub height: u32,
+		pub options: Vec<String>,
+	}
+
+	impl Draw for SelectBox {
+		fn draw(&self) {
+			// ...
+		}
+	}
+
+	// 非泛型实现
+	pub struct Screen {
+		pub components: Vec<Box<dyn Draw>>,
+	}
+
+	impl Screen {
+		pub fn run(&self) {
+			for component in self.components.iter() {
+				component.draw();
+			}
+		}
+	}
+
+	// 泛型实现
+	pub struct Screen<T: Draw> {
+		pub components: Vec<T>,
+	}
+
+	impl<T> Screen<T>
+		where T: Draw {
+		pub fn run(&self) {
+			for component in self.components.iter() {
+				component.draw();
+			}
+		}
+	}
+
+	fn main() {
+		let screen = Screen {
+			components: vec![
+				Box::new(SelectBox {
+					width: 75,
+					height: 10,
+					options: vec![
+						String::from("Yes"),
+						String::from("Maybe"),
+						String::from("No"),
+					],
+				}),
+				Box::new(Button {
+					width: 50,
+					height: 10,
+					label: String::from("OK"),
+				}),
+			],
+		};
+
+		screen.run();
+	}
+
+	// 鸭子类型(duck typing)，简单来说，就是只关心值长啥样，而不关心它实际是什么
+	// 使用特征对象和 Rust 类型系统来进行类似鸭子类型操作的优势是，无需在运行时检查一个值是否实现了特定方法或者担心在调用时因为值没有实现方法而产生错误
+
+特征对象的动态分发
+	静态分发 static dispatch，在编译期完成，对运行时性能没有任何影响，例如对泛型的处理，编译器会为每一个泛型参数对应的具体类型生成一份代码
+	动态分发 dynamic dispatch，直到运行时，才能确定需要调用哪个方法，关键字 `dyn` 强调了 "动态" 这一特点
+		当使用特征对象时，Rust必须使用动态分发，因为编译器无法知晓所有可能用于特征对象代码的类型，所以不知道应该调用哪个类型的哪个方法实现
+![dynamic dispatch](../assets/dynamic_dispatch.jpg)
+	1. 特征对象大小不固定  
+	2. 几乎总是使用特征对象的引用方式，例如 `&dyn Draw`，`Box<dyn Draw>`  
+		1. 虽然特征对象没有固定大小，但是它的引用类型的大小时固定的，即由两个指针 `ptr` 和 `vptr` 组成，占用两个指针大小的空间  
+		2. `ptr` 指向实现了特征的具体类型的实例  
+		3. `vptr` 指向虚表 vtable，vtable 中保存了类型的实例对于可以调用的实现于特征的方法，当调用方法时，直接从 vtable 中找到方法并调用  
+		> 简而言之，当类型 Button 实现了特征 Draw 时，类型 Button 的实例对象 btn 可以当作特征 Draw 的特征对象类型来使用，btn 中保存了作为特征对象的数据指针（指向类型 Button 的实例数据）和行为指针（指向 vtable）.  
+		> 一定要注意，此时的 btn 是 Draw 的特征对象的实例，而不再是具体类型 Button 的实例，而且 btn 的 vtable 只包含了实现自特征 Draw 的那些方法（比如 draw），因此 btn 只能调用实现于特征 Draw 的 draw 方法，而不能调用类型 Button 本身实现的方法和类型 Button 实现于其他特征的方法。也就是说，btn 是哪个特征对象的实例，它的 vtable 中就包含了该特征的方法   
+
+Self 与 self
+	self 指代当前的实例对象，Self 指代特征或者方法类型的别名
+	trait Draw {
+		fn draw(&self) -> Self;
+	}
+
+	#[derive(Clone)]
+	struct Button;
+	impl Draw for Button {
+		fn draw(&self) -> Self {
+			return self.clone()
+		}
+	}
+
+	fn main() {
+		let button = Button;
+		let newbt = button.draw();
+	}
+
+特征对象的限制
+	不是所有特征都拥有特征对象，只有对象安全的特征才行
+	当一个特征的所有方法都有如下属性时，它的对象才是安全的
+		1. 方法的返回类型不能是 Self  
+		2. 方法没有任何泛型参数  
+	// 标准库中的 Clone 特征就不符合对象安全的要求
+	pub trait Clone {
+		fn clone(&self) -> Self;    // 返回 Self 类型，因此它时对象不安全的
+	}
+
+深入了解特征
+	关联类型
+		关联类型是在特征定义的语句块中，申明一个自定义类型，这样就可以在特征的方法签名中使用该类型
+		// 标准库中的迭代器特征 Iterator
+		pub trait Iterator {
+			type Item;  // Iterator 有一个 Item 关联类型，用于替代遍历的值的类型
+
+			fn next(&mut self) -> Option<Self::Item>;
+		}
+		// Self 指代当前调用者的具体类型，Self::Item 指代该类型实现中定义的 Item 类型
+
+	// 使用关联类型比使用泛型，代码的可读性更强
+	// 使用泛型
+	trait Container<A, B> {
+		fn contains(&self, a: A, b: B) -> bool;
+	}
+
+	fn difference<A, B, C>(container: &C) -> i32
+	where C: Container<A, B> {
+		// ...
+	}
+
+	// 使用关联类型
+	trait Container {
+		type A;
+		type B;
+		fn contains(&self, a: &Self::A, b: &Self::B) -> bool;
+	}
+
+	fn difference<C: Container>(container: &C) {
+		// ...
+	}
+
+默认泛型类型参数
+	当使用泛型类型参数时，可以为其指定一个默认的具体类型
+	默认参数主要作用
+		1. 减少实现的样板代码  
+		2. 扩展类型但是无需大幅修改现有的代码  
+	// 标准库中的 std::ops::Add 特征
+	trait Add<RHS=Self> {   // 给泛型参数 RHS 指定了默认值 Self
+		type Output;
+
+		fn add(self, rhs: RHS) -> Self::Output;
+	}
+
+	//
+	use std::ops::Add;
+
+	#[derive(Debug, PartialEq)]
+	struct Point {
+		x: i32,
+		y: i32,
+	}
+
+	impl Add for Point {    // 定义的是两个相同的 Point 类型相加，因此无需指定 RHS
+		type Output = Point;
+
+		fn add(self, other: Point) -> Point {
+			Point {
+				x: self.x + other.x,
+				y: self.y + other.y,
+			}
+		}
+	}
+
+	fn main() {
+		assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3},
+					Point { x: 3, y: 3 });
+	}
+	// Rust 无法为所有运算符进行重载，目前来说，只有定义在 std::ops 中的运算符才能进行重载
+
+	// 定义的是两个不同类型的 + 操作，因此不能再使用默认的 RHS
+	use std::ops::Add;
+
+	struct Millimeters(u32);
+	struct Meters(u32);
+
+	impl Add(Meters) for Millimeters {  // 定义的是两个不同类型的 + 操作，因此不能再使用默认的 RHS
+		type Output = Millimeters;
+
+		fn add(self, other: Meters) -> Millimeters {
+			Millimeters(self.0 + (other.0 * 1000))
+		}
+	}
+
+调用同名的方法
+	完全限定语法
+	// 语法
+	<Type as Trait>::function(receiver_if_method, next_arg, ...);
+	// 第一个参数是方法接收器 receiver （三种 self），只有方法才拥有，例如关联函数就没有 receiver
+
+	// 完全限定语法可以用于任何函数或方法调用，大多数时候无需使用完全限定语法，原因是 Rust 编译器能根据上下文自动推导出调用的路径。
+	// 只有当存在多个同名函数或方法，且 Rust 无法区分出目标函数时才会用到
+	// 1
+	trait Pilot {
+		fn fly(&self);
+	}
+
+	trait Wizard {
+		fn fly(&self);
+	}
+
+	struct Human;
+
+	impl Pilot for Human {
+		fn fly(&self) {
+			println!("pilot")
+		}
+	}
+
+	impl Wizard for Human {
+		fn fly(&self) {
+			println!("wizard");
+		}
+	}
+
+	impl Human {
+		fn fly(&self) {
+			println!("human");
+		}
+	}
+
+	fn main() {
+		let person = Human;
+		person.fly();   //  调用Human类型自身的方法
+		Pilot::fly(&person);    // 调用Pilot特征上的方法
+		Wizard::fly(&person);    // 调用Wizard特征上的方法
+	}
+
+	// 2
+	trait Animal {
+		fn baby_name() -> String;
+	}
+
+	struct Dog;
+
+	impl Dog {
+		fn baby_name() -> String {  // 关联函数
+			String::from("Spot")
+		}
+	}
+
+	impl Animal for Dog {
+		fn baby_name() -> String {
+			String::from("pubby")
+		}
+	}
+
+	fn main() {
+		println!("A dog is called a {}", Dog::baby_name());
+		println!("A baby dog is called a {}", <Dog as Animal>::baby_name());    // 完全限定语法
+	}        
+
+特征定义中的特征约束
+	特征 A 使用另一个特征 B 的功能(另一种形式的特征约束)，此时不仅需要为类型实现特征 A，同时还要为类型实现特征 B (super trait) 
+		use std::fmt::Display;
+
+		trait OutlinePrint: Display {   // 用于特征定义中的特征约束
+			fn outline_print(&self) {
+				let output = self.to_string();
+				let len = output.len();
+				println!("{}", "*".repeat(len + 4));
+				println!("*{}*", " ".repeat(len + 2));
+				println!("* {} *", output);
+				println!("*{}*", " ".repeat(len + 2));
+				println!("{}", "*".repeat(len + 4));
+			}
+		}
+		
+		struct Point {
+			x: i32,
+			y: i32,
+		}
+
+		// 
+		impl OutlinePrint for Point {}  // error: Display 特征未实现
+
+		// 
+		use std::fmt;
+
+		impl fmt::Display for Point {
+			fm fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+				write!(f, "({}, {})", self.x, self.y)
+			}
+		}
+		// 为 Point 实现了 Display 特征，to_string 方法将自动实现：最终获得字符创是通过 fmt 方法获得
+
+在外部类型上实现外部特征
+	孤儿规则：特征或者类型必需至少有一个是本地的，才能在此类型上定义特征
+	为了绕过孤儿规则，需要使用 newtype 模式，即为一个元组结构体创建新类型，该元组结构体封装有一个字段，该字段就是需要实现特征的具体类型，该封装是本地的，因此可以为类型实现外部的特征
+	// 动态数组类型 Vec<T> 定义在标准库中，特征 Display 也定义在标准库里，无法直接为 Vec<T> 实现 Display 特征
+	use std::fmt;
+
+	struct Wrapper(Vec<String>);
+
+	impl fmt::Display for Wrapper {
+		fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			write!(f, "[{}]", self.0.join(", "))    // 先从 Wrapper 中取出数组 self.0 ，然后才能执行 join 方法
+		}
+	}
+
+	fn main() {
+		let w = Wrapper(vec![String::from("hello"), String::from("world")]);
+		println!("w = {}", w);
+	}
+	// Rust 提供了一个特征叫 Deref，实现该特征后，可以自动做一层类似类型转换的操作，可以将 Wrapper 变成 Vec<String> 来使用。这样就会像直接使用数组那样去使用 Wrapper，而无需为每一个操作都添加上 self.0
+
+集合类型
+	动态数组
+	// 创建
+	// 1
+	let v: Vec<i32> = Vec::new();
+	// 2
+	let mut v = Vec::new();
+	v.push(1);  // 编译器通过 v.push(1) 推断出 v 的类型是 Vec<i32>
+	// 如果预先知道要存储的元素个数，可以使用 Vec::with_capacity(capacity) 创建动态数组
+	// 3
+	let v = vec![1, 2, 3];
+
+	// 更新
+	let mut v = Vec::new();
+	v.push(1);
+
+	// 读取
+	//1. 通过下标 ，数组越界访问会导致程序退出
+	//2. 通过  get 方法，有值的时候返回 Some(T)，无值的时候返回 None，比较安全，例如访问数组的第几个元素取决于用户输入时，非常适合
+	let v = vec![1, 2, 3, 4, 5];
+
+	let third: &i32 = &v[2];
+	println!("The third number is {}", third);
+
+	match v.get(2) {
+		Some(third) => println!("The third number is {third}"),
+		None => println!("None"),
+	}
+
+	// 遍历
+	// 1
+	let v = vec![1, 2, 3];
+	for i in &v {
+		println!("{i}")
+	}
+
+	// 2
+	let mut v = vec![1, 2, 3];
+	for i in &mut v {
+		*i += 10
+	}
+
+	// 存储不同类型的元素
+	// 1 通过使用枚举类型实现不同类型元素的存储
+	#[derive(Debug)]
+	enum IpAddr {
+		V4(String),
+		V6(String),
+	}
+
+	fn main() {
+		let v = vec![
+			IpAddr::V4("127.0.0.1".to_string()),
+			IpAddr::V6("::1".to_string()),
+		];
+
+		for ip in v {
+			show_addr(ip);
+		}
+	}
+
+	fn show_addr(ip: IpAddr) {
+		println!("{:?}", ip);
+	}
+	// 2 通过使用特征对象实现不同类型元素的存储
+	trait IpAddr {
+		fn display(&self);
+	}
+
+	struct V4(String);
+	impl IpAddr for V4 {
+		fn display(&self) {
+			println!("ipv4: {:?}", self.0);
+		}
+	}
+
+	struct V6(String);
+	impl IpAddr for V6 {
+		fn display(&self) {
+			println!("ipv6: {:?}", self.0);
+		}
+	}
+
+	fn main() {
+		let v: Vec<Box<dyn IpAddr>> = vec![ // Vec<Box<dyn IpAddr>> 表示数组 v 存储的是特征 IpAddr 的对象
+			Box::new(V4("127.0.0.1".to_string()))
+			Box::new(V6("::1".to_string()))
+		];
+
+		for ip in v {
+			ip.display();
+		}
+	}
+	// 在实际使用中，特征对象比枚举数组常见，因为特征对象非常灵活，而编译器对枚举的限制较多，且无法动态增加类型
+
+	// Vector 常用方法
+	// 1
+	let v = vec![0; 3]; // 默认值为 0，初始长度为 3
+	let v_from = Vec::from([0, 0, 0]);
+	assert_eq!(v, v_from);
+
+	// 增加元素时，如果容量不足会导致 Vector 扩容，频繁扩容会降低程序的性能
+	// 预估容量，减少内存拷贝
+	let mut v = Vec::with_capacity(10);
+	v.extend([1, 2, 3]);
+	println!("The length of v: {}, capacity: {}", v.len(), v.capacity());
+
+	v.reserve(100); // 调整 v 的容量，至少 100
+	println!("The length of v(reserve): {}, capacity: {}", v.len(), v.capacity());
+
+	v.shrink_to_fit();
+	println!("The length of v(shrink_to_fit): {}, capacity: {}", v.len(), v.capacity());
+
+	// 其他常见方法
+	let mut v = vec![1, 2, 3];
+	assert!(!v.is_empty());
+
+	v.insert(2, 3); // 在指定索引插入数据索引值不能大于 v 的长度
+	assert_eq!(v.remove(1), 2); // 移除指定位置元素并返回
+	assert_eq!(v.pop(), Some(3));   // 删除并返回尾部元素
+	assert_eq!(v.pop(), Some(1));
+	assert_eq!(v.pop(), None);
+	v.clear();
+
+	let mut v1 = [11, 22].to_vec(); // append 会导致 v1 清空数据，增加可变声明
+	v.append(&mut v1);              // 将 v1 所有元素附加到 v 中
+	v.truncate(1);                  // 截断到指定位置，其他元素被删除
+	v.retain(|x| *x > 10);          // 保留满足条件的元素，即删除不满足条件的元素
+
+	let mut v = vec![11, 22, 33, 44, 55];
+	// 删除指定范围的元素，同时获取被删除元素的迭代器
+	let mut m: Vec<_> = v.drain(1..=3).collect();
+
+	let v2 = m.split_off(1);    // 指定索引处切分成两个 vec，m: [22]，v2: [33, 44]
+
+	// 切片
+	let v = vec![11, 22, 33, 44, 55];
+	let slice = &v[1..=3];
+	assert_eq!(slice, &[22, 33, 44]);
+
+	// 排序
+	// 稳定排序 sort 和 sort_by
+	// 非稳定排序 sort_unstable 和 sort_unstable_by
+	// 总体而言，非稳定排序的算法的速度会优于稳定排序算法，同时，稳定排序还会额外分配原数组一半的空间
+
+	// 1
+	let mut vec = vec![1, 5, 10, 2, 15];
+	vec.sort_unstable();
+	assert_eq!(vec, vec![1, 2, 5, 10, 15]);
+
+	// 2
+	let mut vec = vec![1.0, 5.6, 10.3, 2.0, 15f32];    
+	vec.sort_unstable();   // error
+	//  在浮点数当中，存在一个 NAN 的值，这个值无法与其他的浮点数进行对比，因此，浮点数类型并没有实现全数值可比较 Ord 的特性，而是实现了部分可比较的特性 PartialOrd
+	assert_eq!(vec, vec![1.0, 2.0, 5.6, 10.3, 15f32]); 
+
+	// 如果确定浮点数数组当中不包含 NAN 值，可以用 partial_cmp 来作为大小判断的依据
+	let mut vec = vec![1.0, 5.6, 10.3, 2.0, 15f32];    
+	vec.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());    
+	assert_eq!(vec, vec![1.0, 2.0, 5.6, 10.3, 15f32]);
+
+	// 对结构体数组进行排序
+	// 1
+	#[derive(Debug)]
+	struct Person {
+		name: String,
+		age: u32,
+	}
+
+	impl Person {
+		fn new(name: String, age: u32) -> Person {
+			Person { name, age }
+		}
+	}
+
+	fn main() {
+		let mut people = vec![
+			Person::new("Zoe".to_string(), 25),
+			Person::new("Al".to_string(), 60),
+			Person::new("John".to_string(), 20),
+		];
+
+		people.sort_unstable_by(|a, b| b.age.cmp(&a.age));
+
+		println!("{:?}", people);
+	}
+
+	// 排序需要类型实现 Ord 特性，可以为结构体实现 Ord 特性从而实现结构体的排序
+	// 实现 Ord 特征，需要实现 Ord, Eq, PartialEq, PartialOrd 特征，这些特征可以通过 derive 实现
+	#[derive(Debug, Ord, Eq, PartialEq, PartialOrd)]
+	struct Person {
+		name: String,
+		age: u32,
+	}
+
+	impl Person {
+		fn new(name: String, age: u32) -> Person {
+			Person { name, age }
+		}
+	}
+
+	fn main() {
+		let mut people = vec![
+			Person::new("Zoe".to_string(), 25),
+			Person::new("Al".to_string(), 60),
+			Person::new("Al".to_string(), 30),
+			Person::new("John".to_string(), 1),
+			Person::new("John".to_string(), 25),
+		];
+
+		people.sort_unstable();
+
+		println!("{:?}", people);
+	}
+	// 需要 derive Ord 相关特性，需要确保你的结构体中所有的属性均实现了 Ord 相关特性，否则会发生编译错误
+	// derive 的默认实现会依据属性的顺序依次进行比较，如上述例子中，当 Person 的 name 值相同，则会使用 age 进行比较
+
+HashMap
+	// 1 使用 new 方法创建
+	use std::collections::HashMap;
+
+	fn main() {
+		let mut my_gems = HashMap::new();
+
+		my_gems.insert("red stone", 1);
+		my_gems.insert("blue stone", 1);
+		my_gems.insert("nomal tone", 18);
+	}
+
+	// 2 使用迭代器和 collect 方法创建
+	// 1
+	use std::collections::HashMap;
+
+	fn main() {
+		let team_list = vec![
+			("China".to_string(), 100),
+			("America".to_string(), 10),
+			("Japan".to_string(), 50),
+		];
+
+		let mut teams_map = HashMap::new();
+		for team in &team_list {
+			teams_map.insert(&team.0, team.1);
+		}
+
+		print!("{:?}", teams_map);
+	}
+	// 2
+	use std::collections::HashMap;
+
+	fn main() {
+		let team_list = vec![
+			("China".to_string(), 100),
+			("America".to_string(), 10),
+			("Japan".to_string(), 50),
+		];
+
+		// 先将 Vec 转为迭代器，接着通过 collect 方法，将迭代器中的元素收集后，转成 HashMap
+		let teams_map: HashMap<_,_> = team_list.into_iter().collect();
+
+		print!("{:?}", teams_map);
+	}
+
+	// HashMap 的所有权规则与其它 Rust 类型没有区别
+	1. 若类型实现 Copy 特征，该类型会被复制进 HashMap，因此无所谓所有权  
+	2. 若没实现 Copy 特征，所有权将被转移给 HashMap 中  
+
+	// 查询
+	// 1
+	use std::collections::HashMap;
+
+	fn main() {
+		// 通过 get 方法获取元素
+		let mut scores = HashMap::new();
+
+		scores.insert(String::from("Blue"), 10);
+		scores.insert(String::from("Yellow"), 50);
+
+		let team_name = String::from("Blue");
+		let score: Option<&i32> = scores.get(&team_name);
+		// 获得 i32 类型的 score
+		let score: i32 = scores.get(&team_name).copied().unwrap_or(0);
+
+		println!("{score}");
+	}
+
+	// 遍历
+	use std::collections::HashMap;
+
+	fn main() {
+		// 遍历 KV 对
+		let mut scores = HashMap::new();
+
+		scores.insert(String::from("Blue"), 10);
+		scores.insert(String::from("Yellow"), 50);
+
+		for (key, value) in &scores {
+			println!("{}: {}", key, value);
+		}
+	}
+
+	// 更新
+	use std::collections::HashMap;
+
+	fn main() {
+		// 更新
+		let mut scores = HashMap::new();
+
+		scores.insert("Blue", 10);
+
+		// 覆盖已有的值
+		let old = scores.insert("Blue", 20);
+		assert_eq!(old, Some(10));
+
+		// 查询新插入的值
+		let new = scores.get("Blue");
+		assert_eq!(new, Some(&20));
+
+		// 查询，不存在则插入新值
+		let v = scores.entry("Yellow").or_insert(5);    // 不存在，则插入
+		assert_eq!(*v, 5);
+
+		// 查询，不存在则插入新值
+		let v = scores.entry("Yellow").or_insert(50);   // 存在，没有插入
+		assert_eq!(*v, 5);
+	}
+
+	// 在已有值的基础上更新
+	use std::collections::HashMap;
+
+	fn main() {
+		// 在已有值的基础上更新
+		let text = "hello world wonderful world";
+
+		let mut map = HashMap::new();
+		for word in text.split_whitespace() {
+			let count = map.entry(word).or_insert(0);
+			*count += 1;
+		}
+
+		println!("{:?}", map);
+	}
+
+	// 哈希函数
+
+生命周期
+	生命周期，简而言之就是引用的有效作用域，主要的作用是避免悬垂引用
+	借用检查
+	{
+		let r;                // ---------+-- 'a
+								//          |
+		{                     //          |
+			let x = 5;        // -+-- 'b  |
+			r = &x;           //  |       |
+		}                     // -+       |
+								//          |
+		println!("r: {}", r); //          |
+	}                         // ---------+
+
+函数中的生命周期
+	fn main() {
+		let string1 = String::from("abcd");
+		let string2 = "xyz";
+
+		let result = longest(string1.as_str(), string2);
+		println!("The longest string is {}", result);
+	}
+
+	fn longest(x: &str, y: &str) -> &str {
+		if x.len() > y.len() {
+			x
+		} else {
+			y
+		}
+	}
+	// error: 编译器无法知道函数的返回值到底引用 x 还是 y，因为编译器需要知道这些来确保函数调用后的引用生命周期分析
+	// 此时，需要手动标注生命周期
+
+生命周期的标注
+	声明周期的作用是告诉编译器多个引用之间的关系
+	标注语法：以 ' 开头，名称往往是一个单独的小写字母，例如 'a
+	在通过函数签名指定生命周期参数时，我们并没有改变传入引用或者返回引用的真实生命周期，而是告诉编译器当不满足此约束条件时，就拒绝编译通过
+	&i32            // 一个引用
+	&'a i32         // 具有显式生命周期的引用
+	&'a mut i32     // 具有显式生命周期的可变引用
+
+	fn useless<'a>(first: &'a i32, second: &'a i32) {}
+	// first 和 second 具有生命周期 'a，它们至少活得和 'a 一样久
+
+函数签名中的生命周期
+	函数或者方法中，参数的生命周期被称为 输入生命周期，返回值的生命周期被称为 输出生命周期
+	编译器使用三条消除规则来确定哪些场景不需要显式地去标注生命周期
+		1. 每一个引用参数都会获得独自的生命周期  
+		2. 若只有一个输入生命周期（函数参数中只有一个引用类型），那么该生命周期会被赋给所有的输出生命周期，也就是所有返回值的生命周期都等于该输入生命周期  
+		3. 若存在多个输入生命周期，且其中一个是 &self 或 &mut self，则 &self 的生命周期被赋给所有的输出生命周期  
+		// 1
+		fn foo<'a>(x: &'a i32)                      // 一个引用参数的函数就有一个生命周期标注
+		fn foo<'a, 'b>(x: &'a i32, y: &'b i32)      // 两个引用参数的函数就有两个生命周期标注
+
+		// 2
+		fn foo(x: &i32) -> &i32                     // x 参数的生命周期会被自动赋给返回值 &i32
+		等价于
+		fn foo<'a>(x: &'a i32) -> &'a i32
+
+		// 编译器如何应用这些规则的示例
+		// 1
+		fn first_word(s: &str) -> &str {}
+		// 应用规则 1
+		fn first_word<'a>(s: &'a str) -> &str {}        // 编译器自动为参数添加生命周期
+		// 应用规则 2
+		fn first_word<'a>(s: &'a str) -> &'a str {}     // 编译器自动为返回值添加生命周期
+
+		// 2
+		fn longest(x: &str, y: &str) -> &str {}
+		// 应用规则 1
+		fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {}   // 为每个参数都标注生命周期
+		// 第二条规则无法被使用，因为输入生命周期有两个
+		// 第三条规则也不符合，因为它是函数，不是方法，因此没有 &self 参数
+		// error
+
+		//
+		// 和泛型一样，使用生命周期参数，需要先声明 <'a>
+		// x，y和返回值至少活得和 'a 一样久
+		fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+			if x.len() > y.len() {
+				x
+			} else {
+				y
+			}
+		}
+
+		// 1
+		fn main() {
+			let string1 = String::from("long string is long");
+
+			{
+				let string2 = String::from("xyz");
+				// 'a 是 string1 和 string2 中作用域较小的那个，即 string2 的生命周期
+				// 函数返回的生命周期为 'a，因此函数返回的生命周期也等于 string2 的生命周期
+				let result = longest(string1.as_str(), string2.as_str());
+				println!("The longest string is {}", result);
+			}
+		}
+
+		fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+			if x.len() > y.len() {
+				x
+			} else {
+				y
+			}
+		}
+		// 2
+		fn main() {
+			let string1 = String::from("long string is long");
+			let result;
+
+			{
+				let string2 = String::from("xyz");
+				result = longest(string1.as_str(), string2.as_str());   // error: string2 小于它应该具备的生命周期 'a
+			}
+
+			println!("The longest string is {}", result);
+		}
+
+		fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+			if x.len() > y.len() {
+				x
+			} else {
+				y
+			}
+		}
+
+		// y 完全没有被使用，因此 y 的生命周期与 x 和返回值的生命周期没有任何关系
+		fn longest<'a>(x: &'a str, y: &str) -> &'a str {
+			x
+		}
+
+		// 函数的返回值如果是一个引用类型，那么它的生命周期只会来源于
+		// 1. 函数参数的生命周期
+		// 2. 函数体中某个新建引用的生命周期
+
+		// 1
+		fn longest<'a>(x: &str, y: &str) -> &'a str {
+			let result  = String::from("really long string");
+			result.as_str() // error: result 在函数结束后就被释放，但是在函数结束后，对 result 的引用依然在继续，悬垂引用
+		}
+
+		// 2 返回内部字符串的所有权，把字符串的所有权转移给调用者
+		fn longest<'a>(_x: &str, _y: &str) -> String {
+			String::from("really long string");
+		}
+
+		fn main() {
+			let s = longest("not", "important");
+		}
+
+结构体中的生命周期
+	结构体中使用引用，需要为引用标注生命周期
+	// 
+	struct ImportantExcerpt<'a> {
+		part: &'a str,  // 结构体所引用的字符串的生命周期需要大于等于该结构体的生命周期
+	}
+
+	fn main() {
+		let novel = String::from("Call me Ishmael. Some years ago...");
+		let first_sentence = novel.split('.').next().expect("Could not find a 'a'");
+		let i = ImportantExcerpt {
+			part: first_sentence,
+		};
+	}
+
+	//
+	#[derive(Debug)]
+	struct ImportantExcerpt<'a> {
+		part: &'a str,  // 结构体所引用的字符串的生命周期需要大于等于该结构体的生命周期
+	}
+
+	fn main() {
+		let i: ImportantExcerpt;
+
+		{
+			let novel = String::from("Call me Ishmael. Some years ago...");
+			let first_sentence = novel.split('.').next().expect("Could not find a 'a'");
+			i = ImportantExcerpt {
+				part: first_sentence,
+			};
+		}
+
+		println!("{:?}", i);    // error: 结构体比它引用的字符串活得更久
+	}
+
+方法中的生命周期
+	// 泛型的语法
+	struct Point<T> {
+		x: T,
+		y: T,
+	}
+
+	impl<T> Point<T> {
+		fn x(&self) -> &T {
+			&self.x
+		}
+	}
+
+	// 为具有生命周期的结构体实现方法的语法
+	struct ImportantExcerpt<'a> {
+		part: &'a str,
+	}
+
+	impl<'a> ImportantExcerpt<'a> {
+		fn level(&self) -> i32 {
+			3
+		}
+	}
+	// impl 中必须使用结构体的完整名称，包括 <'a>，因为生命周期标注也是结构体类型的一部分
+	// 方法签名中，往往不需要标注生命周期，得益于生命周期消除的第一和第三规则
+
+	// 第三规则应用的场景
+	impl<'a> ImportantExcerpt<'a> {
+		fn announce_and_return_part(&self, announcement: &str) -> &str {
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+	// 应用第一规则，给予每个输入参数一个生命周期
+	impl<'a> ImportantExcerpt<'a> {
+		fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &str {
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+	// 应用第三规则，将 &self 的生命周期赋给返回值 &str
+	impl<'a> ImportantExcerpt<'a> {
+		fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'a str {
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+
+
+	//
+	impl<'a> ImportantExcerpt<'a> {
+		fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'b str {
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+	// error: 编译器无法知道 'a 和 'b 的关系
+
+	// 改进 1
+	impl<'a: 'b, 'b> ImportantExcerpt<'a> {
+		fn announce_and_return_part(&'a self, announcement: &'b str) -> &'b str {
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+
+	// 改进 2
+	impl<'a> ImportantExcerpt<'a> {
+		fn announce_and_return_part<'b>(&'a self, announcement: &'b str) -> &'b str
+		where
+			'a: 'b,
+		{
+			println!("Attention please: {}", announcement);
+			self.part
+		}
+	}
+	// 'a: 'b，是生命周期约束语法，跟泛型约束非常相似，用于说明 'a 必须比 'b 活得久
+	// 可以把 'a 和 'b 都在同一个地方声明（如上），或者分开声明但通过 where 'a: 'b 约束生命周期关系
+
+静态生命周期
+	`'static` 是一个非常特殊的生命周期，拥有该生命周期的引用可以和整个程序活得一样久
+	// 字符串字面量是被硬编码进 Rust 的二进制文件中，这些字符串变量全部具有 'static 的生命周期
+	let s: &'static str = "hello world";
+
+	// 生命周期 'static 意味着能和程序活得一样久，例如字符串字面量和特征对象
+	// 实在遇到解决不了的生命周期标注问题，可以尝试 T: 'static，有时候它会给你奇迹
+
+	// 一个复杂例子: 泛型、特征约束
+	use std::fmt::Display;
+
+	fn longest_with_an_announcement<'a, T>(
+		x: &'a str,
+		y: &'a str,
+		ann: T,     // 因为要用格式化 {} 来输出 ann，因此需要它实现 Display 特征
+	) -> &'a str
+	where
+		T: Display,
+	{
+		println!("Announcement! {}", ann);
+		if x.len() > y.len() {
+			x
+		} else {
+			y
+		}
+	}
+
+返回值和错误处理
+	可恢复错误
+		处理用户的访问、操作等错误，不会对系统的全局稳定性产生影响    -> `Result<T, E>`
+	// Result<T, E>
+	enum Result<T, E> {
+		Ok(T),
+		Err(E),
+	}
+
+	//
+	use std::fs::File;
+	use std::io::ErrorKind;
+
+	fn main() {
+		let f = File::open("hello.txt");
+
+		let f = match f {
+			Ok(file) => file,
+			Err(error) => match error.kind() {
+				ErrorKind::NotFound => match File::create("hello.txt") {
+					Ok(fc) => fc,
+					Err(e) => panic!("Problem creating the file: {:?}", e),
+				},
+				other_error => panic!("Problem opening the file: {:?}", other_error),
+			},
+		};
+	}
+
+不可恢复错误
+	数组越界访问，系统启动时发生了影响启动流程的错误等等，对于系统来说是致命的    -> `panic!`
+	// panic!
+	// 线程 panic 后，程序是否会终止？
+	// 如果是 main 线程，则程序会终止，如果是其它子线程，该线程会终止，但是不会影响 main 线程
+
+	//
+	fn main() {
+		let v = vec![1, 2, 3];
+
+		println!("{}", v[99]);  // 被动触发 panic!
+	}
+
+	//
+	fn main() {
+		panic!("crash !");  // 主动出发 panic!
+	}
+
+	// 在不需要处理错误的场景，例如写原型、示例时，我们不想使用 match 去匹配 Result<T, E> 以获取其中的 T 值，因为 match 的穷尽匹配特性，你总要去处理下 Err 分支
+	// 简化处理：使用 unwrap 和 expect，如果返回成功，就将 Ok(T) 中的值取出来，如果失败，就直接 panic
+
+	// 1
+	use std::fs::File;
+
+	fn main() {
+		let f = File::open("hello.txt").unwrap();
+	}
+
+	// 2
+	use std::fs::File;
+
+	fn main() {
+		let f = File::open("hello.txt").expect("Failed to open hello.txt");
+	}
+
+传播错误
+	// 1 (代码有些啰嗦)
+	use std::fs::File;
+	use std::io::{self, Read};
+
+	fn main() {
+		let f = File::open("hello2.txt").unwrap();
+	}
+
+	fn read_username_from_file() -> Result<String, io::Error> {
+		let f = File::open("hello.txt");
+
+		let mut f = match f {
+			Ok(file) => file,
+			Err(e) => return Err(e),
+		};
+
+		let mut s = String::new();
+		match f.read_to_string(&mut s) {
+			Ok(_) => Ok(s),
+			Err(e) => Err(e),
+		}
+	}
+
+	// 使用 ? 进行错误传播
+	use std::fs::File;
+	use std::io;
+	use std::io::Read;
+
+	fn read_username_from_file() -> Result<String, io::Error> {
+		let f = File::open("hello.txt");
+		let mut s = String::new();
+		f.read_to_string(&mut s)?;
+		Ok(s)
+	}
+	// ? 本质上是一个宏，它的作用和 match 一样
+	let mut f = match {
+		Ok(file) => file,
+		Err(e) => return Err(e),
+	};
+
+	// ? 可以自动进行类型提升(转换)
+	fn open_file() -> Result<File, Box<dyn std::error::Error>> {
+		let mut f = File::open("hello.txt")?;
+		Ok(f)
+	}
+	// File::open 报错时返回的错误是 std::io::Error 类型
+	// open_file 函数返回的错误类型是 std::error::Error 的特征对象
+	// 错误类型通过 ? 返回后，变成了另一个错误类型
+
+	// 意味着可以用一个大而全的 ReturnError 来覆盖所有错误类型，只需要为各种子错误类型实现这种转换即可
+
+	// ? 的链式调用
+	use std::fs::File;
+	use std::io;
+	use std::io::Read;
+
+	fn read_username_from_file() -> Result<String, io::Error> {
+		let mut s = String::new();
+
+		File::open("hello.txt")?.read_to_string(&mut s)?;
+
+		Ok(s)
+	}
+
+	// 
+	use std::fs;
+	use std::io;
+
+	fn read_username_from_file() -> Result<String, io::Error> {
+		fs::read_to_string("hello.txt")
+	}
+
+	// ? 用于 Option 的返回
+	// Option 的定义
+	pub enum Option<T> {
+		Some(T),
+		None,
+	}
+
+	// Result 通过 ? 返回错误
+	// Option 通过 ? 返回 None
+
+	//
+	fn first(arr: &[i32]) -> Option<&i32> {
+		let v = arr.get(0)?;
+		Some(v)
+	}
+
+	// 更简洁的版本
+	fn first(arr: &[i32]) -> Option<&i32> {
+		arr.get(0)
+	}
+```
