@@ -1145,6 +1145,414 @@ fn clone_and_compare<T: Clone + Ord>(t1: T, t2: T) -> bool {
 	t1.clone() > t2.clone()
 }
 
+// generic types with trait bounds
+enum Result<T, E> {
+	Ok(T),
+	Err(E),
+}
+
+trait PrettyPrint {
+	fn format(&self) -> String;
+}
+
+impl<T: PrettyPrint, E: PrettyPrint> PrettyPrint for Result<T, E> {
+	fn format(&self) -> String {
+		match *self {
+			Ok(t) => format!("Ok({})", t.format()),
+			Err(e) => format!("Err({})", e.format()),
+		}
+	}
+}
+// be sure to declare all of your generic types in the struct header and the impl block header
+// only the impl block header needs to specify trait bounds
+	// this is useful if you want to have multiple impls for a struct each with different trait bounds
+
+// just an example
+trai Equals {
+	fn equals(&self, other: &Self) -> bool;
+}
+
+impl<T: Equals, E: Equals> Equals for Result<T, E> {
+	fn equals(&self, other: &Self) -> bool {
+		match (*self, *other) {
+			Ok(t1), Ok(t2) => t1.equals(t2),
+			Err(e1), Err(e2) => e1.equals(e2),
+			_ => false
+		}
+	}
+}
+// Self is a special type which refers to the type of self
+
+// trait inheritance
+// some trait may require other traits to be implemented first
+trait Parent {
+	fn foo(&self) {
+		// ...
+	}
+}
+
+trait Child: Parent {
+	fn bar(&self) {
+		self.foo();
+		// ...
+	}
+}
+
+// trait: default methods
+// implementors of the trait can overwrite default implementations, but make sure you have a good reason to !
+	// e.g. never define ne so that it violates the relationship between eq and ne
+trait PartialEq<Rhs: ?Sized = Self> {
+	fn eq(&self, other: &Rhs) -> bool;
+
+	fn ne(&self, other: &Rhs) -> bool {
+		!self.eq(other)
+	}
+}
+
+trait Eq: PartialEq<Self> {}
+
+// deriving
+// many traits are so straightforward that the compiler can often implement them for you
+// a '#[derive(...)]' attribute tells the compiler to insert a default implementation for whatever traits you tell it to
+// this removes the tedium of repeatedly manually implementing traits like 'Clone' yourself
+#[derive(Eq, PartialEq, Debug)]
+enum Result<T, E> {
+	Ok(T),
+	Err(E)
+}
+
+// core traits:
+	Clone, Copy
+	Debug
+	Default
+	Eq, PartialEq
+	Hash
+	Ord, PartialOrd
+// can only derive a trait on a data type when all of its members can have derived the trait
+	// e.g., Eq can't be derived on a struct containing only f32 s, since f32 is not Eq
+
+// trait 'Clone' defines how to duplicate a value of type T
+pub trait Clone: Sized {
+	fn clone(&self) -> Self;
+
+	fn clone_from(&mut self, source: &Self) { ... }
+}
+
+//
+#[derive(Clone)]
+struct Foo {
+	x; i32,
+}
+
+#[derive(Clone)]
+struct Bar {
+	x; Foo,
+}
+
+//
+pub trait Copy: Clone { }
+// trait 'Copy' denotes that a type has 'cpy semantics' instead of 'move semantics'
+// type must be able to be copied by copying bits (memcpy)
+	// types that contain references cannot be Copy
+// Marker trait: does not implement any methods, but defines behavior instead
+// in general, if a type can be Copy, it should be Copy
+
+//
+pub trait Debug {
+	fn fmt(&self, &mut Formatter) -> Result;
+}
+// Debug defines output for the {:?} formatting option
+// generates debug output, not pretty printed
+// generally speaking, you should always derive this trait
+
+#[derive(Debug)]
+struct Point {
+	x: i32,
+	y: i32,
+}
+
+let origin = Point { x: 0, y: 0 };
+println!("The origin is: {?}", origin);
+// The origin is: Point { x: 0, y: 0 }
+
+// Default trait defines a default value for a type
+pub trait Default: Sized {
+	fn default() -> Self;
+}
+
+// Eq, PartialEq define equality via the == operator
+pub trait PartialEq<Rhs: ?Sized = Self> {
+	fn eq(&self, other; &Rhs) -> bool;
+
+	fn ne(&self, other: &Rhs) -> bool { ... }
+}
+
+pub trait Eq: PartialEq<Self> {}
+// PartialEq represents a partial equivalance relation
+	// symmetric: if a == b then b == a
+	// transitive: if a == b and b == c then a == c
+// ne has a default implementation in terms of eq
+// Eq represents a total equivalence relation
+	// symmetric:if a == b then b == a
+	// transitive: if a == b and b == c then a == c
+	// reflexive: a == a
+// Eq does not define any aditional methods
+	// it is also a Marker trait
+
+//
+pub trait Hash {
+	fn hash<H: Hasher>(&self, state: &mut H);
+
+	fn hash_slice<H: Hasher>(data: &[Self], state: &mut H)
+		where Self: Sized { ... }
+}
+// a hashable type
+// the H type parameter is an abstract hash state used to compute the hash
+// if you also implement Eq, there is an additional, important property:
+	// k1 == k2 -> hash(k1) == hash(k2)
+
+// PartialOrd: for values that can be compared for a sort-order
+pub trait PartialOrd<Rhs: ?Sized = Self>: PartialEq<Rhs> {
+	// ordering is one of Less, Equal, Greater
+	fn partial_cmp(&self, other: &Rhs) -> Option<Ordering>;
+
+	fn lt(&self, other: &Rhs) -> bool { ... }
+	fn le(&self, other: &Rhs) -> bool { ... }
+	fn gt(&self, other: &Rhs) -> bool { ... }
+	fn ge(&self, other: &Rhs) -> bool { ... }
+}
+// Ord vs PartialOrd
+// the comparison must satisfy, for all a, b and c
+	// antisymmetry: if a < b then !(a > b), as well as a > b implying !(a < b)
+	// transitivity: a < b and b < c implies a < c. the same must hold for both == and >
+// lt, le, gt, ge have default implementations based on partial_cmp
+
+pub trait Ord: Eq + PartialOrd(Self) {
+	fn cmp(&self, other: &Self) -> Ordering;
+}
+// trait for types that form a total order
+// an order is a total order if it is (for all a, b and c)
+	// total and antisymmetric: exactly one of a < b, a == b or a > b is true
+	// transitive, a < b and b < c implies a < c. The same must hold for both == and >
+// when this trait is derived, it produces a lexicographic ordering
+
+// associated types
+// type definitions inside a trait block indicate associated generic types on the trait
+// an implementor of the trait may specify what the associated types correspond to
+trait Graph {
+	type N;
+	type E;
+
+	fn edges(&self, &Self::N) -> Vec<Self::E>;
+}
+
+impl Graph for MyGraph {
+	type N = MyNode;
+	type E = MyEdge;
+
+	fn edges(&self, n: &MyNode) -> Vec<MyEdge> { /* ... */ }
+}
+
+// trait scope
+// trait scope rules for implementing traits
+	// you need to use a trait in order to access its methods on types, even if you have access to the type
+	// in order to write an impl, you need to own(i.e. have yourself defined) either the trait or the type
+
+// bad practice
+trait Foo {
+	fn bar(&self) -> bool;
+}
+
+impl Foo for i32 {
+	fn bar(&self) -> bool {
+		true
+	}
+}
+
+//
+pub trait Display {
+	fn fmt(&self, &mut Formatter) -> Result<(), Error>;
+}
+
+impl Display for Point {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "Point {}, {}", self.x, self.y)
+	}
+}
+
+//
+pub trait Drop {
+	fn drop(&mut self);
+}
+
+// Sized indicates that a type has a constant size known at compile time
+// ?Sized indicates that a type might be sized
+// by default, all types are implicitly Sized, and ?Sized undoes this
+	// types like [T] and str (no &) are ?Sized
+	// e.g. Box<T> allows 'T: ?Sized'
+
+// trait objects
+//
+trait Foo { fn bar(&self); }
+
+impl Foo for String {
+	fn bar(&self) { /*...*/ }
+}
+
+impl Foo for usize {
+	fn bar(&self) { /*...*/ }
+}
+
+// call bar via static dispatch using any type with bounds 'T: Foo'
+// when the code is compiled, the compiler will insert calls to specialized versions of bar
+	// one function is generated for each implementator of the Foo trait
+fn blah(x: T) where T: Foo {
+	x.bar()
+}
+
+fn main() {
+	let s = "Foo".to_string();
+	let u = 12;
+
+	blah(s);
+	blah(u);
+}
+
+// dynamic dispatch through the use of trait objects
+// a trait object is something like 'Box<Foo>' or '&Foo'
+// the data behind the reference/box must implement the trait Foo
+// the concrete type underlying the trait is erased; it can't be determined
+trait Foo { /*...*/ }
+
+impl Foo for char { /*...*/ }
+impl Foo for i32 { /*...*/ }
+
+fn use_foo(f: &Foo) {
+	// No way to figure out if we got a 'char' or an 'i32'
+	// or anything else
+	match *f {
+		// what type do we have ? I dunno...
+		// error: mismatched types: expected 'Foo', found '_'
+		198 => println!("CIS 198"),
+		'c' => println!("See?"),
+		_ => println!("Something else..."),
+	}
+}
+
+use_foo(&'c');	// these coerce into '&Foo's
+use_foo(&198i32);
+
+// a trait is object-safe if:
+	// It does not require that Self: Sized
+	// Its methods must not use Self
+	// Its methods must not have any type parameters
+	// Its methods do not require that Self: Sized
+
+
+// closures
+let foo_v1 = |x: i32| { x * x };
+let foo_v2 = |x: i32, y: i32| x * y;
+let foo_v1 = |x: i32| {
+	// very important arithmatic
+	let y = x * 2;
+	let z = 4 + y;
+	x + y + z
+};
+let foo_v4 = |x: i32| if x == 0 { 0 } else { 1 };
+// closure syntax
+// specify arguments in ||, followed by the return expression
+	// the return expression can be a series of expressions in {}
+
+// closure vs function
+	// let instead of fn
+	// arguments in pipes
+	// braces are optional
+
+// closure: type inference
+let square_v4 = |x: u32| { (x * x) as i32 };
+
+let square_v4 = |x| -> i32 { x * x };
+let square_v4 = |x|		   { x * x };
+// unlike functions, we don't need to specify the return type or argument types of a closure
+// having concrete function types for type inference and self-documentation. for closures, ease of use is more important
+
+// closure environment
+	// closure close over (contain) their environment
+let magic_num = 5;
+let magic_johnson = 32;
+let plus_magic = |x: i32| x + magic_num;
+// The closure plus_magic is able to reference magic_num even though it's not passed as an argument.
+	// magic_num is in the "environment" of the closure.
+	// magic_johnson is not borrowed!
+
+//
+let mut magic_num = 5;
+let magic_johnson = 32;
+let plus_magic = |x: i32| x + magic_num;
+
+let more_magic = &mut magic_num; // Err!
+println!("{}", magic_johnson); // Ok!
+
+//
+let mut magic_num = 5;
+{
+    let plus_magic = |x: i32| x + magic_num;
+} // the borrow of magic_num ends here
+
+let more_magic = &mut magic_num; // Ok!
+println!("magic_num: {}", more_magic);
+
+// move closures
+// you can force a closure to take ownership of all environment variables by using the move keyword
+	// taking ownership can mean taking a copy, not just moving
+let mut magic_num = 5;
+let own_the_magic = move |x: i32| x + magic_num;
+let more_magic = &mut magic_num;
+
+// move closures are necessary when the closure f needs to outlive the scope in which it was created.
+	// e.g. when you pass f into a thread, or return f from a function.
+	// move essentially disallows bringing references into the closure.
+fn make_closure(x: i32) -> Box<Fn(i32) -> i32> {
+    let f = move |y| x + y; // ^ more on this in 15 seconds
+    Box::new(f)
+}
+
+let f = make_closure(2);
+println!("{}", f(3));
+
+// closure ownership
+// Sometimes, a closure must take ownership of an environment variable to be valid. This happens automatically (without move):
+	// If the value is moved into the return value.
+let lottery_numbers = vec![11, 39, 51, 57, 75];
+{
+    let ticket = || { lottery_numbers };
+}
+// The braces do no good here.
+println!("{:?}", lottery_numbers); // use of moved value
+	// Or moved anywhere else
+let numbers = vec![2, 5, 32768];
+let alphabet_soup = || { numbers; vec!['a', 'b'] };
+                      // ^ throw away unneeded ingredients
+println!("{:?}", numbers); // use of moved value
+// If the type is not Copy, the original variable is invalidated.
+
+// Closures which own data and then move it can only be called once
+	// move behavior is implicit because alphabet_soup must own numbers to move it.
+let numbers = vec![2, 5, 32768];
+let alphabet_soup = || { numbers; vec!['a', 'b'] };
+                      // ^ throw away unneeded ingredients
+alphabet_soup();
+alphabet_soup(); // use of moved value
+
+// Closures which own data but don't move it can be called multiple times
+let numbers = vec![2, 5, 32768];
+let alphabet_soup = move || { println!("{:?}", numbers) };
+alphabet_soup();
+alphabet_soup(); // Delicious soup
+
+// The same closure can take some values by reference and others by moving ownership (or Copying values), determined by behavior.
+
+// closure traits
 
 ```
 
