@@ -54,6 +54,75 @@
 []()  
 []()  
 []()  
+
+- incomplete type
+  - an incomplete type is a type that's declared but but yet fully defined, the compiler knows that the type exists, but not how big it is or what it contains.
+```c
+// "incomplete type" acts like a promise:
+	// I’ll tell you what this type looks like later — but for now, you can pass pointers around
+
+// why it works even without struct definition in main.c
+	// The compiler only needs the type name and pointer size (8 bytes on x86-64) to compile calls and variable declarations.
+	// The definition of the struct is only required where you dereference or allocate it (malloc, w->id, etc.).
+	// The linker just connects symbols — it doesn’t care about structs at all.
+
+| Concept                       | Meaning                                              |
+| ----------------------------- | ---------------------------------------------------- |
+| **Incomplete type**           | Type is declared but not defined (size unknown)      |
+| **Opaque pointer**            | Pointer to such a type used to hide implementation   |
+| **Compile-time in user code** | Compiler only checks pointer usage & prototypes      |
+| **Compile-time in impl code** | Compiler knows struct layout                         |
+| **Link-time**                 | Functions matched by symbol names, not struct layout |
+| **Runtime**                   | Only addresses are passed — type info gone           |
+
+
+struct Foo;		// declaration only - incomplete type
+// what compiler knows:
+	// 1. there is a type called 'struct Foo'
+	// 2. but its size, members and layout are unknown
+
+// you can use pointers or references to it:
+struct Foo *p;							// Ok - pointer to incomplete type
+extern struct Foo *foo_create(void);	// Ok
+// but cannot
+struct Foo f;		// ❌ Error: incomplete type
+p->member = 1;		// ❌ Error: struct not defined
+sizeof(struct Foo); // ❌ Error: incomplete type
+
+// when you define the structure, it becomes "complete"
+struct Foo {
+	int a;
+}
+// what compiler knows:
+	// its size, fields
+	// how to allocate and access it
+struct Foo f;      // ✅ OK
+f.a = 10;          // ✅ OK
+```
+
+- opaque pointer
+  - an opaque pointer is a pointer to an incomplete type used intentionally to hide implementation details
+```c
+// An opaque pointer is a pointer to an incomplete type that remains incomplete in the public interface, allowing you to compile, link, and run code that manipulates data whose layout is known only to its implementation file.
+
+// don't expose the struct definition in the header file
+typedef struct Foo Foo;   // forward-declare and alias
+
+// Foo* is an opaque pointer, users can hold it, pass it abound, but cannot look inside
+Foo* foo_create(void);
+void foo_destroy(Foo* f);
+
+// "Every opaque pointer is based on an incomplete type, but not every incomplete type is opaque."
+// Incomplete type = "compiler doesn’t know layout yet."
+
+// Opaque pointer = "you intentionally keep it incomplete in the public interface."
+| Concept         | Example                                             | Visible to user?                              | Used for                           |
+| --------------- | --------------------------------------------------- | --------------------------------------------- | ---------------------------------- |
+| Incomplete type | `struct A;`                                         | Temporarily incomplete, will be defined later | Internal modular code organization |
+| Opaque pointer  | `typedef struct Foo Foo;` (no definition in header) | Intentionally hidden forever                  | Encapsulation / API design         |
+
+```
+
 ```c
 // .h
 typedef struct Foo Foo;
