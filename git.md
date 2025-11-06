@@ -139,6 +139,21 @@ done
 
 Git管理的是修改，而不是文件
 
+#
+git diff main -- <file-path>
+
+git checkout main -- <file-path>
+git restore --source main -- <file-path>
+
+git checkout main -- file1.txt file2.txt
+git restore --source main -- file1.txt file2.txt
+
+git checkout main -- .
+git restore --source main -- .
+
+git reset HEAD <file-path>
+git checkout main -- <file-path>
+
 # Check if branch exists (returns exit code 0 if exists, 1 if not)
 git show-ref --verify --quiet refs/heads/branch-name
 

@@ -1553,6 +1553,71 @@ alphabet_soup(); // Delicious soup
 // The same closure can take some values by reference and others by moving ownership (or Copying values), determined by behavior.
 
 // closure traits
+// closure are actually based on a set of traits under the hood
+	// Fn, FnMut, FnOnce - method calls are overloadable operators
+pub trait Fn<Args> : FnMut<Args> {
+    extern "rust-call"
+      fn call(&self, args: Args) -> Self::Output;
+}
+
+pub trait FnMut<Args> : FnOnce<Args> {
+    extern "rust-call"
+      fn call_mut(&mut self, args: Args) -> Self::Output;
+}
+
+pub trait FnOnce<Args> {
+    type Output;
+
+    extern "rust-call"
+      fn call_once(self, args: Args) -> Self::Output;
+}
+// Fn, FnMut, FnOnce differ in the way they take self:
+	// Fn borrows self as &self
+	// FnMut borrows self mutably as &mut self
+	// FnOnce takes ownership of sel
+// Fn is a superset of FnMut, which is a superset of FnOnce
+// Functions also implement these traits
+// "The || {} syntax for closures is sugar for these three traits. Rust will generate a struct for the environment, impl the appropriate trait, and then use it."
+
+// closures as arguments
+// passing closures works like function pointers
+
+// self = Vec<A>
+fn map<A, B, F>(self, f: F) -> Vec<B>
+	where F: FnMut(A) -> B;
+// map takes an argument f: F, where F is an FnMut trait object
+
+// returning closures
+// since closures are implicitly trait objects, they're unsized
+fn i_need_some_closure() -> (Fn(i32) -> i32) {
+    let local = 2;
+    |x| x * local
+}
+// error: Fn(i32) -> i32 doesn't have a size known at compile-time
+
+// fix: wrap the Fn in a layer of indirection and return a reference
+
+fn i_need_some_closure_by_reference() -> &(Fn(i32) -> i32) {
+    let local = 2;
+    |x| x * local
+}
+// error: missing lifetime specifier
+
+fn box_me_up_that_closure() -> Box<Fn(i32) -> i32> {
+    let local = 2;
+    Box::new(|x| x * local)
+}
+// error: closure may outlive the current function
+
+fn box_up_your_closure_and_move_out() -> Box<Fn(i32) -> i32> {
+    let local = 2;
+    Box::new(move |x| x * local)
+}
+// ok
+
+
+
+
 
 ```
 
