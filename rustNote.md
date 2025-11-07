@@ -6,7 +6,7 @@
 [Rust Documentation](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/)  
 []()  
 []()  
-[]()  
+[Crate std](https://doc.rust-lang.org/std/index.html)  
 []()  
 []()  
 
@@ -1615,7 +1615,372 @@ fn box_up_your_closure_and_move_out() -> Box<Fn(i32) -> i32> {
 }
 // ok
 
+// standard library
 
+// strings
+	// sequence of Unicode values encoded in UTF-8
+	// not null-terminated and may contain null bytes
+
+// &str
+// string
+
+// &str
+	// &str is a string slice  (like array slice)
+	// 'string literals' are of type &str
+	// &str s are statically-allocated and fixed size
+	// my not be indexed with some_str[i], as each character may be multiple bytes due to Unicode
+		// instead, iterate with 'chars()', e.g. 'for c in "1234".chars() { ... }'
+	// as with all Rust references, they have an associated lifetime.
+
+// str is an Unsized type, the size is unknown at compile time
+	// you cannot have bindings to str s directly, only references
+
+// String
+	// String s are heap-allocated, and are dynamically growable
+		// like Vec s in that regard
+		// in fact, String is just a wrapper over Vec<u8>
+	// cannot be indexed either
+		// can select characters with s.nth(i)
+	// may be coerced into an &str by taking a reference to the String
+
+let s0: String = String::new();
+let s1: String = "foo".to_string();
+let s2: String = String::from("bar");
+let and_s: &str = &s0;
+
+// a String and an &str may be concatenated with +
+let course_code = "CIS".to_string();
+let course_name = course_code + " 198";
+
+// concatenating two String s requires coercing one to &str
+let course_code = String::from("CIS");
+let course_num  = String::from(" 198");
+let course_name = course_code + &course_num;
+
+// cannot concatenate two &str s
+let course_name = "CIS " + "198"	// Error
+
+// converting a String into an &str requires a dereference
+use std::net::TcpStream;
+
+TcpStream::connect("192.168.0.1:3000");
+let addr = "192.168.0.1:3000".to_string();
+TcpStream::connect(&*addr));
+
+// automatic dereferencing behavior works between types as well
+pub trait Deref {
+    type Target: ?Sized;
+    fn deref(&self) -> &Self::Target;
+}
+// since String implements Deref<Target=str>, so values of &String will automatically be dereferenced to &str when possible
+
+// String & &str
+	// &strs are useful for passing a view into a String
+	// it's expensive to copy a String around, and lending an entire String out may be overkill
+	// &str therefore allows you to pass portions of a String around, saving memory
+	// generally, if you want to do more than use string literals, use String
+		// you can then lend out &strs easily
+
+// Option<T>
+enum Option<T> {
+	None,
+	Some(T),
+}
+
+// provides a concrete type to the concept of nothingness
+// use this instead of returning NaN, -1, null, etc. from a function
+// no restrictions on what T may be
+
+// Option::unwrap()
+// the pattern where None values are ignored is pretty common
+// fn foo() -> Option<i32>
+match foo() {
+	None => None,
+	Some(value) => {
+		bar(value)
+		// ...
+	},
+}
+
+// Option::map()
+// take an option, change the value if it exists, and return an Option
+	// instead of failing on None, keep it as None
+fn map<U, F>(self, f: F) -> Option<U>
+		where F: FnOnce(T) -> U {
+	match self {
+		None => None,
+		Some(x) => Some(f(x))
+	}
+}
+
+// fn foo() -> Option<i32>
+let x = foo().map(|x| bar(x));
+
+// Option::and_then()
+fn and_then<U, F>(self, f: F) -> Option<U>
+      where F: FnOnce(T) -> Option<U> {
+    match self {
+        Some(x) => f(x),
+        None => None,
+    }
+}
+
+// fn foo() -> Option<i32>
+let x = foo().and_then(|x| Some(bar(x)));
+
+// Option::unwrap_or()
+// if we don't want to operate on an Option value, but it has a sensible default value, there's unwrap_or
+impl<T> Option<T> {
+    fn unwrap_or<T>(&self, default: T) -> T {
+      match *self {
+          None => default,
+          Some(value) => value,
+      }
+    }
+}
+
+// Option::unwrap_or_else()
+// If you don't have a static default value, but you can write a closure to compute one
+impl<T> Option<T> {
+    fn unwrap_or_else<T>(&self, f: F) -> T
+            where F: FnOnce() -> T {
+        match *self {
+            None => f(),
+            Some(value) => value,
+        }
+    }
+}
+
+// Result<T, E>
+// Result is like Option, but it also encodes an Err type
+// Can be converted to an Option using ok() or err().
+	// Takes either Ok or Err and discards the other as None.
+// Can be operated on in almost all the same ways as Option
+	// and, or, unwrap, etc.
+
+// Unlike Option, a Result should always be consumed.
+	// If a function returns a Result, you should be sure to unwrap/expect it, or otherwise handle the Ok/Err in a meaningful way.
+	// The compiler warns you if you don't.
+	// Not using a result could result (ha) in your program unintentionally crashing!
+
+
+// custom Result aliases
+use std::io::Error;
+type Result<T> = Result<T, Error>;
+
+// Users of this type should namespace it:
+use std::io;
+fn foo() -> io::Result {
+    // ...
+}
+
+// try!
+// try! is a macro, which means it generates Rust's code at compile-time.
+	// This means it can actually expand to pattern matching syntax patterns.
+// The code that try! generates looks roughly like this:
+macro_rules! try {
+    ($e:expr) => (match $e {
+        Ok(val) => val,
+        Err(err) => return Err(err),
+    });
+}
+
+// try! is a concise way to implement early returns when encountering errors
+let socket1: TcpStream = try!(TcpStream::connect("127.0.0.1:8000"));
+
+// Is equivalent to...
+let maybe_socket: Result<TcpStream> =
+    TcpStream::connect("127.0.0.1:8000");
+let socket2: TcpStream =
+    match maybe_socket {
+        Ok(val) => val,
+        Err(err) => { return Err(err) }
+    };
+
+
+// Collections
+	// Vec<T>
+	// VecDequeue<T>
+	// LinkedList<T>
+	// HashMap<K,V>/BTreeMap<K,V>
+	// HashSet<T>/BTreeSet<T>
+	// BinaryHeap<T>
+	// rust-lang-nursery (eful "stdlib-ish" crates that are community-developed, but not official-official)
+		// Bindings to libc
+		// A rand library
+		// Regex support
+		// Serialization
+		// UUID generation
+
+// Iterators
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+
+    // More fields omitted
+}
+// A Trait with an associated type, Item, and a method next which yields that type
+// Other methods (consumers and adapters) are implemented on Iterator as default methods using next
+
+// three types of iteration
+	// into_iter(), yielding Ts.
+	// iter(), yielding &Ts.
+	// iter_mut(), yielding &mut Ts.
+
+let values = vec![1, 2, 3, 4, 5];
+{
+	let result = match values.into_iter() {
+		mut iter => loop {
+			match iter.next() {
+				Some(x) => { /* loop body */ },
+				None => break,
+			}
+		},
+	};
+	result
+}
+// nto_iter() is provided by the trait IntoIterator.
+	// Automatically implemented by anything with the Trait Iterator.
+
+// IntoIterator
+pub trait IntoIterator where Self::IntoIter::Item == Self::Item {
+    type Item;
+    type IntoIter: Iterator;
+
+    fn into_iter(self) -> Self::IntoIter;
+}
+// you can implement IntoIterator on a &T to iterate over a collection by reference
+	// or on &mut T to iterate by mutable reference
+
+let ones = vec![1, 1, 1, 1, 1, 1];
+
+for one in &ones {
+    // Doesn't move any values.
+    // Also, why are you doing this?
+}
+
+// collect
+// collect() rolls a (lazy) iterator back into an actual collection.
+// The target collection must define the FromIterator trait for the Item inside the Iterator.
+// collect() sometimes needs a type hint to properly compile.
+	// The output type can be practically any collection.
+
+fn collect<B>(self) -> B where B: FromIterator<Self::Item>
+
+let vs = vec![1,2,3,4];
+// What type is this?
+let set = vs.iter().collect();
+// Hint to `collect` that we want a HashSet back.
+// Note the lack of an explicit <i32>.
+let set: HashSet<_> = vs.iter().collect();
+// Alternate syntax! The "turbofish" ::<>
+let set = vs.iter().collect::<HashSet<_>>();
+
+// fold
+// fold "folds up" an iterator into a single value.
+	// Sometimes called reduce or inject in other languages.
+// fold takes two arguments:
+	// An initial value or "accumulator" (acc above) of type B.
+	// A function that takes a B and the type inside the iterator (Item) and returns a B.
+
+fn fold<B, F>(self, init: B, f: F) -> B
+    where F: FnMut(B, Self::Item) -> B;
+
+let vs = vec![1,2,3,4,5];
+let sum = vs.iter().fold(0, |acc, &x| acc + x);
+assert_eq!(sum, 15);
+
+// filter
+// filter takes a predicate function P and removes anything that doesn't pass the predicate.
+// filter returns a Filter<Self, P>, so you need to collect it to get a new collection.
+
+fn filter<P>(self, predicate: P) -> Filter<Self, P>
+    where P: FnMut(&Self::Item) -> bool;
+
+// find & position
+	// Try to find the first item in the iterator that matches the predicate function.
+	// find returns the item itself.
+	// position returns the item's index.
+	// On failure, both return a None.
+
+fn find<P>(&mut self, predicate: P) -> Option<Self::Item>
+    where P: FnMut(Self::Item) -> bool;
+
+fn position<P>(&mut self, predicate: P) -> Option<usize>
+    where P: FnMut(Self::Item) -> bool;
+
+// skip
+// Creates an iterator that skips its first n elements.
+fn skip(self, n: usize) -> Skip<Self>;
+
+// zip
+// Takes two iterators and zips them into a single iterator.
+// Invoked like a.iter().zip(b.iter()).
+	// Returns pairs of items like (ai, bi).
+// The shorter iterator of the two wins for stopping iteration.
+
+fn zip<U>(self, other: U) -> Zip<Self, U::IntoIter>
+    where U: IntoIterator;
+
+// any & all
+// any tests if any element in the iterator matches the input function
+// all tests all elements in the iterator match the input function
+// Logical OR vs. logical AND.
+fn any<F>(&mut self, f: F) -> bool
+    where F: FnMut(Self::Item) -> bool;
+
+fn all<F>(&mut self, f: F) -> bool
+    where F: FnMut(Self::Item) -> bool;
+
+// enumerate
+// Want to iterate over a collection by item and index?
+// Use enumerate!
+// This iterator returns (index, value) pairs.
+	// index is the usize index of value in the collection.
+
+// Iterator Adapters
+// Adapters operate on an iterator and return a new iterator.
+// Adapters are often lazy -- they don't evaluate unless you force them to!
+// You must explicitly call some iterator consumer on an adapter or use it in a for loop to cause it to evaluate.
+
+// map
+// map takes a function and creates an iterator that calls the function on each element
+// Abstractly, it takes a Collection<A> and a function of A -> B and returns a Collection<B>
+	// (Collection is not a real type)
+
+fn map<B, F>(self, f: F) -> Map<Self, F>
+    where F: FnMut(Self::Item) -> B;
+
+let vs = vec![1,2,3,4,5];
+let twice_vs: Vec<_> = vs.iter().map(|x| x * 2).collect();
+
+// take & take_while
+// take creates an iterator that yields its first n elements.
+// take_while takes a closure as an argument, and iterates until the closure returns false.
+// Can be used on infinite ranges to produce finite enumerations:
+
+fn take(self, n: usize) -> Take<Self>;
+
+fn take_while<P>(self, predicate: P) -> TakeWhile<Self, P>
+    where P: FnMut(&Self::Item) -> bool;
+
+for i in (0..).take(5) {
+    println!("{}", i); // Prints 0 1 2 3 4
+}
+
+// cloned
+// Creates an iterator which calls clone on all of its elements.
+// Abstracts the common pattern vs.iter().map(|v| v.clone()).
+// Useful when you have an iterator over &T, but need one over T.
+
+fn cloned<'a, T>(self) -> Cloned<Self>
+    where T: 'a + Clone, Self: Iterator<Item=&'a T>;
+
+// drain
+// Not actually an Iterator method, but is very similar.
+// Calling drain() on a collection removes and returns some or all elements.
+// e.g. Vec::drain(&mut self, range: R) removes and returns a range out of a vector.
+[Trait Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html)  
 
 
 
