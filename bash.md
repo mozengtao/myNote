@@ -2752,6 +2752,23 @@ grep -E 'pattern1|pattern2' fileName_or_filePath
 grep -e pattern1 -e pattern2 fileName_or_filePath
 
 ## 只打印匹配行的匹配字段
+# 注意：'grep -o' 打印 entire match, 而不是 capture groups
+echo "123 (abc) 456" | grep -o -E '\(.*\)'          # output: (abc) 而不是 abc
+
+echo "123 (abc) 456" | sed -n 's/.*(\(.*\)).*/\1/p' # output: abc
+    # \( ... \) is used to define a capture group (in basic sed regex, parentheses must be escaped)
+    123 (abc) 456
+    ^^^ ^^^^ ^^^^
+    |   |    |
+    |   |    └── .* (after closing parenthesis)
+    |   └────── \(.*\)  → captured text: abc
+    └────────── .* (before opening parenthesis)
+
+    Entire match (.*(\(.*\)).*) → "123 (abc) 456"
+    Captured group (\(.*\)) → "abc"
+    Replacement \1 → "abc"
+
+
 grep -o '(.*)'
 grep -o '([^)]*)'  # 如果单行有多个括号，用于多个匹配的多个分行输出
 

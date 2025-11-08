@@ -29,6 +29,68 @@ s/old/new/flags : edit PS in-place (can use g, p, i flags)
 N / D : multi-line PS operations
 
 ```bash
+# by default, sed is greedy
+echo "a (one) b (two) c" | sed -n 's/.*(\(.*\)).*/\1/p'		# OUTPUT: "one) b (two"
+
+# simulate non-greedy behavior by telling sed explicitly what not to cross
+echo "a (one) b (two)" | sed -n 's/.*(\([^)]*\)).*/\1/p'	# OUTPUT: "one"
+# explanation:
+	| Regex part  | Meaning                                                              |
+	| ----------- | -------------------------------------------------------------------- |
+	| `.*(`       | Match everything before the first `(`                                |
+	| `\([^)]*\)` | Capture all characters that are **not `)`** — so it stops before `)` |
+	| `.*`        | Ignore the rest                                                      |
+	| `\1`        | Replace with the captured part                                       |
+
+# multiple matches -extract all
+echo "a (one) b (two) c (three)" |
+  sed 's/([^)]*)/\n&/g' |
+  sed -n 's/.*(\([^)]*\)).*/\1/p'
+# first sed: inserts newline before each (...) match (& stands for whole match)
+# second sed: extracts content inside each (...)
+
+# no \ is needed after | because | tells the shell: "expect another command next." (a new line is treated like a space)
+
+# operators that don't need \
+# Bash (and POSIX shells) have a formal grammar that defines certain “compound command separators” and “control operators.”, When the shell parser encounters one of these tokens at the end of a line,it knows the command is not complete — so it automatically continues reading
+
+|						# Pipe stdout → stdin
+&&, ||					# logical operators
+|&						# pipe stdout+stderr
+;						# sequential
+&						# Run command in background
+do, then, else, elif,	# Shell keywords (blocks, loops, conditionals)
+fi, done, esac, }
+(, {, [, [[				# Grouping or conditional opening
+
+# Any operator or keyword that opens a new syntactic construct or expects a command after it implies continuation automatically.
+
+echo "hello" |
+  tr a-z A-Z
+
+test -f /etc/passwd &&
+  echo "exists" ||
+  echo "missing"
+
+echo start ;
+  echo done
+
+sleep 1 &
+  echo "backgrounded"
+
+make |&
+  tee build.log
+
+if true; then
+  echo "yes"
+else
+  echo "no"
+fi
+
+In shell, any token that clearly tells the parser “more command is coming” (like |, &&, ;, do, then) makes newline = space.
+Otherwise, newline = end of command — unless escaped with \
+
+
 # command line options
 sed -e or --expression {script}
 sed -f or --file {script-file}
