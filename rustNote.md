@@ -9,6 +9,16 @@
 [Crate std](https://doc.rust-lang.org/std/index.html)  
 []()  
 []()  
+[Rust Language Cheat Sheet](https://cheats.rs/)  
+[Practical System Programming for Rust Developers](https://github.com/PacktPublishing/Practical-System-Programming-for-Rust-Developers)  
+[Rust Programming By Example](https://github.com/PacktPublishing/Rust-Programming-By-Example)  
+![Programming Rust](./assets/ProgrammingRust.pdf) #pdf  
+[ProgrammingRust examples](https://github.com/ProgrammingRust/examples) #online  
+[Comprehensive Rust](https://google.github.io/comprehensive-rust/) #online  
+[]()  
+[]()  
+[]()  
+[]()  
 
 ## lifetime
 - Lifetimes in Rust are mechanisms for ensuring that all borrows that occur within your code are valid. 
