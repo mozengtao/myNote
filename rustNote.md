@@ -16,7 +16,7 @@
 [ProgrammingRust examples](https://github.com/ProgrammingRust/examples) #online  
 [Comprehensive Rust](https://google.github.io/comprehensive-rust/) #online  
 []()  
-[]()  
+[The Rust Reference](https://doc.rust-lang.org/stable/reference/introduction.html) #online  
 []()  
 []()  
 
@@ -1992,6 +1992,564 @@ fn cloned<'a, T>(self) -> Cloned<Self>
 // e.g. Vec::drain(&mut self, range: R) removes and returns a range out of a vector.
 [Trait Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html)  
 
+// std pointer types
+&T and &mut T
+
+Box<T>
+// a Box<T> is one of Rust's ways of allocating data on the heap
+// a Box<T> owns T, so its pointer is unique - it can't be aliased (only reference)
+// Box es are automatically freed when they go out of scope
+// almost the same as unboxed values, but dynamically allocated
+// create a Box with Box::new()
+
+let boxed_five = Box::new(5);
+
+// patterns
+let opt_box = Option<Box<i32>> = Some(Box::new(5));
+
+match opt_box {
+	Some(boxed) => {
+		let unboxed = *boxed;
+		println!("Some {}", unboxed);
+	}
+	None => println!("None"),
+}
+
+
+std::rc::Rc<T>
+// Want to share a pointer with your friends? Use an Rc<T>!
+// A "Reference Counted" pointer.
+	// Keeps track of how many aliases exist for the pointer.
+// Call clone() on an Rc to get a reference.
+	// Increments its reference count.
+	// No data gets copied!
+// When the ref count drops to 0, the value is freed.
+// The T can only be mutated when the reference count is 1 😕.
+	// Same as the borrowing rules - there must be only one owner.
+
+let mut shared = Rc::new(6);
+{
+    println!("{:?}", Rc::get_mut(&mut shared)); // ==> Some(6)
+}
+let mut cloned = shared.clone(); // ==> Another reference to same data
+{
+    println!("{:?}", Rc::get_mut(&mut shared)); // ==> None
+    println!("{:?}", Rc::get_mut(&mut cloned)); // ==> None
+}
+
+std::rc::Weak<T>
+
+// Cells
+// A way to wrap data to allow interior mutability.
+// An immutable reference allows modifying the contained value!
+// There are two types of cell: Cell<T> and RefCell<T>.
+
+struct Foo {
+    x: Cell<i32>,
+    y: RefCell<u32>,
+}
+
+std::cell::Cell<T>
+// A wrapper type providing interior mutability for Copy types.
+	// Cell<T>s cannot contain references.
+// Get values from a Cell with get().
+// Update the value inside a Cell with set().
+	// Can't mutate the T, only replace it.
+// Generally pretty limited, but safe & cheap.
+
+let c = Cell::new(10);
+c.set(20);
+println!("{}", c.get()); // 20
+
+
+std::cell::RefCell<T>
+// A wrapper type providing interior mutability for any type.
+// Uses dynamic borrow checking rules (performed at runtime).
+// This may cause a panic at runtime.
+// Borrow inner data via borrow() or borrow_mut().
+// These may panic if the RefCell is already borrowed!
+
+use std::cell::RefCell;
+
+let refc = RefCell::new(vec![12]);
+let mut inner = refc.borrow_mut();
+inner.push(24);
+println!("{:?}", *inner); // [12, 24]
+
+let inner2 = refc.borrow();
+// ==> Panics since refc is already borrow_mut'd!
+
+std::cell::Ref<T> & RefMut<T>
+
+*const T & *mut T
+// C-like raw pointers: they just point... somewhere in memory.
+// No ownership rules.
+// No lifetime rules.
+// Zero-cost abstraction... because there is no abstraction.
+// Requires unsafe to be dereferenced.
+	// May eat your laundry if you're not careful.
+// Use these if you're building a low-level structure like Vec<T>, but not in typical code.
+	// Can be useful for manually avoiding runtime costs.
+// We won't get to unsafe Rust for a while, but for now:
+	// Unsafe Rust is basically C with Rust syntax.
+	// Unsafe means having to manually maintain Rust's assumptions (borrowing, non-nullability, non-undefined memory, etc.)
+
+// const
+const PI: f32 = 3.1419;
+// constans live for the duration of the program
+// must annote the type
+// no guarantee that multiple references to the same constant are the same
+
+//static
+static PI: f32 = 3.1419;
+// must annote type
+// typical global variable with fixed memory address
+// all references to static variables has the 'static lifetime, because statics live as long as the program
+// unsafe to mutate
+let life_of_pi: &'static f32 = &PI;
+// String literals are references (with lifetime 'static) to 'static str' s
+
+static mut counter: i32 = 0;
+// mutable static variables can only be mutated inside unsafe blocks
+
+// modules
+// everything in Rust is module-scoped: if it's not pub, it's only accessible from within the same module
+// modules can be defined within one file
+mod english {
+	pub mod greetings {
+	}
+	pub mod farewells {
+	}
+}
+
+mod japanese {
+	pub mod greetings {
+	}
+	pub mod farewells {
+	}
+}
+
+// modules can be defined as files instead
+// lib.rs:
+mod english;
+
+// english.rs:
+pub mod greetings { /* ... */ }
+
+// modules can also be defined as directories
+// lib.rs:
+mod english;
+
+// english/
+	// mod.rs:
+	pub mod greetings;
+
+	// greetings.rs
+	/* ... */
+
+// namespacing
+// when accessing a member of a module, by default namesapces are relative to the current module
+mod one {
+	mod two { pub fn foo() {} }
+	fn bar {
+		two::foo()
+	}
+}
+// it can be made absolute with a leading :: operator
+mod one {
+	mod two { pub fn foo() {} }
+	fn bar {
+		::one::two::foo()
+	}
+}
+
+// use modules
+// use directives are absolute by default, but can not relative to the current module
+
+// english/mod.rs
+use self::greetings;
+use super::japanese;
+
+// pub use can be used to re-export other items
+
+// default_language.rs
+
+#[cfg(english)]
+pub use english::*;
+
+#[cfg(japanese)]
+pub use japanese::*;
+
+// using external crates
+// for external crates, use 'extern crate' instead of 'mod'
+extern crate rand;
+
+use rand::Rng;
+
+// make your own crate
+// anything marked 'pub' in the root module (lib.rs) is exported
+
+pub mod english;
+
+// use your own crate from Cargo
+[dependencies]
+myfoo = { git = "https://github.com/me/foo-rs" }
+mybar = { path = "../rust-bar" }
+
+or
+
+[dependencies.myfoo]
+git = "https://github.com/me/foo-rs"
+
+// use them:
+extern crate myfoo;
+
+use myfoo::english;
+
+// Cargo: build scripts
+
+// attributes
+// ways to pass information to the compiler
+// #[test] is an attribute that annotates a function as a test
+// #[test] annotates the next block; #![test] annotates the surrounding block
+
+#[test]
+fn midterm1() {
+	// ...
+}
+
+fn midterm2() {
+	#![test]
+	// ...
+}
+
+// use attributes to...
+	// #![no_std] disable the standard library.
+	// #[derive(Debug)] auto-derive traits.
+	// #[inline(always)] give compiler behavior hints.
+	// #[allow(missing_docs)] disable compiler warnings for certain lints.
+	// #![crate_type = "lib"] provide crate metadata.
+	// #![feature(box_syntax)] enable unstable syntax.
+	// #[cfg(target_os = "linux")] define conditional compilation.
+
+// Rust Code Style
+
+// format!
+// ? means debug-print
+// positional parameter, an index into the argument list
+println!("{2} {} {} {0} {} {}", 0, 1, 2, 3, 4, 5);	// "2 0 1 0 2 3"
+// among the specifiers with no positional parameter, they implicitly count up: {0} {1} {2} ...
+format!("{name} {}", 1, name = 2);	// "2 1"
+// named parameters
+
+// format! specifiers
+Spec	Trait
+{}		Display
+{:?}	Debug
+{:o}	Octal
+{:x}	LowerHex
+{:X}	UpperHex
+{:p}	Pointer
+{:b}	Binary
+{:e}	LowerExp
+{:E}	UpperExp
+
+
+{:04} -> 0010: padding
+'{:^4}' -> ' 10 ': alignment (centering)
+# indicates an "alternate" print format:
+{:#X} -> 0xA: including 0x
+{:#?}: Pretty-prints objects
+
+// operators
+// operators are evaluated left-to-right, in the following order
+Unary operators: ! - * & &mut
+as 					casting
+* / % 				multiplicative arithmetic
++ - 				additive arithmetic
+<< >> 				shift arithmetic
+& 					bitwise and
+^ 					bitwise xor
+| 					bitwise or
+== != < > <= >= 	logical comparison
+&& 					logical and
+|| 					logical or
+= .. 				assignment and ranges
+
+Also: call(), index[]
+
+// operator overloading
+// Rust defines these - surprise! - using traits, in std::ops.
+Neg, Not, Deref, DerefMut
+Mul, Div, Mod
+Add, Sub
+Shl, Shr
+BitAnd
+BitXor
+BitOr
+Eq, PartialEq, Ord, PartialOrd
+And
+Or
+
+Also: Fn, FnMut, FnOnce, Index, IndexMut, Drop
+
+// from one type into another
+// Casting (as) cannot be overloaded - instead, we use From and Into.
+	// trait From<T> { fn from(T) -> Self; }, called like Y::from(x).
+	// trait Into<T> { fn into(self) -> T; }, called like x.into().
+// If you implement From, Into will be automatically implemented.
+	// So you should prefer implementing From.
+struct A(Vec<i32>);
+impl From<Vec<i32>> for A {
+    fn from(v: Vec<i32>) -> Self {
+        A(v)
+    }
+}
+
+// sometimes, for various reasons, implementing From isn't possible - only Into
+struct A(Vec<i32>);
+
+impl From<A> for Vec<i32> { // error: private type A in
+    fn from(a: A) -> Self { // exported type signature.
+        let A(v) = a; v     // (This impl is exported because
+    }                       // both the trait (From) and the type
+}                           // (Vec) are visible from outside.)
+
+impl Into<Vec<i32>> for A {
+    fn into(self) -> Vec<i32> {
+        let A(v) = self; v
+    }
+}
+
+// making references
+// Borrow/BorrowMut: "a trait for borrowing data."¹
+trait Borrow<Borrowed> { fn borrow(&self) -> &Borrowed; }
+// AsRef/AsMut: "a cheap, reference-to-reference conversion."²
+trait AsRef<T>         { fn as_ref(&self) -> &T; }
+
+
+// I/O & Serialization
+// I/O
+pub trait Read {
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize>;
+
+    // Other methods implemented in terms of read().
+}
+
+pub trait Write {
+    fn write(&mut self, buf: &[u8]) -> Result<usize>;
+    fn flush(&mut self) -> Result<()>;
+
+    // Other methods implemented in terms of write() and flush().
+}
+
+// std::io::Read
+use std::io;
+use std::io::prelude::*;
+use std::fs::File;
+
+let mut f = try!(File::open("foo.txt"));
+let mut buffer = [0; 10];
+
+// read up to 10 bytes
+try!(f.read(&mut buffer));
+
+// ways of reading
+/// Required.
+fn read(&mut self, buf: &mut [u8]) -> Result<usize>;
+
+/// Reads to end of the Read object.
+fn read_to_end(&mut self, buf: &mut Vec<u8>) -> Result<usize>
+
+/// Reads to end of the Read object into a String.
+fn read_to_string(&mut self, buf: &mut String) -> Result<usize>
+
+/// Reads exactly the length of the buffer, or throws an error.
+fn read_exact(&mut self, buf: &mut [u8]) -> Result<()>
+
+// reading iterators
+fn bytes(self) -> Bytes<Self> where Self: Sized
+
+// Unstable!
+fn chars(self) -> Bytes<Self> where Self: Sized
+
+// iterator adaptors
+fn chain<R: Read>(self, next: R) -> Chain<Self, R>
+    where Self: Sized
+// chain takes a second reader as input, and returns an iterator over all bytes from self, then next.
+
+fn take<R: Read>(self, limit: u64) -> Take<Self>
+    where Self: Sized
+// take creates an iterator which is limited to the first limit bytes of the reader.
+
+// std::io::Write
+pub trait Write {
+    fn write(&mut self, buf: &[u8]) -> Result<usize>;
+    fn flush(&mut self) -> Result<()>;
+
+    // Other methods omitted.
+}
+
+// Write is a trait with two required methods, write() and flush()
+	// Like Read, it provides other default methods implemented in terms of these.
+// write (attempts to) write to the buffer and returns the number of bytes written (or queued).
+// flush ensures that all written data has been pushed to the target.
+	// Writes may be queued up, for optimization.
+	// Returns Err if not all queued bytes can be written successfully.
+
+// writing methods
+let mut buffer = try!(File::create("foo.txt"));
+
+try!(buffer.write("Hello, Ferris!"));
+
+/// Attempts to write entire buffer into self.
+fn write_all(&mut self, buf: &[u8]) -> Result<()> { ... }
+
+/// Writes a formatted string into self.
+/// Don't call this directly, use `write!` instead.
+fn write_fmt(&mut self, fmt: Arguments) -> Result<()> { ... }
+
+/// Borrows self by mutable reference.
+fn by_ref(&mut self) -> &mut Self where Self: Sized { ... }
+
+// write!
+let mut buf = try!(File::create("foo.txt"));
+
+write!(buf, "Hello {}!", "Ferris").unwrap();
+
+// BufReader
+fn new(inner: R) -> BufReader<R>;
+
+let mut f = try!(File::open("foo.txt"));
+let buffered_reader = BufReader::new(f);
+
+// BufReader is a struct that adds buffering to any reader.
+// BufReader itself implements Read, so you can use it transparently.
+
+// BufReader also implements a separate interface BufRead
+pub trait BufRead: Read {
+    fn fill_buf(&mut self) -> Result<&[u8]>;
+    fn consume(&mut self, amt: usize);
+
+    // Other optional methods omitted.
+}
+
+// BufReader defines two alternative methods of reading from your input, reading up until a certain byte has been reached.
+fn read_until(&mut self, byte: u8, buf: &mut Vec<u8>)
+    -> Result<usize> { ... }
+fn read_line(&mut self, buf: &mut String)
+    -> Result<usize> { ... }
+
+// BufReader also defines two iterators
+fn split(self, byte: u8)
+    -> Split<Self> where Self: Sized { ... }
+fn lines(self)
+    -> Lines<Self> where Self: Sized { ... }
+
+// BufWriter
+// BufWriter does the same thing, wrapping around writers
+let f = try!(File::create("foo.txt"));
+let mut writer = BufWriter::new(f);
+try!(buffer.write(b"Hello world"));
+
+// BufWriter doesn't implement a second interface like BufReader does.
+// Instead, it just caches all writes until the BufWriter goes out of scope, then writes them all at once.
+
+// StdIn
+// StdInLock
+// StdOut
+
+// special IO structs
+repeat(byte: u8): A reader which will infinitely yield the specified byte.
+	// It will always fill the provided buffer.
+sink(): "A writer which will move data into the void."
+empty(): A reader which will always return Ok(0).
+copy(reader: &mut R, writer: &mut W) -> Result<u64>: copies all bytes from the reader into the writer.
+
+
+// Serialization
+// rustc-serialize
+	// Implements automatic serialization for Rust structs.
+		// (Via compiler support.)
+	// Usually used with JSON output:
+extern crate rustc_serialize;
+use rustc_serialize::json;
+
+#[derive(RustcDecodable, RustcEncodable)]
+pub struct X { a: i32, b: String }
+
+fn main() {
+    let object = X { a: 6, b: String::from("half dozen") };
+    let encoded = json::encode(&object).unwrap();
+    // ==> the string {"a":6,"b":"half dozen"}
+    let decoded: X = json::decode(&encoded).unwrap();
+}
+
+// Serde
+	// Serialization/Deserialization.
+	// Next generation of Rust serialization: faster, more flexible.
+		// But API is currently in flux! We're talking about serde 0.7.0, released yesterday. (Not on crates.io as of this writing.)
+	// Serde is easy in Rust nightly!
+		// A compiler plugin creates attributes and auto-derived traits.
+	// Slightly harder to use in Rust stable:
+		// Compiler plugins aren't available.
+		// Instead, Rust code is generated before building (via build.rs).
+			// serde_codegen generates .rs files from .rs.in files.
+		// And you use the include! macro to include the resulting files.
+	// Separate crates for each output format:
+		// Support for binary, JSON, MessagePack, XML, YAML.
+#![feature(custom_derive, plugin)]
+#![plugin(serde_macros)]
+
+extern crate serde;
+extern crate serde_json;
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct X { a: i32, b: String }
+
+fn main() {
+    let object = X { a: 6, b: String::from("half dozen") };
+    let encoded = serde_json::to_string(&object).unwrap();
+    // ==> the string {"a":6,"b":"half dozen"}
+    let decoded: X = serde_json::from_str(&encoded).unwrap();
+}
+
+// more features
+
+//
+use serde;
+use serde::*;
+use serde::ser::*;
+
+struct Point { x: i32, y: i32 }
+
+impl Serialize for Point {
+    fn serialize<S>(&self, sr: &mut S)
+            -> Result<(), S::Error> where S: Serializer {
+        sr.serialize_struct("Point",
+            PointMapVisitor { value: self, state: 0 })
+    }
+}
+
+//
+struct PointMapVisitor<'a> { value: &'a Point, state: u8 }
+
+impl<'a> MapVisitor for PointMapVisitor<'a> {
+fn visit<S>(&mut self, sr: &mut S)
+    -> Result<Option<()>, S::Error> where S: Serializer {
+  match self.state {
+    0 => { // On first call, serialize x.
+      self.state += 1;
+      Ok(Some(try!(sr.serialize_struct_elt("x", &self.value.x))))
+    }
+    1 => { // On second call, serialize y.
+      self.state += 1;
+      Ok(Some(try!(sr.serialize_struct_elt("y", &self.value.y))))
+    }
+    _ => Ok(None) // Subsequently, there is no more to serialize.
+  }
+}
+}
 
 
 ```
