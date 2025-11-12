@@ -30,17 +30,39 @@ N / D : multi-line PS operations
 
 ```bash
 # by default, sed is greedy
-echo "a (one) b (two) c" | sed -n 's/.*(\(.*\)).*/\1/p'		# OUTPUT: "one) b (two"
+
+# 提取最后一对括号内容
+echo "a (one) b (two) c (three) d" | sed -n 's/.*(\(.*\)).*/\1/p'         # OUTPUT: three
 
 # simulate non-greedy behavior by telling sed explicitly what not to cross
-echo "a (one) b (two)" | sed -n 's/.*(\([^)]*\)).*/\1/p'	# OUTPUT: "one"
+echo "a (one) b (two) c (three) d" | sed -n 's/[^(]*(\([^)]*\)).*/\1/p'   # OUTPUT: one
 # explanation:
 	| Regex part  | Meaning                                                              |
 	| ----------- | -------------------------------------------------------------------- |
-	| `.*(`       | Match everything before the first `(`                                |
-	| `\([^)]*\)` | Capture all characters that are **not `)`** — so it stops before `)` |
-	| `.*`        | Ignore the rest                                                      |
-	| `\1`        | Replace with the captured part                                       |
+	| '[^(]*'    | Match everything except for ( before the first '('                    |
+	| '\([^)]*\)' | Capture all characters that are **not ')'** — so it stops before ')' |
+	| '.*'        | Ignore the rest                                                      |
+	| '\1'        | Replace with the captured part                                       |
+
+
+echo "a (one) b (two) c" | grep -oP '\([^)]*\)'   # OUTPUT: (one)
+                                                            (two)
+
+echo "a (one) b (two) c" | grep -oP '\([^)]*\)' | sed 's/[()]//g'   # OUTPUT: one
+                                                                              two
+
+echo "a (one) b (two) c" | grep -oP '\([^)]*\)' | sed 's/[()]//g' | tr '\n' ' '   # OUTPUT: one two
+
+echo -e "abc\nde" | xargs   # OUTPUT: abc de
+
+echo $(echo -e "abc\nde")   # OUTPUT: abc de
+
+echo -e "abc\nde" | paste -s -d ' '   # OUTPUT: abc de
+
+# 去除末尾可能得多余空格
+echo -e "abc\ncd" | tr '\n' ' ' | sed 's/ $//'
+
+echo -e "abc\ncd" | paste -s -d ' ' | tr -d '\n'
 
 # multiple matches -extract all
 echo "a (one) b (two) c (three)" |

@@ -19,6 +19,14 @@
 [The Rust Reference](https://doc.rust-lang.org/stable/reference/introduction.html) #online  
 []()  
 []()  
+[]()  
+[]()  
+[]()  
+[**The Little Book of Rust Macros**](https://danielkeep.github.io/tlborm/book/)  
+[A Practical Intro to Macros in Rust 1.0](https://danielkeep.github.io/practical-intro-to-macros.html)  
+[]()  
+[]()  
+[]()  
 
 ## lifetime
 - Lifetimes in Rust are mechanisms for ensuring that all borrows that occur within your code are valid. 

@@ -18,6 +18,93 @@
 [CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)  
 [Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
 
+## extract sections
+```bash
+# input.txt:
+collectd_us_ofdma_partial_reason_count{us_ofdma="port->0;pchidx->12;reason->low-snr",instance="docsis_mac_320ca5a1"} 2 1762848325000
+collectd_us_ofdma_partial_reason_count{us_ofdma="port->0;pchidx->12;reason->reg-ack-tccerr",instance="docsis_mac_320ca5a1"} 1 1762848325000
+
+# process.sh:
+awk '{
+  pch = ""; reason = "";
+  if (match($0, /pchidx->([0-9]+)/, a)) pch = a[1];
+  if (match($0, /reason->([^";,}]+)/, b)) reason = b[1];
+  value = $2;
+  print pch, reason, value
+}' input.txt
+
+# process.sh:
+# for busybox awk, it does not support the GNU awk extension of match(string, regex, array)
+# it only supports match(string, regex)
+awk '{
+  pch = ""; reason = "";
+  if (match($0, /pchidx->[0-9]+/)) {
+    tmp = substr($0, RSTART, RLENGTH);
+    sub(/^.*->/, "", tmp);
+    pch = tmp;
+  }
+  if (match($0, /reason->[^";,}]+/)) {
+    tmp = substr($0, RSTART, RLENGTH);
+    sub(/^reason->/, "", tmp);
+    reason = tmp;
+  }
+  value = $2;
+  print pch, reason, value
+}' input.txt
+
+# OUTPUT:
+12 low-snr 2
+12 reg-ack-tccerr 1
+
+# input.txt
+morris-dentist_md1_0  90:58:51:5c:9c:5c  0/13  0  0  0  0  2  1  0  1  0  0  0
+                                         0/12  0  0  0  0  2  1  0  1  0  0  0
+                      0c:b9:37:a2:14:40  0/13  0  0  0  0  0  0  0  1  0  0  1
+                                         0/12  0  0  0  0  0  0  0  1  0  0  1
+
+# process.sh:
+awk '
+{
+  ucid_field = 0
+  for (i = 1; i <= NF; i++) {
+    if ($i ~ /^[0-9]+\/[0-9]+$/) {
+      ucid = $i
+      ucid_field = i
+      break
+    }
+  }
+  if (ucid_field > 0) {
+    for (i = ucid_field + 1; i <= NF; i++) {
+      col = i - ucid_field + 1
+      sum[ucid, col] += $i
+      if (col > max_col) max_col = col
+    }
+    ucid_list[ucid] = 1
+  }
+}
+END {
+  for (ucid in ucid_list) {
+    printf "%s", ucid
+    for (i = 2; i <= max_col; i++)
+      printf " %d", sum[ucid, i] + 0
+    printf "\n"
+  }
+}' input.txt | sort -V
+
+# some explanation
+if (i > max_col) max_col = i    # keep track of the maximum number of columns seen
+sum[ucid, i] + 0                # forces numeric output (avoids printing nothing if unset)
+ucid_list[ucid] = 1             # clean, independent list of UCIDs to iterate later
+sort -V                         # sort output for deterministic order
+
+# OUTPUT:
+0/12 0 0 0 0 2 1 0 2 0 0 1
+0/13 0 0 0 0 2 1 0 2 0 0 1
+
+
+```
+
+
 ## array
 ```bash
 # 1
