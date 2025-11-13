@@ -6,6 +6,89 @@
 []()  
 
 
+## C-S Architecture
+```
++--------------------+        +------------------------+
+|   Terminal (TTY1)  |        |   Terminal (TTY2)      |
+|  +--------------+  |        |  +-------------------+  |
+|  | tmux client  |  |        |  | tmux client       |  |
+|  +--------------+  |        |  +-------------------+  |
+|        | connect via UNIX socket (/tmp/tmux-UID/default) |
++--------|--------------------------------------------------+
+         |
+         v
++-----------------------------------------------------------+
+|                    tmux server                            |
+|   +---------------------+   +---------------------------+  |
+|   | session 1           |   | session 2 (detached)      |  |
+|   |  +---------------+  |   |  +---------------------+  |  |
+|   |  | window 0      |  |   |  | window 0            |  |  |
+|   |  |  +---------+  |  |   |  |  +---------------+  |  |  |
+|   |  |  | shell   |  |  |   |  |  | vim, top, etc |  |  |  |
+|   |  |  +---------+  |  |   |  |  +---------------+  |  |  |
+|   |  +---------------+  |   |  +---------------------+  |  |
+|   +---------------------+   +---------------------------+  |
++-----------------------------------------------------------+
+
+tmux server
+	A single background process that manages all sessions, windows, and panes
+tmux sessions
+	Collections of windows managed by the server
+tmux clients
+	Terminal connections that display and interact with sessions
+
+
+Process tree before and after detach:
+
+# Before detach:
+SSH → shell → tmux-client → tmux-server
+
+# After detach:
+SSH → shell  (client gone, server remains)
+              tmux-server (still running in background)
+
+
+tmux new -s work
+# Before detach:
+bash(1000)
+ └─ tmux(1100)
+      ├─ tmux: server(1101)
+      │    ├─ bash(1200)
+      │    │    └─ vim(1300)
+      │    └─ (other panes/shells)
+      └─ tmux: client(1100)
+
+Process 1100 is the tmux client you launched.
+It starts the tmux server (1101) if not already running.
+The server then:
+	creates PTYs for panes/windows,
+	runs shell(s) or programs inside them (bash, vim, etc.),
+	sends their screen output to the client over a UNIX socket.
+The client draws this on your terminal.
+
+# When You Detach
+1. The client sends a detach-client command to the server over the socket.
+2. The server:
+	Marks that client as detached from its session.
+	Keeps the session alive (and all processes inside).
+3. The client process exits gracefully.
+4. Your terminal returns to your original shell prompt.
+
+Notice: Only the client process dies; the server and all session child processes (your shells, vim, etc.) continue running
+
+# After detach:
+bash(1000)
+ ├─ tmux: server(1101)
+ │    ├─ bash(1200)
+ │    │    └─ vim(1300)
+ │    └─ (other panes/shells)
+ └─ (you’re back to the outer shell)
+
+✔️ Server still alive
+✔️ Your shells and apps still running inside tmux
+✔️ Client gone
+```
+
 ## key bindings
 ```bash
 Ctrl+B D 			— Detach from the current session.

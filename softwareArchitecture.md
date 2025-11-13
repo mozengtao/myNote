@@ -1,3 +1,13 @@
+[Embedded Systems Architecture Resources](https://embeddedartistry.com/blog/2019/07/12/embedded-systems-architecture-resources/)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
 Software architecture is a high-level blueprint of a software system.
 Software design focuses on the low-level structure and components.
 
@@ -37,3 +47,9 @@ Software design focuses on the low-level structure and components.
     - RAM
 
 - I: Implementation
+    - Dedicated Server
+    - Kubernetes
+    - NoServer
+    - 
+    - 
+    - 

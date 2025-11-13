@@ -2654,6 +2654,54 @@ i, --ignore-case
 	2. Extended Regular Expressions (ERE)
 	3. Perl Compatible Regular Expressions (PCRE)
 
+# intput.txt:
+abc 1
+def 2
+hij 3
+
+# include.txt:
+def
+
+# exclude.txt:
+abc
+hij
+
+grep -f include.txt input.txt
+# Output:
+def 2
+
+grep -v -f exclude.txt input.txt
+# Output:
+def 2
+
+# awk version
+awk '
+    /abc/ { next }
+    /hij/ { next }
+    { print }
+' input.txt
+# Output:
+def 2
+
+# grep -Ev
+grep -Ev 'abc|hij' input.txt
+grep -Ev '(abc|hij)' input.txt      # Parentheses only matter for grouping when mixed with surrounding patterns
+# Output:
+def 2
+
+# grep -E
+echo "foo abc bar" | grep -E 'foo (abc|hij) bar'
+# Output:
+foo abc bar
+
+echo "foo hij bar" | grep -E 'foo (abc|hij) bar'
+# Output:
+foo hij bar
+
+echo "foo abc hij bar" | grep -E 'foo abc|hij bar'
+# Output:
+foo abc hij bar
+
 # literal match
 grep bash /etc/passwd
 

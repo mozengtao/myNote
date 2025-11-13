@@ -1,3 +1,19 @@
+[OpenAI Cookbook](https://cookbook.openai.com/)  
+[Prompt Engineering Guide](https://www.promptingguide.ai/)  
+[Prompt Engineering Guide](https://learnprompting.org/docs/introduction)  
+[Five proven prompt engineering techniques](https://www.lennysnewsletter.com/p/five-proven-prompt-engineering-techniques)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ## Coding Platform
 [Cursor](https://cursor.com/home)  
 [Claude](https://claude.ai/)  
