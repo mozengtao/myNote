@@ -45,6 +45,271 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## kobject
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+// 简单的链表实现（放在最前以便后续结构体使用）
+struct list_head {
+    struct list_head *next, *prev;
+};
+
+#define LIST_HEAD_INIT(name) { &(name), &(name) }
+#define LIST_HEAD(name) struct list_head name = LIST_HEAD_INIT(name)
+
+#define list_entry(ptr, type, member) \
+    ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+
+// 遍历宏
+#define list_for_each(pos, head) \
+    for ((pos) = (head)->next; (pos) != (head); (pos) = (pos)->next)
+
+static inline void INIT_LIST_HEAD(struct list_head *list)
+{
+    list->next = list;
+    list->prev = list;
+}
+
+static inline void __list_add(struct list_head *new,
+                              struct list_head *prev,
+                              struct list_head *next)
+{
+    next->prev = new;
+    new->next = next;
+    new->prev = prev;
+    prev->next = new;
+}
+
+static inline void list_add(struct list_head *new, struct list_head *head)
+{
+    __list_add(new, head, head->next);
+}
+
+static inline void __list_del(struct list_head *prev, struct list_head *next)
+{
+    next->prev = prev;
+    prev->next = next;
+}
+
+static inline void list_del(struct list_head *entry)
+{
+    __list_del(entry->prev, entry->next);
+    entry->next = NULL;
+    entry->prev = NULL;
+}
+
+// 模拟 kref (引用计数)
+struct kref {
+    int refcount;
+};
+
+// 模拟 kobject
+struct kobject {
+    char name[32];
+    struct kref kref;
+    void (*release)(struct kobject *kobj);
+    struct list_head list;
+};
+
+// 全局对象列表
+static LIST_HEAD(object_list);
+
+// 初始化链表头
+void list_head_init(void)
+{
+    INIT_LIST_HEAD(&object_list);
+}
+
+// kref 操作函数
+void kref_init(struct kref *kref)
+{
+    kref->refcount = 1;
+    printf("kref_init: refcount = 1\n");
+}
+
+void kref_get(struct kref *kref)
+{
+    kref->refcount++;
+    printf("kref_get: refcount = %d\n", kref->refcount);
+}
+
+int kref_put(struct kref *kref, void (*release)(struct kref *kref))
+{
+    kref->refcount--;
+    printf("kref_put: refcount = %d\n", kref->refcount);
+    
+    if (kref->refcount == 0) {
+        if (release) {
+            release(kref);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+// kobject 操作函数
+void kobject_init(struct kobject *kobj, const char *name)
+{
+    strncpy(kobj->name, name, sizeof(kobj->name) - 1);
+    kobj->name[sizeof(kobj->name) - 1] = '\0';
+    kref_init(&kobj->kref);
+    INIT_LIST_HEAD(&kobj->list);
+    
+    // 添加到全局列表
+    list_add(&kobj->list, &object_list);
+    printf("kobject_init: created '%s'\n", name);
+}
+
+struct kobject *kobject_get(struct kobject *kobj)
+{
+    if (kobj) {
+        kref_get(&kobj->kref);
+    }
+    return kobj;
+}
+
+static void kobject_release(struct kref *kref)
+{
+    struct kobject *kobj = (struct kobject *)((char *)kref - 
+                         (unsigned long)(&((struct kobject *)0)->kref));
+    
+    printf("kobject_release: releasing '%s'\n", kobj->name);
+    
+    // 从列表中删除
+    list_del(&kobj->list);
+    
+    // 调用用户提供的release函数
+    if (kobj->release) {
+        kobj->release(kobj);
+    }
+}
+
+void kobject_put(struct kobject *kobj)
+{
+    if (kobj) {
+        printf("kobject_put: putting '%s'\n", kobj->name);
+        kref_put(&kobj->kref, kobject_release);
+    }
+}
+
+// 示例设备结构
+struct my_device {
+    char description[64];
+    int device_id;
+    struct kobject kobj;
+};
+
+void device_release(struct kobject *kobj)
+{
+    struct my_device *dev = list_entry(kobj, struct my_device, kobj);
+    
+    printf("device_release: freeing device '%s' (id=%d)\n", 
+           dev->description, dev->device_id);
+    
+    // 实际释放设备内存
+    free(dev);
+}
+
+// 创建设备函数
+struct my_device *create_device(const char *desc, int id)
+{
+    struct my_device *dev = malloc(sizeof(struct my_device));
+    if (!dev) {
+        return NULL;
+    }
+    
+    strncpy(dev->description, desc, sizeof(dev->description) - 1);
+    dev->description[sizeof(dev->description) - 1] = '\0';
+    dev->device_id = id;
+    
+    // 初始化内嵌的 kobject
+    kobject_init(&dev->kobj, desc);
+    dev->kobj.release = device_release;
+    
+    return dev;
+}
+
+// 显示当前所有对象
+void show_all_objects(void)
+{
+    struct list_head *pos;
+    struct kobject *kobj;
+    
+    printf("\n=== Current Objects ===\n");
+    list_for_each(pos, &object_list) {
+        kobj = list_entry(pos, struct kobject, list);
+        printf("Object: %s (refcount=%d)\n", kobj->name, kobj->kref.refcount);
+    }
+    printf("=======================\n\n");
+}
+
+// 测试函数
+void test_kobject_lifecycle(void)
+{
+    printf("=== 开始 kobject 生命周期测试 ===\n\n");
+    
+    // 创建设备对象
+    struct my_device *dev1 = create_device("Network Card", 1);
+    struct my_device *dev2 = create_device("USB Controller", 2);
+    
+    show_all_objects();
+    
+    // 模拟多个模块使用设备
+    printf("=== 模拟模块A使用网络卡 ===\n");
+    struct kobject *dev1_ref1 = kobject_get(&dev1->kobj);
+    
+    printf("=== 模拟模块B使用网络卡 ===\n");
+    struct kobject *dev1_ref2 = kobject_get(&dev1->kobj);
+    
+    show_all_objects();
+    
+    // 模块B停止使用
+    printf("=== 模块B停止使用网络卡 ===\n");
+    kobject_put(dev1_ref2);
+    
+    show_all_objects();
+    
+    // 尝试释放 USB 控制器（应该不会真的释放，因为还有引用）
+    printf("=== 尝试释放USB控制器 ===\n");
+    kobject_put(&dev2->kobj);
+    
+    show_all_objects();
+    
+    // 模块A停止使用网络卡
+    printf("=== 模块A停止使用网络卡 ===\n");
+    kobject_put(dev1_ref1);
+    
+    show_all_objects();
+    
+    // 最终释放网络卡
+    printf("=== 最终释放网络卡 ===\n");
+    kobject_put(&dev1->kobj);
+    
+    show_all_objects();
+    
+    // 最终释放USB控制器
+    printf("=== 最终释放USB控制器 ===\n");
+    kobject_put(&dev2->kobj);
+    
+    show_all_objects();
+}
+
+int main(void)
+{
+    // 初始化全局链表
+    list_head_init();
+    
+    // 运行测试
+    test_kobject_lifecycle();
+    
+    printf("=== 测试完成 ===\n");
+    return 0;
+}
+```
+
 ## C语言可执行程序的数据段大小是如何确定的
 - c program's memory layout
 ```
