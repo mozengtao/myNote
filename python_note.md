@@ -54,6 +54,428 @@
 []()  
 
 
+## Builtins
+```python
+# abs
+c: complex = 3 + 4j
+print(abs(c))
+
+# all, any
+voters: list[int] = [1, 1, 1, 0, 1]
+print(all(voters))
+print(any(voters))
+
+# ascii
+text: str = 'Hello, World!'
+print(ascii(text))
+
+# bin
+print(bin(10))
+print(bin(-5))
+print(bin(0))
+print(bin(1_000_000))
+
+# bool
+print(bool(1))
+print(bool(0))
+print(bool(None))
+print(bool(''))
+print(bool(' '))
+print(bool([]))
+
+# callable
+print(callable(print))
+print(callable(100))
+
+# chr
+print(chr(65))
+print(chr(97))
+
+# complex
+print(complex())
+print(complex(3))
+print(complex(3, 4))
+print(complex('3+4j'))
+
+# dict
+empty_dict: dict[str, int] = dict()
+empty_dict: dict[str, int] = {}
+
+container: list[tuple[str, int]] = [('a', 1), ('b', 2), ('c', 3)]
+print(dict(container))
+
+print(dict(['a1', 'b2', 'c3']))
+
+# dir
+print(dir(100))
+print(dir('hello'))
+
+import json
+print(dir(json))
+
+# divmod
+print(divmod(10, 3))
+print(divmod(3.5, 1.5))
+
+# enumerate
+print(enumerate('hello'))
+print(enumerate('hello', start=1))
+print(enumerate('hello', start=10))
+print(enumerate('hello', start=100))
+
+names: list[str] = ['Alice', 'Bob', 'Charlie']
+
+enumeration: enumerate[tuple[int, str]] = enumerate(names)
+for index, name in enumeration:
+    print(index, name, sep=': ')
+
+print(list(enumeration))
+
+# eval
+some_text: str = '1 + 1'
+print(eval(some_text))
+
+# exec
+some_code: str = """
+a: int = 1
+b: int = 2
+
+print(a + b)
+
+for i in range(3):
+    print('exec() loop iteration: ', i)
+"""
+
+exec(some_code)
+print(a)
+
+# filter
+names: list[str] = ['Alice', 'Bob', 'Charlie']
+
+# 1
+def starts_with_a(name: str) -> bool:
+    return name.startswith('A')
+
+filtered_names: list[str] = filter(starts_with_a, names)
+print(list(filtered_names))
+
+# 2
+filtered_names: list[str] = filter(lambda name: name[0].lower() == 'a', names)
+print(list(filtered_names))
+
+# float
+f: float = float()
+print(f)
+
+print(float('10.5'))
+
+# frozenset
+fs: frozenset[int] = frozenset([1, 2, 3, 4, 5])
+print(fs)
+print(hash(fs))
+
+# globals
+print(globals())
+
+# locals
+def sample_function():
+    x: int = 1
+    y: int = 2
+
+    print(locals())
+
+print('-' * 100)
+sample_function()
+
+# hash
+print(hash(frozenset([1, 2, 3, 4, 5])))
+print(hash('hello'))
+print(hash((1, 2, 3)))
+
+# help
+#help()
+
+def hello(name: str) -> None:
+    """
+    A function that prints a hello message
+
+    :param name: The name to print
+    :type name: str
+    :return: None
+    """
+    print(f'Hello, {name}!')
+
+#help(hello)
+
+# id
+user: str = 'John Doe'
+print(id(user))
+
+number: int = 100
+print(id(number))
+
+l1: list[int] = [1, 2, 3]
+l2: list[int] = [1, 2, 3]
+print(f'{id(l1)=}')
+print(f'{id(l2)=}')
+print(l1 is l2)
+print(l1 == l2)
+
+s1: str = 'hello'
+s2: str = 'hello'
+print(f'{id(s1)=}')
+print(f'{id(s2)=}')
+print(s1 is s2)
+print(s1 == s2)
+
+# int
+print(int())
+print(int(10.5))
+print(int('10'))
+print(int('10', base=10))
+print(int('10', base=16))
+print(int('10', base=8))
+print(int('10', base=2))
+
+# isinstance
+from typing import Any, Iterator
+
+print(isinstance(10, int))
+print(isinstance('text', str | int))
+
+user_input: Any = (1, 2, 3)
+if isinstance(user_input, int):
+    print(f'{user_input=} is an integer')
+elif isinstance(user_input, tuple | set | list):
+    print(f'{user_input=} is a sequence')
+else:
+    print(f'{user_input=} is unknown')
+
+# issubclass
+class Parent:
+    pass
+
+class Child(Parent):
+    pass
+
+print(issubclass(Child, Parent))
+print(issubclass(Parent, Child))
+print(issubclass(Child, Parent | object))
+print(issubclass(Parent, Child | object))
+print(issubclass(bool, int))
+
+# iter
+from typing import Iterator
+
+queue: list[int] = [1, 2, 3]
+iterator: Iterator[int] = iter(queue)
+print(list(iterator))
+print(list(iterator))
+
+# len
+print(len('hello'))
+print(len([1, 2, 3]))
+print(len((1, 2, 3)))
+print(len({1, 2, 3}))
+print(len(range(10)))
+
+# list
+print(list())
+print(list([1, 2, 3]))
+print(list((1, 2, 3)))
+print(list({1, 2, 3}))
+print(list(range(10)))
+print(list(range(10, 20)))
+print(list(range(10, 20, 2)))
+
+characters: str = 'aeiou'
+print(list(characters))
+
+# map
+from typing import Iterator
+
+def square(x: int) -> int:
+    return x * x
+
+numbers: list[int] = [1, 2, 3, 4, 5]
+print(list(map(square, numbers)))
+
+sequared: Iterator[int] = map(square, numbers)
+print(list(sequared))
+
+all_uppercase: Iterator[str] = map(str.upper, ['hello', 'world'])
+print(list(all_uppercase))
+
+# max, min
+print(max('hello'))
+print(max([1, 2, 3, 4, 5]))
+
+names: list[str] = ['Alice', 'Bob', 'Charlie']
+print(max(names))
+print(max(names, key=len))
+print(min(names))
+print(min(names, key=len))
+
+# open
+with open('input.txt', 'w') as file:
+    file.write('Hello, World!')
+
+with open('input.txt', 'r') as file:
+    print(file.read())
+
+# ord
+print(ord('A'))
+print(ord('a'))
+
+# pow
+print(pow(2, 3))
+print(pow(2, 3, 5))
+
+# print
+print(1, 2, 3, sep=', ')
+
+names: list[str] = ['Alice', 'Bob', 'Charlie']
+print(*names, sep=', ', end='.\n')
+
+# range
+print(list(range(10)))
+print(list(range(0, 10)))
+print(list(range(0, 10, 2)))
+
+print(list(range(10, 0, -1)))
+print(list(range(10, 0, -2)))
+
+# reversed
+print(list(reversed([1, 2, 3])))
+
+sequence: list[int] = [1, 2, 3]
+print(sequence[::-1])
+
+# repr
+print(repr(10))
+print(repr('hello'))
+
+# round
+print(round(12.3456789, 2))
+print(round(12.3456789, 3))
+print(round(12.3456789, -1))
+print(round(12.3456789, -2))
+
+# set
+empty_set: set[int] = set()
+empty_set: set[int] = {}
+print(empty_set)
+
+list_with_duplicates: list[int] = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+print(set(list_with_duplicates))
+
+
+# slice
+numbers: list[int] = [1, 2, 3, 4, 5]
+step_two_slice: slice = slice(None, None, 2) # [::2]
+print(numbers[step_two_slice])
+
+reversed_numbers_slice: slice = slice(None, None, -1) # [::-1]
+print(numbers[reversed_numbers_slice])
+
+first_three_slice: slice = slice(0, 3) # [0:3]
+first_three_slice: slice = slice(3) # [0:3]
+print(numbers[first_three_slice])
+
+last_three_slice: slice = slice(-3, None) # [-3:]
+print(numbers[last_three_slice])
+
+# sorted
+print(sorted([3, 1, 2]))
+
+names: list[str] = ['Alice', 'Bob', 'Charlie']
+print(sorted(names))
+print(sorted(names, key=len))
+print(sorted(names, key=len, reverse=True))
+
+# str
+empty_str: str = str()
+print(empty_str)
+print(repr(empty_str))
+
+print(str(10))
+print(str(10.5))
+print(str(True))
+print(str(bool))
+print(str(None))
+print(str(None).upper())
+
+# sum
+scores: list[int] = [10, 20, 30, 40, 50]
+print(sum(scores))
+print(sum(scores, start=100))
+
+# tuple
+empty_tuple: tuple[int, str] = ()
+empty_tuple: tuple[int, str] = tuple()
+print(empty_tuple)
+
+print(tuple([1, 2, 3]))
+
+# Any
+from typing import Any
+
+elements: list[Any] = [1, 'hello', True, None]
+for element in elements:
+    print(type(element))
+
+# zip
+a: list[int] = [1, 2, 3]
+b: list[str] = ['a', 'b', 'c']
+c: list[bool] = [True, False, True]
+print(list(zip(a, b, c)))
+
+zipped: list[tuple[int, str, bool]] = list(zip(a, b, c))
+print(zipped)
+
+zipped: Iterator[tuple[int, str, bool]] = zip(a, b, c)
+print(list(zipped))
+
+# zlib
+import zlib
+
+data: str = 'Hello, World!'
+compressed: bytes = zlib.compress(data.encode())
+print(compressed)
+print(zlib.decompress(compressed))
+```
+
+## Protocol
+```python
+from typing import Protocol
+
+class Animal(Protocol):
+    def make_sound(self) -> str:
+        ...
+
+class Dog:
+    def make_sound(self) -> str:
+        return "Woof"
+
+class Cat:
+    def make_sound(self) -> str:
+        return "Meow"
+
+def make_sound(animal: Animal) -> str:
+    return animal.make_sound()
+
+dog = Dog()
+cat = Cat()
+
+print(make_sound(dog))
+print(make_sound(cat))
+
+# Output:
+Woof
+Meow
+```
+
+
 ## list, set, dict, tuple
 [Python Data Structures: Lists, Dictionaries, Sets, Tuples](https://www.dataquest.io/blog/data-structures-in-python/)  
 []()  
