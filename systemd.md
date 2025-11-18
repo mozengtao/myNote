@@ -1,10 +1,11 @@
+[**Manual Pages**](https://systemd.io/)  
 [systemd.directives](https://www.freedesktop.org/software/systemd/man/latest/systemd.directives.html)  
 [systemd.directives](https://manpages.ubuntu.com/manpages/focal/man7/systemd.directives.7.html)  
 [systemd.directives](https://www.mankier.com/7/systemd.directives)  
 
 [Learning to love systemd](https://opensource.com/article/20/4/systemd)  
 
-[System and Service Manager](https://systemd.io/)  
+[**System and Service Manager**](https://systemd.io/)  
 [The systemd for Administrators Blog Series](https://systemd.io/)  
 [freedesktop](https://www.freedesktop.org/wiki/Software/systemd/)  
 
@@ -14,6 +15,120 @@
 ![systemd-basics](./assets/systemd-basics.pdf)  
 ![systemd-management](./assets/systemd-management.pdf)  
 
+## User service
+```bash
+# systemd has 2 independent managers:
+| Manager            | Runs as        | Controls                                 |
+| ------------------ | -------------- | ---------------------------------------- |
+| **system systemd** | root           | System services (`/etc/systemd/system`)  |
+| **user systemd**   | per user (UID) | User services (`~/.config/systemd/user`) |
+
+# user service manager
+systemctl --user status
+
+# what can user-level services do
+They can:
+    ✔ run daemons
+    ✔ start background tasks
+    ✔ auto-start when you log in
+    ✔ stay running even after logout (with loginctl enable-linger)
+    ✔ manage tmux sessions
+    ✔ run scripts / apps long-term
+    ✔ create timers (user cron replacements)
+    ✔ manage sockets
+
+And they run under:
+    your UID
+    your HOME
+    your environment
+    your PATH (sometimes minimal)
+
+# service units location
+~/.config/systemd/user/
+
+# command
+systemctl --user enable myservice.service
+systemctl --user start myservice.service
+systemctl --user status myservice.service
+systemctl --user restart myservice
+systemctl --user daemon-reload
+
+```
+
+```bash
+mkdir -p ~/.config/systemd/user
+
+touch ~/.config/systemd/user/tmux-vcmts.service
+
+# ~/tmux-vcmts-init.sh:
+#!/usr/bin/env bash
+
+SESSION="VCMTS"
+LXD_VCMOS_DIR="/home/morrism/workspace/vcmts/vcmos"
+LXD_CODE_DIR="${HOME}/code"
+DEV5_TESTBED_DIR="/mnt/DATA/morrism/testbed"
+WIN1="code"
+WIN2="build"
+WIN3="dev5"
+
+# If the session already exists, exit quietly
+tmux has-session -t "$SESSION" 2>/dev/null && exit 0
+
+# Create the session
+tmux new-session -d -s "$SESSION" -n "$WIN1"
+
+# Create other windows
+tmux new-window -t "$SESSION" -n "$WIN2" -c /tmp
+tmux new-window -t "$SESSION" -n "$WIN3" -c /tmp
+
+# Split panes (vertically, then horizontally)
+tmux split-window -v -t "$SESSION:$WIN1"
+tmux split-window -v -t "$SESSION:$WIN2"
+tmux split-window -v -t "$SESSION:$WIN3"
+tmux split-window -h -t "$SESSION:$WIN2".1
+tmux split-window -h -t "$SESSION:$WIN3".1
+
+# Pane commands
+for pane in 0 1; do
+    tmux send-keys -t "$SESSION:$WIN1.$pane" "cd $LXD_CODE_DIR" Enter
+done
+
+tmux send-keys -t "$SESSION:$WIN2.0" "cd $LXD_VCMOS_DIR" Enter
+tmux send-keys -t "$SESSION:$WIN2.1" "cd ${LXD_VCMOS_DIR}/meta-vcore/meta-vcore-base" Enter
+
+for pane in 0 1; do
+    tmux send-keys -t "$SESSION:$WIN3.$pane" "2dev5" Enter
+    tmux send-keys -t "$SESSION:$WIN3.$pane" \
+        "cd ${DEV5_TESTBED_DIR}; source ${DEV5_TESTBED_DIR}/bash_functions.sh" Enter
+done
+
+# chmod +x
+chmod +x ~/tmux-vcmts-init.sh
+
+# tmux-vcmts.service:
+[Unit]
+Description=Persistent tmux session VCMTS
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/tmux new-session -d -s VCMTS
+ExecStop=/usr/bin/tmux kill-session -t VCMTS
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
+
+
+# user-level commands
+systemctl --user daemon-reload
+systemctl --user enable tmux-vcmts.service
+systemctl --user start tmux-vcmts.service
+systemctl --user status tmux-vcmts.service
+journalctl --user -xeu tmux-vcmts.service
+
+```
+
+## Basic
 ``` bash
 ## 基本概念
 unit 是systemd可以操作和管理的任何资源

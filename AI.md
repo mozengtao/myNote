@@ -10,8 +10,8 @@
 []()  
 []()  
 []()  
-[]()  
-[]()  
+[gemini-cli](https://github.com/google-gemini/gemini-cli)  
+[Gemini CLI documentation](https://geminicli.com/docs/)  
 
 
 ## Coding Platform
