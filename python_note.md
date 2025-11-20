@@ -53,6 +53,105 @@
 []()  
 []()  
 
+## how len() works
+```python
+# duck typing + special methods
+# any object with a __len__method can be used with len(), regardless of its actual type
+
+class MyCollection:
+    def __len__(self):
+        return 10
+
+my_collection = MyCollection()
+print(len(my_collection))
+
+# howto trace methods
+import sys
+from contextlib import contextmanager
+
+class CallTracer:
+    def __init__(self, show_special_methods=True):
+        self.show_special_methods = show_special_methods
+        self.depth = 0
+
+    def trace_calls(self, frame, event, arg):
+        if event == 'call':
+            code = frame.f_code
+            func_name = code.co_name
+            filename = code.co_filename
+
+            # Skip internal Python files
+            if '<' in filename or 'importlib' in filename:
+                return self.trace_calls
+
+            # Optionally filter special methods
+            if not self.show_special_methods and func_name.startswith('__'):
+                return self.trace_calls
+
+            indent = "  " * self.depth
+            args_info = frame.f_locals
+
+            print(f"{indent}→ {func_name}() {list(args_info.keys())}")
+            self.depth += 1
+
+        elif event == 'return':
+            self.depth = max(0, self.depth - 1)
+
+        return self.trace_calls
+
+@contextmanager
+def trace_context(show_special_methods=True):
+    """Context manager for tracing function calls"""
+    tracer = CallTracer(show_special_methods)
+    sys.settrace(tracer.trace_calls)
+    try:
+        yield
+    finally:
+        sys.settrace(None)
+
+# Usage
+class Container:
+    def __init__(self, items):
+        self.items = items
+
+    def __len__(self):
+        return len(self.items)
+
+    def __getitem__(self, key):
+        return self.items[key]
+
+def process_container(container):
+    size = len(container)  # Calls __len__
+    first = container[0]   # Calls __getitem__
+    return size, first
+
+# Trace this specific block
+with trace_context(show_special_methods=True):
+    c = Container([10, 20, 30])
+    result = process_container(c)
+    print(f"Result: {result}")
+
+
+# trace calls
+import trace
+import sys
+
+tracer = trace.Trace(
+    count=False,           # Don't count lines
+    trace=True,            # Print each line before execution
+)
+
+def my_function():
+    x = [1, 2, 3]
+    length = len(x)
+    return length
+
+# Run with tracing
+tracer.run('my_function()')
+
+
+```
+
 
 ## Builtins
 ```python

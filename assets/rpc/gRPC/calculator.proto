@@ -1,0 +1,45 @@
+// calculator.proto
+// gRPC 服务定义文件
+
+syntax = "proto3";
+
+package calculator;
+
+// 计算器服务定义
+service Calculator {
+  // 加法
+  rpc Add (BinaryOperation) returns (Result) {}
+  
+  // 减法
+  rpc Subtract (BinaryOperation) returns (Result) {}
+  
+  // 乘法
+  rpc Multiply (BinaryOperation) returns (Result) {}
+  
+  // 除法
+  rpc Divide (BinaryOperation) returns (Result) {}
+  
+  // 平方根
+  rpc SquareRoot (Number) returns (Result) {}
+  
+  // 流式计算：计算从 1 到 n 的平方（服务器流式）
+  rpc GetSquares (Number) returns (stream Result) {}
+}
+
+// 二元操作的请求消息
+message BinaryOperation {
+  double a = 1;
+  double b = 2;
+}
+
+// 单个数字的请求消息
+message Number {
+  double value = 1;
+}
+
+// 结果消息
+message Result {
+  double value = 1;
+  string message = 2;  // 可选的消息
+}
+
