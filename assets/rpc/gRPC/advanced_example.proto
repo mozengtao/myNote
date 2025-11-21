@@ -1,0 +1,258 @@
+// advanced_example.proto
+// 展示 Protocol Buffers 的各种语法特性
+
+syntax = "proto3";
+
+package example;
+
+// ==================== 1. 枚举类型 ====================
+
+// 用户角色
+enum UserRole {
+  USER_ROLE_UNKNOWN = 0;  // 必须从 0 开始
+  USER_ROLE_GUEST = 1;
+  USER_ROLE_USER = 2;
+  USER_ROLE_ADMIN = 3;
+  USER_ROLE_SUPER_ADMIN = 4;
+}
+
+// 订单状态
+enum OrderStatus {
+  ORDER_STATUS_UNKNOWN = 0;
+  ORDER_STATUS_PENDING = 1;
+  ORDER_STATUS_CONFIRMED = 2;
+  ORDER_STATUS_SHIPPED = 3;
+  ORDER_STATUS_DELIVERED = 4;
+  ORDER_STATUS_CANCELLED = 5;
+}
+
+// ==================== 2. 嵌套消息 ====================
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string province = 3;
+  string country = 4;
+  string postal_code = 5;
+  
+  // 嵌套定义：地理坐标
+  message GeoLocation {
+    double latitude = 1;
+    double longitude = 2;
+  }
+  
+  GeoLocation location = 6;  // 使用嵌套消息
+}
+
+// ==================== 3. 基本数据类型 ====================
+
+message DataTypes {
+  // 整数类型
+  int32 int32_value = 1;      // -2147483648 到 2147483647
+  int64 int64_value = 2;      // 更大的整数
+  uint32 uint32_value = 3;    // 0 到 4294967295
+  uint64 uint64_value = 4;    // 更大的正整数
+  
+  // 浮点数类型
+  float float_value = 5;      // 单精度
+  double double_value = 6;    // 双精度
+  
+  // 布尔类型
+  bool bool_value = 7;
+  
+  // 字符串和字节
+  string string_value = 8;
+  bytes bytes_value = 9;
+}
+
+// ==================== 4. 重复字段（数组/列表） ====================
+
+message Lists {
+  repeated string tags = 1;           // 字符串列表
+  repeated int32 scores = 2;          // 整数列表
+  repeated Address addresses = 3;      // 消息列表
+  repeated UserRole roles = 4;         // 枚举列表
+}
+
+// ==================== 5. Map 类型 ====================
+
+message Maps {
+  map<string, string> attributes = 1;      // 字符串到字符串
+  map<int32, string> id_to_name = 2;      // 整数到字符串
+  map<string, Address> address_book = 3;   // 字符串到消息
+  map<string, int32> scores = 4;          // 字符串到整数
+}
+
+// ==================== 6. 完整的用户消息 ====================
+
+message User {
+  // 基本信息
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  string password_hash = 4;
+  
+  // 枚举字段
+  UserRole role = 5;
+  
+  // 嵌套消息
+  Address address = 6;
+  
+  // 重复字段
+  repeated string interests = 7;
+  repeated Address previous_addresses = 8;
+  
+  // Map 字段
+  map<string, string> metadata = 9;
+  map<string, int32> preferences = 10;
+  
+  // 保留字段（已删除的字段编号）
+  reserved 11, 12;
+  reserved "old_field", "deprecated_field";
+}
+
+// ==================== 7. 订单系统示例 ====================
+
+message Product {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 stock = 5;
+  repeated string images = 6;  // 图片 URL 列表
+}
+
+message OrderItem {
+  Product product = 1;
+  int32 quantity = 2;
+  double subtotal = 3;
+}
+
+message Order {
+  int32 id = 1;
+  int32 user_id = 2;
+  OrderStatus status = 3;
+  repeated OrderItem items = 4;
+  double total_amount = 5;
+  Address shipping_address = 6;
+  string tracking_number = 7;
+}
+
+// ==================== 8. 请求和响应消息 ====================
+
+// 获取用户请求
+message GetUserRequest {
+  int32 user_id = 1;
+}
+
+// 创建用户请求
+message CreateUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  UserRole role = 4;
+}
+
+// 更新用户请求
+message UpdateUserRequest {
+  int32 user_id = 1;
+  string email = 2;
+  Address address = 3;
+  map<string, string> metadata = 4;
+}
+
+// 搜索用户请求（带分页）
+message SearchUserRequest {
+  string keyword = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  string sort_by = 4;
+  bool ascending = 5;
+}
+
+// 用户响应
+message UserResponse {
+  User user = 1;
+  string message = 2;
+}
+
+// 用户列表响应
+message UserListResponse {
+  repeated User users = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 total_pages = 4;
+}
+
+// 空响应
+message Empty {}
+
+// ==================== 9. 服务定义 ====================
+
+service UserService {
+  // 一元 RPC：获取单个用户
+  rpc GetUser (GetUserRequest) returns (UserResponse) {}
+  
+  // 一元 RPC：创建用户
+  rpc CreateUser (CreateUserRequest) returns (UserResponse) {}
+  
+  // 一元 RPC：更新用户
+  rpc UpdateUser (UpdateUserRequest) returns (UserResponse) {}
+  
+  // 一元 RPC：搜索用户
+  rpc SearchUsers (SearchUserRequest) returns (UserListResponse) {}
+  
+  // 服务器流式 RPC：监听用户更新
+  rpc WatchUsers (Empty) returns (stream User) {}
+  
+  // 客户端流式 RPC：批量创建用户
+  rpc BatchCreateUsers (stream CreateUserRequest) returns (UserListResponse) {}
+  
+  // 双向流式 RPC：实时聊天
+  rpc Chat (stream Message) returns (stream Message) {}
+}
+
+// 聊天消息
+message Message {
+  int32 user_id = 1;
+  string content = 2;
+  int64 timestamp = 3;
+}
+
+// ==================== 10. 订单服务 ====================
+
+service OrderService {
+  // 创建订单
+  rpc CreateOrder (CreateOrderRequest) returns (OrderResponse) {}
+  
+  // 获取订单
+  rpc GetOrder (GetOrderRequest) returns (OrderResponse) {}
+  
+  // 更新订单状态
+  rpc UpdateOrderStatus (UpdateOrderStatusRequest) returns (OrderResponse) {}
+  
+  // 流式接收订单更新
+  rpc TrackOrder (GetOrderRequest) returns (stream Order) {}
+}
+
+message CreateOrderRequest {
+  int32 user_id = 1;
+  repeated OrderItem items = 2;
+  Address shipping_address = 3;
+}
+
+message GetOrderRequest {
+  int32 order_id = 1;
+}
+
+message UpdateOrderStatusRequest {
+  int32 order_id = 1;
+  OrderStatus new_status = 2;
+  string tracking_number = 3;
+}
+
+message OrderResponse {
+  Order order = 1;
+  string message = 2;
+}
+

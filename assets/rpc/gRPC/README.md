@@ -24,11 +24,15 @@ x/
 ├── calculator_pb2.py           # 自动生成（消息类）
 ├── calculator_pb2_grpc.py      # 自动生成（服务代码）
 ├── gRPC使用指南.md             # gRPC 详细文档
+├── gRPC层次模型.md             # ⭐ gRPC 架构详解
 │
-├── ========== 对比和工具 ==========
-├── RPC技术对比.md              # XML-RPC vs gRPC 详细对比
-├── t1.py                       # Python 函数调用追踪器
-└── README_RPC.md               # 额外的 RPC 文档
+├── ========== Proto 语法指南 ==========
+├── proto语法指南.md            # Protocol Buffers 完整语法教程
+├── proto快速参考.md            # ⭐ Proto 语法速查卡片
+├── advanced_example.proto      # 高级 proto 语法示例
+│
+├── ========== 对比和总结 ==========
+└── RPC技术对比.md              # XML-RPC vs gRPC 详细对比
 ```
 
 ---
@@ -144,6 +148,29 @@ python3 grpc_client.py    # 终端 2
 - ✅ 对比性能差异
 
 **阅读：** `gRPC使用指南.md`
+
+---
+
+#### 第 3.5 步：深入 Proto 语法（30 分钟）
+
+```bash
+# 快速参考
+cat proto快速参考.md
+
+# 详细学习
+cat proto语法指南.md
+
+# 查看高级示例
+cat advanced_example.proto
+```
+
+**学习目标：**
+- ✅ 掌握 .proto 文件语法
+- ✅ 理解各种数据类型
+- ✅ 学习消息和服务定义
+- ✅ 了解最佳实践
+
+**阅读：** `proto语法指南.md` 或 `proto快速参考.md`
 
 ---
 
@@ -366,9 +393,16 @@ python3 t1.py
 
 ## 📚 详细文档
 
-- **[RPC使用指南.md](RPC使用指南.md)** - XML-RPC 完整教程
+### RPC 教程
 - **[gRPC使用指南.md](gRPC使用指南.md)** - gRPC 完整教程
-- **[RPC技术对比.md](RPC技术对比.md)** - 详细技术对比
+- **[gRPC层次模型.md](gRPC层次模型.md)** ⭐ - gRPC 架构与层次结构详解
+- **[RPC技术对比.md](RPC技术对比.md)** - XML-RPC vs gRPC 详细对比
+
+### Proto 语法
+- **[proto快速参考.md](proto快速参考.md)** ⭐ - Proto 语法速查卡片
+- **[proto语法指南.md](proto语法指南.md)** - Protocol Buffers 完整语法教程
+- **[calculator.proto](calculator.proto)** - 简单示例
+- **[advanced_example.proto](advanced_example.proto)** - 高级示例
 
 ---
 
