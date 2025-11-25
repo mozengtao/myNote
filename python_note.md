@@ -53,6 +53,188 @@
 []()  
 []()  
 
+## habits
+```python
+# 1
+# organize everthing in main()
+def main() -> None:
+    ...
+
+if __name__ == '__main__':
+    main()
+
+# 2 logic clear first
+# BAD
+def enter_club(name: str, age: int, has_id: bool) -> None:
+    if name.lower() == 'bob':
+        print('Get out of here, we don\'t want no trouble')
+        return
+
+    if age >= 21 and has_id:
+        print('You may enter the club.')
+    else:
+        print('You may not enter the club.')
+
+# GOOD
+def is_bob(name: str) -> bool:
+    return name.lower() == 'bob'
+
+def is_an_adult(age: int, has_id: bool) -> bool:
+    return age >= 21 and has_id
+
+def enter_club(name: str, age: int, has_id: bool) -> None:
+    if is_bob(name):
+        print('Get out of here, we don\'t want no trouble')
+        return
+
+    if is_an_adult(age, has_id):
+        print('You may enter the club.')
+    else:
+        print('You may not enter the club.')
+
+# list comprehension
+names = list[str] = ['James', 'Charlotte', 'Stephany', 'Mario', 'Sandra']
+
+long_names: list[str] = [name for name in names if len(name) > 7]
+
+# partial
+from functools import partial
+
+def specifications(color: str, name: str, amount: int) -> None:
+    print(f'Specs: {color=}, {name=}, {amount=}.')
+
+specify_name: partial = partial(specifications, 'Green', amount=10)
+specify_name('Bob')
+specify_name('Bob2')
+
+# permutations
+from itertools import permutations, combinations_with_replacement
+from collections.abc import Iterable
+
+
+def main() -> None:
+    perms: permutations[str] = permutations(['A', 'B', 'C'])
+
+    for a, b, c in tuple(perms):
+        print(a, b, c)
+
+    StrCombs = Iterable[tuple[str, str]]
+    combs: StrCombs = combinations_with_replacement(['A', 'B', 'C'], 2)
+    print(tuple(combs))
+
+# random
+from random import choice, choices, sample
+
+def main() -> None:
+    names: list[str] = ['Alice', 'Bob', 'Charlie', 'David']
+
+    person = choice(names)
+    print(f'{person = }')
+
+    persons = choices(names, k=2)
+    print(f'{persons = }')
+
+    persons = sample(names, k=2)
+    print(f'{persons = }')
+```
+
+## f-string
+```python
+n: int = 100000000
+print(f'{n:_}')
+print(f'{n:,}')
+
+# OUTPUT:
+100_000_000
+100,000,000
+
+#
+var: str = 'var'
+print(f'{var:_>10}')
+print(f'{var:#<10}')
+print(f'{var:|^10}')
+
+# OUTPUT:
+_______var
+var#######
+|||var||||
+
+#
+from datetime import datetime
+
+now: datetime = datetime.now()
+print(f'{now:%Y-%m-%d %H:%M:%S}')
+print(f'{now:%c}')
+print(f'{now:%I%p}')
+
+# OUTPUT:
+2025-11-22 16:36:13
+Sat Nov 22 16:36:13 2025
+04PM
+
+#
+n: float = 1234.5678
+print(f'Result: {n:.2f}')
+print(f'Result: {n:,.2f}')
+print(f'Result: {n:,.0f}')
+
+# OUTPUT:
+Result: 1234.57
+Result: 1,234.57
+Result: 1,235
+
+#
+a: int = 10
+b: int = 20
+my_var: str = 'hello world'
+
+print(f'a + b = {a + b}')
+print(f'{a + b = }')
+print(f'{my_var = }')
+
+# OUTPUT:
+a + b = 30
+a + b = 30
+my_var = 'hello world'
+
+```
+
+## guard clause pattern
+```python
+# 传统嵌套写法 (不推荐)   - 深层嵌套
+def process_order_old(amount, customer_type, inventory):
+    if amount > 0:
+        if customer_type in ["regular", "vip"]:
+            if inventory > 0:
+                # 主要业务逻辑
+                discount = 0.1 if customer_type == "vip" else 0
+                totoal = amount * (1 - discount)
+                return f"订单处理成功: ${total}"
+            else:
+                return "库存不足"
+        else:
+            return "客户类型无效"
+    else:
+        return "金额必须大于0"
+
+# Guard Clause 写法(推荐)  - 扁平结构
+def process_order(amount, customer_type, inventory):
+    # Guard Clauses - 前置条件检查
+    if amount <= 0:
+        return "金额必须大于0"
+
+    if customer_type not in ["regular", "vip"]:
+        return "客户类型无效"
+
+    if inventory <= 0:
+        return "库存不足"
+
+    # 主要业务逻辑 (没有嵌套)
+    discount = 0.1 if customer_type == "vip" else 0
+    totoal = amount * (1 - discount)
+    return f"订单处理成功: ${total}"
+```
+
 ## how len() works
 ```python
 # duck typing + special methods
@@ -1561,6 +1743,56 @@ OOP is a paradigm that provides a means of structuring programs so that properti
 4.**polymorphism**: allows objects of different classes to be treated as if they were of the same class, it allows you to access attributes and methods on objects without needing to worry about their actual class
 polymorphism: allows objects of different classes to be treated as if they were of the same class, it allows you to access attributes and methods on objects without needing to worry about their actual class
 ```python
+# a complete example
+class Microwave:
+    # self stands for the instance of the class itself
+    # for __init__ function self can be replaces with arbitary names such as instance, s, ...
+    def __init__(self, brand: str, power_rating: str) -> None:
+        self.brand = brand
+        self.power_rating = power_rating
+        self.turned_on: bool = False
+
+    def turn_on(self) -> None:
+        if self.turned_on:
+            print(f'Microwave ({self.brand}) is already turned on.')
+        else:
+            self.turned_on = True
+            print(f'Microwave ({self.brand}) now is turned on.')
+
+    def turn_off(self) -> None:
+        if self.turned_on:
+            self.turned_on = False
+            print(f'Microwave ({self.brand}) now is turned off.')
+        else:
+            print(f'Microwave ({self.brand}) is already turned off.')
+
+    def run(self, seconds: int) -> None:
+        if self.turned_on:
+            print(f'Running ({self.brand}) for {seconds} seconds')
+        else:
+            print(f'Turn on your microwave first...')
+
+    def __str__(self) -> str:
+        return f'{self.brand} (Rating: {self.power_rating})'
+
+    def __repr__(self) -> str:
+        return f'Microwave(brand="{self.brand}", power_rating="{self.power_rating}")'
+
+def main() -> None:
+    smeg: Microwave = Microwave(brand='Smeg', power_rating='B')
+    bosch: Microwave = Microwave(brand='Bosch', power_rating='C')
+    samsung: Microwave = Microwave(brand='Samsung', power_rating='A')
+
+    samsung.turn_on()
+    samsung.run(30)
+    samsung.turn_off()
+    print(samsung)
+    print(repr(samsung))
+
+if __name__ == '__main__':
+    main()
+
+#
 class Dog:
     #  class attributes
     species = "Canis familiaris"

@@ -663,6 +663,88 @@ ssh -T user@hostip << EOF
 echo "The current local working directory is: $PWD"
 echo "The current remote working directory is: \$PWD"
 EOF
+
+#
+send_email() {
+    local TO=$1
+    local SUBJECT=$2
+
+    cat << EOF | sendmail $TO
+Subject: $SUBJECT
+From: admin@example.com
+To: $TO
+...
+这是一封自动生成的邮件
+...
+EOF
+}
+
+#
+cat << EOF | grep "error"
+info: ...
+error: ...
+warning: ...
+error: ...
+EOF
+
+#
+MESSAGE=$(cat << EOF
+多行的
+消息内容
+EOF
+)
+
+#
+read -r -d '' HELP_TEXT << EOF
+用法： command [选项] [参数]
+
+选项:
+  -h, --help    显示帮助信息
+  -v, --version 显示版本信息
+EOF
+
+#
+bc <<< "2 + 3 * 4"
+
+#
+print_menu() {
+    cat << 'EOF'
+请选择操作：
+  1. 查看信息
+  2. 修改设置
+  3. 退出程序
+
+请输入选项 (1-3): 
+EOF
+}
+
+#
+generate_nginx_config() {
+    local domain=$1
+    local port=$2
+
+    cat << CONFIG
+server {
+    listen $port;
+    server_name $domain;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+}
+CONFIG
+}
+
+#
+install_dependencies() {
+    cat << 'EOF' | bash
+echo "安装依赖..."
+apt-get update
+apt-get install -y python3 python3-pip
+pip3 install flask requests
+echo "依赖安装完成！"
+EOF
+}
 ```
 
 ## split 1 long command into serveral parts

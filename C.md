@@ -45,6 +45,176 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## 二级指针
+![C语言中二级指针](./C语言中二级指针.md)  
+
+## 机制与策略分离
+![Linux内核中机制与策略分离的典型场景](./Linux内核中机制与策略分离的典型场景.md)  
+![C语言机制与策略分离示例代码](./C语言机制与策略分离示例代码.md)  
+![private_data usage demo](./private_data_demo.c)  
+![]()  
+- 机制
+    机制负责'能做什么'，它提供一组能力/钩子/API，本身不决定要怎么用
+
+- 策略
+    策略负责'具体怎么做'，决定具体行为
+
+- 机制与策略分离的优势
+    可扩展：增加新策略，只需实现一组回调 / 新的策略模块，不改通用机制
+    可测试：机制代码可以用 '假策略' 测试（例如 stub 策略），方便单元测试
+    可复用：同一机制可以被多个策略使用（例如不同调度算法、不同日志后端）
+    隔离复杂性：复杂业务逻辑集中在策略层，机制层代码更小、更稳定
+
+- 关键思想
+    机制 = 通用框架 + 钩子
+    策略 = 通过钩子填入的具体实现
+
+- 如何实现机制与策略分离
+    1. 识别机制
+        找出 '总是需要的框架性工作'，例如
+            循环调度框架（while(1) 轮询）
+            共享内存映射、锁管理
+            协议报文的通用解析
+    2. 识别策略
+        找出 '经常变' 的规则，例如
+            不同的转发策略 / ACL / 计费规则
+            不同的调度算法 / 优先级规则
+            不同的导出目标（collectd / Prometheus / 自定义 log）
+    3. 抽象出接口
+        设计一个 *_ops 结构体，或一组函数指针
+        让机制代码只面向这个接口，而不是具体实现
+    4. 通过注入选择策略
+        在初始化阶段，根据配置 / 编译选项创建具体策略对象，填好 ops 和 ctx
+        把它们交给机制层统一使用
+    5. 保持接口稳定
+        改策略时，只动新策略模块，不改机制层 API
+        机制层只做与策略无关的通用工作（资源管理、调度框架、错误处理）
+
+- C语言中机制与策略分离的实现手段
+    函数指针
+    回调表
+    不透明指针
+    模块化设计
+
+```c
+// 回调表
+// 典型写法: 机制定义一个 '操作表(ops)'，策略提供具体实现
+typedef struct {
+    int  (*open)(void *ctx);
+    int  (*close)(void *ctx);
+    int  (*send)(void *ctx, const void *buf, size_t len);
+    int  (*recv)(void *ctx, void *buf, size_t len);
+} net_ops_t;
+
+typedef struct {
+    net_ops_t *ops;  // 策略
+    void      *ctx;  // 策略上下文（socket、fd、DPDK port 等）
+} net_if_t;
+
+// 机制：上层只依赖 net_if_t，不关心具体策略
+int net_send_packet(net_if_t *iface, const void *buf, size_t len)
+{
+    return iface->ops->send(iface->ctx, buf, len);
+}
+/*
+机制层：net_send_packet 等函数，只知道通过 ops->send 发送
+策略层：提供 tcp_ops、udp_ops、dpdk_ops 等不同实现
+当换成 DPDK、AF_XDP 或普通 socket，只需要换 ops 和 ctx，机制不变
+*/
+
+// 上下文结构 + 回调
+// 常见于库或框架：机制定义一个“框架流程”，留出若干回调点
+typedef struct {
+    int  (*on_packet)(void *user_ctx, const uint8_t *pkt, size_t len);
+    void (*on_error)(void *user_ctx, int err);
+    void *user_ctx;
+} packet_handler_t;
+
+// 机制：轮询收包，并在适当时机调用策略
+void run_loop(int fd, packet_handler_t *handler)
+{
+    uint8_t buf[2048];
+    ssize_t len;
+
+    for (;;) {
+        len = recv(fd, buf, sizeof(buf), 0);
+        if (len < 0) {
+            if (handler->on_error)
+                handler->on_error(handler->user_ctx, errno);
+            continue;
+        }
+        if (handler->on_packet)
+            handler->on_packet(handler->user_ctx, buf, (size_t)len);
+    }
+}
+
+/*
+run_loop 是数据面机制：负责收包、循环、错误处理框架
+策略通过 handler->on_packet 和 user_ctx 决定“每个包怎么处理”
+*/
+
+// void * + 用户自定义数据结构
+// 机制定义操作接口和一个不透明的 void * 句柄，策略定义真正的结构和行为
+typedef struct allocator allocator_t;
+
+allocator_t *allocator_create(void *impl, 
+                              void *(*alloc)(void *impl, size_t),
+                              void (*dealloc)(void *impl, void *));
+void        *allocator_alloc(allocator_t *a, size_t size);
+void         allocator_free(allocator_t *a, void *p);
+
+/*
+机制：只实现 allocator_t 的调度、统计、锁等通用逻辑
+策略：在 impl 中放不同算法的数据结构（buddy/链表/slab），并提供相应分配/释放函数
+*/
+
+// 调度器（Scheduler）与调度算法
+// 机制: 提供“添加任务”、“选择下一个任务”、“记录调度统计”等基本操作
+// 策略: FIFO、优先级队列、加权轮询（WRR）、WFQ、DRR 等
+// 定义通用的 scheduler_t
+typedef struct scheduler_ops {
+    void (*enqueue)(void *ctx, task_t *t);
+    task_t *(*dequeue)(void *ctx);
+} scheduler_ops_t;
+
+typedef struct {
+    scheduler_ops_t *ops;
+    void            *ctx;
+} scheduler_t;
+// 各种调度算法实现自己的 ctx + ops，统一挂在 scheduler_t 上使用
+// 很多网络栈、特别是 DPDK HQoS、SF 队列这类代码，都采用这种模式
+
+// 日志机制与日志策略
+机制：提供 log_debug, log_info, log_error 等统一入口，并处理线程安全、格式化
+策略：
+    输出到 syslog
+    输出到文件
+    输出到远程 server 或 ring buffer
+
+C 实现：
+    在 log_init() 时注册一个 log_backend 回调表（write_line, flush）
+    不同部署通过配置选择不同策略实现
+```
+
+## mark a function parameter as intentionally unused
+```c
+void handler(int event, void *ctx)
+{
+    (void)ctx;  // ctx required by the signature, but unused
+    printf("event = %d\n", event);
+}
+
+// how (void)parameter; works
+It performs a cast-to-void, which evaluates parameter but explicitly throws away the result.
+This counts as a “use”, so the compiler no longer warns.
+It has zero runtime effect: the compiler optimizes it out completely.
+
+(void)parameter; is used to:
+    ✔ Silence "unused parameter" warnings
+    ✔ Indicate intentional non-use
+    ✔ Guarantee zero runtime cost
+```
+
 ## kobject
 ```c
 #include <stdio.h>

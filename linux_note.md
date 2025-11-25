@@ -29,6 +29,47 @@
 [System V Application Binary Interface](https://refspecs.linuxbase.org/elf/gabi4+/contents.html)  
 [zSeries ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/zSeries/lzsabi0_zSeries/book1.html)  
 
+## concepts
+```
+memory page:
+A memory page is the basic fixed-size unit of memory management used by the OS and CPU.
+操作系统把内存按固定大小切成一块一块的小单元，每一块就叫 page（页）
+
+在 x86/Linux 上一般是 4KB 一页
+Memory management uses pages for:
+    Virtual → physical address mapping (page tables).
+    Protection (read/write/execute permissions per page).
+    Swapping/paging to disk (move whole pages in/out).
+    Caching address translations in the TLB (Translation Lookaside Buffer), one entry per page.
+    虚拟内存管理的基本单位：虚拟地址空间按页映射到物理内存。
+    换页（paging）、缺页中断（page fault）、内存保护等都以“页”为粒度。
+    CPU 的 TLB（Translation Lookaside Buffer）中，每一项通常缓存“一页的地址映射”。
+内存不是按字节、也不是按数组，而是按“4KB 一块”来管理的，这一块就是 page
+
+Huge page
+定义：Huge page 就是 比普通页大很多的页，例如：
+    普通页：4KB
+    Huge page：2MB（常见）或 1GB 等。
+
+为什么要有 huge page：
+如果一个进程要用很多内存，用 4KB 页会有成千上万甚至更多的页：
+    页表很大（page table entries 很多）。
+    TLB 每一项只覆盖 4KB，容易 TLB miss。
+换成 huge page：
+    一个页表项覆盖的地址范围更大 → 页表更小。
+    同样数量的 TLB 项能覆盖更多内存 → 减少 TLB miss，降低地址翻译开销。
+
+适用场景：
+    大内存、高吞吐、访问模式比较顺序或稳定的场景：
+        数据库（如 Oracle、PostgreSQL）。
+        大缓存（内存 KV 存储、内存池）。
+        高性能网络包处理（DPDK、VPP 等）。
+
+使用方式：
+显式 huge page：应用自己通过 hugetlbfs 或 mmap(MAP_HUGETLB, ...) 申请，需要事先在系统里预留 huge pages。
+透明大页（THP, Transparent Huge Pages）：内核自动尝试把合适的内存区域合并成 huge page，对应用透明。
+```
+
 ## socket
 [GNU C Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  
 [How Linux creates sockets and counts them](https://ops.tips/blog/how-linux-creates-sockets/)  
