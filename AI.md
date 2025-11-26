@@ -35,6 +35,7 @@ Settings
 [Grok](https://grok.com/)  
 [KiMi](https://kimi.moonshot.cn/)  
 [Gmini](https://gemini.google.com/app)  
+[NoteBookLM](https://notebooklm.google.com/)  
 [DeepSeek](https://chat.deepseek.com/)  
 [hix.ai/](https://hix.ai/)  
 [Ithy](https://ithy.com/)  
@@ -73,6 +74,78 @@ Settings
 | **4. How – 风格/形式**        | 希望输出什么形式    | 列表？总结？教学？代码？报告？ |
 | **5. Scope – 范围限定**       | 要多深、多长、多专业 | 控制回答粒度和复杂度      |
 | **6. Restriction – 约束条件** | 指定语气、风格、格式 | 避免啰嗦或跑题         |
+```
+### TIPS
+Socratic Questioning: ->"Act as a Socratic tutor and help me understand the concept of [topic]. Ask me questions to guide my understanding."
+
+Multi-Level Explanations: ->"Explain [concept] to me as if I’m a child, then a high schooler, and finally an academic."
+
+Practice Questions: ->"Create practice questions for me on [topic] at beginner, intermediate, and advanced levels."
+
+Summarizing and Comparing: ->"Summarize this paper and list the key concepts. Then compare it to my summary and identify any gaps."
+
+Key Terms and Categories: ->"Give me a list of 20 key terms in this paper and break them into five categories."
+
+Bloom’s Taxonomy Challenges: ->"Create a set of challenges for me to apply Bloom’s taxonomy (remember, understand, apply, analyze, evaluate, create) to [topic]." Analogies and 
+
+Real-Life Examples: ->"Provide analogies and real-life examples to help me understand [concept]."
+
+苏格拉底式提问：->"请扮演苏格拉底式的导师，通过提问引导我理解[主题]概念。"
+多层级解释：->"请用小学生、中学生和学者能理解的不同表述方式，为我解释[概念]。"
+分级练习题：->"请围绕[主题]设计初级、中级和高级三个难度的练习题。"
+摘要对比分析：->"请总结这篇论文的核心概念，并与我的总结对比，指出遗漏之处。"
+术语分类归纳：->"请列出本文的20个关键术语，并将其归纳为五个类别。"
+布鲁姆分类法实践：->"请根据布鲁姆分类法（记忆、理解、应用、分析、评估、创造）设计一套关于[主题]的实践挑战。"
+类比迁移教学：->"请通过类比和生活实例帮助我理解[概念]。"
+
+示例:
+请用苏格拉底式提问，通过提问引导我理解linux的启动过程，提问过程中的每次对话记录上一次的上下文
+
+- 示例
+```
+如何高效的利用cursor学习linux 3.2内核源码,给出具体的学习建议和步骤，例如先从哪个简单的模块入手比较好
+
+分析arch/x86/kernel/syscall_table_32.S中的系统调用表结构，列出前10个系统调用的名称和对应的处理函数
+
+跟踪sys_getpid系统调用的完整执行路径：
+1. 用户态调用入口
+2. 陷入内核的机制
+3. 实际处理函数
+4. 返回用户态的过程
+
+解释task_struct结构体中的主要字段含义
+
+分析进程调度器如何选择下一个运行进程
+
+画出Linux 3.2的内存管理架构图
+
+分析伙伴系统的工作原理
+
+解释VFS层的四个主要对象关系
+
+解释VFS层的四个主要对象关系
+
+提问模板："分析[文件名]中的[函数名]函数：
+1. 函数的主要功能
+2. 输入参数说明
+3. 返回值含义
+4. 调用关系图"
+
+提问模板："在[模块名]中，
+为我创建5个关键数据结构的记忆卡片（字段名+说明）"
+
+如果我要在Linux 3.2中添加一个简单的系统调用，
+需要修改哪些文件？给出具体代码示例
+
+# 1. 生成调用图
+"为__schedule函数生成函数调用关系图"
+
+# 2. 对比分析
+"比较Linux 3.2与最新内核在内存管理方面的主要差异"
+
+# 3. 漏洞分析
+"分析CVE-2012-0056漏洞的成因和修复方案"
+
 ```
 
 - 结构化提问模板
