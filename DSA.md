@@ -13,7 +13,7 @@
 [A First Course on Data Structures in Python]()  
 [DATA STRUCTURES AND ALGORITHMS USING PYTHON]()  
 [algorithm-books](https://github.com/0bprashanthc/algorithm-books/tree/master)  
-[Data Structures & Algorithms in Python]()  
+![**Data Structures & Algorithms in Python**](./assets/Data%20Structures%20&%20Algorithms%20Using%20Python.pdf)  
 []()  
 []()  
 []()  
@@ -26,7 +26,7 @@
 
 [Learn Data Structures and Algorithms](https://www.programiz.com/dsa)  
 
-![Grokking Algorithms](./assets/grokking-algorithms.pdf) #pdf  
+![**Grokking Algorithms**](./assets/grokking-algorithms.pdf) #pdf  
 
 [Data Structures Reference](https://www.interviewcake.com/data-structures-reference)  
 [Data Structures](https://www.hackerearth.com/practice/data-structures)  

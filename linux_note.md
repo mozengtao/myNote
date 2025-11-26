@@ -9,10 +9,12 @@
 ![Linux 内核链表](./linux_kernel_list.md)  
 ![Linux 系统调用实现机制](./linux_syscall_mechanism.md)  
 ![Linux 启动流程](./linux_boot_process.md)  
-![Linux ](./)  
-![Linux ](./)  
-![Linux ](./)  
-![Linux ](./)  
+![Linux sys_read 系统调用执行路径](./linux_sys_read_trace.md)  
+![Linux sys_getpid 系统调用执行路径](./linux_sys_getpid_trace.md)  
+![Linux 3.2 内存管理架构](./linux_memory_architecture.md)  
+![Linux 3.2 进程间通信(IPC)机制详解](./linux_ipc_mechanisms.md)  
+![Linux ]()  
+![Linux ]()  
 
 
 [**linux_kernel_wiki**](https://github.com/0voice/linux_kernel_wiki)  
