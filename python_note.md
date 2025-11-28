@@ -53,6 +53,34 @@
 []()  
 []()  
 
+## uv
+[uv](https://github.com/astral-sh/uv)  
+[uv document](https://docs.astral.sh/uv/)  
+[markitdown](https://github.com/microsoft/markitdown)  
+[]()  
+[]()  
+
+- markitdown
+
+```bash
+# howto install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# install markitdown
+uv tool install 'markitdown[all]'
+
+# howto fix
+<<ERROR
+> markitdown systemd-basics.pdf > /tmp/doc.md
+/home/morrism/.local/share/uv/tools/markitdown/lib/python3.10/site-packages/pydub/utils.py:170: RuntimeWarning: Could not find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+  warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+ERROR
+
+sudo apt update
+sudo apt install ffmpeg
+
+```
+
 ## habits
 ```python
 # 1

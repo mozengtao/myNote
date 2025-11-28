@@ -1,3 +1,60 @@
+## WSL
+[Basic commands for WSL](https://learn.microsoft.com/en-us/windows/wsl/basic-commands)  
+[]()  
+[]()  
+[]()  
+
+- WSL访问Windows下的文件夹
+```bash
+# 通过/mnt/目录直接访问 （WSL会自动将Windows的驱动器挂载到/mnt/目录下）
+cd /mnt/c/Users/$USER/Downloads
+
+# 创建符号链接
+ln -s /mnt/c/Users/$USER/Downloads ~/Downloads
+cd ~/Downloads
+
+# WSL 下打开 Windows 文件管理器
+explorer.exe .
+explorer.exe /mnt/c/Users/$USER/Desktop/
+
+# Windows 下访问WSL文件
+# 在Windows文件资源管理器地址栏输入：
+\\wsl$\Ubuntu\home\用户名
+
+# cmds
+wsl --list --online
+wsl --install	# install default distribution Ubuntu
+wsl --install --distribution <distribution_name>
+# wsl --install -d <distribution_name>
+
+wsl --list --verbose
+# wsl -l -v
+
+# run a distribution  on the terminal
+wsl -d <distribution_name>
+
+wsl --terminate <running_distribution_name>
+wsl --shutdown	# shut down the entire WSL system
+
+wsl --version
+
+wsl --status
+
+wsl --set-version <distribution name> <versionNumber>
+# wsl --set-version Ubuntu 2
+
+# backup your installed distribution along with all the data
+wsl --export <distribution_name> <file_name.tar>
+
+wsl --import <Distribution Name> <Import location> <exported file>
+
+wsl --unregister <distribution_name>
+
+wsl --update
+
+
+```
+
 
 ## 应用开机自启动
 ```bash
