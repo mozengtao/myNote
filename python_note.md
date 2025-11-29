@@ -53,6 +53,18 @@
 []()  
 []()  
 
+## psutil
+`git clone https://github.com/giampaolo/psutil.git`
+![项目架构分析文档](./psutil/ARCHITECTURE_ANALYSIS.md)  
+![API 设计模式分析](./psutil/TASK1_API_DESIGN_PATTERNS.md)  
+![数据类型设计分析](./psutil/TASK2_DATA_TYPE_DESIGN.md)  
+![Linux 平台实现深入分析](./psutil/TASK3_LINUX_IMPLEMENTATION.md)  
+![Windows 平台实现分析](./psutil/TASK4_WINDOWS_IMPLEMENTATION.md)  
+![平台抽象层设计分析](./psutil/TASK5_PLATFORM_ABSTRACTION.md)  
+![C 扩展实现深入分析](./psutil/TASK6_C_EXTENSION.md)  
+![性能优化技术分析](./psutil/TASK7_PERFORMANCE_OPTIMIZATION.md)  
+![测试体系分析](./psutil/TASK8_TESTING_SYSTEM.md)  
+
 ## uv
 [uv](https://github.com/astral-sh/uv)  
 [uv document](https://docs.astral.sh/uv/)  
