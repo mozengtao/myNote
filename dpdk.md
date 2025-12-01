@@ -17,7 +17,12 @@
 []()  
 []()  
 
-![dpdk howo](./assets/dpdk_howto.md)
+![dpdk howo](./dpdk/dpdk_howto.md)
+![dpdk初始化及包处理流程](./dpdk/DPDK_initialization_and_packet_processing.md)  
+![DPDK 网卡直接访问 Huge Page 的核心机制](./dpdk/DPDK_UIO_and_Hugepage_Mechanism.md)  
+![DPDK 网卡驱动重新绑定机制详解](./dpdk/DPDK_Driver_Binding_Mechanism.md)  
+![]()  
+![]()  
 
 ## EAL 初始化
 EAL 初始化（rte_eal_init()）就是把进程从“普通用户态程序”变成“适合做高性能报文处理的运行环境”
