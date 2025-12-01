@@ -45,6 +45,16 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## link list
+![单向链表](./link_list/singly_linked_list.md)  
+![双向链表](./link_list/doubly_linked_list.md)  
+![]()  
+
+## tree
+![树形数据结构](./tree/tree_data_structures.md)  
+![]()  
+
+
 ## 类型擦除 + 依赖注入
 - 类型擦除  =  统一接口 + void* 作为 Opaque 实例
 - 依赖注入  =  外部提供/赋值/注册 ops，实现控制反转和可替换实现
@@ -530,11 +540,56 @@ Linux 启动初始化中的 IoC 本质：
 ![VFS多态](./03_vfs_polymorphic_ops_ioc.md)  
 ![网络子系统](./04_net_device_ops_ioc.md)  
 ![initcall编排机制](./05_initcall_mechanism_ioc.md)  
-![]()  
-![]()  
-![]()  
-![]()  
-![]()  
+
+- linux-ioc-patterns
+├── README.md                    (360行)  - 索引与学习指南
+├── 01_driver_model.md          (947行)  - Linux 驱动模型
+├── 02_console_subsystem.md     (786行)  - 控制台子系统
+├── 03_vfs_file_operations.md   (807行)  - VFS 多态 ops
+├── 04_net_device_ops.md        (920行)  - 网络设备 ops
+└── 05_initcall_mechanism.md    (791行)  - initcall 机制
+
+- 五种 IoC 模式对比
+    场景	        注入时机	                控制反转体现	                           核心好处
+    Driver Model	运行时 (driver_register)	驱动不主动找设备，框架自动匹配绑定	        热插拔、统一生命周期
+    Console	        运行时 (register_console)	printk 不知道输出到哪，console 动态注入	   多输出并行、运行时切换
+    VFS ops	        运行时 (inode 创建时)	    read/write 调用不关心具体文件系统	        统一接口、多态实现
+    net_device_ops	运行时 (probe 时)	        协议栈不关心具体硬件	                   硬件抽象、中间层设备
+    initcall	    编译时 (链接器)	            模块不决定初始化时机和顺序	                自动排序、零耦合
+
+- IoC 共同模式
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        Linux 内核 IoC 通用模式                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   1. 定义接口契约 (函数指针结构体)                                           │
+│      struct xxx_ops {                                                        │
+│          int (*operation_a)(...);                                           │
+│          int (*operation_b)(...);                                           │
+│      };                                                                      │
+│                                                                              │
+│   2. 具体实现注入 (填充函数指针)                                             │
+│      static const struct xxx_ops my_ops = {                                 │
+│          .operation_a = my_impl_a,                                          │
+│          .operation_b = my_impl_b,                                          │
+│      };                                                                      │
+│                                                                              │
+│   3. 注册到框架 (关联对象与 ops)                                             │
+│      obj->ops = &my_ops;                                                    │
+│      register_xxx(obj);                                                     │
+│                                                                              │
+│   4. 框架调用 (多态分发)                                                     │
+│      obj->ops->operation_a(...);                                            │
+│                                                                              │
+│   好处:                                                                      │
+│   - 调用者与实现解耦                                                         │
+│   - 支持运行时替换                                                           │
+│   - 统一的生命周期管理                                                       │
+│   - 易于扩展新实现                                                           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 二级指针
 ![C语言中二级指针](./C语言中二级指针.md)  

@@ -1,11 +1,20 @@
-## Terminal
-### fzf
+## fzf
 ```bash
-find *.go ./ | fzf
+# fuzzy search (default)
+text
+txt
 
-cat demo.go | fzf
+# exact search
+<<EOF
+'text
+EOF
 
-fzf --preview 'cat {}'
+# 
+^text
+
+#
+text$
+
 
 ```
 
