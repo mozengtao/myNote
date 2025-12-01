@@ -64,6 +64,44 @@ Settings
 [面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook/#/)  
 
 ## Prompt
+![ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
+[]()  
+```
+ConfD 配置事务 (commit)
+        │
+        ▼
+┌─────────────────────────────────────────┐
+│  Work 结构体 (工作列表)                  │
+│  ┌─────────┐                            │
+│  │ w->list │──► Witem ──► Witem ──► nil │
+│  └─────────┘    (变更1)   (变更2)        │
+└─────────────────────────────────────────┘
+
+ASCII Art Diagram（ASCII 艺术图）或 Text-based Diagram（纯文本图表）
+
+名称	                            说明
+ASCII Flow Chart	                ASCII 流程图 - 展示流程和步骤
+ASCII Box Diagram	                ASCII 方框图 - 用方框表示组件
+ASCII Data Structure Diagram	    ASCII 数据结构图 - 展示链表、树等结构
+ASCII Architecture Diagram	        ASCII 架构图 - 展示系统组件关系
+
+ASCII Art 中文对齐问题：
+推荐做法
+    对于技术文档，最简单的方案是：
+    1. 纯英文 绘制 ASCII 图
+    2. 图下方 用普通文字添加中文说明
+
+示例:
+┌─────────────────────────────────────────┐
+│  Work Structure (worklist)              │
+│  ┌─────────┐                            │
+│  │ w->list │──► Witem ──► Witem ──► nil │
+│  └─────────┘    (item1)   (item2)       │
+└─────────────────────────────────────────┘
+
+说明：Work 是工作结构体，包含一个 Witem 链表，
+每个 Witem 代表一个配置变更项。
+```
 - 核心原则 (5W1H + R)
 ```
 | 原则                          | 含义               | 说明              |
@@ -77,26 +115,26 @@ Settings
 ```
 ### TIPS
 Socratic Questioning: ->"Act as a Socratic tutor and help me understand the concept of [topic]. Ask me questions to guide my understanding."
+苏格拉底式提问：->"请扮演苏格拉底式的导师，通过提问引导我理解[主题]概念。"
 
 Multi-Level Explanations: ->"Explain [concept] to me as if I’m a child, then a high schooler, and finally an academic."
+多层级解释：->"请用小学生、中学生和学者能理解的不同表述方式，为我解释[概念]。"
 
 Practice Questions: ->"Create practice questions for me on [topic] at beginner, intermediate, and advanced levels."
+分级练习题：->"请围绕[主题]设计初级、中级和高级三个难度的练习题。"
 
 Summarizing and Comparing: ->"Summarize this paper and list the key concepts. Then compare it to my summary and identify any gaps."
+摘要对比分析：->"请总结这篇论文的核心概念，并与我的总结对比，指出遗漏之处。"
 
 Key Terms and Categories: ->"Give me a list of 20 key terms in this paper and break them into five categories."
+术语分类归纳：->"请列出本文的20个关键术语，并将其归纳为五个类别。"
 
 Bloom’s Taxonomy Challenges: ->"Create a set of challenges for me to apply Bloom’s taxonomy (remember, understand, apply, analyze, evaluate, create) to [topic]." Analogies and 
+布鲁姆分类法实践：->"请根据布鲁姆分类法（记忆、理解、应用、分析、评估、创造）设计一套关于[主题]的实践挑战。"
 
 Real-Life Examples: ->"Provide analogies and real-life examples to help me understand [concept]."
-
-苏格拉底式提问：->"请扮演苏格拉底式的导师，通过提问引导我理解[主题]概念。"
-多层级解释：->"请用小学生、中学生和学者能理解的不同表述方式，为我解释[概念]。"
-分级练习题：->"请围绕[主题]设计初级、中级和高级三个难度的练习题。"
-摘要对比分析：->"请总结这篇论文的核心概念，并与我的总结对比，指出遗漏之处。"
-术语分类归纳：->"请列出本文的20个关键术语，并将其归纳为五个类别。"
-布鲁姆分类法实践：->"请根据布鲁姆分类法（记忆、理解、应用、分析、评估、创造）设计一套关于[主题]的实践挑战。"
 类比迁移教学：->"请通过类比和生活实例帮助我理解[概念]。"
+
 
 示例:
 请用苏格拉底式提问，通过提问引导我理解linux的启动过程，提问过程中的每次对话记录上一次的上下文
@@ -123,16 +161,13 @@ Real-Life Examples: ->"Provide analogies and real-life examples to help me under
 
 解释VFS层的四个主要对象关系
 
-解释VFS层的四个主要对象关系
-
 提问模板："分析[文件名]中的[函数名]函数：
 1. 函数的主要功能
 2. 输入参数说明
 3. 返回值含义
 4. 调用关系图"
 
-提问模板："在[模块名]中，
-为我创建5个关键数据结构的记忆卡片（字段名+说明）"
+提问模板："在[模块名]中，为我创建5个关键数据结构的记忆卡片（字段名+说明）"
 
 如果我要在Linux 3.2中添加一个简单的系统调用，
 需要修改哪些文件？给出具体代码示例
