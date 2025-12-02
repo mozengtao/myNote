@@ -3,6 +3,9 @@
 [100-days-of-code-python](https://github.com/phillipai/100-days-of-code-python/tree/main)  
 [100DaysOfCode](https://github.com/b-tomi/100DaysOfCode/tree/master)  
 []()  
+[**betterpython**](https://github.com/ArjanCodes/betterpython)  
+[**examples**](https://github.com/ArjanCodes/examples/tree/main)  
+[]()  
 []()  
 
 [Python Tips](https://book.pythontips.com/en/latest/index.html)  

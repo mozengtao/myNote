@@ -1,5 +1,5 @@
 [Embedded Systems Architecture Resources](https://embeddedartistry.com/blog/2019/07/12/embedded-systems-architecture-resources/)  
-[]()  
+[How I Learned System Design](https://medium.com/@himanshusingour7/how-i-learned-system-design-d7444d454367)  
 []()  
 []()  
 []()  

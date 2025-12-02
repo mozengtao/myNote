@@ -13,7 +13,7 @@
 ![Linux sys_getpid 系统调用执行路径](./linux_sys_getpid_trace.md)  
 ![Linux 3.2 内存管理架构](./linux_memory_architecture.md)  
 ![Linux 3.2 进程间通信(IPC)机制详解](./linux_ipc_mechanisms.md)  
-![Linux ]()  
+![Linux 启动流程与初始化系统](./Linux_Boot_Process_and_Init_Systems.md)  
 ![Linux ]()  
 
 

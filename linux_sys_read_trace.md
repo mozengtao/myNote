@@ -18,6 +18,38 @@
 
 ## 执行路径概览
 
+- 核心调用链
+```
+read(fd, buf, count)  [用户态]
+    │
+    ▼
+system_call           [entry_32.S]
+    │
+    ▼
+sys_read()            [fs/read_write.c:460]
+    │
+    ├── fget_light(fd)        → 获取 struct file
+    │
+    └── vfs_read()            [fs/read_write.c:364]
+            │
+            └── do_sync_read() → f_op->aio_read()
+                    │
+                    ▼
+            generic_file_aio_read()  [mm/filemap.c:1409]
+                    │
+                    └── do_generic_file_read()  [mm/filemap.c:1104]
+                            │
+                            ├── find_get_page()      [页缓存查找]
+                            │       │
+                            │       ├── 命中 → copy_to_user()
+                            │       │
+                            │       └── 未命中 → readpage() → submit_bio()
+                            │                         │
+                            │                    等待 I/O 完成
+                            │                         │
+                            └── copy_to_user(buf, page_data, count)
+```
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                    sys_read 普通文件读取完整执行路径                          │

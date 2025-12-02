@@ -3,9 +3,9 @@
 [Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)  
 [Protocol Buffers Documentation](https://protobuf.dev/)  
 
+![Google Protocol Buffers 工作原理](./Google_Protobuf_Working_Principle.md)  
 
 [Protocol Buffers Python API Reference](https://googleapis.dev/python/protobuf/latest/index.html)  
-[]()  
 []()  
 []()  
 []()  
