@@ -56,6 +56,59 @@
 
 
 ## 类型擦除 + 依赖注入
+![依赖注入 (Dependency Injection)](./DI/Dependency_Injection_in_C.md)  
+[]()  
+[]()  
+```
+核心概念：
+
+    WITHOUT DI (紧耦合)                    WITH DI (松耦合)
+
+    ┌─────────────────┐                   ┌─────────────────┐
+    │  OrderService   │                   │  OrderService   │
+    │                 │                   │                 │
+    │  FileLogger log │──┐                │  Logger *logger │──► <<interface>>
+    │  log.write(...) │  │                │  logger->log()  │         Logger
+    └─────────────────┘  │                └─────────────────┘            │
+                        │                                         ┌────┴────┐
+                        ▼                                         ▼         ▼
+                ┌─────────────┐                              FileLogger  MockLogger
+                │ FileLogger  │
+                │ (hardcoded) │
+                └─────────────┘
+
+C语言实现关键技术：
+
+    /* 接口 = 函数指针结构体 */
+    typedef struct Logger {
+        void (*log)(struct Logger *self, const char *msg);
+        void (*destroy)(struct Logger *self);
+        void *private_data;  /* 实现特定数据 */
+    } Logger;
+
+    /* 构造函数注入 */
+    OrderService* order_service_create(Logger *logger) {
+        OrderService *svc = malloc(sizeof(OrderService));
+        svc->logger = logger;  /* 注入依赖 */
+        return svc;
+    }
+
+识别需要依赖注入的代码坏味道：
+
+    坏味道	        示例
+    直接实例化	    FileLogger *log = file_logger_create();
+    全局变量	    static Database *g_database;
+    硬编码调用	    send_email("smtp.example.com", ...)
+    条件分支切换	if (use_file) {...} else if (use_syslog) {...}
+
+重构6步骤：
+    1. 识别依赖 - 找到函数内创建的具体对象
+    2. 提取接口 - 定义函数指针结构体
+    3. 添加依赖字段 - 在主结构体中添加接口指针
+    4. 构造函数注入 - 通过创建函数传入依赖
+    5. 使用接口 - 业务逻辑只调用接口方法
+    6. 组合根 - 在 main 中创建和组装所有对象
+```
 - 类型擦除  =  统一接口 + void* 作为 Opaque 实例
 - 依赖注入  =  外部提供/赋值/注册 ops，实现控制反转和可替换实现
 
