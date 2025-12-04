@@ -45,6 +45,35 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## C 工程技巧
+![单例模式](./c_tips/01_单例模式_Singleton.md)  
+![单例模式](./c_tips/01_单例模式_Singleton_Pattern.md)  
+![工厂模式](./c_tips/02_工厂模式_Factory.md)  
+![适配器模式](./c_tips/03_适配器模式_Adapter.md)  
+![观察者模式](./c_tips/04_观察者模式_Observer.md)  
+![策略模式](./c_tips/05_策略模式_Strategy.md)  
+![状态模式](./c_tips/06_状态模式_State.md)  
+![回调模式](./c_tips/07_回调模式_Callback.md)  
+![C语言软件工程技巧](./c_tips/08_C语言软件工程技巧.md)  
+![不透明指针](./c_tips/09_不透明指针_Opaque_Pointer.md)  
+![X-Mac技术](./c_tips/10_X-Macro技术.md)  
+![内存池](./c_tips/11_内存池_Memory_Pool.md)  
+![错误处理策](./c_tips/12_错误处理策略_Error_Handling.md)  
+![契约式编程](./c_tips/13_契约式编程_Design_by_Contract.md)  
+![侵入式数据结构](./c_tips/14_侵入式数据结构_Intrusive.md)  
+![编译时断言](./c_tips/15_编译时断言_Static_Assert.md)  
+![属性清理](./c_tips/16_属性清理_RAII_Cleanup.md)  
+![泛型宏编程](./c_tips/17_泛型宏编程_Generic.md)  
+[防御式编程](./c_tips/18_防御式编程_Defensive.md)  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+
+
 ## link list
 ![单向链表](./link_list/singly_linked_list.md)  
 ![双向链表](./link_list/doubly_linked_list.md)  
@@ -57,6 +86,13 @@
 
 ## 类型擦除 + 依赖注入
 ![依赖注入 (Dependency Injection)](./DI/Dependency_Injection_in_C.md)  
+[Dependency Injection](https://github.com/rahff/Software_book) #pdf  
+[Dependency Injection in .NET](https://github.com/huutoannht/Books)#pdf  
+[Design Pattern Online Training using .NET](https://dotnettutorials.net/lesson/design-patterns-online-training/)  
+[Dependency Injection](https://blog.ploeh.dk/tags/#Dependency%20Injection-ref)  
+[Hands-On Dependency Injection in Go](https://github.com/PacktPublishing/Hands-On-Dependency-Injection-in-Go)  
+[]()  
+[]()  
 []()  
 []()  
 ```

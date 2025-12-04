@@ -5,6 +5,10 @@
 
 [Go Modules Reference](https://go.dev/ref/mod)  
 [How to Write Go Code](https://go.dev/doc/code)  
+[**GoBooks**](https://github.com/dariubs/GoBooks)  
+[How to Implement Dependency Injection in Go](https://www.freecodecamp.org/news/how-to-use-dependency-injection-in-go/)  
+[]()  
+[]()  
 
 
 [Code for Network Programming with Go](https://github.com/awoodbeck/gnp) #github  
@@ -15,6 +19,9 @@
 [Interfaces in Go](https://go101.org/article/interface.html)  
 [Go from the beginning](https://softchris.github.io/golang-book/)  
 [How to use Go Channels: The Complete Guide](https://deadsimplechat.com/blog/how-to-use-go-channels/)  
+[]()  
+[]()  
+[]()  
 []()  
 
 ## Go projects
