@@ -10,6 +10,10 @@
 [**BitBake User Manual**](https://docs.yoctoproject.org/bitbake/index.html)  
 [Source Directory Structure](https://docs.yoctoproject.org/ref-manual/structure.html#source-directory-structure)  
 []()  
+[]()  
+
+![Yocto 构建流程 及 devtool 工作流程](./yocto/yocto-devtool-workflow.md)  
+[]()  
 
 ## how bitbake handle a recipe(.bb)
 ```bash

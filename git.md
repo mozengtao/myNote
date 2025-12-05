@@ -139,6 +139,27 @@ done
 
 Git管理的是修改，而不是文件
 
+# 临时指定远程分支
+git pull origin develop --rebase
+
+# 永久设置跟踪关系
+git branch --set-upstream-to=origin/主分支名 当前分支名
+
+# 查看所有分支和跟踪关系
+git branch -vv
+
+# 查看远程仓库信息
+git remote -v
+
+# 查看可用的远程分支
+git branch -r
+
+# 创建新分支时直接设置跟踪
+git checkout -b 新分支名 --track origin/远程分支名
+
+# 或者推送新分支时设置上游
+git push -u origin 分支名
+
 #
 git diff main -- <file-path>
 
