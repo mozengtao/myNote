@@ -276,6 +276,7 @@
 [开发者内功修炼](https://github.com/yanfeizhang/coder-kung-fu)  
 
 ## Books
+[**ARM_System_Developer's_Guide**](https://shankarrajagopal.github.io/textbooks/Text_Book_ARM_System_Developer's_Guide.pdf)#pdf  
 [Computer Science from the Bottom Up](https://www.cs.swarthmore.edu/~kwebb/cs31/s15/bucs/index.html)  
 [**Computer Science from the Bottom Up**](https://www.bottomupcs.com/index.html)  
 [Linux Kernel Development (3rd Edition)](https://www.doc-developpement-durable.org/file/Projets-informatiques/cours-&-manuels-informatiques/Linux/Linux%20Kernel%20Development,%203rd%20Edition.pdf)  

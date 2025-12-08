@@ -45,6 +45,26 @@
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
 
+## C 分层结构
+![嵌入式C可复用技巧](./c_tips/embedded_c_reusability.md)  
+![C语言软件分层架构1](./c_tips/c_layer_interaction_part1.md)  
+![C语言软件分层架构2](./c_tips/c_layer_interaction_part2.md)  
+
+- 设计模式
+![单例模式](./c_tips/patterns/singleton.md)  
+![工厂模式](./c_tips/patterns/factory.md)  
+![观察者模式](./c_tips/patterns/observer.md)  
+![状态机模式](./c_tips/patterns/state_machine.md)  
+![命令模式](./c_tips/patterns/command.md)  
+![装饰器模式](./c_tips/patterns/decorator.md)  
+![适配器模式](./c_tips/patterns/adapter.md)  
+![对象池模式](./c_tips/patterns/object_pool.md)  
+![责任链模式](./c_tips/patterns/chain_of_responsibility.md)  
+![模板方法模式](./c_tips/patterns/template_method.md)  
+![服务定位器模式](./c_tips/patterns/service_locator.md)  
+![策略模式](./c_tips/patterns/strategy.md)  
+![依赖注入模式](./c_tips/patterns/dependency_injection.md)  
+
 ## C 工程技巧
 ![单例模式](./c_tips/01_单例模式_Singleton.md)  
 ![单例模式](./c_tips/01_单例模式_Singleton_Pattern.md)  

@@ -7,6 +7,13 @@
 [How to Write Go Code](https://go.dev/doc/code)  
 [**GoBooks**](https://github.com/dariubs/GoBooks)  
 [How to Implement Dependency Injection in Go](https://www.freecodecamp.org/news/how-to-use-dependency-injection-in-go/)  
+[Domain Driven Design with GoLang](https://github.com/PacktPublishing/Domain-Driven-Design-with-GoLang)  
+[Event Driven Architecture in Golang](https://github.com/PacktPublishing/Event-Driven-Architecture-in-Golang)  
+[Test Driven Development in Go](https://github.com/PacktPublishing/Test-Driven-Development-in-Go)  
+[learn go with tests](https://github.com/quii/learn-go-with-tests)  
+[Hands On Dependency Injection in Go](https://github.com/PacktPublishing/Hands-On-Dependency-Injection-in-Go)  
+[]()  
+[]()  
 []()  
 []()  
 
