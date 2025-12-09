@@ -64,6 +64,7 @@
 ![服务定位器模式](./c_tips/patterns/service_locator.md)  
 ![策略模式](./c_tips/patterns/strategy.md)  
 ![依赖注入模式](./c_tips/patterns/dependency_injection.md)  
+![依赖注入 + 服务器定位 + 策略模式](./c_tips/patterns/DI_ServiceLoader_Strategy.md)  
 
 ## C 工程技巧
 ![单例模式](./c_tips/01_单例模式_Singleton.md)  

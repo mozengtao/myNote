@@ -307,33 +307,53 @@ if __name__ == "__main__":
 ```
 
 ## Patterns
-- 创建型模式 (Creational Patterns)
+- 核心思想
+    C语言实现设计模式的本质是「用结构体模拟对象、函数指针实现多态、封装函数控制访问」，最终目标是解耦、复用、可扩展
+
+- 创建型模式 (Creational Patterns): 聚焦对象创建逻辑
 ![构建器模式](builder_pattern.md)  
 ![工厂方法模式](factory_method_pattern.md)  
 ![抽象工厂模式](abstract_factory_pattern.md)  
 ![原型模式](prototype_pattern.md)  
 ![单例模式](singleton_pattern.md)  
 
-- 结构型模式 (Structural Patterns)
+- 结构型模式 (Structural Patterns):聚焦对象/模块的组合关系
 ![适配器模式](adapter_pattern.md)  
 ![桥接模式](bridge_pattern.md)  
 ![装饰器模式](decorator_pattern.md)  
 ![外观模式](facade_pattern.md)  
 ![代理模式](proxy_pattern.md)  
 
-- 行为型模式 (Behavioral Patterns)
+- 行为型模式 (Behavioral Patterns):聚焦对象间的交互与行为
 ![命令模式](command_pattern.md)  
 ![迭代器模式](iterator_pattern.md)  
 ![备忘录模式](memento_pattern.md)  
 ![观察者模式](observer_pattern.md)  
 ![策略模式](strategy_pattern.md)  
 ![访问者模式](visitor_pattern.md)  
+![](./c_tips/patterns/)  
 ![]()  
 ![]()  
 ![]()  
 ![]()  
-![]()  
-![]()  
+
+- 创建型模式 (Creational Patterns)
+![单例模式](./c_tips/patterns/01_singleton.md)  
+![工厂模式](./c_tips/patterns/02_factory.md)  
+![原型模式](./c_tips/patterns/03_prototype.md)  
+
+- 结构型模式 (Structural Patterns)
+![适配器模式](./c_tips/patterns/04_adapter.md)  
+![装饰器模式](./c_tips/patterns/05_decorator.md)  
+![组合模式](./c_tips/patterns/06_composite.md)  
+![桥接模式](./c_tips/patterns/07_bridge.md)  
+
+- 行为型模式 (Behavioral Patterns)
+![策略模式](./c_tips/patterns/08_strategy.md)  
+![观察者模式](./c_tips/patterns/09_observer.md)  
+![命令模式](./c_tips/patterns/10_command.md)  
+![迭代器模式](./c_tips/patterns/11_iterator.md)  
+![状态模式](./c_tips/patterns/12_state.md)  
 
 ## Builder Pattern
 - When piecewise object construction is complicated, provide an API for doing it succinctly.
