@@ -355,6 +355,21 @@ if __name__ == "__main__":
 ![迭代器模式](./c_tips/patterns/11_iterator.md)  
 ![状态模式](./c_tips/patterns/12_state.md)  
 
+- Kernel patterns
+![README.md](./c_tips/kernel_patterns/README.md)  
+![单例模式](./c_tips/kernel_patterns/01_singleton_pattern.md)  
+![工厂模式](./c_tips/kernel_patterns/02_factory_pattern.md)  
+![原型模式](./c_tips/kernel_patterns/03_prototype_pattern.md)  
+![适配器模式](./c_tips/kernel_patterns/04_adapter_pattern.md)  
+![装饰器模式](./c_tips/kernel_patterns/05_decorator_pattern.md)  
+![组合模式](./c_tips/kernel_patterns/06_composite_pattern.md)  
+![桥接模式](./c_tips/kernel_patterns/07_bridge_pattern.md)  
+![策略模式](./c_tips/kernel_patterns/08_strategy_pattern.md)  
+![观察者模式](./c_tips/kernel_patterns/09_observer_pattern.md)  
+![命令模式](./c_tips/kernel_patterns/10_command_pattern.md)  
+![迭代器模式](./c_tips/kernel_patterns/11_iterator_pattern.md)  
+![状态模式](./c_tips/kernel_patterns/12_state_pattern.md)  
+
 ## Builder Pattern
 - When piecewise object construction is complicated, provide an API for doing it succinctly.
     - A buildder is a separate component for building an object step by step

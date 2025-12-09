@@ -13,11 +13,11 @@
 []()  
 
 ![Yocto 构建流程 及 devtool 工作流程](./yocto/yocto-devtool-workflow.md)  
-[]()  
+![]()  
 
 ## bitbake
 ![bitbake 常用命令](./yocto/bitbake/bitbake_commands.md)  
-![]()  
+![Yocto Project 核心概念与 Recipe 详解](./yocto/yocto_concepts_and_recipes.md)  
 ![]()  
 - commands
 ```bash
