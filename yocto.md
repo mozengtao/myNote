@@ -15,6 +15,36 @@
 ![Yocto 构建流程 及 devtool 工作流程](./yocto/yocto-devtool-workflow.md)  
 []()  
 
+## bitbake
+![bitbake 常用命令](./yocto/bitbake/bitbake_commands.md)  
+![]()  
+![]()  
+- commands
+```bash
+# show recipe path
+bitbake-layers show-recipes -f docsis-mac
+
+#  lists all recipes matching target and their file paths
+bitbake-layers show-recipes "vmc-container"
+
+# Inspect Recipe Metadata
+bitbake -e vmc-container | grep "^FILE="
+
+# list all enabled layers first 
+bitbake-layers show-layers
+# Search the enabled layers for the recipe
+# Replace <LAYER_PATH> with paths from "show-layers" (e.g., meta-custom, meta)
+find <LAYER_PATH> -name "vmc-container*.bb" -o -name "vmc-container*.bbappend"
+# e.g
+find meta-custom meta-poky -name "vmc-container*.bb"
+# Check for Image Aliases (If vmc-container is a "virtual" target) (Sometimes vmc-container is an alias (e.g., via IMAGE_BASENAME or BBFILE_COLLECTIONS))
+#1. Check local.conf for aliases
+grep -r "vmc-container" conf/local.conf
+#2. Check layer configuration files (e.g., layer.conf)
+grep -r "vmc-container" meta-*/conf/layer.conf
+
+```
+
 ## how bitbake handle a recipe(.bb)
 ```bash
 1. Parse
