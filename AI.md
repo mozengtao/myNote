@@ -408,3 +408,115 @@ Real-Life Examples: ->"Provide analogies and real-life examples to help me under
 **请帮我分析：** 头文件路径在哪里？正确编译参数是什么？collectd 插件一般怎么编译？
 
 ```
+
+- Ultimate Learning Prompt for Any Topic
+```
+I want to learn the topic: <TOPIC>.
+Please act as my expert instructor and provide ALL of the following:
+
+High-level overview
+    What the topic is
+    Why it matters
+    Where it is used in real systems
+
+Core concepts explained simply
+    Define the essential terms
+    Give short analogies for each concept
+    Provide visual ASCII diagrams when helpful
+
+Progressive deep dive
+    Structure the learning in levels:
+        Level 1: Beginner explanation
+        Level 2: Intermediate technical concepts
+        Level 3: Expert-level architecture & internal mechanisms
+        Level 4: Real-world engineering considerations (performance, design, pitfalls)
+
+Hands-on examples
+    Provide practical examples relevant to <TOPIC>, such as:
+        Code examples (C / Rust / Go / Python depending on context)
+        Command-line examples
+        Minimal complete working examples (MCWE)
+
+Mini-projects / exercises
+    Give me exercises at three difficulty levels:
+        Easy
+        Medium
+        Hard
+        Include expected outputs or hints.
+
+Common mistakes & misunderstandings
+Explain the top mistakes learners make
+Show correct vs incorrect examples
+
+Links between concepts
+    Explain how this topic connects to:
+        Operating systems
+        Networking
+        Memory management
+        Distributed systems
+        Security
+        (Choose relevant ones depending on <TOPIC>)
+
+Interview-style questions
+    Provide 10 conceptual questions + 10 deep technical questions + answers.
+
+Learning roadmap
+    Tell me what to study next after this topic.
+    Include recommended order and estimated time.
+
+Optional: generate visual summaries
+    Such as:
+        ASCII architecture diagrams
+        Flowcharts
+        Tables summarizing differences or pros/cons
+
+Before starting, ask me 3 clarifying questions to tailor the material to my background and goals.
+```
+
+- 用于生成高质量 Anki 卡片的专家级提示词
+```
+I want to learn the topic: <TOPIC>.
+
+Act as my expert instructor and generate high-quality Anki-style flashcards that are accurate, clear, and optimized for long-term technical retention.
+
+Please create the cards with ALL of the following characteristics:
+
+1. **Card Format**
+   - Use Q: (front) and A: (back)
+   - One concept per card
+   - Avoid overly long answers
+   - Prefer clear definitions, contrasts, examples, diagrams
+
+2. **Card Types (mix them)**
+   - Concept cards (definitions)
+   - Reverse cards (A→Q)
+   - Cloze deletion cards
+   - Understanding tests ("why", "what if", "compare")
+   - Code interpretation cards (for C/Python when appropriate)
+   - ASCII diagram cards (for system / kernel / network topics)
+
+3. **Content Requirements**
+   - Start with core fundamentals of <TOPIC>
+   - Add deeper internal mechanisms (since I am intermediate level)
+   - Include real examples whenever possible
+   - For networking/kernel topics, emphasize:
+        - call paths
+        - state machines
+        - data structures
+        - key APIs
+   - Include common misconceptions and contrast them
+
+4. **Difficulty Levels**
+   - Tag each card as: [Basic], [Intermediate], or [Advanced]
+
+5. **Number of Cards**
+   - Generate 30 cards initially
+   - Ensure they progressively increase in complexity
+
+6. **Output Format**
+   - Provide clean plain-text output.
+   - No numbering; each card separated by a blank line.
+
+Before generating the cards, ask me 2–3 clarifying questions to tailor the difficulty, language, and coding examples.
+
+```

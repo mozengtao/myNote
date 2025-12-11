@@ -17,6 +17,30 @@
 ![Linux ]()  
 
 
+- Flashcards
+![块设备驱动](./linux/flashcards/blkdev_driver_flashcards.md)  
+![字符设备驱动](./linux/flashcards/chardev_kernel_flashcards.md)  
+![设备模型](./linux/flashcards/device_model_flashcards.md)  
+![file结构及相关操作](./linux/flashcards/file_structures_flashcards.md)  
+![文件系统](./linux/flashcards/filesystem_kernel_flashcards.md)  
+![中断和异常](./linux/flashcards/interrupt_exception_flashcards.md)  
+![IPC(进程间通信)](./linux/flashcards/ipc_kernel_flashcards.md)  
+![链表操作](./linux/flashcards/linked_list_flashcards.md)  
+![内存管理](./linux/flashcards/memory_mgmt_flashcards.md)  
+![网络设备驱动](./linux/flashcards/netdev_driver_flashcards.md)  
+![Netfilter](./linux/flashcards/netfilter_kernel_flashcards.md)  
+![Netlink](./linux/flashcards/netlink_kernel_flashcards.md)  
+![进程管理](./linux/flashcards/process_mgmt_flashcards.md)  
+![skb相关操作](./linux/flashcards/skb_kernel_flashcards.md)  
+![socket相关操作](./linux/flashcards/socket_kernel_flashcards.md)  
+![linux启动过程](./linux/flashcards/startup_kernel_flashcards.md)  
+![系统调用](./linux/flashcards/syscall_kernel_flashcards.md)  
+![TCP/IP网络处理](./linux/flashcards/tcpip_kernel_flashcards.md)  
+![虚拟内存和物理内存](./linux/patterns/vm_pm_flashcards.md)  
+![时间和timer](./linux/flashcards/timer_flashcards.md)  
+![Linux ]()  
+
+
 [**linux_kernel_wiki**](https://github.com/0voice/linux_kernel_wiki)  
 []()  
 []()  

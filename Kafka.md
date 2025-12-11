@@ -14,11 +14,11 @@
 [Kafka基本原理](https://blog.csdn.net/weixin_45366499/article/details/106943229)  
 []()  
 []()  
-[]()  
 
-![Kafka核心概念及工作原理]()  
-[]()  
-[]()  
+[librdkafka examples](https://github.com/confluentinc/librdkafka/tree/master/examples)  
+![Kafka核心概念及工作原理](./kafka/kafka-core-concepts-and-workflow.md)  
+![simple_producer.c](./kafka/simple_producer.c)  
+![simple_consumer.c](./kafka/simple_consumer.c)  
 
 
 
