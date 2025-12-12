@@ -8,7 +8,8 @@
 [Best VS Code extensions to use, settings to customize, shortcuts you should know, & more](https://www.software.com/src/top-vs-code-extensions-settings-shortcuts-and-more)  
 []()  
 []()  
-[]()  
+[regex syntax](https://docs.rs/regex/1.12.2/regex/#syntax)  
+[Regular Expression Language - Quick Reference](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference)  
 
 ## plugins
 C/C++
@@ -75,6 +76,11 @@ Minimap
 
 # shortcuts
 Ctr + k Ctrl + s
+
+# search
+Alt + C	# Case
+Alt + W	# Whole word
+Alt + R	# Regular exparession
 
 #
 Ctrl + Shift + F

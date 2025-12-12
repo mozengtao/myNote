@@ -370,6 +370,13 @@ if __name__ == "__main__":
 ![迭代器模式](./c_tips/kernel_patterns/11_iterator_pattern.md)  
 ![状态模式](./c_tips/kernel_patterns/12_state_pattern.md)  
 
+- Design Patterns for Embedded Systems in C (pdf)
+![硬件访问模式](./design_patterns/embedded/01_hardware_access_patterns.md)  
+![并发和资源管理模式](./design_patterns/embedded/02_concurrency_patterns.md)  
+![状态机设计模式](./design_patterns/embedded/03_state_machine_patterns.md)  
+![安全和可靠性模式](./design_patterns/embedded/04_safety_reliability_patterns.md)  
+
+
 ## Builder Pattern
 - When piecewise object construction is complicated, provide an API for doing it succinctly.
     - A buildder is a separate component for building an object step by step

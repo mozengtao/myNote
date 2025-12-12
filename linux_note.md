@@ -38,6 +38,10 @@
 ![TCP/IP网络处理](./linux/flashcards/tcpip_kernel_flashcards.md)  
 ![虚拟内存和物理内存](./linux/patterns/vm_pm_flashcards.md)  
 ![时间和timer](./linux/flashcards/timer_flashcards.md)  
+![DMA](./linux/flashcards/dma_flashcards.md)  
+![Linux ]()  
+![Linux ]()  
+![Linux ]()  
 ![Linux ]()  
 
 
