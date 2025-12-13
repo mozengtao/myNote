@@ -1,3 +1,5 @@
+[Understanding the Linux Kernel](https://github.com/hraverkar/books)  
+
 ![linux 内核源码架构](./linux3_2内核源码架构.md)  
 ![Linux 字符设备驱动框架](./Linux字符设备驱动框架.md)  
 ![Linux 内核如何根据 `/dev/xxx` 找到对应的设备驱动](./linux_chardev_lookup.md)  
@@ -40,6 +42,10 @@
 ![时间和timer](./linux/flashcards/timer_flashcards.md)  
 ![DMA](./linux/flashcards/dma_flashcards.md)  
 ![Linux ]()  
+![Linux ]()  
+![Linux ]()  
+![Linux NIC driver virtio_net code walkthrough](./linux/virtio_net_driver_walkthrough.md)  
+![SKB及相关操作](./linux/skb_internals_deep_dive.md)  
 ![Linux ]()  
 ![Linux ]()  
 ![Linux ]()  

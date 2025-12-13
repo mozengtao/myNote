@@ -1286,7 +1286,7 @@ void ixgbe_alloc_rx_buffers(struct ixgbe_ring *rx_ring, u16 cleaned_count)
     | Cache  |                              | Engine |
     +--------+                              +--------+
         |                                        |
-        +----------------+  +--------------------+
+        +---------------+  +--------------------+
                         |  |
                         v  v
                 +-------------+
@@ -1360,7 +1360,7 @@ void ixgbe_alloc_rx_buffers(struct ixgbe_ring *rx_ring, u16 cleaned_count)
 +---------------------------------------------------------------+
 |                                                               |
 |  1. 使用缓存 (Cached)                                         |
-|     - 内存正常使用CPU缓存                                     |
+|     - 内存正常使用CPU缓存                                      |
 |     - 访问速度快                                              |
 |                                                               |
 |  2. 需要手动同步                                              |

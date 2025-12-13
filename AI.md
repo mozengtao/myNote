@@ -520,3 +520,16 @@ Please create the cards with ALL of the following characteristics:
 Before generating the cards, ask me 2–3 clarifying questions to tailor the difficulty, language, and coding examples.
 
 ```
+
+- prompt 1
+```
+walk through a real Linux NIC driver, end-to-end, at code level, but still readable.use virtio_net as the main example(considering RX/TX rings, DMA, NAPI, SKB, etc.) 如果需要的，可以用如下的方式进行展示
+1.纯英文 绘制 ASCII 图
+2.图下方 用普通文字添加中文说明
+结果保存为Markdown格式的文件
+
+Explain SKB(struct sk_buff) internals with diagrams, which should be a driver-level + stack-level explanation, with ASCII diagrams, field breakdowns, and how data flows without copies, header offsets which is critical for protocol stack, SKB lifecycle for tx path and rx path, linear and no-linear SKBs, common SKB helper APIs, how SKB ties to RX/TX rings, etc.如果需要的，可以用如下的方式进行展示
+1.纯英文 绘制 ASCII 图
+2.图下方 用普通文字添加中文说明
+结果保存为Markdown格式的文件
+```

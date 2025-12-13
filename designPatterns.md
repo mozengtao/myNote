@@ -1,3 +1,12 @@
+[Design Patterns for Dummies](https://github.com/hraverkar/books)  
+[Dive-Into-Design-Patterns---Code-Samples](https://github.com/arvi9/Dive-Into-Design-Patterns---Code-Samples/tree/master)  
+[Design Patterns Explained simply](https://github.com/hraverkar/books/tree/master)  
+[]()  
+[]()  
+[]()  
+
+
+
 [Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html)  
 [Java Design Patterns](https://java-design-patterns.com/patterns/)  
 [14 Patterns to Ace Any Coding Interview Question](https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed)  
@@ -9,8 +18,7 @@
 []()  
 []()  
 []()  
-[]()  
-[]()  
+[Dive into Systems](https://diveintosystems.org/)  
 []()  
 []()  
 []()  
@@ -376,6 +384,13 @@ if __name__ == "__main__":
 ![状态机设计模式](./design_patterns/embedded/03_state_machine_patterns.md)  
 ![安全和可靠性模式](./design_patterns/embedded/04_safety_reliability_patterns.md)  
 
+
+![Linux Operations Structure Pattern](./linux/linux_kernel_ops_pattern.md)  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
 
 ## Builder Pattern
 - When piecewise object construction is complicated, provide an API for doing it succinctly.
