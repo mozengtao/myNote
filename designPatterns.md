@@ -386,8 +386,8 @@ if __name__ == "__main__":
 
 
 ![Linux Operations Structure Pattern](./linux/linux_kernel_ops_pattern.md)  
-![]()  
-![]()  
+![Linux Kernel 经典设计模式](./linux/linux_kernel_classic_patterns.md)  
+![Linux Kernel 经典设计模式 对应 用户空间代码示例](./linux/kernel_patterns_userspace_examples.md)  
 ![]()  
 ![]()  
 ![]()  
