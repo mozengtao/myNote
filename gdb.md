@@ -4,7 +4,7 @@
 []()  
 []()  
 []()  
-[]()  
+![GDB 符号加载机制](./gdb/gdb-symbol-loading-mechanism.md)  
 
 ```bash
 gdb -ex r --args ./a.out --input=data.txt

@@ -532,4 +532,227 @@ Explain SKB(struct sk_buff) internals with diagrams, which should be a driver-le
 1.纯英文 绘制 ASCII 图
 2.图下方 用普通文字添加中文说明
 结果保存为Markdown格式的文件
+
+If needed, you can present it in the following way:
+1. Pure English ASCII diagram
+2. Below the diagram, add Chinese explanations in plain text
+Save the result as a Markdown file
+```
+
+- Structured Prompt Template (General Technical Topics)
+```
+I want to learn the topic: <TOPIC>.
+
+Please act as an expert systems engineer and instructor.
+Explain this topic in a clear, structured, and progressive way.
+
+Follow this exact structure:
+
+1. High-level overview
+   - What the topic is
+   - Why it exists (the problem it solves)
+   - Where it is used in real systems
+
+2. Architecture overview
+   - Describe the overall architecture
+   - Identify major components and their responsibilities
+   - Show how components interact
+   - Include a clean ASCII architecture diagram (aligned, readable)
+
+3. Key components (deep but clear)
+   For each major component:
+   - Purpose
+   - Inputs / outputs
+   - Key data structures
+   - Important invariants or rules
+   - Common variations or implementations
+
+4. Core workflows (step-by-step)
+   - Explain the main workflows end-to-end
+   - Show control flow and data flow
+   - Use ASCII sequence diagrams or flow diagrams where helpful
+
+5. Internal mechanisms (under-the-hood)
+   - Explain how it actually works internally
+   - Algorithms, state machines, memory layout, or concurrency model
+   - Highlight performance and correctness considerations
+
+6. Practical examples
+   - Minimal working examples (MCWE)
+   - Realistic code snippets (C / C++ / Rust / Go / Python as appropriate)
+   - Explain what each part of the code does
+   - Show how the example maps back to the architecture
+
+7. Common mistakes and pitfalls
+   - Typical misunderstandings
+   - Incorrect vs correct approaches
+   - Real-world bugs and how to avoid them
+
+8. Mental models and summaries
+   - Provide 2–3 strong mental models
+   - Summarize key takeaways in bullet points
+   - Optional comparison table if alternatives exist
+
+9. Real-world engineering considerations
+   - Performance bottlenecks
+   - Scalability concerns
+   - Debugging and observability
+   - Security or reliability implications
+
+10. What to learn next
+    - Related topics
+    - Suggested learning order
+    - Why each next topic matters
+
+Constraints:
+- Break explanations into small, digestible sections
+- Prefer diagrams over long text when possible
+- Use precise technical language but explain it clearly
+- Do not skip steps or hand-wave important details
+
+```
+
+```
+Explain <TOPIC> as if I am reading production source code.
+
+- Explicitly connect concepts to real implementations
+- Show how the abstractions map to actual code paths
+- Call out invariants, ownership rules, and lifetimes
+- Use ASCII diagrams for memory layout and control flow
+- Prefer correctness and clarity over oversimplification
+
+Assume I have an intermediate programming background.
+
+```
+
+- Structured Prompt: Learning Linux Kernel Source Code (v3.2)
+```
+I want to systematically learn the Linux kernel source code (version 3.2).
+
+Please act as a senior Linux kernel maintainer and systems instructor.
+Teach me by reading and explaining the actual source code, not just concepts.
+
+Assume:
+- I have intermediate C skills
+- I understand OS fundamentals
+- I want to learn how the kernel really works internally
+
+Follow this exact structure:
+
+────────────────────────────────────────
+1. Subsystem context (big picture)
+────────────────────────────────────────
+- What kernel subsystem are we studying?
+- What problem does it solve?
+- Where it sits in the overall kernel architecture
+- How this subsystem interacts with others
+
+Include a clean ASCII architecture diagram showing:
+- This subsystem
+- Adjacent subsystems
+- Data/control flow
+
+────────────────────────────────────────
+2. Directory & file map (code navigation)
+────────────────────────────────────────
+- List the main directories and files involved (relative to kernel root)
+- Explain the responsibility of each file
+- Explain why the code is split this way
+
+Example format:
+  kernel/
+    sched/
+      core.c   → main scheduler logic
+      fair.c   → CFS implementation
+
+────────────────────────────────────────
+3. Core data structures
+────────────────────────────────────────
+For each important struct:
+- Show the struct definition (simplified if large)
+- Explain each field
+- Explain ownership and lifetime rules
+- Explain how and where it is allocated/freed
+
+Explain invariants that must always hold.
+
+────────────────────────────────────────
+4. Entry points & call paths
+────────────────────────────────────────
+- Identify key entry points (syscalls, interrupts, callbacks)
+- Trace the main call paths step-by-step
+- Show the function call chain in order
+
+Use ASCII call graphs or sequence diagrams.
+
+────────────────────────────────────────
+5. Core workflows (code-driven)
+────────────────────────────────────────
+Explain major workflows such as:
+- Initialization
+- Fast path (performance-critical)
+- Slow path (exceptional cases)
+- Error handling paths
+
+For each workflow:
+- Start from the triggering event
+- Walk through the exact functions involved
+- Explain state changes and side effects
+
+────────────────────────────────────────
+6. Important algorithms & mechanisms
+────────────────────────────────────────
+- Scheduling, locking, memory management, or protocol logic
+- Why these algorithms were chosen
+- Tradeoffs and limitations (especially in v3.2)
+
+Explain with diagrams where appropriate.
+
+────────────────────────────────────────
+7. Concurrency & synchronization
+────────────────────────────────────────
+- What concurrency model is used?
+- What locks are involved?
+- Where preemption, interrupts, or RCU are used
+- What race conditions the code prevents
+
+Explain what would break if synchronization is wrong.
+
+────────────────────────────────────────
+8. Performance considerations
+────────────────────────────────────────
+- Hot paths vs cold paths
+- Cacheline considerations
+- Lock contention
+- Scalability limits in v3.2
+
+────────────────────────────────────────
+9. Common pitfalls & bugs
+────────────────────────────────────────
+- Typical mistakes kernel developers make here
+- Subtle bugs this code avoids
+- Historical issues or known limitations in v3.2
+
+────────────────────────────────────────
+10. How to read this code yourself
+────────────────────────────────────────
+- What functions to read first
+- What to ignore initially
+- Suggested reading order
+- Grep / cscope tips
+
+────────────────────────────────────────
+11. Summary & mental model
+────────────────────────────────────────
+- One-paragraph summary
+- Key invariants
+- Mental model to keep while reading code
+
+────────────────────────────────────────
+12. What to study next
+────────────────────────────────────────
+- Related kernel subsystems
+- Why they matter
+- Recommended learning order
+
 ```

@@ -3,12 +3,16 @@
 [Design Patterns Explained simply](https://github.com/hraverkar/books/tree/master)  
 []()  
 []()  
-[]()  
+
+![Java Design Patterns: A tutorial](./design_patterns/Java_Design_Patterns-A_tutorial.pdf)  
+![Java Design Patterns](./design_patterns/Java-Design-Patterns.pdf)  
+![Holub on Patterns](./design_patterns/Holub_on_Patterns.pdf)  
 
 
 
 [Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html)  
-[Java Design Patterns](https://java-design-patterns.com/patterns/)  
+[**The Catalog of Design Patterns**](https://refactoring.guru/design-patterns/catalog)  
+[**Java Design Patterns**](https://java-design-patterns.com/patterns/)  
 [14 Patterns to Ace Any Coding Interview Question](https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed)  
 [Design Patterns](https://sourcemaking.com/design_patterns)  
 [**Design Pattern Online Training using .NET**](https://dotnettutorials.net/lesson/design-patterns-online-training/)  

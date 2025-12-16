@@ -15,6 +15,11 @@
 ![systemd-basics](./assets/systemd-basics.pdf)  
 ![systemd-management](./assets/systemd-management.pdf)  
 
+![Systemd System Extension (Sysext)](./systemd/systemd-sysext-architecture.md)  
+![]()  
+![]()  
+![]()  
+
 ## User service
 ```bash
 # systemd has 2 independent managers:
