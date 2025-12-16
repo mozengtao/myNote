@@ -18,6 +18,18 @@
 ![Linux 启动流程与初始化系统](./Linux_Boot_Process_and_Init_Systems.md)  
 ![Linux ]()  
 
+![pci子系统](./linux/deepdive/linux_pci_subsystem_deep_dive_v3.2.md)  
+![inode->i_fop 决定了VFS的 file_operations](./linux/deepdive/linux_inode_fop_binding_deep_dive.md)  
+![块设备驱动](./linux/deepdive/linux_block_device_driver_deep_dive_v3.2.md)  
+![设备模型](./linux/deepdive/linux_device_model_kobject_sysfs_deep_dive_v3.2.md)  
+![网络子系统](./linux/deepdive/linux_network_subsystem_deep_dive_v3.2.md)  
+![字符设备驱动](./linux/deepdive/linux_character_device_driver_deep_dive_v3.2.md)  
+![字符设备](./linux/deepdive/linux_chardev_deep_dive_v3.2.md)  
+![字符设备驱动](./linux/deepdive/linux_char_device_driver_deep_dive_v3.2.md)  
+![VFS](./linux/deepdive/linux_vfs_deep_dive_v3.2.md)  
+![进程管理](./linux/deepdive/linux_process_management_deep_dive_v3.2.md)  
+![进程调度](./linux/deepdive/linux_scheduler_deep_dive_v3.2.md)  
+
 
 - Flashcards
 ![块设备驱动](./linux/flashcards/blkdev_driver_flashcards.md)  
