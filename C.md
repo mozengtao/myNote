@@ -6,6 +6,19 @@
 []()  
 []()  
 
+
+![C Guidelines](./c/c_systems_programming_guidelines.md)  
+![]()  
+
+> Raylib — Clean C Library with Layered Subsystems
+[raylib](https://github.com/raysan5/raylib)  
+![Learn Architecture from raylib](./c/raylib_ARCHITECTURE_CASE_STUDY.md)  
+
+> sqlite - 
+![Learn Architecture from sqlite](./c/sqlite_LAYERED_ARCHITECTURE_ANALYSIS.md)  
+![Boundaries and Contracts in C Architectures](./c/sqlite_boundaries_and_contracts_in_c.md)  
+
+
 [Understanding the C Runtime: crt0, crt1, crti, and crtn](https://www.inferara.com/en/blog/c-runtime/)  
 [C/C++ Runtime Startup](https://etherealwake.com/2021/09/crt-startup/)  
 [Explanation of crt0, crt1, crt1, and crtn (C- Runtime)](https://thejat.in/learn/explanation-of-crt0-crt1-crt1-and-crtn-c-runtime)  

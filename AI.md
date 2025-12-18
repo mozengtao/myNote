@@ -756,3 +756,312 @@ Explain what would break if synchronization is wrong.
 - Recommended learning order
 
 ```
+
+- Learn Boundaries & Contracts in C Architectures
+```
+You are a senior systems architect with decades of experience designing
+large, long-lived C codebases (databases, OS components, network services).
+
+Your task is to teach me how to identify, design, and enforce
+BOUNDARIES and CONTRACTS in typical C architectures.
+
+Do NOT focus on patterns by name alone.
+Focus on responsibilities, dependency rules, and invariants.
+
+--------------------------------------------------
+STEP 1 — Define What a Boundary Is (in C)
+--------------------------------------------------
+
+Explain:
+- What a boundary means in C (where the language gives no enforcement)
+- Why boundaries exist
+- What problems boundaries prevent over time
+
+Explicitly distinguish between:
+- Conceptual boundaries
+- Code-level boundaries
+
+--------------------------------------------------
+STEP 2 — Identify Common Architectural Layers in C
+--------------------------------------------------
+
+List common architectural layers used in real C systems, such as:
+- Application / Policy layer
+- Domain / Service layer
+- Core / Mechanism layer
+- Infrastructure / OS layer
+
+For each layer:
+- Primary responsibility
+- Allowed dependencies
+- Forbidden dependencies
+- Typical volatility (how often it changes)
+
+--------------------------------------------------
+STEP 3 — Boundary Types and Contracts
+--------------------------------------------------
+
+Identify and explain the major types of boundaries in C, including:
+
+- API boundaries
+- Data ownership boundaries
+- Control flow boundaries
+- Error propagation boundaries
+- Configuration / policy boundaries
+- Visibility / symbol boundaries
+
+For EACH boundary type:
+- What contract is enforced
+- What is allowed
+- What is forbidden
+- What breaks when the contract is violated
+
+--------------------------------------------------
+STEP 4 — Contracts as C Interfaces
+--------------------------------------------------
+
+Show how contracts are expressed in C using:
+- Header files
+- Opaque structs
+- Function signatures
+- Naming conventions
+- Documentation invariants
+
+Provide small but realistic C code snippets for each technique.
+
+--------------------------------------------------
+STEP 5 — Allowed Interaction Patterns Between Layers
+--------------------------------------------------
+
+Describe and illustrate:
+- Direct downward calls
+- Dependency injection via function pointers
+- Callbacks without layer inversion
+- Data passed across layers safely
+
+For each interaction:
+- Why it is allowed
+- What rules must be followed
+
+--------------------------------------------------
+STEP 6 — Forbidden Interactions (Anti-Patterns)
+--------------------------------------------------
+
+List common boundary violations in C systems, such as:
+- Upward dependencies
+- Leaking internal structs
+- Shared global state
+- Policy decisions in low layers
+
+Show short C examples of each violation and explain why it is harmful.
+
+--------------------------------------------------
+STEP 7 — Contracts Over Time (Evolution)
+--------------------------------------------------
+
+Explain how boundaries and contracts help when:
+- Features are added
+- Performance is optimized
+- Code is refactored
+- Teams change
+
+Explain what happens when contracts are vague or undocumented.
+
+--------------------------------------------------
+STEP 8 — Mapping Boundaries to Real Systems
+--------------------------------------------------
+
+Apply the concepts to at least one real C system
+(e.g., SQLite, Redis, or a POSIX service).
+
+Identify:
+- Major boundaries
+- Key contracts
+- Where the system is strict vs pragmatic
+
+--------------------------------------------------
+STEP 9 — Boundary Review Checklist
+--------------------------------------------------
+
+Provide a practical checklist I can use during code review to evaluate:
+- Whether boundaries are respected
+- Whether contracts are clear
+- Where architecture is at risk of decay
+
+--------------------------------------------------
+RULES
+--------------------------------------------------
+
+- Architecture-first explanations
+- Use precise language
+- Avoid buzzwords
+- Prefer tables and diagrams where useful
+- Treat this as professional-level training
+
+
+
+- Coach Advice (Important)
+
+Most C codebases fail not because of performance,
+but because boundaries erode silently.
+
+If you master:
+    Where boundaries are
+    What contracts they enforce
+    How violations creep in
+You’ll outgrow 90% of C developers architecturally—even very senior ones.
+```
+
+- Cursor Prompt: Learn Boundaries & Contracts in a Specific C Project
+```
+You are a senior systems architect reviewing a real-world C codebase.
+
+Your task is to help me learn how boundaries and contracts are designed,
+enforced, and violated over time in the following project:
+
+PROJECT:
+[project name + repo path]
+
+Do NOT explain what the project does at a high level.
+Treat it as an architectural artifact under review.
+
+Focus on:
+- Where boundaries exist
+- What contracts they enforce
+- How violations creep in
+- How architecture decays in C systems
+
+--------------------------------------------------
+STEP 1 — Identify the Major Architectural Boundaries
+--------------------------------------------------
+
+Scan the codebase and identify its major architectural boundaries.
+
+For each boundary, explain:
+- Boundary name
+- What lies on each side of the boundary
+- Why the boundary exists
+- What kind of change it is meant to absorb
+
+Present the result as a table.
+
+--------------------------------------------------
+STEP 2 — Map Boundaries to Code Locations
+--------------------------------------------------
+
+For each identified boundary, map it to concrete code elements:
+- Directories
+- Source files
+- Header files
+- Key data structures
+
+Explain how the boundary is expressed in C
+(e.g., headers, opaque structs, naming, file layout).
+
+--------------------------------------------------
+STEP 3 — Contracts Enforced at Each Boundary
+--------------------------------------------------
+
+For each boundary, describe the contracts enforced across it:
+
+- API contracts (function signatures, headers)
+- Data ownership and lifetime contracts
+- Control flow contracts (who calls whom)
+- Error propagation contracts
+- Performance contracts (hot path vs cold path)
+
+Show small but representative C code snippets
+that illustrate each contract.
+
+--------------------------------------------------
+STEP 4 — Dependency Rules & Direction
+--------------------------------------------------
+
+Explain the dependency rules for each boundary:
+
+- Which side may depend on which
+- Which includes are allowed or forbidden
+- Whether dependency inversion is used
+
+Provide a textual dependency diagram and explain
+why reversing any dependency would be harmful.
+
+--------------------------------------------------
+STEP 5 — How Violations Creep In (Architecture Decay)
+--------------------------------------------------
+
+Analyze realistic ways this project’s boundaries can be violated over time:
+
+- Convenience-driven shortcuts
+- Performance-driven exceptions
+- Debugging or logging leaks
+- Feature creep
+- Team or ownership changes
+
+For each violation type:
+- Show what the code smell looks like
+- Explain why it seems harmless at first
+- Explain the long-term architectural damage
+
+--------------------------------------------------
+STEP 6 — Existing Safeguards (or Lack Thereof)
+--------------------------------------------------
+
+Explain how the project currently prevents violations:
+
+- Coding conventions
+- File layout discipline
+- Comments or documentation
+- Review culture implied by the code
+
+Also explain what is NOT protected and relies on discipline alone.
+
+--------------------------------------------------
+STEP 7 — Stability vs Volatility Analysis
+--------------------------------------------------
+
+Identify:
+- Stable boundaries that rarely change
+- Volatile boundaries that absorb frequent change
+
+Explain how contracts protect stable parts
+and where instability leaks across layers.
+
+--------------------------------------------------
+STEP 8 — Stress-Test the Architecture
+--------------------------------------------------
+
+Evaluate the architecture under these hypothetical changes:
+
+1) Add a major new feature
+2) Optimize performance on a hot path
+3) Remove or replace a subsystem
+4) Hand the project to a new team
+
+For each case:
+- Which boundaries hold
+- Which contracts are stressed or broken
+- Where refactoring would be required
+
+--------------------------------------------------
+STEP 9 — Architecture Lessons Extracted
+--------------------------------------------------
+
+Summarize reusable lessons from this project:
+
+For each lesson:
+- Boundary or contract principle
+- How this project applies it (or fails to)
+- How I should apply it in my own C projects
+
+--------------------------------------------------
+RULES
+--------------------------------------------------
+
+- Architecture-first analysis
+- Use concrete code references
+- No vague praise or generic advice
+- Prefer structured output (tables, diagrams)
+- Treat this as a professional architecture review
+
+```

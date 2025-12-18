@@ -1,5 +1,8 @@
 [Understanding the Linux Kernel](https://github.com/hraverkar/books)  
 
+> RCU 不是“内核专属 API”，而是一种 "读者无锁、写者等待、以时间换并发" 的设计思想
+[Userspace RCU](https://liburcu.org/)  
+
 ![linux 内核源码架构](./linux3_2内核源码架构.md)  
 ![Linux 字符设备驱动框架](./Linux字符设备驱动框架.md)  
 ![Linux 内核如何根据 `/dev/xxx` 找到对应的设备驱动](./linux_chardev_lookup.md)  
@@ -29,6 +32,7 @@
 ![VFS](./linux/deepdive/linux_vfs_deep_dive_v3.2.md)  
 ![进程管理](./linux/deepdive/linux_process_management_deep_dive_v3.2.md)  
 ![进程调度](./linux/deepdive/linux_scheduler_deep_dive_v3.2.md)  
+![RCU 机制](./linux/linux_rcu_deep_dive_v3.2.md)  
 
 
 - Flashcards
@@ -61,6 +65,11 @@
 ![Linux ]()  
 ![Linux ]()  
 ![Linux ]()  
+
+![Linux 分层架构是如何交互的](./linux/linux_layered_architecture_boundaries.md)  
+![Boundaries and Contracts in C Architectures](./linux/c_architecture_boundaries_contracts.md)  
+![Linux Kernel Boundaries and Contracts Analysis](./linux/linux_kernel_boundaries_contracts_analysis.md)  
+
 
 
 [**linux_kernel_wiki**](https://github.com/0voice/linux_kernel_wiki)  
