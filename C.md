@@ -4,6 +4,15 @@
 [**Beej's Guide to C Programming**](https://beej.us/guide/bgc/html/split/index.html)  
 []()  
 []()  
+[**Object-oriented Programming with Ansi-C**](http://ebook.pldworld.com/-huihoo-/book/pdf/object-oriented-programming-with-ansi-c/)  
+[Sources for "Object-Oriented Programming with ANSI-C"](https://github.com/shichao-an/ooc/tree/master)  
+[Application Note Object-Oriented Programming in C](https://www.state-machine.com/doc/AN_Simple_OOP_in_C.pdf)  
+[OOP-in-C](https://github.com/QuantumLeaps/OOP-in-C)  
+[Object-oriented techniques in C](https://dmitryfrank.com/articles/oop_in_c)  
+[OBJECT-ORIENTED PROGRAMMING IN C](https://home.cs.colorado.edu/~kena/classes/5448/f12/presentation-materials/srivastava.pdf)  
+[Key Concept: Object-Oriented Programming](https://www.state-machine.com/oop)  
+[]()  
+[]()  
 []()  
 
 
@@ -57,6 +66,62 @@
 [Understanding Complex C/C++ Declarations](https://www.thejat.in/blog/understanding-complex-cc-declarations)  
 [Exploring Singleton Pattern in C++: Ensuring Unique Instances](https://www.thejat.in/blog/exploring-singleton-pattern-in-c-ensuring-unique-instances)  
 []()  
+
+## Methods to Denest(减少函数嵌套的方法)
+1. Extraction(提取法:把函数的一部分提出出来变成独立的函数)
+2. Inversion(反转法:反转提前判断，改用提前判断的方式)
+```c
+// Before
+int calculate(int bottom, int top)
+{
+	if (top > bottom)
+	{
+		int sum = 0;
+
+		for (int number = bottom; number <= top; number++)
+		{
+			if (number % 2 == 0)
+			{
+				sum += number;
+			}
+		}
+
+		return sum;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+// After
+int filterNumber(int number)
+{
+	if (number % 2 == 0)
+	{
+		return number;
+	}
+
+	return 0;
+}
+
+int calculate(int bottom, int top)
+{
+	if (top < bottom)
+	{
+		return 0;
+	}
+
+	int sum = 0;
+
+	for (int number = bottom; number <= top; number++)
+	{
+		sum += filterNumber(number);
+	}
+
+	return sum;
+}
+```
 
 ## C 分层结构
 ![嵌入式C可复用技巧](./c_tips/embedded_c_reusability.md)  

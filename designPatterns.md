@@ -27,6 +27,13 @@
 []()  
 []()  
 
+## Design Patterns (python examples)
+![设计模式](./design_patterns/design_patterns_index.md)  
+![创建型设计模式](./design_patterns/design_patterns_creational.md)  
+![结构型设计模式](./design_patterns/design_patterns_structural.md)  
+![行为型设计模式](./design_patterns/design_patterns_behavioral_1.md)  
+![行为型设计模式](./design_patterns/design_patterns_behavioral_2.md)  
+
 ## SOLID原则
 1. SRP(Single Responsibility Principle单一职责原则)
 ```python

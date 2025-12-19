@@ -69,6 +69,15 @@
 ![Linux 分层架构是如何交互的](./linux/linux_layered_architecture_boundaries.md)  
 ![Boundaries and Contracts in C Architectures](./linux/c_architecture_boundaries_contracts.md)  
 ![Linux Kernel Boundaries and Contracts Analysis](./linux/linux_kernel_boundaries_contracts_analysis.md)  
+![Linux ops pattern详解](./linux/linux_ops_pattern_deep_dive.md)  
+![Linux Object-Oriented Design Patterns](./linux/linux_kernel_oo_patterns.md)  
+![Linux FSM pattern](./linux/linux_kernel_fsm_patterns.md)  
+![Uart子系统](./linux/linux_uart_tty_subsystem_architecture.md)  
+![SPI 子系统](./linux/linux_spi_subsystem_architecture.md)  
+![I2C子系统](./linux/linux_i2c_subsystem_architecture.md)  
+![GPIO 子系统](./linux/linux_gpio_subsystem_architecture.md)  
+![Linux ]()  
+![Linux ]()  
 
 
 
