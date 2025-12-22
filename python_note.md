@@ -53,8 +53,22 @@
 []()  
 []()  
 []()  
-[]()  
-[]()  
+
+- requests: a simple, yet elegant, HTTP library
+[requests](https://github.com/psf/requests)  
+![Learn Architecture & Patterns in psf/requests](./python/requests_ARCHITECTURE_ANALYSIS.md)  
+
+- click: a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary
+[click](https://github.com/pallets/click)  
+![Learn Architecture & Patterns in click](./python/click_ARCHITECTURE_ANALYSIS.md)  
+
+- attrs: the Python package that will bring back the joy of writing classes by relieving you from the drudgery of implementing object protocols (aka dunder methods).
+[attrs](https://github.com/python-attrs/attrs)  
+![Learn Architecture & Patterns in attrs](./python/attrs_ARCHITECTURE_ANALYSIS.md)  
+
+- flask: is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications.
+[flask](https://github.com/pallets/flask)  
+![Learn Architecture & Patterns in flask](./python/flask_ARCHITECTURE_ANALYSIS.md)  
 
 ## psutil
 `git clone https://github.com/giampaolo/psutil.git`
