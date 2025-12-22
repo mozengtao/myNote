@@ -1065,3 +1065,343 @@ RULES
 - Treat this as a professional architecture review
 
 ```
+
+- Example Prompt
+For each of the following prompts:
+
+
+1️⃣ Prompt — Ops Tables (Manual Polymorphism)
+You are a Linux kernel maintainer.
+
+Teach me how the Linux kernel (v3.2) implements object-oriented design
+using ops tables (function pointer tables).
+
+Focus on architectural intent, not syntax.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand why ops tables exist
+- Understand the xxx->ops->yyy() pattern
+- Understand contracts between caller and callee
+- Learn how to apply this pattern in user-space C
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Explain what ops tables represent conceptually
+2. Explain why the kernel avoids inheritance and virtual functions
+3. Analyze at least 6 real examples:
+   - VFS (file_operations)
+   - net_device_ops
+   - uart_ops
+   - block_device_operations
+   - usb_driver ops
+   - tty_operations
+4. For each example:
+   - who owns the ops table
+   - who calls it
+   - what invariants are guaranteed
+   - what violations look like
+5. Extract a reusable user-space design pattern
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Architecture-first explanations
+- Minimal code snippets
+- Explicit contracts
+
+2️⃣ Prompt — Inversion of Control (IoC)
+You are a Linux kernel architect.
+
+Teach me how inversion of control is enforced in Linux kernel v3.2.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand framework-driven execution
+- Understand why drivers never call each other
+- Learn how IoC enables scalability
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Explain IoC in kernel terms
+2. Analyze:
+   - driver model (probe/remove)
+   - VFS call paths
+   - netdev open/transmit paths
+3. Explain how control flow is inverted
+4. Identify forbidden call directions
+5. Show how violating IoC breaks kernel architecture
+6. Translate IoC into user-space frameworks
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Call-flow diagrams (textual)
+- Clear layering rules
+
+3️⃣ Prompt — Ownership & Lifetime Discipline
+You are a Linux kernel memory and lifetime expert.
+
+Teach me how strict ownership and lifetime rules are enforced
+in Linux kernel v3.2.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand single-owner rule
+- Understand explicit ownership transfer
+- Understand how lifetime errors are prevented
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Define ownership vs reference
+2. Analyze ownership in:
+   - sk_buff
+   - struct file
+   - task_struct
+3. Explain refcounting rules
+4. Explain common lifetime bugs
+5. Show how these rules can be used in user-space C
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Rule-based explanations
+- Bug-driven examples
+
+4️⃣ Prompt — Refcount + RCU Pattern
+You are an RCU and concurrency maintainer.
+
+Teach me how refcounting and RCU work together
+in Linux kernel v3.2.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand why RCU exists
+- Understand reader vs writer contracts
+- Learn safe object reclamation
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Explain why refcount alone is insufficient
+2. Explain RCU mental model
+3. Analyze at least 5 real kernel examples combining both
+4. Explain what goes wrong if contracts are violated
+5. Translate pattern to user-space design
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Mental models
+- Timeline diagrams (text)
+
+5️⃣ Prompt — Fast Path vs Slow Path Separation
+You are a Linux kernel performance engineer.
+
+Teach me how fast paths and slow paths are separated
+in Linux kernel v3.2.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand performance-driven architecture
+- Learn how hot paths are protected from complexity
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Define fast path vs slow path
+2. Analyze examples from:
+   - networking
+   - block I/O
+   - scheduler
+3. Explain how slow paths are isolated
+4. Show how mixing paths causes regressions
+5. Apply this idea to user-space systems
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Performance reasoning
+- Before/after examples
+
+6️⃣ Prompt — Context-Aware Programming
+You are a Linux kernel concurrency expert.
+
+Teach me how Linux kernel v3.2 enforces context-aware programming.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand execution contexts
+- Understand why sleeping is forbidden sometimes
+- Learn context-safe design
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Explain kernel execution contexts
+2. Analyze:
+   - IRQ handlers
+   - softirqs
+   - process context
+3. Explain allowed and forbidden operations per context
+4. Show real bugs caused by context misuse
+5. Translate to user-space async systems
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Rule tables
+- Context comparison
+
+7️⃣ Prompt — Embedded State Machines
+You are a Linux kernel protocol designer.
+
+Teach me how state machines are implemented
+in Linux kernel v3.2.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand enum + switch FSMs
+- Understand ops-based state pattern
+- Learn maintainable FSM design
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Analyze TCP FSM
+2. Analyze at least 2 other kernel FSMs
+3. Explain state transitions and invariants
+4. Show why FSMs are split across files
+5. Apply FSM patterns to user-space protocols
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- State transition explanations
+- Failure analysis
+
+8️⃣ Prompt — Policy vs Mechanism Separation
+You are a Linux kernel architect.
+
+Teach me how Linux kernel v3.2 separates policy from mechanism.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand long-term maintainability
+- Learn extensible architecture design
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Define policy vs mechanism
+2. Analyze scheduler classes
+3. Analyze VFS and block layer
+4. Show how policy is swapped without touching mechanism
+5. Apply this principle in user-space libraries
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Architectural diagrams (text)
+
+9️⃣ Prompt — Zero-Cost Abstractions
+You are a Linux kernel performance specialist.
+
+Teach me how Linux kernel v3.2 achieves abstraction without overhead.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand zero-cost abstractions
+- Learn when macros beat functions
+- Learn tradeoffs
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Analyze inline functions
+2. Analyze ops tables vs virtual dispatch
+3. Analyze container_of and macros
+4. Show performance reasoning
+5. Apply to user-space systems code
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Cost analysis
+- Assembly-level reasoning (lightweight)
+
+🔟 Prompt — Failure-First Design
+You are a Linux kernel reliability engineer.
+
+Teach me how Linux kernel v3.2 is designed for failure-first behavior.
+
+----------------------------------------
+GOALS
+----------------------------------------
+
+- Understand explicit error handling
+- Learn robust cleanup patterns
+
+----------------------------------------
+ANALYSIS TASKS
+----------------------------------------
+
+1. Analyze probe error paths
+2. Analyze goto-based cleanup
+3. Explain why exceptions are avoided
+4. Show how partial failure is handled
+5. Apply failure-first design to user-space C
+
+----------------------------------------
+OUTPUT STYLE
+----------------------------------------
+
+- Error-path walkthroughs
+- Cleanup invariants
+
+For each prompt, produce an output according to the specified style:
+
+Present it in the following way:
+1. Pure English ASCII diagram
+2. Below the diagram, add Chinese explanations in plain text
+
+Save the result as a Markdown file
