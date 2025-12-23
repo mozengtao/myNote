@@ -19,6 +19,90 @@ Computer Programming with C++
 []()  
 []()  
 
+## Guides
+![C++ Mastery](./cpp/cpp_mastery/00_index.md)  
+```
+cpp_mastery/
+├── 00_index.md                              ← This file
+├── 01_resource_lifetime/
+│   ├── 01_raii.md                           ✅
+│   ├── 02_value_vs_reference_semantics.md   ✅
+│   ├── 03_rule_of_zero_five.md              ✅
+│   └── 04_move_semantics.md                 ✅
+├── 02_interfaces_abstractions/
+│   ├── 05_zero_cost_abstractions.md         ✅
+│   ├── 06_static_polymorphism.md            ✅
+│   ├── 07_dynamic_polymorphism.md           ✅
+│   └── 08_type_erasure.md                   ✅
+├── 03_error_handling/
+│   ├── 09_exception_safety.md               ✅
+│   ├── 10_exceptions_vs_optional.md         ✅
+│   └── 11_error_resilient_apis.md           ✅
+├── 04_memory_performance/
+│   ├── 12_object_layout.md                  ✅
+│   ├── 13_heap_vs_stack.md                  ✅
+│   └── 14_custom_allocators.md              ✅
+├── 05_concurrency/
+│   ├── 15_memory_model.md                   ✅
+│   ├── 16_atomics.md                        ✅
+│   ├── 17_mutexes_raii_locking.md           ✅
+│   └── 18_lockfree_hard.md                  ✅
+├── 06_compile_time/
+│   ├── 19_templates.md                      ✅
+│   ├── 20_constexpr.md                      ✅
+│   └── 21_concepts.md                       ✅
+├── 07_build_tooling/
+│   ├── 22_header_hygiene.md                 ✅
+│   ├── 23_pimpl.md                          ✅
+│   └── 24_tooling.md                        ✅
+└── 08_design_api/
+    ├── 25_composition_over_inheritance.md   ✅
+    ├── 26_api_invariants.md                 ✅
+    └── 27_expressing_ownership_in_types.md  ✅
+```
+
+## Design Patterns
+![C++ 设计模式](./cpp/design_patterns/00_index.md)  
+```
+cpp/design_patterns/
+├── 00_index.md
+├── 01_creational
+│   ├── 01_singleton.md
+│   ├── 02_factory_method.md
+│   ├── 03_abstract_factory.md
+│   ├── 04_builder.md
+│   └── 05_prototype.md
+├── 02_structural
+│   ├── 06_adapter.md
+│   ├── 07_bridge.md
+│   ├── 08_composite.md
+│   ├── 09_decorator.md
+│   ├── 10_facade.md
+│   ├── 11_flyweight.md
+│   └── 12_proxy.md
+├── 03_behavioral
+│   ├── 13_strategy.md
+│   ├── 14_state.md
+│   ├── 15_command.md
+│   ├── 16_observer.md
+│   ├── 17_iterator.md
+│   ├── 18_visitor.md
+│   ├── 19_template_method.md
+│   ├── 20_mediator.md
+│   ├── 21_memento.md
+│   ├── 22_chain_of_responsibility.md
+│   └── 23_interpreter.md
+├── 04_cpp_centric
+│   ├── 24_raii.md
+│   ├── 25_type_erasure.md
+│   ├── 26_crtp.md
+│   ├── 27_policy_based.md
+│   ├── 28_pimpl.md
+│   ├── 29_value_semantics.md
+│   └── 30_nvi.md
+└── 99_summary.md
+```
+
 ## LevelDB
 `git clone https://github.com/google/leveldb.git`
 ![项目整体分析](./leveldb/ARCHITECTURE.md)  

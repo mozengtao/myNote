@@ -1405,3 +1405,149 @@ Present it in the following way:
 2. Below the diagram, add Chinese explanations in plain text
 
 Save the result as a Markdown file
+
+
+- C++ Patterns
+You are a senior C++ architect and systems engineer.
+
+My goal is to MASTER design patterns in C++, not by memorizing names,
+but by understanding:
+- the engineering problems they solve
+- the specific C++ language features that enable them
+- how to apply them safely in real-world projects
+
+For EACH pattern below, do ALL of the following:
+
+----------------------------------------------------
+1. Problem the Pattern Solves
+- What concrete design pressure leads to this pattern?
+- What goes wrong if the pattern is NOT used?
+- What symptoms in real code indicate this pattern is needed?
+
+----------------------------------------------------
+2. Core Idea (C++-Specific)
+- Explain the idea in precise C++ terms
+- Avoid abstract OOP theory unless absolutely necessary
+- Emphasize ownership, lifetime, and compile-time vs runtime tradeoffs
+
+----------------------------------------------------
+3. C++ Grammar & Language Features
+Explicitly list and explain:
+- C++ syntax and features used (e.g. virtual, templates, constexpr, RAII)
+- STL facilities involved (containers, algorithms, smart pointers)
+- Compile-time vs runtime mechanisms
+
+----------------------------------------------------
+4. Canonical C++ Implementation
+- Provide a complete, minimal, compilable C++ example
+- Follow modern C++ best practices (C++17+)
+- Use RAII, strong typing, and clear ownership semantics
+- Avoid unnecessary cleverness
+
+----------------------------------------------------
+5. Typical Usage in Real Projects
+- Where this pattern commonly appears in real C++ systems
+- Typical domains (systems, networking, GUI, game engines, libraries)
+- Mention well-known libraries, frameworks, or standard library examples
+
+----------------------------------------------------
+6. Common Mistakes & Misuse
+- How developers overuse or misuse this pattern
+- Performance or maintainability pitfalls
+- When the pattern makes code WORSE
+
+----------------------------------------------------
+7. When NOT to Use This Pattern
+- Explicit anti-use cases
+- Simpler alternatives
+- Tradeoffs vs other patterns
+
+----------------------------------------------------
+8. Pattern Variations & Modern C++ Alternatives
+- How modern C++ simplifies or replaces this pattern
+- Template-based vs virtual-based forms
+- C++20/23 improvements if applicable
+
+----------------------------------------------------
+9. Mental Model Summary
+- A one-paragraph intuition for when this pattern "clicks"
+- How to recognize it during code reviews
+
+----------------------------------------------------
+Patterns to cover (in this exact order):
+
+I. Creational Patterns
+1. Singleton
+2. Factory Method
+3. Abstract Factory
+4. Builder
+5. Prototype
+
+II. Structural Patterns
+6. Adapter
+7. Bridge
+8. Composite
+9. Decorator
+10. Facade
+11. Flyweight
+12. Proxy
+
+III. Behavioral Patterns
+13. Strategy
+14. State
+15. Command
+16. Observer
+17. Iterator
+18. Visitor
+19. Template Method
+20. Mediator
+21. Memento
+22. Chain of Responsibility
+23. Interpreter
+
+IV. C++-Centric / Modern Patterns
+24. RAII (as a foundational pattern)
+25. Type Erasure
+26. CRTP (Curiously Recurring Template Pattern)
+27. Policy-Based Design
+28. PIMPL Idiom
+29. Value-Semantic Design
+30. Non-Virtual Interface (NVI)
+
+----------------------------------------------------
+Additional constraints:
+
+- Prefer composition over inheritance
+- Favor value semantics where possible
+- Explicitly discuss ownership and lifetime
+- Compare runtime polymorphism vs compile-time polymorphism
+- Show how STL already implements many of these ideas
+- When relevant, compare with C or Linux kernel patterns
+
+----------------------------------------------------
+End with:
+
+1. A summary table:
+   Pattern → Problem Solved → Runtime Cost → Compile-Time Cost
+
+2. A decision guide:
+   “If you see X problem in code → consider Y pattern”
+
+3. A recommended subset of patterns that:
+   - Every C++ engineer MUST master
+   - Patterns that should be used sparingly
+
+Do not be verbose for its own sake.
+Clarity and correctness are more important than coverage.
+
+Present it in the following way if needed:
+1. Pure English ASCII diagram
+2. Below the diagram, add Chinese explanations in plain text
+Save the result for each pattern as a Markdown file
+
+
+
+
+
+
+
