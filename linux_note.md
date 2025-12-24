@@ -27,6 +27,37 @@
 ![Linux ]()  
 ![Linux ]()  
 ![Linux ]()  
+![Linux 设备驱动模型架构](./linux/linux_device_model_architecture.md)  
+![Linux 内核模块工作原理](./linux/linux_kernel_module_anatomy.md)  
+
+![Linux OPS 设计模式](./linux/linux_manual_polymorphism_ops_pattern.md)  
+- 代码示例
+[C OOP示例](https://gitee.com/event-os/elab/tree/master/lesson/ooc/lesson_07_ooc_pwm_driver)  
+```
+app layer:
+    app_led.c
+    app_pwm.c
+
+device layer:
+    eio_pin.h
+    eio_pwm.h
+    eio_pin.c
+    eio_pwm.c
+
+driver layer:
+    driver_pin.c
+    driver_pwm.c
+```
+[C OOP示例](https://gitee.com/event-os/elab/tree/master/lesson/ooc/lesson_08_ooc_device/user)  
+```
+# 设备基类抽象
+eio_object.h
+eio_object.c
+```
+
+![Linux ]()  
+![Linux ]()  
+![Linux ]()  
 
 
 ![linux block layer](./linux/linux_block_layer.md)  

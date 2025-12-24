@@ -1,3 +1,154 @@
+- go learning guide
+[Learning Guide](./go/go-learning-guide/INDEX.md)  
+```
+go-learning-guide
+├── 01-philosophy
+│   ├── 01-why-go-was-created.md
+│   ├── 02-simplicity-readability-convention.md
+│   ├── 03-execution-model.md
+│   └── 04-toolchain-overview.md
+├── 02-type-system
+│   ├── 05-basic-types-zero-values.md
+│   ├── 06-structs-composition.md
+│   ├── 07-interfaces.md
+│   ├── 08-value-vs-reference-semantics.md
+│   ├── 09-pointers.md
+│   └── 10-methods-and-receivers.md
+├── 03-memory
+│   ├── 11-garbage-collection.md
+│   ├── 12-escape-analysis.md
+│   ├── 13-object-lifetime-ownership.md
+│   ├── 14-memory-leaks-in-go.md
+│   └── 15-gc-vs-manual-memory.md
+├── 04-errors
+│   ├── 16-error-values.md
+│   ├── 17-panic-recover.md
+│   ├── 18-defer.md
+│   ├── 19-error-friendly-apis.md
+│   └── 20-error-antipatterns.md
+├── 05-concurrency
+│   ├── 21-goroutines.md
+│   ├── 22-channels.md
+│   ├── 23-select.md
+│   ├── 24-sync-primitives.md
+│   ├── 25-context.md
+│   ├── 26-data-races.md
+│   └── 27-memory-model.md
+├── 06-packages
+│   ├── 28-package-system.md
+│   ├── 29-go-modules.md
+│   ├── 30-project-layout.md
+│   ├── 31-public-api-design.md
+│   └── 32-cyclic-dependencies.md
+├── 07-stdlib
+│   ├── 33-net-http.md
+│   ├── 34-encoding-json.md
+│   ├── 35-io-interfaces.md
+│   ├── 36-os-filesystem.md
+│   └── 37-time-context.md
+├── 08-testing
+│   ├── 38-go-test.md
+│   ├── 39-benchmarks.md
+│   ├── 40-race-detector.md
+│   ├── 41-profiling.md
+│   └── 42-linting-formatting.md
+├── 09-performance
+│   ├── 43-when-go-is-fast.md
+│   ├── 44-when-go-is-slow.md
+│   ├── 45-allocation-aware.md
+│   ├── 46-premature-optimization.md
+│   └── 47-go-vs-c-performance.md
+├── 10-architecture
+│   ├── 48-dependency-injection.md
+│   ├── 49-interface-driven-design.md
+│   ├── 50-layered-architecture.md
+│   ├── 51-maintainable-services.md
+│   └── 52-when-not-go.md
+├── 11-real-projects
+│   ├── 53-beginner-traps.md
+│   ├── 54-code-review-checklist.md
+│   ├── 55-reading-go-projects.md
+│   ├── 56-learning-projects.md
+│   └── 57-summary-and-checklist.md
+├── INDEX.md
+└── README.md
+```
+- go advanced guide
+[Advanced Guide](./go/go-advanced-guide/README.md)  
+```
+go-advanced-guide/
+├── 01-concurrency
+│   ├── 01-goroutines.md
+│   ├── 02-go-scheduler.md
+│   ├── 03-channels.md
+│   ├── 04-select.md
+│   ├── 05-goroutine-lifetime.md
+│   ├── 06-goroutine-leaks.md
+│   ├── 07-context.md
+│   ├── 08-sync-primitives.md
+│   ├── 09-data-races.md
+│   └── 10-memory-model.md
+├── 02-type-system
+│   ├── 01-structs-composition.md
+│   ├── 02-embedding.md
+│   ├── 03-interfaces.md
+│   ├── 04-value-vs-pointer.md
+│   ├── 05-method-receivers.md
+│   └── 06-zero-values.md
+├── 03-memory
+│   ├── 01-garbage-collection.md
+│   ├── 02-escape-analysis.md
+│   ├── 03-allocation-behavior.md
+│   ├── 03-defer.md
+│   ├── 04-object-lifetime.md
+│   └── 05-defer.md
+├── 04-errors
+│   ├── 01-error-values.md
+│   ├── 02-error-wrapping.md
+│   ├── 02-sentinel-errors.md
+│   ├── 03-error-wrapping.md
+│   ├── 03-panic-recover.md
+│   ├── 04-error-boundaries.md
+│   ├── 05-panic-vs-error.md
+│   └── 06-recover.md
+├── 05-stdlib
+│   ├── 01-net-http.md
+│   ├── 02-io-reader-writer.md
+│   ├── 03-encoding-json.md
+│   ├── 04-os-exec.md
+│   ├── 05-signal-handling.md
+│   └── 06-time-package.md
+├── 06-project
+│   ├── 01-package-boundaries.md
+│   ├── 01-project-layout.md
+│   ├── 02-api-design.md
+│   ├── 03-go-modules.md
+│   ├── 04-versioning.md
+│   └── 05-project-layouts.md
+├── 07-testing
+│   ├── 01-go-test.md
+│   ├── 01-testing-fundamentals.md
+│   ├── 02-table-driven-tests.md
+│   ├── 03-subtests.md
+│   ├── 04-benchmarks.md
+│   ├── 05-race-detector.md
+│   └── 06-profiling.md
+├── 08-performance
+│   ├── 01-allocation-aware.md
+│   ├── 02-slice-map-behavior.md
+│   ├── 03-buffer-reuse.md
+│   ├── 04-when-to-optimize.md
+│   └── 05-when-not-go.md
+├── 09-architecture
+│   ├── 01-concurrency-patterns.md
+│   ├── 01-dependency-injection.md
+│   ├── 02-interface-driven-design.md
+│   ├── 03-composition-patterns.md
+│   ├── 04-concurrency-patterns.md
+│   └── 05-anti-patterns.md
+└── README.md
+```
+
 [Golang tutorial series](https://golangbot.com/learn-golang-series/)  
 [Difference between Function and Methods in Golang](https://medium.com/@ravikumarray92/difference-between-function-and-methods-in-golang-986fc16b5912)  
 [An Introduction to Programming in Go](https://www.golang-book.com/books/intro)  
