@@ -11,7 +11,7 @@
 │                     THREADING MODEL COMPARISON                          │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│   1:1 Model (C/C++, Java, Rust)                                        │
+│   1:1 Model (C/C++, Java, Rust)                                         │
 │   ─────────────────────────────                                         │
 │   User Thread ────────► OS Thread                                       │
 │                                                                         │

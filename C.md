@@ -13,7 +13,8 @@
 [Key Concept: Object-Oriented Programming](https://www.state-machine.com/oop)  
 []()  
 []()  
-[]()  
+[EmbedSummary](https://github.com/zhengnianli/EmbedSummary)  
+[QuantumLeaps](https://github.com/QuantumLeaps)  
 
 
 ![C Guidelines](./c/c_systems_programming_guidelines.md)  
