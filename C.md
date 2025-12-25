@@ -24,6 +24,54 @@
 []()  
 
 
+## libraries
+> jansson - C library for encoding, decoding and manipulating JSON data
+[jansson](https://github.com/akheron/jansson)  
+
+> json-c - JSON-C implements a reference counting object model that allows you to easily construct JSON objects in C
+[json-c](https://github.com/json-c/json-c)  
+
+> the LIBpcap interface to various kernel packet capture mechanism
+[libpcap](https://github.com/the-tcpdump-group/libpcap)  
+
+> CppUTest unit testing and mocking framework for C/C++
+[cpputest](https://github.com/cpputest/cpputest)  
+
+> High-level C binding for ØMQ
+[czmq](https://github.com/zeromq/czmq)  
+
+> a small daemon which collects system information periodically and provides mechanisms to store and monitor the values in a variety of ways.
+[collectd](https://github.com/collectd/collectd)  
+
+> Protocol Buffers (a.k.a., protobuf) are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+[protobuf](https://github.com/protocolbuffers/protobuf)  
+
+> TLS/SSL and crypto library
+[openssl](https://github.com/openssl/openssl)  
+
+> The Apache Kafka C/C++ library
+[librdkafka](https://github.com/confluentinc/librdkafka)  
+
+> C++ based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)
+[grpc](https://github.com/grpc/grpc)  
+
+> a set of utilities for Linux networking
+[iproute2](https://github.com/iproute2/iproute2)  
+
+> a tool to manipulate and display information about what parts of a program are actually executed (i.e. "covered") while running a particular test case or set of testcases.
+[lcov](https://github.com/linux-test-project/lcov)  
+
+> A command line tool and library for transferring data with URL syntax
+[curl](https://github.com/curl/curl)  
+
+> libxml2 - is an XML toolkit implemented in C, originally developed for the GNOME Project
+[libxml2](https://github.com/GNOME/libxml2)  
+[]()  
+[]()  
+[]()  
+[]()  
+
+
 ![C Guidelines](./c/c_systems_programming_guidelines.md)  
 ![]()  
 
