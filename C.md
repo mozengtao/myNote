@@ -15,10 +15,32 @@
 []()  
 [EmbedSummary](https://github.com/zhengnianli/EmbedSummary)  
 [QuantumLeaps](https://github.com/QuantumLeaps)  
+[Practical UML Statecharts in C/C++](https://www.state-machine.com/category/books)  
+[Practical Statecharts in C/C++](https://www.state-machine.com/category/books)  
+[专业嵌入式软件开发:全面走向高质高效编程]()  
+[程序员修炼之道：通向务实的最高境界]()  
+[七周七并发模型]()  
+[]()  
+[]()  
 
 
 ![C Guidelines](./c/c_systems_programming_guidelines.md)  
 ![]()  
+
+
+- Data Strutures
+![array](./c/data_structures/ds_01_array.md)  
+![singly linked list](./c/data_structures/ds_02_singly_linked_list.md)  
+![doubly linked list](./c/data_structures/ds_03_doubly_linked_list.md)  
+![intrusive linked list](./c/data_structures/ds_04_intrusive_linked_list.md)  
+![stack](./c/data_structures/ds_05_stack.md)  
+![queue](./c/data_structures/ds_06_queue.md)  
+![ring buffer](./c/data_structures/ds_07_ring_buffer.md)  
+![binary tree](./c/data_structures/ds_08_binary_tree.md)  
+![binary search tree](./c/data_structures/ds_09_binary_search_tree.md)  
+![balanced trees](./c/data_structures/ds_10_balanced_trees.md)  
+![hash table](./c/data_structures/ds_11_hash_table.md)  
+![advanced structures](./c/data_structures/ds_12_advanced_structures.md)  
 
 > Raylib — Clean C Library with Layered Subsystems
 [raylib](https://github.com/raysan5/raylib)  
