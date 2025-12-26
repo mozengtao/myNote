@@ -55,7 +55,7 @@
 - cron
 	- cron 是linux上的一个系统守护进程，主要负责检测和执行周期性的定时任务
 	- cron ^^每1分钟^^执行的完整周期
-		- ![cron-cycle-2](https://www.junosnotes.com/wp-content/uploads/2021/07/cron-cycle-2.png){:height 623, :width 716}
+		- ![cron-cycle-2](https://www.junosnotes.com/wp-content/uploads/2021/07/cron-cycle-2.png)
 -
 - cron job 语法
 	- ```

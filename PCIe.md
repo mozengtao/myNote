@@ -50,7 +50,7 @@ CPU会 "读出" PCI设备需要多大的PCI配置空间例如1M，在CPU的地�
 	  个通道传输速率为2.5 Gbps（PCIe 1.0/1.1）或每个通道传输速率为8.0 Gbps（PCIe 3.0）或更高
 	  ```
 	- PCIe slots
-		- ![Pasted image 20221028091505.png](./assets/Pasted_image_20221028091505_1679559896747_0.png){:height 126, :width 776}
+		- ![Pasted image 20221028091505.png](./assets/Pasted_image_20221028091505_1679559896747_0.png)
 		- x之后的数字代表PCIe slot有多少lane可以用来通信，它决定了数据的传输速率。
 			- PCIex1 有一个lane，在一个时钟周期只能传输一个比特的数据
 			- PCIex2 有两个lane，在一个时钟周期只能传输两个比特的数据

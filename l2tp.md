@@ -40,7 +40,7 @@
 - 两种类型的tunnel
 	- LAC-LNS 隧道
 		- ![image.png](./assets/image_1670483897484_0.png)
-		- ![image.png](./assets/image_1670487539447_0.png){:height 333, :width 716}
+		- ![image.png](./assets/image_1670487539447_0.png)
 		- LAC-LNS连接建立过程
 			- ![image.png](./assets/image_1670487767498_0.png)
 				- 建立tunnel

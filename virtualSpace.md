@@ -1,6 +1,6 @@
 - x86-32位虚拟地址空间
 	- 用户进程上下文切换用户空间地址会发生改变，但是内核空间地址总是保持不变
-	- ![](https://fanlv.fun/2021/07/25/linux-mem/Linux-Memory-X86-32.jpg){:height 506, :width 716}
+	- ![](https://fanlv.fun/2021/07/25/linux-mem/Linux-Memory-X86-32.jpg)
 	- 用户地址空间
 		- `0 ~ 3G`
 			- 保留区

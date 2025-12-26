@@ -3,7 +3,7 @@
 	- 同步IO
 		- 阻塞IO
 		  collapsed:: true
-			- ![image.png](./assets/image_1688721012889_0.png){:height 274, :width 334}
+			- ![image.png](./assets/image_1688721012889_0.png)
 			- 等待队列是内核实现阻塞和唤醒的内核机制。等待队列以循环链表为基础结构，链表头和链表项分别为等待队列头和等待队列元素。整个等待队列由等待队列头进行管理。
 			- 等待队列使用方法
 				- 初始化等待队列，并将条件置为假(condition 为 false 时阻塞)

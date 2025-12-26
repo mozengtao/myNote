@@ -1,5 +1,5 @@
 - 什么是云服务
-  ![Image 1.png](./assets/Image_1_1668170140575_0.png){:height 446, :width 776}
+  ![Image 1.png](./assets/Image_1_1668170140575_0.png)
 -
 -
 - 不同云服务的类比

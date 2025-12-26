@@ -20,7 +20,7 @@
 	  collapsed:: true
 		- `tegra20.dtsi`
 		  collapsed:: true
-			- ![image.png](./assets/image_1678413167939_0.png){:height 477, :width 686}
+			- ![image.png](./assets/image_1678413167939_0.png)
 		- `tegra20-harmony.dts`
 		  collapsed:: true
 			- ![image.png](./assets/image_1678413188657_0.png)

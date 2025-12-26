@@ -16,7 +16,7 @@
   collapsed:: true
 	- 类Unix系统，Linux借鉴了Unix的许多设计并且实现了Unix的API，但Linux没有像其他Unix变种那样直接使用Unix的源代码，它的实现可能和其他Unix完全不同，但是它没有抛弃Unix的设计目标并保证了应用程序编程接口的一致。
 	- 处理器在任何时间点上的活动
-		- ![image.png](./assets/image_1676555582743_0.png){:height 627, :width 746}
+		- ![image.png](./assets/image_1676555582743_0.png)
 	- Linux与传统Unix的差异
 		- Linux支持动态加载内核模块
 		- Linux支持对称多处理(SMP)机制
@@ -202,7 +202,7 @@
   collapsed:: true
 	- 链表
 		- 单向链表
-			- ![image.png](./assets/image_1676727770258_0.png){:height 267, :width 686}
+			- ![image.png](./assets/image_1676727770258_0.png)
 		- 双向链表
 			- ![image.png](./assets/image_1676727791601_0.png)
 		- 环形链表

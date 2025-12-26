@@ -1,7 +1,7 @@
 - vfs的作用
 	- 向上给用户提供统一的"文件"操作接口
 	- 向下给底层驱动的实现制定统一的接口框架
-	- ![](https://img-blog.csdnimg.cn/20200615094618108.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMyNzQwMTA3,size_16,color_FFFFFF,t_70){:height 332, :width 553}
+	- ![](https://img-blog.csdnimg.cn/20200615094618108.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMyNzQwMTA3,size_16,color_FFFFFF,t_70)
 - vfs的4个主要对象
 	- super_block
 		- 描述一个已经挂载的文件系统，包含设备名，分区大小，blocksize等基础数据，superblock方法集合，所包含的inode链表等
