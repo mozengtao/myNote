@@ -1,7 +1,10 @@
+[RefactoringGuru](https://github.com/RefactoringGuru)  
+[Refactoring: Improving the Design of Existing Code]()  
+
+
 [Design Patterns for Dummies](https://github.com/hraverkar/books)  
 [Dive-Into-Design-Patterns---Code-Samples](https://github.com/arvi9/Dive-Into-Design-Patterns---Code-Samples/tree/master)  
 [Design Patterns Explained simply](https://github.com/hraverkar/books/tree/master)  
-[]()  
 []()  
 
 ![Java Design Patterns: A tutorial](./design_patterns/Java_Design_Patterns-A_tutorial.pdf)  

@@ -59,6 +59,29 @@ eio_object.c
 ![Linux ]()  
 ![Linux ]()  
 
+- VFS
+![01_why_vfs_exists](./linux/vfs/vfs_01_why_vfs_exists.md)  
+![02_core_objects](./linux/vfs/vfs_02_core_objects.md)  
+![03_polymorphism](./linux/vfs/vfs_03_polymorphism.md)  
+![04_pdd_mapping](./linux/vfs/vfs_04_pdd_mapping.md)  
+![05_registration](./linux/vfs/vfs_05_registration.md)  
+![06_lifecycle](./linux/vfs/vfs_06_lifecycle.md)  
+![07_concurrency](./linux/vfs/vfs_07_concurrency.md)  
+![08_patterns](./linux/vfs/vfs_08_patterns.md)  
+![09_exercise](./linux/vfs/vfs_09_exercise.md)  
+![10_antipatterns](./linux/vfs/vfs_10_antipatterns.md)  
+
+- net
+![01_why_net_exists](./linux/net/net_01_why_net_exists.md)  
+![02_core_objects](./linux/net/net_02_core_objects.md)  
+![03_skbuff](./linux/net/net_03_skbuff.md)  
+![04_polymorphism](./linux/net/net_04_polymorphism.md)  
+![05_layering](./linux/net/net_05_layering.md)  
+![06_registration](./linux/net/net_06_registration.md)  
+![07_lifecycle](./linux/net/net_07_lifecycle.md)  
+![08_performance](./linux/net/net_08_performance.md)  
+![09_patterns](./linux/net/net_09_patterns.md)  
+![10_exercise](./linux/net/net_10_exercise.md)  
 
 ![linux block layer](./linux/linux_block_layer.md)  
 ![linux debug infrastructure](./linux/linux_debug_infrastructure.md)  
