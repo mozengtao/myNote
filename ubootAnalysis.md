@@ -6,8 +6,8 @@
 				- 初始化其他硬件（Flash, UART等）
 			- 拷贝内核到内存
 		- 启动内核
-	- ![image.png](../assets/image_1696942255235_0.png)
-	- ![image.png](../assets/image_1696942271466_0.png)
+	- ![image.png](./assets/image_1696942255235_0.png)
+	- ![image.png](./assets/image_1696942271466_0.png)
 - linux内核为了运行用户的应用程序
 	- 启动应用程序
 		- 能读写flash：驱动程序，以及其他各种驱动程序

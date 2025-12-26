@@ -2,11 +2,11 @@
 	- > The CPU cache holds onto information that the processor frequently uses, for a certain period of time, allowing for fast and easy access.
 - CPU Cache
 	-
-	- ![image.png](../assets/image_1670995876492_0.png)
-	- ![image.png](../assets/image_1670987350778_0.png)
-	- ![image.png](../assets/image_1670987381132_0.png)
+	- ![image.png](./assets/image_1670995876492_0.png)
+	- ![image.png](./assets/image_1670987350778_0.png)
+	- ![image.png](./assets/image_1670987381132_0.png)
 - CPU访问数据过程
-	- ![image.png](../assets/image_1670987458901_0.png)
+	- ![image.png](./assets/image_1670987458901_0.png)
 		- CPU请求数据
 		- 如果Cache有请求的数据则直接返回数据给CPU，如果Cache没有请求的数据，Cache向RAM发送数据请求
 		- RAM拷贝数据到Cache

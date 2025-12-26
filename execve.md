@@ -4,9 +4,9 @@ root@slot-120:~ [P1]# ps -ef|grep cms
 root      3099  2946  0 Jun24 ?        00:01:24 /opt/berwick/build/armstrong/powerpc/bin/cms cpu=0 ndsnpu=4
 ```
 linux下运行新的程序
-	![image.png](../assets/image_1675212361056_0.png)
-	![image.png](../assets/image_1675212608503_0.png)
-	![image.png](../assets/image_1675212746708_0.png)
+	![image.png](./assets/image_1675212361056_0.png)
+	![image.png](./assets/image_1675212608503_0.png)
+	![image.png](./assets/image_1675212746708_0.png)
 
 execve相关库函数
 ```c
@@ -22,7 +22,7 @@ execve相关库函数
 	// p -> path
 	// e -> env
 ```
-![image.png](../assets/image_1675142263517_0.png)
+![image.png](./assets/image_1675142263517_0.png)
 execve与[[环境变量]]
 	进程获取环境变量的方式
 		如果新的进程是通过 [[fork]] 系统调用创建，则子进程会继承父进程的环境变量
@@ -66,13 +66,13 @@ execve与[[环境变量]]
 	}
 ```
 环境变量的内存位置
-	![image.png](../assets/image_1675670198130_0.png)
+	![image.png](./assets/image_1675670198130_0.png)
 	envp和environ起始时指向相同的位置
 	envp只能在main函数内部进行访问，environ是一个全局变量
 	当环境变量发生变化时(如增加新的环境变量)，存储环境变量的位置可能会移动到堆上，因此environ的位置可能会发生改变，而envp则不会
 
 Shell变量与环境变量
-	![image.png](../assets/image_1675670686181_0.png)
+	![image.png](./assets/image_1675670686181_0.png)
 在shell下运行的进程的环境变量来自shell的如下两个部分
 	shell下从环境变量拷贝而来的shell变量
 	shell下用户通过export导出的shell变量

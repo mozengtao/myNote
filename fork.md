@@ -1,4 +1,4 @@
-- ![image.png](../assets/image_1675212886948_0.png)
+- ![image.png](./assets/image_1675212886948_0.png)
 - linux提供fork系统调用，用来创建子进程
 	- 参数
 		- 无

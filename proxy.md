@@ -61,7 +61,7 @@ ssh –R 8080:localhost:5534 pnap@ssh.server.com
 		  
 		  
 		  ```
-			- ![image.png](../assets/image_1672210455265_0.png)
+			- ![image.png](./assets/image_1672210455265_0.png)
 - 查看squid服务log
 	- `sudo tail -f /var/log/squid/access.log`
 - 参考文档

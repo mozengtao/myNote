@@ -6,7 +6,7 @@
 - elf文件的双重属性，elf文件是一系列segments和headers的集合
 	- 内核看到是segments，内核使用mmap(2)将segments映射到虚拟地址空间
 	- 链接器看到的是sections，它将sections合并为可执行文件或者共享目标文件
-	- ![image.png](../assets/image_1672822000165_0.png)
+	- ![image.png](./assets/image_1672822000165_0.png)
 
 - elf文件类型
 	- 可执行文件executables (ET_EXEC)

@@ -6,8 +6,8 @@
 - [**zguide**](https://zguide.zeromq.org/)
 [**ZMQ API reference**](https://libzmq.readthedocs.io/en/latest/)  
 
-![zguide](../assets/zguide.pdf)  
-![zguide_c](../assets/zguide_c.pdf)  
+![zguide](./assets/zguide.pdf)  
+![zguide_c](./assets/zguide_c.pdf)  
 
 
 ## czmq

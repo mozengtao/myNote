@@ -16,7 +16,7 @@
   collapsed:: true
 	- 类Unix系统，Linux借鉴了Unix的许多设计并且实现了Unix的API，但Linux没有像其他Unix变种那样直接使用Unix的源代码，它的实现可能和其他Unix完全不同，但是它没有抛弃Unix的设计目标并保证了应用程序编程接口的一致。
 	- 处理器在任何时间点上的活动
-		- ![image.png](../assets/image_1676555582743_0.png){:height 627, :width 746}
+		- ![image.png](./assets/image_1676555582743_0.png){:height 627, :width 746}
 	- Linux与传统Unix的差异
 		- Linux支持动态加载内核模块
 		- Linux支持对称多处理(SMP)机制
@@ -77,7 +77,7 @@
 			- 用来描述一个进程所用到的所有信息
 			- 内核把进程的列表存放在叫做任务列表task list的双向循环列表中，链表中的每一项都是被称为进程描述符的结构task_struct
 			- Linux通过slab分配器动态生成task_struct结构，因此只需在栈底（对于向下增长的栈）或栈顶（对于向上增长的栈）创建一个新的结构struct thread_info，指向实际分配的task_struct
-				- ![image.png](../assets/image_1676638005793_0.png)
+				- ![image.png](./assets/image_1676638005793_0.png)
 			- 内核通过一个唯一的进程标识值PID来标识每个进程(pid_t，默认最大值32768(short int最大值，可以通过`/proc/sys/kernel/pid_max`进行修改)，内核把每个进程的PID存放在他们各自的进程描述符中
 			- 内核中大部分处理进程的代码都是直接通过task_struct进行的，因此如何快速高效的获得指向task_struct的指针变得很重要，内核通过current宏来查找正在运行的进程的进程描述符，硬件体系不同该宏的实现也不相同，例如PPC有专门的寄存器用来保存task_struct，而像x86只能在内核栈的尾端创建thread_info结构，通过偏移间接的查找task_struct结构
 			- 进程的状态
@@ -91,7 +91,7 @@
 					- 进程正在被其他进程跟踪，例如通过ptrace对调试程序进行跟踪
 				- __TASK_STOPPED
 					- 进程停止执行，进程没有投入运行也不能投入运行。通常发生在接收到SIGSTOP等信号的时候。在调试期间收到任何信号都会使进程进入这种状态
-				- ![image.png](../assets/image_1676639422954_0.png)
+				- ![image.png](./assets/image_1676639422954_0.png)
 		- 进程上下文
 			- 用户空间的进程通过系统调用或者触发异常陷入内核空间，此时内核“代表进程执行”并处于进程上下文中，进程退出内核后，进程恢复在用户空间继续执行。
 	- 执行线程
@@ -190,7 +190,7 @@
 	-
 - 系统调用
   collapsed:: true
-	- ![image.png](../assets/image_1676727035414_0.png)
+	- ![image.png](./assets/image_1676727035414_0.png)
 	- 系统调用是用户空间访问内核的唯一手段，除异常和陷入外，它是内核唯一的合法入口
 	- 系统调用的作用
 		- 为用户空间提供一种硬件的抽象接口，屏蔽具体的底层硬件操作细节。
@@ -202,16 +202,16 @@
   collapsed:: true
 	- 链表
 		- 单向链表
-			- ![image.png](../assets/image_1676727770258_0.png){:height 267, :width 686}
+			- ![image.png](./assets/image_1676727770258_0.png){:height 267, :width 686}
 		- 双向链表
-			- ![image.png](../assets/image_1676727791601_0.png)
+			- ![image.png](./assets/image_1676727791601_0.png)
 		- 环形链表
 			- linux内核的标准链表采用环形链表
-				- ![image.png](../assets/image_1676727890109_0.png)
+				- ![image.png](./assets/image_1676727890109_0.png)
 		- linux中链表的实现
 			- 不是将数据结构塞入链表，而是将链表节点塞入数据结构
-			- ![image.png](../assets/image_1676728192131_0.png)
-			- ![image.png](../assets/image_1676728231026_0.png)
+			- ![image.png](./assets/image_1676728192131_0.png)
+			- ![image.png](./assets/image_1676728231026_0.png)
 			- 操作链表
 				- 添加节点
 					- list_add
@@ -230,7 +230,7 @@
 					- list_for_each_entry_safe
 	- 队列
 		- 队列也成为FIFO，是实现生产者消费者模型一种方式
-		- ![image.png](../assets/image_1676728865068_0.png)
+		- ![image.png](./assets/image_1676728865068_0.png)
 		- linux内核通用队列的实现为kfifo
 			- 队列操作
 				- 创建队列
@@ -269,7 +269,7 @@
 			- 中断上下文和进程无关（没有后备进程），所以中断上下文不可睡眠，因此中断处理程序中不能调用某些函数
 			- 中断栈的空间是有限的，尽量节约内核栈空间的使用
 		- 中断处理机制的实现
-			- ![image.png](../assets/image_1676808284169_0.png)
+			- ![image.png](./assets/image_1676808284169_0.png)
 				- 设备产生中断，通过总线把电信号发送给中断控制器
 				- 如果中断线是激活的（中断线允许被屏蔽），中断控制器把中断发送给处理器（通过电信号给处理器的特定管脚发送一个信号）
 				- 除非处理器禁止该中断，否则处理器停止当前处理，关闭中断系统，跳转到预定义的中断处理程序入口处开始执行
@@ -328,11 +328,11 @@
 			- 工作队列是唯一能在进程上下文中运行的下半部实现机制，也只有它才可以睡眠。
 			- 工作队列的实现
 				- 工作队列子系统是一个用于创建内核线程的接口，通过它创建的进程负责执行由内核其他部分排到队列里的任务，创建的内核线程称为工作者线程worker thread，用workqueue_struct表示
-				- ![image.png](../assets/image_1676813029705_0.png)
+				- ![image.png](./assets/image_1676813029705_0.png)
 				- 使用工作队列
 					-
 	- 三种下半部接口的比较
-		- ![image.png](../assets/image_1676813165046_0.png)
+		- ![image.png](./assets/image_1676813165046_0.png)
 		- 在下半部之间加锁
 		- 禁止下半部
 	-
@@ -342,7 +342,7 @@
 		- 访问和操作共享数据的代码段
 		- 两个执行线程有可能处于同一个临界区中同时执行，如果这种bug情况发生了，称它是竞争条件race conditions，避免并发和防止竞争条件称为同步
 	- 加锁
-		- ![image.png](../assets/image_1676813646938_0.png)
+		- ![image.png](./assets/image_1676813646938_0.png)
 		- 锁是采用原子操作实现的，而原子操作不存在竞争，锁的实现与具体的体系结构密切相关，几乎所有的处理器都实现了测试和设置指令，这一指令测试整数的值，如果其值为0就设置一新值。
 		- 各种锁机制的主要区别
 			- 当锁已经被其他线程持有，锁不可用时的行为表现
@@ -670,7 +670,7 @@
 					  GFP_NOWAIT
 					  ......
 					  ```
-				- ![image.png](../assets/image_1677068858877_0.png)
+				- ![image.png](./assets/image_1677068858877_0.png)
 		- kfree
 			- ```c
 			  void kfree(const void *ptr);
@@ -689,7 +689,7 @@
 				- 满
 				- 部分满
 				- 空
-			- ![image.png](../assets/image_1677069930549_0.png)
+			- ![image.png](./assets/image_1677069930549_0.png)
 				- 高速缓存
 					- ```c
 					  每个高速缓存都使用kmem_cache结构来表示，该结构包含3个链表
@@ -733,13 +733,13 @@
 - 虚拟文件系统
   collapsed:: true
 	- 虚拟文件系统使得程序可以通过标准的Unix系统调用对不同的文件系统设置不同介质的上的文件系统进行读写操作。
-	- ![image.png](../assets/image_1677119162183_0.png)
+	- ![image.png](./assets/image_1677119162183_0.png)
 	- 文件系统抽象层
 		- 之所以可以通过通用接口对所有类型的文件系统进行操作，是因为内核在它的底层文件系统接口上建立了一个抽象层VFS。VFS提供了一个通用文件系统模型，该模型囊括了任何文件系统的常用功能集和行为。
 		- 系统调用
 			- 系统调用是通用VFS接口，提供给用户空间前端
 			- 系统调用是具体文件系统的后端，处理实现细节
-			- ![image.png](../assets/image_1677119506005_0.png)
+			- ![image.png](./assets/image_1677119506005_0.png)
 			- Unix文件系统
 				- 文件
 					- 文件被看作是一个有序的字节序列，文件名是为了方便系统和用户识别文件
@@ -855,7 +855,7 @@
 				- 扇区又称为硬扇区或者设备块
 			- 块是文件系统的一种抽象---只能基于块来访问文件系统，块是文件系统的最小寻址单元
 				- 块又称作文件块或者IO块
-			- ![image.png](../assets/image_1677127661267_0.png)
+			- ![image.png](./assets/image_1677127661267_0.png)
 			- 缓冲区和缓冲区头
 				- 块被调入内存时，存储在一个缓冲区中，每个缓冲区与一个块对应，每个缓冲区都有一个对应的描述符，描述符用缓冲区头buffer_head表示，它包含了内核操作缓冲区所需的全部信息
 					- 缓冲区头的目的在于描述磁盘块和物理内存缓冲区（在特定页面上的字节序列）之间的映射关系
@@ -872,7 +872,7 @@
 					  }
 					  ```
 				- 使用bio结构体的目的主要是代表正在现场执行的IO操作
-					- ![image.png](../assets/image_1677128296629_0.png)
+					- ![image.png](./assets/image_1677128296629_0.png)
 				- IO向量
 					- 形式为`<page, offset, len>`向量的bio_vec结构，描述了一个特定的片段：片段所在物理页，块在物理页中偏移位置、从给定偏移量开始的块长度
 					- 每一块IO请求都通过一个bio结构体表示
@@ -957,7 +957,7 @@
 				- PMD中的表项指向PTE中的表项
 			- 页表
 				- 包含了pte_t类型的页表项，页表项指向物理页面
-			- ![image.png](../assets/image_1677245071628_0.png)
+			- ![image.png](./assets/image_1677245071628_0.png)
 		- 每个进程都有自己的页表，内存描述符的pgd域指向的就是进程的页全局目录
 		- TLB（Translate Lookaside Buffer）是一个将虚拟地址映射到物理地址的硬件缓存
 			- 当CPU访问虚拟地址时，如果在缓存中直接命中，则直接返回物理地址
@@ -1048,7 +1048,7 @@
 					  ```
 				- 具有ktype的kobject可以被分组到不同的kset，也就是说，在linux内核中，只有少数一些的ktype，却有多个kset
 			- kobject, ktype, kset之间的关系
-				- ![image.png](../assets/image_1677332734160_0.png)
+				- ![image.png](./assets/image_1677332734160_0.png)
 			- sysfs
 				- sysfs文件系统是一个处于内存中的虚拟文件系统，提供了kobject对象层次结构的视图
 				- sysfs把kobject对象与目录项directory entries紧密联系起来，这点是通过kobject对象中的dentry字段实现的（dentry表示目录项，通过连接kobject到指定的目录项上，可以方便的将kobject映射到该目录上）

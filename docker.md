@@ -52,10 +52,10 @@ oVirt 基于 KVM/QEMU 虚拟化，通过硬件辅助虚拟化运行和管理虚�
 			- 相比于虚拟机，容器只包含用到的组件，因此相比虚拟机文件要小很多
 - docker
 	- docker 属于 Linux容器的一种封装，提供简单易用的容器使用接口，是目前最流行的linux容器解决方案
-	- ![image.png](../assets/image_1673944206041_0.png)
-	- ![image.png](../assets/image_1673944266512_0.png)
+	- ![image.png](./assets/image_1673944206041_0.png)
+	- ![image.png](./assets/image_1673944266512_0.png)
 	- docker镜像
-		- ![image.png](../assets/image_1673945888063_0.png)
+		- ![image.png](./assets/image_1673945888063_0.png)
 
 
 [**Mini Container Series**](https://hechao.li/2020/06/09/Mini-Container-Series-Part-0-Not-a-Real-Container/)  

@@ -14,7 +14,7 @@
 - 中断子系统
 	- 中断控制器
 	  collapsed:: true
-		- ![image.png](../assets/image_1689149154816_0.png)
+		- ![image.png](./assets/image_1689149154816_0.png)
 	- 中断号相关的概念
 	  collapsed:: true
 		- IRQ number
@@ -40,7 +40,7 @@
 		- GICv3
 		- GICv4
 		- 例PL390
-			- ![image.png](../assets/image_1689772454733_0.png)
+			- ![image.png](./assets/image_1689772454733_0.png)
 			- [PL390 Technical Reference Manual](https://documentation-service.arm.com/static/5e8e1d3588295d1e18d3635c)
 		- 例GIC400
 	- 申请中断

@@ -15,13 +15,22 @@
 []()  
 [EmbedSummary](https://github.com/zhengnianli/EmbedSummary)  
 [QuantumLeaps](https://github.com/QuantumLeaps)  
-[Practical UML Statecharts in C/C++](https://www.state-machine.com/category/books)  
-[Practical Statecharts in C/C++](https://www.state-machine.com/category/books)  
+> FSM
+[**Practical UML Statecharts in C/C++**](https://www.state-machine.com/category/books)  
+[**Practical Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 [专业嵌入式软件开发:全面走向高质高效编程]()  
 [程序员修炼之道：通向务实的最高境界]()  
 [七周七并发模型]()  
 []()  
 []()  
+
+
+- Device OS (Firmware) for Particle Devices
+[Device OS](https://docs.particle.io/getting-started/device-os/introduction-to-device-os/)  
+[device-os](https://github.com/particle-iot/device-os)  
+[]()  
+[]()  
+
 
 
 ## libraries

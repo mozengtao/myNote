@@ -2,7 +2,7 @@
   When **init** starts, it looks for a line in /etc/inittab that specifies the default run level:
       id:5:initdefault:
 - Run level numbers
-	- ![image.png](../assets/image_1676862558086_0.png)
+	- ![image.png](./assets/image_1676862558086_0.png)
 - reboot
 	- ```bash
 	  # linux的重启命令，如下几个是等价的

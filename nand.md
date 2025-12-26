@@ -14,7 +14,7 @@
 		- ![](https://www.edn.com/wp-content/uploads/media-1130295-269145-nandvnor01.jpg)
 - NAND Flash 是一种电擦除可编程的非易失性存储芯片，主要应用为数据存储。
 - NAND Flash 由块组成，每块包含32,64或者128个page，每个page包含1个main area和1个spare area。
-	- ![image.png](../assets/image_1674184682346_0.png)
+	- ![image.png](./assets/image_1674184682346_0.png)
 	- Block
 		- 块是nand flash最小的擦除单位
 	- Page
@@ -22,7 +22,7 @@
 		- 两种类型的页
 			- Small Page
 			- Large Page
-			- ![image.png](../assets/image_1674184851615_0.png)
+			- ![image.png](./assets/image_1674184851615_0.png)
 	- Main area
 		- 每个页的main area大小可以是512，2048或者4096个字节，main area 包含真正的代码和数据
 	- Spare area

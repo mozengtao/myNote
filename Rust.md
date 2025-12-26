@@ -2094,7 +2094,7 @@ where 约束
 	静态分发 static dispatch，在编译期完成，对运行时性能没有任何影响，例如对泛型的处理，编译器会为每一个泛型参数对应的具体类型生成一份代码
 	动态分发 dynamic dispatch，直到运行时，才能确定需要调用哪个方法，关键字 `dyn` 强调了 "动态" 这一特点
 		当使用特征对象时，Rust必须使用动态分发，因为编译器无法知晓所有可能用于特征对象代码的类型，所以不知道应该调用哪个类型的哪个方法实现
-![dynamic dispatch](../assets/dynamic_dispatch.jpg)
+![dynamic dispatch](./assets/dynamic_dispatch.jpg)
 	1. 特征对象大小不固定  
 	2. 几乎总是使用特征对象的引用方式，例如 `&dyn Draw`，`Box<dyn Draw>`  
 		1. 虽然特征对象没有固定大小，但是它的引用类型的大小时固定的，即由两个指针 `ptr` 和 `vptr` 组成，占用两个指针大小的空间  

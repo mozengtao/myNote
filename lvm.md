@@ -4,8 +4,8 @@
   – meaningful names to volumes, rather than the usual cryptic device names.
   – span multiple physical disks
 - lvm相关概念
-	- ![image.png](../assets/image_1673592791917_0.png)
-	- ![image.png](../assets/image_1673592803241_0.png)
+	- ![image.png](./assets/image_1673592791917_0.png)
+	- ![image.png](./assets/image_1673592803241_0.png)
 	- pv
 		- Physical volume (e.g. a partition, RAID array, etc)
 	- vg

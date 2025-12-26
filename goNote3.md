@@ -72,10 +72,10 @@
     - 浮点型
         - float32
 
-            ![float32表示](../assets/float32.png)
+            ![float32表示](./assets/float32.png)
         - float 64
 
-            ![float64表示](../assets/float64.png)
+            ![float64表示](./assets/float64.png)
     - byte 与 rune
         > byte 和 uint8 没有区别，rune 和 int32 没有区别, byte 和 rune 类型的目的是：uint8 和 int32 ，直观上让人以为这是一个数值，但是实际上，它也可以表示一个字符，所以为了消除这种直观错觉，就诞生了 byte 和 rune 这两个别名类型
         - byte

@@ -3,7 +3,7 @@
 	- 同步IO
 		- 阻塞IO
 		  collapsed:: true
-			- ![image.png](../assets/image_1688721012889_0.png){:height 274, :width 334}
+			- ![image.png](./assets/image_1688721012889_0.png){:height 274, :width 334}
 			- 等待队列是内核实现阻塞和唤醒的内核机制。等待队列以循环链表为基础结构，链表头和链表项分别为等待队列头和等待队列元素。整个等待队列由等待队列头进行管理。
 			- 等待队列使用方法
 				- 初始化等待队列，并将条件置为假(condition 为 false 时阻塞)
@@ -79,10 +79,10 @@
 			  #define wake_up(x)			__wake_up(x, TASK_NORMAL, 1, NULL)
 			  #define wake_up_interruptible(x)	__wake_up(x, TASK_INTERRUPTIBLE, 1, NULL)
 			  ```
-			- ![image.png](../assets/image_1689056674186_0.png)
+			- ![image.png](./assets/image_1689056674186_0.png)
 		- 非阻塞IO
 		  collapsed:: true
-			- ![image.png](../assets/image_1688720935623_0.png)
+			- ![image.png](./assets/image_1688720935623_0.png)
 			- ```c
 			  # 在驱动中判断应用程序是否包含非阻塞的标志，如果包含的话根据条件判断条件是否ready进行返回
 			  if(file->f_flags & O_NONBLOCK) {
@@ -92,7 +92,7 @@
 			  ```
 		- 信号驱动IO
 		  collapsed:: true
-			- ![image.png](../assets/image_1688721058097_0.png)
+			- ![image.png](./assets/image_1688721058097_0.png)
 			- ```c
 			  # 驱动程序实现fasync方法
 			  1.当应用程序开启信号驱动IO时，会触发驱动中的fasync函数
@@ -119,7 +119,7 @@
 			  ```
 		- IO多路复用
 		  collapsed:: true
-			- ![image.png](../assets/image_1688720983642_0.png)
+			- ![image.png](./assets/image_1688720983642_0.png)
 			- ```c
 			  # 实现file_operations结构体中的poll函数，实现内容如下
 			  1.对可能引起设备文件状态变化的等待队列调用poll_wait，将对应的等待队列头添加到poll_table
@@ -143,7 +143,7 @@
 			  }
 			  ```
 	- 异步IO
-		- ![image.png](../assets/image_1688720912924_0.png)
+		- ![image.png](./assets/image_1688720912924_0.png)
 		- 异步IO可以在用户空间的glibc库进行实现，可以不依赖于内核
 - 同步IO与异步IO的区别
   collapsed:: true

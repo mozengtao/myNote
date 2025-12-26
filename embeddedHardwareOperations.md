@@ -1,11 +1,11 @@
 - 欧姆定律
   collapsed:: true
-	- ![image.png](../assets/image_1680697034242_0.png)
+	- ![image.png](./assets/image_1680697034242_0.png)
 	- ```bash
 	  I = V / R
 	  V = I * R
 	  ```
-	- ![image.png](../assets/image_1680697129225_0.png)
+	- ![image.png](./assets/image_1680697129225_0.png)
 	- ```bash
 	  # 1
 	  R = R1 + R2
@@ -20,14 +20,14 @@
 	  按键K断开时，R2的值可以看做是无穷大
 	  此时V2 = V
 	  ```
-	- ![image.png](../assets/image_1680697418864_0.png)
+	- ![image.png](./assets/image_1680697418864_0.png)
 	- ```bash
 	  I = (V - V2) / R
 	  当MCU控制GPIO输出高电平时，V = V2，此时I = 0，LED熄灭
 	  当MCU控制GPIO输出低电平时，V2 = 0，此时I = V / R，有电流流经LED，LED被点亮
 	  ```
 	- 电流的方向和电子流动的方向相反
-		- ![image.png](../assets/image_1680698069924_0.png)
+		- ![image.png](./assets/image_1680698069924_0.png)
 	- 电子的扩散
 		- 物质会从浓度高的地方向浓度低的地方运动
 - 硬件原理图
@@ -37,10 +37,10 @@
 		- 以LED为例，无论其外形如何，其共同点为：有两个引脚（触电），一正一负
 	- 原理图
 		- 使用抽象出来的元件图，绘制得到的连线图称为原理图
-			- ![image.png](../assets/image_1680698966908_0.png)
-			- ![image.png](../assets/image_1680698986303_0.png)
+			- ![image.png](./assets/image_1680698966908_0.png)
+			- ![image.png](./assets/image_1680698986303_0.png)
 	- 芯片引脚标记
-		- ![image.png](../assets/image_1680698868479_0.png)
+		- ![image.png](./assets/image_1680698868479_0.png)
 	- 电路板的制作过程
 		- ```bash
 		  1.元件图
@@ -60,7 +60,7 @@
 - 硬件接口的类型
 	- GPIO和门电路
 		- 利用GPIO进行输出高低电平，或者捕获输入，或者接上各类晶体管实现逻辑运算
-		- ![image.png](../assets/image_1680699834134_0.png)
+		- ![image.png](./assets/image_1680699834134_0.png)
 		- GPIO的应用
 			- 输出功能
 				- LED
@@ -81,15 +81,15 @@
 				- 当二极管正、负极之间的电压小于0时，二极管不导通，此时电阻近似于无穷大
 		- 三极管
 			- NPN三极管
-				- ![image.png](../assets/image_1680701645204_0.png)
+				- ![image.png](./assets/image_1680701645204_0.png)
 			- PNP三极管
-				- ![image.png](../assets/image_1680701735185_0.png)
+				- ![image.png](./assets/image_1680701735185_0.png)
 				-
 	- 协议类接口
 		- 两个设备之间传输的数据比较复杂，可以约定一些规则，这类接口可以归纳为“协议类”接口，如UART，I2C，SPI等
-		- ![image.png](../assets/image_1680699867239_0.png)
+		- ![image.png](./assets/image_1680699867239_0.png)
 	- 类似内存的接口
-		- ![image.png](../assets/image_1680700096854_0.png)
+		- ![image.png](./assets/image_1680700096854_0.png)
 	- 模拟电路
 		- 数字电路上传输的电压值只有2类，例如
 			- 2.xV到3.3V，抽象为逻辑1
@@ -97,5 +97,5 @@
 		- 模拟电路上传输的电压有多个取值，例如
 			- ADC电路可以读取滑动电阻器上的触点电压值
 			- DAC电路可以控制输出不同的电压值
-			- ![image.png](../assets/image_1680701073157_0.png)
+			- ![image.png](./assets/image_1680701073157_0.png)
 		-

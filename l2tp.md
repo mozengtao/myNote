@@ -39,10 +39,10 @@
 		- 数据消息用来封装 PPP 帧
 - 两种类型的tunnel
 	- LAC-LNS 隧道
-		- ![image.png](../assets/image_1670483897484_0.png)
-		- ![image.png](../assets/image_1670487539447_0.png){:height 333, :width 716}
+		- ![image.png](./assets/image_1670483897484_0.png)
+		- ![image.png](./assets/image_1670487539447_0.png){:height 333, :width 716}
 		- LAC-LNS连接建立过程
-			- ![image.png](../assets/image_1670487767498_0.png)
+			- ![image.png](./assets/image_1670487767498_0.png)
 				- 建立tunnel
 					- LAC发送SCCRQ消息
 					- LNS发送SCCRP消息用来响应LAC发送的SCCRQ消息
@@ -57,7 +57,7 @@
 					- LNS发送ZLB ACK来响应LAC发送的ICCN消息，ZLB ACK可能位于另一个消息当中。此时l2tp session建立完成。
 				- PPP协商在l2tp tunnel和l2tp session建立完成之后开始
 					- 通过tunnel建立PPP连接的过程
-						- ![image.png](../assets/image_1670491545134_0.png)
+						- ![image.png](./assets/image_1670491545134_0.png)
 				- tunnel建立之后，LAC会周期性的发送keepalive消息给LNS，LNS会做出回应，如果LAC在一定时间内没有收到LNS的回应，它会认为tunnel断连并尝试重新建立tunnel连接。
 	- peer-to-peer 隧道
 		- 通过中间的IP网络建立单独的3层端到端VPN，用来建立端到端的PPP链路

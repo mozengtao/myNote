@@ -1,5 +1,5 @@
 - Autoconf-automake-process
-    - ![Autoconf-automake-process](../assets/autoconf_automake_process.png)
+    - ![Autoconf-automake-process](./assets/autoconf_automake_process.png)
 
 ```bash
 ## on debian linux

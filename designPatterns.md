@@ -13,7 +13,7 @@
 
 
 
-[Game Programming Patterns](https://gameprogrammingpatterns.com/contents.html)  
+[**Game Programming Patterns**](https://gameprogrammingpatterns.com/contents.html)  
 [**The Catalog of Design Patterns**](https://refactoring.guru/design-patterns/catalog)  
 [**Java Design Patterns**](https://java-design-patterns.com/patterns/)  
 [14 Patterns to Ace Any Coding Interview Question](https://hackernoon.com/14-patterns-to-ace-any-coding-interview-question-c5bb3357f6ed)  

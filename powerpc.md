@@ -1,6 +1,6 @@
 - 基本概念
 	- RCW
-		- ![image.png](../assets/image_1675948126037_0.png)
+		- ![image.png](./assets/image_1675948126037_0.png)
 - 参考文档
 	- [QorIQ Processing Platform Board Bring-up Fundamentals](https://comm.eefocus.com/media/download/index/id-1009185)
 	- [QorIQ Debugger and NEXUS Trace](https://www2.lauterbach.com/pdf/debugger_ppcqoriq.pdf)
