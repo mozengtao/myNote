@@ -5,7 +5,7 @@
 []()  
 
 ## sed 是如何工作的
-![how sed works]((./assets/Pasted_image_20221029213136_1668150554863_0.png))  
+![how sed works](./assets/how_sed_works.png)  
 
   Read --> Execute --> Print
    |                     |

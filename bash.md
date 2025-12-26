@@ -19,6 +19,48 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## 命令替换的分词
+```bash
+for file in $(find . -name '* *.png'); do
+  echo $file;
+done
+
+问题: $(command)的结果会被 shell 进行分词（根据 IFS变量，默认是空格、制表符、换行符分割）,所以 "file name.png"被分割成了2个单词:"file", "name"
+
+# 解决方案
+find . -name '* *.png' | while IFS= read -r file; do
+    echo "$file"
+done
+
+# or
+
+while IFS= read -r file; do
+    echo "$file"
+done < <(find . -name '* *.png')
+
+# or
+
+# 将结果存入数组
+mapfile -t files < <(find . -name '* *.png')
+
+# 遍历数组
+for file in "${files[@]}"; do
+    echo "$file"
+done
+
+# or
+
+# 临时修改 IFS
+OLDIFS=$IFS
+IFS=$'\n'
+
+for file in $(find . -name '* *.png' | sed 's/.\/assets\///'); do
+    echo "$file"
+done
+
+IFS=$OLDIFS
+```
+
 ## setsid, nohup, disown and double-fork daemon
 ```
 | Method           | Detaches from shell? | Removes controlling TTY?    | Avoids SIGHUP?                            | Avoids Ctrl-C?  | Survives logout?                                 | True daemon? |

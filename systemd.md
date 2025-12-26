@@ -214,7 +214,7 @@ unit file 存放路径：
 	```
 
 [archlinux systemd help](https://wiki.archlinux.org/title/Systemd)  
-[How do I properly install a systemd timer and service]((https://askubuntu.com/questions/1083537/how-do-i-properly-install-a-systemd-timer-and-service)  
+[How do I properly install a systemd timer and service](https://askubuntu.com/questions/1083537/how-do-i-properly-install-a-systemd-timer-and-service)  
 [**systemd Documentation**](https://0pointer.de/blog/projects/systemd-docs.html)  
 [**systemd* help doc**](https://www.freedesktop.org/software/systemd/man/latest/)  
 ![LinuxServiceManagementMadeEasyWithSystemd.pdf](./assets/LinuxServiceManagementMadeEasyWithSystemd.pdf)  
