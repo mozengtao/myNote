@@ -19,6 +19,134 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## read
+```bash
+# -r: read raw input (Do not treat a <backslash> character in any special way)
+read -r input
+echo "$input"
+
+# -p: prompt
+read -p 'Enter your name: ' name
+echo "Hello, $name!"
+
+# -s: silent input
+read -s -p 'Enter your password: ' password
+echo "Password: $password"
+
+# -n: read a specific number of characters
+read -n 1 -p 'Enter a character: ' char
+echo "You entered: $char"
+
+# -t: read with a timeout
+if read -t 3 -p 'Enter answer in 3 seconds: ' answer; then
+  echo "You entered: $answer"
+else
+  echo "Timeout"
+fi
+
+# -d: read with a delimiter
+read -d ';' -p 'Enter a string terminated by a semicolon: ' string
+echo "You entered: $string"
+
+# -a: read an array
+read -a array -p 'Enter an array: '
+echo "You entered: ${array[*]}"
+echo "Number of elements: ${#array[@]}"
+
+# read multiple variables
+read -r -p 'Enter three variables: ' var1 var2 var3
+echo "You entered: $var1, $var2, $var3"
+
+# read a line
+read -r -p 'Enter a line: ' line
+echo "You entered: $line"
+
+# restore IFS
+OLDIFS=$IFS
+IFS=','
+read -r -p 'Enter 3 comma-separated values: ' first second third
+echo "You entered: $first, $second, $third"
+IFS=$OLDIFS
+
+# read from a file
+while IFS= read -r line; do
+  echo "$line"
+done < input.txt
+
+# read from a pipe
+seq 3 | while IFS= read -r line; do
+  echo "$line"
+done
+
+# read from a file descriptor
+while IFS= read -r line; do
+  echo "$line"
+done < <(seq 3)
+
+# read from a file descriptor
+find . -type f -name "*.c" -print0 | while IFS= read -r -d '' file; do
+  echo "$file"
+done
+
+# read from a pipe
+ls -1 | while IFS= read -r file; do
+  echo "$file"
+done
+
+# menu example
+echo "1) Option 1"
+echo "2) Option 2"
+echo "3) Option 3"
+echo "q) Quit"
+
+while true; do
+  read -n 1 -p "Enter your choice(1-3 or q): " choice
+  echo
+  case $choice in
+    1) echo "You chose Option 1";;
+    2) echo "You chose Option 2";;
+    3) echo "You chose Option 3";;
+    q) echo "Quitting"; exit 0;;
+    *) echo "Invalid choice";;
+  esac
+done
+
+# confirm example
+read -p 'Continue? (Yy/Nn): ' continue
+if [[ $continue =~ [Yy] ]]; then
+  echo "Continuing"
+else
+  echo "Exiting"
+  exit 0
+fi
+
+# read CSV file
+while IFS=',' read -r col1 col2 col3; do
+  echo "Column 1: $col1, Column 2: $col2, Column 3: $col3"
+done < input.csv
+
+# special variable
+read -p 'input:'
+echo "You entered: $REPLY"
+
+# read into variables
+read -r first rest <<< "This is a test"
+echo "First: $first, Rest: $rest"
+
+# here-string
+read -r var1 var2 <<< "hello world"
+echo "var1: $var1, var2: $var2"
+
+# here-document
+read -r first_line <<'EOF'
+This is the first line
+This is the second line
+This is the third line
+EOF
+
+echo "First line: $first_line"
+```
+
 ## 命令替换的分词
 ```bash
 for file in $(find . -name '* *.png'); do
