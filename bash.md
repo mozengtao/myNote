@@ -19,6 +19,18 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## ps
+- ps命令默认列宽限制
+    ps命令默认会截断超过终端宽度的输出
+    这是为了在多列输出时保持对齐
+    在管道传递时，ps会使用默认列宽（通常80字符）
+```bash
+cat /proc/$(pgrep -f confd)/cmdline | tr '\0' ' '
+
+cat /proc/$(pgrep -f confd)/cmdline | xargs -0 echo
+
+```
+
 ## read
 ```bash
 # -r: read raw input (Do not treat a <backslash> character in any special way)

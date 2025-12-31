@@ -1,5 +1,94 @@
 [Understanding the Linux Kernel](https://github.com/hraverkar/books)  
 
+- 嵌入式 C 的面向对象的目的
+    驱动可替换
+    硬件可扩展
+    平台可移植
+    系统可长期维护
+
+- 关于一个项目时，尝试回答：
+✅ 它的“核心对象”是谁？
+✅ 对象之间如何组合/继承？
+✅ 多态是怎么实现的？
+✅ 是否有“协议（interface）”？
+✅ 是否支持“可扩展插件”？
+✅ 如何管理对象生命周期？
+
+- zephyr
+> A scalable real-time operating system (RTOS) supporting multiple hardware architectures, optimized for resource constrained devices, and built with security in mind.
+[zephyr](https://github.com/zephyrproject-rtos/zephyr)  
+[]()  
+[]()  
+[]()  
+
+- rt-thread
+> An open source IoT Real-Time Operating System (RTOS)
+[rt-thread](https://github.com/RT-Thread/rt-thread)  
+[]()  
+[]()  
+[]()  
+
+- qpc
+> QP/C real-time event framework (RTEF) is a lightweight implementation of the asynchronous, event-driven Active Object (a.k.a. Actor) model of computation specifically designed for real-time embedded systems, such as microcontrollers (MCUs).
+[qpc](https://github.com/QuantumLeaps/qpc)  
+[]()  
+[]()  
+
+- littlefs
+> A little fail-safe filesystem designed for microcontrollers.
+[littlefs](https://github.com/littlefs-project/littlefs)  
+[]()  
+[]()  
+
+- lwip
+> lwIP is a small independent implementation of the TCP/IP protocol suite.
+[lwip](https://github.com/lwip-tcpip/lwip)  
+[]()  
+[]()  
+
+- micropython
+> MicroPython - a lean and efficient Python implementation for microcontrollers and constrained systems
+[micropython](https://github.com/micropython/micropython)  
+[]()  
+[]()  
+
+- mongoose
+> Embedded web server, with TCP/IP network stack, MQTT and Websocket
+[mongoose](https://github.com/cesanta/mongoose)  
+[]()  
+[]()  
+
+- libopencm3
+> Open source ARM Cortex-M microcontroller library
+[libopencm3](https://github.com/libopencm3/libopencm3)  
+[]()  
+[]()  
+
+- sml
+> C++14 State Machine library
+[sml](https://github.com/boost-ext/sml)  
+[]()  
+[]()  
+
+- 
+> 
+[]()  
+[]()  
+[]()  
+
+- 
+> 
+[]()  
+[]()  
+[]()  
+
+- 
+> 
+[]()  
+[]()  
+[]()  
+
+
 > RCU 不是“内核专属 API”，而是一种 "读者无锁、写者等待、以时间换并发" 的设计思想
 [Userspace RCU](https://liburcu.org/)  
 

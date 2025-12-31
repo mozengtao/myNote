@@ -142,6 +142,14 @@ fsm_rt_t print_hello(void)
 }
 ```
 
+- 裸机思维(傻孩子)系列
+[从零开始的状态机漫谈1](https://aijishu.com/a/1060000000122957)  
+[从零开始的状态机漫谈2](https://aijishu.com/a/1060000000185409)  
+[从零开始的状态机漫谈3](https://aijishu.com/a/1060000000187948)  
+[从零开始的状态机漫谈4](https://aijishu.com/a/1060000000241386)  
+[]()  
+
+
 [Finite State Machine Designer](https://madebyevan.com/fsm/)  
 [Finite States Machines (in C)](https://dev.to/rdentato/finite-states-machines-in-c-129n)  
 [fsm](https://github.com/rdentato/fsm)  

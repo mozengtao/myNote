@@ -70,6 +70,30 @@
 [flask](https://github.com/pallets/flask)  
 ![Learn Architecture & Patterns in flask](./python/flask_ARCHITECTURE_ANALYSIS.md)  
 
+## global
+[Using and Creating Global Variables in Your Python Functions](https://realpython.com/python-use-global-variable-in-function/)  
+
+- Python can look for variables in four different scopes
+1. The local, or function-level, scope, which exists inside functions
+2. The enclosing, or non-local, scope, which appears in nested functions
+3. The global scope, which exists at the module level
+4. The built-in scope, which is a special scope for Python’s built-in names
+
+- from inner_func() perspective
+```python
+# Global scope
+
+def outer_func():
+    # Non-local scope
+    def inner_func():
+        # Local scope
+        print(some_variable)
+    inner_func()
+
+# Variable search order
+local scope -> non-local scope -> global scope -> built-in scope
+```
+
 ## psutil
 `git clone https://github.com/giampaolo/psutil.git`
 ![项目架构分析文档](./psutil/ARCHITECTURE_ANALYSIS.md)  
