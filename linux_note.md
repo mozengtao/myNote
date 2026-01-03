@@ -1,4 +1,13 @@
 [Understanding the Linux Kernel](https://github.com/hraverkar/books)  
+[**OS Development Wiki**](https://wiki.osdev.org/Main_Page)  
+[haiku OS](https://github.com/haiku/haiku)  
+[Linux-Kernel-Programming](https://github.com/PacktPublishing/Linux-Kernel-Programming)  
+[The Linux Kernel Module Programming Guide](https://sysprog21.github.io/lkmpg/)  
+[Learning operating system development using Linux kernel and Raspberry Pi](https://github.com/s-matyukevich/raspberry-pi-os)  
+[learning-linux-kernel](https://github.com/danbev/learning-linux-kernel)  
+[]()  
+[]()  
+[]()  
 
 - 嵌入式 C 的面向对象的目的
     驱动可替换
@@ -87,6 +96,99 @@
 []()  
 []()  
 []()  
+
+- architecture
+![what is architecture](./linux/architecture/guide/01_what_is_architecture.md)  
+![core engineering problems](./linux/architecture/guide/02_core_engineering_problems.md)  
+![architecture vs implementation](./linux/architecture/guide/03_architecture_vs_implementation.md)  
+![why c cpp needs architecture](./linux/architecture/guide/04_why_c_cpp_needs_architecture.md)  
+![failure without architecture](./linux/architecture/guide/05_failure_without_architecture.md)  
+![architecture deliverables](./linux/architecture/guide/06_architecture_deliverables.md)  
+![when architecture needed](./linux/architecture/guide/07_when_architecture_needed.md)  
+![thinking anchors](./linux/architecture/guide/08_thinking_anchors.md)  
+
+- whole view
+![why architectural motivation](./linux/architecture/subsystems/whole/01_why_architectural_motivation.md)  
+![how architectural principles](./linux/architecture/subsystems/whole/02_how_architectural_principles.md)  
+![what concrete patterns](./linux/architecture/subsystems/whole/03_what_concrete_patterns.md)  
+![where source code map](./linux/architecture/subsystems/whole/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/whole/05_transfer_to_real_projects.md)  
+
+- process management
+![why process management](./linux/architecture/subsystems/process_manage/01_why_process_management.md)  
+![how architectural strategy](./linux/architecture/subsystems/process_manage/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/process_manage/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/process_manage/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/process_manage/05_transfer_to_real_projects.md)  
+
+- memory management
+![why memory management](./linux/architecture/subsystems/memory_manage/01_why_memory_management.md)  
+![how architectural strategy](./linux/architecture/subsystems/memory_manage/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/memory_manage/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/memory_manage/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/memory_manage/05_transfer_to_real_projects.md)  
+
+- VFS
+![why filesystem subsystem](./linux/architecture/subsystems/file_system/01_why_filesystem_subsystem.md)  
+![how architectural strategy](./linux/architecture/subsystems/file_system/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/file_system/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/file_system/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/file_system/05_transfer_to_real_projects.md)  
+
+- Network Stack
+![why network stack](./linux/architecture/subsystems/network_stack/01_why_network_stack.md)  
+![how architectural strategy](./linux/architecture/subsystems/network_stack/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/network_stack/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/network_stack/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/network_stack/05_transfer_to_real_projects.md)  
+
+- net subsystem
+![why engineering motivation](./linux/net/3w1h/01_why_engineering_motivation.md)  
+![how design principles](./linux/net/3w1h/02_how_design_principles.md)  
+![what architecture patterns](./linux/net/3w1h/03_what_architecture_patterns.md)  
+![where source code](./linux/net/3w1h/04_where_source_code.md)  
+![reflection and migration](./linux/net/3w1h/05_reflection_and_migration.md)  
+
+- tcp-fsm
+[linux3.2](git clone --depth 1 --branch v3.2 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git)  
+![fsm purpose problem statement](./linux/tcp_fsm/01_fsm_purpose_problem_statement.md)  
+![state representation](./linux/tcp_fsm/02_state_representation.md)  
+![events inputs](./linux/tcp_fsm/03_events_inputs.md)  
+![transition logic](./linux/tcp_fsm/04_transition_logic.md)  
+![fsm concurrency](./linux/tcp_fsm/05_fsm_concurrency.md)  
+![error handling recovery](./linux/tcp_fsm/06_error_handling_recovery.md)  
+![design patterns](./linux/tcp_fsm/07_design_patterns.md)  
+![engineering tradeoffs](./linux/tcp_fsm/08_engineering_tradeoffs.md)  
+![userspace takeaways](./linux/tcp_fsm/09_userspace_takeaways.md)  
+![hands on reconstruction](./linux/tcp_fsm/10_hands_on_reconstruction.md)  
+
+- wireshark-fsm
+[wireshark](git clone --depth 1 https://gitlab.com/wireshark/wireshark.git)  
+![README](./wireshark/fsm/README.md)  
+![why fsm](./wireshark/fsm/01-why-fsm.md)  
+![fsm boundaries](./wireshark/fsm/02-fsm-boundaries.md)  
+![state representation](./wireshark/fsm/03-state-representation.md)  
+![events transitions](./wireshark/fsm/04-events-transitions.md)  
+![error handling](./wireshark/fsm/05-error-handling.md)  
+![performance](./wireshark/fsm/06-performance.md)  
+![patterns](./wireshark/fsm/07-patterns.md)  
+![comparative](./wireshark/fsm/08-comparative.md)  
+![design lessons](./wireshark/fsm/09-design-lessons.md)  
+![hands on exercise](./wireshark/fsm/10-hands-on-exercise.md)  
+
+- ngtcp2
+[ngtcp2](git clone --depth 1 https://github.com/ngtcp2/ngtcp2.git)  
+![fsm role in quic](./ngtcp2/fsm/01-fsm-role-in-quic.md)  
+![state modeling](./ngtcp2/fsm/02-state-modeling.md)  
+![events and drivers](./ngtcp2/fsm/03-events-and-drivers.md)  
+![transition implementation](./ngtcp2/fsm/04-transition-implementation.md)  
+![fsm async design](./ngtcp2/fsm/05-fsm-async-design.md)  
+![error states teardown](./ngtcp2/fsm/06-error-states-teardown.md)  
+![design patterns](./ngtcp2/fsm/07-design-patterns.md)  
+![comparison with tcp](./ngtcp2/fsm/08-comparison-with-tcp.md)  
+![user space takeaways](./ngtcp2/fsm/09-user-space-takeaways.md)  
+![hands on design task](./ngtcp2/fsm/10-hands-on-design-task.md)  
+![README](./ngtcp2/fsm/README.md)  
 
 
 > RCU 不是“内核专属 API”，而是一种 "读者无锁、写者等待、以时间换并发" 的设计思想
@@ -1219,7 +1321,6 @@ sudo ./test_example_dev
 [Linux内核: I2C子系统分析](https://www.cnblogs.com/schips/p/linux-subsystem-i2c-0-about.html)  
 [Linux环境编程：从应用到内核](https://github.com/0voice/linux_kernel_wiki/blob/main/%E7%94%B5%E5%AD%90%E4%B9%A6%E7%B1%8D/Linux%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B%EF%BC%9A%E4%BB%8E%E5%BA%94%E7%94%A8%E5%88%B0%E5%86%85%E6%A0%B8%20(Linux%20Unix%E6%8A%80%E6%9C%AF%E4%B8%9B%E4%B9%A6).pdf)  
 [linux-insides](https://github.com/0xAX/linux-insides/blob/master/SUMMARY.md)  
-[OS Development Wiki](https://wiki.osdev.org/Main_Page)  
 [build-your-own-x](https://github.com/codecrafters-io/build-your-own-x)  
 [Baking Pi – Operating Systems Development](https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/os/index.html)  
 [Writing a Tiny x86 Bootloader](https://www.joe-bergeron.com/posts/Writing%20a%20Tiny%20x86%20Bootloader/)  
