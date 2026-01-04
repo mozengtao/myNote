@@ -142,6 +142,34 @@
 ![where source code map](./linux/architecture/subsystems/network_stack/04_where_source_code_map.md)  
 ![transfer to real projects](./linux/architecture/subsystems/network_stack/05_transfer_to_real_projects.md)  
 
+- Device driver
+![why driver subsystem](./linux/architecture/subsystems/device_driver/01_why_driver_subsystem.md)  
+![how architectural strategy](./linux/architecture/subsystems/device_driver/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/device_driver/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/device_driver/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/device_driver/05_transfer_to_real_projects.md)  
+
+- Virtualization
+![why virtualization](./linux/architecture/subsystems/virtulization/01_why_virtualization.md)  
+![how architectural strategy](./linux/architecture/subsystems/virtulization/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/virtulization/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/virtulization/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/virtulization/05_transfer_to_real_projects.md)  
+
+- Security
+![why security subsystem](./linux/architecture/subsystems/security/01_why_security_subsystem.md)  
+![how architectural strategy](./linux/architecture/subsystems/security/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/security/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/security/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/security/05_transfer_to_real_projects.md)  
+
+- Tracing
+![why tracing exists](./linux/architecture/subsystems/tracing/01_why_tracing_exists.md)  
+![how architectural strategy](./linux/architecture/subsystems/tracing/02_how_architectural_strategy.md)  
+![what concrete architecture](./linux/architecture/subsystems/tracing/03_what_concrete_architecture.md)  
+![where source code map](./linux/architecture/subsystems/tracing/04_where_source_code_map.md)  
+![transfer to real projects](./linux/architecture/subsystems/tracing/05_transfer_to_real_projects.md)  
+
 - net subsystem
 ![why engineering motivation](./linux/net/3w1h/01_why_engineering_motivation.md)  
 ![how design principles](./linux/net/3w1h/02_how_design_principles.md)  
