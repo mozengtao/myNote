@@ -20,6 +20,13 @@
 ![simple_producer.c](./kafka/simple_producer.c)  
 ![simple_consumer.c](./kafka/simple_consumer.c)  
 
+- librdkafka
+![WHY-Engineering-Motivation](./kafka/01-WHY-Engineering-Motivation.md)  
+![HOW-Design-Philosophy](./kafka/02-HOW-Design-Philosophy.md)  
+![WHAT-Architecture-Concrete-Forms](./kafka/03-WHAT-Architecture-Concrete-Forms.md)  
+![WHERE-Source-Code-Reading](./kafka/04-WHERE-Source-Code-Reading.md)  
+![Real-Project-Usage](./kafka/05-Real-Project-Usage.md)  
+![Reflection-Knowledge-Transfer](./kafka/06-Reflection-Knowledge-Transfer.md)  
 
 
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统

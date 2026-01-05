@@ -1,10 +1,23 @@
 > collectd is a small daemon which collects metrics periodically and provides mechanisms to store and monitor the values in a variety of ways.
-
 [collectd](https://collectd.org/)  
+[collectd](https://github.com/collectd/collectd)  
 []()  
 []()  
 []()  
-[]()  
+
+![01_architecture_overview](./collectd/01_architecture_overview.md)  
+![02_process_model](./collectd/02_process_model.md)  
+![03_plugin_architecture](./collectd/03_plugin_architecture.md)  
+![04_data_model](./collectd/04_data_model.md)  
+![05_dispatch_and_cache](./collectd/05_dispatch_and_cache.md)  
+![06_threading_and_concurrency](./collectd/06_threading_and_concurrency.md)  
+![07_write_plugins](./collectd/07_write_plugins.md)  
+![08_configuration](./collectd/08_configuration.md)  
+![09_writing_plugins](./collectd/09_writing_plugins.md)  
+![10_architecture_mapping](./collectd/10_architecture_mapping.md)  
+![11_limitations_and_tradeoffs](./collectd/11_limitations_and_tradeoffs.md)  
+![12_learning_summary](./collectd/12_learning_summary.md)  
+
 
 ## install collectd
 sudo apt install collectd

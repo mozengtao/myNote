@@ -4,9 +4,10 @@
 [Five proven prompt engineering techniques](https://www.lennysnewsletter.com/p/five-proven-prompt-engineering-techniques)  
 []()  
 []()  
+[llm-course](https://github.com/mlabonne/llm-course)  
 []()  
-[]()  
-[]()  
+[**vibekanban**](https://www.vibekanban.com/)  
+> Vibe Kanban lets you run coding agents in parallel without conflicts, and perform code review through our diff tool. Now you can focus on planning and quality instead of watching terminal logs.
 []()  
 []()  
 []()  
