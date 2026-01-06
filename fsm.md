@@ -1,6 +1,20 @@
 [**Practical UML Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 [**Practical Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 
+
+![01 when fsm needed](./fsm/01_when_fsm_needed.md)  
+![02 what core concepts](./fsm/02_what_core_concepts.md)  
+![03 how states events transitions](./fsm/03_how_states_events_transitions.md)  
+![04 why rejecting transitions](./fsm/04_why_rejecting_transitions.md)  
+![05 how logic vs work](./fsm/05_how_logic_vs_work.md)  
+![06 scale table driven](./fsm/06_scale_table_driven.md)  
+![07 why real systems](./fsm/07_why_real_systems.md)  
+![08 how event driven](./fsm/08_how_event_driven.md)  
+![09 what object lifetime](./fsm/09_what_object_lifetime.md)  
+![10 scale hierarchical](./fsm/10_scale_hierarchical.md)  
+![11 reflection mastery](./fsm/11_reflection_mastery.md)  
+
+
 # 状态机
 ## 状态
 ### 状态的定义
