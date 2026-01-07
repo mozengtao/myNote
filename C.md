@@ -5418,6 +5418,12 @@ Graceful close vs force close
 ```
 
 ## hash table
+![00 index](./hash_table/00-index.md)  
+![01 separate chaining](./hash_table/01-separate-chaining.md)  
+![02 open addressing basic](./hash_table/02-open-addressing-basic.md)  
+![03 open addressing advanced](./hash_table/03-open-addressing-advanced.md)  
+![04 specialized methods](./hash_table/04-specialized-methods.md)  
+![05 comparison and advice](./hash_table/05-comparison-and-advice.md)  
 ```c
 /*
 Hash Buckets

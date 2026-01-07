@@ -14,6 +14,61 @@
 ![10 scale hierarchical](./fsm/10_scale_hierarchical.md)  
 ![11 reflection mastery](./fsm/11_reflection_mastery.md)  
 
+- Implementation
+![fsm approach1 table driven](./fsm/impl/fsm_approach1_table_driven.md)  
+![fsm approach2 function pointer](./fsm/impl/fsm_approach2_function_pointer.md)  
+![fsm approach3 macro dsl](./fsm/impl/fsm_approach3_macro_dsl.md)  
+```
+Table-Driven FSM	2D array [state][event] = transition
+Function Pointer	Per-state handler functions
+Macro-Based DSL	X-macro generates code from spec
+
++=====================================================================================+
+|                    THREE FSM APPROACHES COMPARISON                                  |
++=====================================================================================+
+
+                        TABLE-DRIVEN         FUNCTION POINTER       MACRO DSL
++-------------------+--------------------+---------------------+--------------------+
+| Single Source of  | Transition table   | Handler functions   | TRANSITIONS macro  |
+| Truth             | (2D array)         | (1D array)          | (X-macro)          |
++-------------------+--------------------+---------------------+--------------------+
+| Transition        | One struct per     | Switch-case inside  | One line per       |
+| Visibility        | cell, all visible  | each handler        | transition         |
++-------------------+--------------------+---------------------+--------------------+
+| Complex Logic     | Limited (action    | Unlimited (full     | Limited (action    |
+| Support           | function only)     | code in handler)    | function only)     |
++-------------------+--------------------+---------------------+--------------------+
+| Guard Conditions  | Needs extra field  | Natural if/else     | Needs extra macro  |
++-------------------+--------------------+---------------------+--------------------+
+| Unit Testing      | Test engine only   | Test each handler   | Test engine only   |
++-------------------+--------------------+---------------------+--------------------+
+| Documentation     | Manual sync        | Manual sync         | Auto-generated!    |
++-------------------+--------------------+---------------------+--------------------+
+| Learning Curve    | Low                | Low                 | Medium (macros)    |
++-------------------+--------------------+---------------------+--------------------+
+| Best For          | Simple, uniform    | Complex, varied     | Stable, documented |
+|                   | transitions        | per-state logic     | FSMs               |
++=====================================================================================+
+
+```
+## 三种方案各有适用场景：
+
+### 表驱动：适合转换规则统一、逻辑简单的场景，易于理解和验证
+	转换规则集中在一个二维表中，一目了然
+	添加新状态只需在表中加一行
+	结果处理逻辑集中在 switch 中，避免重复
+	易于自动生成文档和测试用例
+
+### 函数指针：适合每个状态有复杂独立逻辑、需要单元测试的场景
+	每个状态转换有复杂的独立逻辑
+	需要独立进行单元测试
+	愿意接受更多的代码量换取更清晰的职责分离
+
+### 宏DSL：适合规格稳定、需要自动生成文档的场景，团队需熟悉宏技术
+	追求极致的代码简洁和自文档化
+	愿意接受宏的复杂性
+	需要从代码自动生成状态图文档
+
 
 # 状态机
 ## 状态
