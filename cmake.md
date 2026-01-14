@@ -9,6 +9,8 @@
 [CMake-Best-Practices](https://github.com/PacktPublishing/CMake-Best-Practices/tree/main)  
 [More Modern CMake](https://hsf-training.github.io/hsf-training-cmake-webpage/aio/index.html)  
 [More Modern CMake](https://hsf-training.github.io/hsf-training-cmake-webpage/)  
+[It's Time To Do CMake Right](https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/)  
+[]()  
 []()  
 
 ## CMake 核心思想

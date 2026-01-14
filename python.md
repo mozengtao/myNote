@@ -8,7 +8,7 @@
 
 [Managing Python Projects With uv: An All-in-One Solution](https://realpython.com/python-uv/)  
 [Python UV: The Ultimate Guide to the Fastest Python Package Manager](https://www.datacamp.com/tutorial/python-uv)  
-[]()  
+[Python Decorators From the Ground Up](https://pabloariasal.github.io/python-decorators-from-the-ground-up/)  
 []()  
 []()  
 []()  

@@ -2,6 +2,11 @@
 [Introduction to C++](https://www.studyplan.dev/intro-to-programming)  
 [Professional C++](https://www.studyplan.dev/pro-cpp)  
 
+[**Design Patterns in Modern C++ Series' Articles**](https://dev.to/visheshpatel/series/6202)  
+[**What Is Design Pattern?**](https://vishalchovatiya.com/posts/what-is-design-pattern/)  
+[]()  
+
+
 [Effective Modern C++](https://ananyapam7.github.io/resources/C++/Scott_Meyers_Effective_Modern_C++.pdf) #pdf  
 [Effective Modern C++中文版](https://github.com/CnTransGroup/EffectiveModernCppChinese) #github
 [Effective Modern C++中文版](https://cntransgroup.github.io/EffectiveModernCppChinese/) #online
@@ -13,9 +18,9 @@
 Computer Programming with C++
 
 [TCP/IP Network Programming Design Patterns in C++](https://vichargrave.github.io/programming/tcp-ip-network-programming-design-patterns-in-cpp/)  
-[]()  
-[]()  
-[]()  
+[How Does Virtual Function Works Internally?](https://dev.to/visheshpatel/part-1-all-about-virtual-keyword-in-c-how-does-virtual-function-works-internally-2ebk)  
+[Understandig Virtual Tables in C++](https://pabloariasal.github.io/2017/06/10/understanding-virtual-tables/)  
+[Virtual Functions](http://web.archive.org/web/20100209040010/http://www.codersource.net/published/view/325/virtual_functions_in.aspx)  
 []()  
 []()  
 

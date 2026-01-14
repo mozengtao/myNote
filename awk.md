@@ -267,6 +267,11 @@ END {
 
 ## Tips
 ```bash
+
+echo "DOCS-IF3-MIB::docsIf3CmtsSignalQualityExtCNIR.569 = INTEGER: .0" | awk -F'[:.]' '{print $3}'
+#docsIf3CmtsSignalQualityExtCNIR
+
+
 # Rule of Thumb
 Use sed for simple edits (substitution, deletion, insertion).
 Use awk when you need to process fields, add conditions, or compute.
