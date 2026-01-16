@@ -1,0 +1,22 @@
+> PostgreSQL is an advanced object-relational database management system that supports an extended subset of the SQL standard, including transactions, foreign keys, subqueries, triggers, user-defined types and functions.
+[PostgreSQL](https://github.com/postgres/postgres)  
+[]()  
+[]()  
+
+- PostgreSQL Learning Guide
+![01 why databases exist](./PostgreSQL/learning-guide/01_why_databases_exist.md)  
+![02 why postgresql exists](./PostgreSQL/learning-guide/02_why_postgresql_exists.md)  
+![03 postgresql architecture](./PostgreSQL/learning-guide/03_postgresql_architecture.md)  
+![04 source tree tour](./PostgreSQL/learning-guide/04_source_tree_tour.md)  
+![05 sql processing pipeline](./PostgreSQL/learning-guide/05_sql_processing_pipeline.md)  
+![06 storage engine](./PostgreSQL/learning-guide/06_storage_engine.md)  
+![07 indexing](./PostgreSQL/learning-guide/07_indexing.md)  
+![08 transactions mvcc](./PostgreSQL/learning-guide/08_transactions_mvcc.md)  
+![09 locking concurrency](./PostgreSQL/learning-guide/09_locking_concurrency.md)  
+![10 wal](./PostgreSQL/learning-guide/10_wal.md)  
+![11 recovery replication](./PostgreSQL/learning-guide/11_recovery_replication.md)  
+![12 memory management](./PostgreSQL/learning-guide/12_memory_management.md)  
+![13 using postgresql](./PostgreSQL/learning-guide/13_using_postgresql.md)  
+![14 real projects](./PostgreSQL/learning-guide/14_real_projects.md)  
+![15 common mistakes](./PostgreSQL/learning-guide/15_common_mistakes.md)  
+![16 mental model](./PostgreSQL/learning-guide/16_mental_model.md)  

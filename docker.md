@@ -7,6 +7,24 @@
 [Kubernetes Deployment Antipatterns](https://codefresh.io/blog/kubernetes-antipatterns-1/)  
 [Docker anti-patterns](https://codefresh.io/blog/docker-anti-patterns/)  
 
+- learning guide
+![README](./docker/learning-guide/README.md)  
+![01 the problem docker is solving](./docker/learning-guide/01-the-problem-docker-is-solving.md)  
+![02 containers vs vms](./docker/learning-guide/02-containers-vs-vms.md)  
+![03 docker architecture](./docker/learning-guide/03-docker-architecture.md)  
+![04 linux primitives](./docker/learning-guide/04-linux-primitives.md)  
+![05 docker images](./docker/learning-guide/05-docker-images.md)  
+![06 docker containers](./docker/learning-guide/06-docker-containers.md)  
+![07 dockerfile](./docker/learning-guide/07-dockerfile.md)  
+![08 docker networking](./docker/learning-guide/08-docker-networking.md)  
+![09 volumes](./docker/learning-guide/09-volumes.md)  
+![10 docker compose](./docker/learning-guide/10-docker-compose.md)  
+![11 real projects](./docker/learning-guide/11-real-projects.md)  
+![12 common mistakes](./docker/learning-guide/12-common-mistakes.md)  
+![13 docker vs kubernetes](./docker/learning-guide/13-docker-vs-kubernetes.md)  
+![14 repositories](./docker/learning-guide/14-repositories.md)  
+![15 mental model](./docker/learning-guide/15-mental-model.md)  
+
 ## LXD, Docker 和 oVirt
 ```
 LXD(Linux Container Daemon)是一种基于 Linux容器 (LXC) 的系统级容器，提供类似虚拟机的轻量级容器环境，同时保持接近原生的性能，它通过抽象底层 LXC 技术，简化了容器管理的复杂性，并扩展了容器的高级功能

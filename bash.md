@@ -19,6 +19,56 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## line-by-line pairing in shell scripting
+```bash
+cat > cmd.txt << EOF
+cmd1 arg1
+cmd2 arg1 arg2
+EOF
+
+cat > filename.txt << EOF
+name1
+name2
+EOF
+
+# option 1
+echo "Option 1"
+paste cmd.txt filename.txt | while IFS="$(printf '\t')" read -r cmd filename; do
+    echo "Running $cmd and saving the output to $filename"
+done
+
+echo "Option 1"
+paste cmd.txt filename.txt | while IFS="$(printf '\t')" read -r cmd filename; do
+    ./exec.sh "$cmd" < /dev/null > "$filename"
+done
+
+<<EOF
+Problem: When a script inside a while read loop reads from stdin, it steals the piped input meant for the loop.
+
+paste output -> while read (gets line 1)
+                    -> vmc_confd_cli.sh reads stdin (steals lines 2, 3, ...)
+                -> while read (nothing left!)
+
+Fix: < /dev/null blocks the inner script from reading the loop's stdin.
+EOF
+
+# option 2
+echo "Option 2"
+exec 3< filename.txt
+
+while IFS= read -r cmd || [[ -n "$cmd" ]]
+do
+    IFS= read -r name <&3 || true
+    echo "Running $cmd and saving the output to $name"
+done < cmd.txt
+
+exec 3<&-
+
+# option 3
+echo "Option 3"
+awk 'NR==FNR { names[FNR] = $0; next } { print "Running " $0 " and saving the output to " names[FNR] }' filename.txt cmd.txt
+```
+
 ## ps
 - ps命令默认列宽限制
     ps命令默认会截断超过终端宽度的输出
