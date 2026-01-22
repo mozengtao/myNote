@@ -38,6 +38,32 @@
 [Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
 [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
+## How CPU communicates with I/O devices
+- I/O devices： Input/Output devices
+
+- How CPU talk with I/O device
+	- The CPU doesn’t control I/O devices — it communicates with them.
+
+IO设备内部都有专用微控制器芯片(device controller)，CPU不直接和设备进行交互，而是通过device controller和device间接进行交互
+- How CPU talk with I/O device:
+1. CPU sends out request to device controller
+2. device contoller executes the request to communicate with the device itself
+3. once the request information is ready, device controller sends back the inforamtion to CPU through the control bus.
+![CPU与IO设备的交互过程](./io_devices/cpu_io_communication.png)  
+
+![IO设计需要考虑的两个方面](./io_devices/io_considerations.png)  
+
+- When designing IO, there are 2 things to be considered
+	- Communication Method
+		![CPU与IO设备的2种通信方式](./io_devices/io_MMIO_PORTIO.png)  
+		Memory-Mapped I/O
+		Port-Mapped I/O (Isolated I/O)
+	- Data transfer technique
+		Programmed I/O (Polling)
+		Interrupt-Driven I/O
+
+![CPU内部总线结构](./io_devices/cpu_io_topo1.png)  
+
 ## socket
 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)  
 [Linux Socket Programming](https://theexuberantindian.wordpress.com/2017/04/12/linux-socket-programming/)  

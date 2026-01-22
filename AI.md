@@ -1550,7 +1550,7 @@ Save the result for each pattern as a Markdown file
 
 ## ask ChatGPT to give a structured Cursor prompt to learn a topic
 ```
-I did not touch docker before, I want to systematically learn docker, provide me a structured Cursor prompt in detail in pure Markdown format in a whole, the prompt should cover the following items: the docker architecture, why it is designed like this, how it works, how to use it for real projects,if there is any opensource repo to reference it would be good
+I did not touch docker before, I want to systematically learn docker, provide me a structured Cursor prompt in detail in pure Markdown format that I can copy directly, the prompt should cover the following items: the docker architecture, why it is designed like this, how it works, how to use it for real projects,if there is any opensource repo to reference it would be good
 
 Output Expectations
 - Use precise technical language

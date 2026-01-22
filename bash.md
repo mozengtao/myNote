@@ -19,6 +19,58 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## tips
+```bash
+# 获取匹配行及之后所有内容
+sed -n '/pattern/,$p' file.txt
+
+# 获取匹配行之后所有内容（不包括匹配行）
+awk '/pattern/{found=1;next} found' file.txt
+
+# 测试1：有分隔符的情况
+echo "=== 测试1：有分隔符 ==="
+cat > test_with_dash.txt << 'EOF'
+Header 1
+Header 2
+---
+Data 1
+Data 2
+EOF
+
+# 期望输出：只输出 Data 1 和 Data 2
+awk '
+  BEGIN { buffer = ""; found = 0 }
+  /---/ && !found { buffer = ""; found = 1; next }
+  !found { buffer = buffer $0 "\n"; next }
+  found { print }
+  END { if (!found) printf "%s", buffer }
+' test_with_dash.txt
+# 输出：
+# Data 1
+# Data 2
+
+# 测试2：无分隔符的情况
+echo -e "\n=== 测试2：无分隔符 ==="
+cat > test_without_dash.txt << 'EOF'
+Data 1
+Data 2
+Data 3
+EOF
+
+# 期望输出：输出全部 Data 1, Data 2, Data 3
+awk '
+  BEGIN { buffer = ""; found = 0 }
+  /---/ && !found { buffer = ""; found = 1; next }
+  !found { buffer = buffer $0 "\n"; next }
+  found { print }
+  END { if (!found) printf "%s", buffer }
+' test_without_dash.txt
+# 输出：
+# Data 1
+# Data 2
+# Data 3
+```
+
 ## line-by-line pairing in shell scripting
 ```bash
 cat > cmd.txt << EOF

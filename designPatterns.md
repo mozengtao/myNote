@@ -30,6 +30,309 @@
 []()  
 []()  
 
+## Template Method (模板方法) 设计模式
+- 核心思想
+    在一个方法中定义一个算法的骨架（固定步骤），而将一些步骤的延迟执行（即具体实现）交给子类或具体的实现模块
+
+    不变部分（Template）： 算法的整体步骤、执行逻辑、状态跳转。这部分代码被封装起来，不允许轻易修改
+    可变部分（Hooks/Slots）： 算法中依赖具体环境或特定需求的细节
+
+- 解决的问题
+    有一个稳定的执行流程
+    其中某些步骤因对象 / 场景不同而变化
+    但你不允许调用方随意改变顺序
+
+- 核心约束
+    流程顺序由框架掌控
+    变化点被明确标记
+    变化点不能反向控制流程
+
+- 应用场景
+
+- template-method-guide/
+├── ![00-index.md](./design_patterns/template_method/template-method-guide/00-index.md)  
+├── ![01-core-concept.md](./design_patterns/template_method/template-method-guide/01-core-concept.md)  
+├── ![02-identification-rules.md](./design_patterns/template_method/template-method-guide/02-identification-rules.md)  
+├── ![03-vfs-case.md](./design_patterns/template_method/template-method-guide/03-vfs-case.md)  
+├── ![04-netdev-case.md](./design_patterns/template_method/template-method-guide/04-netdev-case.md)  
+├── ![05-napi-case.md](./design_patterns/template_method/template-method-guide/05-napi-case.md)  
+├── ![06-block-case.md](./design_patterns/template_method/template-method-guide/06-block-case.md)  
+├── ![07-device-model-case.md](./design_patterns/template_method/template-method-guide/07-device-model-case.md)  
+├── ![08-unified-skeleton.md](./design_patterns/template_method/template-method-guide/08-unified-skeleton.md)  
+├── ![09-vs-strategy.md](./design_patterns/template_method/template-method-guide/09-vs-strategy.md)  
+├── ![10-antipatterns.md](./design_patterns/template_method/template-method-guide/10-antipatterns.md)  
+├── ![11-reading-guide.md](./design_patterns/template_method/template-method-guide/11-reading-guide.md)  12-mental-model.md
+└── ![12-mental-model.md](./design_patterns/template_method/template-method-guide/12-mental-model.md)  
+
+template_method
+├── ![appl1_file_parser.c](./design_patterns/template_method/appl1_file_parser.c)  
+├── ![appl2_proto_handle.c](./design_patterns/template_method/appl2_proto_handle.c)  
+├── ![appl3_data_exporter.c](./design_patterns/template_method/appl3_data_exporter.c)  
+├── ![impl1_func_ptr.c](./design_patterns/template_method/impl1_func_ptr.c)  
+├── ![impl2_struct_callback.c](./design_patterns/template_method/impl2_struct_callback.c)  
+├── ![linux_blk_dev_ops.c](./design_patterns/template_method/linux_blk_dev_ops.c)  
+├── ![linux_blk_dev_ops2.c](./design_patterns/template_method/linux_blk_dev_ops2.c)  
+├── ![linux_cdev_ops.c](./design_patterns/template_method/linux_cdev_ops.c)  
+├── ![linux_i2c_bus_driver.c](./design_patterns/template_method/linux_i2c_bus_driver.c)  
+├── ![linux_int_process.c](./design_patterns/template_method/linux_int_process.c)  
+├── ![linux_net_ops.c](./design_patterns/template_method/linux_net_ops.c)  
+├── ![linux_pci_driver.c](./design_patterns/template_method/linux_pci_driver.c)  
+├── ![linux_platform_drv.c](./design_patterns/template_method/linux_platform_drv.c)  
+├── ![linux_spi_bus_driver.c](./design_patterns/template_method/linux_spi_bus_driver.c)  
+├── ![linux_summary.md](./design_patterns/template_method/linux_summary.md)  
+├── ![linux_timer_framework.c](./design_patterns/template_method/linux_timer_framework.c)  
+├── ![linux_vfs.c](./design_patterns/template_method/linux_vfs.c)  
+├── ![linux_vfs2.c](./design_patterns/template_method/linux_vfs2.c)  
+├── ![linux_workqueue.c](./design_patterns/template_method/linux_workqueue.c)  
+├── ![peripheral_op_procedure.c](./design_patterns/template_method/peripheral_op_procedure.c)  
+├── ![simplify1_marcro.c](./design_patterns/template_method/simplify1_marcro.c)  
+├── ![simplify2_register_table.c](./design_patterns/template_method/simplify2_register_table.c)  
+├── ![template-method-guide](./design_patterns/template_method/template-method-guide)  
+└── ![template.c](./design_patterns/template_method/template.c)  
+
+## Strategy Pattern (策略模式)
+- ✅ 核心思想
+    将一组功能等价、可互相替换的算法 / 策略，分别封装为独立的 “策略单元”；使用策略的「上下文（客户端）」不直接实现算法，而是通过 “策略接口” 调用算法，使得算法的实现与使用逻辑完全解耦，客户端可在运行时动态切换不同策略，无需修改核心逻辑。
+
+    3 个关键要点
+        1. 算法封装独立：每个策略（算法）都是独立的实现，互不干扰，符合 “单一职责”；
+        2. 接口统一规范：所有策略遵循相同的调用接口（参数、返回值一致），保证客户端可无缝切换；
+        3. 动态切换无侵入：新增 / 替换策略时，只需新增 / 修改策略实现，完全不改动客户端的核心逻辑（开闭原则）
+
+
+- ✅ C 语言落地核心步骤（通用范式）
+    1. 定义策略接口：用typedef声明函数指针类型，统一所有策略的调用格式；
+    2. 实现具体策略：编写多个符合函数指针类型的函数，对应不同算法；
+    3. 定义上下文结构体：包含策略函数指针（用于存储当前选中的策略）；
+    4. 上下文封装调用逻辑：提供 “设置策略”“执行策略” 的函数，客户端通过这些函数切换 / 调用策略；
+    5. 客户端使用：创建上下文实例，动态赋值策略指针，调用执行函数。
+
+- ✅ 策略模式核心思想
+    封装可替换的算法，统一接口，动态切换，算法与使用方解耦。
+- ✅ C 语言实现关键
+    用函数指针类型定义统一的策略接口；
+    用结构体封装策略指针作为上下文；
+    上下文提供「设置策略」「执行策略」函数，客户端无需直接操作函数指针；
+    新增策略只需新增函数，完全不修改核心逻辑。
+- ✅ 与模板方法的核心区别
+    模板方法：流程固定，步骤细节可变（“骨架不变，肉可变”）；
+    策略模式：无固定流程，算法本身可变（“肉不变，做法可变”）；
+    核心判断：如果是 “换算法”，用策略模式；如果是 “换步骤实现”，用模板方法。
+- ✅ 策略模式的核心价值
+    消除大量 if-else/switch 判断，代码更简洁；
+    算法独立扩展，符合开闭原则；
+    运行时动态切换策略，适配不同业务场景；
+    是 C 语言实现 “算法解耦、动态扩展” 的最佳实践之一。
+
+- strategy-pattern-guide
+├── ![00-index](./design_patterns/strategy_pattern/strategy-pattern-guide/00-index.md)  
+├── ![01-core-concept](./design_patterns/strategy_pattern/strategy-pattern-guide/01-core-concept.md)
+├── ![02-identification-rules](./design_patterns/strategy_pattern/strategy-pattern-guide/02-identification-rules.md)
+├── ![03-scheduler-case](./design_patterns/strategy_pattern/strategy-pattern-guide/03-scheduler-case.md)
+├── ![04-tcp-congestion-case](./design_patterns/strategy_pattern/strategy-pattern-guide/04-tcp-congestion-case.md)
+├── ![05-io-scheduler-case](./design_patterns/strategy_pattern/strategy-pattern-guide/05-io-scheduler-case.md)
+├── ![06-memory-policy-case](./design_patterns/strategy_pattern/strategy-pattern-guide/06-memory-policy-case.md)
+├── ![07-lsm-case](./design_patterns/strategy_pattern/strategy-pattern-guide/07-lsm-case.md)
+├── ![08-unified-skeleton](./design_patterns/strategy_pattern/strategy-pattern-guide/08-unified-skeleton.md)
+├── ![09-vs-template-method](./design_patterns/strategy_pattern/strategy-pattern-guide/09-vs-template-method.md)
+├── ![10-antipatterns](./design_patterns/strategy_pattern/strategy-pattern-guide/10-antipatterns.md)
+├── ![11-reading-guide](./design_patterns/strategy_pattern/strategy-pattern-guide/11-reading-guide.md)
+└── ![12-mental-model](./design_patterns/strategy_pattern/strategy-pattern-guide/12-mental-model.md)
+
+strategy_pattern/
+├── ![linux_crypto_subsys.c](./design_patterns/strategy_pattern/linux_crypto_subsys.c)  
+├── ![linux_io_sched.c](./design_patterns/strategy_pattern/linux_io_sched.c)  
+├── ![linux_mem_alloc.c](./design_patterns/strategy_pattern/linux_mem_alloc.c)  
+├── ![linux_proc_sched.c](./design_patterns/strategy_pattern/linux_proc_sched.c)  
+├── ![linux_summary.md](./design_patterns/strategy_pattern/linux_summary.md)  
+├── ![strategy-pattern-guide](./design_patterns/strategy_pattern/strategy-pattern-guide)  
+└── ![template.c](./design_patterns/strategy_pattern/template.c)  
+
+
+## Singleton (单例模式)
+- 核心要点（C 语言视角）
+    唯一性：实例在进程 / 内核空间中仅存在一份（通过static全局变量实现）；
+    懒加载 / 饿汉式：懒加载（首次访问时初始化）、饿汉式（程序启动 / 内核初始化时创建）；
+    线程 / 多核安全：多线程 / 多核环境下需加锁保护初始化逻辑，避免竞态导致多次初始化；
+    全局访问：封装初始化逻辑，对外仅暴露一个获取实例的函数，隐藏内部实现。
+
+- C 语言实现单例模式的核心思路
+    单例模式角色	C 语言实现方式
+    唯一实例		static全局变量（进程 / 内核空间仅一份）
+    初始化保护		互斥锁（pthread_mutex_t/ 内核spinlock）+ 初始化标记
+    全局访问接口	封装初始化逻辑的static函数 如get_instance()
+
+singleton_pattern/
+├── ![linux_int_controller.c](./design_patterns/singleton_pattern/linux_int_controller.c)  
+├── ![linux_pid_manager.c](./design_patterns/singleton_pattern/linux_pid_manager.c)  
+├── ![linux_slab_cache.c](./design_patterns/singleton_pattern/linux_slab_cache.c)  
+├── ![linux_summary.md](./design_patterns/singleton_pattern/linux_summary.md)  
+├── ![linux_sys_call_table.c](./design_patterns/singleton_pattern/linux_sys_call_table.c)  
+└── ![template.c](./design_patterns/singleton_pattern/template.c)  
+
+## Factory (工厂模式)
+- 核心定义
+    工厂模式的核心是封装对象（产品）的创建逻辑，将对象的创建与使用分离：通过一个统一的「工厂接口」，根据输入参数（如设备 ID、类型名、配置）返回对应类型的产品实例，用户无需关心产品的具体创建细节（如内存分配、初始化、硬件适配），仅需调用工厂接口即可获取可用的实例。
+
+- 核心分类（C 语言 / 内核视角）
+	内核中以简单工厂模式为主（单一工厂函数创建所有产品），工厂方法模式（每个产品对应一个工厂函数）为辅，二者核心差异如下：
+		类型		核心特征						  内核应用场景
+		简单工厂	一个工厂函数创建所有类型的产品		PCI 设备匹配、字符设备创建
+		工厂方法	每个产品对应一个专属工厂函数		Crypto 算法创建、文件系统挂载
+
+- 核心要点（C 语言视角）
+	产品抽象：所有产品遵循统一的接口（用函数指针结构体定义），保证用户可无缝替换产品；
+	创建封装：工厂函数集中处理产品的创建逻辑（如参数校验、内存分配、初始化），用户无需感知；
+	扩展友好：新增产品时，仅需新增产品实现和工厂函数的参数判断，无需修改用户逻辑；
+	解耦：用户仅依赖工厂接口，不依赖具体产品的实现，降低模块耦合。
+
+- C 语言实现工厂模式的核心思路
+    工厂模式 OOP 角色	C 语言实现方式							作用说明
+    抽象产品			函数指针结构体（定义统一的产品接口）	 所有具体产品遵循相同的函数指针规范
+    具体产品			填充函数指针的结构体实例				不同产品的具体实现
+    工厂				工厂函数（根据参数返回具体产品实例）	 封装创建逻辑，统一对外接口
+
+factory_pattern/
+├── ![linux_char_dev.c](./design_patterns/factory_pattern/linux_char_dev.c)  
+├── ![linux_crypto.c](./design_patterns/factory_pattern/linux_crypto.c)  
+├── ![linux_fs.c](./design_patterns/factory_pattern/linux_fs.c)  
+├── ![linux_pci_device.c](./design_patterns/factory_pattern/linux_pci_device.c)  
+├── ![linux_summary.md](./design_patterns/factory_pattern/linux_summary.md)  
+└── ![template.c](./design_patterns/factory_pattern/template.c)  
+
+## Observer (观察者模式)
+- 核心定义
+    观察者模式定义了主题（Subject）与观察者（Observer）的一对多依赖关系：当主题的状态 / 事件发生变化时，会自动遍历并通知所有已注册的观察者（调用观察者的回调函数），观察者无需主动轮询主题状态，而是被动接收通知。核心目标是解耦主题与观察者—— 主题无需知道观察者的具体实现，观察者也无需知道主题的内部逻辑，二者仅通过统一的回调接口交互。
+
+- 核心角色（C 语言 / 内核视角映射）
+    - OOP 中的观察者模式角色可完全映射到 C 语言的基础特性，这也是内核实现的核心思路：
+    观察者模式 OOP 角色		C 语言实现方式							作用说明
+    主题（Subject）			结构体（管理观察者链表 + 事件状态）		维护观察者注册池，触发事件时通知所有观察者
+    观察者（Observer）		函数指针（统一的回调接口）				每个观察者对应一个回调函数，接收主题通知
+    注册 / 注销				链表操作函数（添加 / 删除回调指针）		管理观察者的注册与注销，支持动态增减
+    通知					遍历链表 + 调用回调函数				   主题状态变化时，批量触发观察者回调
+
+- 核心要点（C 语言视角）
+    解耦性：主题与观察者无直接依赖，仅通过回调接口交互，新增 / 删除观察者无需修改主题逻辑；
+    被动通知：观察者无需轮询，由主题主动推送事件，降低 CPU 开销；
+    动态性：运行时可动态注册 / 注销观察者，支持热插拔；
+    一致性：所有观察者遵循统一的回调接口，主题无需适配不同观察者的实现。
+
+observer_pattern/
+├── ![linux_inotify.c](./design_patterns/observer_pattern/linux_inotify.c)  
+├── ![linux_int_top_bot_half.c](./design_patterns/observer_pattern/linux_int_top_bot_half.c)  
+├── ![linux_kobj_uevent.c](./design_patterns/observer_pattern/linux_kobj_uevent.c)  
+├── ![linux_netlink.c](./design_patterns/observer_pattern/linux_netlink.c)  
+├── ![linux_summary.md](./design_patterns/observer_pattern/linux_summary.md)  
+└── ![template.c](./design_patterns/observer_pattern/template.c)  
+
+## Adapter (适配器模式)
+- 核心定义
+    适配器模式的核心是将一个现有、不兼容的接口（被适配者 / Adaptee）转换为上层模块期望的统一目标接口（Target），使原本因接口格式、参数、命名不匹配而无法协作的模块能够无缝工作。核心目标是 “接口适配，逻辑复用”—— 不修改被适配者的原有实现（如硬件驱动、老旧模块），仅通过适配器层做接口格式的转换，复用其核心逻辑。
+
+- 核心角色（C 语言 / 内核视角映射）
+    OOP 中的适配器模式角色可完全映射到 C 语言的基础特性，这也是内核实现的核心思路：
+    适配器模式 OOP 角色		C 语言实现方式												作用说明
+    目标接口（Target）		函数指针结构体（上层 / 内核核心层期望的统一接口）				定义适配器需要实现的标准化接口，是上层模块交互的唯一入口
+    被适配者（Adaptee）		现有不兼容的函数 / 结构体（如厂商硬件原生接口）					已有但接口不匹配的模块，核心逻辑无需修改
+    适配器（Adapter）		封装被适配者的结构体 + 函数（实现目标接口，内部调用被适配者）	实现目标接口，在函数内部完成参数 / 格式转换，调用被适配者的接口
+
+- 核心要点（C 语言视角）
+    无侵入性：不修改被适配者的任何代码，仅通过适配器层做转换，保护原有逻辑；
+    接口统一：上层模块仅依赖目标接口，无需感知底层被适配者的差异；
+    复用性：原有不兼容的模块（如不同厂商硬件驱动）可通过适配器复用在统一框架中；
+    双向适配：支持 “类适配器”（直接封装）和 “对象适配器”（通过指针引用），内核中以对象适配器为主（更灵活）。
+
+adapter_pattern/
+├── ![linux_32bit_64bit_syscall.c](./design_patterns/adapter_pattern/linux_32bit_64bit_syscall.c)  
+├── ![linux_device_mapper.c](./design_patterns/adapter_pattern/linux_device_mapper.c)  
+├── ![linux_spic.c](./design_patterns/adapter_pattern/linux_spic.c)  
+├── ![linux_summary.md](./design_patterns/adapter_pattern/linux_summary.md)  
+├── ![linux_vfs_adapter.c](./design_patterns/adapter_pattern/linux_vfs_adapter.c)  
+└── ![template.c](./design_patterns/adapter_pattern/template.c)  
+
+## Decorator (装饰器模式)
+
+- 核心定义
+装饰器模式的核心是在不修改原有核心功能代码的前提下，动态地给一个 “核心对象” 添加额外的职责（附加功能），且保持对象的统一接口 —— 装饰后的对象可完全替代原对象使用。核心目标是 “功能扩展解耦”：将核心功能（如文件读写、内存分配）与附加功能（如日志、校验、加密、统计）分离，通过嵌套装饰器实现多维度功能组合（如 “读写 + 日志 + 加密”），避免为每个功能组合创建冗余的实现（即 OOP 中的 “类爆炸”，C 语言中则是 “函数爆炸”）。
+
+- 核心角色（C 语言 / 内核视角映射）
+OOP 中的装饰器模式角色可完全映射到 C 语言的基础特性，这也是内核实现的核心思路：
+装饰器模式 OOP 角色				C 语言实现方式							作用说明
+组件（Component）				函数指针结构体（定义统一的核心接口）	核心功能的标准化接口，装饰器和基础组件都需实现
+具体组件（ConcreteComponent）	实现核心接口的基础函数 / 结构体			提供无附加功能的 “纯核心逻辑”（如基础文件读写、原生内存分配）
+装饰器（Decorator）				嵌套核心接口指针的结构体 + 封装函数		持有核心接口指针，实现统一接口，内部调用核心逻辑并添加附加功能
+具体装饰器（ConcreteDecorator）	具体的装饰器函数 / 结构体				实现特定附加功能（如日志装饰、加密装饰、统计装饰）
+
+- 核心要点（C 语言视角）
+无侵入性：不修改核心功能的任何代码，仅通过封装扩展；
+接口一致性：装饰器与核心组件实现相同的函数指针接口，上层无感知；
+动态组合：支持多个装饰器嵌套（如 “日志装饰器包裹加密装饰器，再包裹核心组件”）；
+按需扩展：运行时可动态添加 / 移除装饰器（如调试时加日志，生产时移除）。
+
+decorator_pattern/
+├── ![linux_file_ops.c](./design_patterns/decorator_pattern/linux_file_ops.c)  
+├── ![linux_int_handler.c](./design_patterns/decorator_pattern/linux_int_handler.c)  
+├── ![linux_kmalloc.c](./design_patterns/decorator_pattern/linux_kmalloc.c)  
+├── ![linux_net_packet.c](./design_patterns/decorator_pattern/linux_net_packet.c)  
+├── ![linux_summary.md](./design_patterns/decorator_pattern/linux_summary.md)  
+└── ![template.c](./design_patterns/decorator_pattern/template.c)  
+
+## Iterator (迭代器模式)
+
+1. 核心定义
+迭代器模式的核心是提供一种统一的方式来遍历聚合对象（如链表、数组、哈希表）中的所有元素，而无需暴露该聚合对象的内部存储结构（如数组下标、链表节点指针）。核心目标是 “遍历逻辑与聚合对象解耦”—— 上层代码仅通过迭代器的统一接口（如has_next()、next()）遍历元素，无需关心聚合对象是数组、链表还是哈希表；同时聚合对象的内部实现修改后，遍历逻辑无需任何调整。
+
+2. 核心角色（C 语言 / 内核视角映射）
+OOP 中的迭代器模式角色可完全映射到 C 语言的基础特性，这也是内核实现迭代器的核心思路：
+迭代器模式 OOP 角色				C 语言实现方式													作用说明
+迭代器接口（Iterator）			函数指针结构体（包含has_next/next/reset）						定义统一的遍历接口，所有具体迭代器需实现
+具体迭代器（ConcreteIterator）	针对特定聚合对象的迭代函数 / 宏（如链表迭代宏、数组迭代函数）	实现迭代器接口，封装具体的遍历逻辑（如链表节点移动、数组下标递增）
+聚合对象（Aggregate）			数组 / 链表 / 哈希表等数据结构（如内核list_head、hlist）	存储元素的容器，提供 “创建迭代器” 的方法（如内核list_iterator_init）
+具体聚合对象（ConcreteAggregate）	内核task_struct链表、device链表等具体容器				实际存储业务数据的聚合对象，适配迭代器接口
+
+3. 核心要点（C 语言视角）
+接口统一性：不同聚合对象的迭代器实现相同的接口，上层遍历逻辑完全复用；
+解耦性：遍历逻辑（如 “逐个访问元素”）与聚合对象内部结构（如链表节点、数组下标）分离；
+安全性：迭代器封装了聚合对象的遍历边界（如数组越界、链表尾节点判断），避免上层出错；
+灵活性：支持正向 / 反向遍历、条件遍历（如内核list_for_each_entry_if），且可同时存在多个迭代器遍历同一聚合对象。
+
+iterator_pattern/
+├── ![linux_device_traverse.c](./design_patterns/iterator_pattern/linux_device_traverse.c)  
+├── ![linux_hlist.c](./design_patterns/iterator_pattern/linux_hlist.c)  
+├── ![linux_list_head.c](./design_patterns/iterator_pattern/linux_list_head.c)  
+├── ![linux_summary.md](./design_patterns/iterator_pattern/linux_summary.md)  
+├── ![linux_task_traverse.c](./design_patterns/iterator_pattern/linux_task_traverse.c)  
+└── ![template.c](./design_patterns/iterator_pattern/template.c)  
+
+## Flyweight (享元模式)
+
+1. 核心定义
+享元模式的核心是复用内存中已存在的 “细粒度对象”（享元对象），而非每次创建新对象，以此减少内存占用和对象创建 / 销毁的开销。其关键是将对象的状态严格分为两类：
+内部状态（Intrinsic State）：可共享、不变的状态（如对象的类型、基础配置、固定属性），存储在享元对象内部，是复用的核心依据；
+外部状态（Extrinsic State）：不可共享、可变的状态（如对象的使用上下文、临时参数、动态数据），由外部传入，不存储在享元对象中。
+
+2. 核心角色（C 语言 / 内核视角映射）
+OOP 中的享元模式角色可完全适配 C 语言特性，这也是内核实现享元的核心思路：
+享元模式 OOP 角色				C 语言实现方式									作用说明
+享元接口（Flyweight）			函数指针结构体（定义享元对象的操作接口）		统一共享对象的使用方式，屏蔽内部状态差异
+具体享元（ConcreteFlyweight）	存储内部状态的结构体							包含不可变的共享状态，实现享元接口
+享元工厂（FlyweightFactory）	对象池管理函数（创建 / 获取 / 回收享元对象）	维护对象池，优先返回已存在的享元对象（命中），未命中则创建新对象
+外部状态						函数参数 / 全局上下文							不存储在享元对象中，使用时动态传入
+
+3. 核心要点（C 语言视角）
+复用优先：工厂函数先检查对象池，仅在无匹配对象时创建新对象；
+状态分离：内部状态必须是 “不变、可共享” 的属性，外部状态需动态传入且不持久化；
+池化管理：通过数组 / 链表管理享元对象，设置池大小上限平衡内存占用和复用率；
+轻量复用：回收对象时仅重置外部状态，保留内部状态，减少复用成本。
+
+flyweight_pattern/
+├── ![linux_inode.c](./design_patterns/flyweight_pattern/linux_inode.c)  
+├── ![linux_skbuff_pool.c](./design_patterns/flyweight_pattern/linux_skbuff_pool.c)  
+├── ![linux_slab.c](./design_patterns/flyweight_pattern/linux_slab.c)  
+├── ![linux_summary.md](./design_patterns/flyweight_pattern/linux_summary.md)  
+└── ![template.c](./design_patterns/flyweight_pattern/template.c)  
+
 ## PDD(Presentation–Domain–Data Layering)
 ![what pdd really means](./design_patterns/pdd/pdd_01_what_pdd_really_means.md)  
 ![linux kernel mapping](./design_patterns/pdd/pdd_02_linux_kernel_mapping.md)  

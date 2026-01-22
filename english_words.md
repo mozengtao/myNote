@@ -164,3 +164,4 @@ inhibit / ɪnˈhɪbɪt /    抑制，约束；使拘束，使尴尬；降低（�
 relinquish  / rɪˈlɪŋkwɪʃ /  <正式>（尤指不情愿地）放弃，交出（权力、职位等）；<正式>（不情愿地）松开
 hash it out 具体讨论
 discrepancy / dɪˈskrepənsi /    差异，不符
+hypothesis/hypotheses / haɪˈpɑːθəsiːz /    假定；臆测

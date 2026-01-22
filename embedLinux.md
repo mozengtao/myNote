@@ -76,6 +76,12 @@ Off   Off   |  高阻
 通信速率10M+
 
 ## I2C
+[I2C – What’s That?](https://www.i2c-bus.org/)  
+[Basics of the I2C Communication Protocol](https://www.circuitbasics.com/basics-of-the-i2c-communication-protocol/)  
+[I2C Primer: What is I2C? (Part 1)](https://www.analog.com/cn/resources/technical-articles/i2c-primer-what-is-i2c-part-1.html)  
+[I2C Timing: Definition and Specification Guide (Part 2)](https://www.analog.com/cn/resources/technical-articles/i2c-timing-definition-and-specification-guide-part-2.html)  
+[]()  
+[]()  
 引入总线的概念(CLK + DATA)，支持一对多通信
 	由于采用 开漏输出 +上拉电阻 的实现方式，I2C抗干扰能力弱，只适合于同一电路板上的芯片之间进行通信
 ![i2c总线结构:开漏输出 +上拉电阻](./embedded/i2c/i2c_bus_1.png)  

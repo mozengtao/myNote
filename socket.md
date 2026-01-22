@@ -1,4 +1,170 @@
-- 客户-服务器模型
+## MAC芯片 vs PHY芯片
+- MAC 负责“帧”，PHY 负责“比特 + 电气”
+### PHY 芯片 (完全硬件)
+- PHY 的世界里，没有“以太网帧”这个概念，对应 OSI 第一层（物理层）
+
+- PHY 芯片 只关心
+	比特流（0 / 1）
+	编码方式
+	电压 / 光信号
+	链路训练
+
+- PHY 具体做什么
+	- 以 1000BASE-T 为例：
+		模拟 / 数字信号处理
+		编码 / 解码
+		8b/10b（千兆以下）
+		PAM-5 / PAM-16（千兆及以上）
+		自动协商（Auto-Negotiation）
+		链路建立 / Link Up / Down
+		Clock recovery
+		信号均衡、回声消除
+
+- PHY 不知道 MAC 地址、CRC、VLAN、IP
+### MAC芯片 (硬件 + 很薄的逻辑)
+- MAC 是“以太网帧”的第一位理解者，对应 OSI 第二层（数据链路层）
+- MAC 负责
+	帧封装 / 解封装
+	MAC 地址识别
+	帧边界（Preamble / SFD）
+	CRC32 计算 / 校验
+	最小帧填充（Padding）
+	Flow Control（PAUSE 帧）
+	VLAN Tag 解析（有的 MAC）
+	DMA 到内存（绝大多数 SoC / NIC
+- MAC 不懂 IP / TCP，但它懂“以太网帧”
+
+### MAC 和 PHY 的“硬边界”
+```
+            数字接口（并行 / 串行）
+MAC  <-------------------------------->  PHY
+        MII / GMII / RGMII / SGMII
+```
+- PHY 输出的是 已解码的比特流
+- MAC 接收的是 有节拍的 nibble / byte / symbol
+
+### 一次以太网“发送”涉及哪些硬件模块
+```
+1️⃣ 软件阶段（CPU）
+	应用 → socket → TCP/IP → skb → driver
+
+	构造 skb
+	填写 L2/L3/L4 头
+	调用 ndo_start_xmit()
+
+	这是软件的最后一次“主动行为”
+
+2️⃣ MAC + DMA（硬件主导）
+	驱动只是配置，不是搬数据
+
+	CPU
+	└─ 写 Tx Descriptor
+		└─ 指向 skb data
+
+	然后：
+		DMA 从内存拉数据
+		MAC 做的事情：
+		加 Preamble + SFD
+		计算 CRC
+		插入 VLAN（如果 offload）
+		处理 IFG
+
+	此时 CPU 已经“撒手不管”
+
+3️⃣ MAC → PHY
+
+	MAC 输出
+		[字节流 / symbol] + clock
+	给 PHY
+
+4️⃣ PHY → 网线（纯硬件）
+
+PHY：
+	编码
+	调制
+	放大
+	输出到双绞线 / 光纤
+```
+
+#### 发送流程
+1. RAM (内存)： 数据最初存在系统内存的缓冲区中。
+2. DMA (直接存储器访问)： 为了不占用 CPU，DMA 控制器负责把数据从 RAM 搬运到 MAC 的 FIFO 缓存。
+3. MAC 芯片： 给原始数据加上包头（前导码）、帧起始符、源/目的地址、长度信息，并在末尾计算 CRC 校验码，组成完整的以太网帧。
+4. MII 接口： MAC 将帧转换成位流，通过 MII 接口传给 PHY。
+5. PHY 芯片： 进行 8b/10b 或类似编码，转换成模拟信号。
+6. 网络变压器 (Magnetics)： 起到电气隔离和阻抗匹配的作用，滤除噪声。
+7. RJ45 接口： 信号通过网线物理发出。
+
+### 一次“接收”涉及哪些硬件模块
+```
+1️⃣ PHY 接收（纯硬件）
+网线 → PHY
+
+PHY 做：
+	信号恢复
+	解码
+	Clock recovery
+	Link 状态维护
+
+输出给 MAC：
+	干净的 bit / symbol
+
+2️⃣ MAC 解帧（硬件）
+
+MAC 做：
+	找 Preamble / SFD
+	识别帧边界
+	校验 CRC
+	判断目的 MAC
+	丢弃错误帧（绝大多数）
+
+📌 很多“坏包”在这里就死掉了
+
+3️⃣ DMA 到内存（硬件）
+
+MAC：
+	把帧 DMA 到 Rx ring buffer
+	更新 Rx descriptor
+	触发中断 / NAPI poll
+
+4️⃣ 软件首次参与（关键边界）
+
+完整的、CRC 正确的以太网帧已经在内存里之后
+
+此时：
+	硬件完成
+	────────
+	skb 在内存中
+	↓
+	驱动 NAPI poll()
+	↓
+	netif_receive_skb()
+```
+
+### 责任边界图
+```
+┌────────────┐
+│  Software  │
+│  TCP/IP    │
+│  Driver    │
+└─────▲──────┘
+      │ skb / descriptor
+┌─────┴──────┐
+│   MAC      │  ← 帧的世界
+│ CRC / DMA  │
+└─────▲──────┘
+      │ MII / RGMII / SGMII
+┌─────┴──────┐
+│   PHY      │  ← 比特 + 电气世界
+│  Cod/Dec   │  编解码
+└─────▲──────┘
+      │ 电信号 / 光信号
+┌─────┴──────┐
+│   Cable    │
+└────────────┘
+```
+
+## 客户-服务器模型
 	- server
 		- 服务器被动等待和响应客户端的请求
 		- 被动socket
