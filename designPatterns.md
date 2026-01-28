@@ -30,6 +30,162 @@
 []()  
 []()  
 
+## chain-of-responsibility-guide
+├── [00-index.md](./design_patterns/chain-of-responsibility-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/chain-of-responsibility-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/chain-of-responsibility-guide/02-identification-rules.md)
+├── [03-netfilter-case.md](./design_patterns/chain-of-responsibility-guide/03-netfilter-case.md)
+├── [04-irq-case.md](./design_patterns/chain-of-responsibility-guide/04-irq-case.md)
+├── [05-unified-skeleton.md](./design_patterns/chain-of-responsibility-guide/05-unified-skeleton.md)
+├── [06-vs-observer.md](./design_patterns/chain-of-responsibility-guide/06-vs-observer.md)
+├── [07-antipatterns.md](./design_patterns/chain-of-responsibility-guide/07-antipatterns.md)
+├── [08-reading-guide.md](./design_patterns/chain-of-responsibility-guide/08-reading-guide.md)
+    └── [09-mental-model.md](./design_patterns/chain-of-responsibility-guide/09-mental-model.md)
+
+## command-deferred-guide
+├── [00-index.md](./design_patterns/command-deferred-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/command-deferred-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/command-deferred-guide/02-identification-rules.md)
+├── [03-workqueue-case.md](./design_patterns/command-deferred-guide/03-workqueue-case.md)
+├── [04-tasklet-case.md](./design_patterns/command-deferred-guide/04-tasklet-case.md)
+├── [05-softirq-case.md](./design_patterns/command-deferred-guide/05-softirq-case.md)
+├── [06-unified-skeleton.md](./design_patterns/command-deferred-guide/06-unified-skeleton.md)
+├── [07-vs-direct.md](./design_patterns/command-deferred-guide/07-vs-direct.md)
+├── [08-antipatterns.md](./design_patterns/command-deferred-guide/08-antipatterns.md)
+├── [09-reading-guide.md](./design_patterns/command-deferred-guide/09-reading-guide.md)
+    └── [10-mental-model.md](./design_patterns/command-deferred-guide/10-mental-model.md)
+
+## composite-hierarchy-guide
+├── [00-index.md](./design_patterns/composite-hierarchy-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/composite-hierarchy-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/composite-hierarchy-guide/02-identification-rules.md)
+├── [03-kobject-case.md](./design_patterns/composite-hierarchy-guide/03-kobject-case.md)
+├── [04-device-case.md](./design_patterns/composite-hierarchy-guide/04-device-case.md)
+├── [05-unified-skeleton.md](./design_patterns/composite-hierarchy-guide/05-unified-skeleton.md)
+├── [06-antipatterns.md](./design_patterns/composite-hierarchy-guide/06-antipatterns.md)
+├── [07-reading-guide.md](./design_patterns/composite-hierarchy-guide/07-reading-guide.md)
+    └── [08-mental-model.md](./design_patterns/composite-hierarchy-guide/08-mental-model.md)
+
+## container-of-guide
+├── [00-index.md](./design_patterns/container-of-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/container-of-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/container-of-guide/02-identification-rules.md)
+├── [03-list-head-case.md](./design_patterns/container-of-guide/03-list-head-case.md)
+├── [04-hlist-case.md](./design_patterns/container-of-guide/04-hlist-case.md)
+├── [05-kobject-case.md](./design_patterns/container-of-guide/05-kobject-case.md)
+├── [06-work-struct-case.md](./design_patterns/container-of-guide/06-work-struct-case.md)
+├── [07-unified-skeleton.md](./design_patterns/container-of-guide/07-unified-skeleton.md)
+├── [08-vs-inheritance.md](./design_patterns/container-of-guide/08-vs-inheritance.md)
+├── [09-antipatterns.md](./design_patterns/container-of-guide/09-antipatterns.md)
+├── [10-reading-guide.md](./design_patterns/container-of-guide/10-reading-guide.md)
+    └── [11-mental-model.md](./design_patterns/container-of-guide/11-mental-model.md)
+
+## error-handling-guide
+├── [00-index.md](./design_patterns/error-handling-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/error-handling-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/error-handling-guide/02-identification-rules.md)
+├── [03-goto-cleanup-case.md](./design_patterns/error-handling-guide/03-goto-cleanup-case.md)
+├── [04-err-ptr-case.md](./design_patterns/error-handling-guide/04-err-ptr-case.md)
+├── [05-return-conventions-case.md](./design_patterns/error-handling-guide/05-return-conventions-case.md)
+├── [06-unified-skeleton.md](./design_patterns/error-handling-guide/06-unified-skeleton.md)
+├── [07-vs-exceptions.md](./design_patterns/error-handling-guide/07-vs-exceptions.md)
+├── [08-antipatterns.md](./design_patterns/error-handling-guide/08-antipatterns.md)
+├── [09-reading-guide.md](./design_patterns/error-handling-guide/09-reading-guide.md)
+    └── [10-mental-model.md](./design_patterns/error-handling-guide/10-mental-model.md)
+
+## factory-guide
+├── [00-index.md](./design_patterns/factory-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/factory-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/factory-guide/02-identification-rules.md)
+├── [03-netdev-case.md](./design_patterns/factory-guide/03-netdev-case.md)
+├── [04-skb-case.md](./design_patterns/factory-guide/04-skb-case.md)
+├── [05-unified-skeleton.md](./design_patterns/factory-guide/05-unified-skeleton.md)
+├── [06-antipatterns.md](./design_patterns/factory-guide/06-antipatterns.md)
+├── [07-reading-guide.md](./design_patterns/factory-guide/07-reading-guide.md)
+    └── [08-mental-model.md](./design_patterns/factory-guide/08-mental-model.md)
+
+## hashtable-guide
+├── [00-index.md](./design_patterns/hashtable-guide/00-index.md)
+├── [01-separate-chaining.md](./design_patterns/hashtable-guide/01-separate-chaining.md)
+├── [02-open-addressing-basic.md](./design_patterns/hashtable-guide/02-open-addressing-basic.md)
+├── [03-open-addressing-advanced.md](./design_patterns/hashtable-guide/03-open-addressing-advanced.md)
+├── [04-specialized-methods.md](./design_patterns/hashtable-guide/04-specialized-methods.md)
+    └── [05-comparison-and-advice.md](./design_patterns/hashtable-guide/05-comparison-and-advice.md)
+
+## object-pool-guide
+├── [00-index.md](./design_patterns/object-pool-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/object-pool-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/object-pool-guide/02-identification-rules.md)
+├── [03-slab-case.md](./design_patterns/object-pool-guide/03-slab-case.md)
+├── [04-mempool-case.md](./design_patterns/object-pool-guide/04-mempool-case.md)
+├── [05-unified-skeleton.md](./design_patterns/object-pool-guide/05-unified-skeleton.md)
+├── [06-antipatterns.md](./design_patterns/object-pool-guide/06-antipatterns.md)
+├── [07-reading-guide.md](./design_patterns/object-pool-guide/07-reading-guide.md)
+    └── [08-mental-model.md](./design_patterns/object-pool-guide/08-mental-model.md)
+
+## observer-notifier-guide
+├── [00-index.md](./design_patterns/observer-notifier-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/observer-notifier-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/observer-notifier-guide/02-identification-rules.md)
+├── [03-blocking-notifier-case.md](./design_patterns/observer-notifier-guide/03-blocking-notifier-case.md)
+├── [04-netdev-notifier-case.md](./design_patterns/observer-notifier-guide/04-netdev-notifier-case.md)
+├── [05-reboot-notifier-case.md](./design_patterns/observer-notifier-guide/05-reboot-notifier-case.md)
+├── [06-unified-skeleton.md](./design_patterns/observer-notifier-guide/06-unified-skeleton.md)
+├── [07-vs-callback.md](./design_patterns/observer-notifier-guide/07-vs-callback.md)
+├── [08-antipatterns.md](./design_patterns/observer-notifier-guide/08-antipatterns.md)
+├── [09-reading-guide.md](./design_patterns/observer-notifier-guide/09-reading-guide.md)
+    └── [10-mental-model.md](./design_patterns/observer-notifier-guide/10-mental-model.md)
+
+## rcu-guide
+├── [00-index.md](./design_patterns/rcu-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/rcu-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/rcu-guide/02-identification-rules.md)
+├── [03-dcache-case.md](./design_patterns/rcu-guide/03-dcache-case.md)
+├── [04-routing-case.md](./design_patterns/rcu-guide/04-routing-case.md)
+├── [05-unified-skeleton.md](./design_patterns/rcu-guide/05-unified-skeleton.md)
+├── [06-antipatterns.md](./design_patterns/rcu-guide/06-antipatterns.md)
+├── [07-reading-guide.md](./design_patterns/rcu-guide/07-reading-guide.md)
+    └── [08-mental-model.md](./design_patterns/rcu-guide/08-mental-model.md)
+
+## refcount-guide
+├── [00-index.md](./design_patterns/refcount-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/refcount-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/refcount-guide/02-identification-rules.md)
+├── [03-kref-case.md](./design_patterns/refcount-guide/03-kref-case.md)
+├── [04-kobject-case.md](./design_patterns/refcount-guide/04-kobject-case.md)
+├── [05-file-case.md](./design_patterns/refcount-guide/05-file-case.md)
+├── [06-module-case.md](./design_patterns/refcount-guide/06-module-case.md)
+├── [07-unified-skeleton.md](./design_patterns/refcount-guide/07-unified-skeleton.md)
+├── [08-vs-garbage-collection.md](./design_patterns/refcount-guide/08-vs-garbage-collection.md)
+├── [09-antipatterns.md](./design_patterns/refcount-guide/09-antipatterns.md)
+├── [10-reading-guide.md](./design_patterns/refcount-guide/10-reading-guide.md)
+    └── [11-mental-model.md](./design_patterns/refcount-guide/11-mental-model.md)
+
+## registration-guide
+├── [00-index.md](./design_patterns/registration-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/registration-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/registration-guide/02-identification-rules.md)
+├── [03-driver-case.md](./design_patterns/registration-guide/03-driver-case.md)
+├── [04-filesystem-case.md](./design_patterns/registration-guide/04-filesystem-case.md)
+├── [05-unified-skeleton.md](./design_patterns/registration-guide/05-unified-skeleton.md)
+├── [06-antipatterns.md](./design_patterns/registration-guide/06-antipatterns.md)
+├── [07-reading-guide.md](./design_patterns/registration-guide/07-reading-guide.md)
+    └── [08-mental-model.md](./design_patterns/registration-guide/08-mental-model.md)
+
+## state-machine-guide
+├── [00-index.md](./design_patterns/state-machine-guide/00-index.md)
+├── [01-core-concept.md](./design_patterns/state-machine-guide/01-core-concept.md)
+├── [02-identification-rules.md](./design_patterns/state-machine-guide/02-identification-rules.md)
+├── [03-netdev-states-case.md](./design_patterns/state-machine-guide/03-netdev-states-case.md)
+├── [04-tcp-states-case.md](./design_patterns/state-machine-guide/04-tcp-states-case.md)
+├── [05-usb-states-case.md](./design_patterns/state-machine-guide/05-usb-states-case.md)
+├── [06-unified-skeleton.md](./design_patterns/state-machine-guide/06-unified-skeleton.md)
+├── [07-vs-flags.md](./design_patterns/state-machine-guide/07-vs-flags.md)
+├── [08-antipatterns.md](./design_patterns/state-machine-guide/08-antipatterns.md)
+├── [09-reading-guide.md](./design_patterns/state-machine-guide/09-reading-guide.md)
+└── [10-mental-model.md](./design_patterns/state-machine-guide/10-mental-model.md)
+
+
 ## Template Method (模板方法) 设计模式
 - 核心思想
     在一个方法中定义一个算法的骨架（固定步骤），而将一些步骤的延迟执行（即具体实现）交给子类或具体的实现模块

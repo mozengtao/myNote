@@ -1,3 +1,18 @@
+## tips
+```bash
+# how to ignore untracked files in Git
+# Add patterns to .gitignore in your repo root(shared with team)
+echo "docs/" >> .gitignore
+
+# For files you want to ignore without affecting the shared .gitignore(local only)
+echo "docs/" >> .git/info/exclude
+
+# For patterns you want ignored across all your repositories(all repos)
+git config --global core.excludesfile ~/.gitignore_global
+echo "*.log" >> ~/.gitignore_global
+
+```
+
 ## git commit
 ```bash
 # typical(non-merge) case

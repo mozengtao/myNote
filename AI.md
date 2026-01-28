@@ -13,6 +13,22 @@
 []()  
 [gemini-cli](https://github.com/google-gemini/gemini-cli)  
 [Gemini CLI documentation](https://geminicli.com/docs/)  
+[]()  
+[]()  
+[cursor commands](https://github.com/hamzafer/cursor-commands)  
+[cursor rules](https://cursor.com/cn/docs/context/rules)  
+[slasm commands](https://cursor.com/cn/docs/cli/reference/slash-commands)  
+[Speed Up Your Agents with Cursor Slash Commands](https://egghead.io/speed-up-your-agents-with-cursor-slash-commands~ze5ag)  
+[awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules/tree/main)  
+[awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc/tree/main)  
+[agent-best-practices](https://cursor.com/cn/blog/agent-best-practices)  
+[trigger.dev](https://github.com/triggerdotdev/trigger.dev)  
+[How to write great Cursor Rules](https://trigger.dev/blog/cursor-rules)  
+[Mastering Cursor Rules: A Developer's Guide to Smart AI Integration](https://dev.to/dpaluy/mastering-cursor-rules-a-developers-guide-to-smart-ai-integration-1k65)  
+[]()  
+[]()  
+[]()  
+[]()  
 
 
 ## Coding Platform
@@ -31,6 +47,14 @@ Settings
     Ctrl + Shift + j
 ```
 
+## Prompt tips
+```
+请以Markdown格式回答以下问题，并将整个回复内容放在一个标记为 markdown的代码块中
+Use markdown format to answer: TOPIC, make sure to put the whole response into a code block marked in markdown format.
+Use markdown format to answer: TOPIC, make sure to put the whole response into a ```markdown  code block.
+```
+
+
 ## Online
 [ChatGPT](https://chatgpt.com/)  
 [Grok](https://grok.com/)  
@@ -45,7 +69,35 @@ Settings
 [阿里通义](https://tongyi.aliyun.com/qianwen/)  
 
 
+![Prompt engineering vs Context engineering](./assets/prompt_engineering_vs_context_engineering.png)  
 
+## Context Engineering
+- what is Context engineering
+   the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference, including all the other information that may land there outside of the prompts.
+
+### Context
+- What is context
+   the set of tokens included when sampling from a large-language model (LLM)
+
+### Engineering
+- engineering problem
+   optimizing the utility of those tokens against the inherent constraints of LLMs in order to consistently achieve a desired outcome
+
+## Skills
+[skills](https://github.com/anthropics/skills)  
+[Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)  
+[Skills explained: How Skills compares to prompts, Projects, MCP, and subagents](https://claude.com/blog/skills-explained)  
+[skill-creator](https://skillsmp.com/skills/langgenius-dify-agents-skills-skill-creator-skill-md)  
+[]()  
+[]()  
+- What Skills were designed for
+   delivering specialized context on demand without permanent overhead.
+
+- A skill is
+   a document (often markdown) containing instructions, constraints, and domain knowledge, stored in a designated directory that Claude can access through simple file-reading tools.
+
+- Mental model
+   skills are prompts and contextual resources that activate on demand, providing specialized guidance for specific task types without incurring permanent context overhead.
 
 [Learn The Art of Prompting](https://www.learnprompt.org/)  
 [A Comprehensive Guide to Using ChatGPT Prompts for Coding Tasks](https://www.learnprompt.org/chat-gpt-prompts-for-coding/)  
@@ -66,6 +118,30 @@ Settings
 
 ## Prompt
 ![ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
+
+### [任务分解: 输入 + 输出 + 过程](./prompt/input_output_process.md)  
+- 输入
+- 输出
+- 过程
+   - 步骤1
+      针对步骤中可能造成的不确定性通过指定工具或者通过描述进行限制(例如:必须使用xxx工具进行xxx),并指定输出内容保存到指定文件，方便后续步骤进行使用
+   - 步骤2
+      可以利用之前步骤生成的文件进行进一步加工处理，和步骤1类似，可以指定特定工具防止不确定性(例如：必须使用curl命令进行下载)，以及文件的保存路径(例如:逐一下载图片到resources/ 文件夹)
+   - 步骤3
+      如果生成的结构比较复杂，可以通过指定文件内容的链接进行引用(例如:article中的图片链接指向resources/ 文件夹)
+
+- 如何让 AI 拥有长期记忆
+   如果任务本身过于复杂(例如有几十个步骤需要处理), 上下文里的噪音就越多，回答就越容易出现幻觉，解决思路: 让 AI 学会记笔记，即通过给 AI 设计一个专属工作笔记，让 AI 在执行流程中不断的进行更新，例如在提示器的最顶上增加一条总规则，并在具体的步骤中添加约束, 要求 AI 必须更新状态
+
+   步骤0: 生成笔记
+      - 仿照例子和当前任务生成笔记 progress.md
+
+   - 步骤2
+      - 把图片链接写入 progress.md 图片下载进度
+      ...
+      - 每下载完成一个图片, 必须更新图片下载进度
+
+[]()  
 []()  
 ```
 ConfD 配置事务 (commit)
@@ -1563,3 +1639,541 @@ Output Expectations
 
 
 
+## Promts
+- Explanation and Learning
+```
+Explain [topic/concept] step by step, starting from the fundamentals and building up to advanced aspects. Use analogies where helpful, and include real-world examples.
+
+Break down [complex topic] into its core components. For each component, provide:
+- A clear definition
+- Why it matters
+- A simple example
+- Common pitfalls or misconceptions
+
+Teach me [skill/topic] as if I'm a complete beginner. Structure your response as a mini-lesson with sections: 1) Key concepts, 2) Practical steps, 3) Common mistakes, 4) Practice exercises.
+```
+
+- Creative Writing
+```
+Write a [genre] short story (approximately [word count] words) about [premise/setting]. The main character is [description], facing [central conflict]. Include vivid sensory details and end with [type of ending, e.g., twist, hopeful resolution].
+
+Generate a [poetic form, e.g., sonnet, haiku sequence] on the theme of [theme]. Use [specific style/imagery constraints, e.g., nature metaphors, modern urban setting].
+
+Describe [scene/object/character] in rich, immersive detail suitable for a novel. Focus on [specific senses or mood, e.g., atmosphere of tension, visual contrasts].
+```
+
+- Problem Solving and Reasoning
+```
+Solve the following problem: [state problem clearly]. Show your reasoning step by step, explain each decision, and verify the final answer.
+
+You are an expert [domain] consultant. Analyze this situation: [describe situation]. Provide:
+1. Key issues
+2. Possible causes
+3. Recommended solutions with pros/cons
+4. Next steps
+
+Think through this puzzle/question step by step before giving the answer: [state puzzle]. Use chain-of-thought reasoning and consider alternative approaches.
+```
+
+- Coding and Technical Tasks
+```
+Write a [language] function that [clearly describe functionality]. Include:
+- Type hints/signatures
+- Docstring
+- Error handling
+- Example usage
+- Time/space complexity analysis
+
+Review this code: [paste code]. Identify bugs, performance issues, and style problems. Suggest specific improvements and provide the refactored version.
+
+Explain how [algorithm/data structure] works. Include:
+- High-level overview
+- Step-by-step pseudocode
+- Real code example in [language]
+- Use cases and limitations
+```
+
+- Analysis and Summarization
+```
+Summarize the key points of [text/article/document] in bullet points. Highlight main arguments, evidence, and conclusions. Keep it under [word count] words.
+
+Compare and contrast [item A] and [item B] across these dimensions: [list dimensions, e.g., cost, performance, usability]. Present results in a clear table.
+
+Analyze the strengths and weaknesses of [idea/strategy/product]. Provide balanced evidence and end with an overall recommendation.
+```
+
+- Programming Fundamentals
+```
+Explain the concept of [specific concept, e.g., recursion, object-oriented inheritance, memory management] in [language, e.g., Python/C++/Java]. Start with a clear definition, provide a simple real-world analogy, then show a minimal working code example, followed by a more complex example. Finally, list common errors beginners make and how to avoid them.
+
+Teach me how to implement [data structure or pattern, e.g., linked list, binary search tree, singleton pattern] from scratch in [language]. Provide:
+- Step-by-step pseudocode
+- Full implementation with comments
+- Time and space complexity analysis
+- Test cases with expected outputs
+
+Walk me through debugging this code: [paste code snippet]. Identify potential bugs, explain why they occur, suggest fixes, and provide the corrected version with explanations of changes.
+```
+
+- Algorithms and Data Structures
+```
+Explain [algorithm, e.g., Dijkstra's, merge sort, dynamic programming] in detail. Include:
+- Problem it solves
+- Step-by-step breakdown with a small example
+- Pseudocode
+- Big-O analysis
+- When to use it versus alternatives
+
+Compare [algorithm A] and [algorithm B] for solving [problem type]. Present in a table format covering time/space complexity, ease of implementation, and real-world use cases. Recommend which to use in [specific scenario].
+```
+
+- Mathematics for Computing
+```
+Teach me [mathematical topic, e.g., linear algebra for machine learning, probability theory, graph theory] with a focus on computer science applications. Structure the response as:
+1. Core concepts and definitions
+2. Key theorems/formulas with proofs or derivations
+3. Computational examples (with code if applicable)
+4. Practice problems with solutions
+
+Derive and explain [specific theorem or formula, e.g., Bayes' theorem, Fourier transform]. Show the mathematical steps clearly using LaTeX, then demonstrate its application in [technical context, e.g., machine learning, signal processing].
+```
+
+- Machine Learning and Data Science
+```
+Explain how [ML concept, e.g., gradient descent, convolutional neural networks, overfitting] works. Provide:
+- Intuitive explanation with analogy
+- Mathematical formulation
+- Pseudocode or simple implementation
+- Tips for tuning hyperparameters
+
+Guide me through building a [specific model, e.g., linear regression, decision tree, neural network] for [task/dataset description]. Include data preprocessing steps, model training code in [library/language], evaluation metrics, and interpretation of results.
+```
+
+- Systems and Architecture
+```
+Describe the architecture of [system/component, e.g., operating systems kernel, CPU cache hierarchy, distributed systems]. Break it down into layers/components, explain interactions, and include diagrams described in text (or suggest ASCII art).
+
+Explain [systems concept, e.g., virtual memory, concurrency with threads vs. processes, TCP/IP handshake] step by step. Include real-world implications, potential pitfalls, and how modern systems handle them.
+```
+
+- General Concepts
+```
+Provide an overview of the Gang of Four (GoF) design patterns. Categorize them into Creational, Structural, and Behavioral patterns. For each category, list the patterns, briefly state their primary intent, and explain how design patterns in general promote software reusability, flexibility, and maintainability.
+
+Explain the key principles behind effective use of design patterns (e.g., SOLID principles, favoring composition over inheritance). Illustrate how violating or misapplying these principles can lead to anti-patterns, with one concrete example.
+```
+
+- Creational Patterns
+```
+Explain the [Creational pattern, e.g., Singleton, Factory Method, Abstract Factory, Builder, Prototype] design pattern in detail. Include:
+- Intent and motivation
+- UML class diagram description (text-based)
+- Key participants and their responsibilities
+- A complete code example in [language, e.g., Java, Python, C++]
+- Pros, cons, and common pitfalls
+
+Implement the [Creational pattern, e.g., Singleton, Builder] in [language]. Provide:
+- Thread-safe version where applicable
+- A realistic usage scenario (e.g., configuration manager, complex object construction)
+- Explanation of how it solves the problem better than alternative approaches
+
+Compare the Factory Method and Abstract Factory patterns. Highlight:
+- Structural differences
+- When to prefer one over the other
+- Code examples in [language] demonstrating both in the same domain (e.g., GUI component creation)
+```
+
+- Structural Patterns
+```
+Describe the [Structural pattern, e.g., Adapter, Decorator, Proxy, Facade, Composite] design pattern. Cover:
+- Problem it solves
+- Structure with text-based UML
+- Implementation steps
+- Full working example in [language]
+- Real-world use cases and trade-offs
+
+Compare the Adapter and Facade patterns. Provide:
+- Key differences in intent and structure
+- Scenarios where Adapter is more appropriate vs. Facade
+- Side-by-side code examples in [language] applied to legacy system integration
+```
+
+- Behavioral Patterns
+```
+Explain the [Behavioral pattern, e.g., Observer, Strategy, Command, State, Template Method] design pattern thoroughly. Include:
+- Motivation and applicability
+- Participants and collaborations
+- Sequence diagram description
+- Complete implementation in [language]
+- Advantages, disadvantages, and modern alternatives if any
+
+Compare the Strategy and State patterns. Discuss:
+- How they handle behavior variation
+- Structural and runtime differences
+- Practical example in [language] (e.g., game character behavior or payment processing) showing both approaches
+
+Analyze when to use the Observer pattern versus event/delegate systems in modern frameworks (e.g., C# events, JavaFX properties). Provide a code comparison in [language] and discuss performance and decoupling implications.
+```
+
+- Architectural Styles
+```
+Provide a comprehensive overview of [architectural style, e.g., monolithic, layered, microservices, event-driven, serverless]. Include:
+- Core characteristics and structure
+- Text-based description of a typical diagram (e.g., UML or C4 model)
+- Advantages and disadvantages
+- Real-world examples of systems using this style
+
+Compare [style A, e.g., monolithic] and [style B, e.g., microservices] architectures. Present the comparison in a table covering:
+- Scalability
+- Deployment complexity
+- Fault isolation
+- Development team organization
+- Suitable use cases
+
+Explain the MVC (Model-View-Controller), MVVM, and Clean/Hexagonal architecture patterns. For each:
+- Describe the layers/components and their responsibilities
+- Provide a simple code structure example in [language]
+- Discuss when to choose one over the others
+```
+
+- Core Principles
+```
+Explain the key architectural principles (e.g., separation of concerns, modularity, scalability, resilience) and how they relate to quality attributes (e.g., performance, maintainability, security). Provide concrete examples of applying these principles in system design.
+
+Describe how the SOLID principles apply at the architectural level rather than just the class level. Illustrate with a before-and-after example of refactoring a poorly architected system to align with SOLID.
+```
+
+- System Design and Components
+```
+Walk through designing a [system type, e.g., e-commerce platform, real-time chat application, high-throughput API service]. Include:
+- High-level components (e.g., frontend, backend services, database, cache, message queue)
+- Data flow and interaction diagrams (described in text or ASCII)
+- Technology choices with justification
+- Scalability and reliability considerations
+
+Explain common architectural components such as API gateways, service meshes, caching strategies (e.g., Redis, CDN), and message brokers (e.g., Kafka, RabbitMQ). For each, describe:
+- Role in the architecture
+- Integration patterns
+- Trade-offs in synchronous vs. asynchronous communication
+```
+
+- Evaluation and Trade-offs
+```
+Analyze the trade-offs when migrating from a monolithic to a microservices architecture. Cover:
+- Technical challenges (e.g., distributed transactions, data consistency)
+- Organizational impacts (e.g., team structure, DevOps requirements)
+- Metrics for evaluating success
+- Mitigation strategies for common pitfalls
+
+Evaluate the suitability of [architectural approach, e.g., serverless, CQRS, event sourcing] for [specific scenario, e.g., startup MVP, enterprise data processing]. Provide:
+- Pros and cons with evidence
+- Alternative approaches
+- Decision framework (e.g., cost, latency, complexity)
+
+Discuss architectural decision records (ADRs) and how to document key trade-offs. Provide a template ADR for a hypothetical decision (e.g., choosing between relational and NoSQL databases) and explain its structure and benefits.
+```
+
+- Kernel Initialization and Core Infrastructure
+```
+Analyze the kernel boot process in Linux v3.2. Trace the execution flow starting from arch/x86/boot/header.S through start_kernel() in init/main.c. Highlight key initialization steps for subsystems (e.g., memory, scheduling, interrupts), and explain the role of setup_arch() and rest_init().
+
+Examine the kernel build system in v3.2 (Kbuild and Makefiles). Walk through the top-level Makefile and explain how it processes Kconfig files, generates .config, and orchestrates compilation of built-in objects versus modules. Provide examples of key rules and variables.
+```
+
+- Process Management and Scheduling
+```
+Explain the process descriptor and task management in Linux v3.2. Focus on the struct task_struct in include/linux/sched.h, key fields (e.g., state, prio, policy), and how tasks are managed via the runqueue. Trace process creation from do_fork() in kernel/fork.c.
+
+Describe the Completely Fair Scheduler (CFS) in v3.2. Analyze the core data structures (e.g., struct rq, struct cfs_rq, struct sched_entity) in kernel/sched_fair.c, explain the red-black tree usage for scheduling, and walk through the pick_next_task_fair() logic.
+```
+
+- Memory Management
+```
+Detail the virtual memory subsystem in Linux v3.2. Explain the role of struct mm_struct, the page table hierarchy for x86 (e.g., struct page, pgd_t), and key functions in mm/memory.c such as do_page_fault() and handle_mm_fault().
+
+Analyze slab allocator implementation in v3.2. Trace the code in mm/slab.c (or mm/slub.c if enabled), explain cache creation (kmem_cache_create()), object allocation/free, and differences between slab, slob, and slub allocators available in this version.
+```
+
+- Virtual File System and Block I/O
+```
+Explain the Virtual File System (VFS) layer in Linux v3.2. Describe key structures (e.g., struct super_block, struct inode, struct dentry, struct file) in include/linux/fs.h, and trace a file read operation from sys_read() through the VFS to a specific filesystem (e.g., ext2).
+
+Examine the block I/O layer in v3.2. Focus on the request queue and bio structures in block/* and drivers/block/*. Walk through submission of a read request via submit_bio(), elevator merging, and I/O scheduling algorithms available at that time.
+```
+
+- Device Drivers and Networking
+```
+Describe the interrupt handling and device driver framework in v3.2. Explain request_irq()/free_irq() in kernel/irq/, the struct irqaction, and bottom-half mechanisms (tasklets and workqueues). Provide an example flow for a simple character driver.
+
+Analyze the network protocol stack in Linux v3.2. Trace packet reception from a device driver (e.g., netif_rx()) through the softirq (NET_RX_SOFTIRQ), skb processing in net/core/dev.c, and delivery to the IP layer in net/ipv4/ip_input.c.
+```
+
+
+- Deep System Understanding Prompt
+```
+# Role
+You are a senior systems engineer and teacher.
+
+# Objective
+Help me deeply understand **[SYSTEM / PROJECT / COMPONENT]**.
+
+# Context
+- My background: [your background]
+- My goal: [learning / debugging / design]
+
+# What Problem It Solves
+Explain:
+- What real-world problems this system addresses
+- What would break or be harder without it
+
+# Why It Is Designed This Way
+Cover:
+- Key design constraints
+- Trade-offs and rejected alternatives
+- Historical or ecosystem reasons
+
+# How It Works (Layered)
+Explain from:
+1. High-level architecture
+2. Core abstractions
+3. Critical data structures
+4. Control flow
+5. Performance considerations
+
+# Key Invariants & Guarantees
+List:
+- What must always be true
+- What the system assumes
+- What it explicitly does NOT guarantee
+
+# Real-World Usage
+Show:
+- Typical usage patterns
+- Common mistakes
+- When NOT to use it
+
+# Mental Model
+Provide a simple mental model or analogy.
+
+# Summary
+Condense the essence into 5 bullet points.
+```
+
+- Learning-by-Building Prompt
+```
+# Role
+Act as a pragmatic mentor who teaches by building.
+
+# Goal
+Teach me **[TOPIC]** by incrementally building a minimal system.
+
+# Constraints
+- Avoid unnecessary abstractions
+- Prefer clarity over cleverness
+- Each step must compile or run
+
+# Step-by-Step Plan
+1. Define the smallest useful version
+2. Add one feature at a time
+3. Explain WHY before HOW
+
+# For Each Step
+Explain:
+- What we are adding
+- Why it is needed
+- What would go wrong if we skip it
+
+# Failure Modes
+At each step:
+- What bugs typically appear
+- How to detect them
+- How to fix them
+
+# Final Reflection
+- What concepts were actually essential
+- What was optional
+
+```
+
+- Design Review Prompt (Architect Mindset)
+```
+# Role
+You are a strict but fair software architect.
+
+# Artifact to Review
+- System / design / code: **[DESCRIPTION or LINK]**
+
+# Evaluation Criteria
+Review it against:
+- Correctness
+- Simplicity
+- Extensibility
+- Performance
+- Debuggability
+
+# Architecture Breakdown
+Identify:
+- Core responsibilities
+- Dependency directions
+- Ownership of state
+
+# Design Smells
+Call out:
+- Over-coupling
+- Leaky abstractions
+- Premature optimization
+- Hidden global state
+
+# Alternatives
+Propose:
+- At least one simpler design
+- One more scalable design
+
+# Verdict
+Answer:
+- What this design gets right
+- What will hurt in 6–12 months
+
+```
+
+- Debugging & Root Cause Analysis Prompt
+```
+# Role
+Act as a senior engineer debugging a production issue.
+
+# Problem Description
+- Symptoms:
+- Logs / errors:
+- Expected behavior:
+
+# Environment
+- OS / runtime:
+- Version info:
+- Reproducibility:
+
+# Hypotheses
+List possible root causes ranked by likelihood.
+
+# Investigation Plan
+For each hypothesis:
+- What evidence to look for
+- How to validate or falsify it
+
+# Root Cause
+Explain:
+- The exact failure mechanism
+- Why it was not caught earlier
+
+# Fix
+Provide:
+- Minimal fix
+- Proper fix
+- Preventive measures
+
+# Lessons Learned
+Generalize the takeaway.
+
+```
+
+- Concept-to-Implementation Prompt
+```
+# Role
+You are both a theoretician and a practical engineer.
+
+# Concept
+Explain **[CONCEPT]**.
+
+# Intuition First
+Explain it with:
+- Plain language
+- Simple analogy
+
+# Formal Definition
+Provide:
+- Precise terminology
+- Constraints and assumptions
+
+# Implementation Mapping
+Show:
+- How the concept maps to code
+- Typical data structures
+- Control flow patterns
+
+# Example
+Give:
+- A minimal working example
+- A real-world example
+
+# Pitfalls
+List:
+- Common misunderstandings
+- Incorrect implementations
+
+# When to Use / Avoid
+Provide clear decision rules.
+
+```
+
+- Comparison & Trade-off Prompt
+```
+# Role
+Act as an unbiased technical advisor.
+
+# Options to Compare
+- Option A:
+- Option B:
+- (Optional) Option C:
+
+# Comparison Axes
+Compare across:
+- Complexity
+- Performance
+- Memory
+- Operational cost
+- Learning curve
+
+# Decision Table
+Summarize trade-offs concisely.
+
+# Use-Case Mapping
+For each option:
+- Best scenarios
+- Worst scenarios
+
+# Recommendation
+Give:
+- Default choice
+- When to override the default
+
+```
+
+- Teaching with Zero Distractions Prompt
+```
+# Role
+Act as a minimalist teacher.
+
+# Topic
+**[TOPIC]**
+
+# Rules
+- No frameworks
+- No advanced optimizations
+- No unrelated features
+
+# Core Elements Only
+Explain only:
+- The essential components
+- Their interactions
+
+# Rejection Over Acceptance
+Focus on:
+- What inputs/states are invalid
+- Why rejecting is critical
+
+# One Diagram (Textual)
+Describe the system in a single diagram-like explanation.
+
+# Summary
+If I remember only one thing, it should be this: **[...]**
+
+```

@@ -11,6 +11,26 @@
 [regex syntax](https://docs.rs/regex/1.12.2/regex/#syntax)  
 [Regular Expression Language - Quick Reference](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference)  
 
+## Markdown 文件自动生成目录
+- 内置功能
+	Ctrl+Shift+O
+- 扩展插件
+	Markdown All in One
+	用法:
+	- 生成目录: Ctrl+Shift+P → "Create Table of Contents"
+	- 更新目录: Ctrl+Shift+P → "Update Table of Contents"
+
+	Markdown TOC
+	用法:
+	- 右键菜单: "Generate TOC"
+	- 命令面板: "Markdown TOC: Insert/Update"
+
+	Markdown Preview Enhanced
+	特殊功能:
+	- 侧边栏目录自动显示
+	- 导出时保持目录
+	- 支持多种格式导出
+
 ## plugins
 C/C++
 	The C/C++ extension adds language support for C/C++ to Visual Studio Code, including editing (IntelliSense) and debugging features.
