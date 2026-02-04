@@ -18,6 +18,82 @@
 [CLI text processing with GNU awk](https://learnbyexample.github.io/learn_gnuawk/cover.html)  
 [Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
 
+awk/awk-tutorial/
+├── [part1-core-mental-model.md](./awk/awk-tutorial/part1-core-mental-model.md)  
+├── [part2-pattern-matching.md](./awk/awk-tutorial/part2-pattern-matching.md)  
+├── [part3-core-actions.md](./awk/awk-tutorial/part3-core-actions.md)  
+├── [part4-programming-language.md](./awk/awk-tutorial/part4-programming-language.md)  
+├── [part5-daily-use-cases.md](./awk/awk-tutorial/part5-daily-use-cases.md)  
+├── [part6-functions.md](./awk/awk-tutorial/part6-functions.md)  
+├── [part7-professional-style.md](./awk/awk-tutorial/part7-professional-style.md)  
+└── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
+
+
+```bash
+# range match pattern + action (prserve spaces)
+awk '
+  /^volume "persistent_evc_db" {/,/^}/ {
+    # Modified sub() with capture groups to preserve original spaces
+    sub(/(^\s*per_alloc\s*=\s*)(true)(\s*$)/, "\\1false\\3")
+  }
+  1
+' your_job_file.hcl
+
+# comment out the entire volume_mount block for persistent_evc_db
+# INPUT TEXT
+    task "evc" {
+      driver = "docker"
+
+      volume_mount {
+        volume      = "persistent_evc_db"
+        destination = var.ncs_mount_path
+          read_only = false
+      }
+
+      volume_mount {
+        volume      = "persistent_shared"
+        destination = var.evc_shared_path
+          read_only = false
+      }
+    }
+
+# COMMAND
+awk '
+  # Step 1: Detect start of volume_mount block, begin buffering
+  /^[[:space:]]*volume_mount[[:space:]]*\{/ {
+    in_block = 1
+    target_block = 0
+    buffer_len = 0
+  }
+
+  # Step 2: While in block, buffer lines and check for target
+  in_block {
+    buffer[++buffer_len] = $0
+
+    if (/^[[:space:]]*volume[[:space:]]*=[[:space:]]*"persistent_evc_db"/) {
+      target_block = 1
+    }
+
+    # Step 3: At closing brace, flush buffer (commented if target)
+    if (/^[[:space:]]*\}/) {
+      for (i = 1; i <= buffer_len; i++) {
+        if (target_block) {
+          print "#" buffer[i]
+        } else {
+          print buffer[i]
+        }
+      }
+      in_block = 0
+      buffer_len = 0
+    }
+    next
+  }
+
+  # Step 4: Print non-block lines unchanged
+  { print }
+' your_job_file.hcl > temp.hcl && mv temp.hcl your_job_file.hcl
+```
+
 ## extract sections
 ```bash
 # input.txt:

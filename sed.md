@@ -29,6 +29,30 @@ s/old/new/flags : edit PS in-place (can use g, p, i flags)
 N / D : multi-line PS operations
 
 ```bash
+# 自定义定界符
+# sed 自定义定界符的正确格式是 \字符模式字符（如 \#模式#、\@模式@），第一个定界符前必须加 \
+sed -n '\@"local/vector:/etc/vector"@p' morris-dentist_evc_container.nomad.hcl
+sed -n '\#"local/vector:/etc/vector"#p' morris-dentist_evc_container.nomad.hcl
+
+# 保留缩进格式
+# sed 的内置解析规则 ——sed 会将 a 后无转义的开头空格判定为 “语法分隔符”，而非需要保留的文本内容
+# 要让 sed 保留 a 后的缩进空格，只需对紧跟 a 的第一个空格添加反斜杠 \ 转义即可
+sed -i '\@"local/vector:/etc/vector"@a\    line with spaces at the beginning' morris-dentist_evc_container.nomad.hcl
+
+# sed 的花括号 {} 组合多操作, 针对匹配行连续执行
+# 方案 1：单行简洁版
+# 匹配模式末尾添加正则行尾锚定符 $，可以多次执行
+sed -i.bak '\@"local/vector:/etc/vector"$@;{ s/$/,/; a\          "/mnt/DATA/morrism/testbed/evc_32s_2ofdm.cli:/tmp/evc_32s_2ofdm.cli", }' morris-dentist_evc_container.nomad.hcl
+
+# 1. \@xxx@;{ → 定界符与 { 之间加分号 ;    2. s/$/,/; a\ → 分号后加空格
+
+# 方案 2：多行易读版（适合后续扩展多操作）
+# 匹配模式末尾添加正则行尾锚定符 $，可以多次执行
+sed -i '\@"local/vector:/etc/vector"$@ {
+s/$/,/
+a\          "/mnt/DATA/morrism/testbed/evc_32s_2ofdm.cli:/tmp/evc_32s_2ofdm.cli",
+}' morris-dentist_evc_container.nomad.hcl
+
 # by default, sed is greedy
 
 # 提取最后一对括号内容

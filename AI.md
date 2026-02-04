@@ -68,6 +68,9 @@ Settings
 [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)  
 [moltbot skills](https://github.com/moltbot/moltbot/tree/main/skills)  
 []()  
+[]()  
+[]()  
+[]()  
 
 ## Prompt tips
 ```
@@ -75,6 +78,16 @@ Settings
 Use markdown format to answer: TOPIC, make sure to put the whole response into a code block marked in markdown format.
 Use markdown format to answer: TOPIC, make sure to put the whole response into a ```markdown  code block.
 ```
+[AI Prompt Library](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/)  
+[Claude Prompt Library](https://platform.claude.com/docs/en/resources/prompt-library/library)  
+[Learning supported by AI prompts](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/learning-supported-by-ai-prompts/)  
+[Prompt Library](https://www.moreusefulthings.com/prompts)  
+[snackprompt](https://snackprompt.com/)  
+[Learning Prompt](https://learningprompt.wiki/)  
+[aishort](https://www.aishort.top/)  
+[]()  
+[]()  
+[]()  
 
 
 ## Online

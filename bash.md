@@ -3234,6 +3234,15 @@ The PID of the sleep process was: 62020
 []()..
 []()..
 ```bash
+# (A|B)：扩展正则的分组或逻辑，匹配 A 或 B
+# \.：正则中.是通配符（匹配任意单个字符），需转义为字面量的点
+# 55[45]：中括号[]匹配其中任意一个字符
+snmpwalk -v 2c -c public $SNMPNSI IF-MIB:ifTable -M /home/tcao/mibs | grep -E '(ifOperStatus|ifAdminStatus)\.55[45]'
+IF-MIB::ifAdminStatus.554 = INTEGER: down(2)
+IF-MIB::ifAdminStatus.555 = INTEGER: down(2)
+IF-MIB::ifOperStatus.554 = INTEGER: down(2)
+IF-MIB::ifOperStatus.555 = INTEGER: down(2)
+
 # Basic OR
 grep 'pattern1\|pattern2' file
 
