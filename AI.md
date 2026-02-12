@@ -1,5 +1,16 @@
+[Cursor](cursor.md)  
+[Gemini](gemini.md)  
+[Prompt Guide](prompt_guide.md)  
+[Prompt Guide for Learning](prompt_guide_for_learning.md)  
+[Prompt Guide for Architecture Design](prompt_guide_for_arch_design.md)  
+[Prompt Guide for Design Patterns in Linux Kernel(v3.2)](prompt_guide_for_linux_design_patterns.md)  
+[]()  
+[]()  
+[]()  
+
+
 [OpenAI Cookbook](https://cookbook.openai.com/)  
-[Prompt Engineering Guide](https://www.promptingguide.ai/)  
+[**Prompt Engineering Guide**](https://www.promptingguide.ai/)  
 [Prompt Engineering Guide](https://learnprompting.org/docs/introduction)  
 [Five proven prompt engineering techniques](https://www.lennysnewsletter.com/p/five-proven-prompt-engineering-techniques)  
 []()  
@@ -62,12 +73,12 @@ Settings
 ## skill
 [skill creator](https://github.com/moltbot/moltbot/blob/main/skills/skill-creator/SKILL.md)  
 > The open agent skills tool - npx skills
+[superpowers](https://github.com/obra/superpowers/tree/main)  
 [skills](https://github.com/vercel-labs/skills)  
 > The Open Agent Skills Ecosystem
 [skills](https://skills.sh/)  
 [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)  
 [moltbot skills](https://github.com/moltbot/moltbot/tree/main/skills)  
-[]()  
 []()  
 []()  
 []()  
@@ -91,17 +102,22 @@ Use markdown format to answer: TOPIC, make sure to put the whole response into a
 
 
 ## Online
+[AI Resources](https://www.controlaltachieve.com/p/resources-ai.html)  
 [ChatGPT](https://chatgpt.com/)  
 [Grok](https://grok.com/)  
 [KiMi](https://kimi.moonshot.cn/)  
 [Gmini](https://gemini.google.com/app)  
 [NoteBookLM](https://notebooklm.google.com/)  
 [DeepSeek](https://chat.deepseek.com/)  
-[hix.ai/](https://hix.ai/)  
-[Ithy](https://ithy.com/)  
 [字节豆包](https://www.doubao.com/chat/)  
 [腾讯元宝](https://yuanbao.tencent.com/chat/)  
-[阿里通义](https://tongyi.aliyun.com/qianwen/)  
+[Groq](https://console.groq.com/playground)  
+[copilot](https://copilot.microsoft.com/)  
+[perplexity](https://www.perplexity.ai/)  
+[meta](https://www.meta.ai/)  
+[]()  
+[]()  
+[]()  
 
 
 ![Prompt engineering vs Context engineering](./assets/prompt_engineering_vs_context_engineering.png)  
@@ -153,6 +169,12 @@ Use markdown format to answer: TOPIC, make sure to put the whole response into a
 
 ## Prompt
 ![ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
+[writing assistant](./prompt/writing_assistant.md)  
+[AI Prompt Optimization Specialist](./prompt/better_prompt.md)  
+[explain a topic](./prompt/explain_topic.md)  
+[]()  
+[]()  
+[]()  
 
 ### [任务分解: 输入 + 输出 + 过程](./prompt/input_output_process.md)  
 - 输入

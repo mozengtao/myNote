@@ -1,0 +1,6 @@
+[Gemini API reference](https://ai.google.dev/api)  
+[Gemini CLI Extensions](https://github.com/gemini-cli-extensions)  
+[Unleash the Super-Prompt: Mastering Your Coding AI Workflow With Gemini](https://www.leeboonstra.dev/prompt-engineering/ai-development/super-prompting/gemini-cli-super-prompt/)  
+[]()  
+[]()  
+[]()  

@@ -1,2 +1,0 @@
-- [Prometheus](https://prometheus.io/docs/concepts/data_model/)
-    - [EXPOSITION FORMATS](https://prometheus.io/docs/instrumenting/exposition_formats/)

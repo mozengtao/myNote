@@ -8,6 +8,109 @@
 []()  
 []()  
 
+## A complete example
+```yaml
+# YAML Complete Data Types Example
+# ================================
+# 1. Scalar Types (single value)
+# -------------------------------
+# String types (plain, quoted, multi-line, folded)
+plain_string: Hello World          # Plain string (no quotes, works for most cases)
+quoted_string: "Hello: World"      # Double-quoted string (escapes special chars like colon/space)
+single_quoted_string: 'Hello\nWorld' # Single-quoted (no escape, literal \n)
+multi_line_string: |               # Literal block (preserves newlines, ends with blank line)
+  Line 1 of multi-line text
+  Line 2 with indentation
+  Line 3 ends here
+  
+folded_string: >                   # Folded block (collapses newlines to spaces)
+  This is a long string that
+  spans multiple lines but
+  will be treated as a single line
+
+# Numeric types (integer, float, special numeric formats)
+integer_decimal: 42               # Decimal integer
+integer_hex: 0x2A                 # Hexadecimal (0x prefix)
+integer_octal: 0o52               # Octal (0o prefix)
+integer_binary: 0b101010          # Binary (0b prefix)
+float_basic: 3.14159              # Basic float
+float_scientific: 6.02e23         # Scientific notation (6.02 × 10²³)
+float_infinite: .inf              # Infinity (also -inf for negative infinity)
+float_nan: .nan                   # Not a Number (NaN)
+
+# Boolean types (case-insensitive: true/false, yes/no, on/off)
+boolean_true: true                # True (equivalent to yes/on)
+boolean_false: false              # False (equivalent to no/off)
+
+# Null type (two valid representations)
+null_value_1: ~                   # Null (tilde symbol)
+null_value_2: null                # Null (literal 'null', case-insensitive: NULL/Null also work)
+
+# Date/Time types (ISO 8601 format)
+date_only: 2026-02-11             # Date (YYYY-MM-DD)
+time_only: 14:30:45               # Time (HH:MM:SS)
+date_time: 2026-02-11T14:30:45Z   # Date + Time (UTC, Z suffix)
+date_time_with_offset: 2026-02-11T14:30:45+08:00 # Date + Time with timezone offset
+
+# 2. Collection Types (complex values)
+# -------------------------------------
+# Sequence (List/Array - ordered collection, marked with '-')
+simple_sequence:                  # Basic list of scalars
+  - apple
+  - banana
+  - cherry
+
+nested_sequence:                  # Nested list (list inside list)
+  - [1, 2, 3]                     # Inline sequence (compact syntax)
+  - [4, 5, 6]
+  - 
+    - seven
+    - eight
+
+# Mapping (Dictionary/Object - unordered key-value pairs)
+simple_mapping:                   # Basic key-value mapping
+  name: Alice
+  age: 30
+  is_student: false
+
+nested_mapping:                   # Nested mapping (mapping inside mapping)
+  personal_info:
+    address:
+      street: 123 Main St
+      city: New York
+      zip: 10001
+  contact:
+    email: alice@example.com
+    phone: "+1-555-1234"          # Quoted to preserve leading '+' and hyphens
+
+sequence_of_mappings:             # List of mappings (common for arrays of objects)
+  - id: 1
+    product: Laptop
+    price: 999.99
+  - id: 2
+    product: Phone
+    price: 699.99
+
+# 3. Advanced YAML Features
+# --------------------------
+# Anchors (&) and References (*) (reuse values)
+base_config: &base                # Anchor: mark this mapping as 'base'
+  timeout: 30
+  retries: 3
+
+extended_config:                  # Reference + override
+  <<: *base                       # Merge all key-value from 'base'
+  retries: 5                      # Override 'retries' value
+  timeout: 60                     # Override 'timeout' value
+  endpoint: /api/v1               # Add new key
+
+# Inline mapping (compact syntax for mappings)
+inline_mapping: {x: 10, y: 20, z: 30} # Compact key-value (equivalent to multi-line mapping)
+
+# Special characters (escaped in double-quoted strings)
+escaped_chars: "Line1\nLine2\tTab\tBackslash\\Quote\"" # \n=newline, \t=tab, \\=backslash, \"=double quote
+```
+
 ```yaml
 # YAML三种基本数据结构
 	标量：单一的值，如字符串、数字、布尔值等

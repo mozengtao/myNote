@@ -97,6 +97,36 @@
 []()  
 []()  
 
+ipc
+├── [01_file_based_ipc.md](./linux/ipc/01_file_based_ipc.md)  
+├── [02_unix_domain_sockets.md](./linux/ipc/02_unix_domain_sockets.md)  
+├── [03_posix_semaphores.md](./linux/ipc/03_posix_semaphores.md)  
+├── [04_posix_message_queues.md](./linux/ipc/04_posix_message_queues.md)  
+├── [05_shared_memory.md](./linux/ipc/05_shared_memory.md)  
+├── [06_comparison.md](./linux/ipc/06_comparison.md)  
+├── [README.md](./linux/ipc/README.md)  
+└── examples
+    ├── 01_file
+    │   ├── [Makefile](./linux/ipc/examples/01_file/Makefile)  
+    │   ├── [core_process.c](./linux/ipc/examples/01_file/core_process.c)  
+    │   └── [noncore_process.c](./linux/ipc/examples/01_file/noncore_process.c)  
+    ├── 02_socket
+    │   ├── [Makefile](./linux/ipc/examples/02_socket/Makefile)  
+    │   ├── [core_process.c](./linux/ipc/examples/02_socket/core_process.c)  
+    │   └── [noncore_process.c](./linux/ipc/examples/02_socket/noncore_process.c)  
+    ├── 03_semaphore
+    │   ├── [Makefile](./linux/ipc/examples/03_semaphore/Makefile)  
+    │   ├── [core_process.c](./linux/ipc/examples/03_semaphore/core_process.c)  
+    │   └── [noncore_process.c](./linux/ipc/examples/03_semaphore/noncore_process.c)  
+    ├── 04_msgqueue
+    │   ├── [Makefile](./linux/ipc/examples/04_msgqueue/Makefile)
+    │   ├── [core_process.c](./linux/ipc/examples/04_msgqueue/core_process.c)  
+    │   └── [noncore_process.c](./linux/ipc/examples/04_msgqueue/noncore_process.c)  
+    └── 05_sharedmem
+        ├── [Makefile](./linux/ipc/examples/05_sharedmem/Makefile)  
+        ├── [core_process.c](./linux/ipc/examples/05_sharedmem/core_process.c)  
+        └── [noncore_process.c](./linux/ipc/examples/05_sharedmem/noncore_process.c)  
+
 - architecture
 [what is architecture](./linux/architecture/guide/01_what_is_architecture.md)  
 [core engineering problems](./linux/architecture/guide/02_core_engineering_problems.md)  
@@ -134,6 +164,12 @@
 [what concrete architecture](./linux/architecture/subsystems/file_system/03_what_concrete_architecture.md)  
 [where source code map](./linux/architecture/subsystems/file_system/04_where_source_code_map.md)  
 [transfer to real projects](./linux/architecture/subsystems/file_system/05_transfer_to_real_projects.md)  
+[vfs_inode_design_patterns_v3.2](./linux/vfs/vfs_inode_design_patterns_v3.2.md)  
+[vfs_inode_v32_code_reference](./linux/vfs/vfs_inode_v32_code_reference.md)  
+[vfs internal guide](./linux/vfs/vfs_internals_guide.md)  
+[]()  
+[]()  
+[]()  
 
 - Network Stack
 [why network stack](./linux/architecture/subsystems/network_stack/01_why_network_stack.md)  

@@ -4,6 +4,11 @@
 
 - skills
 ```bash
+npx skills add --list https://github.com/anthropics/skills
+
+ls ~/.cursor/skills
+find-skills  skill-creator
+
 npx skills --help
 
 Usage: skills <command> [options]

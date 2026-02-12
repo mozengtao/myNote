@@ -1,5 +1,89 @@
 [JSON formatter](https://jsonformatter.org/) 
 
+## A complete example
+```json
+{
+  /* ================================
+     1. Scalar Types (single values)
+     ================================ */
+  // String (must use double quotes; escape special characters with backslash)
+  "plain_string": "Hello World",
+  "string_with_escapes": "Line 1\nLine 2\tTab Character\\Backslash\"Double Quote/'Single Quote'", // Escapes: \n=newline, \t=tab, \\=backslash, \"=double quote
+  "string_with_special_chars": "🌍 Unicode Emoji | + - * / = @ # $ % ^ &", // Supports Unicode and special symbols (no escape needed if not reserved)
+
+  // Number (integer, float, scientific notation; no hex/octal/binary in standard JSON)
+  "integer_positive": 42,
+  "integer_negative": -100,
+  "float_basic": 3.14159,
+  "float_scientific_notation": 6.02e23, // 6.02 × 10²³ (positive exponent)
+  "float_scientific_negative": 1.23e-4, // 1.23 × 10⁻⁴ (negative exponent)
+  "float_zero": 0.0,
+
+  // Boolean (only two valid values: true/false, lowercase)
+  "boolean_true": true,
+  "boolean_false": false,
+
+  // Null (only one value: null, lowercase; represents empty/undefined)
+  "null_value": null,
+
+  /* ================================
+     2. Collection Types (complex values)
+     ================================ */
+  // Array (ordered list, enclosed in []; can contain mixed types)
+  "simple_array": ["apple", "banana", "cherry"], // Array of strings
+  "mixed_type_array": [10, true, "text", null, 3.14], // Array with mixed scalar types
+  "nested_array": [ // Nested array (array inside array)
+    [1, 2, 3], // Inline sub-array
+    [4, 5, 6],
+    ["seven", "eight", "nine"]
+  ],
+
+  // Object (unordered key-value pairs, enclosed in {}; keys are always double-quoted strings)
+  "simple_object": {
+    "name": "Alice",
+    "age": 30,
+    "is_student": false,
+    "email": "alice@example.com"
+  },
+  "nested_object": { // Object inside another object
+    "personal_info": {
+      "address": {
+        "street": "123 Main St",
+        "city": "New York",
+        "zip_code": "10001"
+      },
+      "phone": "+1-555-1234" // Preserves special characters (no escape needed here)
+    },
+    "preferences": {
+      "colors": ["red", "blue", "green"],
+      "notifications": true
+    }
+  },
+  "array_of_objects": [ // Common pattern: array containing multiple objects
+    {
+      "id": 1,
+      "product": "Laptop",
+      "price": 999.99,
+      "in_stock": true
+    },
+    {
+      "id": 2,
+      "product": "Smartphone",
+      "price": 699.99,
+      "in_stock": false,
+      "features": ["5G", "48MP Camera", "5000mAh Battery"]
+    }
+  ],
+
+  /* ================================
+     3. Edge Cases & Practical Notes
+     ================================ */
+  "empty_array": [], // Valid empty array
+  "empty_object": {}, // Valid empty object
+  "number_without_fraction": 10.0, // Equivalent to 10, but explicitly float
+  "large_number": 9876543210987654321 // JSON supports arbitrary-precision integers (depends on parser)
+}
+```
 
 ```bash
 # JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate

@@ -1,3 +1,6 @@
+[uv](uv.md)  
+
+
 [**python-course.eu**](https://python-course.eu/)  
 [Python-100-Days](https://github.com/jackfrued/Python-100-Days/tree/master)  
 [100-days-of-code-python](https://github.com/phillipai/100-days-of-code-python/tree/main)  

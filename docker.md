@@ -1,3 +1,12 @@
+[Docker 从入门到实践](https://vuepress.mirror.docker-practice.com/)  
+[Docker Hub](https://hub.docker.com/)  
+[dockerdocs](https://docs.docker.com/)  
+[A Docker Tutorial for Beginners](https://docker-curriculum.com/)  
+[Docker 教程](https://www.runoob.com/docker/docker-tutorial.html)  
+[]()  
+[]()  
+[]()  
+
 
 [Understanding Hypervisors: Exploring Type-1 vs Type-2 and Full vs Para Virtualization](https://medium.com/@ravipatel.it/understanding-hypervisors-exploring-type-1-vs-type-2-and-full-vs-para-virtualization-71b4dad9abd9)  
 
@@ -24,6 +33,50 @@
 ![13 docker vs kubernetes](./docker/learning-guide/13-docker-vs-kubernetes.md)  
 ![14 repositories](./docker/learning-guide/14-repositories.md)  
 ![15 mental model](./docker/learning-guide/15-mental-model.md)  
+
+## Tips
+- 配置 Docker 国内镜像源
+```bash
+# 创建或修改 Docker 守护进程配置文件
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json > /dev/null <<EOF
+{
+  "registry-mirrors": [
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com",
+    "https://docker.mirrors.ustc.edu.cn"
+  ]
+}
+EOF
+
+# 重启 Docker 服务
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+# 验证配置是否生效
+docker info
+```
+
+- 为 Docker 守护进程配置代理
+```bash
+# 创建 Docker 服务的代理配置目录
+sudo mkdir -p /etc/systemd/system/docker.service.d
+
+# 创建代理配置文件
+sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf > /dev/null <<EOF
+[Service]
+Environment="HTTP_PROXY=http://your-proxy-server:port"
+Environment="HTTPS_PROXY=http://your-proxy-server:port"
+Environment="NO_PROXY=localhost,127.0.0.1"
+EOF
+
+# 重启 Docker 服务
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+# 验证代理配置
+systemctl show --property=Environment docker
+```
 
 ## LXD, Docker 和 oVirt
 ```

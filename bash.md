@@ -19,6 +19,107 @@
 []()  
 [IPC Performance Comparison: Anonymous Pipes, Named Pipes, Unix Sockets, and TCP Sockets](https://www.baeldung.com/linux/ipc-performance-comparison)  
 
+## Bash 并行执行的方法
+### 基础模板
+```bash
+# 基础函数1：模拟服务A启动（耗时2秒）
+start_serviceA() {
+    echo "[$(date +%H:%M:%S)] Starting Service A..."
+    sleep 2  # 模拟启动耗时，替换为实际业务逻辑
+    echo "[$(date +%H:%M:%S)] Service A started successfully!"
+}
+
+# 基础函数2：模拟服务B启动（耗时3秒）
+start_serviceB() {
+    echo "[$(date +%H:%M:%S)] Starting Service B..."
+    sleep 3  # 模拟启动耗时，替换为实际业务逻辑
+    echo "[$(date +%H:%M:%S)] Service B started successfully!"
+}
+
+# 主函数统一命名：所有方法均在该函数内实现并行逻辑
+# 核心要求：两个基础函数同时运行，全部完成后输出最终提示
+run_parallel_functions() {
+    # 【各方法的并行逻辑写在这里】
+}
+
+# 统一调用测试（所有方法均用此命令执行）
+run_parallel_functions
+```
+### 最简无依赖: & + wait
+```bash
+# 主函数：& + wait 实现并行
+run_parallel_functions() {
+    # 两个函数后加&，放入后台同时运行
+    start_serviceA &
+    start_serviceB &
+
+    # 等待所有后台子进程执行完成
+    wait
+
+    # 所有并行任务完成后，输出最终提示
+    echo -e "\n[$(date +%H:%M:%S)] All services started successfully!"
+}
+
+# 调用测试
+run_parallel_functions
+```
+### 进程替换 <()
+> bash 原生扩展特性<()，将函数启动为独立子进程并行执行，核心优势是可对每个函数的输出做独立重定向
+```bash
+# 主函数：进程替换作为cat命令参数（规范用法，无Permission denied）
+run_parallel_functions() {
+    # 遵循进程替换「必须作为命令参数」的原生规则，<()作为cat命令的参数，启动独立子进程并行执行
+    # cat <(命令) 是进程替换的经典规范用法：cat 命令读取进程替换的临时文件描述符输出，间接让<()后的命令启动为独立子进程
+    # 独立输出重定向，日志文件单独生成
+    cat <(start_serviceA > serviceA_start.log 2>&1) &
+    cat <(start_serviceB > serviceB_start.log 2>&1) &
+
+    # 等待所有后台子进程完成
+    wait
+
+    echo -e "\n[$(date +%H:%M:%S)] All services started successfully! (logs in *.log)"
+}
+
+# 调用测试
+run_parallel_functions
+```
+### 系统自带工具: xargs + -P（精准限制并行数）
+```bash
+# 关键步骤：导出函数为环境变量（让xargs子shell可识别，必须放在函数定义后、主函数前）
+export -f start_serviceA start_serviceB
+
+# 主函数：xargs + -P 实现并行（限制并行数为2）
+run_parallel_functions() {
+    # echo传递待并行的函数名 → xargs处理
+    # -I {}：将{}作为函数名占位符；-P 2：指定同时运行2个进程（与函数数一致）
+    echo -e "start_serviceA\nstart_serviceB" | xargs -I {} -P 2 bash -c "{}"
+
+    # 无需额外wait：xargs -P 会自动阻塞，直到所有并行进程完成后再退出
+    echo -e "\n[$(date +%H:%M:%S)] All services started successfully!"
+}
+
+# 调用测试
+run_parallel_functions
+```
+### 专业并行工具: GNU Parallel（功能最强，灵活扩展）
+```bash
+# 关键步骤：导出函数为环境变量（让GNU Parallel可识别）
+export -f start_serviceA start_serviceB
+
+# 主函数：GNU Parallel 实现并行（基础版）
+run_parallel_functions() {
+    # 核心语法：parallel ::: 待并行的函数/命令列表
+    parallel ::: start_serviceA start_serviceB
+
+    # 无需额外wait：parallel自动等待所有并行进程完成
+    echo -e "\n[$(date +%H:%M:%S)] All services started successfully!"
+}
+
+# 调用测试
+run_parallel_functions
+```
+
+
 ## tips
 ```bash
 # 获取匹配行及之后所有内容
@@ -3712,6 +3813,8 @@ tr 'a-z' 'A-Z' <<< "hello world"
 ## find
 [find(1)](https://www.mankier.com/1/find)  
 ```bash
+# find and delete files
+# -print0 and -0: These are crucial. They use a "null character" to separate filenames, ensuring that files with spaces in their names (e.g., Old Log.txt) are handled correctly and not treated as two separate files.
 find . -name vcmts.cfg -print0 | xargs -0 vim
 find . -name vcmts.cfg -exec vim {} +
 
