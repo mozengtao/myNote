@@ -16,6 +16,21 @@
 > The power tool for querying Prometheus, Build, understand, and fix your queries much more effectively with the ultimate query builder for PromQL
 [PromLens](https://promlens.com/)  
 
+- Example: a time series for HTTP requests 
+```
+http_requests_total{status="200", method="GET"}  1234  1623456789000
+|__________________| \________________________/ |____| |___________|
+         |                       |                |          |
+    Metric Name               Labels            Value    Timestamp
+         |             (Key-Value Pairs)          |     (Unix ms)
+         |                       |                |          |
+  "What is being       "Dimensions to filter      |     "When it 
+    measured"           or group results"         |      happened"
+                                                  |
+                                         "The actual count
+                                          at this moment"
+```
+
 [**Learn Prometheus**](https://training.promlabs.com/)  
 []()  
 [Prometheus](https://prometheus.io/docs/concepts/data_model/)  

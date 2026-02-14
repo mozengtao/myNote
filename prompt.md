@@ -1,4 +1,6 @@
+[**Gemini: Prompt design strategies**](https://ai.google.dev/gemini-api/docs/prompting-strategies)  
 [Prompt Engineering Guide](https://www.promptingguide.ai/)  
+
 [AI Prompt Libraries for Educators](https://www.controlaltachieve.com/2024/03/ai-prompt-libraries-for-educators.html)  
 [Write prompts for AI agents](https://www.infobip.com/docs/ai-agents/advanced-topics/write-prompts)  
 [Writing Effective Prompts for AI Agent Creation](https://documentation.sysaid.com/docs/writing-effective-prompts-for-ai-agent-creation)  
@@ -10,7 +12,111 @@
 []()  
 []()  
 [How to Use ChatGPT to Easily Learn Anything (7 GPT-4 Prompts for Studying)](https://blog.alexanderfyoung.com/how-to-use-chatgpt-to-learn-any-skill/)  
+[Prompt Engineering Power-Up: How to Make Gemini Write Your Prompts](https://leonnicholls.medium.com/prompt-engineering-power-up-how-to-make-gemini-write-your-prompts-ee62660b8060)  
+[The Art of the Power Prompt: Mastering Google Gemini](https://leonnicholls.medium.com/the-art-of-the-power-prompt-mastering-google-gemini-9518200c8c55)  
 []()  
+[]()  
+[]()  
+
+## Phrases Focusing on Prompt Transformation
+```
+✅ Elevate this prompt
+Elevate this image prompt
+“A cat napping in the sun”
+
+✅ Take this prompt to the next level
+Take this image prompt to the next level
+“A cityscape at night”
+
+✅ Transform this into a masterpiece prompt
+Transform this image prompt into a masterpiece prompt
+“A flower blooming”
+
+✅ Refine this into a powerful prompt
+Refine this image prompt into a powerful prompt
+ “A person walking”
+
+✅ Make this prompt more specific
+Make this prompt more specific
+“a song about love”
+
+✅ Add stylistic details to this prompt
+Add stylistic details to this prompt
+“a portrait of a woman”
+
+✅ Make this prompt more evocative
+Make this prompt more evocative
+“A flower”
+
+✅ Include these keywords…
+Write a description for a new line of eco-friendly cleaning products. Include these keywords: ‘clean,’ ‘green,’ and ‘effective’.
+
+✅ Expand this prompt
+Expand this prompt
+“a cat wearing a hat”
+
+✅ Give me variations on this prompt
+Give me variations on this prompt
+“Write a joke.” 
+
+```
+
+## Prompt Generation
+```
+✅ Prompt Generator: Ask Gemini to generate prompts directly.
+Generate five prompts that could help a user write a compelling story about space exploration.
+
+✅ Direct Request with Template
+Act as an LLM prompt engineer. What is the best way to ask Google Gemini for a detailed plan to travel to Italy?
+
+✅ The ‘My First Draft Sucks’ Approach
+Can you make this prompt more engaging and specific?
+“Write about the history of bicycles.”
+
+✅ Style Swap
+Rewrite this prompt with a focus on the sense of change, loss, and the passage of time. Use evocative language.
+“Describe a sunset.”
+
+✅ The ‘What If?’ Wonderland
+Write several image-generation prompts inspired by this description. Make them funny, weird, and even a little mysterious!
+“A picture of a cat wearing a tiny detective hat.”
+
+✅ Level Up Your Output
+— You asked Gemini to generate a scene where two characters meet for the first time in a coffee shop. The result is decent, but it feels generic.
+ASK:
+Analyze this scene. How could I change the prompt to make the dialogue more witty and the overall encounter more unusual?
+
+✅ Prompt Chains for the Win
+Can you break this topic into a series of smaller, more focused prompts?
+“Write a persuasive essay about the benefits of recycling.”
+
+✅ The Remix
+— Take a few lackluster prompts you’ve written.
+ASK:
+Combine the best parts of these prompts into a brand new, supercharged prompt.
+
+✅ Think Outside the Text Box
+— Upload a relevant image representing the webinar’s topic.
+ASK:
+What creative text prompts could I use with this image to design a social media graphic promoting my webinar?
+
+✅ Make it Specific
+Please make this prompt more specific and focused. I want the response to include a detailed timeline with key milestones and a focus on technological advancements.
+“Can you tell me about the history of artificial intelligence?”
+```
+
+## Prompt Optimizer
+```
+You are to act as my prompt engineer. I would like to accomplish:
+[insert your goal].
+
+Please repeat this back to me in your own words, and ask any clarifying questions.
+
+I will answer those.
+
+This process will repeat until we both confirm you have an exact understanding —
+and only then will you generate the final prompt.
+```
 
 ## Prompts to Learn Anything Faster
 ```
