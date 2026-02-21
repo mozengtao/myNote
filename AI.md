@@ -1,3 +1,10 @@
+[prompt](prompt.md)  
+[skill](skill.md)  
+[agent](agent.md)  
+[]()  
+[阿里云百炼](https://bailian.console.aliyun.com/)  
+
+[codex](https://chatgpt.com/codex)
 [Cursor](cursor.md)  
 [Gemini](gemini.md)  
 [Prompt Guide](prompt_guide.md)  
@@ -5,7 +12,7 @@
 [Prompt Guide for Architecture Design](prompt_guide_for_arch_design.md)  
 [Prompt Guide for Design Patterns in Linux Kernel(v3.2)](prompt_guide_for_linux_design_patterns.md)  
 []()  
-[]()  
+[ai-efficiency-handbooks](https://github.com/Abhisheksinha1506/ai-efficiency-handbooks)  
 []()  
 
 > AI-powered documentation generator that creates beautiful, interactive wikis for any GitHub, GitLab, or BitBucket repository
@@ -53,59 +60,6 @@
 [Claude](https://claude.ai/)  
 [Qoder](https://qoder.com/)  
 
-### Cursor
-[How I use Cursor](https://www.builder.io/blog/cursor-tips)  
-[cursor.directory](https://cursor.directory/)  
-[Rules](https://docs.cursor.com/en/context/rules)  
-[]()  
-[agent modes](https://cursor.com/cn/docs/agent/modes)  
-- Agent
-   复杂功能、重构
-   自主探索、多文件编辑
-- Ask
-   学习、规划、提问
-   只读探索，无自动修改
-- Plan
-   需要规划的复杂功能
-   在执行前创建详细计划，并提出澄清性问题
-- Debug
-   棘手 Bug、回归问题
-   生成假设、日志埋点、运行时分析
-```shortcuts
-Settings
-    Ctrl + Shift + j
-```
-
-## skill
-[skill creator](https://github.com/moltbot/moltbot/blob/main/skills/skill-creator/SKILL.md)  
-> The open agent skills tool - npx skills
-[superpowers](https://github.com/obra/superpowers/tree/main)  
-[skills](https://github.com/vercel-labs/skills)  
-> The Open Agent Skills Ecosystem
-[skills](https://skills.sh/)  
-[antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)  
-[moltbot skills](https://github.com/moltbot/moltbot/tree/main/skills)  
-[]()  
-[]()  
-[]()  
-
-## Prompt tips
-```
-请以Markdown格式回答以下问题，并将整个回复内容放在一个标记为 markdown的代码块中
-Use markdown format to answer: TOPIC, make sure to put the whole response into a code block marked in markdown format.
-Use markdown format to answer: TOPIC, make sure to put the whole response into a ```markdown  code block.
-```
-[AI Prompt Library](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/)  
-[Claude Prompt Library](https://platform.claude.com/docs/en/resources/prompt-library/library)  
-[Learning supported by AI prompts](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/learning-supported-by-ai-prompts/)  
-[Prompt Library](https://www.moreusefulthings.com/prompts)  
-[snackprompt](https://snackprompt.com/)  
-[Learning Prompt](https://learningprompt.wiki/)  
-[aishort](https://www.aishort.top/)  
-[]()  
-[]()  
-[]()  
-
 
 ## Online
 [AI Resources](https://www.controlaltachieve.com/p/resources-ai.html)  
@@ -140,21 +94,6 @@ Use markdown format to answer: TOPIC, make sure to put the whole response into a
 - engineering problem
    optimizing the utility of those tokens against the inherent constraints of LLMs in order to consistently achieve a desired outcome
 
-## Skills
-[skills](https://github.com/anthropics/skills)  
-[Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)  
-[Skills explained: How Skills compares to prompts, Projects, MCP, and subagents](https://claude.com/blog/skills-explained)  
-[skill-creator](https://skillsmp.com/skills/langgenius-dify-agents-skills-skill-creator-skill-md)  
-[]()  
-[]()  
-- What Skills were designed for
-   delivering specialized context on demand without permanent overhead.
-
-- A skill is
-   a document (often markdown) containing instructions, constraints, and domain knowledge, stored in a designated directory that Claude can access through simple file-reading tools.
-
-- Mental model
-   skills are prompts and contextual resources that activate on demand, providing specialized guidance for specific task types without incurring permanent context overhead.
 
 [Learn The Art of Prompting](https://www.learnprompt.org/)  
 [A Comprehensive Guide to Using ChatGPT Prompts for Coding Tasks](https://www.learnprompt.org/chat-gpt-prompts-for-coding/)  
@@ -174,7 +113,7 @@ Use markdown format to answer: TOPIC, make sure to put the whole response into a
 [面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook/#/)  
 
 ## Prompt
-![ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
+[ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
 [writing assistant](./prompt/writing_assistant.md)  
 [AI Prompt Optimization Specialist](./prompt/better_prompt.md)  
 [explain a topic](./prompt/explain_topic.md)  

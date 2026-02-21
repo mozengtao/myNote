@@ -2,5 +2,7 @@
 [Gemini CLI Extensions](https://github.com/gemini-cli-extensions)  
 [Unleash the Super-Prompt: Mastering Your Coding AI Workflow With Gemini](https://www.leeboonstra.dev/prompt-engineering/ai-development/super-prompting/gemini-cli-super-prompt/)  
 [cookbook](https://github.com/google-gemini/cookbook)  
+[Tips for creating custom Gems](https://support.google.com/gemini/answer/15235603?sjid=9130400640047870510-NC)  
+[]()  
 []()  
 []()  

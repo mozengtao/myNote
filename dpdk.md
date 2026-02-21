@@ -22,6 +22,8 @@
 ![DPDK 网卡直接访问 Huge Page 的核心机制](./dpdk/DPDK_UIO_and_Hugepage_Mechanism.md)  
 ![DPDK 网卡驱动重新绑定机制详解](./dpdk/DPDK_Driver_Binding_Mechanism.md)  
 ![DPDK Run-to-Completion (RTC) Model](./dpdk/Run-to-Completion-Model.md)  
+![DPDK Concepts and Port Types](./dpdk/dpdk_concepts_and_port_types.md)  
+![]()  
 ![]()  
 
 ## EAL 初始化
