@@ -1,5 +1,8 @@
 ## Commands
 ```powershell
+## 单词发音
+Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('perfect')
+
 # 查看 cmdlet 使用说明和示例
 Get-Help Get-ChildItem -Full
 Get-Help Get-Process -Examples

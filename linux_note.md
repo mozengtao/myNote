@@ -97,7 +97,16 @@
 []()  
 []()  
 
-ipc
+- kernel_oop_patterns
+├── [oop_patterns_in_linux_kernel_v3.2](./linux/kernel_oop_patterns/oop_patterns_in_linux_kernel_v3.2.md)  
+├── [01_mental_model](./linux/kernel_oop_patterns/01_mental_model.md)  
+├── [02_vfs_polymorphic_object_system](./linux/kernel_oop_patterns/02_vfs_polymorphic_object_system.md)
+├── [03_device_model_object_hierarchies](./linux/kernel_oop_patterns/03_device_model_object_hierarchies.md)
+├── [04_memory_and_ownership](./linux/kernel_oop_patterns/04_memory_and_ownership.md)
+├── [05_guided_code_walkthrough](./linux/kernel_oop_patterns/05_guided_code_walkthrough.md)
+└── [06_reflection_and_advanced](./linux/kernel_oop_patterns/06_reflection_and_advanced.md)
+
+- ipc
 ├── [01_file_based_ipc.md](./linux/ipc/01_file_based_ipc.md)  
 ├── [02_unix_domain_sockets.md](./linux/ipc/02_unix_domain_sockets.md)  
 ├── [03_posix_semaphores.md](./linux/ipc/03_posix_semaphores.md)  

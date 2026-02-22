@@ -1,13 +1,24 @@
 [**Gemini: Prompt design strategies**](https://ai.google.dev/gemini-api/docs/prompting-strategies)  
 [Prompt Engineering Guide](https://www.promptingguide.ai/)  
 
+[**promptport**](https://app.promptport.ai/)  
+[**aishort**](https://www.aishort.top/)  
+[**PromptHub**](https://app.prompthub.us/prompthub/)  
+[**snackprompt**](https://snackprompt.com/)  
+[**Learning Prompt**](https://learningprompt.wiki/)  
+
 [AI Prompt Libraries for Educators](https://www.controlaltachieve.com/2024/03/ai-prompt-libraries-for-educators.html)  
 [Write prompts for AI agents](https://www.infobip.com/docs/ai-agents/advanced-topics/write-prompts)  
 [Writing Effective Prompts for AI Agent Creation](https://documentation.sysaid.com/docs/writing-effective-prompts-for-ai-agent-creation)  
 [awesome-ai-system-prompts](https://github.com/dontriskit/awesome-ai-system-prompts)  
 [agent-prompts](https://github.com/mitsuhiko/agent-prompts)  
 [Agent prompts](https://app.prompthub.us/prompthub/collection/agent-prompts)  
-[**PromptHub**](https://app.prompthub.us/prompthub/)  
+[AI Prompt Library](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/)  
+[Claude Prompt Library](https://platform.claude.com/docs/en/resources/prompt-library/library)  
+[Learning supported by AI prompts](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/learning-supported-by-ai-prompts/)  
+[Prompt Library](https://www.moreusefulthings.com/prompts)  
+[]()  
+[]()  
 []()  
 []()  
 []()  
@@ -28,19 +39,8 @@
 Use markdown format to answer: TOPIC, make sure to put the whole response into a code block marked in markdown format.
 Use markdown format to answer: TOPIC, make sure to put the whole response into a ```markdown  code block.
 ```
-[AI Prompt Library](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/)  
-[Claude Prompt Library](https://platform.claude.com/docs/en/resources/prompt-library/library)  
-[Learning supported by AI prompts](https://library.maastrichtuniversity.nl/apps-tools/ai-prompt-library/learning-supported-by-ai-prompts/)  
-[Prompt Library](https://www.moreusefulthings.com/prompts)  
-[snackprompt](https://snackprompt.com/)  
-[Learning Prompt](https://learningprompt.wiki/)  
-[aishort](https://www.aishort.top/)  
-[]()  
-[]()  
-[]()  
 
-
-## Phrases Focusing on Prompt Transformation
+### Phrases Focusing on Prompt Transformation
 ```
 ✅ Elevate this prompt
 Elevate this image prompt
@@ -128,6 +128,56 @@ Please make this prompt more specific and focused. I want the response to includ
 ```
 
 ## Prompt Optimizer
+
+```
+You are an expert Prompt Writer for Large Language Models.
+
+task:
+lazy_prompt:
+
+Your goal is to improve the prompt given below for {task} :
+--------------------
+
+Prompt: {lazy_prompt}
+
+--------------------
+
+Here are several tips on writing great prompts:
+
+-------
+
+Start the prompt by stating that it is an expert in the subject.
+
+Put instructions at the beginning of the prompt and use ### or to separate the instruction and context 
+
+Be specific, descriptive and as detailed as possible about the desired context, outcome, length, format, style, etc 
+
+---------
+
+Here's an example of a great prompt:
+
+As a master YouTube content creator, develop an engaging script that revolves around the theme of "Exploring Ancient Ruins."
+
+Your script should encompass exciting discoveries, historical insights, and a sense of adventure.
+
+Include a mix of on-screen narration, engaging visuals, and possibly interactions with co-hosts or experts.
+
+The script should ideally result in a video of around 10-15 minutes, providing viewers with a captivating journey through the secrets of the past.
+
+Example:
+
+"Welcome back, fellow history enthusiasts, to our channel! Today, we embark on a thrilling expedition..."
+
+-----
+
+Now, improve the prompt.
+
+IMPROVED PROMPT:
+```markdown
+......
+```
+```
+
 ```
 You are to act as my prompt engineer. I would like to accomplish:
 [insert your goal].
