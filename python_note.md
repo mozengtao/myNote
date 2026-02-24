@@ -55,7 +55,15 @@
 []()  
 []()  
 []()  
+
+
+## Books
+[Python Books](https://github.com/WeitaoZhu/Python)  
 []()  
+- Fluent Python
+[Fluent Python](https://elmoukrie.com/wp-content/uploads/2022/05/luciano-ramalho-fluent-python_-clear-concise-and-effective-programming-oreilly-media-2022.pdf)  
+[Example code for Fluent Python](https://github.com/fluentpython)  
+
 
 - requests: a simple, yet elegant, HTTP library
 [requests](https://github.com/psf/requests)  

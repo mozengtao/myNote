@@ -97,6 +97,27 @@
 []()  
 []()  
 
+linux/kernel_oop_masterclass/
+├── [00_overview_and_reference.md](./linux/kernel_oop_masterclass/00_overview_and_reference)  
+├── [00b_mental_models_and_anchors.md](./linux/kernel_oop_masterclass/00b_mental_models_and_anchors.md)  
+├── [01_encapsulation.md](./linux/kernel_oop_masterclass/01_encapsulation)  
+├── [02_inheritance.md](./linux/kernel_oop_masterclass/02_inheritance)  
+├── [03_polymorphism.md](./linux/kernel_oop_masterclass/03_polymorphism)  
+├── [04_kobject_hierarchy.md](./linux/kernel_oop_masterclass/04_kobject_hierarchy)  
+├── [05_design_patterns.md](./linux/kernel_oop_masterclass/05_design_patterns)  
+└── [06_synthesis.md](./linux/kernel_oop_masterclass/06_synthesis)  
+
+linux/kernel_design_patterns/
+├── [00_overview.md](./linux/kernel_design_patterns/00_overview.md)  
+├── [01_strategy_and_adapter.md](./linux/kernel_design_patterns/01_strategy_and_adapter.md)  
+├── [02_observer.md](./linux/kernel_design_patterns/02_observer.md)  
+├── [03_template_method.md](./linux/kernel_design_patterns/03_template_method.md)  
+├── [04_iterator.md](./linux/kernel_design_patterns/04_iterator.md)  
+├── [05_state.md](./linux/kernel_design_patterns/05_state.md)  
+├── [06_factory_and_singleton.md](./linux/kernel_design_patterns/06_factory_and_singleton.md)  
+├── [07_facade.md](./linux/kernel_design_patterns/07_facade.md)  
+└── [08_composition_decorator_builder.md](./linux/kernel_design_patterns/08_composition_decorator_builder.md)  
+
 - kernel_oop_patterns
 ├── [oop_patterns_in_linux_kernel_v3.2](./linux/kernel_oop_patterns/oop_patterns_in_linux_kernel_v3.2.md)  
 ├── [01_mental_model](./linux/kernel_oop_patterns/01_mental_model.md)  

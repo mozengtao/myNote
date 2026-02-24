@@ -1,4 +1,5 @@
 [What is an Agent?](https://www.promptingguide.ai/agents/introduction)  
+[Agents](https://docs.langchain.com/oss/python/langchain/agents)  
 [Agent的概念、原理与构建模式](https://github.com/MarkTechStation/VideoCode/tree/main)  
 [AI Agents 101: Everything You Need to Know About Agents](https://medium.com/@sahin.samia/ai-agents-101-everything-you-need-to-know-about-agents-265fba8b9267)  
 [LLM Agents 101](https://github.com/aishwaryanr/awesome-generative-ai-guide/blob/main/resources/agents_101_guide.md)  

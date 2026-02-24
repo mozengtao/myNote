@@ -1,8 +1,21 @@
 [prompt](prompt.md)  
 [skill](skill.md)  
 [agent](agent.md)  
+[RAG](rag.md)  
+[Context Engineering](ContextEngineering.md)  
+[MCP](mcp.md)  
+[]()  
 []()  
 [阿里云百炼](https://bailian.console.aliyun.com/)  
+
+> The Unified Interface For LLMs
+[OpenRouter](https://openrouter.ai/)  
+```
+API key
+Default:
+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
+```
+
 
 [codex](https://chatgpt.com/codex)
 [Cursor](cursor.md)  
@@ -82,17 +95,6 @@
 
 ![Prompt engineering vs Context engineering](./assets/prompt_engineering_vs_context_engineering.png)  
 
-## Context Engineering
-- what is Context engineering
-   the set of strategies for curating and maintaining the optimal set of tokens (information) during LLM inference, including all the other information that may land there outside of the prompts.
-
-### Context
-- What is context
-   the set of tokens included when sampling from a large-language model (LLM)
-
-### Engineering
-- engineering problem
-   optimizing the utility of those tokens against the inherent constraints of LLMs in order to consistently achieve a desired outcome
 
 
 [Learn The Art of Prompting](https://www.learnprompt.org/)  

@@ -1,0 +1,11 @@
+## What is RAG ?
+[Retrieval Augmented Generation (RAG)](https://www.promptingguide.ai/techniques/rag)  
+[What is Retrieval-Augmented Generation?](https://aws.amazon.com/what-is/retrieval-augmented-generation/)  
+[How RAG works](https://www.dailydoseofds.com/bi-encoders-and-cross-encoders-for-sentence-pair-similarity-scoring-part-1/)  
+[ReAct Prompting](https://www.promptingguide.ai/techniques/react)  
+[使用Python构建RAG系统](https://github.com/MarkTechStation/VideoCode/tree/main)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  

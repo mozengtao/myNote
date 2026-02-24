@@ -1,6 +1,9 @@
 - What is skill ?
 [Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)  
 [Agent Skills](https://cursor.com/cn/docs/context/skills)  
+[Skills](https://docs.langchain.com/oss/python/langchain/multi-agent/skills)  
+[]()  
+[]()  
 
 - Skill 与 LLM 交互过程
 1. Discovery
@@ -42,17 +45,24 @@ When explaining code, always include:
 Keep explanations conversational. For complex concepts, use multiple analogies.
 ```
 
-## Ref
+## Marketplace
 > The open agent skills tool - npx skills
 [skill creator](https://github.com/moltbot/moltbot/blob/main/skills/skill-creator/SKILL.md)  
 [**superpowers**](https://github.com/obra/superpowers/tree/main)  
 [skills](https://github.com/vercel-labs/skills)  
 > The Open Agent Skills Ecosystem
 [**skills**](https://skills.sh/)  
+   - [prompt-engineering-patterns](https://skills.sh/wshobson/agents/prompt-engineering-patterns)  
 [antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills)  
 [moltbot skills](https://github.com/moltbot/moltbot/tree/main/skills)  
 []()  
+[cursor marketplace](https://cursor.com/cn/marketplace)  
+[Skills Marketplace](https://www.atcyrus.com/skills)  
+[skillsmp](https://skillsmp.com/)  
 []()  
+[**smithery**](https://smithery.ai/skills)  
+[skill-development](https://smithery.ai/skills/anthropics/skill-development)  
+[**mcpmarket**](https://mcpmarket.com/tools/skills)  
 []()  
 
 
@@ -65,13 +75,6 @@ Keep explanations conversational. For complex concepts, use multiple analogies.
 > Humanizer 的汉化版本，Claude Code Skills，旨在消除文本中 AI 生成的痕迹
 [Humanizer-zh](https://github.com/op7418/Humanizer-zh)  
 
-Marketplace
-[cursor marketplace](https://cursor.com/cn/marketplace)  
-[Skills Marketplace](https://www.atcyrus.com/skills)  
-[skillsmp](https://skillsmp.com/)  
-[]()  
-[]()  
-[]()  
 
 [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)  
 [Skills explained: How Skills compares to prompts, Projects, MCP, and subagents](https://claude.com/blog/skills-explained)  
