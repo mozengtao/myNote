@@ -3,6 +3,9 @@
 [FRRouting User Guide](https://docs.frrouting.org/en/stable-10.5/index.html)  
 []()  
 
+[FRR 学习环境搭建指南（WSL2）](./frr/env_setup_wsl2.md)  
+[FRR vtysh 路由输出到 inetCidrRouteTable SNMP MIB 的映射关系](inetCidrRouteTable-vtysh-mapping.md)  
+
 - Architecture
 ![frr architecture 01 why](./frr/frr_architecture_01_why.md)  
 ![frr architecture 02 how](./frr/frr_architecture_02_how.md)  

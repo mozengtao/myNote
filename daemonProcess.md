@@ -1,9 +1,7 @@
 - Linux Daemon（守护进程）是运行在后台的一种特殊进程。它==独立于控制终端==并且周期性地执行某种任务或等待处理某些发生的事件。不需要用户输入，对整个系统或某项业务提供服务。
 - 守护进程特点
 	- 无需控制终端(不需要与用户交互）
-	  collapsed:: true
 		- 守护进程为什么要脱离终端
-		  collapsed:: true
 			- 为了避免进程被任何终端所产生的信息所打断，其在执行过程中的信息也不在任何终端上显示。由于在 Linux 中，每一个系统与用户进行交流的界面称为终端，每一个从此终端开始运行的进程都会依附于这个终端，这个终端就称为这些进程的控制终端，当控制终端被关闭时，相应的进程都会自动关闭
 	- 后台运行
 	- 生命周期比较长，一般是随系统启动和关闭
@@ -137,7 +135,6 @@
 	- 处理 SIGCHLD 信号
 		- 对于某些进程，特别是服务器进程往往在请求到来时生成子进程处理请求。如果父进程不等待子进程结束，子进程将成为僵尸进程（zombie）从而占用系统资源。如果父进程等待子进程结束，将增加父进程的负担，影响服务器进程的并发性能。在 Linux 下可以简单地将 SIGCHLD 信号的操作设为 SIG_IGN。
 - 参考
-	- [[start-stop-daemon]]
 	- [**Daemon Processes**](https://notes.shichao.io/apue/ch13/)
 	- [1.7 How do I get my program to act like a daemon?](http://web.archive.org/web/20120914180018/http://www.steve.org.uk/Reference/Unix/faq_toc.html#TOC16)
 	- [Run Bash Script as a Daemon](https://www.baeldung.com/linux/bash-daemon-script)

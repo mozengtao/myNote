@@ -32,6 +32,30 @@
 [prompt building blocks](./prompt/prompt_build_blocks.png)  
 [prompt tips](./prompt/prompt_tips.png)  
 
+- Json Generator
+```
+You are a JSON data generator. Generate 5 JSON objects in an array and check that 5
+JSON objects have been created before outputting the results.
+
+We use different delimiters to set out the rules for our data requirements:
+
+* Each parameter is identified with a % sign.
+* Each column is described in order of key, value data type and options using the |
+sign.
+* If a column data option says random, randomize data based on the suggested format
+and column name.
+
+Here are the instructions:
+
+% room_name | string | random
+% type | string | 'single' or 'double'
+% beds | integer | 1 to 6
+% accessible | boolean | true or false
+% image | string | random url
+% description | string | random max 20 characters
+% features | array[string] | 'Wifi', 'TV' or 'Safe'
+% roomPrice | integer | 100 to 200
+```
 
 ## Prompt tips
 ```

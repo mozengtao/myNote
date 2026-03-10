@@ -28,6 +28,257 @@ awk/awk-tutorial/
 ├── [part7-professional-style.md](./awk/awk-tutorial/part7-professional-style.md)  
 └── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
 
+# 经典模式
+- 状态开关模式 (The State Machine / Toggle)
+```Awk
+场景： 只打印 SQL 文件中 CREATE TABLE 到 ; 之间的内容
+
+/^CREATE TABLE/, /;/ { print }
+
+手动控制标志位（更灵活）：
+
+/^START/ { inside = 1; next }
+/^END/   { inside = 0; next }
+inside   { print }
+```
+
+- 数组计数与去重模式 (Associative Array Aggregation)
+```Awk
+场景： 统计日志文件中每个 IP 地址出现的次数
+
+{ count[$1]++ }
+END {
+    for (ip in count) {
+        print ip, count[ip]
+    }
+}
+```
+
+- 多文件关联模式 (The Two-File Join)
+```Awk
+场景： file1 是白名单，file2 是原始数据，只打印在白名单中的行
+
+NR == FNR { whitelist[$1]; next } # 处理第一个文件，存入数组
+$1 in whitelist { print }         # 处理第二个文件，检查是否存在
+```
+
+- 动态字段/转置模式 (Dynamic Field Transformation)
+```Awk
+场景： 计算每一行的总和（无论有多少列）
+
+{
+    sum = 0
+    for (i = 1; i <= NF; i++) sum += $i
+    print "Row", NR, "Sum:", sum
+}
+```
+
+- 段落模式 (Paragraph Mode / RS)
+```Awk
+场景： 处理类似 cat /proc/cpuinfo 这种以空行分隔的配置块
+
+BEGIN { RS = "" ; FS = "\n" }
+/model name/ { 
+    print "Processor " ++count ": " $3 
+}
+```
+
+- 多种模式组合起来解决更复杂的问题
+```bash
+实战场景：智能日志分析
+需求：
+1. 有一个 whitelist.txt（白名单），记录了需要关注的 用户 ID。
+2. 有一个巨大的 app.log，日志以 BEGIN TRANSACTION 开始，END TRANSACTION 结束。
+3. 任务： 统计白名单用户在日志中触发了多少次 ERROR，并按用户汇总。
+
+awk '
+  # 模式 1: 多文件关联 (NR==FNR)
+  # 先把白名单读入内存
+  NR == FNR {
+      whitelist[$1] = 1
+      next
+  }
+
+  # 模式 2: 状态开关 (State Machine)
+  # 识别日志块的开始
+  /BEGIN TRANSACTION/ {
+      in_block = 1
+      current_user = ""
+      has_error = 0
+      next
+  }
+
+  # 在块内部进行逻辑判断
+  in_block {
+      # 提取用户 ID (假设格式为 User: 123)
+      if ($0 ~ /User:/) { current_user = $2 }
+
+      # 标记错误状态
+      if ($0 ~ /ERROR/) { has_error = 1 }
+
+      # 模式 3: 块结束处理 (类似 Buffer-and-Judge 的逻辑)
+      if (/END TRANSACTION/) {
+          # 组合逻辑：是白名单用户 且 块内有错误
+          if ((current_user in whitelist) && has_error) {
+              # 模式 4: 数组聚合 (Aggregation)
+              error_count[current_user]++
+          }
+          in_block = 0
+      }
+  }
+
+  # 模式 5: 最终汇总输出 (END block)
+  END {
+      print "User_ID", "Error_Frequency"
+      for (u in error_count) {
+          print u, error_count[u]
+      }
+  }
+' whitelist.txt app.log
+```
+
+
+## "Buffer-and-Judge" pattern
+```Awk
+/START_PATTERN/ { in_block=1; found=0; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if ($0 ~ /TARGET_CRITERIA/) { found=1 }
+
+    if (/END_PATTERN/) {
+        for (j=1; j<=i; j++) {
+            if (found) {
+                # Action: Modify line
+                print "#" buffer[j]
+            } else {
+                # Action: Leave alone
+                print buffer[j]
+            }
+        }
+        in_block=0
+    }
+    next
+}
+{ print } # Print everything outside of blocks
+```
+
+- The "Buffer-and-Judge" Logic
+
+It’s particularly useful for configuration files (like HCL, JSON, or YAML) where you need to act on a multi-line block based on a specific value found somewhere inside it.
+
+When awk processes a file line-by-line, it doesn't naturally know what's coming next. To handle a block based on its internal content, you follow these four logical stages:
+
+1. Detection (Start): Use a regex to identify the start of the block. Once found, set a "state flag" (e.g., in_block = 1) and clear any previous temporary storage.
+2. Buffering (Accumulation): While the flag is active, instead of printing lines immediately, save them into an array (e.g., buffer[]). This puts the lines in "waiting" while you scan for the criteria.
+3. Identification (The Target): As you buffer each line, check if it contains the specific "trigger" pattern. If it does, set a "target flag" (e.g., target_block = 1).
+4. Action (End/Flush): When you hit the closing brace (}), the block is complete. You now look at your "target flag":
+    If the flag is true: Loop through the buffer and modify the lines.
+    If the flag is false: Loop through the buffer and print the lines as-is.
+    Reset: Clear the flags and the buffer for the next potential block.
+
+- Examples
+
+- Remove an entire storage block from a Kubernetes-style config, but only if it uses type = "nfs"
+```Awk
+/storage \{/ { in_block=1; is_nfs=0; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if ($0 ~ /type = "nfs"/) { is_nfs=1 }
+    if (/^\s*\}/) {
+        if (!is_nfs) { # Only print if it IS NOT the target
+            for (j=1; j<=i; j++) print buffer[j]
+        }
+        in_block=0; next
+    }
+    next
+}
+
+{ print }
+```
+
+- In an SSH config or similar file, find a specific Host block and ensure PasswordAuthentication is set to no, regardless of what it was before.
+```Awk
+/^Host internal-api/ { in_block=1; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if (/^\s*PasswordAuthentication/) { 
+        buffer[i] = "    PasswordAuthentication no" 
+    }
+    if (/^$/ || eof) { # End on blank line
+        for (j=1; j<=i; j++) print buffer[j]
+        in_block=0; next
+    }
+    next
+}
+
+{ print }
+```
+
+- You previously commented out a service block in a Nomad/Consul file. Now you want to "flip the switch" and uncomment it based on the service name.
+```Awk
+/^[[:space:]]*#[[:space:]]*service[[:space:]]*\{/ { in_block=1; target=0; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if ($0 ~ /name = "auth-svc"/) { target=1 }
+    if (/^[[:space:]]*#[[:space:]]*\}/) {
+        for (j=1; j<=i; j++) {
+            if (target) {
+                sub(/^[[:space:]]*#[[:space:]]*/, "", buffer[j]) # Strip the #
+                print buffer[j]
+            } else { print buffer[j] }
+        }
+        in_block=0; next
+    }
+    next
+}
+
+{ print }
+```
+
+- Extract full JSON log objects (which span multiple lines) but only if they contain "level":"error". This is great for filtering huge files.
+```Awk
+/^\{/ { in_block=1; has_error=0; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if ($0 ~ /"level":"error"/) { has_error=1 }
+    if (/^\}/) {
+        if (has_error) {
+            for (j=1; j<=i; j++) print buffer[j]
+        }
+        in_block=0; next
+    }
+    next
+}
+# Note: No '{ print }' here because we ONLY want the errors
+```
+
+- Find a <connector> tag in a Tomcat server.xml and add secure="true" only if the port is 8443.
+```Awk
+/<Connector/ { in_block=1; is_ssl=0; i=0 }
+
+in_block {
+    buffer[++i] = $0
+    if ($0 ~ /port="8443"/) { is_ssl=1 }
+    if (/\/>/ || /<\/Connector>/) {
+        for (j=1; j<=i; j++) {
+            if (is_ssl && buffer[j] ~ /<Connector/) {
+                sub(/>/, " secure=\"true\">", buffer[j])
+            }
+            print buffer[j]
+        }
+        in_block=0; next
+    }
+    next
+}
+
+{ print }
+```
+
 
 ```bash
 # range match pattern + action (prserve spaces)

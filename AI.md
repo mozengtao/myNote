@@ -5,11 +5,17 @@
 [Context Engineering](ContextEngineering.md)  
 [MCP](mcp.md)  
 []()  
-[]()  
+
+[AGENTS.md](https://agents.md/)  
+
+
+> the open source AI coding agent
+[**opencode**](https://opencode.ai/)  
+
 [阿里云百炼](https://bailian.console.aliyun.com/)  
 
 > The Unified Interface For LLMs
-[OpenRouter](https://openrouter.ai/)  
+[**OpenRouter**](https://openrouter.ai/)  
 ```
 API key
 Default:
@@ -33,6 +39,9 @@ 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
 [DeepWiki](https://deepwiki.com/)  
 []()  
 
+- VScode Plugin
+   - Cline
+   - Roo Code
 
 
 [OpenAI Cookbook](https://cookbook.openai.com/)  

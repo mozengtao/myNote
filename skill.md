@@ -1,32 +1,29 @@
 - What is skill ?
+[What are skills?](https://agentskills.io/what-are-skills)  
 [Agent Skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)  
 [Agent Skills](https://cursor.com/cn/docs/context/skills)  
 [Skills](https://docs.langchain.com/oss/python/langchain/multi-agent/skills)  
+[Agent Skills](https://developers.openai.com/codex/skills/)  
 []()  
 []()  
 
-- Skill 与 LLM 交互过程
-1. Discovery
-At startup, Claude loads only the name and description of each available Skill. This keeps startup fast while giving Claude enough context to know when each Skill might be relevant.
-2. Activation
-When your request matches a Skill's description, Claude asks to use the Skill. You'll see a confirmation prompt before the full SKILL.md is loaded into context. Claude matches requests against descriptions using semantic similarity, so write descriptions that include keywords users would naturally say.
-3. Execution
-Claude follows the Skill's instructions, loading referenced files or running bundled scripts as needed.
+[**Coding Skills**](https://smithery.ai/skills?q=category%3ACoding)  
+[python-expert](https://smithery.ai/skills/shubhamsaboo/python-expert)  
+[compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin)  
+[Skill Creator](https://mcpmarket.com/tools/skills/skill-creator)  
+[MCP Advisor](https://mcp.so/server/mcpadvisor)  
+[]()  
+[]()  
 
-- Skill best practices
-[Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)  
 
-- Progressive Disclosure
-```
-================================================================================
-  Layer            Content                        Loading
---------------------------------------------------------------------------------
-  Metadata         Name, Description              Always Load
-  Instruction      SKILL.md (excl. name/desc)     Load on Demand
-  Resource         Reference, Script              Conditional Load
-                     Read / Execute
-================================================================================
-```
+## How skills work (渐进式披露)
+   Skills use progressive disclosure to manage context efficiently:
+
+   1. **Discovery**: At startup, agents load only the name and description of each available skill, just enough to know when it might be relevant.
+   2. **Activation**: When a task matches a skill’s description, the agent reads the full SKILL.md instructions into context.
+   3. **Execution**: The agent follows the instructions, optionally loading referenced files or executing bundled code as needed.
+
+   This approach keeps agents fast while giving them access to more context on demand.
 
 ## explain-code
 ```

@@ -1,0 +1,31 @@
+import os
+from dataclasses import dataclass, field
+from typing import Dict
+
+@dataclass
+class EnvironmentConfig:
+    """Manages and validates system environment variables."""
+    required_vars: list = field(default_factory=lambda: ["PATH", "HOME"])
+    values: Dict[str, str] = field(default_factory=dict, init=False)
+
+    def __post_init__(self):
+        """Validates that all required variables exist on startup."""
+        for var in self.required_vars:
+            val = os.environ.get(var)
+            if not val:
+                raise EnvironmentError(f"Missing required environment variable: {var}")
+            self.values[var] = val
+
+    def get(self, key: str, default: str = None) -> str:
+        return self.values.get(key, os.environ.get(key, default))
+
+def main():
+    try:
+        # Initialize and it will throw an error if "API_KEY" isn't set in the OS
+        config = EnvironmentConfig(required_vars=["PATH", "API_KEY", "HOME"])
+        print(f"Working with Path: {config.get("PATH")}")
+    except Exception as e:
+        print(f"Failed to get environment variable: {e}")
+
+if __name__ == "__main__":
+    main()

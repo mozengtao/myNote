@@ -15,7 +15,8 @@
 
 ## Common MCP Servers
 > Web content fetching and conversion for efficient LLM usage
-- fetch (https://mcp.so/server/fetch/test)
-- 
+- fetch (https://mcp.so/server/fetch/test)  
+
+- spec-workflow-mcp (https://github.com/Pimzino/spec-workflow-mcp)  
 - 
 - 

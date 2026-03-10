@@ -1,5 +1,8 @@
 [Prometheus](https://prometheus.io/)  
 []()  
+> Text-based Exposition Format (Prometheus 的“文本行协议”)
+[OpenMetrics](https://github.com/prometheus/OpenMetrics/blob/main/specification/OpenMetrics.md)  
+[OpenMetrics 1.0](https://prometheus.io/docs/specs/om/open_metrics_spec/)  
 
 
 [What is Prometheus?](https://prometheus.io/docs/introduction/overview/)  
@@ -94,6 +97,14 @@ docker run -d --name prom-test \
 
 # 5. 等待几秒后，打开浏览器
 # http://localhost:9090/graph
+
+# 查看所有数据
+{__name__=~".+"}
+
+# __name__ ： metric 名称，唯一一个在查询结果中可见的 __ 标签
+# Prometheus 自动添加生成的标签：
+# job ： 作业名称，scrape_configs 中的 job_name
+# instance ： 实例地址，默认取 __address__ 的值
 ```
 
 ###  promtool + unit test (离线验证，无需运行服务)

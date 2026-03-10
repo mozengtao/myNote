@@ -1,4 +1,37 @@
 [uv](uv.md)  
+[FastAPI](FastAPI.md)  
+[FastAPI](Flask.md)  
+[FastAPI](FastAPI.md)  
+[**Learn Python Concurrency Super Fast**](https://superfastpython.com/)  
+[]()  
+
+- 执行 Bash Script 或者 Command
+[execute bash script or command](./python/ShellExecutor.py)  
+
+- Bash 环境变量 Validation
+[validate bash environments](./python/EnvironmentConfig.py)  
+
+- wraps the response to provide high-level utility methods, like checking for specific errors or parsing JSON
+[wrap the response to provide high-level utility methods](./python/CommandResult.py)  
+
+> SSH 连接
+[SSH connection](./python/SSHConnection.py)  
+
+- The Full Integrated System
+[The Full Integrated System](./python/full_example.py)  
+
+- Jupyter Notebook
+[Google Colab(Online Jupyter Notebook)](https://colab.research.google.com/)  
+[Jupyter Documentation](https://docs.jupyter.org/en/latest/)  
+[How to Use Jupyter Notebook: A Beginner’s Tutorial](https://www.dataquest.io/blog/jupyter-notebook-tutorial/)  
+[]()  
+
+- 经典 python 开源项目
+[TheAlgorithms](https://github.com/TheAlgorithms/Python)  
+[requests](https://github.com/psf/requests)  
+[flask](https://github.com/pallets/flask)  
+[python-patterns](https://github.com/faif/python-patterns)  
+
 
 
 [**python-course.eu**](https://python-course.eu/)  
@@ -856,7 +889,7 @@ Meow
 [Sets in Python](https://realpython.com/python-sets/)  
 []()  
 []()  
-[Dictionaries in Python](https://realpython.com/python-dicts/)  
+[**Dictionaries in Python**](https://realpython.com/python-dicts/)  
 [Python Dictionary Comprehensions: How and When to Use Them](https://realpython.com/python-dictionary-comprehension/)  
 [Python Dictionaries: A Comprehensive Tutorial](https://www.dataquest.io/blog/python-dictionaries/)  
 []()  

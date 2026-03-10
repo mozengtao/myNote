@@ -1,3 +1,15 @@
+## ps命令默认列宽限制
+- ps命令默认会截断超过终端宽度的输出
+- 这是为了在多列输出时保持对齐
+- 在管道传递时，ps会使用默认列宽（通常80字符）
+
+```bash
+cat /proc/$(pgrep -f confd)/cmdline | tr '\0' ' '
+
+cat /proc/$(pgrep -f confd)/cmdline | xargs -0 echo
+
+```
+
 ```bash
 # 显示进程相关的线程信息
 root@slot-120:/proc/3097 [P1]# ps -T -p $(pgrep cms)

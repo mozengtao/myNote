@@ -5,7 +5,17 @@
 [LLM Agents 101](https://github.com/aishwaryanr/awesome-generative-ai-guide/blob/main/resources/agents_101_guide.md)  
 [Agent Runtime Execution Model](https://learn.microsoft.com/en-us/agent-framework/agents/?pivots=programming-language-python)  
 [microsoft agent-framework](https://github.com/microsoft/agent-framework)  
+[everything-claude-code](https://github.com/affaan-m/everything-claude-code)  
 []()  
+[]()  
+
+[Spec-Driven Development with Cursor 示例](./ai/spec-driven-development-guide.md)  
+
+
+[Agent Factory](https://agentfactory.panaversity.org/docs/about)  
+[**Spec-Driven Development with Claude Code in Action**](https://alexop.dev/posts/spec-driven-development-claude-code-in-action/)  
+[12 Factor Agents](https://www.humanlayer.dev/blog/12-factor-agents)  
+[A Practical Guide to Spec-Driven Development](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide)  
 []()  
 []()  
 
