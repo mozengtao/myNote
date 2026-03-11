@@ -8,6 +8,12 @@
 
 [AGENTS.md](https://agents.md/)  
 
+[Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)  
+[claude-code-ultimate-guide](https://github.com/FlorianBruniaux/claude-code-ultimate-guide/tree/main/guide/diagrams)  
+[]()  
+[]()  
+
+
 
 > the open source AI coding agent
 [**opencode**](https://opencode.ai/)  
@@ -42,6 +48,7 @@ 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
 - VScode Plugin
    - Cline
    - Roo Code
+   - Augment
 
 
 [OpenAI Cookbook](https://cookbook.openai.com/)  

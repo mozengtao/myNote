@@ -142,27 +142,28 @@ funky	/ ˈfʌŋki /		时髦的；畏缩的；恶臭的
 endure	/ ɪnˈdʊr /		持续存在，持久；忍受，忍耐  
 immerse	/ ɪˈmɜːrs /		使沉浸（于），使深陷（于）；使浸没（于液体中）  
 designated  / ˈdezɪɡneɪtɪd /  指定的，标出的  
-marshal / ˈmɑːrʃ(ə)l /  结集，安排；控制，组织；整理（思路、想法等）；（车辆）编组；引导（飞机在机场地面移动）；合并（盾徽）；成形，有序
-derive  / dɪˈraɪv / 获得，取得；起源于，来自；提取，衍生（化学物质）
-hinder  / ˈhɪndər / 阻碍，妨碍
-segregate   / ˈseɡrɪɡeɪt /  （使）分开，分离
-trampoline  / ˌtræmpəˈliːn /    蹦床（一种体育器械），弹簧垫
-intervention    / ˌɪntərˈvenʃ(ə)n / 干预，介入；调停，斡旋；（为改善情况尤指病痛采取的）措施，做法
-throttle    / ˈθrɑːtl / 节流阀，油门；功率，马力；<古>喉咙，气管
-resiliency  / rɪˈzɪlɪjənsi /    弹性；跳回；灵活性
-shelve  /ʃelv / 将（书等）放置在架子上；搁置，将某事放到一旁不予考虑；将…搁在一边；装搁架于；罢免
-evaporate   /ɪˈvæpəreɪt /  使某物）蒸发，挥发，消失；
-minimize    / ˈmɪnɪmaɪz /   使减少到最低限度；贬低，使显得不重要；（尤指在计算机屏幕上）使最小化
-elastic     / ɪˈlæstɪk /    有弹性的；灵活的
-vibe       / vaɪb /      感应，氛围；
-disruption  / dɪsˈrʌpʃn /   扰乱，中断
-idiomatic   / ɪdiəˈmætɪk /  语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的
-revoke  / rɪˈvoʊk / 撤回，撤销；（桥牌、惠斯特等牌戏中）有牌不跟
-retain  / rɪˈteɪn / 保持，保留；保存，储存；记住；付定金聘定（尤指律师）；留用（员工）
-intact  / ɪnˈtækt / 完好无损的
-inhibit / ɪnˈhɪbɪt /    抑制，约束；使拘束，使尴尬；降低（酶等）的活性；禁止（神职人员）司神职
-relinquish  / rɪˈlɪŋkwɪʃ /  <正式>（尤指不情愿地）放弃，交出（权力、职位等）；<正式>（不情愿地）松开
-hash it out 具体讨论
-discrepancy / dɪˈskrepənsi /    差异，不符
-hypothesis/hypotheses / haɪˈpɑːθəsiːz /    假定；臆测
-prime   / praɪm /   事先指点，使（某人）做好准备；把（某事物）准备好，使备用；给（表面）涂上底色
+marshal / ˈmɑːrʃ(ə)l /  结集，安排；控制，组织；整理（思路、想法等）；（车辆）编组；引导（飞机在机场地面移动）；合并（盾徽）；成形，有序  
+derive  / dɪˈraɪv / 获得，取得；起源于，来自；提取，衍生（化学物质）  
+hinder  / ˈhɪndər / 阻碍，妨碍  
+segregate   / ˈseɡrɪɡeɪt /  （使）分开，分离  
+trampoline  / ˌtræmpəˈliːn /    蹦床（一种体育器械），弹簧垫  
+intervention    / ˌɪntərˈvenʃ(ə)n / 干预，介入；调停，斡旋；（为改善情况尤指病痛采取的）措施，做法  
+throttle    / ˈθrɑːtl / 节流阀，油门；功率，马力；<古>喉咙，气管  
+resiliency  / rɪˈzɪlɪjənsi /    弹性；跳回；灵活性  
+shelve  /ʃelv / 将（书等）放置在架子上；搁置，将某事放到一旁不予考虑；将…搁在一边；装搁架于；罢免  
+evaporate   /ɪˈvæpəreɪt /  使某物）蒸发，挥发，消失；  
+minimize    / ˈmɪnɪmaɪz /   使减少到最低限度；贬低，使显得不重要；（尤指在计算机屏幕上）使最小化  
+elastic     / ɪˈlæstɪk /    有弹性的；灵活的  
+vibe       / vaɪb /      感应，氛围；  
+disruption  / dɪsˈrʌpʃn /   扰乱，中断  
+idiomatic   / ɪdiəˈmætɪk /  语言）自然地道的；与（某时期、人或团体的艺术或音乐风格）相合的，特点一致的  
+revoke  / rɪˈvoʊk / 撤回，撤销；（桥牌、惠斯特等牌戏中）有牌不跟  
+retain  / rɪˈteɪn / 保持，保留；保存，储存；记住；付定金聘定（尤指律师）；留用（员工）  
+intact  / ɪnˈtækt / 完好无损的  
+inhibit / ɪnˈhɪbɪt /    抑制，约束；使拘束，使尴尬；降低（酶等）的活性；禁止（神职人员）司神职  
+relinquish  / rɪˈlɪŋkwɪʃ /  <正式>（尤指不情愿地）放弃，交出（权力、职位等）；<正式>（不情愿地）松开  
+hash it out 具体讨论  
+discrepancy / dɪˈskrepənsi /    差异，不符  
+hypothesis/hypotheses / haɪˈpɑːθəsiːz /    假定；臆测  
+prime   / praɪm /   事先指点，使（某人）做好准备；把（某事物）准备好，使备用；给（表面）涂上底色  
+gotchas  / ˈɡɑːtʃə /    陷阱，突然出现的问题：意外的困境或问题，通常在计划、项目或软件中出现  

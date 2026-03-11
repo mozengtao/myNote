@@ -17,6 +17,18 @@
 []()  
 []()  
 
+dpdk/concepts
+├── [00-overview.md](./dpdk/concepts/00-overview.md)  # 概述
+├── [01-hugepages.md](./dpdk/concepts/01-hugepages.md)  # 大页
+├── [02-eal.md](./dpdk/concepts/02-eal.md)  # EAL
+├── [03-lcore.md](./dpdk/concepts/03-lcore.md)  # LCORE
+├── [04-numa.md](./dpdk/concepts/04-numa.md)  # NUMA
+├── [05-ring.md](./dpdk/concepts/05-ring.md)  # RING
+├── [06-mempool.md](./dpdk/concepts/06-mempool.md)  # MEMPOOL
+├── [07-mbuf.md](./dpdk/concepts/07-mbuf.md)  # MBUF
+├── [08-pmd.md](./dpdk/concepts/08-pmd.md)  # PMD
+└── [09-kni.md](./dpdk/concepts/09-kni.md)  # KNI
+
 ![dpdk howo](./dpdk/dpdk_howto.md)
 ![dpdk初始化及包处理流程](./dpdk/DPDK_initialization_and_packet_processing.md)  
 ![DPDK 网卡直接访问 Huge Page 的核心机制](./dpdk/DPDK_UIO_and_Hugepage_Mechanism.md)  

@@ -32,6 +32,11 @@
 [prompt building blocks](./prompt/prompt_build_blocks.png)  
 [prompt tips](./prompt/prompt_tips.png)  
 
+- ASCII Diagrams
+```
+"When generating architectural diagrams, please avoid complex Unicode borders. Use standard Markdown code blocks with simple ASCII (+, -, |). Ensure all text inside boxes is left-aligned and the boxes themselves are symmetrical. If the content is complex, prefer a Mermaid diagram for better clarity."
+```
+
 - Json Generator
 ```
 You are a JSON data generator. Generate 5 JSON objects in an array and check that 5
