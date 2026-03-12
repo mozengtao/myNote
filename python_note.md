@@ -33,6 +33,16 @@
 [python-patterns](https://github.com/faif/python-patterns)  
 
 
+## Modules
+- requests
+> Requests is an elegant and simple HTTP library for Python, built for human beings.
+[requests](https://mimo.org/glossary/python/requests-library)  
+[Requests: HTTP for Humans](https://requests.readthedocs.io/en/latest/#)  
+[]()  
+[]()  
+[]()  
+
+
 
 [**python-course.eu**](https://python-course.eu/)  
 [Python-100-Days](https://github.com/jackfrued/Python-100-Days/tree/master)  
