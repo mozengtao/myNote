@@ -9,6 +9,33 @@
 []()  
 []()  
 
+```bash
+# 强制使用 SSH 密钥连接 GitHub，输出详细调试日志
+ssh -vT git@github.com
+```
+
+## 常见问题
+1. 问题 1：SSH 端口被屏蔽（最常见）
+	GitHub SSH 默认用 22 端口，很多网络环境（公司 / 校园网）会屏蔽 22 端口，导致连接卡住。
+
+```bash
+解决方案：改用 GitHub 的 443 端口（HTTPS 端口，几乎不被屏蔽）
+
+1. 在 WSL 中创建 / 编辑 SSH 配置文件：
+vi ~/.ssh/config
+
+2. 粘贴以下内容并保存（按 i 编辑，esc+:wq 保存退出）：
+Host github.com
+  Hostname ssh.github.com
+  Port 443
+  User git
+  IdentityFile ~/.ssh/id_ed25519  # 确保这是你生成的密钥路径
+  IdentitiesOnly yes
+
+3. 重新测试 SSH 连接：
+ssh -vT git@github.com
+```
+
 ## exec remote cmd which has an interactive cli
 ```bash
 # 1 use here-doc

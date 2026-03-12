@@ -167,3 +167,4 @@ discrepancy / dɪˈskrepənsi /    差异，不符
 hypothesis/hypotheses / haɪˈpɑːθəsiːz /    假定；臆测  
 prime   / praɪm /   事先指点，使（某人）做好准备；把（某事物）准备好，使备用；给（表面）涂上底色  
 gotchas  / ˈɡɑːtʃə /    陷阱，突然出现的问题：意外的困境或问题，通常在计划、项目或软件中出现  
+incognito   / ˌɪnkɑːɡˈniːtoʊ /  伪装的，隐姓埋名的  

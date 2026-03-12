@@ -6,6 +6,9 @@
 [Clean Architecture: A Deep Dive into Structured Software Design](https://www.spaceteams.de/en/insights/clean-architecture-a-deep-dive-into-structured-software-design)  
 [How Clean Architecture Solves Common Software Development Challenges](https://www.spaceteams.de/en/insights/how-clean-architecture-solves-common-software-development-challenges)  
 
+[架构师手册](https://tonydeng.github.io/architect-manual/)  
+[]()  
+
 ## Clean Architecture
 [The Clean Architecture I Wish Someone Had Explained to Me](https://medium.com/@rafael-22/the-clean-architecture-i-wish-someone-had-explained-to-me-dcc1572dbeac)  
 
