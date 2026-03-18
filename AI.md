@@ -13,6 +13,9 @@
 []()  
 []()  
 
+> The Web Data API for AI - Turn entire websites into LLM-ready markdown or structured data
+[]()  
+[firecrawl](https://github.com/firecrawl/firecrawl)  
 
 
 > the open source AI coding agent

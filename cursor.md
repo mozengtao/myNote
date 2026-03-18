@@ -28,3 +28,14 @@
 Settings
     Ctrl + Shift + j
 ```
+
+## Tips
+```
+在 Windows 环境下使用 Cursor 通过 Remote SSH 连接远程服务器时，对话记录（包括 Chat 和 Agent/Composer 的历史）并不是保存在远程服务器上，而是保存在你本地的 Windows 电脑中
+
+Cursor 遵循了 VS Code 的设计理念：插件状态和工作区元数据由客户端（本地）管理
+
+在 Windows 上，具体的存储路径为:
+%APPDATA%\Cursor\User\workspaceStorage\
+```
+

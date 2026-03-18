@@ -13,19 +13,19 @@ In the mid-2000s, Google faced severe engineering challenges that existing langu
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Google's Engineering Pain Points              │
+│                    Google's Engineering Pain Points             │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   C/C++                          Python/Java                     │
+│                                                                 │
+│   C/C++                          Python/Java                    │
 │   ┌──────────────────┐          ┌──────────────────┐            │
-│   │ ✓ Fast execution │          │ ✓ Fast development│            │
-│   │ ✗ Slow builds    │          │ ✗ Slow execution │            │
-│   │ ✗ Memory bugs    │          │ ✗ Runtime deps   │            │
-│   │ ✗ Complex deps   │          │ ✗ Type errors    │            │
-│   │ ✗ Hard concurrency│         │ ✗ GIL (Python)   │            │
+│   │ ✓ Fast execution │          │ ✓ Fast development│          │
+│   │ ✗ Slow builds    │          │ ✗ Slow execution │           │
+│   │ ✗ Memory bugs    │          │ ✗ Runtime deps   │           │
+│   │ ✗ Complex deps   │          │ ✗ Type errors    │           │
+│   │ ✗ Hard concurrency│         │ ✗ GIL (Python)   │           │
 │   └──────────────────┘          └──────────────────┘            │
-│                         │                                        │
-│                         ▼                                        │
+│                         │                                       │
+│                         ▼                                       │
 │              ┌──────────────────┐                               │
 │              │       Go         │                               │
 │              │ ✓ Fast execution │                               │

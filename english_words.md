@@ -168,3 +168,5 @@ hypothesis/hypotheses / haɪˈpɑːθəsiːz /    假定；臆测
 prime   / praɪm /   事先指点，使（某人）做好准备；把（某事物）准备好，使备用；给（表面）涂上底色  
 gotchas  / ˈɡɑːtʃə /    陷阱，突然出现的问题：意外的困境或问题，通常在计划、项目或软件中出现  
 incognito   / ˌɪnkɑːɡˈniːtoʊ /  伪装的，隐姓埋名的  
+ingest  / ɪnˈdʒest /    摄取；咽下；吸收；接待  
+relevance   / ˈreləvəns /   相关性，实用性，意义  

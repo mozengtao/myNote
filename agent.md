@@ -1,3 +1,5 @@
+> An AI Agent is a digital worker that can understand instructions and take actions in order to complete tasks
+
 [What is an Agent?](https://www.promptingguide.ai/agents/introduction)  
 [Agents](https://docs.langchain.com/oss/python/langchain/agents)  
 [Agent的概念、原理与构建模式](https://github.com/MarkTechStation/VideoCode/tree/main)  
@@ -8,6 +10,30 @@
 [everything-claude-code](https://github.com/affaan-m/everything-claude-code)  
 []()  
 []()  
+
+## 5 AI AGENT COMPONENTS
+1. LLM (brain)
+2. Prompting (instructions)
+3. Memory
+4. External Knowledge
+5. Tools
+
+### PROS OF MEMORY
+1. Remember what you talked about
+2. Keep track of its tasks
+3. Build on previous conversation
+4. Learn from past interactions
+
+### PROS OF TOOLS
+1. Checking real-time data
+2. Updating databases
+3. Sending messages & notifications
+
+## THE 3 INGREDIENTS
+1. External Knowledge
+2. Tools
+3. Prompting
+
 
 [Spec-Driven Development with Cursor 示例](./ai/spec-driven-development-guide.md)  
 

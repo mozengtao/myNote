@@ -5,7 +5,25 @@
 []()  
 []()  
 
-## manuals
+## 在线编辑环境
+> 专注前端框架开发，内置海量模板，支持npm安装依赖、热更新，免费版支持私人项目，适合框架项目原型、组件开发、开源项目调试
+[**CodeSandbox**](https://codesandbox.io/)
+
+> 可以打开本地文件夹
+[**vscode**](https://vscode.dev/)  
+
+> Python, Java, C++, C, HTML, React, Go
+[code playground](https://programiz.pro/ide/c)  
+
+> Learn programming for free
+[Programiz](https://www.programiz.com/)  
+
+[OneCompiler](https://onecompiler.com/)  
+
+[myCompiler](https://www.mycompiler.io/)  
+
+
+## 在线帮助手册
 [**W3cubDocs**](https://docs2.w3cub.com/)  
 [**devdocs**](https://devdocs.io/)  
 [ManKier(Linux man pages)](https://www.mankier.com/)  
@@ -17,17 +35,6 @@
 [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html)  
 []()  
 
-## editor
-[vscode](https://vscode.dev/)  
-
-## code compiler
-[OneCompiler](https://onecompiler.com/)  
-[Programiz](https://www.programiz.com/)  
-[]()  
-[code playground](https://programiz.pro/ide/c)  
-[code playground](https://codapi.org/)  
-[myCompiler](https://www.mycompiler.io/)  
-[Practice with our Online Compilers](https://www.programiz.com/)  
 
 ## game
 [toddler(拼图)](https://toddler-games.com/)  
@@ -41,7 +48,7 @@
 ## hex edit
 [hexedit online](https://hexed.it/)  
 
-## file format converter
+## 文件格式转换
 [Convert TSV to JSON](https://onlinetools.com/json/convert-tsv-to-json#examples)  
 [onlineyamltools](https://onlineyamltools.com/)  
 [YAML Formatter](https://jsonformatter.org/yaml-formatter#Sample)  
@@ -53,9 +60,15 @@
 [Free Formatter](https://www.freeformatter.com/)
 [CodeConvert](https://www.codeconvert.ai/free-converter)  
 
+[Json Formatter & Validator](https://jsonformatter.curiousconcept.com/)  
 
-## translate
+
+
+
+## 英文写作和翻译
 [deepl](https://www.deepl.com/en/write)  
+> AI 英文写作助手（聊天式）
+[ludwig](https://app.ludwig.guru/chat)  
 
 
 
@@ -71,14 +84,14 @@
 [腾讯元宝](https://yuanbao.tencent.com/chat/)  
 [阿里通义](https://tongyi.aliyun.com/qianwen/)  
 
-## packet decoder
+## pcap 解码
 [Hex Packet Decoder](https://hpd.gasmi.net/)  
 [Packetor](https://packetor.com/)  
 [Packet Hexdump Decoder](http://eon.sadjad.org/phd/)  
 []()  
 
 
-## drawing tool
+## 画图工具
 [Napkin](https://www.napkin.ai/) #根据文字内容转换为可视化的视图
 > Napkin turns your text into visuals so sharing your ideas is quick and effective  
 [Excalidraw](https://excalidraw.com/)#白板工具  
