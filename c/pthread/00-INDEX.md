@@ -85,16 +85,16 @@
 +------------------------------------------------------------------+
 |                                                                  |
 |   1. MUTEX PROTECTS DATA, NOT CODE                               |
-|      互斥锁保护数据不变量，不是代码块                              |
+|      互斥锁保护数据不变量，不是代码块                               |
 |                                                                  |
 |   2. ALWAYS USE while() WITH CONDITION VARIABLES                 |
 |      条件变量必须配合 while 循环使用                               |
 |                                                                  |
 |   3. EVERY LOCK MUST HAVE A DOCUMENTED ORDERING                  |
-|      每个锁必须有文档化的获取顺序                                  |
+|      每个锁必须有文档化的获取顺序                                   |
 |                                                                  |
 |   4. NEVER PASS STACK POINTERS TO OTHER THREADS                  |
-|      永远不要把栈指针传给其他线程                                  |
+|      永远不要把栈指针传给其他线程                                   |
 |                                                                  |
 |   5. SIGNAL, DON'T CANCEL                                        |
 |      用信号协调关闭，不要用 pthread_cancel                         |

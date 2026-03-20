@@ -130,7 +130,7 @@
 |              (crawler.c lines 734-765)                           |
 +------------------------------------------------------------------+
 |                                                                  |
-|   "Lock dance to block until thread is waiting on condition"    |
+|   "Lock dance to block until thread is waiting on condition"     |
 |                                                                  |
 |   Main Thread                       Crawler Thread               |
 |   +-----------+                     +-----------+                |

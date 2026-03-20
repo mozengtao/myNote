@@ -1,5 +1,13 @@
 > An AI Agent is a digital worker that can understand instructions and take actions in order to complete tasks
 
+[MCP](./mcp.md)  
+[A2A](./ai/A2A.md)  
+[Function Calling 与 MCP 的协同工作机制](./ai/FunctionCalling_and_MCP.md)  
+[Function Calling 与 MCP 协同工作原理](./ai/FunctionCalling_and_MCP2.md)  
+[]()  
+
+
+
 [What is an Agent?](https://www.promptingguide.ai/agents/introduction)  
 [Agents](https://docs.langchain.com/oss/python/langchain/agents)  
 [Agent的概念、原理与构建模式](https://github.com/MarkTechStation/VideoCode/tree/main)  
@@ -9,6 +17,7 @@
 [microsoft agent-framework](https://github.com/microsoft/agent-framework)  
 [everything-claude-code](https://github.com/affaan-m/everything-claude-code)  
 []()  
+[OpenAI Docs](https://developers.openai.com/api/docs)  
 []()  
 
 ## 5 AI AGENT COMPONENTS

@@ -31,7 +31,7 @@
 |   +------------------------------------------------------------+ |
 |   |                                                            | |
 |   |   // Looks atomic but ISN'T                                | |
-|   |   counter++;  // Actually: tmp = counter; tmp++; counter=tmp|
+|   |   counter++;  // Actually: tmp = counter; tmp++; counter=tmp |
 |   |                                                            | |
 |   |   Thread A:   load(counter) -> 5                           | |
 |   |   Thread B:   load(counter) -> 5                           | |

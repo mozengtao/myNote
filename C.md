@@ -42,6 +42,9 @@
 [ring buffer](c/ring_buffer.md)  
 [简化版插件架构示例](c/plugin_arch.md)  
 [动态链接 和 静态链接](c/static_danymic.md)  
+[pthread](./pthread.md)  
+[]()  
+[]()  
 
 c/data_structure
 ├── [00-index.md](./c/data_structure/00-index.md)  # 索引
@@ -66,21 +69,6 @@ c/data_structure
 []()  
 []()  
 []()  
-
-
-## pthread
-[memcached](https://github.com/memcached/memcached)  
-> a high performance multithreaded event-based key/value cache store intended to be used in a distributed system.
-[]()  
-![INDEX](./c/pthread/00-INDEX.md)  
-![WHY pthreads](./c/pthread/01-WHY-pthreads.md)  
-![HOW pthreads](./c/pthread/02-HOW-pthreads.md)  
-![WHAT advanced](./c/pthread/03-WHAT-advanced.md)  
-![WHAT sync](./c/pthread/03-WHAT-sync.md)  
-![WHAT threads](./c/pthread/03-WHAT-threads.md)  
-![WHERE pthreads](./c/pthread/04-WHERE-pthreads.md)  
-![PITFALLS pthreads](./c/pthread/05-PITFALLS-pthreads.md)  
-![TRANSFER pthreads](./c/pthread/06-TRANSFER-pthreads.md)  
 
 ## mempool
 [nginx](https://github.com/nginx/nginx)  
@@ -296,23 +284,6 @@ c/data_structure
 > C TEMPLATE LIBRARY (CTL) is a fast compiling, type safe, header only, template-like library for ISO C99/C11.
 [C CONTAINER TEMPLATE LIBRARY (CTL)](https://rurban.github.io/ctl/)  
 []()  
-[]()  
-[]()  
-[]()  
-
-## pthread
-[Multithreaded Programming (POSIX pthreads Tutorial)](https://randu.org/tutorials/threads/)  
-[POSIX Threads API](https://www.cs.fsu.edu/~baker/opsys/notes/pthreads.html)  
-[POSIX Threads API](https://www.cs.fsu.edu/~baker/realtime/restricted/notes/pthreads.html)  
-[POSIX thread (pthread) libraries](https://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html)  
-[Pthreads Tutorial](https://www.eecs.umich.edu/courses/eecs570/discussions/w22/pthreads.html)  
-[Parallel Programming with the PThread API](https://www.cs.emory.edu/~cheung/Courses/561/Syllabus/91-pthreads/create-threads.html)  
-[Multithreaded Programming Guide](https://docs.oracle.com/cd/E19120-01/open.solaris/816-5137/index.html)  
-[Multithreading for Beginners: Step-by-Step](https://hackernoon.com/multithreading-for-beginners-step-by-step)  
-[Learning About Threads: An Essential Guide for Developers](https://hackernoon.com/learning-about-threads-an-essential-guide-for-developers)  
-[What Every Gopher Should Know About the Go Memory Model](https://hackernoon.com/what-every-gopher-should-know-about-the-go-memory-model)  
-[Threading Programming Guide](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/Introduction/Introduction.html)  
-[MasteringPthreads](https://github.com/ANSANJAY/MasteringPthreads)  
 []()  
 []()  
 []()  

@@ -14,6 +14,41 @@
 [How to Master Bash Regex Patterns](https://labex.io/tutorials/shell-how-to-master-bash-regex-patterns-390416)  
 [How to Use Regex in Bash Scripting](https://labex.io/tutorials/shell-how-to-use-regex-in-bash-scripting-392579)  
 ```bash
+#  bash 原生字符串替换：${变量/匹配串/替换串}
+
+- 关键点说明：
+  单斜杠 /：只替换第一个匹配
+  双斜杠 //：替换所有匹配
+  #：只在开头匹配时替换
+  %：只在结尾匹配时替换
+
+# 1. 替换第一次出现的模式
+filename="test_file.txt.txt"
+echo "${filename/.txt/.log}"   # 输出: test_file.log.txt
+
+# 2. 替换所有出现的模式（使用双斜杠 //）
+filename="test_file.txt.txt"
+echo "${filename//.txt/.log}"  # 输出: test_file.log.log
+
+# 3. 删除模式（替换为空字符串）
+filename="test.file.name.txt"
+echo "${filename/.}"           # 输出: testfile.name.txt
+echo "${filename//.}"          # 输出: testfilenametxt
+
+# 4. 从开头匹配并替换
+filename="prefix_filename.ext"
+echo "${filename/#prefix_/new_}"  # 输出: new_filename.ext
+
+# 5. 从结尾匹配并替换
+filename="file.bak"
+echo "${filename/%.bak/.backup}"  # 输出: file.backup
+
+# 6. 实际应用：修改文件扩展名
+fullpath="/path/to/document.pdf"
+newpath="${fullpath/%.pdf/.docx}"
+echo "$newpath"  # 输出: /path/to/document.docx
+
+
 # ​​语法​​	​                 ​方向​​	​​          示例输入​​	        ​输出​​	​​  说明​
 # ${var%pattern}	    结尾最短匹配	file.txt.bak	file.txt	删除最短匹配后缀
 # ${var%%pattern}	    结尾最长匹配	file.txt.bak	file	    删除最长匹配后缀
