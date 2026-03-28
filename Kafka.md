@@ -1,3 +1,29 @@
+
+[Apache Kafka 系统化学习走读](./kafka/kafka-systematic-learning-walkthrough.md)  
+[Kafka Debugging Toolkit（命令手册 + 系统化排障方法）](./kafka/kafka-debugging-toolkit.md)  
+[Kafka集群架构图](./kafka/kafka_cluster_architecture.md)  
+[](./kafka/)  
+
+```
++-------------------+          +-------------------------------------+          +-------------------+
+|   Producer        | -------> |             Topic                   | -------> |    Consumer       |
++-------------------+          |  +-------------------------------+  |          +-------------------+
+                               |  |         Partition             |  |
+                               |  | +-----+-----+-----+-----+---+ |  |
+                               |  | | ... |Msg 1|Msg 2|Msg 3|...| |  |
+                               |  | +-----+-----+-----+-----+---+ |  |
+                               |  |              ↑                |  |
+                               |  |            Offset             |  |
+                               |  +-------------------------------+  |
+                               +-------------------------------------+
+```
+
+[Kafka Visualization](https://softwaremill.com/kafka-visualisation/)  
+[]()  
+
+[Kafka 高性能核心原因分析](./kafka/why_is_kafka_fast.png)  
+[Kafka 高性能核心原因分析](./kafka/why_is_kafka_fast.md)  
+
 [What is Apache Kafka?](https://learn.conduktor.io/kafka/what-is-apache-kafka/)  
 [conduktor](https://www.conduktor.io/)
 [How to Install Apache Kafka on Windows?](https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-windows/)
@@ -16,17 +42,21 @@
 []()  
 
 [librdkafka examples](https://github.com/confluentinc/librdkafka/tree/master/examples)  
-![Kafka核心概念及工作原理](./kafka/kafka-core-concepts-and-workflow.md)  
-![simple_producer.c](./kafka/simple_producer.c)  
-![simple_consumer.c](./kafka/simple_consumer.c)  
+[Kafka核心概念及工作原理](./kafka/kafka-core-concepts-and-workflow.md)  
+[simple_producer.c](./kafka/simple_producer.c)  
+[simple_consumer.c](./kafka/simple_consumer.c)  
 
 - librdkafka
-![WHY-Engineering-Motivation](./kafka/01-WHY-Engineering-Motivation.md)  
-![HOW-Design-Philosophy](./kafka/02-HOW-Design-Philosophy.md)  
-![WHAT-Architecture-Concrete-Forms](./kafka/03-WHAT-Architecture-Concrete-Forms.md)  
-![WHERE-Source-Code-Reading](./kafka/04-WHERE-Source-Code-Reading.md)  
-![Real-Project-Usage](./kafka/05-Real-Project-Usage.md)  
-![Reflection-Knowledge-Transfer](./kafka/06-Reflection-Knowledge-Transfer.md)  
+[WHY-Engineering-Motivation](./kafka/01-WHY-Engineering-Motivation.md)  
+[HOW-Design-Philosophy](./kafka/02-HOW-Design-Philosophy.md)  
+[WHAT-Architecture-Concrete-Forms](./kafka/03-WHAT-Architecture-Concrete-Forms.md)  
+[WHERE-Source-Code-Reading](./kafka/04-WHERE-Source-Code-Reading.md)  
+[Real-Project-Usage](./kafka/05-Real-Project-Usage.md)  
+[Reflection-Knowledge-Transfer](./kafka/06-Reflection-Knowledge-Transfer.md)  
+
+
+kafka本质上是典型的**MQ**(Message Queue)系统，典型的MQ有3大功能:异步，解耦，消峰
+
 
 
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统

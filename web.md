@@ -4,6 +4,9 @@
 [](./web/)  
 [](./web/)  
 
+[RESTful API 深度解析](./web/RESTfull_API.md)  
+[](./web/)  
+
 [MDN learning-area](https://github.com/mdn/learning-area/tree/main)  
 
 []()  
@@ -21,6 +24,12 @@
 []()  
 []()  
 
+
+[数据库密码安全存储与验证流程](./web/how_password_is_stored_in_database.png)  
+[数据库密码安全存储与验证流程](./web/how_password_is_stored_in_database.md)  
+
+[扫码支付的工作原理](./web/how_scan_to_pay_works.png)  
+[扫码支付的工作原理](./web/how_scan_to_pay_works.md)  
 
 ## 在线编辑环境
 > 分栏式编辑HTML/CSS/JS，即时预览，内置常用框架，社区生态丰富，新手友好，适合快速写demo、学习前端语法、仿写效果、分享代码片段

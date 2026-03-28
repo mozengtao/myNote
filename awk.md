@@ -7,8 +7,11 @@
 []()  
 []()  
 []()  
-[]()  
-[]()  
+
+
+[AWK 系统化掌握手册](./awk/awk_mastery.md)  
+[AWK 编程语言参考指南](./awk/awk_ref.md)  
+[AWK 常用内置函数与复杂逻辑配方](./awk/awk_functions.md)  
 
 
 [sed & awk](https://docstore.mik.ua/orelly/unix/sedawk/index.htm)  
@@ -27,6 +30,24 @@ awk/awk-tutorial/
 ├── [part6-functions.md](./awk/awk-tutorial/part6-functions.md)  
 ├── [part7-professional-style.md](./awk/awk-tutorial/part7-professional-style.md)  
 └── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
+
+```bash
+# 打印match行之后的所有行
+nomad job status node-exporter | awk '/Allocations/{found=1} found'
+
+nomad job status node-exporter | awk '/Allocations/{match=1} {if(match) print}'
+
+nomad job status node-exporter | awk '
+    /Allocations/ { match=1 }
+    match { print }
+'
+
+nomad job status node-exporter | sed -n '/Allocations/,$p'
+
+# 匹配包含"Allocations"的行，然后向下数到第三行（即数据行），并打印该行的第一个字段（即ID）
+nomad job status snmp-evc-dentist-1 | awk '/Allocations/{c=3} c&&!--c{print $1}'
+
+```
 
 # 经典模式
 - 状态开关模式 (The State Machine / Toggle)

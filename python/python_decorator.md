@@ -106,6 +106,16 @@ f(1, 2, x=3, y=4)
 ```python
 def f(*args, **kwargs):
     pass
+
+# 1. 打包示例
+def print_args(*args, **kwargs):
+    print(f"位置参数元组: {args}")
+    print(f"关键字参数字典: {kwargs}")
+
+print_args(1, 2, 3, name='元宝', age=4)
+# 输出：
+# 位置参数元组: (1, 2, 3)
+# 关键字参数字典: {'name': '元宝', 'age': 4}
 ```
 
 作用：
@@ -116,6 +126,16 @@ def f(*args, **kwargs):
 
 ```python
 f(*args, **kwargs)
+
+# 2. 解包示例
+def normal_func(a, b, c):
+    print(a, b, c)
+
+my_list = [1, 2, 3]
+my_dict = {'a': 10, 'b': 20, 'c': 30}
+
+normal_func(*my_list)  # 等价于 normal_func(1, 2, 3)
+normal_func(**my_dict) # 等价于 normal_func(a=10, b=20, c=30)
 ```
 
 作用：
@@ -148,6 +168,9 @@ f(**kwargs)  # 等价于：f(x=10, y=20)
 
 **正确顺序：**
 ```
+def func(standard_args, *args, keyword_only_args, **kwargs):
+    ...
+
 位置参数 → *args → keyword-only 参数 → **kwargs
 ```
 

@@ -18,4 +18,7 @@
 []()  
 []()  
 []()  
-[]()  
+[当在浏览器输入URL时发生的完整流程](./web/what_happens_when_type_URL_in_browser.png)  
+[当在浏览器输入URL时发生的完整流程](./web/what_happens_when_type_URL_in_browser.md)  
+[HTTPS 工作过程总结](./web/https_illustrated.png)  
+[HTTPS 工作过程总结](./web/https_illustrated.md)  

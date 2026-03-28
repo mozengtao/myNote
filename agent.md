@@ -2,12 +2,19 @@
 
 [MCP](./mcp.md)  
 [A2A](./ai/A2A.md)  
-[Function Calling 与 MCP 的协同工作机制](./ai/FunctionCalling_and_MCP.md)  
-[Function Calling 与 MCP 协同工作原理](./ai/FunctionCalling_and_MCP2.md)  
+[LangChain](./ai/langchain.md)  
+[]()  
+[]()  
+[Spec-Driven Development with Cursor 示例](./ai/spec-driven-development-guide.md)  
+
+[Agent Factory](https://agentfactory.panaversity.org/docs/about)  
+[**Spec-Driven Development with Claude Code in Action**](https://alexop.dev/posts/spec-driven-development-claude-code-in-action/)  
+[12 Factor Agents](https://www.humanlayer.dev/blog/12-factor-agents)  
+[A Practical Guide to Spec-Driven Development](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide)  
+[]()  
 []()  
 
-
-
+## What is an Agent?
 [What is an Agent?](https://www.promptingguide.ai/agents/introduction)  
 [Agents](https://docs.langchain.com/oss/python/langchain/agents)  
 [Agent的概念、原理与构建模式](https://github.com/MarkTechStation/VideoCode/tree/main)  
@@ -20,39 +27,38 @@
 [OpenAI Docs](https://developers.openai.com/api/docs)  
 []()  
 
-## 5 AI AGENT COMPONENTS
-1. LLM (brain)
-2. Prompting (instructions)
-3. Memory
-4. External Knowledge
-5. Tools
+- 5 AI AGENT COMPONENTS
+    1. LLM (brain)
+    2. Prompting (instructions)
+    3. Memory
+    4. External Knowledge
+    5. Tools
 
-### PROS OF MEMORY
-1. Remember what you talked about
-2. Keep track of its tasks
-3. Build on previous conversation
-4. Learn from past interactions
+    - PROS OF MEMORY
+        1. Remember what you talked about
+        2. Keep track of its tasks
+        3. Build on previous conversation
+        4. Learn from past interactions
 
-### PROS OF TOOLS
-1. Checking real-time data
-2. Updating databases
-3. Sending messages & notifications
+    - PROS OF TOOLS
+        1. Checking real-time data
+        2. Updating databases
+        3. Sending messages & notifications
 
-## THE 3 INGREDIENTS
-1. External Knowledge
-2. Tools
-3. Prompting
+- THE 3 INGREDIENTS
+    1. External Knowledge
+    2. Tools
+    3. Prompting
 
-
-[Spec-Driven Development with Cursor 示例](./ai/spec-driven-development-guide.md)  
-
-
-[Agent Factory](https://agentfactory.panaversity.org/docs/about)  
-[**Spec-Driven Development with Claude Code in Action**](https://alexop.dev/posts/spec-driven-development-claude-code-in-action/)  
-[12 Factor Agents](https://www.humanlayer.dev/blog/12-factor-agents)  
-[A Practical Guide to Spec-Driven Development](https://docs.zencoder.ai/user-guides/tutorials/spec-driven-development-guide)  
+## Function calling
+[Function Calling 与 MCP 的协同工作机制](./ai/FunctionCalling_and_MCP.md)  
+[Function Calling 与 MCP 协同工作原理](./ai/FunctionCalling_and_MCP2.md)  []()  
+[Function calling with the Gemini API](https://ai.google.dev/gemini-api/docs/function-calling)  
+[Combine built-in tools and function calling](https://ai.google.dev/gemini-api/docs/tool-combination)  
 []()  
 []()  
+[]()  
+
 
 ## 2 Implemention Patterns
 ### ReAct Pattern

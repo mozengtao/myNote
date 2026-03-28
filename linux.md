@@ -1,44 +1,157 @@
-[OldLinux](https://oldlinux.org/)  
-[**A Heavily Commented Linux kernel Source Code(English)**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
-[**A Heavily Commented Linux kernel Source Code(Chinese)**](https://download.oldlinux.org/CLK-5.0-WithCover.pdf)  
-[The little book about OS development](https://littleosbook.github.io/)  
-[CS212 lecture notes](https://www.scs.stanford.edu/25sp-cs212/notes/)  
+# Linux 系统学习指南
 
+## 目录
 
-[Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
-[The Linux Kernel](https://tldp.org/LDP/tlk/tlk-toc.html)  
-[The Linux Kernel](https://origin.kernel.org/doc/html/latest/index.html)  
-[(Linux) Kernel Programming](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html)  
-[Understanding the Linux Virtual Memory Manager](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html) #online  
+- [Linux 内核学习资源](#linux-内核学习资源)
+- [系统编程](#系统编程)
+- [I/O 和硬件交互](#io-和硬件交互)
+- [内核开发和调试](#内核开发和调试)
+- [系统管理和工具](#系统管理和工具)
+- [操作系统理论](#操作系统理论)
+- [模拟器](#模拟器)
 
-[xv6: a simple, Unix-like teaching operating system](https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf) #pdf  
+## Linux 内核学习资源
 
-[Various Computer Science Topics](https://azrael.digipen.edu/~mmead/www/)  
-[Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html) #online  
+### 官方文档和内核源码
 
-[The Process Control Block of a Process in Linux](https://www.baeldung.com/linux/pcb)  
+- [OldLinux](https://oldlinux.org/)  
+- [**A Heavily Commented Linux kernel Source Code(English)**](https://download.oldlinux.org/ECLK-5.0-WithCover.pdf)  
+- [**A Heavily Commented Linux kernel Source Code(Chinese)**](https://download.oldlinux.org/CLK-5.0-WithCover.pdf)  
+- [The Linux Kernel](https://origin.kernel.org/doc/html/latest/index.html)  
+- [**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
+- [**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
 
-[Processes, as they are in the Linux Kernel](https://puranikvinit.hashnode.dev/linux-processes)  
-[Interrupts: The Clockwork Orchestra of the Linux Kernel](https://puranikvinit.hashnode.dev/linux-interrupts)  
-[CFS Scheduler in the Linux Kernel](https://puranikvinit.hashnode.dev/cfs-scheduler)  
+### 内核开发教程
 
+- [Linux Kernel 2.4 Internals](https://tldp.org/LDP/lki/lki.html#toc2)  
+- [The Linux Kernel](https://tldp.org/LDP/tlk/tlk-toc.html)  
+- [(Linux) Kernel Programming](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html)  
+- [Linux Kernel Development Second Edition](https://litux.nl/mirror/kerneldevelopment/0672327201/toc.html) #online  
+- [Linux Kernel Development - Extending Drivers for new Devices](https://javiercarrascocruz.github.io/)  
 
-[**Linux Kernel Teaching**](https://linux-kernel-labs.github.io/refs/heads/master/)  
-[**The Linux kernel**](https://aeb.win.tue.nl/linux/lk/lk.html#toc5)  
-[The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
-[A journey into the Linux proc filesystem](https://fernandovillalba.substack.com/p/a-journey-into-the-linux-proc-filesystem)  
+### 内核核心概念
 
-[Computer Science from the Bottom Up](https://bottomupcs.com/index.html)  
-[fork, exec, wait and exit](https://percona.community/blog/2021/01/04/fork-exec-wait-and-exit/)  
-[Disillusioning the Magic of the fork System Call](https://blog.codingconfessions.com/p/the-magic-of-fork)  
+- [Understanding the Linux Virtual Memory Manager](https://www.cse.iitb.ac.in/~puru/courses/cs695/ex5.html) #online  
+- [The Process Control Block of a Process in Linux](https://www.baeldung.com/linux/pcb)  
+- [Processes, as they are in the Linux Kernel](https://puranikvinit.hashnode.dev/linux-processes)  
+- [Interrupts: The Clockwork Orchestra of the Linux Kernel](https://puranikvinit.hashnode.dev/linux-interrupts)  
+- [CFS Scheduler in the Linux Kernel](https://puranikvinit.hashnode.dev/cfs-scheduler)  
+- [The /proc Filesystem](https://docs.kernel.org/filesystems/proc.html)  
+- [A journey into the Linux proc filesystem](https://fernandovillalba.substack.com/p/a-journey-into-the-linux-proc-filesystem)  
 
-[eXpOS Documentation](https://exposnitc.github.io/documentation.html)  
+### 教学和学习资源
 
+- [The little book about OS development](https://littleosbook.github.io/)  
+- [CS212 lecture notes](https://www.scs.stanford.edu/25sp-cs212/notes/)  
+- [Various Computer Science Topics](https://azrael.digipen.edu/~mmead/www/)  
+- [xv6: a simple, Unix-like teaching operating system](https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf) #pdf  
+- [eXpOS Documentation](https://exposnitc.github.io/documentation.html)  
+- [Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
 
-[Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
-[Operating Systems 2](https://linux-kernel-labs.github.io/refs/heads/master/so2/index.html)  
+### 经典书籍和资料
 
-## How CPU communicates with I/O devices
+- [**Operating Systems: Three Easy Pieces**](https://pages.cs.wisc.edu/~remzi/OSTEP/)  
+- [**Operating Systems: Three Easy Pieces中文版**](https://pages.cs.wisc.edu/~remzi/OSTEP/Chinese/)  
+- [**Operating System Concepts**](https://pc.woozooo.com/mydisk.php)  
+- [**操作系统导论**](https://github.com/gsZhiZunBao/e-books/blob/main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%AE%BA.pdf)  
+- **Operating Systems. Design and Implementation** #pdf  
+- **The Design and Implementation of the FreeBSD Operating System (2nd Edition)** #pdf  
+- [[linux内核设计与实现]]  
+- [**I.MX6U嵌入式Linux驱动开发指南**](https://github.com/alientek-openedv/imx6ull-document/blob/master/%E3%80%90%E6%AD%A3%E7%82%B9%E5%8E%9F%E5%AD%90%E3%80%91I.MX6U%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97V1.5.2.pdf) #pdf #github  
+
+### 在线学习资源
+
+- [**Linux Storage**](http://linux-training.be/storage/index.html) #online  
+- [Linux From Scratch HOWTO](https://www.linuxfromscratch.org/museum/lfs-museum/2.0-beta1/LFS-HOWTO-2.0-beta1-HTML/LFS-HOWTO-2.0-beta1.html#toc10) #online  
+- [Linux System Administration](http://linux-training.be/sysadmin/index.html) #online  
+- [**Linux Internals**](https://www.learnlinux.org.za/courses/build/internals/) #online  
+- [linux online books](https://www.linuxtopia.org/online_books/) #online  
+- [嵌入式Linux学习目录](https://draapho.github.io/2017/11/23/1734-linux-content/)  
+- [jz2440学习笔记](https://yifengyou.gitbooks.io/jz2440/content/docs/Linux%E9%A9%B1%E5%8A%A8/) 知识点目录  
+
+### 专题学习
+
+- [Computer Science from the Bottom Up](https://bottomupcs.com/index.html)  
+- [fork, exec, wait and exit](https://percona.community/blog/2021/01/04/fork-exec-wait-and-exit/)  
+- [Disillusioning the Magic of the fork System Call](https://blog.codingconfessions.com/p/the-magic-of-fork)  
+- [Dynamic Tracing with DTrace & SystemTap](https://myaut.github.io/dtrace-stap-book/index.html)  
+
+## 系统编程
+
+### 系统调用
+
+- [Introduction to system calls](https://how.dev/answers/introduction-to-system-calls)  
+- [Linux: Anatomy of a System Call](https://www.diskodev.com/posts/linux-system-calls/)  
+- [man 2 syscalls](https://www.mankier.com/2/syscalls)  
+- [man 2 syscall](https://www.mankier.com/2/syscall)  
+- [Syscalls](https://aquasecurity.github.io/tracee/dev/docs/events/builtin/syscalls/)  
+- [**linux system call table**](https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md)  
+- [system call table for x86](https://filippo.io/linux-syscall-table/)  
+- [man 2 syscall](https://man7.org/linux/man-pages/man2/syscall.2.html#NOTES)  
+- [User-space, Kernel-space, and System Calls](https://www.codeinsideout.com/blog/linux/system-call/)  
+- [Anatomy of a Syscall](https://www.chromium.org/nativeclient/reference/anatomy-of-a-sys/)  
+
+### 进程管理：fork, execve, mmap, exit
+
+#### fork 系统调用
+- [fork(2)](https://www.mankier.com/2/fork)  
+- [The fork() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/create.html)  
+- [Fork System Call](https://www.scaler.com/topics/fork-system-call/)  
+- [Fork() System Call](https://www.naukri.com/code360/library/fork-system-call)  
+- [The Difference Between fork(), vfork(), exec() and clone()](https://www.baeldung.com/linux/fork-vfork-exec-clone)  
+
+#### exec 系列函数
+- [execve(2)](https://www.mankier.com/2/execve)  
+- [Executing a File](https://www.gnu.org/software/libc/manual/html_mono/libc.html)  
+- [fork and exec system calls in Linux](https://www.softprayog.in/programming/creating-processes-with-fork-and-exec-in-linux)  
+- [The Exec Family of Functions](https://www.baeldung.com/linux/exec-functions)  
+- [What is the execvp() function in C?](https://how.dev/answers/what-is-the-execvp-function-in-c)  
+- [Environment Variables](https://www.gnu.org/software/libc/manual/html_node/Environment-Variables.html)  
+- [Environment Access](https://www.gnu.org/software/libc/manual/html_node/Environment-Access.html)  
+
+#### 内存映射
+- [mmap(2)](https://www.mankier.com/2/mmap)  
+- [Linux: mmap() System Call — Part I](https://www.diskodev.com/posts/linux-mmap-part-1/)  
+- [Linux: mmap() System Call — Part II](https://www.diskodev.com/posts/linux-mmap-part-2/)  
+- [Understanding mmap](https://unix.stackexchange.com/questions/389124/understanding-mmap)  
+- [Memory mapping](https://linux-kernel-labs.github.io/refs/heads/master/labs/memory_mapping.html)  
+- [More about `mmap()` file access](https://biriukov.dev/docs/page-cache/5-more-about-mmap-file-access/)  
+- [The mmap Device Operation](http://www.makelinux.net/ldd3/chp-15-sect-2.shtml)  
+- [In-depth understanding of mmap - kernel code analysis and driver demo examples](https://www.sobyte.net/post/2022-03/mmap/)  
+- [Understanding the Memory Layout of Linux Executables](https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4)  
+
+#### 进程退出和等待
+- [exit(3)](https://www.mankier.com/3/exit)  
+- [wait/waitpid(2)](https://www.mankier.com/2/wait)  
+- [The wait() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/wait.html)  
+- [What is the waitpid() system call?](https://how.dev/answers/what-is-the-waitpid-system-call)  
+- [wait() vs waitpid() in C](https://how.dev/answers/wait-vs-waitpid-in-c)  
+
+#### 管道和文件描述符
+- [What is a pipe in C?](https://how.dev/answers/what-is-a-pipe-in-c)  
+- [Linux: Pipes - Part I](https://www.diskodev.com/posts/pipes-part-i-linux/)  
+- [Linux: File Descriptor Data Structures](https://www.diskodev.com/posts/linux-fd-data-structures/)  
+- [fdopen](https://www.mankier.com/3/fopen)  
+- [Linux file descriptor 理解](https://davidleitw.github.io/posts/fd/)  
+
+#### 错误处理
+- [strerror](https://www.mankier.com/3/strerror)  
+- [perror](https://www.mankier.com/3/perror)  
+- [What is perror in C?](https://how.dev/answers/what-is-perror-in-c)  
+
+#### 其他进程相关
+- [Linux: Process In Memory](https://www.diskodev.com/posts/linux-process-in-memory/)  
+- [Linux: Page Cache](https://www.diskodev.com/posts/linux-page-cache/)  
+
+### 信号处理
+
+- [LINUX Signals](https://faculty.cs.niu.edu/~hutchins/csci480/signals.htm)  
+- [signal(7)](https://man7.org/linux/man-pages/man7/signal.7.html) # Execution of signal handlers  
+- [sigreturn(2)](https://man7.org/linux/man-pages/man2/sigreturn.2.html)  
+
+## I/O 和硬件交互
+
+### CPU与I/O设备通信
 - I/O devices： Input/Output devices
 
 - How CPU talk with I/O device
@@ -64,7 +177,9 @@ IO设备内部都有专用微控制器芯片(device controller)，CPU不直接�
 
 ![CPU内部总线结构](./io_devices/cpu_io_topo1.png)  
 
-## socket
+### Socket 网络编程
+
+#### Socket 编程指南
 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)  
 [Linux Socket Programming](https://theexuberantindian.wordpress.com/2017/04/12/linux-socket-programming/)  
 ![TCP IP Sockets in C](./assets/TCP%20IP%20Sockets%20in%20C.pdf)  
@@ -245,7 +360,7 @@ int getpeername( int sock, struct sockaddr *name, socklen_t*namelen );	// gather
     printf( "remote port is %d\n", ntohs(remaddr.sin_port) );
 ```
 
-## UIO
+### 用户空间I/O (UIO)
 [The Userspace I/O HOWTO](https://egeeks.github.io/kernal/uio-howto/index.html)  
 [Userspace I/O (UIO)](https://byu-cpe.github.io/ecen427/documentation/uio/)  
 [The Userspace I/O HOWTO](https://www.kernel.org/doc/html/v4.18/driver-api/uio-howto.html)  
@@ -261,101 +376,77 @@ int getpeername( int sock, struct sockaddr *name, socklen_t*namelen );	// gather
 [What is IOMMU and how it can be used?](https://blog.3mdeb.com/2021/2021-01-13-iommu/)  
 [IOMMU(input–output memory management unit)](https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit)  
 [Input-Output Memory Management Unit (IOMMU)](https://instinct.docs.amd.com/projects/amdgpu-docs/en/latest/conceptual/iommu.html)  
-[]()  
-[]()  
-[]()  
-
-## fork, execve, mmap, exit
-[Introduction to system calls](https://how.dev/answers/introduction-to-system-calls)  
-
-[fork(2)](https://www.mankier.com/2/fork)  
-[The fork() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/create.html)  
-[Fork System Call](https://www.scaler.com/topics/fork-system-call/)  
-[Fork() System Call](https://www.naukri.com/code360/library/fork-system-call)  
-[The Difference Between fork(), vfork(), exec() and clone()](https://www.baeldung.com/linux/fork-vfork-exec-clone)  
-
-[execve(2)](https://www.mankier.com/2/execve)  
-[Executing a File](https://www.gnu.org/software/libc/manual/html_mono/libc.html)  
-[fork and exec system calls in Linux](https://www.softprayog.in/programming/creating-processes-with-fork-and-exec-in-linux)  
-[The Exec Family of Functions](https://www.baeldung.com/linux/exec-functions)  
-[What is the execvp() function in C?](https://how.dev/answers/what-is-the-execvp-function-in-c)  
-[Environment Variables](https://www.gnu.org/software/libc/manual/html_node/Environment-Variables.html)  
-[Environment Access](https://www.gnu.org/software/libc/manual/html_node/Environment-Access.html)  
-
-[mmap(2)](https://www.mankier.com/2/mmap)  
-[Linux: mmap() System Call — Part I](https://www.diskodev.com/posts/linux-mmap-part-1/)  
-[Linux: mmap() System Call — Part II](https://www.diskodev.com/posts/linux-mmap-part-2/)  
-
-[exit(3)](https://www.mankier.com/3/exit)  
-[wait/waitpid(2)](https://www.mankier.com/2/wait)  
-[The wait() System Call](https://www.csl.mtu.edu/cs4411.ck/www/NOTES/process/fork/wait.html)  
-[What is the waitpid() system call?](https://how.dev/answers/what-is-the-waitpid-system-call)  
-[wait() vs waitpid() in C](https://how.dev/answers/wait-vs-waitpid-in-c)  
-
-[What is a pipe in C?](https://how.dev/answers/what-is-a-pipe-in-c)  
-
-[strerror](https://www.mankier.com/3/strerror)  
-[perror](https://www.mankier.com/3/perror)  
-[What is perror in C?](https://how.dev/answers/what-is-perror-in-c)  
 
 
-[fdopen](https://www.mankier.com/3/fopen)  
+## 操作系统理论
 
+### CS 131: 计算机系统基础课程
 
-[Linux: Pipes - Part I](https://www.diskodev.com/posts/pipes-part-i-linux/)  
-[Linux: File Descriptor Data Structures](https://www.diskodev.com/posts/linux-fd-data-structures/)  
-[Linux: Page Cache](https://www.diskodev.com/posts/linux-page-cache/)  
-[Linux: Process In Memory](https://www.diskodev.com/posts/linux-process-in-memory/)  
+- [l01](https://cs.brown.edu/courses/csci1310/2020/notes/l01.html)  
+- [l02](https://cs.brown.edu/courses/csci1310/2020/notes/l02.html)  
+- [l03](https://cs.brown.edu/courses/csci1310/2020/notes/l03.html)  
+- [l04](https://cs.brown.edu/courses/csci1310/2020/notes/l04.html)  
+- [l05](https://cs.brown.edu/courses/csci1310/2020/notes/l05.html)  
+- [l06](https://cs.brown.edu/courses/csci1310/2020/notes/l06.html)  
+- [l07](https://cs.brown.edu/courses/csci1310/2020/notes/l07.html)  
+- [l08](https://cs.brown.edu/courses/csci1310/2020/notes/l08.html)  
+- [l09](https://cs.brown.edu/courses/csci1310/2020/notes/l09.html)  
+- [l10](https://cs.brown.edu/courses/csci1310/2020/notes/l10.html)  
+- [l11](https://cs.brown.edu/courses/csci1310/2020/notes/l11.html)  
+- [l12](https://cs.brown.edu/courses/csci1310/2020/notes/l12.html)  
+- [l13](https://cs.brown.edu/courses/csci1310/2020/notes/l13.html)  
+- [l14](https://cs.brown.edu/courses/csci1310/2020/notes/l14.html)  
+- [l15](https://cs.brown.edu/courses/csci1310/2020/notes/l15.html)  
+- [l16](https://cs.brown.edu/courses/csci1310/2020/notes/l16.html)  
+- [l17](https://cs.brown.edu/courses/csci1310/2020/notes/l17.html)  
+- [l18](https://cs.brown.edu/courses/csci1310/2020/notes/l18.html)  
+- [l19](https://cs.brown.edu/courses/csci1310/2020/notes/l19.html)  
+- [l20](https://cs.brown.edu/courses/csci1310/2020/notes/l20.html)  
+- [l21](https://cs.brown.edu/courses/csci1310/2020/notes/l21.html)  
+- [l22](https://cs.brown.edu/courses/csci1310/2020/notes/l22.html)  
+- [l23](https://cs.brown.edu/courses/csci1310/2020/notes/l23.html)  
+- [l24](https://cs.brown.edu/courses/csci1310/2020/notes/l24.html)  
+- [l25](https://cs.brown.edu/courses/csci1310/2020/notes/l25.html)  
+- [CS 162: Operating Systems](https://notes.bencuan.me/cs162/)  
 
+## 内核开发和调试
 
-## CS 131: Fundamentals of Computer Systems
-[l01](https://cs.brown.edu/courses/csci1310/2020/notes/l01.html)  
-[l02](https://cs.brown.edu/courses/csci1310/2020/notes/l02.html)  
-[l03](https://cs.brown.edu/courses/csci1310/2020/notes/l03.html)  
-[l04](https://cs.brown.edu/courses/csci1310/2020/notes/l04.html)  
-[l05](https://cs.brown.edu/courses/csci1310/2020/notes/l05.html)  
-[l06](https://cs.brown.edu/courses/csci1310/2020/notes/l06.html)  
-[l07](https://cs.brown.edu/courses/csci1310/2020/notes/l07.html)  
-[l08](https://cs.brown.edu/courses/csci1310/2020/notes/l08.html)  
-[l09](https://cs.brown.edu/courses/csci1310/2020/notes/l09.html)  
-[l10](https://cs.brown.edu/courses/csci1310/2020/notes/l10.html)  
-[l11](https://cs.brown.edu/courses/csci1310/2020/notes/l11.html)  
-[l12](https://cs.brown.edu/courses/csci1310/2020/notes/l12.html)  
-[l13](https://cs.brown.edu/courses/csci1310/2020/notes/l13.html)  
-[l14](https://cs.brown.edu/courses/csci1310/2020/notes/l14.html)  
-[l15](https://cs.brown.edu/courses/csci1310/2020/notes/l15.html)  
-[l16](https://cs.brown.edu/courses/csci1310/2020/notes/l16.html)  
-[l17](https://cs.brown.edu/courses/csci1310/2020/notes/l17.html)  
-[l18](https://cs.brown.edu/courses/csci1310/2020/notes/l18.html)  
-[l19](https://cs.brown.edu/courses/csci1310/2020/notes/l19.html)  
-[l20](https://cs.brown.edu/courses/csci1310/2020/notes/l20.html)  
-[l21](https://cs.brown.edu/courses/csci1310/2020/notes/l21.html)  
-[l22](https://cs.brown.edu/courses/csci1310/2020/notes/l22.html)  
-[l23](https://cs.brown.edu/courses/csci1310/2020/notes/l23.html)  
-[l24](https://cs.brown.edu/courses/csci1310/2020/notes/l24.html)  
-[l25](https://cs.brown.edu/courses/csci1310/2020/notes/l25.html)  
+### Linux 内核启动过程
 
-## Linux Tracing Technologies
-[Process Tracing / Count system calls with ptrace](https://medium.com/@bjammal/process-tracing-system-call-analysis-with-ptrace-685a8844dbfa)  
-[Write yourself an strace in 70 lines of code](https://blog.nelhage.com/2010/08/write-yourself-an-strace-in-70-lines-of-code/)  
-[Playing with ptrace, Part I](https://www.linuxjournal.com/article/6100)  
-[Playing with ptrace, Part II](https://www.linuxjournal.com/article/6210)  
-[Playing with ptrace() for fun](https://actes.sstic.org/SSTIC06/Playing_with_ptrace/SSTIC06-article-Bareil-Playing_with_ptrace.pdf)  
-[Linux Tracing Technologies](https://docs.kernel.org/trace/index.html)  
-[TRACE-CMD](https://www.trace-cmd.org/)  
-[ftrace - Function Tracer](https://docs.kernel.org/trace/ftrace.html)  
+- [The Linux Startup Process](https://linuxlink.timesys.com/docs/startup_overview)  
+- [Bootup Sequence](https://www.codeinsideout.com/blog/linux/bootup-sequence/)  
+- [What's the Difference Between initrd and initramfs?](https://www.baeldung.com/linux/initrd-vs-initramfs)  
+- [Initramfs/Guide](https://wiki.gentoo.org/wiki/Initramfs/Guide)  
+- [About initramfs](https://www.linuxfromscratch.org/blfs/view/svn/postlfs/initramfs.html)  
+- [**All-Stages-of-Linux-Booting-Process-Architecture**](https://github.com/nu11secur1ty/All-Stages-of-Linux-Booting-Process-Architecture)  
+- [Linux Boot Procedure](https://www.linkedin.com/pulse/linux-boot-procedure-sriram-ramanujam/)  
+- [The Linux Boot Process](http://www.embeddedlinux.org.cn/EmbLinux/ch04lev1sec2.htm)  
+- [Boot Process Overview](https://linuxjourney.com/lesson/boot-process-overview)  
+- [boot-scripts - general description of boot sequence](https://manpages.ubuntu.com/manpages/trusty/man7/boot.7.html)  
+- [Using the initial RAM disk (initrd)](https://docs.kernel.org/admin-guide/initrd.html)  
+- [Linux initial RAM disk (initrd) overview](https://developer.ibm.com/articles/l-initrd/)  
+- [Linux Kernel Boot Process](https://thuc.space/posts/linux-kernel-boot-process/)  
+- [跟踪分析Linux内核的启动过程](https://xuezhaojiang.github.io/LinuxKernel/lab3/lab3.html)  
 
-## ANSI Escape Sequences
-[ANSI Escape Sequences](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)  
-[ANSI Escape Codes](https://www.bit-101.com/2017/2022/11/ansi-escape-codes/)  
+### 追踪和调试技术
 
-## signals
-[LINUX Signals](https://faculty.cs.niu.edu/~hutchins/csci480/signals.htm)  
-[signal(7)](https://man7.org/linux/man-pages/man7/signal.7.html) # Execution of signal handlers  
-[sigreturn(2)](https://man7.org/linux/man-pages/man2/sigreturn.2.html)   
+- [Process Tracing / Count system calls with ptrace](https://medium.com/@bjammal/process-tracing-system-call-analysis-with-ptrace-685a8844dbfa)  
+- [Write yourself an strace in 70 lines of code](https://blog.nelhage.com/2010/08/write-yourself-an-strace-in-70-lines-of-code/)  
+- [Playing with ptrace, Part I](https://www.linuxjournal.com/article/6100)  
+- [Playing with ptrace, Part II](https://www.linuxjournal.com/article/6210)  
+- [Playing with ptrace() for fun](https://actes.sstic.org/SSTIC06/Playing_with_ptrace/SSTIC06-article-Bareil-Playing_with_ptrace.pdf)  
+- [Linux Tracing Technologies](https://docs.kernel.org/trace/index.html)  
+- [TRACE-CMD](https://www.trace-cmd.org/)  
+- [ftrace - Function Tracer](https://docs.kernel.org/trace/ftrace.html)  
 
+## 系统管理和工具
 
-## 常用shell命令
+### 终端相关
+
+- [ANSI Escape Sequences](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797)  
+- [ANSI Escape Codes](https://www.bit-101.com/2017/2022/11/ansi-escape-codes/)  
+
+### 常用shell命令
 ```bash
 chrt
 	# manipulate the real-time attributes of a process (chrt sets or retrieves the real-time scheduling attributes of an existing PID, or runs command with the given attributes.)
@@ -711,13 +802,18 @@ pgrep
 []()  
 []()  
 
-## simulator
-[Bochs User Manual](https://bochs.sourceforge.io/doc/docbook/user/index.html)  
+## 模拟器
 
-[How To Use QEMU From the Linux Command-Line](https://www.baeldung.com/linux/qemu-from-terminal)  
-[QEMU/Options](https://wiki.gentoo.org/wiki/QEMU/Options)  
+### Bochs
+
+- [Bochs User Manual](https://bochs.sourceforge.io/doc/docbook/user/index.html)  
+
+### QEMU
+
+- [How To Use QEMU From the Linux Command-Line](https://www.baeldung.com/linux/qemu-from-terminal)  
+- [QEMU/Options](https://wiki.gentoo.org/wiki/QEMU/Options)  
 [QEMU’s documentation](https://www.qemu.org/docs/master/)  
-[QEMU](https://wiki.archlinuxcn.org/zh-hans/QEMU)  
-[QEMU User Documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/821395464/QEMU+User+Documentation)  
-[How to create a disk image in QEMU](https://computernewb.com/wiki/How_to_create_a_disk_image_in_QEMU)  
-[QEMU Disk Images](https://qemu-project.gitlab.io/qemu/system/images.html#)  
+- [QEMU](https://wiki.archlinuxcn.org/zh-hans/QEMU)  
+- [QEMU User Documentation](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/821395464/QEMU+User+Documentation)  
+- [How to create a disk image in QEMU](https://computernewb.com/wiki/How_to_create_a_disk_image_in_QEMU)  
+- [QEMU Disk Images](https://qemu-project.gitlab.io/qemu/system/images.html#)  
