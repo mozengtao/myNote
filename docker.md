@@ -1,3 +1,40 @@
+Linux 内核 → LXC → Docker 的关系
+```
+Docker：用户空间 → 封装并更易用
+	Docker 不是重新发明容器，而是对 Linux 容器技术做了易用化、标准化封装，让容器真正普及
+|
+V
+LXC：用户空间 → 调用能力  (Docker 最初基于 LXC，后来改用自研的 libcontainer，但始终依赖 Linux 内核的隔离与限制能力)
+|
+V
+内核：内核空间 → 提供能力
+	Namespace：隔离资源（进程、网络、用户、文件系统等）
+	Cgroups：限制资源（CPU、内存、磁盘 IO、带宽等）
+
+
+┌─────────────────────────────────────────────────────────┐
+│                    应用 & 业务程序                        │
+├─────────────────────────────────────────────────────────┤
+│                         Docker                          │
+│  ├─ 标准化镜像 (Docker Image)                            │
+│  ├─ 分层文件系统 (OverlayFS/AUFS)                        │
+│  ├─ 镜像仓库 (Docker Hub/Registry)                      │
+│  ├─ 简单 CLI：docker run / build / push / pull          │
+│  ├─ 网络、数据卷、容器编排、日志管理等上层能力               │
+│  └─ 统一生命周期管理                                     │
+├─────────────────────────────────────────────────────────┤
+│                          LXC                            │
+│  （早期 Linux 容器工具集）                                │
+│  提供基础容器创建、启动、管理命令                           │
+│  偏底层、无统一镜像、无标准化分发                           │
+├─────────────────────────────────────────────────────────┤
+│                  Linux 内核（核心能力）                   │
+│  ├─ Namespace：PID、Mount、Network、User、UTS 等隔离      │
+│  └─ Cgroup：CPU、内存、IO、带宽等资源限制                   │
+└─────────────────────────────────────────────────────────┘
+```
+
+[What's LXC?](https://linuxcontainers.org/lxc/introduction/)  
 [Docker 从入门到实践](https://vuepress.mirror.docker-practice.com/)  
 [Docker Hub](https://hub.docker.com/)  
 
@@ -8,6 +45,8 @@
 [A Docker Tutorial for Beginners](https://docker-curriculum.com/)  
 [Docker 教程](https://www.runoob.com/docker/docker-tutorial.html)  
 []()  
+
+[Windows WSL2 + Docker + Kafka 学习指南](./docker/wsl2_docker_kafka.md)
 
 [Docker Cli Usage Scenarios 1](docker_usage_1.md)  
 [Docker Cli Usage Scenarios 2](docker_usage_2.md)  

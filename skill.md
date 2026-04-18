@@ -13,6 +13,10 @@
 [Skill Creator](https://mcpmarket.com/tools/skills/skill-creator)  
 [MCP Advisor](https://mcp.so/server/mcpadvisor)  
 []()  
+[The Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)  
+[Claude Skills 完整构建指南](https://github.com/libukai/awesome-agent-skills/blob/main/docs)  
+[]()  
+[]()  
 []()  
 
 

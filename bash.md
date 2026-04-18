@@ -73,6 +73,7 @@
 - [ps 命令](./bash/ps.md)
 - [grep 命令](./bash/grep.md)
 - [string 操作](./bash/string.md)
+- [htop 命令](./bash/htop.md)
 
 ---
 

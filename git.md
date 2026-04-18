@@ -1,5 +1,9 @@
 ## tips
 ```bash
+# 仅撤销（revert）特定文件的修改
+git restore --source=HEAD~1 range.z
+
+
 # how to ignore untracked files in Git
 # Add patterns to .gitignore in your repo root(shared with team)
 echo "docs/" >> .gitignore
@@ -153,6 +157,23 @@ done
 ```bash
 
 Git管理的是修改，而不是文件
+
+# 查看未被跟踪（untracked）的文件
+git status -s
+git ls-files --others --exclude-standard
+git clean -n
+
+# 删除未被跟踪文件（untracked files）
+# 预览
+git clean -n
+# 删除未跟踪的文件
+git clean -f
+# 删除未跟踪的目录
+git clean -fd
+# 连同被忽略（ignored）的文件一起删除
+git clean -fdx
+# 交互式删除
+git clean -fi
 
 # 临时指定远程分支
 git pull origin develop --rebase

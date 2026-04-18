@@ -9,9 +9,10 @@
 []()  
 
 
-[AWK 系统化掌握手册](./awk/awk_mastery.md)  
-[AWK 编程语言参考指南](./awk/awk_ref.md)  
-[AWK 常用内置函数与复杂逻辑配方](./awk/awk_functions.md)  
+- [AWK 系统化掌握手册](./awk/awk_mastery.md)
+- [AWK 编程语言参考指南](./awk/awk_ref.md)
+- [AWK 常用内置函数与复杂逻辑配方](./awk/awk_functions.md)
+- [AWK "Buffer-and-Judge" 模式](./awk/Buffer-and-Judge.md)
 
 
 [sed & awk](https://docstore.mik.ua/orelly/unix/sedawk/index.htm)  

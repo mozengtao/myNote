@@ -48,6 +48,9 @@ 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
 [DeepWiki](https://deepwiki.com/)  
 []()  
 
+[zread](https://zread.ai/)  
+[zread mcp](https://zread.ai/mcp)  
+
 - VScode Plugin
    - Cline
    - Roo Code

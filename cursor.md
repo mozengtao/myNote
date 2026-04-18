@@ -7,6 +7,18 @@
 []()  
 []()  
 
+| 功能场景 | 快捷键 | 作用说明 |
+| :--- | :--- | :--- |
+| 打开 AI 聊天面板 | `Ctrl + L/I` | 快速调出侧边 AI 对话窗口，可直接提问或解释代码 |
+| 切换 Agent 模式| `Shift + Table` | 快速切换不同 Agent 模式 |
+| 切换 AI 模型| `Ctrl + /` | 快速切换不同 AI 模型 |
+| 新建聊天| `Ctrl + N` | 新建聊天 |
+| 行内 AI 编辑指令 | `Ctrl + K` | 对选中/当前行发起 AI 修改，输入指令直接改写代码 |
+| 接受 AI 全部修改 | `Ctrl + Enter` | 确认应用 AI 生成/修改的代码 |
+| 拒绝 AI 全部修改 | `Ctrl + Backspace` | 放弃本次 AI 修改，恢复原代码 |
+| 终止 AI 生成 | `Ctrl + Shift + Backspace` | 停止正在生成中的 AI 响应 |
+| 格式化文档 | `Shift + Alt + F` | 自动格式化代码排版 |
+
 [How I use Cursor](https://www.builder.io/blog/cursor-tips)  
 [cursor.directory](https://cursor.directory/)  
 [Rules](https://docs.cursor.com/en/context/rules)  

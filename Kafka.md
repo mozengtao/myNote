@@ -2,6 +2,9 @@
 [Apache Kafka 系统化学习走读](./kafka/kafka-systematic-learning-walkthrough.md)  
 [Kafka Debugging Toolkit（命令手册 + 系统化排障方法）](./kafka/kafka-debugging-toolkit.md)  
 [Kafka集群架构图](./kafka/kafka_cluster_architecture.md)  
+[](./kafka/librdkafka.md)  
+[](./kafka/ksql.md)  
+[](./kafka/)  
 [](./kafka/)  
 
 ```
@@ -19,7 +22,7 @@
 ```
 
 [Kafka Visualization](https://softwaremill.com/kafka-visualisation/)  
-[]()  
+[Kafka 101 Course](https://developer.confluent.io/courses/apache-kafka/events/)  
 
 [Kafka 高性能核心原因分析](./kafka/why_is_kafka_fast.png)  
 [Kafka 高性能核心原因分析](./kafka/why_is_kafka_fast.md)  
@@ -41,21 +44,23 @@
 []()  
 []()  
 
-[librdkafka examples](https://github.com/confluentinc/librdkafka/tree/master/examples)  
 [Kafka核心概念及工作原理](./kafka/kafka-core-concepts-and-workflow.md)  
 [simple_producer.c](./kafka/simple_producer.c)  
 [simple_consumer.c](./kafka/simple_consumer.c)  
 
 - librdkafka
+[librdkafka 核心心智模型 (Mental Model)](./kafka/librdkafka_metal_model.md)  
 [WHY-Engineering-Motivation](./kafka/01-WHY-Engineering-Motivation.md)  
 [HOW-Design-Philosophy](./kafka/02-HOW-Design-Philosophy.md)  
 [WHAT-Architecture-Concrete-Forms](./kafka/03-WHAT-Architecture-Concrete-Forms.md)  
 [WHERE-Source-Code-Reading](./kafka/04-WHERE-Source-Code-Reading.md)  
 [Real-Project-Usage](./kafka/05-Real-Project-Usage.md)  
 [Reflection-Knowledge-Transfer](./kafka/06-Reflection-Knowledge-Transfer.md)  
+[librdkafka examples](https://github.com/confluentinc/librdkafka/tree/master/examples)  
+[Getting Started with Apache Kafka and C/C++](https://developer.confluent.io/get-started/c/)
 
 
-kafka本质上是典型的**MQ**(Message Queue)系统，典型的MQ有3大功能:异步，解耦，消峰
+kafka本质上是典型的**MQ**(Message Queue)系统，典型的MQ有3大功能:异步，解耦，削峰
 
 
 
