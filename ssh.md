@@ -6,7 +6,7 @@
 [Managing Your SSH known_hosts Using Git](https://www.jamieweb.net/blog/managing-your-ssh-known_hosts-using-git/)  
 [Introduction to BGP Routing and Security](https://www.jamieweb.net/blog/bgp-routing-security-prelude-connecting-to-the-dn42-overlay-network/)  
 [The Little known SSH ForceCommand](https://shaner.life/the-little-known-ssh-forcecommand/)  
-[]()  
+[本地控制 + 远程执行 + 数据同步：心智模型与最佳实践](remote_ssh_cmds.md)  
 []()  
 
 ```bash

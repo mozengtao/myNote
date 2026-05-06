@@ -159,3 +159,5 @@
 - **vibe**          [vaɪb]         感应；氛围
 - **vigilance**     ['vɪdʒɪləns]   警戒；警觉；失眠症
 - **warehouse**     ['werhaʊs]     仓库
+- **eligible**      ['elɪdʒəb(ə)l] 符合条件的，合格的；
+

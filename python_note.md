@@ -4,7 +4,7 @@
 [FastAPI](FastAPI.md)  
 [**Learn Python Concurrency Super Fast**](https://superfastpython.com/)  
 [Decorator](./python/decorator.md)  
-[]()  
+[pydantic](./python/pydantic.md)  
 []()  
 
 - 执行 Bash Script 或者 Command

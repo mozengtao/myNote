@@ -6,6 +6,42 @@
 [OpenTelemetry入门](https://www.modb.pro/db/1712285347122601984)  
 [OpenTelemetry and Dynatrace](https://docs.dynatrace.com/docs/ingest-from/opentelemetry)  
 []()  
+[**OpenTelemetry Configuration**](https://opentelemetry.io/docs/collector/configuration/)  
+[]()  
+
+## 数据流架构图
+```
+┌─────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│  Receivers  │───▶│ Processors   │───▶│ Connectors   │───▶│  Exporters   │
+│             │    │              │    │              │    │              │
+│ • OTLP      │    │ • Batch      │    │ • SpanMetrics│    │ • Prometheus │
+│ • Prometheus│    │ • Filter     │    │ • Count      │    │ • Jaeger     │
+│ • Files     │    │ • Transform  │    │ • Route      │    │ • Loki       │
+└─────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+```
+
+- OpenTelemetry Collector 的四个核心组件协同工作机制：
+
+1. Receivers (接收器)
+    作用：从各种数据源接收遥测数据
+    支持：OTLP、Prometheus、文件、Syslog 等
+
+2. Processors (处理器)
+    作用：数据转换、过滤、增强、批处理
+    功能：性能优化、格式转换、标签处理
+
+3. Exporters (导出器)
+    作用：将处理后的数据发送到目标系统
+    支持：Prometheus、Jaeger、Loki、云服务等
+
+4. Connectors (连接器)
+    作用：连接不同管道，实现数据类型转换
+    功能：Spans→Metrics、跨管道路由、数据聚合
+
+- 协同工作流程：
+    数据源 → Receivers → Processors → Connectors → Exporters → 目标系统
+
+- 通过 Pipeline 配置将这些组件串联(每个组件独立可替换，支持插件式扩展)，形成完整的遥测数据处理管道，实现统一的可观测性数据收集、处理和分发
 
 ## 可观测性三大信号（Telemetry Data）
 - Traces: Distributed traces

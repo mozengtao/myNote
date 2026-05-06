@@ -6,6 +6,10 @@
 
 - WSL访问Windows下的文件夹
 ```bash
+# 资源管理器查看 WSL 下的文件
+Win+E
+\\wsl.localhost
+
 # 通过/mnt/目录直接访问 （WSL会自动将Windows的驱动器挂载到/mnt/目录下）
 cd /mnt/c/Users/$USER/Downloads
 

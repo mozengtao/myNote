@@ -1,8 +1,8 @@
 [That's What I sed](https://objectcomputing.com/resources/publications/sett/august-2019-thats-what-i-sed)  
 []()  
 []()  
-[]()  
-[]()  
+[sed 核心区别：基础正则 (BRE) vs 扩展正则 (ERE)](sed_regex.md)  
+[sed 匹配引用技巧总结](sed_match.md)  
 
 ## sed 是如何工作的
 ![how sed works](./assets/how_sed_works.png)  

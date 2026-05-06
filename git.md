@@ -1,5 +1,19 @@
 ## tips
 ```bash
+
+# 查看本地 commit 与 develop 的差异
+git diff develop...HEAD
+git diff develop...
+# 查看变更统计
+git diff develop...HEAD --stat
+# 仅查看变更的文件列表
+git diff develop...HEAD --name-only
+
+
+# 统计截止到指定提交的提交次数
+git rev-list --count COMMIT_ID
+git rev-list --count HEAD
+
 # 仅撤销（revert）特定文件的修改
 git restore --source=HEAD~1 range.z
 
