@@ -123,6 +123,12 @@ ssh user@remote 'bash -s' < script.sh arg1 arg2
 
 ```bash
 # 同步项目文件
+# ./project → 同步目录本身
+rsync -avz --delete ./project user@remote:/opt/project/
+# 指定 ssh 端口
+rsync -avz --delete -e "ssh -p 5617" ./project user@remote:/opt/project/
+
+# ./project/ → 同步目录内内容
 rsync -avz --delete ./project/ user@remote:/opt/project/
 
 # 远程执行

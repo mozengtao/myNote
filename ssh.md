@@ -7,9 +7,20 @@
 [Introduction to BGP Routing and Security](https://www.jamieweb.net/blog/bgp-routing-security-prelude-connecting-to-the-dn42-overlay-network/)  
 [The Little known SSH ForceCommand](https://shaner.life/the-little-known-ssh-forcecommand/)  
 [本地控制 + 远程执行 + 数据同步：心智模型与最佳实践](remote_ssh_cmds.md)  
+[Remote Execution via Jump Host](remote_exec_via_jump_host.md)  
+[Proxies_and_Jump_Hosts](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts)  
+[]()  
 []()  
 
 ```bash
+1. 本地建立代理通道：本地 SSH 客户端首先利用你电脑中原有的成功配置（用户名、私钥等），通过 ssh -t dhcpdentist 免密登录到跳板机，并在本地与跳板机之间强制分配一个伪终端（TTY）用于双向交互。
+2. 指令环境完全解耦：当连接踏入跳板机后，后面的双引号命令 "ssh tier3support@65.100.0.92" 开始在跳板机的系统环境内（而非你本地）触发并执行。
+3. 复用跳板机受信任凭据：由于命令是在跳板机本地发起的，它会自动加载跳板机内部存储的、针对目标机 65.100.0.92 的正确密钥进行认证。
+4. 安全策略直接放行：目标 Vecima 设备在校验时，发现这个连接请求带着受信任的内网合法密钥，因此直接放行登录，不会向你抛出需要计算 Response 的 PKCS7 双因素安全挑战。
+5. 终端交互无缝透传：得益于最外层 -t 参数建立的伪终端，里层目标机的 Shell 交互流量（如 Tab 补全、快捷键、命令输出）得以通过跳板机原封不动地透传回你的本地屏幕，实现一键直达。
+ssh -t dhcpdentist "ssh tier3support@65.100.0.92"
+
+
 # 强制使用 SSH 密钥连接 GitHub，输出详细调试日志
 ssh -vT git@github.com
 ```

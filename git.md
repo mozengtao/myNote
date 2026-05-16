@@ -1,5 +1,11 @@
 ## tips
 ```bash
+# 查看 git 管理的文件
+git ls-files
+
+# Git 停止追踪这个文件，但不删除本地文件
+git rm --cached file.txt
+git commit -m "stop tracking file.txt"
 
 # 查看本地 commit 与 develop 的差异
 git diff develop...HEAD
@@ -19,6 +25,7 @@ git restore --source=HEAD~1 range.z
 
 
 # how to ignore untracked files in Git
+# exclude（以及 .gitignore）文件只能忽略那些“未被追踪”（Untracked）的文件
 # Add patterns to .gitignore in your repo root(shared with team)
 echo "docs/" >> .gitignore
 
@@ -176,6 +183,9 @@ Git管理的是修改，而不是文件
 git status -s
 git ls-files --others --exclude-standard
 git clean -n
+
+# 配置 editor
+git config --global core.editor "vim"
 
 # 删除未被跟踪文件（untracked files）
 # 预览
