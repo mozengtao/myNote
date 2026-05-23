@@ -262,6 +262,20 @@ Host saratoga
   User tier3support
   Port 5617
   ProxyJump lxd
+
+# 实现 "一键直达" 目标内网机器
+# tail -n 9 ~/.ssh/config
+# 最终目标机：coolserver
+Host coolserver
+    # 跳板机的真实 IP（或者是能解析的域名）, 继承你现有的 dhcpcool 配置（欺骗本地 SSH 第一步先连它）
+    HostName 10.254.25.136
+    # 跳板机的登录用户名
+    User root
+    # 登录到 dhcpcool 后，自动执行连接目标机的命令
+    RemoteCommand ssh -tt -p 5617 -o StrictHostKeyChecking=no tier3support@10.254.25.203
+    # 强制分配伪终端，确保交互式 Shell 正常工作
+    RequestTTY yes
+
 ```
 
 ### 使用示例

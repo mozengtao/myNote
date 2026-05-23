@@ -5,29 +5,112 @@
 []()  
 []()  
 
+## Tmux 会话管理器（Session Managers）
+- [tmuxp](https://tmuxp.git-pull.com/)
+```bash
+pip3 install --user tmuxp
+
+# 确认当前 tmux session name, 保存当前 session 配置
+tmux ls
+tmux freeze xxx(tmux session name)
+
+## 启动与加载会话
+# 标准加载命令
+tmuxp load VCMTS
+# 自动确认（跳过 [y/n] 提示，直接拉起整个环境）
+tmuxp load -y VCMTS
+# 如果你不在默认目录，可以直接指定配置文件路径
+tmuxp load -y ~/.config/tmuxp/VCMTS.yaml
+# 在后台静默加载（创建好会话但不立刻进入，适合开机脚本）
+tmuxp load -d -y VCMTS
+
+## 在多个会话间切换与查看
+# 查看当前有哪些可用的配置文件
+tmuxp ls
+
+# 查看当前系统中有哪些正在运行的 Tmux 会话（原生 Tmux 命令）
+tmux
+
+## 关闭与销毁会话
+# 在 Tmux 会话内部时，直接快捷键退出
+Prefix + :kill-session
+
+# 在普通终端下，直接销毁指定的会话
+tmux kill-session -t VCMTS
+
+# 如果想关闭所有的 Tmux 会话（包括 VCMTS 和其他临时会话）
+tmux kill-server
+```
+
+- `~/.tmuxp/vCMTS.yaml`
+```yaml
+session_name: vCMTS
+
+environment:
+  LXD_VCMOS_DIR: "/home/morrism/workspace/vcmts/vcmos"
+  LXD_CODE_DIR: "/home/morrism/code"
+  DEV5_TESTBED_DIR: "/mnt/DATA/morrism/testbed"
+
+windows:
+  - window_name: code
+    layout: even-vertical
+    start_directory: "${LXD_CODE_DIR}"
+    panes:
+      - blank
+      - blank
+
+  - window_name: build
+    layout: main-horizontal
+    options:
+      main-pane-height: 55%
+    start_directory: "/tmp"
+    panes:
+      - shell_command:
+          - cd ${LXD_VCMOS_DIR}
+      - shell_command:
+          - cd ${LXD_VCMOS_DIR}/meta-vcore/meta-vcore-base
+      - blank
+
+  - window_name: dev5
+    layout: main-horizontal
+    options:
+      main-pane-height: 55%
+    start_directory: "/tmp"
+    panes:
+      - shell_command:
+          - 2dev5
+          - cd /mnt/DATA/morrism/testbed
+          - source /mnt/DATA/morrism/testbed/bash_functions.sh
+      - shell_command:
+          - 2dev5
+          - cd /mnt/DATA/morrism/testbed
+          - source /mnt/DATA/morrism/testbed/bash_functions.sh
+      - blank
+
+```
 
 ## C-S Architecture
 ```
 +--------------------+        +------------------------+
 |   Terminal (TTY1)  |        |   Terminal (TTY2)      |
-|  +--------------+  |        |  +-------------------+  |
-|  | tmux client  |  |        |  | tmux client       |  |
-|  +--------------+  |        |  +-------------------+  |
+|  +--------------+  |        |  +-------------------+ |
+|  | tmux client  |  |        |  | tmux client       | |
+|  +--------------+  |        |  +-------------------+ |
 |        | connect via UNIX socket (/tmp/tmux-UID/default) |
 +--------|--------------------------------------------------+
          |
          v
 +-----------------------------------------------------------+
 |                    tmux server                            |
-|   +---------------------+   +---------------------------+  |
-|   | session 1           |   | session 2 (detached)      |  |
-|   |  +---------------+  |   |  +---------------------+  |  |
-|   |  | window 0      |  |   |  | window 0            |  |  |
-|   |  |  +---------+  |  |   |  |  +---------------+  |  |  |
-|   |  |  | shell   |  |  |   |  |  | vim, top, etc |  |  |  |
-|   |  |  +---------+  |  |   |  |  +---------------+  |  |  |
-|   |  +---------------+  |   |  +---------------------+  |  |
-|   +---------------------+   +---------------------------+  |
+|   +---------------------+   +---------------------------+ |
+|   | session 1           |   | session 2 (detached)      | |
+|   |  +---------------+  |   |  +---------------------+  | |
+|   |  | window 0      |  |   |  | window 0            |  | |
+|   |  |  +---------+  |  |   |  |  +---------------+  |  | |
+|   |  |  | shell   |  |  |   |  |  | vim, top, etc |  |  | |
+|   |  |  +---------+  |  |   |  |  +---------------+  |  | |
+|   |  +---------------+  |   |  +---------------------+  | |
+|   +---------------------+   +---------------------------+ |
 +-----------------------------------------------------------+
 
 tmux server

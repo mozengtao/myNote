@@ -1,3 +1,6 @@
+[]()  
+[FreeRTOS 内核实现与应用开发实战—基于STM32(野火)](https://doc.embedfire.com/rtos/freertos/zh/latest/index.html)  
+[FreeRTOS Documentation](https://www.freertos.org/Documentation/00-Overview)  
 [FreeRTOS](https://github.com/FreeRTOS)  
 > FreeRTOS(TM) is a market leading RTOS from Amazon Web Services
 

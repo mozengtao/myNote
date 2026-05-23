@@ -30,6 +30,10 @@
 - [Shell Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)
 - [Shell Expansions](https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html)
 - [Bash Variables](https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html)
+> Let's build a shell!
+- [shell-workshop](https://github.com/kamalmarhubi/shell-workshop)
+- []()
+- []()
 
 ### 教程与指南
 - [Advanced Bash-Scripting Guide](https://hangar118.sdf.org/p/bash-scripting-guide/)

@@ -160,4 +160,5 @@
 - **vigilance**     ['vɪdʒɪləns]   警戒；警觉；失眠症
 - **warehouse**     ['werhaʊs]     仓库
 - **eligible**      ['elɪdʒəb(ə)l] 符合条件的，合格的；
+- **reimbursement** [riːɪmˈbɜːrsmənt] 赔付，偿付，赔偿；赔偿金额
 
