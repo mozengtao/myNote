@@ -6,7 +6,8 @@
 []()  
 []()  
 []()  
-[]()  
+[awk 内部执行模型（Pattern–Action VM）总结](awk_pattern_action.md)  
+[awk 语法格式最佳实践](awk_format_practice.md)  
 
 
 - [AWK 系统化掌握手册](./awk/awk_mastery.md)
@@ -33,6 +34,44 @@ awk/awk-tutorial/
 └── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
 
 ```bash
+# 提取日志中 匹配内容(例如total_events) 及其后面所有内容
+awk -v key="total_events" 'match($0, key "=.*") {print substr($0, RSTART)}' file.log
+# 提取任意 K=V 的值
+# 新版本 awk 支持高级正则捕获组 match(..., m) 语法
+awk -v key="total_events" 'match($0, key"=([0-9]+)", m) {print m[1]}' file.log
+# 通用版本
+# Shell 将单引号内 ' ... ' 的内容 当成一整块字符串，原封不动传给 awk, 换行在引号内 = 普通字符
+awk -v key="total_events" '
+{
+    if (match($0, key"=[0-9]+")) {
+        s = substr($0, RSTART + length(key) + 1)
+        if (match(s, /^[0-9]+/)) {
+            print substr(s, 1, RLENGTH)
+        }
+    }
+}' vmc.stdout.0
+
+# 指定多个分隔符
+awk -F'[=,]' '{print $2}' file.log
+
+# 阈值过滤
+awk -v thresh=10 '
+{
+    line = $0
+    # 精准提取 total_events=数字
+    if (match(line, /total_events=[0-9]+/)) {
+        val = substr(line, RSTART, RLENGTH)
+        # 提取纯数字
+        sub(/.*=/, "", val)
+
+        # 只输出大于阈值的行
+        if (val + 0 > thresh) {
+            print line
+        }
+    }
+}
+' vmc.stdout.0
+
 # 打印match行之后的所有行
 nomad job status node-exporter | awk '/Allocations/{found=1} found'
 

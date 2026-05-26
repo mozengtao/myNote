@@ -9,7 +9,7 @@
 [本地控制 + 远程执行 + 数据同步：心智模型与最佳实践](remote_ssh_cmds.md)  
 [Remote Execution via Jump Host](remote_exec_via_jump_host.md)  
 [Proxies_and_Jump_Hosts](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts)  
-[]()  
+[](ssh_config_mental_model.md)  
 []()  
 
 ```bash

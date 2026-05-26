@@ -79,6 +79,8 @@
 - [string 操作](./bash/string.md)
 - [htop 命令](./bash/htop.md)
 - [通用 Bash 模板：模板 × 变量集合 = 任务展开执行器](./bash/template_var_executor.md)
+- [Bash / awk / sed 工程级实践指南](./bash/bash_awk_sed.md)
+- [Shell `{}` + `time` + 重定向 的工作模型](./bash/time_redirection_model.md)
 
 ---
 

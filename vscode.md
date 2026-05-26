@@ -11,6 +11,29 @@
 [regex syntax](https://docs.rs/regex/1.12.2/regex/#syntax)  
 [Regular Expression Language - Quick Reference](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference)  
 
+## 正则选中和替换
+```bash
+## 正则搜索 + 全选
+
+# 调出搜索框
+Ctrl + F
+
+# 开启正则模式
+「正则表达式」图标（.*）
+
+# 匹配只有 4 个空格的空行
+^ {4}$
+
+# 批量选中
+Alt + Enter
+
+
+## 替换 + 反向使用
+Ctrl + H
+「正则表达式」图标（.*）
+^ {4}$\n
+```
+
 ## Markdown 文件自动生成目录
 - 内置功能
 	Ctrl+Shift+O
