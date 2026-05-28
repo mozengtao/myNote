@@ -81,6 +81,7 @@
 - [通用 Bash 模板：模板 × 变量集合 = 任务展开执行器](./bash/template_var_executor.md)
 - [Bash / awk / sed 工程级实践指南](./bash/bash_awk_sed.md)
 - [Shell `{}` + `time` + 重定向 的工作模型](./bash/time_redirection_model.md)
+- [多层命令执行链（multi-layer command execution pipeline）的工程化实践与核心认知](./bash/multi_layer_cmd_exec_pipeline.md)
 
 ---
 

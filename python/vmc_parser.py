@@ -122,7 +122,7 @@ def load_and_validate(path: str) -> VmcInputData:
 def process_vmc_data(data: VmcInputData) -> dict:
     """
     将VMC数据转换为目标输出格式
-    
+
     格式：
     {
       "vmc_name": {
@@ -136,25 +136,25 @@ def process_vmc_data(data: VmcInputData) -> dict:
     }
     """
     result = {}
-    
+
     # 遍历所有VMC
     for vmc in data.data.cable.cm_view.modem.vmc:
         vmc_name = vmc.vmc_name
         cms = {}
-        
+
         # 遍历每个VMC下的所有CM MAC
         for modem_mac in vmc.modem_mac:
             mac_addr = modem_mac.mac_address
             brief = modem_mac.brief
-            
+
             cms[mac_addr] = {
                 "ip_addrs": brief.ip_address,
                 "mac_state": brief.mac_state,
                 "cpe_number": brief.cpe
             }
-        
+
         result[vmc_name] = cms
-    
+
     return result
 
 
@@ -174,10 +174,10 @@ def print_hierarchical_output(result: dict):
     """
     print("\n📊 VMC 层级结构:")
     print("=" * 50)
-    
+
     for vmc_name, cms in result.items():
         print(f"\n🏠 VMC: {vmc_name}")
-        
+
         for mac_addr, cm_info in cms.items():
             print(f"  📱 CM MAC: {mac_addr}")
             print(f"    🌐 IP地址: {', '.join(cm_info['ip_addrs'])}")
@@ -192,27 +192,27 @@ def print_hierarchical_output(result: dict):
 def main():
     input_file = "/tmp/vmc-morris-dentist-1-brief.json"
     output_file = "/tmp/vmc_parsed_output.json"
-    
+
     try:
         print("🔄 开始处理VMC数据...")
-        
+
         # Step 1: 读取并校验输入文件
         print(f"📖 读取输入文件: {input_file}")
         data = load_and_validate(input_file)
-        
+
         # Step 2: 数据转换
         print("🔄 转换数据格式...")
         result = process_vmc_data(data)
-        
+
         # Step 3: 输出结果
         print(f"💾 保存输出文件: {output_file}")
         save_output(result, output_file)
-        
+
         # Step 4: 打印层级结构（可选）
         print_hierarchical_output(result)
-        
+
         print(f"\n✅ 处理完成! 输出文件: {output_file}")
-        
+
     except FileNotFoundError:
         print(f"❌ 输入文件未找到: {input_file}")
     except ValidationError as e:
@@ -231,7 +231,7 @@ def main_with_args(input_path: str, output_path: str = None):
     """
     if output_path is None:
         output_path = input_path.replace('.json', '_parsed.json')
-    
+
     try:
         print(f"🔄 处理文件: {input_path}")
         data = load_and_validate(input_path)
@@ -239,14 +239,14 @@ def main_with_args(input_path: str, output_path: str = None):
         save_output(result, output_path)
         print_hierarchical_output(result)
         print(f"✅ 输出文件: {output_path}")
-        
+
     except Exception as e:
         print(f"❌ 错误: {e}")
 
 
 if __name__ == "__main__":
     import sys
-    
+
     if len(sys.argv) > 1:
         input_file = sys.argv[1]
         output_file = sys.argv[2] if len(sys.argv) > 2 else None

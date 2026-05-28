@@ -1,5 +1,5 @@
 [ssh](https://www.mankier.com/1/ssh)  
-[ssh_config](https://www.mankier.com/5/ssh_config)  
+[**ssh_config**](https://www.mankier.com/5/ssh_config)  
 [sshd_config](https://www.mankier.com/5/sshd_config)  
 
 [Restricting and Locking Down SSH Users](https://www.jamieweb.net/blog/restricting-and-locking-down-ssh-users/)  
@@ -9,8 +9,9 @@
 [本地控制 + 远程执行 + 数据同步：心智模型与最佳实践](remote_ssh_cmds.md)  
 [Remote Execution via Jump Host](remote_exec_via_jump_host.md)  
 [Proxies_and_Jump_Hosts](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts)  
-[](ssh_config_mental_model.md)  
-[]()  
+[SSH Config 配置最佳实践指南](ssh_config_mental_model.md)  
+[SSH Config 最佳实践指南](ssh_config_examples.md)  
+[SSH Config 最佳实践指南](ssh_config_tricks.md)  
 
 ```bash
 1. 本地建立代理通道：本地 SSH 客户端首先利用你电脑中原有的成功配置（用户名、私钥等），通过 ssh -t dhcpdentist 免密登录到跳板机，并在本地与跳板机之间强制分配一个伪终端（TTY）用于双向交互。
