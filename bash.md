@@ -82,7 +82,11 @@
 - [Bash / awk / sed 工程级实践指南](./bash/bash_awk_sed.md)
 - [Shell `{}` + `time` + 重定向 的工作模型](./bash/time_redirection_model.md)
 - [多层命令执行链（multi-layer command execution pipeline）的工程化实践与核心认知](./bash/multi_layer_cmd_exec_pipeline.md)
-
+- [SSH 中 `-t` / `-T` 与 PTY 深度总结](./bash/ssh_option_t_T.md)
+- [Bash 工程化示例](./bash/evc_ncs_cli.sh)
+- [Bash 中 "构造命令" 的方式总结](./bash/bash_cmd_construct.md)
+- [Linux Shell Script 最佳实践（工程级指南）](./bash/shell_script_guide.md)
+- [Linux Shell (Bash) 数组最佳实践指南](./bash/shell_array_guide.md)
 ---
 
 ## 基础知识
@@ -1231,6 +1235,16 @@ navigate_dirs() {
 ### 脚本安全
 
 ```bash
+Shell 工程化最重要的原则：
+
+把命令当作“参数数组”而不是“字符串”。
+
+函数负责封装逻辑，
+数组负责构造命令，
+"${cmd[@]}" 负责执行命令，
+eval 只作为最后手段。
+
+
 # 严格模式
 set -euo pipefail
 # -e: 命令失败时退出

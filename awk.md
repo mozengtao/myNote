@@ -34,6 +34,13 @@ awk/awk-tutorial/
 └── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
 
 ```bash
+# awk 的心智模型
+for each line {
+    if (pattern) {
+        action
+    }
+}
+
 # 提取日志中 匹配内容(例如total_events) 及其后面所有内容
 awk -v key="total_events" 'match($0, key "=.*") {print substr($0, RSTART)}' file.log
 # 提取任意 K=V 的值
