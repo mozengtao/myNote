@@ -1,5 +1,9 @@
 - [Markdown基本语法](https://www.markdown.xyz/basic-syntax/)
 - [Markdown Basic Syntax](https://www.markdownguide.org/basic-syntax/)
+- [程序员 Markdown → Preview → PPT 工作流最佳实践](markdown_preview_ppt_best_practice.md)
+- [marp guide](marp.md)
+
+- [Slidev Guide](slidev.md)
 
 > markdown + mindmap
 

@@ -33,7 +33,6 @@
 > Let's build a shell!
 - [shell-workshop](https://github.com/kamalmarhubi/shell-workshop)
 - []()
-- []()
 
 ### 教程与指南
 - [Advanced Bash-Scripting Guide](https://hangar118.sdf.org/p/bash-scripting-guide/)
@@ -87,6 +86,12 @@
 - [Bash 中 "构造命令" 的方式总结](./bash/bash_cmd_construct.md)
 - [Linux Shell Script 最佳实践（工程级指南）](./bash/shell_script_guide.md)
 - [Linux Shell (Bash) 数组最佳实践指南](./bash/shell_array_guide.md)
+- [Linux Pipeline 底层实现：系统调用、Pipe 对象与数据流动心智模型](./bash/how_pipe_works.md)
+- [ Linux Process Substitution：>(cmd) 与 <(cmd) 的底层实现及心智模型](./bash/how_process_sub_works.md)
+- [Shell 下读取文件并逐行解析的最佳实践](./bash/howto_read_file_line_by_line.md)
+- [Shell 下读取文件并按行执行命令](./bash/howto_read_file_and_execute_line.md)
+- [Linux Pipeline（管道）工作原理及心智模型](./bash/how_pipeline_works.md)
+- []()
 ---
 
 ## 基础知识
@@ -1586,6 +1591,13 @@ test_report
 
 #### find
 ```bash
+# find 默认跟随软链接，在 sysfs 虚拟文件系统里递归遍历被内核限制、目录读取不完整
+R470-1:/tmp$ find /sys/class/net/ -name sriov_totalvfs
+# 采用glob 通配直接遍历
+R470-1:/tmp$ ls /sys/class/net/*/device/sriov_totalvfs
+/sys/class/net/enp16495np0/device/sriov_totalvfs  /sys/class/net/enp16795np0/device/sriov_totalvfs
+/sys/class/net/enp16505np1/device/sriov_totalvfs  /sys/class/net/enp16805np1/device/sriov_totalvfs
+
 # 查找并执行操作
 find . -name "*.txt" -exec cat {} \;      # 逐个执行
 find . -name "*.txt" -exec cat {} +       # 批量执行

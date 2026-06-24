@@ -21,6 +21,15 @@
 
 ## 核心资源
 
+- [Linux 下通过源码编译安装软件的完整流程与心智模式](./linux/linux_source_code_compile.md)
+- [DNF 包管理工具日常使用指南（心智模型 + 最佳实践）](./linux/dnf_pkg_manager_guide.md)
+- [Linux 软件编译过程：运行时依赖（Runtime Dependency）与编译时依赖（Build Dependency）](./linux/linux_software_build_runtime_dependency.md)
+- [Linux `/sys` 文件系统与 Device Model 心智模型](./linux/linux_sys_fs.md)
+- [从 Device Model 心智模型理解 `/proc/net` 与 `/sys/class/net`](./linux/linux_net_proc_sys.md)
+- [linux 网络接口命名规范](./linux/linux_net_interface_naming.md)
+- [Linux Network Interface 的 sysfs 与 procfs 特征总结](./linux/linux_net_interface_sysfs_procfs.md)
+- [Linux Network Interface 分类心智模型（基于 Device Model 视角）](./linux/linux_net_interface_types.md)
+
 ### 内核学习资料
 - [Understanding the Linux Kernel](https://github.com/hraverkar/books)  
 - [**OS Development Wiki**](https://wiki.osdev.org/Main_Page)  

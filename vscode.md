@@ -55,16 +55,24 @@ Ctrl + H
 	- 支持多种格式导出
 
 ## plugins
-C/C++
+- markdown
+	Marp for VS Code
+		> Create slide deck written in Marp Markdown on VS Code
+	Markdown Preview Mermaid Support
+
+- C/C++
 	The C/C++ extension adds language support for C/C++ to Visual Studio Code, including editing (IntelliSense) and debugging features.
 	C/C++: Switch Header/Source
-Blockman
+- Blockman
 	Highlight Nested Code Blocks
-Python
-	A Visual Studio Code extension with rich support for the Python language
-Remote - SSH
+
+- Python
+	> A Visual Studio Code extension with rich support for the Python language
+
+- Remote - SSH
 	The Remote - SSH extension lets you use any remote machine with a SSH server as your development environment.
-C/C++ Extension Pack
+
+- C/C++ Extension Pack
 	The best VSCode extensions to for C/C++ programmers in one extension pack.
 vscode-icons
 Bearded Theme

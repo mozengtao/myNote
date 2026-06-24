@@ -18,6 +18,12 @@
 - [C语言 时区相关函数完整总结](./c/c_timezone_functions.md)  
 - [epoll](./c/epoll.md)  
 - []()  
+- []()  
+
+- jansson
+    - [jansson github](https://github.com/akheron/jansson)  
+    - [Jansson Documentation](https://jansson.readthedocs.io/en/latest/)  
+    - [Jansson JSON Library 心智模型与 API 总结](./c/jansson_guide.md)
 
 ## 学习资源
 
