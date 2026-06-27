@@ -63,6 +63,7 @@
 
 ## 子文档链接
 
+- [Shell 最佳实践](./bash/shell_best_practice.md)
 - [start-stop-daemon 命令](./bash/start-stop-daemon.md)
 - [Bash命令替换 - command substitution](./bash/command_substitution.md)
 - [命令行参数解析 - command line arguments](./bash/parse_cmd_args.md)
@@ -91,6 +92,22 @@
 - [Shell 下读取文件并逐行解析的最佳实践](./bash/howto_read_file_line_by_line.md)
 - [Shell 下读取文件并按行执行命令](./bash/howto_read_file_and_execute_line.md)
 - [Linux Pipeline（管道）工作原理及心智模型](./bash/how_pipeline_works.md)
+- [Shell 下并行执行（Parallel Execution）最佳实践](./bash/parallel_execution.md)
+- [Shell 函数执行与后台执行的心智模型](./bash/how_function_call_works.md)
+- [Bash 命令查找顺序（Command Resolution Order）心智模型](./bash/cmd_resolve_order.md)
+- [Linux / Bash 执行模型心智模式](./bash/execute_model.md)
+- [Bash Here Document (`<<`) 与重定向 (`>`) 的工作原理及心智模型](./bash/here_doc_and_redirection.md)
+- [Shell 脚本最佳实践 —— "数据"与"处理逻辑"分离](./bash/data_logic_seperation.md)
+- [Shell 脚本数据遍历最佳实践及心智模式](./bash/data_traverse_buide.md)
+- [复杂 Shell 命令的数据流心智模型（Data Flow Mental Model）](./bash/cmd_io_stream.md)
+- [复杂 Shell 脚本的组织心智模型与通用模板](./bash/shell_script_organization.md)
+- [大型 Bash 项目的组织方式——以「网站发布」为例](./bash/howto_organize_shell_script.md)
+- [大型 Bash 项目组织实战：可运行的分层发布 demo](./bash/deploy_demo.md)
+- [大型 Bash 项目最佳实践：配置加载、配置校验与命令抽象的心智模式](./bash/bash_project_workflow.md)
+- [Bash Primitive（命令原语）的设计哲学、最佳实践与心智模式](./bash/bash_primitive_guide.md)
+- [Shell 通用模板](./bash/bash_general_template.sh)
+- []()
+- []()
 - []()
 ---
 

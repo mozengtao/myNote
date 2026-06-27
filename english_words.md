@@ -158,7 +158,9 @@
 - **vague**         [veɪɡ]         不明确的；不清楚的；模糊的；含糊的
 - **vibe**          [vaɪb]         感应；氛围
 - **vigilance**     ['vɪdʒɪləns]   警戒；警觉；失眠症
-- **warehouse**     ['werhaʊs]     仓库
 - **eligible**      ['elɪdʒəb(ə)l] 符合条件的，合格的；
 - **reimbursement** [riːɪmˈbɜːrsmənt] 赔付，偿付，赔偿；赔偿金额
+- **warehouse**     ['werhaʊs]     仓库
+- **stale**         [steɪl]    不新鲜的，变味的；气味不清新的，难闻的；支票，合法要求）（因过期而）失效的
+
 

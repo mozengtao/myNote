@@ -29,6 +29,9 @@
 - [linux 网络接口命名规范](./linux/linux_net_interface_naming.md)
 - [Linux Network Interface 的 sysfs 与 procfs 特征总结](./linux/linux_net_interface_sysfs_procfs.md)
 - [Linux Network Interface 分类心智模型（基于 Device Model 视角）](./linux/linux_net_interface_types.md)
+- [Node Exporter 原理、作用与心智模型](./linux/node_exporter_guide.md)
+- []()
+- []()
 
 ### 内核学习资料
 - [Understanding the Linux Kernel](https://github.com/hraverkar/books)  
