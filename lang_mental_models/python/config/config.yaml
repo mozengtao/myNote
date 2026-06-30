@@ -1,0 +1,10 @@
+# 外部配置：程序里用 config.sources / config.top_n，而不是裸 dict。
+sources:
+  - logs/app1.log
+  - logs/app2.log
+  - logs/app3.log
+alert_levels:
+  - ERROR
+  - WARN
+top_n: 5
+report_path: report.md

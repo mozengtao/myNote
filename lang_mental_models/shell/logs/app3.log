@@ -1,0 +1,6 @@
+2026-06-30T10:02:01 ERROR db connection timeout
+2026-06-30T10:02:02 ERROR auth login failed for user bob
+2026-06-30T10:02:03 WARN cache miss for key session:99
+2026-06-30T10:02:04 INFO api request GET /health 200
+2026-06-30T10:02:05 ERROR cache eviction storm detected
+2026-06-30T10:02:06 INFO db query ok 12ms

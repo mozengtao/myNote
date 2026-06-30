@@ -231,9 +231,9 @@ echo "=== 性能对比测试 ==="
 test_performance() {
     local method="$1"
     local iterations=1000
-    
+
     echo "测试方法: $method"
-    
+
     case "$method" in
         "braces")
             time for i in $(seq 1 $iterations); do
@@ -426,7 +426,7 @@ backup_critical_data() {
 # 复杂的混合重定向模式
 {
     echo "=== 开始批处理 ==="
-    
+
     # 并发子任务（子shell隔离）
     for task in task1 task2 task3; do
         (
@@ -435,16 +435,16 @@ backup_critical_data() {
             echo "完成 $task"
         ) &
     done
-    
+
     wait  # 等待所有子任务完成
     echo "=== 批处理完成 ==="
-    
+
 } 2>&1 | tee batch_process.log
 
 # 嵌套使用示例
 {
     echo "外层开始"
-    
+
     # 子shell中的命令分组
     (
         echo "子shell开始"
@@ -453,7 +453,7 @@ backup_critical_data() {
         } 2>&1 | grep real
         echo "子shell结束"
     )
-    
+
     echo "外层结束"
 } >nested_output.log
 ```
@@ -598,10 +598,10 @@ cat time_output.txt | grep real        # 再处理
 benchmark() {
     local cmd="$1"
     local iterations=${2:-5}
-    
+
     echo "Benchmarking: $cmd ($iterations iterations)"
     echo "----------------------------------------"
-    
+
     for i in $(seq 1 $iterations); do
         echo -n "Run $i: "
         { time eval "$cmd" >/dev/null 2>&1; } 2>&1 | grep real | awk '{print $2}'
@@ -663,7 +663,7 @@ fi
    ```bash
    # bash 内建 time
    time cmd
-   
+
    # GNU time (更多格式选项)
    /usr/bin/time -v cmd
    ```
@@ -714,20 +714,20 @@ Shell 中所有复杂重定向行为的本质：
 # 使用 {} 进行统一日志记录
 {
     echo "=== 开始构建 $(date) ==="
-    
+
     # 各阶段都需要时间统计
     { time npm install; } 2>&1 | grep real | sed 's/real/Install time:/'
     { time npm run build; } 2>&1 | grep real | sed 's/real/Build time:/'
     { time npm test; } 2>&1 | grep real | sed 's/real/Test time:/'
-    
+
     echo "=== 构建完成 $(date) ==="
-    
+
 } 2>&1 | tee "build_$(date +%Y%m%d_%H%M%S).log"
 
 # 并行测试（使用子shell隔离）
 run_parallel_tests() {
     local test_dirs=("unit" "integration" "e2e")
-    
+
     for dir in "${test_dirs[@]}"; do
         (
             cd "tests/$dir"
@@ -735,7 +735,7 @@ run_parallel_tests() {
             { time npm test; } 2>&1 | tee "${dir}_test.log"
         ) &
     done
-    
+
     wait
     echo "所有测试完成"
 }
@@ -751,27 +751,27 @@ run_parallel_tests() {
 monitor_system() {
     {
         echo "=== 系统监控报告 $(date) ==="
-        
+
         echo "CPU使用率："
         { time cpu_intensive_task; } 2>&1 | grep real
-        
+
         echo "内存使用："
         free -h
-        
+
         echo "磁盘I/O："
         { time dd if=/dev/zero of=/tmp/test bs=1M count=100 2>/dev/null; } 2>&1 | grep real
         rm -f /tmp/test
-        
+
         echo "网络延迟："
         { time ping -c 5 8.8.8.8 >/dev/null; } 2>&1 | grep real
-        
+
     } >> "system_monitor_$(date +%Y%m%d).log"
 }
 
 # 并发监控多个服务（使用子shell隔离）
 monitor_services() {
     local services=("nginx" "mysql" "redis")
-    
+
     for service in "${services[@]}"; do
         (
             echo "监控服务: $service"
@@ -793,34 +793,34 @@ monitor_services() {
 #!/bin/bash
 # 大数据处理管道
 
-# ETL 管道（使用 {} 进行阶段性时间统计）
+# ETL((Extract -> Transform -> Load)) 管道（使用 {} 进行阶段性时间统计）
 process_data_pipeline() {
     local input_file="$1"
     local output_dir="$2"
-    
+
     {
         echo "=== 数据处理管道开始 ==="
-        
+
         # Extract 阶段
         {
             echo "提取阶段开始..."
             time extract_data "$input_file"
         } 2>&1 | grep real | sed 's/real/Extract time:/'
-        
+
         # Transform 阶段  
         {
             echo "转换阶段开始..."
             time transform_data
         } 2>&1 | grep real | sed 's/real/Transform time:/'
-        
+
         # Load 阶段
         {
             echo "加载阶段开始..."
             time load_data "$output_dir"  
         } 2>&1 | grep real | sed 's/real/Load time:/'
-        
+
         echo "=== 数据处理管道完成 ==="
-        
+
     } 2>&1 | tee "etl_$(date +%Y%m%d_%H%M%S).log"
 }
 
@@ -828,7 +828,7 @@ process_data_pipeline() {
 parallel_process_chunks() {
     local data_dir="$1"
     local chunk_size=1000
-    
+
     # 分割数据为小块，并行处理
     for chunk_file in "$data_dir"/chunk_*.csv; do
         (
@@ -838,7 +838,7 @@ parallel_process_chunks() {
             } 2>&1 | grep real | sed "s/real/Chunk $(basename "$chunk_file") time:/"
         ) &
     done
-    
+
     wait
     echo "所有数据块处理完成"
 }
@@ -855,50 +855,50 @@ incremental_backup() {
     local source_dir="$1"
     local backup_dir="$2"
     local backup_name="backup_$(date +%Y%m%d_%H%M%S)"
-    
+
     {
         echo "=== 增量备份开始 ==="
         echo "源目录: $source_dir"
         echo "备份目录: $backup_dir/$backup_name"
-        
+
         # 计算需要备份的文件
         {
             echo "扫描变更文件..."
             time find "$source_dir" -newer "$backup_dir/last_backup_timestamp" -type f
         } 2>&1 | grep real | sed 's/real/Scan time:/'
-        
+
         # 执行备份
         {
             echo "执行备份..."
             time rsync -avz --link-dest="$backup_dir/latest" \
                 "$source_dir/" "$backup_dir/$backup_name/"
         } 2>&1 | grep real | sed 's/real/Backup time:/'
-        
+
         # 更新符号链接
         ln -sfn "$backup_name" "$backup_dir/latest"
         touch "$backup_dir/last_backup_timestamp"
-        
+
         echo "=== 备份完成 ==="
-        
+
     } 2>&1 | tee "$backup_dir/$backup_name/backup.log"
 }
 
 # 并行验证备份完整性
 verify_backups() {
     local backup_dir="$1"
-    
+
     for backup in "$backup_dir"/backup_*; do
         (
             backup_name=$(basename "$backup")
             echo "验证备份: $backup_name"
-            
+
             {
                 time verify_backup_integrity "$backup"
             } 2>&1 | grep real | sed "s/real/Verify $backup_name time:/"
-            
+
         ) &
     done
-    
+
     wait
     echo "所有备份验证完成"
 }
@@ -915,37 +915,37 @@ benchmark_suite() {
     local test_name="$1"
     shift
     local commands=("$@")
-    
+
     {
         echo "=== 基准测试: $test_name ==="
         echo "测试时间: $(date)"
         echo "测试环境: $(uname -a)"
         echo ""
-        
+
         for i in "${!commands[@]}"; do
             echo "测试 $((i+1)): ${commands[i]}"
-            
+
             # 预热运行
             eval "${commands[i]}" >/dev/null 2>&1
-            
+
             # 正式测试（多次运行取平均）
             local total_time=0
             for run in {1..5}; do
                 exec_time=$({
                     time eval "${commands[i]}" >/dev/null 2>&1
                 } 2>&1 | grep real | awk '{print $2}' | sed 's/[sm]//g')
-                
+
                 echo "  运行 $run: ${exec_time}s"
                 total_time=$(echo "$total_time + $exec_time" | bc -l)
             done
-            
+
             avg_time=$(echo "scale=3; $total_time / 5" | bc -l)
             echo "  平均时间: ${avg_time}s"
             echo ""
         done
-        
+
         echo "=== 基准测试完成 ==="
-        
+
     } 2>&1 | tee "benchmark_${test_name}_$(date +%Y%m%d_%H%M%S).log"
 }
 
@@ -953,11 +953,11 @@ benchmark_suite() {
 concurrent_benchmark() {
     local concurrent_levels=(1 2 4 8 16)
     local test_command="$1"
-    
+
     for level in "${concurrent_levels[@]}"; do
         (
             echo "并发级别: $level"
-            
+
             {
                 time {
                     for ((i=1; i<=level; i++)); do
@@ -966,10 +966,10 @@ concurrent_benchmark() {
                     wait
                 }
             } 2>&1 | grep real | sed "s/real/Concurrent $level time:/"
-            
+
         ) &
     done
-    
+
     wait
 }
 
@@ -980,7 +980,7 @@ main() {
         "find /usr -name '*.so' | head -1000" \
         "tar -czf /tmp/test.tar.gz /etc/passwd" \
         "grep -r 'function' /usr/share/doc | head -100"
-    
+
     # 并发测试
     concurrent_benchmark "sleep 1"
 }

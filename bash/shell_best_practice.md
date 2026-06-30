@@ -1,4 +1,49 @@
 
+```bash
+# printf 会循环复用格式字符串处理所有输入参数，%s\n 模板每处理一个参数就输出一行
+printf '%s\n' A B C
+A
+B
+C
+
+```
+
+- 
+```bash
+# -c <command> (执行后面的字符串作为 Shell 脚本)    告诉远程：启动 Bash，然后执行这段脚本。
+# -l <login shell> (把当前 Bash 当作 Login Shell) 告诉远程：读取 profile，得到完整环境。
+
+run_ncs() {
+    local host=$1
+
+    ssh "$host" 'bash -l -c "
+        nomad alloc exec \
+            -task evc \
+            -job evc \
+            ncs_cli -u admin
+    "'
+}
+
+show_cable_modem_vmc_brief() {
+    local host=$1
+    local vmc=$2
+
+    printf 'show cable modem vmc %s brief | t\n' "$vmc" |
+        run_ncs "$host"
+}
+
+vmc="graphite"
+{
+    printf 'show cable modem vmc %s brief | tab | nomore\n' "$vmc"
+    printf 'show cable modem vmc %s summary\n' "$vmc"
+} | run_ncs csl-41
+
+run_ncs csl-41 < <(
+    printf 'show cable modem vmc %s brief | tab | nomore\n' "$vmc"
+    printf 'show cable modem vmc %s summary\n' "$vmc"
+)
+```
+
 - shell 函数的优化
 ```bash
 # 1

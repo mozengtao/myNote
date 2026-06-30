@@ -5,7 +5,8 @@
 [](./kafka/librdkafka.md)  
 [](./kafka/ksql.md)  
 [](./kafka/)  
-[](./kafka/)  
+[Kafka 核心概念、工作原理、心智模型与 CLI 最佳实践](./kafka/how_kafka_works.md)  
+[Kafka Command-Line Interface (CLI) Tools](https://docs.confluent.io/kafka/operations-tools/kafka-tools.html)  
 
 ```
 +-------------------+          +-------------------------------------+          +-------------------+
@@ -348,7 +349,8 @@ kafka-topics.sh
 
 	kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
 
-	morrism@PC24036:~$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 3 --replication-factor 1 --create                                               WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.                    Created topic first_topic.                                                                                                                                                            
+	morrism@PC24036:~$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --partitions 3 --replication-factor 1 --create                                               WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.                    Created topic first_topic
+
 	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --list
 	first_topic
 
@@ -356,7 +358,7 @@ kafka-topics.sh
 	Topic: first_topic      TopicId: _t7T4e2jR7a52Nfw0DK38Q PartitionCount: 3       ReplicationFactor: 1    Configs: segment.bytes=1073741824
 			Topic: first_topic      Partition: 0    Leader: 1       Replicas: 1     Isr: 1
 			Topic: first_topic      Partition: 1    Leader: 1       Replicas: 1     Isr: 1
-			Topic: first_topic      Partition: 2    Leader: 1       Replicas: 1     Isr: 1	
+			Topic: first_topic      Partition: 2    Leader: 1       Replicas: 1     Isr: 1
 
 	morrism@PC24036:/tmp/kafka-logs$ kafka-topics.sh --bootstrap-server localhost:9092 --topic first_topic --delete
 

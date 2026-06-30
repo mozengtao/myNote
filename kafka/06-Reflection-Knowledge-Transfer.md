@@ -4,7 +4,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                     KAFKA'S STRENGTHS AND LIMITATIONS                            │
+│                     KAFKA'S STRENGTHS AND LIMITATIONS                           │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
     SWEET SPOT                                    BREAKS DOWN
@@ -19,18 +19,18 @@
     │  └─ Change data capture         │          │                                 │
     │                                 │          │  Request-Reply Patterns         │
     │  Decoupled Microservices        │          │  ├─ RPC calls                   │
-    │  ├─ Async communication         │          │  ├─ API gateways               │
+    │  ├─ Async communication         │          │  ├─ API gateways                │
     │  ├─ Event-driven architecture   │          │  └─ Synchronous workflows       │
     │  └─ Service mesh events         │          │                                 │
     │                                 │          │  Small Scale                    │
-    │  Data Pipeline                  │          │  ├─ < 1000 msg/sec             │
-    │  ├─ ETL processes               │          │  ├─ Single machine sufficient  │
-    │  ├─ Stream processing           │          │  └─ Operational overhead       │
+    │  Data Pipeline                  │          │  ├─ < 1000 msg/sec              │
+    │  ├─ ETL processes               │          │  ├─ Single machine sufficient   │
+    │  ├─ Stream processing           │          │  └─ Operational overhead        │
     │  └─ Analytics feed              │          │                                 │
     │                                 │          │  Complex Queries                │
-    │  Replay & Audit                 │          │  ├─ Random key lookup          │
-    │  ├─ Event replay                │          │  ├─ Aggregations               │
-    │  ├─ Audit logs                  │          │  └─ Joins across topics        │
+    │  Replay & Audit                 │          │  ├─ Random key lookup           │
+    │  ├─ Event replay                │          │  ├─ Aggregations                │
+    │  ├─ Audit logs                  │          │  └─ Joins across topics         │
     │  └─ State reconstruction        │          │                                 │
     │                                 │          │                                 │
     └─────────────────────────────────┘          └─────────────────────────────────┘
@@ -45,25 +45,25 @@
     │  ═══════════════════════════════                                            │
     │                                                                             │
     │  Traditional State:                    Log-Based State:                     │
-    │  ┌─────────────────┐                  ┌─────────────────────────────────┐  │
-    │  │  Database       │                  │  Event Log                      │  │
-    │  │  (current state │                  │  ┌───┬───┬───┬───┬───┬───┐     │  │
-    │  │   only)         │                  │  │e1 │e2 │e3 │e4 │e5 │...│     │  │
-    │  └─────────────────┘                  │  └───┴───┴───┴───┴───┴───┘     │  │
-    │                                       │           │                     │  │
-    │                                       │           v                     │  │
-    │                                       │  ┌─────────────────────────┐   │  │
-    │                                       │  │ Derived View (database) │   │  │
-    │                                       │  │ Derived View (cache)    │   │  │
-    │                                       │  │ Derived View (search)   │   │  │
-    │                                       │  └─────────────────────────┘   │  │
-    │                                       └─────────────────────────────────┘  │
+    │  ┌─────────────────┐                  ┌─────────────────────────────────┐   │
+    │  │  Database       │                  │  Event Log                      │   │
+    │  │  (current state │                  │  ┌───┬───┬───┬───┬───┬───┐      │   │
+    │  │   only)         │                  │  │e1 │e2 │e3 │e4 │e5 │...│      │   │
+    │  └─────────────────┘                  │  └───┴───┴───┴───┴───┴───┘      │   │
+    │                                       │           │                     │   │
+    │                                       │           v                     │   │
+    │                                       │  ┌─────────────────────────┐    │   │
+    │                                       │  │ Derived View (database) │    │   │
+    │                                       │  │ Derived View (cache)    │    │   │
+    │                                       │  │ Derived View (search)   │    │   │
+    │                                       │  └─────────────────────────┘    │   │
+    │                                       └─────────────────────────────────┘   │
     │                                                                             │
     │  Benefits:                                                                  │
-    │  • Audit trail built-in                                                    │
-    │  • Multiple derived views from same truth                                  │
-    │  • Easy to add new consumers                                               │
-    │  • Debug by replaying events                                               │
+    │  • Audit trail built-in                                                     │
+    │  • Multiple derived views from same truth                                   │
+    │  • Easy to add new consumers                                                │
+    │  • Debug by replaying events                                                │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -71,26 +71,26 @@
     │  IDEA 2: PARTITIONED PARALLELISM                                            │
     │  ═══════════════════════════════                                            │
     │                                                                             │
-    │  Single Queue (Scaling Limit):        Partitioned (Linear Scale):          │
+    │  Single Queue (Scaling Limit):        Partitioned (Linear Scale):           │
     │                                                                             │
-    │  ┌─────────────────────────┐          ┌───────────┐ ┌───────────┐          │
-    │  │   Queue                 │          │  Part 0   │ │  Part 1   │          │
-    │  │   ┌───┬───┬───┬───┬───┐│          │  ┌───┐    │ │  ┌───┐    │          │
-    │  │   │msg│msg│msg│msg│msg││          │  │msg│    │ │  │msg│    │          │
-    │  │   └───┴───┴───┴───┴───┘│          │  └───┘    │ │  └───┘    │          │
-    │  │           │            │          │     │     │ │     │     │          │
-    │  │           v            │          │     v     │ │     v     │          │
-    │  │   ┌───────────────┐    │          │ ┌──────┐  │ │ ┌──────┐  │          │
-    │  │   │  Consumer     │    │          │ │ C1   │  │ │ │ C2   │  │          │
-    │  │   └───────────────┘    │          │ └──────┘  │ │ └──────┘  │          │
-    │  │   (bottleneck)         │          └───────────┘ └───────────┘          │
-    │  └─────────────────────────┘                                               │
-    │                                       Add partitions = add parallelism     │
+    │  ┌─────────────────────────┐          ┌───────────┐ ┌───────────┐           │
+    │  │   Queue                 │          │  Part 0   │ │  Part 1   │           │
+    │  │   ┌───┬───┬───┬───┬───┐│          │  ┌───┐    │ │  ┌───┐    │            │
+    │  │   │msg│msg│msg│msg│msg││          │  │msg│    │ │  │msg│    │            │
+    │  │   └───┴───┴───┴───┴───┘│          │  └───┘    │ │  └───┘    │            │
+    │  │           │            │          │     │     │ │     │     │            │
+    │  │           v            │          │     v     │ │     v     │            │
+    │  │   ┌───────────────┐    │          │ ┌──────┐  │ │ ┌──────┐  │            │
+    │  │   │  Consumer     │    │          │ │ C1   │  │ │ │ C2   │  │            │
+    │  │   └───────────────┘    │          │ └──────┘  │ │ └──────┘  │            │
+    │  │   (bottleneck)         │          └───────────┘ └───────────┘            │
+    │  └─────────────────────────┘                                                │
+    │                                       Add partitions = add parallelism      │
     │                                                                             │
-    │  Apply in your designs:                                                    │
-    │  • Shard by user_id, tenant_id, etc.                                      │
-    │  • Each shard independently processable                                    │
-    │  • Ordering only needed within shard                                       │
+    │  Apply in your designs:                                                     │
+    │  • Shard by user_id, tenant_id, etc.                                        │
+    │  • Each shard independently processable                                     │
+    │  • Ordering only needed within shard                                        │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -98,27 +98,27 @@
     │  IDEA 3: IMMUTABLE DATA FLOWS                                               │
     │  ════════════════════════════                                               │
     │                                                                             │
-    │  Mutable (Traditional):               Immutable (Kafka-style):             │
+    │  Mutable (Traditional):               Immutable (Kafka-style):              │
     │                                                                             │
-    │  ┌─────────────────────┐              ┌─────────────────────────────────┐  │
-    │  │  record.status =    │              │  Events:                        │  │
-    │  │    "pending"        │              │  ├─ OrderCreated                │  │
-    │  │        │            │              │  ├─ OrderPaid                   │  │
-    │  │        v            │              │  ├─ OrderShipped                │  │
-    │  │  record.status =    │              │  └─ OrderDelivered              │  │
-    │  │    "paid"           │              │                                 │  │
-    │  │        │            │              │  State = f(events)              │  │
-    │  │        v            │              │                                 │  │
-    │  │  record.status =    │              │  Current status = last event   │  │
-    │  │    "shipped"        │              │  History = all events           │  │
-    │  │                     │              │                                 │  │
-    │  └─────────────────────┘              └─────────────────────────────────┘  │
+    │  ┌─────────────────────┐              ┌─────────────────────────────────┐   │
+    │  │  record.status =    │              │  Events:                        │   │
+    │  │    "pending"        │              │  ├─ OrderCreated                │   │
+    │  │        │            │              │  ├─ OrderPaid                   │   │
+    │  │        v            │              │  ├─ OrderShipped                │   │
+    │  │  record.status =    │              │  └─ OrderDelivered              │   │
+    │  │    "paid"           │              │                                 │   │
+    │  │        │            │              │  State = f(events)              │   │
+    │  │        v            │              │                                 │   │
+    │  │  record.status =    │              │  Current status = last event    │   │
+    │  │    "shipped"        │              │  History = all events           │   │
+    │  │                     │              │                                 │   │
+    │  └─────────────────────┘              └─────────────────────────────────┘   │
     │                                                                             │
     │  Benefits:                                                                  │
-    │  • No lost updates (concurrent modifications)                              │
-    │  • Audit trail automatic                                                   │
-    │  • Time-travel queries possible                                            │
-    │  • Simpler concurrency model                                               │
+    │  • No lost updates (concurrent modifications)                               │
+    │  • Audit trail automatic                                                    │
+    │  • Time-travel queries possible                                             │
+    │  • Simpler concurrency model                                                │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -127,24 +127,24 @@
     │  ════════════════════════════════════════════                               │
     │                                                                             │
     │  Instead of:                          Use:                                  │
-    │  ┌─────────────────────┐              ┌─────────────────────────────────┐  │
-    │  │  Checkpoint:        │              │  Offset-based:                  │  │
-    │  │  "last_processed_   │              │                                 │  │
-    │  │   at = 2024-01-15   │              │  committed_offset = 12345       │  │
-    │  │   14:30:22"         │              │                                 │  │
-    │  │                     │              │  On recovery:                   │  │
-    │  │  Problem: What if   │              │  1. Read committed_offset       │  │
-    │  │  timestamps don't   │              │  2. Seek to offset + 1          │  │
-    │  │  match exactly?     │              │  3. Continue processing         │  │
-    │  │                     │              │                                 │  │
-    │  └─────────────────────┘              │  Deterministic recovery!        │  │
-    │                                       └─────────────────────────────────┘  │
+    │  ┌─────────────────────┐              ┌─────────────────────────────────┐   │
+    │  │  Checkpoint:        │              │  Offset-based:                  │   │
+    │  │  "last_processed_   │              │                                 │   │
+    │  │   at = 2024-01-15   │              │  committed_offset = 12345       │   │
+    │  │   14:30:22"         │              │                                 │   │
+    │  │                     │              │  On recovery:                   │   │
+    │  │  Problem: What if   │              │  1. Read committed_offset       │   │
+    │  │  timestamps don't   │              │  2. Seek to offset + 1          │   │
+    │  │  match exactly?     │              │  3. Continue processing         │   │
+    │  │                     │              │                                 │   │
+    │  └─────────────────────┘              │  Deterministic recovery!        │   │
+    │                                       └─────────────────────────────────┘   │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
 
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                     DESIGNING YOUR OWN STREAMING SYSTEM                          │
+│                     DESIGNING YOUR OWN STREAMING SYSTEM                         │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
     IDEAS TO KEEP FROM KAFKA                  IDEAS TO SIMPLIFY
@@ -166,28 +166,28 @@
     │  1. Zookeeper Dependency (Historical)                                       │
     │     ─────────────────────────────────                                       │
     │     Kafka originally used Zookeeper for coordination.                       │
-    │     KRaft removes this. Your system: use Raft directly if needed.          │
+    │     KRaft removes this. Your system: use Raft directly if needed.           │
     │                                                                             │
     │  2. No Built-in Exactly-Once Consumer                                       │
     │     ─────────────────────────────────                                       │
-    │     Kafka added this later. If you control producer + consumer,            │
-    │     you might not need it (idempotent consumers simpler).                  │
+    │     Kafka added this later. If you control producer + consumer,             │
+    │     you might not need it (idempotent consumers simpler).                   │
     │                                                                             │
     │  3. JVM-Based (Originally)                                                  │
     │     ────────────────────────                                                │
-    │     Kafka brokers are JVM. librdkafka proves C clients work fine.          │
-    │     Your system: choose runtime for your needs.                            │
+    │     Kafka brokers are JVM. librdkafka proves C clients work fine.           │
+    │     Your system: choose runtime for your needs.                             │
     │                                                                             │
     │  4. Complex Protocol Evolution                                              │
     │     ────────────────────────────                                            │
-    │     40+ API versions for compatibility. If greenfield, you can             │
+    │     40+ API versions for compatibility. If greenfield, you can              │
     │     version more aggressively.                                              │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
 
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                     MINIMUM VIABLE STREAMING SYSTEM                              │
+│                     MINIMUM VIABLE STREAMING SYSTEM                             │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
     If you were to build a simple Kafka-like system:
@@ -198,33 +198,33 @@
     │  ═════════════                                                              │
     │                                                                             │
     │  struct segment {                                                           │
-    │      int fd;                    // File descriptor                         │
-    │      int64_t base_offset;       // First offset in segment                 │
-    │      int64_t size;              // Current size                            │
+    │      int fd;                    // File descriptor                          │
+    │      int64_t base_offset;       // First offset in segment                  │
+    │      int64_t size;              // Current size                             │
     │  };                                                                         │
     │                                                                             │
     │  struct partition {                                                         │
-    │      char *topic;                                                          │
-    │      int32_t id;                                                           │
-    │      segment *segments;         // Array of segments                       │
-    │      int64_t next_offset;       // Next offset to assign                   │
-    │      pthread_mutex_t lock;      // Write lock                              │
+    │      char *topic;                                                           │
+    │      int32_t id;                                                            │
+    │      segment *segments;         // Array of segments                        │
+    │      int64_t next_offset;       // Next offset to assign                    │
+    │      pthread_mutex_t lock;      // Write lock                               │
     │  };                                                                         │
     │                                                                             │
     │  // Append (producer)                                                       │
-    │  int64_t append(partition *p, void *data, size_t len) {                    │
-    │      pthread_mutex_lock(&p->lock);                                         │
-    │      segment *s = get_active_segment(p);                                   │
-    │      write_record(s, p->next_offset, data, len);                           │
-    │      int64_t offset = p->next_offset++;                                    │
-    │      pthread_mutex_unlock(&p->lock);                                       │
+    │  int64_t append(partition *p, void *data, size_t len) {                     │
+    │      pthread_mutex_lock(&p->lock);                                          │
+    │      segment *s = get_active_segment(p);                                    │
+    │      write_record(s, p->next_offset, data, len);                            │
+    │      int64_t offset = p->next_offset++;                                     │
+    │      pthread_mutex_unlock(&p->lock);                                        │
     │      return offset;                                                         │
     │  }                                                                          │
     │                                                                             │
     │  // Read (consumer)                                                         │
-    │  record *read_from(partition *p, int64_t offset, int max_records) {        │
-    │      segment *s = find_segment(p, offset);                                 │
-    │      return read_records(s, offset, max_records);                          │
+    │  record *read_from(partition *p, int64_t offset, int max_records) {         │
+    │      segment *s = find_segment(p, offset);                                  │
+    │      return read_records(s, offset, max_records);                           │
     │  }                                                                          │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
@@ -235,17 +235,17 @@
     │  ═════════════════════════                                                  │
     │                                                                             │
     │  Request Types:                                                             │
-    │  ┌────────────────────────────────────────────────────────────┐            │
-    │  │  PRODUCE   │ topic, partition, records[]                   │            │
-    │  │  FETCH     │ topic, partition, offset, max_bytes           │            │
-    │  │  METADATA  │ topics[]                                      │            │
-    │  │  COMMIT    │ group, topic, partition, offset               │            │
-    │  └────────────────────────────────────────────────────────────┘            │
+    │  ┌────────────────────────────────────────────────────────────┐             │
+    │  │  PRODUCE   │ topic, partition, records[]                   │             │
+    │  │  FETCH     │ topic, partition, offset, max_bytes           │             │
+    │  │  METADATA  │ topics[]                                      │             │
+    │  │  COMMIT    │ group, topic, partition, offset               │             │
+    │  └────────────────────────────────────────────────────────────┘             │
     │                                                                             │
     │  Response Format:                                                           │
-    │  ┌────────────────────────────────────────────────────────────┐            │
-    │  │  error_code │ response_data                                │            │
-    │  └────────────────────────────────────────────────────────────┘            │
+    │  ┌────────────────────────────────────────────────────────────┐             │
+    │  │  error_code │ response_data                                │             │
+    │  └────────────────────────────────────────────────────────────┘             │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
@@ -254,18 +254,18 @@
     │  WHAT YOU CAN SKIP (For Simple Use Cases)                                   │
     │  ═════════════════════════════════════════                                  │
     │                                                                             │
-    │  ❌ Replication         → Single node, rely on disk/backup                 │
-    │  ❌ Consumer groups     → Single consumer per partition                    │
-    │  ❌ Transactions        → At-least-once is enough                          │
-    │  ❌ Compaction          → Time-based retention only                        │
-    │  ❌ Schema registry     → Application handles schema                       │
-    │  ❌ ACLs                → Trust internal services                          │
+    │  ❌ Replication         → Single node, rely on disk/backup                  │
+    │  ❌ Consumer groups     → Single consumer per partition                     │
+    │  ❌ Transactions        → At-least-once is enough                           │
+    │  ❌ Compaction          → Time-based retention only                         │
+    │  ❌ Schema registry     → Application handles schema                        │
+    │  ❌ ACLs                → Trust internal services                           │
     │                                                                             │
     └─────────────────────────────────────────────────────────────────────────────┘
 
 
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                     LEARNING OUTCOME CHECKLIST                                   │
+│                     LEARNING OUTCOME CHECKLIST                                  │
 └─────────────────────────────────────────────────────────────────────────────────┘
 
     After studying these materials, verify you can:
@@ -372,15 +372,15 @@ Real-time requirements:
 Break-even analysis:
 ┌──────────────────────────────────────────────────────────────┐
 │  Volume < 1000 msg/sec                                       │
-│  ├─ Kafka: 3 brokers + Zookeeper (or KRaft)                 │
-│  ├─ Monitoring, alerting, upgrades                          │
+│  ├─ Kafka: 3 brokers + Zookeeper (or KRaft)                  │
+│  ├─ Monitoring, alerting, upgrades                           │
 │  └─ Team knowledge required                                  │
 │                                                              │
 │  Alternative:                                                │
-│  ├─ Redis Streams (single node)                             │
-│  ├─ PostgreSQL NOTIFY/LISTEN                                │
-│  ├─ Simple file-based queue                                 │
-│  └─ In-process queue                                        │
+│  ├─ Redis Streams (single node)                              │
+│  ├─ PostgreSQL NOTIFY/LISTEN                                 │
+│  ├─ Simple file-based queue                                  │
+│  └─ In-process queue                                         │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -508,11 +508,11 @@ typedef struct checkpoint {
 void recover() {
     checkpoint_t cp = load_checkpoint();
     seek_to(stream, cp.offset + 1);
-    
+
     while (running) {
         record_t *rec = read_next(stream);
         process(rec);
-        
+
         // Periodic checkpoint
         if (should_checkpoint()) {
             save_checkpoint(stream, rec->offset);

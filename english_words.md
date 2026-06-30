@@ -162,5 +162,6 @@
 - **reimbursement** [riːɪmˈbɜːrsmənt] 赔付，偿付，赔偿；赔偿金额
 - **warehouse**     ['werhaʊs]     仓库
 - **stale**         [steɪl]    不新鲜的，变味的；气味不清新的，难闻的；支票，合法要求）（因过期而）失效的
+- **bootstrap**     [ˈbuːtstræp]  [计] 引导程序，辅助程序；自展
 
 

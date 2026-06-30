@@ -1,0 +1,3 @@
+# 可选依赖：若安装了 PyYAML，config/loader.py 会优先用它解析 config.yaml。
+# 未安装也能运行 —— loader.py 内置了针对本项目这份简单 YAML 的降级解析器。
+PyYAML>=6.0

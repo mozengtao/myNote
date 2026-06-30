@@ -1,1 +1,2 @@
+- [ksqlDB 核心概念、工作原理、心智模型与 CLI 使用指南](ksql_guide.md)
 - [ksql 常用命令](ksql_cmds.md)

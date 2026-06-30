@@ -1,0 +1,13 @@
+# 配置永远来自外部：程序里读取 config.hosts / config.timeout，
+# 而不是把主机列表、超时时间硬编码在代码中。
+hosts:
+  - sw1
+  - sw2
+  - sw3
+
+username: admin
+
+timeout: 10
+
+# 报告输出路径（相对 main.py 所在目录）
+report_path: report.md

@@ -24,6 +24,9 @@
 ## 参考资源
 
 ### 官方文档
+- [shell-workshop](https://github.com/kamalmarhubi/shell-workshop)
+- [Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
+- [BashPitfalls](https://mywiki.wooledge.org/BashPitfalls)
 - [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
 - [GNU Bash Reference Manual](https://www.linuxtopia.org/online_books/bash_reference_guide/index.html)
 - [Bash Features](https://www.gnu.org/software/bash/manual/html_node/)
@@ -31,7 +34,11 @@
 - [Shell Expansions](https://www.gnu.org/software/bash/manual/html_node/Shell-Expansions.html)
 - [Bash Variables](https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html)
 > Let's build a shell!
-- [shell-workshop](https://github.com/kamalmarhubi/shell-workshop)
+- [Classic Shell Scripting](http://www.nylxs.com/docs/classicshellscripting.pdf)
+- [The Unix Programming Environment](https://scis.uohyd.ac.in/~apcs/itw/UNIXProgrammingEnvironment.pdf)
+- []()
+- []()
+- []()
 - []()
 
 ### 教程与指南
@@ -106,9 +113,14 @@
 - [大型 Bash 项目最佳实践：配置加载、配置校验与命令抽象的心智模式](./bash/bash_project_workflow.md)
 - [Bash Primitive（命令原语）的设计哲学、最佳实践与心智模式](./bash/bash_primitive_guide.md)
 - [Shell 通用模板](./bash/bash_general_template.sh)
-- []()
-- []()
-- []()
+- [Shell 构造命令流（Generate Command Stream）最佳实践与心智模型](./bash/generate_cmd_stream.md)
+- [围绕五大心智模型的 Shell 知识体系](./bash/shell_mental_models.md)
+- [Python 自动化项目代码组织与心智模式（完整示例）](./bash/python_automation_guide.md)
+- [Python 自动化示例项目实战：可运行的分层 network_audit demo](./bash/python_automation_demo.md)
+- [三种语言心智模型对比（Shell/Python/Go 日志聚合）](./lang_mental_models/README.md)
+- [Shell 示例：Text Stream 文本流驱动](./lang_mental_models/shell/README.md)
+- [Python 示例：Object Flow 对象流驱动](./lang_mental_models/python/README.md)
+- [Go 示例：Service/Message 服务消息流驱动](./lang_mental_models/go/README.md)
 ---
 
 ## 基础知识

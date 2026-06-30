@@ -1,0 +1,6 @@
+2026-06-30T10:00:01 ERROR auth login failed for user bob
+2026-06-30T10:00:02 INFO auth login ok for user alice
+2026-06-30T10:00:03 WARN db slow query 1200ms
+2026-06-30T10:00:04 ERROR db connection timeout
+2026-06-30T10:00:05 INFO api request GET /health 200
+2026-06-30T10:00:06 ERROR auth login failed for user bob
