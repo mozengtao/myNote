@@ -18,7 +18,7 @@ In the mid-2000s, Google faced severe engineering challenges that existing langu
 │                                                                 │
 │   C/C++                          Python/Java                    │
 │   ┌──────────────────┐          ┌──────────────────┐            │
-│   │ ✓ Fast execution │          │ ✓ Fast development│          │
+│   │ ✓ Fast execution │          │ ✓ Fast development│           │
 │   │ ✗ Slow builds    │          │ ✗ Slow execution │           │
 │   │ ✗ Memory bugs    │          │ ✗ Runtime deps   │           │
 │   │ ✗ Complex deps   │          │ ✗ Type errors    │           │

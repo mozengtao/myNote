@@ -7,6 +7,26 @@
 [pydantic](./python/pydantic.md)  
 []()  
 
+- Books
+- [Domain Modeling Made Functional]()
+- [Architecture Patterns with Python]()
+- [Fluent Python]()
+- [Clean Architecture]()
+- [Domain-Driven Design]()
+- [Implementing Domain-Driven Design]()
+- [Patterns of Enterprise Application Architecture]()
+- [Domain-Driven Design]()
+- []()
+- []()
+
+- Ref
+- [Python 对象流驱动（Object Flow Driven）心智模型](python/object_flow_driven.md)
+- [电商订单履约流程示例（Object Flow Driven 实战）](python/order_fulfillment_flow/README.md)
+- [Python Domain Modeling 心智模式（Domain-Driven Object Modeling）](python/domain_driven_object_modeling.md)
+- [结合若干代码示例，总结python Domain Modeling的心智模式，结果保存在markdown block中](python/complex_obj_organization.md)
+- []()
+- []()
+
 - 执行 Bash Script 或者 Command
 [execute bash script or command](./python/ShellExecutor.py)  
 
