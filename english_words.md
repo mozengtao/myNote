@@ -163,5 +163,14 @@
 - **warehouse**     ['werhaʊs]     仓库
 - **stale**         [steɪl]    不新鲜的，变味的；气味不清新的，难闻的；支票，合法要求）（因过期而）失效的
 - **bootstrap**     [ˈbuːtstræp]  [计] 引导程序，辅助程序；自展
+- **maneuver**      [məˈnuːvər ]  巧妙地移动；操纵，使花招；部署（军队、船只等）；演习
+- **cohesive**      [koʊˈhiːsɪv]  团结的，有凝聚力的；使团结的，使凝聚的
+- **distill**       [dɪˈstɪl]   提取；蒸馏；使滴下
+- **succinct**      [səkˈsɪŋkt]   言简意赅的，简练的
+- **tactical**      [ˈtæktɪkl]   战术的；策略的；善于策略的
+
+
+
+
 
 

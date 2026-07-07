@@ -906,3 +906,310 @@ dict
 cd python/complex_obj_organization_examples/<示例目录名>
 python3 main.py
 ```
+
+---
+
+# 二十、分层架构完整示例：DDD + Object Flow + Infrastructure Layer
+
+前面的示例都把所有对象放在同一个文件里。当项目规模变大、并且明确要对接外部系统（例如通过 SSH 操作网络设备）时，通常会进一步按**层**拆成多个模块。这是网络自动化项目中非常常见的组织方式。
+
+## 推荐的心智模型
+
+按照 DDD + Object Flow + Infrastructure Layer 去组织：
+
+```
+Application
+    |
+    v
+Workflow
+    |
+    v
+Domain Object
+    |
+    v
+Infrastructure
+    |
+    v
+Paramiko
+```
+
+对应目录：
+
+```
+project/
++-- app.py                      # 程序入口
+|
++-- infrastructure/
+|   +-- ssh_client.py
+|   +-- interactive_shell.py
+|
++-- domain/
+|   +-- vmc.py
+|   +-- vmc_service.py
+|
++-- workflow/
+    +-- reboot_workflow.py
+```
+
+整个程序变成：
+
+```
+Application
+    |
+    v
+Workflow
+    |
+    v
+VMCService
+    |
+    v
+InteractiveShell
+    |
+    v
+Paramiko
+```
+
+## 第一层：Infrastructure（基础设施层）——只负责 SSH
+
+这一层只知道怎么建立 SSH 连接、怎么打开一个 shell，完全不知道什么是 VMC，也不知道任何业务命令。
+
+```python
+# infrastructure/ssh_client.py
+import paramiko
+
+
+class SSHConnection:
+
+    def __init__(self, host, user, password):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.client = None
+
+    def connect(self):
+        self.client = paramiko.SSHClient()
+        self.client.set_missing_host_key_policy(
+            paramiko.AutoAddPolicy()
+        )
+        self.client.connect(
+            hostname=self.host,
+            username=self.user,
+            password=self.password,
+            allow_agent=False,
+            look_for_keys=False,
+        )
+
+    def open_shell(self):
+        return self.client.invoke_shell(width=220)
+
+    def close(self):
+        self.client.close()
+```
+
+这里只有 SSH Connection，没有任何业务。
+
+## 第二层：Interactive Shell——负责人机交互协议
+
+负责 `send()` / `recv_until()` / `drain()`，仍然完全不知道 VMC。
+
+```python
+# infrastructure/interactive_shell.py
+import time
+
+
+class InteractiveShell:
+
+    def __init__(self, channel):
+        self.channel = channel
+
+    def send(self, cmd):
+        self.channel.send(cmd + "\n")
+
+    def recv_until(self, marker, timeout=30):
+        buf = ""
+        deadline = time.time() + timeout
+
+        while time.time() < deadline:
+            if self.channel.recv_ready():
+                chunk = self.channel.recv(4096).decode()
+                print(chunk, end="")
+                buf += chunk
+                if marker in buf:
+                    return buf
+            time.sleep(0.1)
+
+        raise TimeoutError(marker)
+
+    def drain(self):
+        time.sleep(1)
+        while self.channel.recv_ready():
+            print(self.channel.recv(4096).decode(), end="")
+```
+
+## 第三层：Domain——第一次出现"VMC 是什么"
+
+```python
+# domain/vmc.py
+from dataclasses import dataclass
+
+
+@dataclass
+class VMC:
+    name: str
+```
+
+它只是业务对象，没有 SSH。
+
+## 第四层：Domain Service——表达"VMC 能做什么"
+
+这里开始表达"VMC 能做什么"，而不是"SSH 怎么发"。
+
+```python
+# domain/vmc_service.py
+class VMCService:
+
+    PROMPT = "Are you sure?"
+
+    def __init__(self, shell):
+        self.shell = shell
+
+    def reboot(self, vmc):
+        print("=" * 60)
+        print("Reboot", vmc.name)
+        print("=" * 60)
+
+        self.shell.send(
+            f"vmc {vmc.name} reboot keep-current-version false"
+        )
+        self.shell.recv_until(self.PROMPT)
+
+        self.shell.send("yes")
+        self.shell.drain()
+```
+
+这里完全没有 `recv()`、`channel`、`socket`，业务非常干净。
+
+## 第五层：Workflow——表示整个流程
+
+```
+连接
+  |
+  v
+登录
+  |
+  v
+遍历
+  |
+  v
+重启
+  |
+  v
+关闭
+```
+
+```python
+# workflow/reboot_workflow.py
+from domain.vmc import VMC
+
+
+class RebootWorkflow:
+
+    def __init__(self, vmc_service):
+        self.service = vmc_service
+
+    def execute(self, vmc_names):
+        for name in vmc_names:
+            vmc = VMC(name)
+            self.service.reboot(vmc)
+```
+
+Workflow 不知道 SSH，不知道 Paramiko，不知道 `recv()`。
+
+## 第六层：Application——最后才开始装配对象
+
+```python
+# app.py
+from infrastructure.ssh_client import SSHConnection
+from infrastructure.interactive_shell import InteractiveShell
+
+from domain.vmc_service import VMCService
+
+from workflow.reboot_workflow import RebootWorkflow
+
+HOST = "192.168.244.43"
+USER = "admin"
+PASSWORD = "admin"
+
+VMC_NAMES = [
+    "astatine0",
+    "barium0",
+    "bohrium",
+]
+
+
+def main():
+    conn = SSHConnection(HOST, USER, PASSWORD)
+    conn.connect()
+
+    shell = InteractiveShell(conn.open_shell())
+    shell.drain()
+
+    service = VMCService(shell)
+    workflow = RebootWorkflow(service)
+    workflow.execute(VMC_NAMES)
+
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## 最后的对象流（Object Flow）
+
+整个程序的数据流变成：
+
+```
+                main()
+                  |
+                  v
+         SSHConnection.connect()
+                  |
+                  v
+           InteractiveShell
+                  |
+                  v
+            RebootWorkflow
+                  |
+          create VMC(name)
+                  |
+                  v
+        VMCService.reboot(vmc)
+                  |
+                  v
+      shell.send(command_string)
+                  |
+                  v
+        Paramiko Channel.send()
+                  |
+             SSH Server
+                  |
+        Paramiko Channel.recv()
+                  |
+                  v
+     InteractiveShell.recv_until()
+                  |
+                  v
+        VMCService（业务决策）
+```
+
+每一层只依赖它下面一层暴露出来的"接口"，完全不知道再下面几层具体怎么实现——这正是 Infrastructure 层可以随意替换成假实现（用于测试/演示）而上层代码不用改的原因。
+
+## 完整可运行代码示例
+
+[`python/complex_obj_organization_examples/vmc_reboot_automation/`](complex_obj_organization_examples/vmc_reboot_automation) 目录下提供了本节对应的完整可运行代码。为了让示例不依赖真实 VMC 设备、也不需要安装 `paramiko`，示例里额外提供了一个 `FakeSSHConnection` 来模拟设备交互，与真实的 `SSHConnection` 接口完全一致，用来演示 Infrastructure 层可替换这一点。运行方式：
+
+```bash
+cd python/complex_obj_organization_examples/vmc_reboot_automation
+python3 main.py
+```

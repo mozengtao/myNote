@@ -1,5 +1,13 @@
 > TypeScript is JavaScript with syntax for types.
 
+- [oop expert with typescript](https://github.com/jafari-dev/oop-expert-with-typescript)
+- [TypeScript Guide by Convex](https://www.convex.dev/typescript)
+- [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
+- [TypeScript best practices: common mistakes and how to avoid them](https://testomat.io/blog/typescript-best-practices-common-mistakes-how-avoid-them/)
+- []()
+- []()
+- []()
+
 [**typescript Tutorials**](https://krython.com/tutorials/category/typescript)  
 [awesome-typescript](https://github.com/dzharii/awesome-typescript)  
 [TypeScript Documentation](https://www.typescriptlang.org/docs/)  

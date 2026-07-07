@@ -30,6 +30,9 @@
 - [Linux Network Interface 的 sysfs 与 procfs 特征总结](./linux/linux_net_interface_sysfs_procfs.md)
 - [Linux Network Interface 分类心智模型（基于 Device Model 视角）](./linux/linux_net_interface_types.md)
 - [Node Exporter 原理、作用与心智模型](./linux/node_exporter_guide.md)
+- [Linux Container Networking 知识体系（Knowledge Map）](linux/container_networking.md)
+- []()
+- []()
 - []()
 - []()
 
@@ -112,7 +115,6 @@
 ## Linux内核架构
 
 ### 内核面向对象模式研究
-```
 linux/kernel_oop_masterclass/
 ├── [00_overview_and_reference.md](./linux/kernel_oop_masterclass/00_overview_and_reference)  
 ├── [00b_mental_models_and_anchors.md](./linux/kernel_oop_masterclass/00b_mental_models_and_anchors.md)  
@@ -122,10 +124,8 @@ linux/kernel_oop_masterclass/
 ├── [04_kobject_hierarchy.md](./linux/kernel_oop_masterclass/04_kobject_hierarchy)  
 ├── [05_design_patterns.md](./linux/kernel_oop_masterclass/05_design_patterns)  
 └── [06_synthesis.md](./linux/kernel_oop_masterclass/06_synthesis)  
-```
 
 ### 内核设计模式
-```
 linux/kernel_design_patterns/
 ├── [00_overview.md](./linux/kernel_design_patterns/00_overview.md)  
 ├── [01_strategy_and_adapter.md](./linux/kernel_design_patterns/01_strategy_and_adapter.md)  
@@ -136,10 +136,8 @@ linux/kernel_design_patterns/
 ├── [06_factory_and_singleton.md](./linux/kernel_design_patterns/06_factory_and_singleton.md)  
 ├── [07_facade.md](./linux/kernel_design_patterns/07_facade.md)  
 └── [08_composition_decorator_builder.md](./linux/kernel_design_patterns/08_composition_decorator_builder.md)  
-```
 
 ### 内核面向对象模式详解
-```
 kernel_oop_patterns/
 ├── [oop_patterns_in_linux_kernel_v3.2](./linux/kernel_oop_patterns/oop_patterns_in_linux_kernel_v3.2.md)  
 ├── [01_mental_model](./linux/kernel_oop_patterns/01_mental_model.md)  
@@ -148,10 +146,8 @@ kernel_oop_patterns/
 ├── [04_memory_and_ownership](./linux/kernel_oop_patterns/04_memory_and_ownership.md)
 ├── [05_guided_code_walkthrough](./linux/kernel_oop_patterns/05_guided_code_walkthrough.md)
 └── [06_reflection_and_advanced](./linux/kernel_oop_patterns/06_reflection_and_advanced.md)
-```
 
 ### 进程间通信(IPC)
-```
 ipc/
 ├── [01_file_based_ipc.md](./linux/ipc/01_file_based_ipc.md)  
 ├── [02_unix_domain_sockets.md](./linux/ipc/02_unix_domain_sockets.md)  
@@ -166,7 +162,6 @@ ipc/
     ├── 03_semaphore/
     ├── 04_msgqueue/
     └── 05_sharedmem/
-```
 
 ---
 

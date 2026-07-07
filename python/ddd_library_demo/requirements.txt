@@ -1,0 +1,4 @@
+# The project itself uses only the Python standard library
+# (dataclasses, typing, enum, abc, uuid, logging, pathlib).
+# pytest is the only dependency, needed to run the test suite.
+pytest>=8.0
