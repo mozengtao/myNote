@@ -3,6 +3,7 @@
 [The GNU Awk User's Guide](https://ftp.gnu.org/old-gnu/Manuals/gawk-3.1.1/html_node/)  
 [Effective AWK Programming](https://www.mssl.ucl.ac.uk/swift/om/sw/help/man/gawk.html)  
 [Awk Quick Reference](https://www.grymoire.com/Unix/AwkRef.html)  
+[AWK 组合多个条件（Multiple Conditions）心智模型](awk/multi_condition.md)  
 []()  
 []()  
 []()  
