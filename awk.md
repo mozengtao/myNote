@@ -4,11 +4,15 @@
 [Effective AWK Programming](https://www.mssl.ucl.ac.uk/swift/om/sw/help/man/gawk.html)  
 [Awk Quick Reference](https://www.grymoire.com/Unix/AwkRef.html)  
 [AWK 组合多个条件（Multiple Conditions）心智模型](awk/multi_condition.md)  
-[]()  
+[AWK 中 `{}` 与 `;` 的使用规则、最佳实践及心智模式](awk/brace_colon.md)  
 []()  
 []()  
 [awk 内部执行模型（Pattern–Action VM）总结](awk_pattern_action.md)  
 [awk 语法格式最佳实践](awk_format_practice.md)  
+[AWK "锚点定位 + 相对偏移取值" 心法](awk/awk-anchor-offset-pattern.md)  
+[]()  
+[]()  
+[]()  
 
 
 - [AWK 系统化掌握手册](./awk/awk_mastery.md)
