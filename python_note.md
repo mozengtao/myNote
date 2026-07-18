@@ -13,7 +13,7 @@
 [Python Generator、yield 与 PyFrameObject 心智模型](python/how_yield_works.md)  
 [AST Explorer](https://astexplorer.net/)  
 [VSCode Python Debug 核心快捷键速查表](python/vscode_debug_shortcuts.md)  
-[]()  
+[Collect batch metrics example](python/collect_batch_metrics/docs/ARCHITECTURE.md)  
 []()  
 []()  
 

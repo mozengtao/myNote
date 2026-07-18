@@ -1,0 +1,98 @@
+{
+  "data": {
+    "ccap:ccap": {
+      "docsis": {
+        "docs-mac-domain": {
+          "mac-domain": [
+            {
+              "mac-domain-name": "morris-dentist-1_md1_0",
+              "ccap-oper:modem": [
+                {
+                  "modem-mac": "a8:11:fc:ee:13:7e",
+                  "brief": {
+                    "ip-address": "64.150.10.181",
+                    "mac-state": "dhcpv4Complete",
+                    "DS": "0/20",
+                    "US": "0/0",
+                    "sid": 0,
+                    "vrf-id": 0,
+                    "vlan-id": 0,
+                    "timing": 1591,
+                    "rx-pwr": "8.0",
+                    "rx-pwr-unit": "dBmV",
+                    "CPE": 0,
+                    "BPI-PLUS": "no",
+                    "BPI-PLUS-NEW": "no",
+                    "certificate": ""
+                  }
+                },
+                {
+                  "modem-mac": "20:6a:94:49:66:08",
+                  "brief": {
+                    "ip-address": "64.150.15.185",
+                    "mac-state": "operational(oA!)",
+                    "DS": "0/12",
+                    "US": "0/B",
+                    "sid": 1486,
+                    "vrf-id": 1,
+                    "vlan-id": 0,
+                    "timing": 1525,
+                    "rx-pwr": "6.0",
+                    "rx-pwr-unit": "dBmV",
+                    "CPE": 0,
+                    "BPI-PLUS": "no",
+                    "BPI-PLUS-NEW": "no",
+                    "certificate": ""
+                  }
+                }
+              ]
+            },
+            {
+              "mac-domain-name": "morris-dentist-1_md1_1",
+              "ccap-oper:modem": [
+                {
+                  "modem-mac": "14:7d:05:47:bf:20",
+                  "brief": {
+                    "ip-address": "64.150.15.187",
+                    "mac-state": "operational(oA)",
+                    "DS": "1/12",
+                    "US": "1/B",
+                    "sid": 5151,
+                    "vrf-id": 1,
+                    "vlan-id": 0,
+                    "timing": 1529,
+                    "rx-pwr": "8.0",
+                    "rx-pwr-unit": "dBmV",
+                    "CPE": 1,
+                    "BPI-PLUS": "no",
+                    "BPI-PLUS-NEW": "no",
+                    "certificate": ""
+                  }
+                },
+                {
+                  "modem-mac": "e8:3e:fc:30:94:15",
+                  "brief": {
+                    "ip-address": "64.150.40.247",
+                    "mac-state": "operational(!)",
+                    "DS": "1/4",
+                    "US": "1/B",
+                    "sid": 5147,
+                    "vrf-id": 1,
+                    "vlan-id": 0,
+                    "timing": 1589,
+                    "rx-pwr": "6.0",
+                    "rx-pwr-unit": "dBmV",
+                    "CPE": 0,
+                    "BPI-PLUS": "no",
+                    "BPI-PLUS-NEW": "no",
+                    "certificate": ""
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

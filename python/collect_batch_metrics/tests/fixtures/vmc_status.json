@@ -1,0 +1,22 @@
+{
+  "data": {
+    "vcm-vmc-mapper-svc:vmc-state": {
+      "vmc": [
+        {
+          "name": "vmc-morris-dentist-1",
+          "status": {
+            "container-name": "vmc-evc-dentist-31432bd8-8ef9-45e3-97fb-dbdf108d4f11",
+            "state": "Running",
+            "internal-state": "Complete",
+            "up-time": "3d 1h 34m",
+            "docsis-base-capability": "DOCSIS31",
+            "core-id": "3a178aa5981e",
+            "server-name": "dev3",
+            "ha-group": "-",
+            "ha-status": "-"
+          }
+        }
+      ]
+    }
+  }
+}

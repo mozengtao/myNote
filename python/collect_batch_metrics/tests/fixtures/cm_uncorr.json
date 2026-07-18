@@ -1,0 +1,82 @@
+{
+  "data": {
+    "ccap:ccap": {
+      "docsis": {
+        "docs-mac-domain": {
+          "mac-domain": [
+            {
+              "mac-domain-name": "morris-dentist-1_md1_1",
+              "ccap-oper:modem": [
+                {
+                  "modem-mac": "14:7d:05:47:bf:20",
+                  "xmit-chan-counter": [
+                    {
+                      "ucid": "1/0",
+                      "sid": 5151,
+                      "bytes": "3099",
+                      "packets": "9",
+                      "min-modulation": "qam64",
+                      "max-modulation": "qam64",
+                      "no-error": "25",
+                      "corrected": "0",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/12",
+                      "sid": 5151,
+                      "bytes": "941505",
+                      "packets": "1408",
+                      "min-modulation": "qam256",
+                      "max-modulation": "qam256",
+                      "no-error": "2429",
+                      "corrected": "2",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/1",
+                      "sid": 5151,
+                      "bytes": "0",
+                      "packets": "0",
+                      "min-modulation": "qam64",
+                      "max-modulation": "qam64",
+                      "no-error": "0",
+                      "corrected": "0",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/2",
+                      "sid": 5151,
+                      "bytes": "0",
+                      "packets": "0",
+                      "min-modulation": "qam64",
+                      "max-modulation": "qam64",
+                      "no-error": "0",
+                      "corrected": "0",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/3",
+                      "sid": 5151,
+                      "bytes": "0",
+                      "packets": "0",
+                      "min-modulation": "qam64",
+                      "max-modulation": "qam64",
+                      "no-error": "0",
+                      "corrected": "0",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

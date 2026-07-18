@@ -1,0 +1,58 @@
+{
+  "data": {
+    "ccap:ccap": {
+      "docsis": {
+        "docs-mac-domain": {
+          "mac-domain": [
+            {
+              "mac-domain-name": "morris-dentist-1_md1_1",
+              "ccap-oper:modem": [
+                {
+                  "modem-mac": "e8:3e:fc:30:94:15",
+                  "xmit-chan-counter": [
+                    {
+                      "ucid": "1/12",
+                      "sid": 5147,
+                      "bytes": "941505",
+                      "packets": "1408",
+                      "min-modulation": "qam256",
+                      "max-modulation": "qam256",
+                      "no-error": "2000",
+                      "corrected": "50",
+                      "uncorrectable": "7",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/13",
+                      "sid": 5147,
+                      "bytes": "800000",
+                      "packets": "1200",
+                      "min-modulation": "qam256",
+                      "max-modulation": "qam256",
+                      "no-error": "1900",
+                      "corrected": "40",
+                      "uncorrectable": "5",
+                      "no-burst": "0"
+                    },
+                    {
+                      "ucid": "1/1",
+                      "sid": 5147,
+                      "bytes": "0",
+                      "packets": "0",
+                      "min-modulation": "qam64",
+                      "max-modulation": "qam64",
+                      "no-error": "0",
+                      "corrected": "0",
+                      "uncorrectable": "0",
+                      "no-burst": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

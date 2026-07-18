@@ -125,8 +125,8 @@
 - [Bash Template String（模板字符串）最佳实践与心智模式](bash/template_str.md)
 - [Shell 中关于路径（Path）的黄金法则及心智模式](bash/shell_path_guide.md)
 - [Bash 长命令拆分：自动续行（Line Continuation）完整总结](bash/line_cont.md)
-- []()
-- []()
+- [Bash 并行执行方法总结](bash/bash-parallel-execution.md)
+- [周期任务（Periodic Task）的心智模式（黄金法则）](bash/periodic_task.md)
 - []()
 ---
 

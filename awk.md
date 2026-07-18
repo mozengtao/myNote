@@ -10,9 +10,9 @@
 [awk 内部执行模型（Pattern–Action VM）总结](awk_pattern_action.md)  
 [awk 语法格式最佳实践](awk_format_practice.md)  
 [AWK "锚点定位 + 相对偏移取值" 心法](awk/awk-anchor-offset-pattern.md)  
-[]()  
-[]()  
-[]()  
+[AWK「锚点定位 + 相对偏移取值」核心思想与心智模式](awk/awk-anchor-offset-guide.md)  
+[AWK 核心心智模型：Anchor → Boundary → Extract](awk/awk-anchor-boundary-extrac.md)  
+[AWK Anchor → Boundary → Extract 示例](awk/awk-anchor-boundary-extract-example.md)  
 
 
 - [AWK 系统化掌握手册](./awk/awk_mastery.md)

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ofdma-monitor"
+version = "0.1.0"
+description = "Python reimplementation of the OFDMA CM noise monitoring shell scripts (mer / xmit-chan-counter uncorrectable)"
+requires-python = ">=3.10"
+readme = "README.md"
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+ofdma-monitor = "ofdma_monitor.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ofdma_monitor*"]
