@@ -14,6 +14,13 @@
 [AST Explorer](https://astexplorer.net/)  
 [VSCode Python Debug 核心快捷键速查表](python/vscode_debug_shortcuts.md)  
 [Collect batch metrics example](python/collect_batch_metrics/docs/ARCHITECTURE.md)  
+[Python `match-case` 核心心智模型（Structural Pattern Matching）](python/match_case.md)  
+[Python `json` Module 完整指南 —— 工作原理、典型示例、最佳实践与心智模式](python/json_guide.md)  
+[]()  
+[]()  
+[]()  
+[]()  
+[]()  
 []()  
 []()  
 
@@ -1307,6 +1314,9 @@ def count_lines(website):
 [Dependency Injection in Python](https://betterstack.com/community/guides/scaling-python/python-dependency-injection/)  
 [Practical Guide to Asynchronous Programming in Python](https://betterstack.com/community/guides/scaling-python/python-async-programming/)  
 [Introduction to Python Generators](https://betterstack.com/community/guides/scaling-python/python-generators/)  
+[]()  
+[]()  
+[]()  
 []()  
 []()  
 
