@@ -16,13 +16,17 @@
 [Collect batch metrics example](python/collect_batch_metrics/docs/ARCHITECTURE.md)  
 [Python `match-case` 核心心智模型（Structural Pattern Matching）](python/match_case.md)  
 [Python `json` Module 完整指南 —— 工作原理、典型示例、最佳实践与心智模式](python/json_guide.md)  
+[Python YAML 解析完全指南 —— 工作原理、典型用法与心智模型](python/yaml_guide.md)  
+[Python `async` / `await` 完全指南](python/async_await_guide.md)  
+[Python 并发处理（Concurrent Processing）全景总结](python/concurrent_process.md)  
+[Python 可迭代对象 Packing 与 Unpacking（Iterable Packing / Unpacking）](python/iter_pack_unpack.md)  
+[Foundations of Python Network Programming](https://github.com/nguyenkools/Python/tree/master)  
+[socket](https://docs.python.org/3/library/socket.html)  
 []()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+
+- David Beazley
+- [Practical Python Programming](https://github.com/dabeaz-course/practical-python)  
+- [Advanced Python Mastery](https://github.com/dabeaz-course/python-mastery)  
 
 - Books
 - [Domain Modeling Made Functional]()

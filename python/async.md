@@ -1,11 +1,18 @@
 [how async/await works](how_async_await_works.py)  
 [async mental model](async_mental_model.md)
-
+[asyncio — Asynchronous I/O](https://docs.python.org/3/library/asyncio.html)
+[Python's asyncio: A Hands-On Walkthrough](https://realpython.com/async-io-python/)
+[Python Concurrency with asyncio](https://github.com/Rishabh-creator601/Books/blob/master/python_books/Python_Concurrency_with_asyncio_Matthew_Fowler.pdf)
+[concurrency-in-python-with-asyncio](https://github.com/concurrency-in-python-with-asyncio/concurrency-in-python-with-asyncio)
+[]()
+[]()
+[]()
+[]()
 
 
 # Python asyncio 关键 API 速查表
 
-> **适用版本**：Python 3.7+  
+> **适用版本**：Python 3.7+
 > **核心理念**：单线程协作式多任务，非阻塞 I/O
 
 ---

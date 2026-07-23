@@ -5,6 +5,10 @@
 [**Design Patterns in Modern C++ Series' Articles**](https://dev.to/visheshpatel/series/6202)  
 [**What Is Design Pattern?**](https://vishalchovatiya.com/posts/what-is-design-pattern/)  
 []()  
+[]()  
+[]()  
+[C++ RAII：资源跟着对象走，而对象跟着作用域走](cpp/RAII_guide.md)  
+[]()  
 
 
 [Effective Modern C++](https://ananyapam7.github.io/resources/C++/Scott_Meyers_Effective_Modern_C++.pdf) #pdf  
