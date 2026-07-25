@@ -11,6 +11,13 @@ chrome://extensions/shortcuts
 shortcut to search Tabs:
 Ctrl+Shift+A
 
+垂直显示tabs
+空白区域 -> Show tabs vertically
+
+- [Chrome 键盘快捷键](https://support.google.com/chrome/answer/157179?sjid=17735387832554948055-NC)
+- []()
+- []()
+
 
 - OmniTab 新标签页
 - Extension Manager

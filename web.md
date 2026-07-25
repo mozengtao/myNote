@@ -1,19 +1,34 @@
-[Modern Frontend Architecture 1](./web/frontend_architecture_part1_foundations.md)  
-[Modern Frontend Architecture 2](./web/frontend_architecture_part2_deep_dives.md)  
-[Modern Frontend Architecture 3](./web/frontend_architecture_part3_integration.md)  
-[](./web/)  
-[](./web/)  
+[Modern Frontend Architecture 1](web/frontend_architecture_part1_foundations.md)  
+[Modern Frontend Architecture 2](web/frontend_architecture_part2_deep_dives.md)  
+[Modern Frontend Architecture 3](web/frontend_architecture_part3_integration.md)  
+[Web 自动化逆向分析（Web Reverse Engineering）完整分析流程及最佳实践](web/reverse_engineering.md)  
+[](web/)  
+[](web/)  
+[](web/)  
 
-[RESTful API 深度解析](./web/RESTfull_API.md)  
-[](./web/)  
+[RESTful API 深度解析](web/RESTfull_API.md)  
+[](web/)  
 
 [MDN learning-area](https://github.com/mdn/learning-area/tree/main)  
 
+[**HTTP: The Definitive Guide**](https://github.com/oxidation99/MyBooks-1/tree/master)  
+[HTTP: The Definitive Guide](https://github.com/ohari5336/book-1/tree/master)  
+[**Web Browser Engineering**](https://browser.engineering/)  
+[How browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work)  
+[How browsers work](https://web.dev/articles/howbrowserswork)  
+[mitmproxy](https://docs.mitmproxy.org/stable/)  
+[httpbin.org](https://httpbin.org/)  
+[MDN Playground](https://developer.mozilla.org/en-US/play)  
+[Chrome DevTools Protoco](https://chromedevtools.github.io/devtools-protocol/)  
+[CN-Chrome-DevTools](https://github.com/CN-Chrome-DevTools/CN-Chrome-DevTools/tree/master)  
+[The Basics Of Chrome DevTools](https://medium.com/swlh/the-basics-of-chrome-devtools-4d69a102a699)  
+[Chrome DevTools(zh-cn)](https://developer.chrome.com/docs/devtools/overview?hl=zh-cn)  
+[]()  
 []()  
 []()  
 [HTML 元素参考](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Elements)  
 [**HTML DOM for Beginners: What is the Document Object Model?**](https://www.fullstackfoundations.com/blog/html-dom)  
-[Document Object Model (DOM)](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)  
+[**Document Object Model (DOM)**](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)  
 
 - JSON-RPC
 [Master JSON-RPC Protocol](https://www.json-rpc.dev/learn)  
@@ -25,11 +40,11 @@
 []()  
 
 
-[数据库密码安全存储与验证流程](./web/how_password_is_stored_in_database.png)  
-[数据库密码安全存储与验证流程](./web/how_password_is_stored_in_database.md)  
+[数据库密码安全存储与验证流程](web/how_password_is_stored_in_database.png)  
+[数据库密码安全存储与验证流程](web/how_password_is_stored_in_database.md)  
 
-[扫码支付的工作原理](./web/how_scan_to_pay_works.png)  
-[扫码支付的工作原理](./web/how_scan_to_pay_works.md)  
+[扫码支付的工作原理](web/how_scan_to_pay_works.png)  
+[扫码支付的工作原理](web/how_scan_to_pay_works.md)  
 
 ## 在线编辑环境
 > 分栏式编辑HTML/CSS/JS，即时预览，内置常用框架，社区生态丰富，新手友好，适合快速写demo、学习前端语法、仿写效果、分享代码片段

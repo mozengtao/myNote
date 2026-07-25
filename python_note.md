@@ -22,6 +22,10 @@
 [Python 可迭代对象 Packing 与 Unpacking（Iterable Packing / Unpacking）](python/iter_pack_unpack.md)  
 [Foundations of Python Network Programming](https://github.com/nguyenkools/Python/tree/master)  
 [socket](https://docs.python.org/3/library/socket.html)  
+[Python 解析 CLI / Log / Table 文本的通用心智模式](python/cli_parser_guide.md)  
+[Python 常见数据对象承载方式（Normalized Python Object）](python/normalized_object.md)  
+[]()  
+[]()  
 []()  
 
 - David Beazley
@@ -99,19 +103,19 @@
 - []()
 
 - 执行 Bash Script 或者 Command
-[execute bash script or command](./python/ShellExecutor.py)  
+[execute bash script or command](python/ShellExecutor.py)  
 
 - Bash 环境变量 Validation
-[validate bash environments](./python/EnvironmentConfig.py)  
+[validate bash environments](python/EnvironmentConfig.py)  
 
 - wraps the response to provide high-level utility methods, like checking for specific errors or parsing JSON
-[wrap the response to provide high-level utility methods](./python/CommandResult.py)  
+[wrap the response to provide high-level utility methods](python/CommandResult.py)  
 
 > SSH 连接
-[SSH connection](./python/SSHConnection.py)  
+[SSH connection](python/SSHConnection.py)  
 
 - The Full Integrated System
-[The Full Integrated System](./python/full_example.py)  
+[The Full Integrated System](python/full_example.py)  
 
 - Jupyter Notebook
 [Google Colab(Online Jupyter Notebook)](https://colab.research.google.com/)  
@@ -196,19 +200,19 @@
 
 - requests: a simple, yet elegant, HTTP library
 [requests](https://github.com/psf/requests)  
-![Learn Architecture & Patterns in psf/requests](./python/requests_ARCHITECTURE_ANALYSIS.md)  
+![Learn Architecture & Patterns in psf/requests](python/requests_ARCHITECTURE_ANALYSIS.md)  
 
 - click: a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary
 [click](https://github.com/pallets/click)  
-![Learn Architecture & Patterns in click](./python/click_ARCHITECTURE_ANALYSIS.md)  
+![Learn Architecture & Patterns in click](python/click_ARCHITECTURE_ANALYSIS.md)  
 
 - attrs: the Python package that will bring back the joy of writing classes by relieving you from the drudgery of implementing object protocols (aka dunder methods).
 [attrs](https://github.com/python-attrs/attrs)  
-![Learn Architecture & Patterns in attrs](./python/attrs_ARCHITECTURE_ANALYSIS.md)  
+![Learn Architecture & Patterns in attrs](python/attrs_ARCHITECTURE_ANALYSIS.md)  
 
 - flask: is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications.
 [flask](https://github.com/pallets/flask)  
-![Learn Architecture & Patterns in flask](./python/flask_ARCHITECTURE_ANALYSIS.md)  
+![Learn Architecture & Patterns in flask](python/flask_ARCHITECTURE_ANALYSIS.md)  
 
 ## global
 [Using and Creating Global Variables in Your Python Functions](https://realpython.com/python-use-global-variable-in-function/)  
@@ -5473,7 +5477,7 @@ Django
 
 ```
 ## 异步IO
-[async](./python/async.md)  
+[async](python/async.md)  
 []()  
 []()  
 []()  
