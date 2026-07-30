@@ -71,22 +71,22 @@ Netfilter是Linux内核中的**数据包过滤和处理框架**，它提供了�
 ├─────────────────────────────────────┤
 │         Kernel Space                │
 │                                     │
-│  ┌─────────────────────────────┐    │
-│  │        Netfilter            │    │
-│  │    (Hook Framework)         │    │
-│  │                             │    │
-│  │  ┌─────┐ ┌─────┐ ┌─────┐    │    │
-│  │  │Raw  │ │Mangle│ │NAT  │    │    │
-│  │  └─────┘ └─────┘ └─────┘    │    │
-│  │  ┌─────┐ ┌─────────────┐    │    │
-│  │  │Filter│ │ Conntrack  │    │    │
-│  │  └─────┘ └─────────────┘    │    │
-│  └─────────────────────────────┘    │
+│  ┌──────────────────────────────┐   │
+│  │        Netfilter             │   │
+│  │    (Hook Framework)          │   │
+│  │                              │   │
+│  │  ┌─────┐ ┌──────┐ ┌─────┐    │   │
+│  │  │Raw  │ │Mangle│ │NAT  │    │   │
+│  │  └─────┘ └──────┘ └─────┘    │   │
+│  │  ┌──────┐ ┌─────────────┐    │   │
+│  │  │Filter│ │ Conntrack   │    │   │
+│  │  └──────┘ └─────────────┘    │   │
+│  └──────────────────────────────┘   │
 ├─────────────────────────────────────┤
 │         Network Stack               │
-│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐   │
-│  │ TCP │ │ UDP │ │ IP  │ │ etc │   │
-│  └─────┘ └─────┘ └─────┘ └─────┘   │
+│  ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐    │
+│  │ TCP │ │ UDP │ │ IP  │ │ etc │    │
+│  └─────┘ └─────┘ └─────┘ └─────┘    │
 └─────────────────────────────────────┘
 ```
 
@@ -115,23 +115,23 @@ Netfilter是Linux内核中的**数据包过滤和处理框架**，它提供了�
 ```mermaid
 graph TD
     A[Incoming Packet] --> B[Raw PREROUTING]
-    B --> C[Mangle PREROUTING] 
+    B --> C[Mangle PREROUTING]
     C --> D[NAT PREROUTING]
     D --> E[Routing Decision]
-    
+
     E --> F[Local Packet]
     E --> G[Forward Packet]
-    
+
     F --> H[Mangle INPUT]
-    H --> I[Filter INPUT] 
+    H --> I[Filter INPUT]
     I --> J[Local Application]
-    
+
     G --> K[Mangle FORWARD]
     K --> L[Filter FORWARD]
     L --> M[Mangle POSTROUTING]
     M --> N[NAT POSTROUTING]
     N --> O[Outgoing Interface]
-    
+
     P[Local Process] --> Q[Mangle OUTPUT]
     Q --> R[NAT OUTPUT]
     R --> S[Filter OUTPUT]
@@ -157,7 +157,7 @@ iptables -t raw -A PREROUTING \
 **使用场景**：
 ```text
 ✓ 高性能Web服务器
-✓ 大流量转发场景  
+✓ 大流量转发场景
 ✓ DDoS防护
 ✓ 特殊协议处理
 ```
@@ -251,7 +251,7 @@ Local Process
 Mangle OUTPUT    ← 修改本机发出的包
       ↓
 NAT OUTPUT       ← 本机发出包的DNAT
-      ↓  
+      ↓
 Filter OUTPUT    ← 控制本机发出的流量
       ↓
 POSTROUTING      ← 最终的SNAT处理
@@ -285,7 +285,7 @@ Chain = 数据包处理阶段
 
 每个Chain代表：
 ┌─────────────────────────────────┐
-│ 数据包在网络栈中的特定位置       │  
+│ 数据包在网络栈中的特定位置       │
 │ 在这个位置可以进行的操作         │
 └─────────────────────────────────┘
 ```
@@ -296,7 +296,7 @@ Chain = 数据包处理阶段
 问题：这个包现在在哪里？
 
 进入系统 → PREROUTING
-发给本机 → INPUT  
+发给本机 → INPUT
 通过本机 → FORWARD
 本机发出 → OUTPUT
 离开系统 → POSTROUTING
@@ -313,7 +313,7 @@ Chain = 数据包处理阶段
 │                Table Functions              │
 │                                             │
 │ Raw Table    → 连接跟踪控制                  │
-│ Mangle Table → 包头修改                     │  
+│ Mangle Table → 包头修改                     │
 │ NAT Table    → 地址转换                     │
 │ Filter Table → 访问控制（默认表）            │
 └─────────────────────────────────────────────┘
@@ -328,7 +328,7 @@ Raw → Mangle → NAT → Filter
 为什么这样排序？
 ┌─────────────────────────────────┐
 │ Raw:    最早决定是否跟踪          │
-│ Mangle: 修改包为后续处理做准备     │  
+│ Mangle: 修改包为后续处理做准备     │
 │ NAT:    地址转换影响路由          │
 │ Filter: 最后决定通过与否          │
 └─────────────────────────────────┘
@@ -359,7 +359,7 @@ Raw → Mangle → NAT → Filter
 ❌ 无状态：
 每个包独立判断 → 性能差 → 规则复杂
 
-✅ 有状态：  
+✅ 有状态：
 连接建立一次 → 后续包自动关联 → 高效
 ```
 
@@ -385,7 +385,7 @@ cat /proc/net/nf_conntrack
 
 # 使用conntrack工具
 conntrack -L                    # 列出所有连接
-conntrack -L -p tcp            # 只显示TCP连接  
+conntrack -L -p tcp            # 只显示TCP连接
 conntrack -D -p tcp            # 删除所有TCP连接
 conntrack -E                   # 实时监控连接事件
 
@@ -417,7 +417,7 @@ iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables [表] [操作] [链] [匹配条件] [目标动作]
          │    │     │      │        │
          │    │     │      │        └─ Target (-j ACTION)
-         │    │     │      └────────── Match Criteria  
+         │    │     │      └────────── Match Criteria
          │    │     └─────────────────── Chain
          │    └───────────────────────── Operation (-A/-I/-D/-R)
          └────────────────────────────── Table (-t table)
@@ -429,7 +429,7 @@ iptables [表] [操作] [链] [匹配条件] [目标动作]
 ```bash
 -t filter    # 默认表，可省略
 -t nat       # NAT表
--t mangle    # Mangle表  
+-t mangle    # Mangle表
 -t raw       # Raw表
 ```
 
@@ -468,7 +468,7 @@ iptables [表] [操作] [链] [匹配条件] [目标动作]
 #### TCP/UDP匹配
 ```bash
 --sport port[:port]     # 源端口
---dport port[:port]     # 目标端口  
+--dport port[:port]     # 目标端口
 --tcp-flags mask comp   # TCP标志位
 --syn                   # TCP SYN包（等价于--tcp-flags SYN,RST,ACK SYN）
 ```
@@ -491,7 +491,7 @@ iptables [表] [操作] [链] [匹配条件] [目标动作]
 #### 基本动作
 ```bash
 -j ACCEPT    # 接受包，停止处理
--j DROP      # 静默丢弃包  
+-j DROP      # 静默丢弃包
 -j REJECT    # 拒绝包并发送错误响应
 -j RETURN    # 返回到调用链继续处理
 ```
@@ -499,7 +499,7 @@ iptables [表] [操作] [链] [匹配条件] [目标动作]
 #### NAT动作
 ```bash
 -j SNAT --to-source IP[:port]           # 源地址转换
--j DNAT --to-destination IP[:port]      # 目标地址转换  
+-j DNAT --to-destination IP[:port]      # 目标地址转换
 -j MASQUERADE [--to-ports port-range]   # 动态源地址转换
 -j REDIRECT --to-ports port             # 重定向到本地端口
 ```
@@ -519,13 +519,13 @@ iptables [表] [操作] [链] [匹配条件] [目标动作]
 ```bash
 # 清空所有规则
 iptables -F
-iptables -X  
+iptables -X
 iptables -t nat -F
 iptables -t mangle -F
 
 # 设置默认策略
 iptables -P INPUT DROP
-iptables -P FORWARD DROP  
+iptables -P FORWARD DROP
 iptables -P OUTPUT ACCEPT
 
 # 允许本地回环
@@ -578,7 +578,7 @@ iptables -A INPUT -m geoip --src-cc CN -j DROP
 │         Troubleshooting Flow        │
 │                                     │
 │ 1. 确定包的路径                     │
-│ 2. 检查路由决策                     │  
+│ 2. 检查路由决策                     │
 │ 3. 验证连接状态                     │
 │ 4. 分析规则匹配                     │
 │ 5. 抓包验证假设                     │
@@ -595,7 +595,7 @@ iptables -A INPUT -m geoip --src-cc CN -j DROP
 ping 8.8.8.8        # OUTPUT链
 curl google.com     # OUTPUT链
 
-# 本机作为服务器  
+# 本机作为服务器
 ssh user@server     # INPUT链（服务器视角）
 
 # 本机作为网关
@@ -607,9 +607,9 @@ ssh user@server     # INPUT链（服务器视角）
 ┌─────────────────────────────────────┐
 │          Path Decision              │
 │                                     │
-│ 目标是本机？ → INPUT                │
-│ 本机发出？   → OUTPUT               │  
-│ 经过本机？   → FORWARD              │
+│ 目标是本机？ → INPUT                  │
+│ 本机发出？   → OUTPUT                 │
+│ 经过本机？   → FORWARD                │
 └─────────────────────────────────────┘
 ```
 
@@ -624,7 +624,7 @@ ip route get 8.8.8.8
 
 # 关键信息：
 # via：下一跳网关
-# dev：出接口  
+# dev：出接口
 # src：源地址选择
 ```
 
@@ -657,14 +657,14 @@ conntrack -L -p tcp --dport 80
 ```text
 问题诊断：
 ┌─────────────────────────────────────┐
-│ 看不到连接记录？                    │
-│ → 包可能被Raw表NOTRACK了            │
+│ 看不到连接记录？                      │
+│ → 包可能被Raw表NOTRACK了             │
 │                                     │
-│ 连接状态是INVALID？                 │  
-│ → 包可能损坏或序列号错误            │
-│                                     │
-│ 只有单向连接？                      │
-│ → 回包路径有问题                    │
+│ 连接状态是INVALID？                  │
+│ → 包可能损坏或序列号错误              │
+│                                    │
+│ 只有单向连接？                       │
+│ → 回包路径有问题                     │
 └─────────────────────────────────────┘
 ```
 
@@ -692,13 +692,13 @@ watch 'iptables -L -n -v'
 │        Counter Analysis             │
 │                                     │
 │ pkts=0, bytes=0                     │
-│ → 包根本没到这个规则                │
-│                                     │  
-│ 计数持续增长                        │
-│ → 规则被命中                        │
+│ → 包根本没到这个规则                  │
 │                                     │
-│ 前面规则计数增长，后面不变           │
-│ → 在前面规则就被处理了              │
+│ 计数持续增长                         │
+│ → 规则被命中                         │
+│                                     │
+│ 前面规则计数增长，后面不变              │
+│ → 在前面规则就被处理了                 │
 └─────────────────────────────────────┘
 ```
 
@@ -725,7 +725,7 @@ tcpdump -ni any -A port 80
 ┌─────────────────────────────────────┐
 │ 1. 包是否到达入接口？               │
 │ 2. 包是否从出接口发送？             │
-│ 3. 在哪个接口消失？                 │  
+│ 3. 在哪个接口消失？                 │
 │ 4. 包的地址是否被NAT修改？          │
 │ 5. 是否有回包？                     │
 └─────────────────────────────────────┘
@@ -743,7 +743,7 @@ tcpdump -ni any -A port 80
 5. 连接被跟踪吗？      → conntrack -L
 ```
 
-#### 问题：NAT不工作  
+#### 问题：NAT不工作
 ```bash
 # 检查清单：
 1. IP转发开启？        → cat /proc/sys/net/ipv4/ip_forward
@@ -758,7 +758,7 @@ tcpdump -ni any -A port 80
 # 检查清单：
 1. 规则位置对？        → iptables -L --line-numbers
 2. 表选择对？          → -t 参数
-3. 链选择对？          → 包路径分析  
+3. 链选择对？          → 包路径分析
 4. 匹配条件对？        → -v 查看计数
 5. 被其他规则拦截？    → 规则顺序检查
 ```
@@ -794,7 +794,7 @@ iptables -A INPUT -p tcp --dport 22 -j ACCEPT               # 永远不会执行
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT
 
-# ❌ 不推荐：每个包都独立判断  
+# ❌ 不推荐：每个包都独立判断
 iptables -A INPUT -p tcp --sport 80 -j ACCEPT              # 容易出错
 iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
 ```
@@ -811,13 +811,13 @@ iptables -A INPUT -p icmp -j ACCEPT                                      # ICMP�
 ```
 
 #### 优化2：使用multiport模块
-```bash  
+```bash
 # ✅ 高效：一条规则处理多端口
 iptables -A INPUT -p tcp -m multiport --dports 80,443,8080,8443 -j ACCEPT
 
 # ❌ 低效：多条规则
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -p tcp --dport 443 -j ACCEPT  
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
 iptables -A INPUT -p tcp --dport 8443 -j ACCEPT
 ```
@@ -870,7 +870,7 @@ iptables -A INPUT -j DROP
 # CentOS/RHEL
 service iptables save
 
-# Ubuntu/Debian  
+# Ubuntu/Debian
 iptables-save > /etc/iptables/rules.v4
 
 # 开机自动加载
@@ -912,7 +912,7 @@ watch -n1 'iptables -t nat -L -n -v'
 ```bash
 # 定义网络区域
 DMZ_NET="10.0.1.0/24"
-LAN_NET="192.168.1.0/24"  
+LAN_NET="192.168.1.0/24"
 MGMT_NET="172.16.1.0/24"
 
 # DMZ访问控制
@@ -948,7 +948,7 @@ iptables -t nat -A PREROUTING -p tcp --dport 80 \
 ```bash
 # 标记不同类型的流量
 iptables -t mangle -A POSTROUTING -p tcp --dport 22 -j DSCP --set-dscp 46    # SSH高优先级
-iptables -t mangle -A POSTROUTING -p tcp --dport 80 -j DSCP --set-dscp 26    # HTTP中优先级  
+iptables -t mangle -A POSTROUTING -p tcp --dport 80 -j DSCP --set-dscp 26    # HTTP中优先级
 iptables -t mangle -A POSTROUTING -p tcp --dport 25 -j DSCP --set-dscp 8     # SMTP低优先级
 
 # 配合tc进行流量控制
@@ -972,7 +972,7 @@ iptables -A DOCKER-USER -s 192.168.1.0/24 -d 172.17.0.0/16 -j ACCEPT
 iptables -A DOCKER-USER -j RETURN
 ```
 
-#### Kubernetes网络策略  
+#### Kubernetes网络策略
 ```bash
 # kube-proxy iptables模式规则示例
 iptables -t nat -A KUBE-SERVICES -p tcp --dport 80 -j KUBE-SVC-XXX
@@ -1008,7 +1008,7 @@ iptables -A FORWARD -d 10.0.0.0/24 -m conntrack --ctstate RELATED,ESTABLISHED -j
 │    不是规则集合，是处理管道                 │
 │                                             │
 │ 2. Hook点架构                               │
-│    在关键节点插入处理逻辑                   │  
+│    在关键节点插入处理逻辑                   │
 │                                             │
 │ 3. 表链分离设计                             │
 │    表定义功能，链定义位置                   │
@@ -1041,6 +1041,6 @@ iptables -A FORWARD -d 10.0.0.0/24 -m conntrack --ctstate RELATED,ESTABLISHED -j
 
 ---
 
-**文档创建时间**: 2026年6月2日  
-**适用版本**: Linux Kernel 5.x+, iptables 1.8+  
+**文档创建时间**: 2026年6月2日
+**适用版本**: Linux Kernel 5.x+, iptables 1.8+
 **参考标准**: RFC 3022 (NAT), RFC 2474 (DSCP)

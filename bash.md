@@ -127,6 +127,10 @@
 - [Bash 长命令拆分：自动续行（Line Continuation）完整总结](bash/line_cont.md)
 - [Bash 并行执行方法总结](bash/bash-parallel-execution.md)
 - [周期任务（Periodic Task）的心智模式（黄金法则）](bash/periodic_task.md)
+- [Bash `printf` 多行模板：引号使用、格式保持与最佳实践](bash/printf_guide.md)
+- []()
+- []()
+- []()
 - []()
 ---
 

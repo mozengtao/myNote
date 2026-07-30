@@ -24,6 +24,12 @@
 [socket](https://docs.python.org/3/library/socket.html)  
 [Python 解析 CLI / Log / Table 文本的通用心智模式](python/cli_parser_guide.md)  
 [Python 常见数据对象承载方式（Normalized Python Object）](python/normalized_object.md)  
+[Python List Construction：构造 List 的完整心智模式](python/list_construction.md)  
+[Python 可迭代对象（Iterable）、迭代器（Iterator）、生成器（Generator）完整理解](python/iterable_iterator_generator.md)  
+[Python 文件读取（File Reading）完整总结：方法、应用场景、最佳实践与心智模式](python/read_file.md)  
+[]()  
+[]()  
+[]()  
 []()  
 []()  
 []()  
@@ -1372,591 +1378,6 @@ def count_lines(website):
 []()  
 
 
-## common utility example
-cfg.toml:
-```toml
-[paths]
-work_dir = "/tmp"
-
-[names]
-evc_job = "evc-morris-dentist"
-vmc_job = "vmc-morris-dentist"
-
-[defaults]
-force = true
-```
-x.py:
-```python
-#!/usr/bin/env python3
-
-import sys
-import shlex
-import argparse
-import subprocess
-from pathlib import Path
-from pprint import pprint
-
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib
-
-class Config:
-    def __init__(self, data: dict):
-        self.paths = data.get("paths", {})
-        self.names = data.get("names", {})
-        self.defaults = data.get("defaults", {})
-    
-    @property
-    def work_dir(self) -> str:
-        return self.paths.get("work_dir", ".")
-
-    @property
-    def evc_job(self) -> str:
-        return self.names.get("evc_job", "evc-job")
-
-    @property
-    def vmc_job(self) -> str:
-        return self.names.get("vmc_job", "vmc-job")
-
-    @property
-    def force(self) -> bool:
-        return self.defaults.get("force", True)
-
-def load_config(config_path: str) -> Config:
-    cfg_path = Path(config_path)
-    if not cfg_path.exists():
-        raise FileNotFoundError(f"Config file not found: {cfg_path}")
-    with open(cfg_path, "rb") as f:
-        data = tomllib.load(f)
-    return Config(data)
-
-def run(cmd: str, cwd: str | None = None, capture: bool = False) -> subprocess.CompletedProcess:
-    kwargs = {
-        "shell": True,
-        "cwd": cwd,
-    }
-    if capture:
-        kwargs.update({
-            "stdout": subprocess.PIPE,
-            "stderr": subprocess.PIPE,
-            "text": True,
-        })
-    #return subprocess.run(cmd, **kwargs)
-    # for test only
-    print(cmd)
-    res = subprocess.run("ls", **kwargs)
-    return res
-
-def run_check_output(cmd: str, cwd: str | None = None) -> str:
-    res = run(cmd, cwd=cwd, capture=True)
-    if res.returncode != 0:
-        raise subprocess.CalledProcessError(f"Command failed: {cmd}\nstdout: {res.stdout}\nstderr: {res.stderr}")
-    return res.stdout
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Nomad helper")
-    subparsers = parser.add_subparsers(dest="cmd")
-
-    # start
-    ps = subparsers.add_parser("start", help="Start EVC or VMC")
-    ps.add_argument("job", choices=["evc", "vmc"], help="Job to start")
-    ps.add_argument("--config", default="cfg.toml", help="Config file")
-
-    # terminal
-    pt = subparsers.add_parser("terminal", help="Terminal EVC or VMC")
-    pt.add_argument("job", choices=["evc", "vmc"], help="Job to terminal")
-    pt.add_argument("--config", default="cfg.toml", help="Config file")
-
-    # purge
-    ps = subparsers.add_parser("purge", help="Purge EVC or VMC")
-    ps.add_argument("job", choices=["evc", "vmc"], help="Job to purge")
-    ps.add_argument("--config", default="cfg.toml", help="Config file")
-
-    return parser
-
-def start_evc(cfg: Config) -> int:
-    cwd = cfg.work_dir
-    evc_cmd = (
-        "nomad job run ",
-        f"-var \"force={str(cfg.force).lower()}\" ",
-        f"{cfg.evc_job}"
-    )
-    res = run(evc_cmd, cwd=cwd)
-    return res.returncode
-
-def run_evc_cli(cfg: Config, command: str) -> str:
-    task = "evc"
-    job = cfg.evc_job
-	cmd = (
-		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '"
-		f"ncs_cli -u admin <<EOF\n{command}\nEOF'"
-	)
-    return run_check_output(cmd)
-
-def start_vmc(cfg: Config) -> int:
-    cwd = cfg.work_dir
-    vmc_cmd = (
-        "nomad job run ",
-        f"-var \"force={str(cfg.force).lower()}\" ",
-        f"{cfg.vmc_job}"
-    )
-    res = run(vmc_cmd, cwd=cwd)
-    return res.returncode
-
-def terminal_evc(cfg: Config) -> int:
-    job = cfg.evc_job
-    task = "evc"
-    cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
-    res = run(cmd, cwd=cfg.work_dir)
-    return res.returncode
-
-def terminal_vmc(cfg: Config) -> int:
-    job = cfg.vmc_job
-    task = "vmc"
-    cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
-    res = run(cmd, cwd=cfg.work_dir)
-    return res.returncode
-
-def purge_evc(cfg: Config) -> int:
-    cwd = cfg.work_dir
-    evc_cmd = (
-        "nomad job stop ",
-        f"{cfg.evc_job}"
-    )
-    return run(evc_cmd, cwd=cwd).returncode
-
-
-def purge_vmc(cfg: Config) -> int:
-    cwd = cfg.work_dir
-    vmc_cmd = (
-        "nomad job stop ",
-        f"{cfg.vmc_job}"
-    )
-    return run(vmc_cmd, cwd=cwd).returncode
-
-def main(argv: list[str]) -> int:
-    parser = build_parser()
-    args = parser.parse_args(argv)
-
-    cfg = load_config(getattr(args, "config", "cfg.toml"))
-```
-    if args.cmd == "start":
-        if args.job == "evc":
-            start_evc(cfg)
-        elif args.job == "vmc":
-            start_vmc(cfg)
-    elif args.cmd == "terminal":
-        if args.job == "evc":
-            terminal_evc(cfg)
-        elif args.job == "vmc":
-            terminal_vmc(cfg)
-    elif args.cmd == "purge":
-        if args.job == "evc":
-            purge_evc(cfg)
-        elif args.job == "vmc":
-            purge_vmc(cfg)
-    else:
-        parser.print_help()
-        return 1
-```
-    match args.cmd:
-        case "start":
-            match args.job:
-                case "evc":
-                    start_evc(cfg)
-                case "vmc":
-                    start_vmc(cfg)
-                case _:
-                    parser.print_help()
-                    return 1
-        case "terminal":
-            match args.job:
-                case "evc":
-                    terminal_evc(cfg)
-                case "vmc":
-                    terminal_vmc(cfg)
-                case _:
-                    parser.print_help()
-                    return 1
-        case "purge":
-            match args.job:
-                case "evc":
-                    purge_evc(cfg)
-                case "vmc":
-                    purge_vmc(cfg)
-                case _:
-                    parser.print_help()
-                    return 1
-        case _:
-            parser.print_help()
-            return 1
-
-    return 0
-
-if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
-```
-
-## cli example
-config file:
-```toml
-[paths]
-work_dir = "/mnt/DATA/morrism/testbed/gen0114"
-
-[names]
-# EVC job name used for exec into controller container
-evc_job = "evc-morris-dentist"
-# Prefix used to parse VMC job name from EVC CLI output
-vmc_prefix = "vmc-morris-dentist"
-# Used to find the running alloc for vmc logs via `nomad status`
-vmc_evc_combined = "vmc-evc-morris-dentist"
-# SNMP job name queried by `nomad job allocs`
-snmp_job = "snmp-evc-morris-dentist-1"
-
-[defaults]
-force = true
-
-[evc]
-host_constraint = "dev5"
-image_path = "artifactory.cn.vecima.com/docker/jenkins/evc/nightly:latest"
-hcl_path = "morris-dentist_evc_container.nomad.hcl"
-
-[kafka]
-service_name_prefix = "morris-dentist"
-image_path = "artifactory.cn.vecima.com/docker/jenkins/kafka/nightly:latest"
-hcl_path = "morris-dentist_kafka_container.nomad.hcl"
-
-[ksqldb]
-service_name = "ksqldb-morris-dentist"
-image_path = "artifactory.cn.vecima.com/docker/jenkins/ksqldb/nightly:latest"
-hcl_path = "morris-dentist_ksqldb_container.nomad.hcl"
-kafka_service_name = "morris-dentist-kafka-bootstrap-server"
-
-[logs]
-# Number of leading characters to strip from lines in `nomad alloc logs` output
-strip_prefix_chars = 45
-```
-python file:
-```python
-#!/usr/bin/env python3
-import argparse
-import subprocess
-import sys
-import os
-import shlex
-from pathlib import Path
-
-try:
-	import tomllib  # Python 3.11+
-except ModuleNotFoundError:
-	import tomli as tomllib  # fallback for <3.11
-
-
-class Config:
-	def __init__(self, data: dict):
-		self.paths = data.get("paths", {})
-		self.names = data.get("names", {})
-		self.defaults = data.get("defaults", {})
-		self.evc = data.get("evc", {})
-		self.kafka = data.get("kafka", {})
-		self.ksqldb = data.get("ksqldb", {})
-		self.logs = data.get("logs", {})
-
-	@property
-	def work_dir(self) -> str:
-		return self.paths.get("work_dir", ".")
-
-	@property
-	def evc_job(self) -> str:
-		return self.names.get("evc_job", "evc-morris-dentist")
-
-	@property
-	def vmc_prefix(self) -> str:
-		return self.names.get("vmc_prefix", "vmc-morris-dentist")
-
-	@property
-	def vmc_evc_combined(self) -> str:
-		return self.names.get("vmc_evc_combined", "vmc-evc-morris-dentist")
-
-	@property
-	def snmp_job(self) -> str:
-		return self.names.get("snmp_job", "snmp-evc-morris-dentist-1")
-
-	@property
-	def force(self) -> bool:
-		return bool(self.defaults.get("force", True))
-
-	@property
-	def evc_host_constraint(self) -> str:
-		return self.evc.get("host_constraint", "dev5")
-
-	@property
-	def evc_image_path(self) -> str:
-		return self.evc.get("image_path", "")
-
-	@property
-	def evc_hcl_path(self) -> str:
-		return self.evc.get("hcl_path", "")
-
-	@property
-	def kafka_service_name_prefix(self) -> str:
-		return self.kafka.get("service_name_prefix", "")
-
-	@property
-	def kafka_image_path(self) -> str:
-		return self.kafka.get("image_path", "")
-
-	@property
-	def kafka_hcl_path(self) -> str:
-		return self.kafka.get("hcl_path", "")
-
-	@property
-	def ksqldb_service_name(self) -> str:
-		return self.ksqldb.get("service_name", "")
-
-	@property
-	def ksqldb_image_path(self) -> str:
-		return self.ksqldb.get("image_path", "")
-
-	@property
-	def ksqldb_hcl_path(self) -> str:
-		return self.ksqldb.get("hcl_path", "")
-
-	@property
-	def kafka_bootstrap_service_name(self) -> str:
-		return self.ksqldb.get("kafka_service_name", "")
-
-	@property
-	def log_strip_prefix_chars(self) -> int:
-		return int(self.logs.get("strip_prefix_chars", 45))
-
-
-def load_config(config_path: str) -> Config:
-	cfg_path = Path(config_path)
-	if not cfg_path.exists():
-		raise FileNotFoundError(f"Config TOML not found: {cfg_path}")
-	with cfg_path.open("rb") as f:
-		data = tomllib.load(f)
-	return Config(data)
-
-
-def run(cmd: str, cwd: str | None = None, capture: bool = False) -> subprocess.CompletedProcess:
-	kwargs = {
-		"shell": True,
-		"cwd": cwd,
-	}
-	if capture:
-		kwargs.update({"stdout": subprocess.PIPE, "stderr": subprocess.PIPE, "text": True})
-	return subprocess.run(cmd, **kwargs)
-
-
-def run_check_output(cmd: str, cwd: str | None = None) -> str:
-	res = run(cmd, cwd=cwd, capture=True)
-	if res.returncode != 0:
-		raise RuntimeError(f"Command failed: {cmd}\nstdout:\n{res.stdout}\nstderr:\n{res.stderr}")
-	return res.stdout
-
-
-def run_ncs_command(cfg: Config, command: str) -> str:
-	task = "evc"
-	job = cfg.evc_job
-	cmd = (
-		f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh -c '"
-		f"ncs_cli -u admin <<EOF\n{command}\nEOF'"
-	)
-	return run_check_output(cmd)
-
-
-def terminal(cfg: Config, task: str) -> int:
-	if task == "evc":
-		job = cfg.evc_job
-		cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
-		return run(cmd).returncode
-	elif task == "vmc":
-		output = run_ncs_command(cfg, "show vmc status | t | nomore")
-		job = ""
-		for line in output.splitlines():
-			if line.startswith(cfg.vmc_prefix):
-				parts = line.split()
-				if len(parts) >= 2:
-					job = parts[1]
-					break
-		if not job:
-			print("unknown container type (vmc job not found)")
-			return 1
-		cmd = f"nomad alloc exec -task {shlex.quote(task)} -job {shlex.quote(job)} sh"
-		return run(cmd).returncode
-	else:
-		print("unknown container type")
-		return 1
-
-
-def show_snmp_nsi_port(cfg: Config) -> int:
-	job = cfg.snmp_job
-	allocs_cmd = f"nomad job allocs {shlex.quote(job)}"
-	try:
-		out = run_check_output(allocs_cmd)
-	except RuntimeError as e:
-		print(e)
-		return 1
-	alloc_id = ""
-	for line in out.splitlines():
-		if "snmp" in line:
-			alloc_id = line.split()[0]
-			break
-	if not alloc_id:
-		return 1
-	status_cmd = f"nomad alloc status {shlex.quote(alloc_id)} 2>/dev/null | awk '/snmp-nsi-port/{{print $3}}'"
-	res = run(status_cmd, capture=True)
-	if res.stdout:
-		print(res.stdout.strip())
-	return 0 if res.returncode == 0 else res.returncode
-
-
-def start_event(cfg: Config) -> int:
-	cwd = cfg.work_dir
-	print("starting kafka container")
-	k_cmd = (
-		"nomad job run "
-		f"-var \"force={str(cfg.force).lower()}\" "
-		f"-var \"kafka_service_name_prefix={cfg.kafka_service_name_prefix}\" "
-		f"-var \"image_path={cfg.kafka_image_path}\" "
-		f"{cfg.kafka_hcl_path} > /dev/null 2>&1 &"
-	)
-	run(k_cmd, cwd=cwd)
-
-	print("starting ksqldb container")
-	ks_cmd = (
-		"nomad job run "
-		f"-var \"force={str(cfg.force).lower()}\" "
-		f"-var \"kafka_service_name={cfg.kafka_bootstrap_service_name}\" "
-		f"-var \"ksqldb_service_name={cfg.ksqldb_service_name}\" "
-		f"-var \"image_path={cfg.ksqldb_image_path}\" "
-		f"{cfg.ksqldb_hcl_path} > /dev/null 2>&1 &"
-	)
-	run(ks_cmd, cwd=cwd)
-
-	print("starting evc container")
-	evc_cmd = (
-		"nomad job run "
-		f"-var \"force={str(cfg.force).lower()}\" "
-		f"-var \"host_constraint={cfg.evc_host_constraint}\" "
-		f"-var \"image_path={cfg.evc_image_path}\" "
-		f"-var \"kafka_service_name={cfg.kafka_bootstrap_service_name}\" "
-		f"-var \"ksqldb_service_name={cfg.ksqldb_service_name}\" "
-		f"{cfg.evc_hcl_path} > /dev/null 2>&1 &"
-	)
-	run(evc_cmd, cwd=cwd)
-
-	# wait for background jobs
-	# There is no simple job control via subprocess when using shell=True & background, so we sleep briefly
-	# to give jobs time to submit, mirroring the bash `wait` not strictly necessary here.
-	print("Started kafka, ksqldb and evc container")
-	return 0
-
-
-def start_evc(cfg: Config) -> int:
-	cwd = cfg.work_dir
-	evc_cmd = (
-		"nomad job run "
-		f"-var \"force={str(cfg.force).lower()}\" "
-		f"-var \"host_constraint={cfg.evc_host_constraint}\" "
-		f"-var \"image_path={cfg.evc_image_path}\" "
-		f"{cfg.evc_hcl_path}"
-	)
-	res = run(evc_cmd, cwd=cwd)
-	print("Starting VMC Container")
-	return res.returncode
-
-
-def purge_all() -> int:
-	cmd = "nomad job stop -purge $(nomad status | grep dentist | awk '{print $1}' | xargs)"
-	return run(cmd).returncode
-
-
-def show_log(cfg: Config, container: str) -> int:
-	if container != "vmc":
-		print("Unkonwn container name")
-		return 1
-	cmd = (
-		"nomad alloc logs -f -tail -task vmc -job $(nomad status | grep "
-		f"{cfg.vmc_evc_combined} | awk '/running/{{print $1}}')"
-	)
-	# stream and trim prefix characters similar to awk substr
-	with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as proc:
-		assert proc.stdout is not None
-		strip_n = cfg.log_strip_prefix_chars
-		for line in proc.stdout:
-			line = line.rstrip("\n")
-			if len(line) > strip_n:
-				print(line[strip_n:])
-			else:
-				print("")
-		return proc.wait()
-
-
-def build_parser() -> argparse.ArgumentParser:
-	p = argparse.ArgumentParser(description="Nomad helper")
-	subparsers = p.add_subparsers(dest="cmd", required=True)
-
-	# start
-	ps = subparsers.add_parser("start", help="start evc or event")
-	ps.add_argument("container", choices=["evc", "event"], help="target to start")
-	ps.add_argument("--config", default="/tmp/config.toml")
-
-	# purge
-	pp = subparsers.add_parser("purge", help="purge all")
-	pp.add_argument("container", choices=["all"], help="target to purge")
-	pp.add_argument("--config", default="/tmp/config.toml")
-
-	# terminal
-	pt = subparsers.add_parser("terminal", help="open container shell")
-	pt.add_argument("container", choices=["evc", "vmc"], help="container type")
-	pt.add_argument("--config", default="/tmp/config.toml")
-
-	# log
-	pl = subparsers.add_parser("log", help="stream container logs")
-	pl.add_argument("container", choices=["vmc"], help="container type")
-	pl.add_argument("--config", default="/tmp/config.toml")
-
-	# show
-	pw = subparsers.add_parser("show", help="show info")
-	pw.add_argument("container", choices=["snmp"], help="item to show")
-	pw.add_argument("--config", default="/tmp/config.toml")
-
-	return p
-
-
-def main(argv: list[str]) -> int:
-	parser = build_parser()
-	args = parser.parse_args(argv)
-
-	cfg = load_config(getattr(args, "config"))
-
-	if args.cmd == "start":
-		if args.container == "evc":
-			return start_evc(cfg)
-		elif args.container == "event":
-			return start_event(cfg)
-	elif args.cmd == "purge":
-		return purge_all()
-	elif args.cmd == "terminal":
-		return terminal(cfg, args.container)
-	elif args.cmd == "log":
-		return show_log(cfg, args.container)
-	elif args.cmd == "show":
-		if args.container == "snmp":
-			return show_snmp_nsi_port(cfg)
-
-	return 0
-
-
-if __name__ == "__main__":
-	sys.exit(main(sys.argv[1:]))
-
-```
-
 ## OOP
 [Python OOP](https://www.pythontutorial.net/python-oop/)  
 []()  
@@ -1970,225 +1391,18 @@ OOP is a paradigm that provides a means of structuring programs so that properti
 3.**abstraction**: allows a class to hide complex details and expose only the necessary functionality, allowing developers to focus on what an object does rather than how it achieves its functionality
 4.**polymorphism**: allows objects of different classes to be treated as if they were of the same class, it allows you to access attributes and methods on objects without needing to worry about their actual class
 polymorphism: allows objects of different classes to be treated as if they were of the same class, it allows you to access attributes and methods on objects without needing to worry about their actual class
-```python
-# a complete example
-class Microwave:
-    # self stands for the instance of the class itself
-    # for __init__ function self can be replaces with arbitary names such as instance, s, ...
-    def __init__(self, brand: str, power_rating: str) -> None:
-        self.brand = brand
-        self.power_rating = power_rating
-        self.turned_on: bool = False
-
-    def turn_on(self) -> None:
-        if self.turned_on:
-            print(f'Microwave ({self.brand}) is already turned on.')
-        else:
-            self.turned_on = True
-            print(f'Microwave ({self.brand}) now is turned on.')
-
-    def turn_off(self) -> None:
-        if self.turned_on:
-            self.turned_on = False
-            print(f'Microwave ({self.brand}) now is turned off.')
-        else:
-            print(f'Microwave ({self.brand}) is already turned off.')
-
-    def run(self, seconds: int) -> None:
-        if self.turned_on:
-            print(f'Running ({self.brand}) for {seconds} seconds')
-        else:
-            print(f'Turn on your microwave first...')
-
-    def __str__(self) -> str:
-        return f'{self.brand} (Rating: {self.power_rating})'
-
-    def __repr__(self) -> str:
-        return f'Microwave(brand="{self.brand}", power_rating="{self.power_rating}")'
-
-def main() -> None:
-    smeg: Microwave = Microwave(brand='Smeg', power_rating='B')
-    bosch: Microwave = Microwave(brand='Bosch', power_rating='C')
-    samsung: Microwave = Microwave(brand='Samsung', power_rating='A')
-
-    samsung.turn_on()
-    samsung.run(30)
-    samsung.turn_off()
-    print(samsung)
-    print(repr(samsung))
-
-if __name__ == '__main__':
-    main()
-
-#
-class Dog:
-    #  class attributes
-    species = "Canis familiaris"
-
-    # instance attributes: attributes created in .__init__()
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-    # dunder method(such as __str__, __init__, __del__, ...)
-    def __str__(self):
-        return f"{self.name} is {self.age} years old"
-
-    # instance method
-    def speak(self, sound):
-        return f"{self.name} says {sound}"
-
-# instantiating a class
-Dog()   # <__main__.Dog object at 0x0004ccc90>
-
-# inheritance
-class Bulldog(Dog):
-    def __init__(self, name, age, color):
-        # access the parent class
-        super().__init__(name, age)
-        self.color = color
-
-    # method overriding
-    def speak(self, sound):
-        return f"{self.name} says {sound} in {self.color} color"
-
-jim = Bulldog("Jim", 5, "brown")
-type(jim) # <class '__main__.Bulldog'>
-isinstance(jim, Dog) # True
-```
-
-## string
-```python
-cmd1 = "ls -l"
-cmd2 = 'ls -l'
-cmd3 = """ls -l"""      # '''ls -l'''
-cmd4 = f"echo {2 + 3}"
-cmd5 = r"echo C:\path\to\file"
-
-# multiple-line string
-
-#1 use triple-quoted strings for readability
-cmd = f"""\
-nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
-show cable modem brief | t
-EOF' > {TMP_MODEM_LIST}
-"""
-
-#2 parentheses with implicit concatenation
-cmd = (
-    f"nomad alloc status $(nomad job allocs {EVCNAME} "
-    "| awk '/snmp/{{print $1}}') 2>/dev/null "
-    "| awk '/snmp-nsi-port/{{print $3}}'"
-)
-
-#3 for embeded templates
-config_template = """\
-interface {iface}
- description {desc}
- ip address {ip} {mask}
-"""
-
-print(config_template.format(iface="eth0", desc="uplink", ip="192.168.1.1", mask="255.255.255.0"))
-
-# use template file
-
-# get_modem_list.template:
-nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
-show cable modem brief | t
-EOF
-' > {OUTPUT_FILE}
-# load and fill the template in python
-from pathlib import Path
-
-TEMPLATE_PATH = Path("templates/get_modem_list.sh")
-
-EVCNAME = "evc-morris-dentist"
-TMP_MODEM_LIST = "/tmp/modem.list"
-
-# Load template
-template = TEMPLATE_PATH.read_text()
-
-# Substitute variables
-cmd = template.format(EVCNAME=EVCNAME, OUTPUT_FILE=TMP_MODEM_LIST)
-
-print(cmd)
-
-# one template file containing multiple command templates
-#1
-# modem_tasks.tpl:
-### CMD:FETCH_MODEM_LIST
-nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
-show cable modem brief | t
-EOF
-' > {OUTPUT_FILE}
-
-### CMD:SNMP_WALK_MODEM
-snmpwalk -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.2.2.1.2 > {OUTPUT_FILE}
-
-### CMD:REBOOT_MODEM
-snmpset -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.69.1.1.3.0 i 1
-
-# python loader:
-from pathlib import Path
-import re
-
-def load_templates(path):
-    text = Path(path).read_text()
-    sections = re.split(r'^### CMD:(\w+)', text, flags=re.M)
-    # sections = ['', 'FETCH_MODEM_LIST', '<body>', 'SNMP_WALK_MODEM', '<body>', ...]
-    templates = {}
-    for i in range(1, len(sections), 2):
-        templates[sections[i]] = sections[i+1].strip()
-    return templates
-
-templates = load_templates("templates/modem_tasks.sh.tpl")
-
-cmd = templates["SNMP_WALK_MODEM"].format(
-    COMMUNITY="public",
-    MODEM_IP="192.168.0.2",
-    OUTPUT_FILE="/tmp/snmp.out"
-)
-
-print(cmd)
-
-#2
-# modem_tasks.yaml:
-FETCH_MODEM_LIST: |
-  nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
-  show cable modem brief | t
-  EOF
-  ' > {OUTPUT_FILE}
-
-SNMP_WALK_MODEM: |
-  snmpwalk -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.2.2.1.2 > {OUTPUT_FILE}
-
-REBOOT_MODEM: |
-  snmpset -v2c -c {COMMUNITY} {MODEM_IP} .1.3.6.1.2.1.69.1.1.3.0 i 1
-
-# python loader:
-import yaml
-
-templates = yaml.safe_load(open("templates/modem_tasks.yaml"))
-
-cmd = templates["REBOOT_MODEM"].format(
-    COMMUNITY="public",
-    MODEM_IP="192.168.0.2"
-)
-
-print(cmd)
-```
 
 ## list, tuple, set
 ```
-            |   List  |  Tuple |   Set     
+            |   List  |  Tuple |   Set
 ------------|---------|--------|--------
-Syntax      |   [ ]   |   ( )  |   { }                
+Syntax      |   [ ]   |   ( )  |   { }
 ------------|---------|--------|--------
-Duplicates? |   Yes   |   Yes  |   No             
+Duplicates? |   Yes   |   Yes  |   No
 ------------|---------|--------|--------
-Ordered?    |   Yes   |   Yes  |   No          
+Ordered?    |   Yes   |   Yes  |   No
 ------------|---------|--------|--------
-Mutable?    |   Yes   |   No   |   Yes      
+Mutable?    |   Yes   |   No   |   Yes
 ------------|---------|--------|--------
 ```
 
@@ -2226,165 +1440,6 @@ python -m pylint mymodule.py
 python -m black mymodule.py
 ```
 
-## example
-```python
-#!/usr/bin/env python3
-import subprocess
-import re
-from pathlib import Path
-
-# -------------------------------
-# Configuration
-# -------------------------------
-EVCNAME = "evc-morris-dentist"
-SNMPNAME = "snmp-evc-morris-dentist-1"
-DHCP_SERVER = "root@10.254.25.42"
-DHCP_SERVER_PASSWORD = "vecima@atc"
-MIB_DIR = "/home/tcao/mibs"
-MIBTABLE_CMTSCMPTR = "DOCS-IF-MIB:docsIfCmtsCmPtr"
-MIBTABLE_CMTSCMSTATUS = "DOCS-IF-MIB:docsIfCmtsCmStatusTable"
-
-TMP_MODEM_LIST = Path("/tmp/modem.list")
-TMP_MODEM_MAC_IP_LIST = Path("/tmp/modem_mac_ip.list")
-
-
-# -------------------------------
-# Helpers
-# -------------------------------
-def run_cmd(cmd, capture=True):
-    print(f"[RUN] {cmd}")
-    result = subprocess.run(cmd, shell=True, text=True, capture_output=capture)
-    if capture:
-        return result.stdout.strip()
-    return None
-
-
-def hexmac2decmac(hexstr, isep=":", osep="."):
-    parts = hexstr.split(isep)
-    try:
-        return osep.join(str(int(p, 16)) for p in parts)
-    except ValueError:
-        return ""
-
-
-def getmodemip(line):
-    match = re.search(r"\[([^\]]*)\]", line)
-    ipv4, ipv6 = "", ""
-    if match:
-        for ip in match.group(1).split():
-            if "." in ip:
-                ipv4 = ip
-            elif ":" in ip:
-                ipv6 = ip
-    if not ipv4:
-        ipv4 = "0.0.0.0"
-    return f"{ipv4} {ipv6}".strip()
-
-
-# -------------------------------
-# Nomad data collection
-# -------------------------------
-def get_modem_list():
-    cmd = f"""nomad alloc exec -task evc -job {EVCNAME} sh -c 'ncs_cli -u admin <<EOF
-show cable modem brief | t
-EOF
-' > {TMP_MODEM_LIST}"""
-    run_cmd(cmd, capture=False)
-
-
-def parse_modem_list():
-    out_lines = []
-    with TMP_MODEM_LIST.open() as fin:
-        for line in fin:
-            if "operational" in line:
-                fields = line.strip().split()
-                if not fields:
-                    continue
-                mac = hexmac2decmac(fields[0])
-                ip = getmodemip(line)
-                out_lines.append(f"{mac} {ip}")
-    TMP_MODEM_MAC_IP_LIST.write_text("\n".join(out_lines))
-    return out_lines
-
-
-def get_snmp_nsiport():
-    cmd = (
-        f"nomad alloc status $(nomad job allocs {SNMPNAME} "
-        "| awk '/snmp/{print $1}') 2>/dev/null | awk '/snmp-nsi-port/{print $3}'"
-    )
-    return run_cmd(cmd)
-
-
-# -------------------------------
-# Optimized SNMP fetching
-# -------------------------------
-def fetch_snmp_data(snmp_port):
-    """Run snmpwalk for both MIB tables once and return text outputs."""
-    base_ssh = (
-        f"sshpass -p '{DHCP_SERVER_PASSWORD}' ssh -o StrictHostKeyChecking=no "
-        f"-o UserKnownHostsFile=/dev/null {DHCP_SERVER} 2>/dev/null"
-    )
-
-    cmd_ptr = f"{base_ssh} snmpwalk -On -v2c -c public {snmp_port} {MIBTABLE_CMTSCMPTR} -M {MIB_DIR}"
-    cmd_status = f"{base_ssh} snmpwalk -On -v2c -c public {snmp_port} {MIBTABLE_CMTSCMSTATUS} -M {MIB_DIR}"
-
-    print("[INFO] Fetching SNMP pointer table once...")
-    cmts_ptr_data = run_cmd(cmd_ptr)
-
-    print("[INFO] Fetching SNMP status table once...")
-    cmts_status_data = run_cmd(cmd_status)
-
-    return cmts_ptr_data.splitlines(), cmts_status_data.splitlines()
-
-
-def run_snmp_analysis(snmp_port):
-    # Step 1: Fetch both SNMP tables once
-    cmts_ptr_lines, cmts_status_lines = fetch_snmp_data(snmp_port)
-
-    # Step 2: Build modem_mac -> key mapping
-    mac_key_map = {}
-    for line in cmts_ptr_lines:
-        parts = line.strip().split()
-        if len(parts) < 2:
-            continue
-        oid_val = parts[-1]
-        for decmac, *_ in (l.split() for l in TMP_MODEM_MAC_IP_LIST.read_text().splitlines()):
-            if decmac in line:
-                mac_key_map[decmac] = oid_val
-
-    # Step 3: For each modem, find its IP entries from status table
-    for decmac, key in mac_key_map.items():
-        mac_hex = ":".join(f"{int(p):02x}" for p in decmac.split("."))
-        print(f"\nMAC (dec): {decmac}")
-        print(f"MAC (hex): {mac_hex}")
-
-        matches = [l for l in cmts_status_lines if key in l and "IpAddress" in l]
-        if matches:
-            print("\n".join(matches))
-        else:
-            print("(No IpAddress found)")
-
-        print("\n--------------------------------\n")
-
-
-# -------------------------------
-# Main flow
-# -------------------------------
-def main():
-    get_modem_list()
-    modem_lines = parse_modem_list()
-    print(f"[INFO] Parsed {len(modem_lines)} modem entries")
-
-    snmp_port = get_snmp_nsiport()
-    print(f"[INFO] SNMP NSI Port: {snmp_port}")
-
-    run_snmp_analysis(snmp_port)
-
-
-if __name__ == "__main__":
-    main()
-```
-
 ## time
 [A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)  
 [time — Time access and conversions](https://docs.python.org/3/library/time.html)  
@@ -2418,124 +1473,6 @@ When to use shell=True (and when not to)
 3. Security warning: Never use shell=True with untrusted input. If you must, quote variables (e.g., with shlex.quote)—but prefer avoiding shell=True entirely.
 """
 
-# safely and securely use the subprocess Python module
-subprocess.run(f"mycommand {user} {argument}", shell=True, check=True) # Dangerous
-subprocess.run(shlex.split(f"mycommand {user} {argument}"), shell=True, check=True)
-
-# Python Pipes to Avoid Shells
-def count_lines(website):
-    args = ['curl', website]
-    args2 = ['wc', '-l']
-    process_curl = subprocess.Popen(args, stdout=subprocess.PIPE,
-                                    shell=False)
-    process_wc = subprocess.Popen(args2, stdin=process_curl.stdout,
-                                  stdout=subprocess.PIPE, shell=False)
-    # Allow process_curl to receive a SIGPIPE if process_wc exits.
-    process_curl.stdout.close()
-    return process_wc.communicate()[0]
-
-# command execution
-import subprocess
-# Simple command execution
-#result = subprocess.run(['ls', '-l'], capture_output=True, text=True)
-result = subprocess.run(shlex.split("ls -l"), capture_output=True, text=True)
-print(result.stdout)
-
-# With additional parameters
-result = subprocess.run(
-    ['python', 'script.py'],
-    capture_output=True,
-    text=True,
-    timeout=60,
-    check=True
-)
-print(result.stdout)
-
-# How to Pipe Subprocess Outputs to Inputs of Subprocesses
-process1 = subprocess.run(["cat","sample.txt"],capture_output=True,text=True)
-process2 = subprocess.run(["grep","-n","Python"],capture_output=True,text=True,input=process1.stdout)
-print(process_2.stdout)
-
-# example
-import subprocess
-import re
-import sys
-import shlex
-import time
-
-def get_nomad_job_id(job_name="vmc-evc-morris-dentist"):
-    try:
-        cmd = f"nomad job status"
-        job_status = subprocess.run(shlex.split(cmd), capture_output=True, text=True, check=True)
-        my_job_status = subprocess.run(['grep', 'vmc-evc-morris-dentist'], input=job_status.stdout, text=True, capture_output=True, check=True)
-        output = my_job_status.stdout.strip()
-        match = re.search(rf"^({job_name}[^\s]+)", output)
-        if match:
-            return match.group(1)
-    except subprocess.CalledProcessError as e:
-      raise RuntimeError(f"Failed to get Nomad job ID: {e.stderr.strip()}") from e
-    except Exception as e:
-      raise RuntimeError(f"An error occurred while getting Nomad job ID: {str(e)}") from e
-
-def execute_confd_command(job_id, confd_cmd, filter):
-    try:
-        nomad_cmd = (
-          "nomad", "alloc", "exec",
-          "-task", "vmc",
-          "-job", job_id,
-          "sh", "-c", confd_cmd
-        )
-
-        result = subprocess.run(
-            nomad_cmd,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-
-        #return result.stdout.strip()
-        return [line for line in result.stdout.splitlines() if re.search(filter, line)]
-
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"Failed to execute confd command: {e.stderr.strip()}") from e
-        sys.exit(1)
-
-def main():
-  try:
-      job_id = get_nomad_job_id()
-      print(f"Nomad Job ID: {job_id}")
-
-      while True:
-          confd_cmd = (
-            "confd_cli -u admin <<EOF\n"
-            "show configuration DOCS-IF3-MIB docsIf3BondingGrpCfgTable | tab\n"
-            "EOF"
-          )
-          mib_output = execute_confd_command(job_id, confd_cmd, 'downstream')
-
-          confd_cmd = (
-            "confd_cli -u admin <<EOF\n"
-            "show ccap docsis docs-mac-domain mac-domain morris-dentist_md1_0 downstream-dynamic-bonding-group | tab\n"
-            "EOF"
-          )
-          cli_output = execute_confd_command(job_id, confd_cmd, 'dsdbg')
-
-          if len(mib_output) == len(cli_output):
-              print("MIB output:")
-              print('\n'.join(mib_output))
-              print("CLI output:")
-              print('\n'.join(cli_output))
-          # Wait for 5 seconds before the next iteration
-          time.sleep(5)
-      return 0
-  except Exception as e:
-      print(f"Error: {e}", file=sys.stderr)
-      return 1
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
-
 ## re
 [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
 [Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  
@@ -2545,20 +1482,6 @@ if __name__ == "__main__":
 []()  
 []()  
 []()  
-```python
-import re
-
-prefix = "foo"
-string = "foo123x bar fle"
-
-regex = rf"^({prefix}[^\s]+)"
-re_obj = re.compile(regex)
-
-match = re_obj.search(string)
-if match:
-    print(match.group(1))
-
-```
 
 
 ## generator
@@ -3200,7 +2123,7 @@ def Student(object):
     def __init__(self, name, score):    # 特殊方法__init__前后分别有两个下划线，self 指向创建的实例本身
         self.name = name                # 数据封装: 每个实例就拥有各自的name和score
         self.score = score
-    
+
     def print_score(self):              # 类的方法，第一个参数永远是实例变量self
         print('%s: %s' % (self.name, self.score))
 
@@ -3222,70 +2145,6 @@ lisa.print_score()
 面向对象的设计思想是抽象出Class，根据Class创建Instance
 面向对象的抽象程度又比函数要高，因为一个Class既包含数据，又包含操作数据的方法
 
-# 类和实例
-bart = Student('Bart', 10)  # bart 指向一个 Student 的实例
-bart    # <t1.Student object at 0x7fe6dab3a800>
-
-# 访问限制
-def Student(object):
-    def __init__(self, name, score):
-        self.__name = name              # 实例变量名以 __ 开头，是私有变量，只在类的内部可以访问
-        self.__score = score
-
-    def get_score(self):
-        return self.__score
-
-    def set_score(self, score):         # 在方法中，可以对参数做检查，避免传入无效的参数
-        self.__score = score
-
-类似 __xxx__ 的变量名是 特殊变量，特殊变量可以直接访问，特殊变量不是 private 变量
-
-# 继承和多态
-class Animal(object):
-    def run(self):
-        print('Animal is running ...')
-
-class Dog(Animal):
-    def run(self):
-        print('Dog is running ...')
-
-class Cat(Animal):
-    def run(self):
-        print('Cat is running ...')
-
-def run_twice(animal):
-    animal.run()
-    animal.run()
-
-dog = Dog()
-cat = Cat()
-isinstance(dog, Animal)     # True
-isinstance(cat, Animal)     # True
-
-run_twice(dog)      # Dog is running ...
-run_twice(cat)      # Cat is running ...
-
-多态的好处：新增一个 Animal 的子类，不必对 run_twice() 做任何修改，任何依赖 Animal 作为参数的函数或者方法可以不加修改地正常运行
-
-def Tortoise(Animal):
-    def run(self):
-        print('Tortoise is running ...')
-
-run_twice(Tortoise())   # Tortoise is running
-
-"开闭原则"
-对扩展开发：允许新增 Animal 子类
-对修改封闭：不需要修改依赖 Animal 类型的 run_twice() 等函数
-
-动态语言的 "鸭子类型"：不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子
-
-对于Python这样的动态语言来说，则不一定需要传入Animal类型。我们只需要保证传入的对象有一个run()方法就可以了
-class Timer(object):
-    def run(self):
-        print('Start ...')
-
-t = Timer()
-run_twice(t)    # Start ...
 
 # 获取对象信息
 # 1 判断对象类型
@@ -3460,7 +2319,7 @@ class Student(object):
     @property           # 把 getter 方法变成属性
     def score(self):
         return self._score
-    
+
     @score.setter       # 把 setter 方法变成属性赋值
     def score(self, value):
         if not isinstance(value, int):
@@ -3662,7 +2521,7 @@ __getattr__() 方法用来动态的返回一个属性，从而避免上述错误
 class Student(object):
     def __inti__(self):
         self.name = 'Michael'
-    
+
     def __getattr__(self, attr):
         if attr == 'score':
             return 99
@@ -4213,375 +3072,6 @@ json_str = '{"age": 20, "score": 88, "name": "Bob"}'
 print(json.loads(json_str, object_hook=dict2student))   # <__main__.Student object at 0x10cd3c190>，打印出的是反序列化的Student实例对象
 ```
 
-## 多进程
-```python
-from multiprocessing import Process
-import os
-
-def run_proc(name):
-    print('Run child process %s (%s)...' % (name, os.getpid()))
-
-if __name == '__main__':
-    print('Parent process %s.' % os.getpid())
-    p = Process(target=run_proc, args=('test',))
-    print('Child process will start.')
-    p.start()
-    p.join()
-    print('Child process end')
-
-# Pool
-Pool 用于启动大量子进程
-from multiprocessing import Pool
-import os, time, random
-
-def long_time_task(name):
-    print('Run task %s (%s)...' % (name, os.getpid()))
-    start = time.time()
-    time.sleep(random.random() * 3)
-    end = time.time()
-    print('Task %s runs %0.2f seconds.' % (name, (end - start)))
-
-if __name__=='__main__':
-    print('Parent process %s.' % os.getpid())
-    p = Pool(4)
-    for i in range(5):
-        p.apply_async(long_time_task, args=(i,))
-    print('Waiting for all subprocesses done...')
-    p.close()
-    p.join()                 # 对Pool对象调用join()方法会等待所有子进程执行完毕，调用join()之前必须先调用close()，调用close()之后就不能继续添加新的Process
-    print('All subprocesses done.')
-
-# subprocess
-subprocess模块可以让我们非常方便地启动一个外部程序，然后控制其输入和输出
-
-# 1
-import subprocess
-
-print('$ nslookup www.python.org')
-r = subprocess.call(['nslookup', 'www.python.org'])
-print('Exit code:', r)
-
-# 2
-import subprocess
-
-print('$ nslookup')
-p = subprocess.Popen(['nslookup'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-output, err = p.communicate(b'set q=mx\npython.org\nexit\n')
-print(output.decode('utf-8'))
-print('Exit code:', p.returncode)
-相当于在命令行执行 nslookup ，然后手动输入
-set q=mx
-python.org
-exit
-
-# 进程间通信
-multiprocessing模块包装了底层的机制，提供了Queue、Pipes等多种方式来交换数据
-
-from multiprocessing import Process, Queue
-import os, time, random
-
-# 写数据进程执行的代码:
-def write(q):
-    print('Process to write: %s' % os.getpid())
-    for value in ['A', 'B', 'C']:
-        print('Put %s to queue...' % value)
-        q.put(value)
-        time.sleep(random.random())
-
-# 读数据进程执行的代码:
-def read(q):
-    print('Process to read: %s' % os.getpid())
-    while True:
-        value = q.get(True)
-        print('Get %s from queue.' % value)
-
-if __name__=='__main__':
-    # 父进程创建Queue，并传给各个子进程：
-    q = Queue()
-    pw = Process(target=write, args=(q,))
-    pr = Process(target=read, args=(q,))
-    # 启动子进程pw，写入:
-    pw.start()
-    # 启动子进程pr，读取:
-    pr.start()
-    # 等待pw结束:
-    pw.join()
-    # pr进程里是死循环，无法等待其结束，只能强行终止:
-    pr.terminate()
-
-# 多线程
-_thread是低级模块，threading是高级模块，对_thread进行了封装
-
-import time, threading
-
-# 新线程执行的代码:
-def loop():
-    print('thread %s is running...' % threading.current_thread().name)
-    n = 0
-    while n < 5:
-        n = n + 1
-        print('thread %s >>> %s' % (threading.current_thread().name, n))
-        time.sleep(1)
-    print('thread %s ended.' % threading.current_thread().name)
-
-print('thread %s is running...' % threading.current_thread().name)
-t = threading.Thread(target=loop, name='LoopThread')
-t.start()
-t.join()
-print('thread %s ended.' % threading.current_thread().name)
-
-# Lock
-多进程中，同一个变量，各自有一份拷贝存在于每个进程中，互不影响
-多线程中，所有变量都由所有线程共享
-
-balance = 0
-lock = threading.Lock()
-
-def run_thread(n):
-    for i in range(100000):
-        # 先要获取锁:
-        lock.acquire()
-        try:
-            # 放心地改吧:
-            change_it(n)
-        finally:
-            # 改完了一定要释放锁:
-            lock.release()
-
-# 多核CPU
-import threading, multiprocessing
-
-def loop():
-    x = 0
-    while True:
-        x = x ^ 1
-
-for i in range(multiprocessing.cpu_count()):
-    t = threading.Thread(target=loop)
-    t.start()
-
-启动与CPU核心数量相同的N个线程，在4核CPU上可以监控到CPU占用率仅有102%，也就是仅使用了一核，Python的线程虽然是真正的线程，但解释器执行代码时，有一个GIL锁：Global Interpreter Lock，任何Python线程执行前，必须先获得GIL锁，然后，每执行100条字节码，解释器就自动释放GIL锁，让别的线程有机会执行。这个GIL全局锁实际上把所有线程的执行代码都给上了锁，所以，多线程在Python中只能交替执行，即使100个线程跑在100核CPU上，也只能用到1个核
-
-Python虽然不能利用多线程实现多核任务，但可以通过多进程实现多核任务。多个Python进程有各自独立的GIL锁，互不影响
-
-# Threadlocal
-多线程环境下，每个线程有自己独立的数据，局部变量只有线程本身可见，不会影响别的线程，而全局变量的修改必须加锁
-局部变量的问题：函数调用时，参数传递麻烦
-def process_student(name):
-    std = Student(name)
-    # std是局部变量，但是每个函数都要用它，因此必须传进去：
-    do_task_1(std)
-    do_task_2(std)
-
-def do_task_1(std):
-    do_subtask_1(std)
-    do_subtask_2(std)
-
-def do_task_2(std):
-    do_subtask_2(std)
-    do_subtask_2(std)
-
-问题：层层函数调用都需要传递参数，使用全局变量也不行因为每个线程处理不同的对象不能共享
-
-解决思路：用一个全局的 dict 存放所有对象，然后以 thread 自身作为 key 获得线程对应的对象
-global_dict = {}
-
-def std_thread(name):
-    std = Student(name)
-    # 把std放到全局变量global_dict中：
-    global_dict[threading.current_thread()] = std
-    do_task_1()
-    do_task_2()
-
-def do_task_1():
-    # 不传入std，而是根据当前线程查找：
-    std = global_dict[threading.current_thread()]
-    ...
-
-def do_task_2():
-    # 任何函数都可以查找出当前线程的std变量：
-    std = global_dict[threading.current_thread()]
-    ...
-
-优点：消除了std对象在每层函数中的传递问题
-缺点：每个函数获取std的代码有点丑
-
-# ThreadLocal 用来解决参数在一个线程中各个函数之间互相传递的问题，ThreadLocal变量虽然是全局变量，但每个线程都只能读写自己线程的独立副本，互不干扰
-ThreadLocal最常用的地方就是为每个线程绑定一个数据库连接，HTTP请求，用户身份信息等，这样一个线程的所有调用到的处理函数都可以非常方便地访问这些资源
-
-import threading
-
-# 创建全局 Threadlocal 对象
-local_school = threading.local()
-
-def process_student():
-    # 获取当前线程关联的 student:
-    std = local_school.student
-    print('Hello, %s (in %s)' % (std, threading.current_thread().name))
-
-def process_thread(name):
-    # 绑定 ThreadLocal 的 student
-    local_school.student = name
-    process_student()
-
-t1 = threading.Thread(target=process_thread, args=('Alice',), name='Thread-A')
-t1 = threading.Thread(target=process_thread, args=('Bob',), name='Thread-B')
-t1.start()
-t2.start()
-t1.join()
-t2.join()
-
-Output:
-Hello, Alice (in Thread-A)
-Hello, Bob (in Thread-B)
-
-# 多进程 vs 多线程
-实现多任务通常使用 Master-Worker模式，Master负责分配任务，Worker负责执行任务，因此，多任务环境下，通常是一个Master，多个Worker
-如果用多进程实现Master-Worker，主进程就是Master，其他进程就是Worker
-如果用多线程实现Master-Worker，主线程就是Master，其他线程就是Worker
-
-多进程模式：
-优点：稳定性高，一个子进程崩溃了，不会影响主进程和其他子进程 （当然主进程挂了所有进程就全挂了，但是Master进程只负责分配任务，挂掉的概率低），Apache最早就是采用多进程模式
-缺点：创建进程的代价大 (Unix/Linux系统下，用fork调用还行，在Windows下创建进程开销巨大)
-
-多线程模式：
-优点：比多进程快一点，但是也快不到哪去
-缺点：任何一个线程挂掉都可能直接造成整个进程崩溃，因为所有线程共享进程的内存
-
-# 线程/进程切换
-无论是多进程还是多线程，只要数量一多，效率肯定上不去，因此操作系统切换任务本身是需要代价的
-
-# 计算密集型任务 vs IO密集型任务
-计算密集型任务：主要消耗CPU资源
-IO密集型任务：CPU消耗很少，任务的大部分时间都在等待IO操作完成（IO的速度远远低于CPU和内存的速度），此时不同语言的效率差异几乎可以忽略不计
-
-# 分布式进程
-对于 Thread 和 Process 应该优先选用 Process，因为 Process 更稳定，并且 Process 可以分布到多台机器上，而 Thread 只能分布到同一台机器的多个 CPU 上
-
-multiprocessing 模块不但支持多进程，其中managers子模块还支持把多进程分布到多台机器上
-
-#  服务进程负责启动Queue，把Queue注册到网络上，然后往Queue里面写入任务
-# task_master.py
-
-import random, time, queue
-from multiprocessing.managers import BaseManager
-
-# 发送任务的队列:
-task_queue = queue.Queue()
-# 接收结果的队列:
-result_queue = queue.Queue()
-
-# 从BaseManager继承的QueueManager:
-class QueueManager(BaseManager):
-    pass
-
-# 把两个Queue都注册到网络上, callable参数关联了Queue对象:
-QueueManager.register('get_task_queue', callable=lambda: task_queue)
-QueueManager.register('get_result_queue', callable=lambda: result_queue)
-# 绑定端口5000, 设置验证码'abc':
-manager = QueueManager(address=('', 5000), authkey=b'abc')
-# 启动Queue:
-manager.start()
-# 获得通过网络访问的Queue对象:
-task = manager.get_task_queue()
-result = manager.get_result_queue()
-# 放几个任务进去:
-for i in range(10):
-    n = random.randint(0, 10000)
-    print('Put task %d...' % n)
-    task.put(n)
-# 从result队列读取结果:
-print('Try get results...')
-for i in range(10):
-    r = result.get(timeout=10)
-    print('Result: %s' % r)
-# 关闭:
-manager.shutdown()
-print('master exit.')
-
-# 在另一台机器上启动任务进程（本机上启动也可以）
-# task_worker.py
-
-import time, sys, queue
-from multiprocessing.managers import BaseManager
-
-# 创建类似的QueueManager:
-class QueueManager(BaseManager):
-    pass
-
-# 由于这个QueueManager只从网络上获取Queue，所以注册时只提供名字:
-QueueManager.register('get_task_queue')
-QueueManager.register('get_result_queue')
-
-# 连接到服务器，也就是运行task_master.py的机器:
-server_addr = '127.0.0.1'
-print('Connect to server %s...' % server_addr)
-# 端口和验证码注意保持与task_master.py设置的完全一致:
-m = QueueManager(address=(server_addr, 5000), authkey=b'abc')
-# 从网络连接:
-m.connect()
-# 获取Queue的对象:
-task = m.get_task_queue()
-result = m.get_result_queue()
-# 从task队列取任务,并把结果写入result队列:
-for i in range(10):
-    try:
-        n = task.get(timeout=1)
-        print('run task %d * %d...' % (n, n))
-        r = '%d * %d = %d' % (n, n, n*n)
-        time.sleep(1)
-        result.put(r)
-    except Queue.Empty:
-        print('task queue is empty.')
-# 处理结束:
-print('worker exit.')
-
-Queue之所以能通过网络访问，就是通过QueueManager实现的。由于QueueManager管理的不止一个Queue，所以，要给每个Queue的网络调用接口起个名字，比如get_task_queue
-authkey 是为了保证两台机器正常通信，不被其他机器恶意干扰。如果task_worker.py的authkey和task_master.py的authkey不一致，肯定连接不上
-
-[Queue对象的存储](picture)
-
-注意：Queue的作用是用来传递任务和接收结果，每个任务的描述数据量要尽量小。比如发送一个处理日志文件的任务，就不要发送几百兆的日志文件本身，而是发送日志文件存放的完整路径，由Worker进程再去共享的磁盘上读取文件
-```
-## 正则表达式
-```python
-# 1
-import re
-
-if re.match(r'ABC\-001', 'ABC\-001'):
-    print('matched')
-else:
-    print('not match')
-
-# 切分字符串
-re.split(r'[\s\,\;]+', 'a,b;; c  d')    # ['a', 'b', 'c', 'c']
-
-# 提取分组
-m = re.match(r'^(\d{3})-(\d{3,8})$', '010-12345')
-m.group(0)  # '010-12345'
-m.group(1)  # '010'
-m.group(2)  # '12345'
-
-# 贪婪匹配 vs 非贪婪匹配
-
-正则匹配默认是贪婪匹配，也就是匹配尽可能多的字符
-re.match(r'^(\d+)(0*)$', '102300').groups() # ('102300', '')
-
-通过添加 ? 进行非贪婪匹配
-re.match(r'^(\d+?)(0*)$', '102300').groups()    # ('1023', '00')
-
-# 编译正则表达式
-re 模块内部使用正则表达式
-1.编译正则表达式，如果正则表达式的字符串本身不合法，会报错
-2.用编译后的正则表达式去匹配字符串
-
-如果一个正则表达式要重复使用多次，通过预编译正则表达式，可以提高效率
-import re
-
-re_telephone = re.compile(r'^(\d{3})-(\d{3,8})$')
-re_telephone.match('010-12345').groups()            # ('010', '12345')
-```
-
 ## 常用内建模块
 ```python
 # datetime
@@ -4755,91 +3245,6 @@ target = sys.argv[2]
 
 对于复杂的参数处理，可以使用内置的argparse库
 
-# 示例：编写一个备份MySQL数据库的命令行程序，需要输入的参数如下
-host参数：表示MySQL主机名或IP，不输入则默认为localhost
-port参数：表示MySQL的端口号，int类型，不输入则默认为3306
-user参数：表示登录MySQL的用户名，必须输入
-password参数：表示登录MySQL的口令，必须输入
-gz参数：表示是否压缩备份文件，不输入则默认为False
-outfile参数：表示备份文件保存在哪，必须输入
-
-# backup.py
-
-import argparse
-
-def main():
-    # 定义一个ArgumentParser实例:
-    parser = argparse.ArgumentParser(
-        prog='backup', # 程序名
-        description='Backup MySQL database.', # 描述
-        epilog='Copyright(r), 2023' # 说明信息
-    )
-    # 定义位置参数:
-    parser.add_argument('outfile')
-    # 定义关键字参数:
-    parser.add_argument('--host', default='localhost')
-    # 此参数必须为int类型:
-    parser.add_argument('--port', default='3306', type=int)
-    # 允许用户输入简写的-u:
-    parser.add_argument('-u', '--user', required=True)
-    parser.add_argument('-p', '--password', required=True)
-    parser.add_argument('--database', required=True)
-    # gz参数不跟参数值，因此指定action='store_true'，意思是出现-gz表示True:
-    parser.add_argument('-gz', '--gzcompress', action='store_true', required=False, help='Compress backup files by gz.')
-
-    # 解析参数:
-    args = parser.parse_args()
-
-    # 打印参数:
-    print('parsed args:')
-    print(f'outfile = {args.outfile}')
-    print(f'host = {args.host}')
-    print(f'port = {args.port}')
-    print(f'user = {args.user}')
-    print(f'password = {args.password}')
-    print(f'database = {args.database}')
-    print(f'gzcompress = {args.gzcompress}')
-
-if __name__ == '__main__':
-    main()
-
-# 测试
-# 1 输入有效的参数
-$ ./backup.py -u root -p hello --database testdb backup.sql
-parsed args:
-outfile = backup.sql
-host = localhost
-port = 3306
-user = root
-password = hello
-database = testdb
-gzcompress = False
-
-# 2 缺少必要的参数，或者参数不对，将报告详细的错误信息
-$ ./backup.py --database testdb backup.sql
-usage: backup [-h] [--host HOST] [--port PORT] -u USER -p PASSWORD --database DATABASE outfile
-backup: error: the following arguments are required: -u/--user, -p/--password
-
-# 3 如果输入-h，则打印帮助信息
-$ ./backup.py -h                          
-usage: backup [-h] [--host HOST] [--port PORT] -u USER -p PASSWORD --database DATABASE outfile
-
-Backup MySQL database.
-
-positional arguments:
-  outfile
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --host HOST
-  --port PORT
-  -u USER, --user USER
-  -p PASSWORD, --password PASSWORD
-  --database DATABASE
-  -gz, --gzcompress     Compress backup files by gz.
-
-Copyright(r), 2023
-
 # base64
 Base64是一种用64个字符来表示任意二进制数据的方法，常用于在URL、Cookie、网页中传输少量二进制数据
 
@@ -4990,13 +3395,13 @@ class Query(object):
     def __enter__(self):
         print('Begin')
         return self
-    
+
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_type:
             print('Error')
         else:
             print('End')
-    
+
     def query(self):
         print('Query info about %s...' % self.name)
 
@@ -5106,174 +3511,19 @@ chardet 用来检测编码，支持检测中文、日文、韩文等多种语言
 # psutil
 psutil 用来获取系统信息（CPU, 内存, 磁盘, 网络 ...），主要用来简化运维工作
 ```
-## 图形界面
-## 网络编程
-```python
-# tcp
-# tcp_server.py
-
-import socket
-import threading
-import time
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(('127.0.0.1', 9999))
-s.listen(5)
-
-print('Waiting for connection...')
-
-def tcplink(sock, addr):
-    print('Accept new connection from %s:%s...' % addr)
-    sock.send(b'Welcome!')
-    while True:
-        data = sock.recv(1024)
-        time.sleep(1)
-        if not data or data.decode('utf-8') == 'exit':
-            break
-        sock.send(('Hello, %s!' % data.decode('utf-8')).encode('utf-8'))
-    sock.close()
-    print('Connection from %s:%s closed.' % addr)
-
-while True:
-    sock, addr = s.accept()     #接受一个新连接
-    t = threading.Thread(target=tcplink, args=(sock, addr))     # 创建新线程来处理TCP连接
-    t.start()
-
-# tcp_client.py
-
-import socket
-import threading
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# 建立连接:
-s.connect(('127.0.0.1', 9999))
-# 接收欢迎消息:
-print(s.recv(1024).decode('utf-8'))
-for data in [b'Michael', b'Tracy', b'Sarah']:
-    # 发送数据:
-    s.send(data)
-    print(s.recv(1024).decode('utf-8'))
-s.send(b'exit')
-s.close()
-
-# udp
-
-# udp_server.py
-import socket
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# 绑定端口:
-s.bind(('127.0.0.1', 9999))
-print('Bind UDP on 9999...')
-
-while True:
-    # 接收数据:
-    data, addr = s.recvfrom(1024)
-    print('Received from %s:%s.' % addr)
-    s.sendto(b'Hello, %s!' % data, addr)
-
-# tcp_client.py
-import socket
-
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-for data in [b'Michael', b'Tracy', b'Sarah']:
-    # 发送数据:
-    s.sendto(data, ('127.0.0.1', 9999))
-    # 接收数据:
-    print(s.recv(1024).decode('utf-8'))
-
-s.close()
-```
-
-## 电子邮件
-```python
-# 一封电子邮件的旅程：
-发件人 -> MUA -> MTA -> MTA -> 若干个MTA -> MDA <- MUA <- 收件人
-MUA：Mail User Agent    （通常是 Outlook, Foxmail 等客户端软件）
-MTA：Mail Transfer Agent    (Email服务提供商，比如网易、新浪等等)
-MDA：Mail Delivery Agent    ()
-
-# SMTP发送邮件
-Python对SMTP支持有smtplib和email两个模块，email负责构造邮件，smtplib负责发送邮件
-
-# POP3收取邮件
-poplib模块，实现了POP3协议，可以直接用来收邮件，email模块提供的各种类来解析原始文本，变成可阅读的邮件对象
-```
-
-## 访问数据库
-```python
-表是数据库中存放关系数据的集合，一个数据库里面通常都包含多个表，比如学生的表，班级的表，学校的表，等等。表和表之间通过外键关联
-要操作关系数据库，首先需要连接到数据库，一个数据库连接称为Connection
-连接到数据库后，需要打开游标，称之为Cursor，通过Cursor执行SQL语句，然后，获得执行结果
-
-
-# SQLite
-SQLite是一种嵌入式数据库，它的数据库就是一个文件。由于SQLite本身是C写的，而且体积很小，所以，经常被集成到各种应用程序中，甚至在iOS和Android的App中都可以集成
-import sqlite3
-
-conn = sqlite3.connect('test.db')   # 如果文件不存在，会自动在当前目录创建
-cursor = conn.cursor()
-cursor.execute('create table user (id varchar(20) primary key, name varchar(20))')
-cursor.execute('insert into user (id, name) values (\'1\', \'Michael\')')
-cursor.rowcount     # 通过rowcount获得插入的行数
-conn.commit()       # 提交事务
-cursor.close()      # 关闭Cursor
-conn.close()        # 关闭Connection
-
-conn = sqlite3.connect('test.db')
-cursor = conn.cursor()
-cursor.execute('select * from user where id=?', ('1',))     # 执行查询语句
-values = cursor.fetchall()                                  # 获得查询结果集
-values                                                      # [('1', 'Michael')]
-cursor.close()
-conn.close()
-
-# MySQL
-MySQL是Web世界中使用最广泛的数据库服务器
-SQLite的特点是轻量级、可嵌入，但不能承受高并发访问，适合桌面和移动应用。而MySQL是为服务器端设计的数据库，能承受高并发访问，同时占用的内存也远远大于SQLite。
-此外，MySQL内部有多种数据库引擎，最常用的引擎是支持数据库事务的InnoDB
-
-pip install mysql-connector-python
-
-
-# ORM框架 SQLAlchemy
-数据库表是一个二维表，包含多行多列。把一个表的内容用Python的数据结构表示出来的话，可以用一个list表示多行，list的每一个元素是tuple，表示一行记录
-比如，包含id和name的user表
-[
-    ('1', 'Michael'),
-    ('2', 'Bob'),
-    ('3', 'Adam')
-]
-用tuple表示一行很难看出表的结构。如果把一个tuple用class实例来表示，就可以更容易地看出表的结构
-class User(object):
-    def __init__(self, id, name):
-        self.id = id
-        self.name = name
-
-[
-    User('1', 'Michael'),
-    User('2', 'Bob'),
-    User('3', 'Adam')
-]
-ORM技术：Object-Relational Mapping，把关系数据库的表结构映射到对象上，这种转换是通过 ORM 框架实现的，在Python中，最有名的ORM框架是SQLAlchemy
-
-pip install sqlalchemy
-
-```
 
 ## Web开发
-```python
 Client/Server模式，不适合Web，最大的原因是Web应用程序的修改和升级非常迅速，而CS架构需要每个客户端逐个升级桌面App
 Browser/Server模式：客户端只需要浏览器，应用程序的逻辑和数据都存储在服务器端。浏览器只需要请求服务器，获取Web页面，并把Web页面展示给用户即可
 
-# HTTP
+-  HTTP
 HTML是一种用来定义网页的文本，会HTML，就可以编写网页
 HTTP是在网络上传输HTML的协议，用于浏览器和服务器的通信
 
 HTML定义了页面的内容，CSS来控制页面元素的样式，而JavaScript负责页面的交互逻辑
 
-# HTML
-# hello.html
+- HTML
+```html
 <html>
 <head>
   <title>Hello</title>
@@ -5282,9 +3532,11 @@ HTML定义了页面的内容，CSS来控制页面元素的样式，而JavaScript
   <h1>Hello, world!</h1>
 </body>
 </html>
+```
 
-# CSS(Cascading Style Sheets)
+- CSS(Cascading Style Sheets)
 CSS用来控制HTML里的所有元素如何展现，比如，给标题元素<h1>加一个样式，变成48号字体，灰色，带阴影
+```html
 <html>
 <head>
   <title>Hello</title>
@@ -5300,10 +3552,12 @@ CSS用来控制HTML里的所有元素如何展现，比如，给标题元素<h1>
   <h1>Hello, world!</h1>
 </body>
 </html>
+```
 
-# JavaScript
+-  JavaScript
 JavaScript是为了让HTML具有交互性而作为脚本语言添加的，JavaScript既可以内嵌到HTML中，也可以从外部链接到HTML中
 如果我们希望当用户点击标题时把标题变成红色，就必须通过JavaScript来实现
+```html
 <html>
 <head>
   <title>Hello</title>
@@ -5324,8 +3578,9 @@ JavaScript是为了让HTML具有交互性而作为脚本语言添加的，JavaSc
   <h1 onclick="change()">Hello, world!</h1>
 </body>
 </html>
+```
 
-# WSGI 接口 (Web Server Gateway Interface)
+- WSGI 接口 (Web Server Gateway Interface)
 Web应用的本质：
 1.浏览器发送一个HTTP请求；
 2.服务器收到请求，生成一个HTML文档；
@@ -5337,6 +3592,7 @@ Web应用的本质：
 
 Python内置了一个WSGI服务器，这个模块叫wsgiref，考虑任何运行效率，仅供开发和测试使用
 
+```python
 # hello.py
 def application(environ, start_response):       # application()函数由WSGI服务器调用
     start_response('200 OK', [('Content-Type', 'text/html')])
@@ -5350,12 +3606,13 @@ httpd = make_server('', 8000, application)
 print('Serving HTTP on port 8000...')
 
 httpd.serve_forever()   # 开始监听HTTP请求
+```
 
-# Web框架
+-  Web框架
 WSGI提供的接口比较低级，需要在WSGI接口之上能进一步抽象，让用户专注于用一个函数处理一个URL，至于URL到函数的映射，则交给Web框架来做
 Flask 是一个目前比较流行的Web框架
 Flask通过Python的装饰器在内部自动地把URL和函数给关联起来
-# 
+```python
 from flask import Flask
 from flask import request
 
@@ -5382,6 +3639,7 @@ def signin():
 
 if __name__ == '__main__':
     app.run()
+```
 
 常见的Python Web框架：
 Flask
@@ -5390,11 +3648,13 @@ web.py
 Bottle
 Tornado
 
-# 模板
+- 模板
 Web App最复杂的部分在HTML页面，HTML不仅要正确，还要通过CSS美化，再加上复杂的JavaScript脚本来实现各种交互和动画效果。总之，生成HTML页面的难度很大
-使用模板，则是预先准备一个HTML文档，这个HTML文档不是普通的HTML，而是嵌入了一些变量和指令，然后，根据我们传入的数据，替换后，得到最终的HTML，发送给用户，即MVC：Model-View-Controller
+使用模板，则是预先准备一个HTML文档，这个HTML文档不是普通的HTML，而是嵌入了一些变量和指令，然后，根据我们传入的数据，替换后，得到最终的HTML，发送给用户，
+即MVC：Model-View-Controller
 
-# MVC 模式
+- MVC 模式
+```python
 from flask import Flask, request, render_template
 
 app = Flask(__name__)
@@ -5417,11 +3677,12 @@ def signin():
 
 if __name__ == '__main__':
     app.run()
+```
 
 Flask默认支持的模板是jinja2 (pip install jinja2)
 
-# jinja2模板
-
+- jinja2模板
+```html
 # home.html
 <html>
 <head>
@@ -5431,7 +3692,9 @@ Flask默认支持的模板是jinja2 (pip install jinja2)
   <h1 style="font-style:italic">Home</h1>
 </body>
 </html>
+```
 
+```html
 # form.html
 <html>
 <head>
@@ -5449,7 +3712,9 @@ Flask默认支持的模板是jinja2 (pip install jinja2)
   </form>
 </body>
 </html>
+```
 
+```html
 # signin-ok.html
 <html>
 <head>
@@ -5459,6 +3724,7 @@ Flask默认支持的模板是jinja2 (pip install jinja2)
   <p>Welcome, {{ username }}!</p>
 </body>
 </html>
+```
 
 一定要把模板放到正确的templates目录下，templates和app.py在同级目录下
 app.py
@@ -5475,122 +3741,8 @@ Mako
 Cheetah
 Django
 
-```
 ## 异步IO
 [async](python/async.md)  
 []()  
 []()  
 []()  
-```python
-# 协程 Coroutine
-协程执行过程中，在子程序内部可中断，然后转而执行别的子程序，在适当的时候再返回来接着执行
-协程最大的优势是执行效率，它没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显
-第二大优势就是不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态
-
-Python对协程的支持是通过generator实现
-
-Python的yield不但可以返回一个值，它还可以接收调用者发出的参数
-
-传统的生产者-消费者模型是一个线程写消息，一个线程取消息，通过锁机制控制队列和等待，但一不小心就可能死锁
-改用协程，生产者生产消息后，直接通过yield跳转到消费者开始执行，待消费者执行完毕后，切换回生产者继续生产，效率极高
-
-#
-def consumer():
-    r = ''
-    while True:
-        n = yield r                                     # consumer通过yield拿到消息，处理，又通过yield把结果传回
-        if not n:
-            return
-        print('[CONSUMER] Consuming %s...' % n)
-        r = '200 OK'
-
-def produce(c):
-    c.send(None)                                        # 启动生成器
-    n = 0
-    while n < 5:
-        n = n + 1
-        print('[PRODUCER] Producing %s...' % n)
-        r = c.send(n)                                   # 切换到consumer执行
-        print('[PRODUCER] Consumer return: %s' % r)     # producer拿到consumer处理的结果，继续生产下一条消息
-    c.close()                                           # 关闭consumer
-
-c = consumer()
-produce(c)
-
-整个流程无锁，由一个线程执行，produce和consumer协作完成任务，所以称为“协程”，而非线程的抢占式多任务
-
-# asyncio
-asyncio的编程模型就是一个消息循环。asyncio模块内部实现了EventLoop，把需要执行的协程扔到EventLoop中执行，就实现了异步IO
-用asyncio提供的@asyncio.coroutine可以把一个generator标记为coroutine类型，然后在coroutine内部用yield from调用另一个coroutine实现异步操作
-Python 3.5 引入了新的语法async和await，可以让coroutine的代码更简洁易读
-
-# 
-async def hello(name):
-    print("Hello %s! (%s)" % (name, threading.current_thread))
-    await asyncio.sleep(1)                                              # 主线程并未等待，而是去执行EventLoop中其他可以执行的async函数了，因此可以实现并发执行
-    print("Hello %s again! (%s)" % (name, threading.current_thread))
-    return name
-
-async def main():
-    L = await asyncio.gather(hello("Bob"), hello("Alice"))
-    print(L)
-
-asyncio.run(main())
-
-# 用asyncio的异步网络连接来获取sina、sohu和163的网站首页
-import asyncio
-
-async def wget(host):
-    print(f"wget {host}...")
-    # 连接80端口:
-    reader, writer = await asyncio.open_connection(host, 80)
-    # 发送HTTP请求:
-    header = f"GET / HTTP/1.0\r\nHost: {host}\r\n\r\n"
-    writer.write(header.encode("utf-8"))
-    await writer.drain()
-
-    # 读取HTTP响应:
-    while True:
-        line = await reader.readline()
-        if line == b"\r\n":
-            break
-        print("%s header > %s" % (host, line.decode("utf-8").rstrip()))
-    # Ignore the body, close the socket
-    writer.close()
-    await writer.wait_closed()
-    print(f"Done {host}.")
-
-async def main():
-    await asyncio.gather(wget("www.sina.com.cn"), wget("www.sohu.com"), wget("www.163.com"))
-
-asyncio.run(main())
-
-# aiohttp
-asyncio实现了TCP、UDP、SSL等协议，aiohttp 则是基于asyncio实现的HTTP框架
-使用aiohttp时，定义处理不同URL的async函数，然后通过app.add_routes()添加映射，最后通过run_app()以asyncio的机制启动整个处理流程
-
-# 编写一个HTTP服务器，分别处理以下URL
-/ - 首页返回Index Page
-/{name} - 根据URL参数返回文本Hello, {name}!
-
-# app.py
-from aiohttp import web
-
-async def index(request):
-    text = "<h1>Index Page</h1>"
-    return web.Response(text=text, content_type="text/html")
-
-async def hello(request):
-    name = request.match_info.get("name", "World")
-    text = f"<h1>Hello, {name}</h1>"
-    return web.Response(text=text, content_type="text/html")
-
-app = web.Application()
-
-# 添加路由:
-app.add_routes([web.get("/", index), web.get("/{name}", hello)])
-
-if __name__ == "__main__":
-    web.run_app(app)
-
-```

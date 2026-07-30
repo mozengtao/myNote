@@ -264,378 +264,6 @@ Image Processing With the Python Pillow Library](https://realpython.com/image-pr
 [Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)  
 [Working With JSON Data in Python](https://realpython.com/python-json/)  
 
-
-## 远程登录
-```python
-# paramiko
-import paramiko
-import time
-import re
-from datetime import datetime
-from typing import List, Tuple, Dict, Optional
-
-EVC_NAME = "evc-cooker-zhisheng"
-VMC_NAME = "vmc-1-cooker"
-CM_MAC = "74:9b:e8:5c:bb:50"
-
-class SSHSession:
-    """
-    SSH 会话管理类，用于封装 SSH 连接和命令执行
-    """
-    
-    def __init__(self, hostname: str, username: str, password: str = None, 
-                 port: int = 22, key_file: str = None, timeout: float = 10):
-        """
-        初始化 SSH 会话
-        
-        Args:
-            hostname: 目标主机名或 IP
-            username: 用户名
-            password: 密码（可选，如果使用密钥则不需要）
-            port: SSH 端口，默认 22
-            key_file: 私钥文件路径（可选）
-            timeout: 连接超时时间
-        """
-        self.hostname = hostname
-        self.username = username
-        self.password = password
-        self.port = port
-        self.key_file = key_file
-        self.timeout = timeout
-        
-        self.client = paramiko.SSHClient()
-        self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.channel = None
-        self.is_connected = False
-
-    def connect(self) -> None:
-        """建立 SSH 连接并创建交互式 shell"""
-        try:
-            if self.key_file:
-                private_key = paramiko.RSAKey.from_private_key_file(self.key_file)
-                self.client.connect(
-                    hostname=self.hostname,
-                    port=self.port,
-                    username=self.username,
-                    pkey=private_key,
-                    timeout=self.timeout
-                )
-            else:
-                self.client.connect(
-                    hostname=self.hostname,
-                    port=self.port,
-                    username=self.username,
-                    password=self.password,
-                    timeout=self.timeout
-                )
-            
-            self.channel = self.client.invoke_shell()
-            self.is_connected = True
-            time.sleep(1)  # 等待 shell 初始化
-            print(f"Connected to {self.hostname}")
-            
-        except paramiko.AuthenticationException as e:
-            raise Exception(f"Authentication failed: {e}")
-        except paramiko.SSHException as e:
-            raise Exception(f"SSH connection failed: {e}")
-
-    def disconnect(self) -> None:
-        """关闭 SSH 连接"""
-        if self.is_connected:
-            self.client.close()
-            self.is_connected = False
-            self.channel = None
-            print("SSH connection closed")
-
-    def execute_command(self, command: str, wait_time: float = 2) -> str:
-        """
-        在当前会话中执行单条命令并返回输出
-        
-        Args:
-            command: 要执行的命令
-            wait_time: 等待输出时间
-        Returns:
-            命令执行的输出
-        """
-        if not self.is_connected or not self.channel:
-            raise RuntimeError("No active SSH session. Please connect first.")
-        
-        self.channel.send(f"{command}\n")
-        time.sleep(wait_time)
-        output = self._get_output()
-        print(f"Command '{command}' executed")
-        return output
-
-    def execute_commands(self, commands: List[Tuple[str, float]]) -> Dict[str, str]:
-        """
-        在当前会话中执行多条命令并返回所有输出
-        
-        Args:
-            commands: 包含 (命令, 等待时间) 的列表
-        Returns:
-            命令及其输出的字典
-        """
-        if not self.is_connected or not self.channel:
-            raise RuntimeError("No active SSH session. Please connect first.")
-        
-        results = {}
-        for command, wait_time in commands:
-            results[command] = self.execute_command(command, wait_time)
-        return results
-
-    def _get_output(self) -> str:
-        """从通道读取输出"""
-        output = ""
-        while self.channel.recv_ready():
-            output += self.channel.recv(1024).decode("utf-8")
-            time.sleep(0.5)
-        return output.strip()
-
-    def __enter__(self):
-        """支持上下文管理器"""
-        self.connect()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """退出时自动关闭连接"""
-        self.disconnect()
-
-
-class CommandProcessor:
-    """命令处理类"""
-    def __init__(self, session: SSHSession):
-        self.session = session
-
-    def setup_session(self) -> None:
-        """执行初始设置命令"""
-        setup_commands = [
-            (f"nomad alloc exec -task evc -job {EVC_NAME} sh", 1),
-            ("ncs_cli -u admin", 1)
-        ]
-        self.session.execute_commands(setup_commands)
-
-    def get_modem_info(self) -> str:
-        """获取modem信息"""
-        cmd = "show cable modem brief | tab | nomore"
-        return self.session.execute_command(cmd, 2)
-
-    def get_field_after_operational(self, text: str) -> str:
-        # 匹配 operational 后跟一个或多个空格，然后捕获下一个非空字段
-        pattern = r'operational[^\s]*\s+(\S+)'
-        match = re.search(pattern, text)
-        if match:
-            return match.group(1)
-        return "nomatch"
-
-    def set_channel_state(self, channel: str, state: str) -> None:
-        """设置通道状态"""
-        cmd = f"vmc {VMC_NAME} mac-domain 0 ds ds-channels {channel} admin-state {state}"
-        commands = [
-            ("config", 1),
-            (cmd, 1),
-            ("commit", 2),
-            ("top", 1),
-            ("exit", 1)
-        ]
-        self.session.execute_commands(commands)
-
-if __name__ == "__main__":
-    # Configuration
-    HOST = "10.254.25.106"
-    USERNAME = "root"
-    PASSWORD = "Gainsp33"
-    
-    with SSHSession(HOST, USERNAME, PASSWORD) as session:
-        cmd_processor = CommandProcessor(session)
-        cmd_processor.setup_session()
-        
-        pre_primary = ""
-        ds_primary = ""
-        for i in range(5):
-            output = cmd_processor.get_modem_info()
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{current_time}: {output}")
-            
-            lines = output.split("\n")
-            for line in lines:
-                # match exact mac address and operational status
-                if CM_MAC in line and "operational" in line:
-                    ds_primary = cmd_processor.get_field_after_operational(line)
-                    if ds_primary == "nomatch":
-                        print("get ds primary channel failed")
-                        break
-                    
-                    # modem is still online with the same ds_primary after ds primary channel dowm
-                    if pre_primary and pre_primary == ds_primary:
-                        print(f"pre_primary and ds_primary are the same: {ds_primary}, wait for 60 seconds")
-                        time.sleep(60)
-                        break
-                    
-                    # up the pre_primary
-                    if pre_primary and pre_primary != ds_primary:
-                        cmd_processor.set_channel_state(pre_primary, "up")
-                    
-                    # down the current ds_primary
-                    print(f"ds_primary: {ds_primary}")
-                    cmd_processor.set_channel_state(ds_primary, "down")
-                    
-                    # update pre_primary
-                    print(f"update pre_primary to {ds_primary}")
-                    pre_primary = ds_primary
-                    break
-            
-            time.sleep(10)
-        
-        if pre_primary:
-            cmd_processor.set_channel_state(pre_primary, "up")
-
-# pexpect
-import pexpect
-import time
-
-class TelnetClient:
-    def __init__(self, host, username, password, port=23, login_timeout=10, command_timeout=10):
-        """
-        初始化 Telnet 客户端
-        :param host: Telnet 服务器地址
-        :param username: 登录用户名
-        :param password: 登录密码
-        :param port: Telnet 服务器端口号，默认为 23
-        :param login_timeout: 登录超时时间，默认为 10 秒
-        :param command_timeout: 命令执行超时时间，默认为 10 秒
-        """
-        self.host = host
-        self.username = username
-        self.password = password
-        self.port = port
-        self.login_timeout = login_timeout
-        self.command_timeout = command_timeout
-        self.child = None
-
-    def connect(self):
-        """
-        建立 Telnet 连接
-        """
-        try:
-            # 构造 Telnet 连接命令
-            cmd = f'telnet {self.host} {self.port}'
-            self.child = pexpect.spawn(cmd, timeout=self.login_timeout)
-            # 等待登录提示符
-            self.child.expect('User Name :', timeout=self.login_timeout)
-            # 输入用户名
-            self.child.sendline(self.username)
-            # 等待密码提示符
-            self.child.expect('Password  :', timeout=self.login_timeout)
-            # 输入密码
-            self.child.sendline(self.password)
-            # 等待登录成功后的提示符
-            self.child.expect(['apc>'], timeout=self.login_timeout)
-            print(f"Successfully connected to {self.host}:{self.port}")
-            return True
-        except Exception as e:
-            print(f"Failed to connect to {self.host}:{self.port}, error: {e}")
-            return False
-
-    def execute_command(self, command):
-        """
-        执行单条命令
-        :param command: 要执行的命令
-        :return: 命令输出
-        """
-        if not self.child:
-            print("Not connected to a Telnet server.")
-            return None
-
-        try:
-            # 发送命令
-            self.child.sendline(command)
-            # 等待命令输出结束
-            self.child.expect(['apc>'], timeout=self.command_timeout)
-            # 获取命令输出
-            output = self.child.before.decode('utf-8').strip()
-            return output
-        except Exception as e:
-            print(f"Failed to execute command '{command}', error: {e}")
-            return None
-
-    def execute_commands(self, commands):
-        """
-        执行多条命令
-        :param commands: 要执行的命令列表
-        :return: 每条命令的输出列表
-        """
-        outputs = []
-        for cmd in commands:
-            output = self.execute_command(cmd)
-            outputs.append(output)
-        return outputs
-
-    def close(self):
-        """
-        关闭 Telnet 连接
-        """
-        if self.child:
-            self.child.close()
-            self.child = None
-            print("Telnet connection closed")
-
-
-class ApcCmdProcessor:
-    def __init__(self, telnet_client):
-        self.telnet_client = telnet_client
-
-    def get_outlet_status(self, outlet, wait_time=1):
-        command = f"olStatus {outlet}"
-        output = self.telnet_client.execute_command(command)
-        time.sleep(wait_time)
-        return output
-
-    def set_outlet_status(self, outlet, status, wait_time=1):
-        if status not in ["on", "off"]:
-            print("Invalid status. Please use 'on' or 'off'.")
-            return
-        if status == "on":
-            command = f"olOn {outlet}"
-        else:
-            command = f"olOff {outlet}"
-        output = self.telnet_client.execute_command(command)
-        time.sleep(wait_time)
-        return output
-
-if __name__ == "__main__":
-    # Telnet 服务器信息
-    host = "10.254.25.46"
-    port = 23
-    username = "apc"
-    password = "apc"
-
-    # 创建 Telnet 客户端
-    telnet_client = TelnetClient(host, username, password, port)
-
-    # 连接到 Telnet 服务器
-    if telnet_client.connect():
-        # 创建 ApcCmdProcessor 实例
-        apc_processor = ApcCmdProcessor(telnet_client)
-        
-        # 执行单条命令
-        output = apc_processor.get_outlet_status(14)
-        print("Command output:")
-        print(output)
-        
-        # 执行单条命令
-        output = apc_processor.set_outlet_status(14, "off")
-        print("Command output:")
-        print(output)
-        
-        # 执行单条命令
-        output = apc_processor.get_outlet_status(14)
-        print("Command output:")
-        print(output)
-
-        # 关闭连接
-        telnet_client.close()
-```
-
 ## logging
 [Logging in Python](https://realpython.com/python-logging/)  
 [Python Logging: A Stroll Through the Source Code](https://realpython.com/python-logging-source-code/)  
@@ -650,94 +278,6 @@ if __name__ == "__main__":
 [Python Descriptors: An Introduction](https://realpython.com/python-descriptors/)  
 [Primer on Python Decorators](https://realpython.com/primer-on-python-decorators/)  
 [Context Managers and Python's with Statement](https://realpython.com/python-with-statement/)  
-```python
-# 示例：timer 装饰器用来统计函数的执行时间
-import time
-# 装饰器内部的wrapper函数中的参数*args, **kwargs保证了其可以处理所有的参数类型，保证了参数传递的统一，使得装饰器的实现成为可能
-# python程序解释器在运行时会解析函数所提供的参数，根据函数签名进行参数匹配，*args用于捕捉未匹配的位置参数（除了required parameters），**kwargs用于捕捉未匹配的关键字参数
-# 当wrapper函数调用真正的函数被时，*args和**kwargs会被unpack，即*args展开为对应的位置参数，**kwargs展开为对应的关键字参数
-def timer(func):
-    def wrapper(*args, **kwargs):
-        print("positional args:", args)
-        print("keyword args:", kwargs)
-        start = time.time()
-        result = func(*args, **kwargs)
-        end = time.time()
-        print(f"{func.__name__} took {end - start:.4f} seconds")
-        print("-" * 20)
-        return result
-    return wrapper
-
-@timer
-def no_args():
-    time.sleep(0.1)
-    print("no args here")
-
-@timer
-def with_positional(num):
-    time.sleep(0.2)
-    print(f"with positional arg {num}")
-
-@timer
-def with_keyword(name, age=18):
-    time.sleep(0.3)
-    print(f"with keyword, name:{name}, age:{age}")
-
-
-no_args()
-with_positional(1)
-with_keyword(name="Alice")
-
-
-Output:
-positional args: ()
-keyword args: {}
-no args here
-no_args took 0.1002 seconds
---------------------
-positional args: (1,)
-keyword args: {}
-with positional arg 1
-with_positional took 0.2002 seconds
---------------------
-positional args: ()
-keyword args: {'name': 'Alice'}
-with keyword, name:Alice, age:18
-with_keyword took 0.3003 seconds
---------------------
-
-
-
-# with ...
-class SimpleClass:
-    def __init__(self):
-        print("__init__")
-
-    def simple_method(self):
-        print("simple_method")
-
-    def _finalize(self):
-        print("_finalize")
-    
-    def __enter__(self):
-        print("__enter__")
-        return self
-    
-    def __exit__(self, exc_type, exc_value, exc_tb):
-        print("__exit__")
-        self._finalize()
-
-
-with SimpleClass() as sc:
-    sc.simple_method()
-
-Output:
-__init__
-__enter__
-simple_method
-__exit__
-_finalize
-```
 
 ## 迭代器
 [Iterators and Iterables in Python: Run Efficient Iterations](https://realpython.com/python-iterators-iterables/)  
@@ -1872,20 +1412,20 @@ class HostConfig:
     def __init__(self, configFile):
         self.configFile= configFile
         self.config= configparser.ConfigParser()
-        
+
     def readConfig(self):
         # Reading the config file
         self.config.read(self.configFile)
-    
+
     def getServers(self):
         # Returning all the sections defined in the config file
         return self.config.sections()
-    
+
     def getData(self, host, key):
         # Getting the values from the particular section (host) 
         # by using the key       
         return self.config[host][key]
-    
+
     def getHostDetails(self, host):
         # Getting all the values defined under the given section (host).
         # Assuming the keys are known and fixed.
@@ -1984,7 +1524,7 @@ def broadcast_message(
 			- ```python
 			  import sys
 			  sys.path.append("modules")
-			  
+
 			  import geometry
 			  distance = geometry.distance(1, 1, 5, 5)
 			  ```
@@ -1994,9 +1534,9 @@ def broadcast_message(
 		- pexpect实现ssh自动登陆
 			- ```python
 			  #!/usr/bin/python
-			  
+
 			  import pexpect
-			  
+
 			  class SSHClient:
 			          def __init__(self, user, host, pwd):
 			                  self.user = user
@@ -2027,23 +1567,23 @@ def broadcast_message(
 			                  self.ssh.sendline('diag-shell\r')
 			                  self.ssh.expect('support')
 			                  return True, '[%s@%s] Success Connecting' % (self.user, self.host)
-			  
+
 			  if __name__ == "__main__":
 			          ssh = SSHClient(user="support", host="169.254.32.200", pwd="Gainsp33")
 			          ret, msg = ssh.connect()
 			          if not ret:
 			                  print(msg)
 			                  exit(0)
-			  
+
 			          cmd = 'ls /tmp'
 			          result = ssh.send_command(cmd)
 			          print(result)
-			  
+
 			          cmd = 'df -h'
 			          result = ssh.send_command(cmd)
 			          print(result)
 			          ssh.close()
-			  
+
 			  ```
 	- [[str]]
 	- [[list]]
@@ -2087,7 +1627,7 @@ def broadcast_message(
 		      	- __init__.py
 		          - 模块1.py
 		          - 模块2.py
-		  
+
 		  # 例如
 		  - python_learn
 		  	- main.py
@@ -2095,10 +1635,10 @@ def broadcast_message(
 		      	- __init__.py
 		          - point.py
 		          - line.py
-		  
+
 		  import geometry.point
 		  distance = geometry.point.distance(3, 4)
-		  
+
 		  import geomegry.point as point
 		  distance = point.distance(3, 4)
 		  ```
@@ -2248,7 +1788,7 @@ def broadcast_message(
 [wxpythoncookbookcode](https://github.com/driscollis/wxpythoncookbookcode) #github  
 [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/)  
 [阿尔法的Python笔记](https://segmentfault.com/blog/alpha94511)  
-[python3 cookbook](https://python3-cookbook.readthedocs.io/zh_CN/latest/index.html)  
+[**python3 cookbook**](https://python3-cookbook.readthedocs.io/zh_CN/latest/index.html)  
 [Python Documentation contents](https://docs.python.org/3/contents.html)  
 [Python for network engineers](https://pyneng.readthedocs.io/en/latest/index.html)  
 [Python Tricks: The Book](http://www.kalfaoglu.com/ceng113/Python-Programming/pythontricks.pdf)  
@@ -2576,228 +2116,7 @@ $	# anthors a match at the end of a string
 !
 <>	# creates a named group
 
-# examples
-re.search('ba[artz]', 'foobarqux')
-re.search('[a-z]', 'FOObar')
-re.search('[0-9][0-9]', 'foo123bar')
-re.search('[0-9a-fA-f]', '--- a0 ---')
-re.search('[^0-9]', '12345foo')
-re.search('[#:^]', 'foo^bar:baz#qux')
-
-re.search('[-abc]', '123-456')
-re.search('[abc-]', '123-456')
-re.search('[ab\-c]', '123-456')
-
-re.search('[]]', 'foo[1]')
-re.search('[ab\]cd]', 'foo[1]')
-
-re.search('[)*+|]', '123*456')
-re.search('[)*+|]', '123+456')
-
-re.search('foo.bar', 'fooxbar')
-
-# \w is essentially shorthand for [a-zA-Z0-9_]
-# \W is the opposite. It matches any non-word character and is equivalent to [^a-zA-Z0-9_]
-re.search('\w', '#(.a$@&')
-re.search('\W', 'a_1*3Qb')
-
-# \d matches any decimal digit character
-# \D is the opposite. It matches any character that isn’t a decimal digit
-re.search('\d', 'abc4def')
-re.search('\D', '234Q678')
-
-# \s matches any whitespace character
-# \S is the opposite of \s. It matches any character that isn’t whitespace
-re.search('\s', 'foo\nbar baz')
-re.search('\S', '  \n foo  \n  ')
-
-re.search('[\d\w\s]', '---3---')
-
-re.search('\.', 'foo.bar')
-
-re.search('\\\\', r'foo\bar')
-re.search(r'\\', r'foo\bar')
-
-# ^ or /A anchors a match to the start of <string>
-re.search('^foo', 'foobar')
-re.search('\Afoo', 'foobar')
-
-# $ or \Z anchors a match to the end of <string>
-re.search('bar$', 'foobar')
-re.search('bar\Z', 'foobar')
-re.search('bar$', 'foobar\n')
-
-# \b anchors a match to a word boundary.
-# \B anchors a match to a word that isn’t a word boundary.
-# A word consists of a sequence of alphanumeric characters or underscores ([a-zA-Z0-9_]), the same as for the \w character class
-re.search(r'\bbar', 'foo bar')
-re.search(r'\bbar', 'foo.bar')
-print(re.search(r'\bbar', 'foobar'))	# None
-re.search(r'foo\b', 'foo bar')
-re.search(r'foo\b', 'foo.bar')
-
-re.search(r'\bbar\b', 'foo bar baz')
-re.search(r'\bbar\b', 'foo(bar)baz')
-
-print(re.search(r'\Bfoo\B', 'foo')) # None
-print(re.search(r'\Bfoo\B', '.foo.')) # None
-re.search(r'\Bfoo\B', 'barfoobaz')
-
-# quantifiers
-re.search('foo-*bar', 'foobar')
-re.search('foo-*bar', 'foo-bar')
-re.search('foo-*bar', 'foo--bar')
-re.search('foo.*bar', '# foo $qux@grault % bar #')
-
-re.search('foo-+bar', 'foobar') # None
-re.search('foo-+bar', 'foo-bar')
-re.search('foo-+bar', 'foo--bar')
-
-re.search('foo-?bar', 'foobar')
-re.search('foo-?bar', 'foo-bar')
-re.search('foo-?bar', 'foo--bar') # None
-
-re.match('foo[1-9]*bar', 'foobar')
-re.match('foo[1-9]*bar', 'foo42bar')
-
-re.match('foo[1-9]+bar', 'foobar') # None
-re.match('foo[1-9]+bar', 'foo42bar')
-
-re.match('foo[1-9]?bar', 'foobar')
-print(re.match('foo[1-9]?bar', 'foo42bar')) # None
-
-# *?
-# +?
-# ??
-# non-greedy (or lazy) versions of the *, +, and ? quantifiers
-# when used alone, the quantifier metacharacters *, +, and ? are all greedy, meaning they produce the longest possible match
-re.search('<.*>', '%<foo> <bar> <baz>%')
-re.search('<.*?>', '%<foo> <bar> <baz>%')
-
-re.search('<.+>', '%<foo> <bar> <baz>%')
-re.search('<.+?>', '%<foo> <bar> <baz>%')
-
-re.search('ba?', 'baaaa')
-re.search('ba??', 'baaaa')
-
-print(re.search('x-{3}x', 'x--x')) # None
-re.search('x-{3}x', 'x---x')
-
-# <regex>{m,n}
-# <regex>{,n}	identical to <regex>{0,n}
-# <regex>{m,}	(>=m)
-# <regex>{,}	identical to <regex>{0,} or <regex>*
-for i in range(1, 6):
-	s = f"x{'-' * i}x"
-	print(f'{i}  {s:10}', re.search('x-{2,4}x', s))
-
-# literal string match
-re.search('x{}y', 'x{}y')
-re.search('x{foo}y', 'x{foo}y')
-re.search('x{a:b}y', 'x{a:b}y')
-re.search('x{1,3,5}y', 'x{1,3,5}y')
-re.search('x{foo,bar}y', 'x{foo,bar}y')
-
-# non-greedy (lazy) version of {m,n}
-re.search('a{3,5}', 'aaaaaaaa')
-re.search('a{3,5}?', 'aaaaaaaa')
-
-# grouping and capturing
-# (<regex>) defines a subexpression or group
-re.search('(bar)', 'foo bar baz')
-re.search('bar', 'foo bar baz')
-
-re.search('bar+', 'foo barrr baz')
-re.search('(bar)+', 'foo bar baz')
-re.search('(bar)+', 'foo barbar baz')
-re.search('(bar)+', 'foo barbarbarbar baz')
-
-re.search('(ba[rz]){2,4}(qux)?', 'bazbarbazqux')
-re.search('(ba[rz]){2,4}(qux)?', 'barbar')
-
-re.search('(foo(bar)?)+(\d\d\d)?', 'foofoobar')
-re.search('(foo(bar)?)+(\d\d\d)?', 'foofoobar123')
-re.search('(foo(bar)?)+(\d\d\d)?', 'foofoo123')
-
-# m.groups() returns a tuple containing all the captured groups from a regex match
-m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
-m.groups()
-
-# m.group(<n>) returns a string containing the <n>th captured match.
-m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
-m.groups()
-m.group(1)
-m.group(2)
-m.group(3)
-
-# m.group(0) returns the entire match, and m.group() does the same
-m.group(0)
-m.group()
-
-# m.group(<n1>, <n2>, ...) returns a tuple containing the specified captured matches.
-m.groups()
-m.group(2, 3)
-m.group(3, 2, 1)
-
-m.group(3, 2, 1)
-(m.group(3), m.group(2), m.group(1))
-
-# backreference
-# \<n> matches the contents of a previously captured group.
-regex = r'(\w+),\1'
-m = re.search(regex, 'foo,foo')
-m.group(1)
-
-# (?P<name><regex>) creates a named captured group.
-m = re.search('(\w+),(\w+),(\w+)', 'foo,quux,baz')
-
-m = re.search('(?P<w1>\w+),(?P<w2>\w+),(?P<w3>\w+)', 'foo,quux,baz')
-m.groups()
-m.group('1')
-m.group('w1')
-m.group('3')
-m.group('w3')
-m.group('1', '2', '3')
-m.group('w1', 'w2', 'w3')
-
-# (?P=<name>) matches the contents of a previously captured named group.
-m = re.search(r'(\w+),\1', 'foo,foo')
-
-m = re.search(r'(?P<word>\w+),(?P=word)', 'foo,foo')
-m.group('word')
-
-# (?:<regex>) creates a non-capturing group.
-m = re.search('(\w+),(?:\w+),(\w+)', 'foo,quux,baz')
-m.groups()
-m.gropu(1)
-m.gropu(2)
-
-# lookahead and lookbehind assertions
-# (?=<lookahead_regex>) creates a positive lookahead assertion.
-# (?=<lookahead_regex>) asserts that what follows the regex parser’s current position must match <lookahead_regex>
-re.search('foo(?=[a-z])', 'foobar')
-
-# (?!<lookahead_regex>) creates a negative lookahead assertion.
-# (?!<lookahead_regex>) asserts that what follows the regex parser’s current position must not match <lookahead_regex>.
-re.search('foo(?![a-z])', 'foo123')
-
-# (?<=<lookbehind_regex>) creates a positive lookbehind assertion.
-# (?<=<lookbehind_regex>) asserts that what precedes the regex parser’s current position must match <lookbehind_regex>.
-re.search('(?<=foo)bar', 'foobar')
-
-# (?<!<lookbehind_regex>) creates a negative lookbehind assertion.
-# (?<!<lookbehind_regex>) asserts that what precedes the regex parser’s current position must not match <lookbehind_regex>:
-re.search('(?<!qux)bar', 'foobar')
-
-# miscellaneous metacharacters
-# (?#...) specifies a comment.
-re.search('bar(?#This is a comment) *baz', 'foo bar baz qux')
-
-# vertical bar, or pipe (|) specifies a set of alternatives on which to match.
-re.search('foo|bar|baz', 'bar')
-re.search('(foo|bar|baz)+', 'foofoofoo')
-
-# re.search(<regex>, <string>, <flags>)
+re.search(<regex>, <string>, <flags>)
 # scans a string for a regex match, applying the specified modifier <flags>.
 
 # flags
@@ -2978,5 +2297,7 @@ re_obj.search(s3)		# <_sre.SRE_Match object; span=(3, 5), match='99'>
 re_obj.search(s4)
 
 ```
+[Regular expression HOWTO](https://docs.python.org/3/howto/regex.html)  
+[re — Regular expression operations](https://docs.python.org/3/library/re.html)  
 [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
 [Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  

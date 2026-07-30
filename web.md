@@ -16,6 +16,7 @@
 [**Web Browser Engineering**](https://browser.engineering/)  
 [How browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work)  
 [How browsers work](https://web.dev/articles/howbrowserswork)  
+[**How browsers work**](https://howbrowserswork.com/)  
 [mitmproxy](https://docs.mitmproxy.org/stable/)  
 [httpbin.org](https://httpbin.org/)  
 [MDN Playground](https://developer.mozilla.org/en-US/play)  

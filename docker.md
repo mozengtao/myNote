@@ -35,9 +35,18 @@ V
 ```
 
 - [Docker Networking overview](https://docs.docker.com/engine/network/)
+- [awesome-compose](https://github.com/docker/awesome-compose)
+- [awesome-docker](https://github.com/veggiemonk/awesome-docker)
+- [Docker Docs](https://docs.docker.com/)
+- [Dockerfile reference](https://docs.docker.com/reference/dockerfile)
+- [CLI reference](https://docs.docker.com/reference/cli/docker/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Building best practices](https://docs.docker.com/build/building/best-practices/)
+- [Docker 依赖的 Linux 内核核心技术](docker_and_linux_kernel.md)
+- [Docker 底层原理（Namespace / cgroups / Mount / Network）的统一心智模型](docker_namespace_mental_model.md)
 - []()
 - []()
-- []()
+[Docker in Action](https://github.com/munishdell/book-1/tree/master/docker)
 
 [What's LXC?](https://linuxcontainers.org/lxc/introduction/)  
 [Docker 从入门到实践](https://vuepress.mirror.docker-practice.com/)  
@@ -51,7 +60,7 @@ V
 [Docker 教程](https://www.runoob.com/docker/docker-tutorial.html)  
 []()  
 
-[Windows WSL2 + Docker + Kafka 学习指南](./docker/wsl2_docker_kafka.md)
+[Windows WSL2 + Docker + Kafka 学习指南](docker/wsl2_docker_kafka.md)
 
 [Docker Cli Usage Scenarios 1](docker_usage_1.md)  
 [Docker Cli Usage Scenarios 2](docker_usage_2.md)  
@@ -60,9 +69,9 @@ V
 
 
 [Understanding Hypervisors: Exploring Type-1 vs Type-2 and Full vs Para Virtualization](https://medium.com/@ravipatel.it/understanding-hypervisors-exploring-type-1-vs-type-2-and-full-vs-para-virtualization-71b4dad9abd9)  
-[Bare Metal, VMs 和 Containers](./docker/bareMetal_VMs_Containers.png)  
-[Bare Metal, VMs 和 Containers](./docker/bareMetal_VMs_Containers.md)  
-[两种Virtual Machine 的 Hypervisor](./docker/VMs.png)  
+![Bare Metal, VMs 和 Containers](docker/bareMetal_VMs_Containers.png)  
+[Bare Metal, VMs 和 Containers](docker/bareMetal_VMs_Containers.md)  
+[两种Virtual Machine 的 Hypervisor](docker/VMs.png)  
 > Bare Metal Hypervisor 不依赖于 Host OS, 直接控制硬件，可以提供更高的性能，缺点是支持Bare Metal Hypervisor的Hardware通常更昂贵
 
 
@@ -74,119 +83,30 @@ V
 [Docker anti-patterns](https://codefresh.io/blog/docker-anti-patterns/)  
 
 - Learning Guide
-	- [README](./docker/learning-guide/README.md)
-	- [01 the problem docker is solving](./docker/learning-guide/01-the-problem-docker-is-solving.md)
-	- [02 containers vs vms](./docker/learning-guide/02-containers-vs-vms.md)
-	- [03 docker architecture](./docker/learning-guide/03-docker-architecture.md)
-	- [04 linux primitives](./docker/learning-guide/04-linux-primitives.md)
-	- [05 docker images](./docker/learning-guide/05-docker-images.md)
-	- [06 docker containers](./docker/learning-guide/06-docker-containers.md)
-	- [07 dockerfile](./docker/learning-guide/07-dockerfile.md)
-	- [08 docker networking](./docker/learning-guide/08-docker-networking.md)
-	- [09 volumes](./docker/learning-guide/09-volumes.md)
-	- [10 docker compose](./docker/learning-guide/10-docker-compose.md)
-	- [11 real projects](./docker/learning-guide/11-real-projects.md)
-	- [12 common mistakes](./docker/learning-guide/12-common-mistakes.md)
-	- [13 docker vs kubernetes](./docker/learning-guide/13-docker-vs-kubernetes.md)
-	- [14 repositories](./docker/learning-guide/14-repositories.md)
-	- [15 mental model](./docker/learning-guide/15-mental-model.md)
+	- [README](docker/learning-guide/README.md)
+	- [01 the problem docker is solving](docker/learning-guide/01-the-problem-docker-is-solving.md)
+	- [02 containers vs vms](docker/learning-guide/02-containers-vs-vms.md)
+	- [03 docker architecture](docker/learning-guide/03-docker-architecture.md)
+	- [04 linux primitives](docker/learning-guide/04-linux-primitives.md)
+	- [05 docker images](docker/learning-guide/05-docker-images.md)
+	- [06 docker containers](docker/learning-guide/06-docker-containers.md)
+	- [07 dockerfile](docker/learning-guide/07-dockerfile.md)
+	- [08 docker networking](docker/learning-guide/08-docker-networking.md)
+	- [09 volumes](docker/learning-guide/09-volumes.md)
+	- [10 docker compose](docker/learning-guide/10-docker-compose.md)
+	- [11 real projects](docker/learning-guide/11-real-projects.md)
+	- [12 common mistakes](docker/learning-guide/12-common-mistakes.md)
+	- [13 docker vs kubernetes](docker/learning-guide/13-docker-vs-kubernetes.md)
+	- [14 repositories](docker/learning-guide/14-repositories.md)
+	- [15 mental model](docker/learning-guide/15-mental-model.md)
 
-## Tips
-- 配置 Docker 国内镜像源
-```bash
-# 创建或修改 Docker 守护进程配置文件
-sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json > /dev/null <<EOF
-{
-  "registry-mirrors": [
-    "https://hub-mirror.c.163.com",
-    "https://mirror.baidubce.com",
-    "https://docker.mirrors.ustc.edu.cn"
-  ]
-}
-EOF
-
-# 重启 Docker 服务
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-
-# 验证配置是否生效
-docker info
-```
-
-- 为 Docker 守护进程配置代理
-```bash
-# 创建 Docker 服务的代理配置目录
-sudo mkdir -p /etc/systemd/system/docker.service.d
-
-# 创建代理配置文件
-sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf > /dev/null <<EOF
-[Service]
-Environment="HTTP_PROXY=http://your-proxy-server:port"
-Environment="HTTPS_PROXY=http://your-proxy-server:port"
-Environment="NO_PROXY=localhost,127.0.0.1"
-EOF
-
-# 重启 Docker 服务
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-
-# 验证代理配置
-systemctl show --property=Environment docker
-```
-
-## LXD, Docker 和 oVirt
-```
-LXD(Linux Container Daemon)是一种基于 Linux容器 (LXC) 的系统级容器，提供类似虚拟机的轻量级容器环境，同时保持接近原生的性能，它通过抽象底层 LXC 技术，简化了容器管理的复杂性，并扩展了容器的高级功能
-
-LXC 是操作系统级虚拟化（容器），容器共享宿主机内核，属于进程级隔离，性能开销小，启动速度快，仅支持 Linux （需要兼容内核版本）
-LXC：
-​核心技术：
-	​命名空间（Namespaces）​：隔离进程、网络、文件系统等资源
-	​控制组（cgroups）​：限制 CPU、内存等资源使用
-	​用户空间（User Space）​：容器内运行完整的用户态环境（如 Ubuntu、CentOS）
-​共享内核：所有容器直接使用宿主机内核，无法运行不同内核版本的系统
-​轻量级：无硬件虚拟化层，资源占用极低
-
-KVM 是硬件级虚拟化，每个虚拟机运行独立内核，属于硬件级隔离（独立虚拟机内核），性能开销较大（需模拟硬件，CPU/内存开销5%~20%），启动速度较慢，支持多种操作系统(Linux, Windows)
-KVM:
-核心技术：
-	​硬件虚拟化扩展：依赖 CPU 的 Intel VT-x/AMD-V 技术实现指令级虚拟化
-	​QEMU 设备模拟：模拟虚拟硬件（如磁盘、网卡）
-	​独立内核：每个虚拟机运行完整的操作系统（包括内核）
-​完全隔离：虚拟机之间通过硬件虚拟化层隔离，安全性更高
-​资源独占：虚拟机需预分配 CPU、内存等资源
-
-Docker 是应用级容器(单进程模型)
-
-oVirt 基于 KVM/QEMU 虚拟化，通过硬件辅助虚拟化运行和管理虚拟机，每个虚拟机有独立的镜像，即可以运行异构的操作系统
-
-```
-
-
+[Linux 虚拟化技术总结：LXD、LXC、KVM、Docker、oVirt](virtualization_summary.md)
 [Container from scratch: table of contents](https://kevinboone.me/containerfromscratch_toc.html)
 [Difference Between chroot and Docker](https://www.baeldung.com/ops/chroot-vs-docker)
 [ruri](https://github.com/Moe-hacker/ruri)
 
 
-- linux容器
-	- linux容器是一种虚拟化技术，LXC(Linux Containers)不是模拟一个完整的操作系统，而是对进程进行隔离，对于容器里的进程来说，各种资源是虚拟的，从而实现与底层系统的隔离。
-	- 特点
-		- 启动快
-			- 容器里面的应用是底层系统的一个进程，因此容器可以达到进程级启动速度
-		- 资源占用少
-			- 相比于虚拟机，容器只占用需要的资源。另外，多个容器可以共享资源
-		- 体积小
-			- 相比于虚拟机，容器只包含用到的组件，因此相比虚拟机文件要小很多
-- docker
-	- docker 属于 Linux容器的一种封装，提供简单易用的容器使用接口，是目前最流行的linux容器解决方案
-	- ![image.png](./assets/image_1673944206041_0.png)
-	- ![image.png](./assets/image_1673944266512_0.png)
-	- docker镜像
-		- ![image.png](./assets/image_1673945888063_0.png)
-
-
-- [**Mini Container Series**](https://hechao.li/2020/06/09/Mini-Container-Series-Part-0-Not-a-Real-Container/)  
+- [**Mini Container Series**](https://hechao.li/tags/container/)  
 - [Container engines, runtimes and orchestrators: an overview](https://sarusso.github.io/blog/container-engines-runtimes-orchestrators.html)  
 - [每天5分钟玩转Docker容器技术](https://github.com/loveLynch/Book/tree/master)  
 - [Docker 简易入门教程](https://iphysresearch.github.io/blog/post/programing/docker-tutorial/)  
