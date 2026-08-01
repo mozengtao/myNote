@@ -122,6 +122,16 @@
 - [timer.c](./c/timer/timer.c) - 定时器实现
 - [timer.h](./c/timer/timer.h) - 定时器头文件
 
+- timer2
+[Makefile](c/timer2/Makefile)
+[README.md](c/timer2/README.md)
+[main.c](c/timer2/main.c)
+[timer-design.md](c/timer2/timer-design.md)
+[timer.c](c/timer2/timer.c)
+[timer.h](c/timer2/timer.h)
+[timer_api_design.md](c/timer2/timer_api_design.md)
+
+
 #### 内存池系统
 - [nginx内存池参考](https://github.com/nginx/nginx) - Nginx内存池实现参考
 - [为什么需要内存池](./c/mempool/01-WHY.md) - 内存池的必要性

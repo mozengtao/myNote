@@ -5,6 +5,8 @@
 [Context Engineering](ContextEngineering.md)  
 [MCP](mcp.md)  
 []()  
+[]()  
+[OpenCode中文实战课](https://learnopencode.com/)  
 
 [AGENTS.md](https://agents.md/)  
 

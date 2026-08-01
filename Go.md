@@ -1,5 +1,22 @@
 # Go 编程学习指南
 
+[Go 高层次心智模式（80/20）](go/mental_model.md)
+[Go 80/20 学习路线 —— 覆盖 80% Go 开发的 20% 核心知识](go/core_concepts.md)
+[Standard library](https://pkg.go.dev/std)
+[Standard library builtin](https://pkg.go.dev/builtin)
+[Directory src](https://go.dev/src/)
+[Effective Go](https://go.dev/doc/effective_go)
+[Go Wiki: Go Code Review Comments](https://go.dev/wiki/CodeReviewComments)
+[Go Style Decisions](https://google.github.io/styleguide/go/decisions)
+[Golang `make` 完全总结：用法、原理与心智模式](go/make.md)
+[Slice 最佳实践与示例](go/slice-practices.md)
+[Map 最佳实践与示例](go/map-practices.md)
+[Channel 最佳实践与示例](go/chan-practices.md)
+[Golang 项目组织最佳实践及心智模式](go/project_organization.md)
+[]()
+[]()
+[]()
+
 ## 📚 目录
 
 - [1. 快速开始](#1-快速开始)

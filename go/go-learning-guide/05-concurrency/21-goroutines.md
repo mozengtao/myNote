@@ -10,30 +10,30 @@ OS threads are expensive:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                 Thread Model Comparison                          │
+│                 Thread Model Comparison                         │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  OS Threads:                      Goroutines:                    │
+│                                                                 │
+│  OS Threads:                      Goroutines:                   │
 │  ┌───────────────────────┐       ┌───────────────────────┐      │
-│  │ 1MB+ stack each      │       │ 2KB stack (grows)     │      │
-│  │ Kernel scheduled     │       │ User-space scheduled  │      │
-│  │ 1ms to create        │       │ ~1μs to create        │      │
-│  │ 10K threads = strain │       │ 1M goroutines = OK    │      │
+│  │ 1MB+ stack each       │       │ 2KB stack (grows)     │      │
+│  │ Kernel scheduled      │       │ User-space scheduled  │      │
+│  │ 1ms to create         │       │ ~1μs to create        │      │
+│  │ 10K threads = strain  │       │ 1M goroutines = OK    │      │
 │  └───────────────────────┘       └───────────────────────┘      │
-│                                                                  │
-│  OS Thread Model:                Goroutine Model (M:N):          │
-│  ┌─────┐ ┌─────┐ ┌─────┐       ┌───┬───┬───┬───┬───┬───┐       │
-│  │ T1  │ │ T2  │ │ T3  │       │G1 │G2 │G3 │G4 │G5 │G6 │ ...   │
-│  └──┬──┘ └──┬──┘ └──┬──┘       └─┬─┴─┬─┴─┬─┴───┴───┴───┘       │
+│                                                                 │
+│  OS Thread Model:                Goroutine Model (M:N):         │
+│  ┌─────┐ ┌─────┐ ┌─────┐       ┌───┬───┬───┬───┬───┬───┐        │
+│  │ T1  │ │ T2  │ │ T3  │       │G1 │G2 │G3 │G4 │G5 │G6 │ ...    │
+│  └──┬──┘ └──┬──┘ └──┬──┘       └─┬─┴─┬─┴─┬─┴───┴───┴───┘        │
 │     │       │       │            │   │   │                      │
 │  ┌──┴───────┴───────┴──┐       ┌─┴───┴───┴─┐                    │
 │  │      OS Kernel      │       │ Go Runtime │ (schedules)       │
-│  └─────────────────────┘       └─────┬──────┘                    │
-│                                      │                           │
+│  └─────────────────────┘       └─────┬──────┘                   │
+│                                      │                          │
 │  1:1 mapping                   ┌─────┴─────┐                    │
 │                                │ OS Threads │ (fewer)           │
-│                                └────────────┘                    │
-│                                                                  │
+│                                └────────────┘                   │
+│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -51,31 +51,31 @@ The Go runtime implements a scheduler (M:N scheduling):
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Go Scheduler (GMP Model)                      │
+│                    Go Scheduler (GMP Model)                     │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
+│                                                                 │
 │  Goroutines (G):       Many, lightweight                        │
-│  ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐                    │
-│  │G1 │ │G2 │ │G3 │ │G4 │ │G5 │ │G6 │ │G7 │ ...                │
-│  └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘                    │
+│  ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐                      │
+│  │G1 │ │G2 │ │G3 │ │G4 │ │G5 │ │G6 │ │G7 │ ...                  │
+│  └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘                      │
 │    │     │     │     │     │     │     │                        │
 │    └─────┴─────┼─────┴─────┼─────┴─────┘                        │
-│                │           │                                     │
+│                │           │                                    │
 │  Processors (P): GOMAXPROCS (usually = num CPUs)                │
 │         ┌──────┴─────┐  ┌──┴─────┐                              │
 │         │    P1      │  │   P2   │                              │
 │         │ (run queue)│  │        │                              │
 │         └──────┬─────┘  └────┬───┘                              │
-│                │             │                                   │
+│                │             │                                  │
 │  OS Threads (M): Few, managed by runtime                        │
 │         ┌──────┴─────┐  ┌────┴───┐                              │
 │         │    M1      │  │   M2   │                              │
 │         └──────┬─────┘  └────┬───┘                              │
-│                │             │                                   │
+│                │             │                                  │
 │         ┌──────┴─────────────┴───┐                              │
 │         │      OS Kernel         │                              │
 │         └────────────────────────┘                              │
-│                                                                  │
+│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -160,7 +160,7 @@ func (s *routermgrServer) AddRouteV4(ctx context.Context, route *routermgrpb.Add
 ```go
 func main() {
     listener, _ := net.Listen("tcp", ":8080")
-    
+
     for {
         conn, _ := listener.Accept()
         go handleConnection(conn)  // New goroutine per connection
@@ -185,18 +185,18 @@ func worker(id int, jobs <-chan int, results chan<- int) {
 func main() {
     jobs := make(chan int, 100)
     results := make(chan int, 100)
-    
+
     // Start 3 workers
     for w := 1; w <= 3; w++ {
         go worker(w, jobs, results)
     }
-    
+
     // Send jobs
     for j := 1; j <= 9; j++ {
         jobs <- j
     }
     close(jobs)
-    
+
     // Collect results
     for a := 1; a <= 9; a++ {
         <-results
@@ -212,7 +212,7 @@ func main() {
    go func() {
        data := <-ch  // What if ch never sends?
    }()
-   
+
    // GOOD: use context for cancellation
    go func() {
        select {
@@ -232,14 +232,14 @@ func main() {
            fmt.Println(i)  // All print 10!
        }()
    }
-   
+
    // GOOD: pass as parameter
    for i := 0; i < 10; i++ {
        go func(n int) {
            fmt.Println(n)
        }(i)
    }
-   
+
    // GOOD (Go 1.22+): loop variables are per-iteration
    for i := 0; i < 10; i++ {
        go func() {
@@ -255,7 +255,7 @@ func main() {
    for i := 0; i < 1000; i++ {
        go func() { counter++ }()  // Race!
    }
-   
+
    // GOOD: use atomic or mutex
    var counter int64
    for i := 0; i < 1000; i++ {
@@ -272,7 +272,7 @@ func main() {
        go doWork(i)
    }
    // Program may exit immediately!
-   
+
    // GOOD: wait for completion
    var wg sync.WaitGroup
    for i := 0; i < 10; i++ {
@@ -308,12 +308,12 @@ void* worker(void* arg) {
 int main() {
     pthread_t threads[10];
     int ids[10];
-    
+
     for (int i = 0; i < 10; i++) {
         ids[i] = i;
         pthread_create(&threads[i], NULL, worker, &ids[i]);
     }
-    
+
     for (int i = 0; i < 10; i++) {
         pthread_join(threads[i], NULL);
     }
@@ -325,7 +325,7 @@ int main() {
 ```go
 func main() {
     var wg sync.WaitGroup
-    
+
     for i := 0; i < 10; i++ {
         wg.Add(1)
         go func(id int) {
@@ -333,7 +333,7 @@ func main() {
             fmt.Printf("Worker %d\n", id)
         }(i)
     }
-    
+
     wg.Wait()
 }
 ```
@@ -354,18 +354,18 @@ import (
 func main() {
     fmt.Printf("CPUs: %d, GOMAXPROCS: %d\n\n", 
         runtime.NumCPU(), runtime.GOMAXPROCS(0))
-    
+
     // Basic goroutine
     fmt.Println("=== Basic Goroutine ===")
     go func() {
         fmt.Println("Hello from goroutine!")
     }()
     time.Sleep(10 * time.Millisecond)
-    
+
     // WaitGroup pattern
     fmt.Println("\n=== WaitGroup Pattern ===")
     var wg sync.WaitGroup
-    
+
     for i := 1; i <= 3; i++ {
         wg.Add(1)
         go func(id int) {
@@ -375,14 +375,14 @@ func main() {
             fmt.Printf("Worker %d done\n", id)
         }(i)
     }
-    
+
     wg.Wait()
     fmt.Println("All workers completed")
-    
+
     // Many goroutines
     fmt.Println("\n=== Many Goroutines ===")
     before := runtime.NumGoroutine()
-    
+
     var wg2 sync.WaitGroup
     for i := 0; i < 10000; i++ {
         wg2.Add(1)
@@ -391,23 +391,23 @@ func main() {
             time.Sleep(10 * time.Millisecond)
         }()
     }
-    
+
     peak := runtime.NumGoroutine()
     wg2.Wait()
     after := runtime.NumGoroutine()
-    
+
     fmt.Printf("Before: %d, Peak: %d, After: %d\n", before, peak, after)
-    
+
     // Goroutine communication via channel
     fmt.Println("\n=== Channel Communication ===")
     results := make(chan int, 5)
-    
+
     for i := 1; i <= 5; i++ {
         go func(n int) {
             results <- n * n
         }(i)
     }
-    
+
     for i := 0; i < 5; i++ {
         fmt.Printf("Result: %d\n", <-results)
     }

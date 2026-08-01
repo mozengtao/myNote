@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "log_level": "debug",
+  "persistence_driver": "memory",
+  "mysql_dsn": ""
+}

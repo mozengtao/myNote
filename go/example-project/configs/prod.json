@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "log_level": "info",
+  "persistence_driver": "mysql",
+  "mysql_dsn": "app_user:app_password@tcp(mysql:3306)/app_db?parseTime=true"
+}
