@@ -43,6 +43,7 @@ V
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Building best practices](https://docs.docker.com/build/building/best-practices/)
 - [Docker 依赖的 Linux 内核核心技术](docker_and_linux_kernel.md)
+- [利用 Linux 原生工具复刻 Docker 的核心功能](docker_simulation.md)
 - [Docker 底层原理（Namespace / cgroups / Mount / Network）的统一心智模型](docker_namespace_mental_model.md)
 - []()
 - []()

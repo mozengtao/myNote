@@ -1,3 +1,13 @@
+[**online text tools**](https://tools.packetcoders.io/textfsm-parser/)
+[**TextFSM Parser**](https://tools.packetcoders.io/textfsm-parser/textfsm-basic/)
+[**Jinja2 Renderer**](https://tools.packetcoders.io/j2-render/)
+[TextFSM template syntax](https://pyneng.readthedocs.io/en/latest/book/21_textfsm/textfsm_syntax.html)
+[TTP Parser](https://tools.packetcoders.io/ttp-parser/)
+[A Beginner's Guide to TextFSM for Network Automation](https://www.packetcoders.io/a-beginners-guide-to-textfsm-for-network-automation/)
+[JMESPath Examples](https://jmespath.org/examples.html)
+[]()
+[]()
+
 [微信文件传输助手网页版](https://filehelper.weixin.qq.com/)  
 [[makeself]]  
 [[dot]]  

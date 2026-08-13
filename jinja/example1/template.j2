@@ -1,0 +1,8 @@
+{% for interface in interfaces %}
+interface {{ interface.name }}
+ description {{ interface.description }}
+ ip address {{ interface.p2p }}
+ no switchport
+ no shut
+!
+{% endfor %}

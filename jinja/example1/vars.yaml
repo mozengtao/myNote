@@ -1,0 +1,13 @@
+---
+interfaces:
+  - name: Eth11
+    p2p: 10.10.10.1/30
+    description: TRANSIT-LINK
+
+  - name: Eth12
+    p2p: 10.10.20.1/30
+    description: CUSTOMER-A
+
+  - name: Eth13
+    p2p: 10.10.30.1/30
+    description: OUTSIDE

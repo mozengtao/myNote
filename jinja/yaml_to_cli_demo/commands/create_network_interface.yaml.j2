@@ -1,0 +1,11 @@
+version: "1.0"
+description: >
+  Attach a network interface to an already-created server. This section
+  is only meaningful after the "servers" section has run, which mirrors
+  how convert_lab_to_cli.py assigns RPDs to VMCs after both already exist.
+commands: |
+    server {{ server }}
+      interface {{ name }}
+        address {{ address }}
+      !
+    !

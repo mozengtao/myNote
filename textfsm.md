@@ -1,0 +1,7 @@
+[**TextFSM Parser**](https://tools.packetcoders.io/textfsm-parser/textfsm-basic/)
+[textfsm](https://github.com/google/textfsm)
+[TextFSM 实现的基本思想、底层原理、设计哲学与心智模式](textfsm/mental_model.md)
+["状态 + 规则表"——一种普适的软件设计心智模式](textfsm/state_ruletable.md)
+[]()
+[]()
+[]()

@@ -332,6 +332,290 @@ async def main():
 asyncio.run(main())
 ```
 
+---
+
+## 示例13
+```python
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
+def do_work(task_id: int, duration: float = 0.1) -> str:
+    time.sleep(duration)
+    return f"Task: {task_id} completed"
+
+
+def run_threading(tasks: int = 5, max_workers: int = 5) -> list[str]:
+    results: list[str] = []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(do_work, i, 0.1) for i in range(tasks)]
+
+        for future in as_completed(futures):
+            result = future.result()
+            results.append(result)
+
+    return results
+
+
+if __name__ == "__main__":
+    start_time = time.perf_counter()
+    results = run_threading(tasks=5)
+    elapsed_time = time.perf_counter() - start_time
+
+    print("Threading Results:")
+    for result in results:
+        print(f" {result}")
+
+    print(f"\nTotal time: {elapsed_time:.2f} seconds")
+    print("Note: Tasks ran concurrently using threads (I/O-bound tasks)")
+```
+
+---
+
+## 示例14
+```python
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
+# 定义几个不同的任务函数
+def compute_square(n: int) -> dict:
+    time.sleep(0.2)  # 模拟I/O等待
+    return {"task": "square", "input": n, "result": n * n}
+
+
+def compute_cube(n: int) -> dict:
+    time.sleep(0.3)
+    return {"task": "cube", "input": n, "result": n * n * n}
+
+
+def fetch_data(url_id: int) -> str:
+    time.sleep(0.5)
+    return f"Data from source {url_id}"
+
+
+def run_different_tasks(max_workers: int = 3) -> list:
+    """
+    使用线程池执行不同的任务函数，并收集结果（按完成顺序）。
+    """
+    results = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # 提交不同的函数，每个函数携带不同的参数
+        futures = [
+            executor.submit(compute_square, 5),
+            executor.submit(compute_cube, 3),
+            executor.submit(fetch_data, 101),
+            executor.submit(compute_square, 10),
+            executor.submit(fetch_data, 202),
+        ]
+
+        # 按完成顺序获取结果
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                results.append(result)
+            except Exception as e:
+                results.append(f"Error: {e}")
+
+    return results
+
+
+if __name__ == "__main__":
+    start_time = time.perf_counter()
+    results = run_different_tasks(max_workers=3)
+    elapsed = time.perf_counter() - start_time
+
+    print("Results (in completion order):")
+    for res in results:
+        print(f"  {res}")
+
+    print(f"\nTotal time: {elapsed:.2f} seconds")
+    print("Note: Different functions were executed concurrently using threads (I/O-bound).")
+```
+
+---
+
+## 示例15
+- 使用 future 到元数据的映射
+在提交任务时，用一个 dict 把 future 对象和你自定义的标识信息绑定起来。等 as_completed 返回该 future 时，通过这个 future 取出对应的元数据，再把结果和元数据组合
+```python
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def compute_square(n: int) -> int:
+    time.sleep(0.2)
+    return n * n
+
+def compute_cube(n: int) -> int:
+    time.sleep(0.3)
+    return n * n * n
+
+def fetch_data(url_id: int) -> str:
+    time.sleep(0.5)
+    return f"Data_{url_id}"
+
+def run_with_metadata(max_workers: int = 3) -> list:
+    results = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # 关键：用 future 作为 key，存储我们关心的元数据
+        future_to_meta = {}
+
+        future1 = executor.submit(compute_square, 5)
+        future_to_meta[future1] = {"task_name": "square", "input": 5, "user": "alice"}
+
+        future2 = executor.submit(compute_cube, 3)
+        future_to_meta[future2] = {"task_name": "cube", "input": 3, "user": "bob"}
+
+        future3 = executor.submit(fetch_data, 101)
+        future_to_meta[future3] = {"task_name": "fetch", "input": 101, "user": "charlie"}
+
+        future4 = executor.submit(compute_square, 10)
+        future_to_meta[future4] = {"task_name": "square", "input": 10, "user": "dave"}
+
+        # 按完成顺序处理
+        for future in as_completed(future_to_meta):
+            meta = future_to_meta[future]          # 取出元数据
+            raw_result = future.result()           # 取出函数返回值
+            # 组合成完整的结果对象，既不污染原函数，又带上了背景信息
+            combined = {
+                **meta,
+                "result": raw_result,
+                "completed_order": len(results) + 1
+            }
+            results.append(combined)
+
+    return results
+
+if __name__ == "__main__":
+    for r in run_with_metadata():
+        print(r)
+```
+
+
+---
+
+## 示例16
+```python
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+def do_cpu_work(task_id: int, iterations: int = 1000000) -> str:
+    result = 0
+    for i in range(iterations):
+        result += i * i
+    return f"Task {task_id} completed (result: {result})"
+
+
+def run_multiprocessing(tasks: int = 5, max_workers: int = 5) -> list[str]:
+    results: list[str] = []
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(do_cpu_work, i, 1000000) for i in range(tasks)]
+        for future in as_completed(futures):
+            result = future.result()
+            results.append(result)
+    return results
+
+
+if __name__ == "__main__":
+    start_time = time.perf_counter()
+    results = run_multiprocessing(tasks=5, max_workers=5)
+    elapsed_time = time.perf_counter() - start_time
+
+    print("Multiprocessing Results:")
+    for result in results:
+        print(f" {result}")
+
+    print(f"\nTotal time: {elapsed_time:.2f} seconds")
+    print("Note: Tasks ran in parallel using separate processes (CPU-bound tasks)")
+```
+
+---
+
+## 示例17
+```python
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+# 三个不同的 CPU 密集型任务函数
+def compute_squares(n: int) -> str:
+    """计算 1 到 n 的平方和"""
+    total = sum(i * i for i in range(1, n + 1))
+    return f"Squares sum up to {n} = {total}"
+
+def compute_factorial(n: int) -> str:
+    """计算 n 的阶乘"""
+    fact = 1
+    for i in range(2, n + 1):
+        fact *= i
+    return f"Factorial of {n} = {fact}"
+
+def compute_fibonacci(n: int) -> str:
+    """计算第 n 个斐波那契数（迭代方式）"""
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return f"Fibonacci({n}) = {a}"
+
+
+def run_multiprocessing() -> list[str]:
+    """提交多个不同的任务到进程池，并收集结果"""
+    results: list[str] = []
+    with ProcessPoolExecutor(max_workers=3) as executor:
+        # 提交不同的函数，参数也各不相同
+        future1 = executor.submit(compute_squares, 10_000_000)
+        future2 = executor.submit(compute_factorial, 100_000)
+        future3 = executor.submit(compute_fibonacci, 1_000_000)
+
+        # 使用 as_completed 按完成顺序获取结果
+        for future in as_completed([future1, future2, future3]):
+            results.append(future.result())
+
+    return results
+
+
+if __name__ == "__main__":
+    start_time = time.perf_counter()
+    results = run_multiprocessing()
+    elapsed_time = time.perf_counter() - start_time
+
+    print("Multiprocessing Results (different functions):")
+    for res in results:
+        print(f"  {res}")
+
+    print(f"\nTotal time: {elapsed_time:.2f} seconds")
+    print("Note: Tasks ran in parallel using separate processes (CPU-bound tasks)")
+```
+
+---
+
+## 示例18
+```python
+import asyncio
+import time
+
+async def do_async_work(task_id: int, duration: float = 0.1) -> str:
+    await asyncio.sleep(duration)
+    return f"Task {task_id} completed"
+
+async def run_asyncio(tasks: int = 5) -> list[str]:
+    task_list = [do_async_work(i, 0.1) for i in range(tasks)]
+    results = await asyncio.gather(*task_list)
+    return list(results)
+
+if __name__ == "__main__":
+    start_time = time.perf_counter()
+    results = asyncio.run(run_asyncio(tasks=5))
+    elapsed_time = time.perf_counter() - start_time
+
+    print("Asyncio Results:")
+    for result in results:
+        print(f" {result}")
+
+    print(f"\nTotal time: {elapsed_time:.2f} seconds")
+    print("Note: Tasks ran concurrently using asyncio (modern I/O-bound approach)")
+```
+
 心智模型：
 
 ```

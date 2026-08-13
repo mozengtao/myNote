@@ -1,0 +1,9 @@
+version: "1.0"
+description: Create a single user account.
+commands: |
+    user {{ name }}
+      role {{ role | default('viewer') }}
+      {% if email is defined -%}
+      email {{ email }}
+      {% endif -%}
+    !

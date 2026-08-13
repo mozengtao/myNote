@@ -1,0 +1,16 @@
+version: "1.0"
+description: >
+  Create a server resource. Most fields have sensible defaults filled in
+  by the converter before rendering (see converter.py:_prepare_server_data),
+  the template itself only falls back for the simplest cases.
+commands: |
+    server {{ name }}
+      role {{ role | default('generic') }}
+      {% if cpu is defined -%}
+      cpu {{ cpu }}
+      {% endif -%}
+      network-pool {{ network_pool | default('default_pool') }}
+      {% for tag in tags | default([]) -%}
+      tag {{ tag }}
+      {% endfor -%}
+    !

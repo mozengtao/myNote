@@ -174,10 +174,10 @@ class AuthInterceptor(grpc.ServerInterceptor):
 def MyMethod(self, request, context):
     # 访问元数据
     metadata = dict(context.invocation_metadata())
-    
+
     # 设置响应元数据
     context.set_trailing_metadata([('key', 'value')])
-    
+
     # 检查是否取消
     if context.is_active():
         return response
@@ -289,20 +289,20 @@ content-type: application/grpc+proto
 [1] 应用层
     ↓ 创建请求对象
     request = BinaryOperation(a=5, b=10)
-    
+
 [2] gRPC 核心层
     ↓ 序列化为 Protocol Buffer
     bytes = request.SerializeToString()
     ↓ 添加 gRPC 元数据（方法名、超时等）
     metadata = {':path': '/Calculator/Add', ...}
-    
+
 [3] HTTP/2 层
     ↓ 分割为 HTTP/2 帧
     HEADERS frame: [metadata]
     DATA frame: [serialized bytes]
     ↓ 压缩头部（HPACK）
     ↓ 多路复用（Stream ID: 1）
-    
+
 [4] TCP/IP 层
     ↓ 发送 TCP 数据包
     [network transmission]
@@ -313,18 +313,18 @@ content-type: application/grpc+proto
 ```
 [4] TCP/IP 层
     ↑ 接收 TCP 数据包
-    
+
 [3] HTTP/2 层
     ↑ 解析 HTTP/2 帧
     ↑ 解压头部（HPACK）
     ↑ 重组数据
-    
+
 [2] gRPC 核心层
     ↑ 提取元数据和方法名
     ↑ 反序列化 Protocol Buffer
     request = BinaryOperation.ParseFromString(bytes)
     ↑ 路由到对应的 Servicer 方法
-    
+
 [1] 应用层
     ↑ 执行业务逻辑
     result = request.a + request.b
@@ -449,17 +449,17 @@ class MyClient:
         )
         # 创建 Stub
         self.stub = calculator_pb2_grpc.CalculatorStub(self.channel)
-    
+
     def calculate(self, a, b):
         # 1. 应用层：创建请求
         request = calculator_pb2.BinaryOperation(a=a, b=b)
-        
+
         # 2. gRPC 核心层：添加元数据
         metadata = [
             ('authorization', 'Bearer token123'),
             ('client-id', 'python-client')
         ]
-        
+
         try:
             # 发起调用（经过所有层次）
             response = self.stub.Add(
@@ -468,7 +468,7 @@ class MyClient:
                 timeout=5.0  # 超时设置
             )
             return response.value
-            
+
         except grpc.RpcError as e:
             # 错误处理
             print(f"RPC 失败: {e.code()}")
@@ -477,31 +477,31 @@ class MyClient:
 
 # 服务端应用代码
 class CalculatorServicer(calculator_pb2_grpc.CalculatorServicer):
-    
+
     def Add(self, request, context):
         # 1. 应用层：访问请求数据
         print(f"收到请求: {request.a} + {request.b}")
-        
+
         # 2. gRPC 核心层：访问上下文
         metadata = dict(context.invocation_metadata())
         print(f"客户端 ID: {metadata.get('client-id')}")
-        
+
         # 验证授权
         if 'authorization' not in metadata:
             context.abort(
                 grpc.StatusCode.UNAUTHENTICATED,
                 '缺少认证信息'
             )
-        
+
         # 1. 应用层：业务逻辑
         result = request.a + request.b
-        
+
         # 2. gRPC 核心层：设置响应元数据
         context.set_trailing_metadata([
             ('server-version', '1.0.0'),
             ('processing-time', '0.001s')
         ])
-        
+
         # 返回响应
         return calculator_pb2.Result(value=result)
 
@@ -516,15 +516,15 @@ def serve():
             ('grpc.max_receive_message_length', 10 * 1024 * 1024)
         ]
     )
-    
+
     # 注册服务
     calculator_pb2_grpc.add_CalculatorServicer_to_server(
         CalculatorServicer(), server
     )
-    
+
     # 3. HTTP/2 层：监听端口
     server.add_insecure_port('[::]:50051')
-    
+
     # 启动（涉及所有层次）
     server.start()
     server.wait_for_termination()
@@ -539,11 +539,11 @@ class ClientInterceptor(grpc.UnaryUnaryClientInterceptor):
         print("[拦截器] 请求前处理")
         print(f"  方法: {client_call_details.method}")
         print(f"  请求: {request}")
-        
+
         # 修改元数据
         metadata = list(client_call_details.metadata or [])
         metadata.append(('x-request-id', str(uuid.uuid4())))
-        
+
         # 创建新的调用详情
         new_details = grpc.ClientCallDetails(
             client_call_details.method,
@@ -551,13 +551,13 @@ class ClientInterceptor(grpc.UnaryUnaryClientInterceptor):
             metadata,
             client_call_details.credentials
         )
-        
+
         # 继续调用
         response = continuation(new_details, request)
-        
+
         print("[拦截器] 响应后处理")
         print(f"  响应: {response}")
-        
+
         return response
 
 
@@ -566,12 +566,12 @@ class ServerInterceptor(grpc.ServerInterceptor):
     def intercept_service(self, continuation, handler_call_details):
         print("[拦截器] 服务端接收请求")
         print(f"  方法: {handler_call_details.method}")
-        
+
         # 获取元数据
         metadata = dict(handler_call_details.invocation_metadata)
         request_id = metadata.get('x-request-id', 'unknown')
         print(f"  请求 ID: {request_id}")
-        
+
         # 继续处理
         return continuation(handler_call_details)
 ```

@@ -1,0 +1,33 @@
+# Example inventory for the "dev" environment.
+# Mirrors the shape of a testbedv2 YAML in the original convert_lab_to_cli.py:
+# a handful of top-level keys, each one handled by its own section processor.
+
+address_pools:
+  network:
+    pool_a:
+      cidr: "10.0.1.0/24"
+    pool_b:
+      cidr: "10.0.2.0/24"
+
+users:
+  - name: alice
+    role: admin
+    email: alice@example.com
+  - name: bob
+
+servers:
+  - name: web01
+    cpu: 4
+    tags: [web, frontend]
+  - name: db01
+    role: database
+    # network_pool intentionally omitted -> converter fills it in
+    # from address_pools (see _prepare_server_data)
+
+network_interfaces:
+  - server: web01
+    name: eth0
+    address: "10.0.1.10/24"
+  - server: db01
+    name: eth0
+    address: "10.0.2.10/24"

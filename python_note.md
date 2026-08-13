@@ -2,6 +2,7 @@
 [FastAPI](FastAPI.md)  
 [FastAPI](Flask.md)  
 [FastAPI](FastAPI.md)  
+[Jinja](Jinja.md)  
 [**Learn Python Concurrency Super Fast**](https://superfastpython.com/)  
 [Decorator](python/decorator.md)  
 [pydantic](python/pydantic.md)  

@@ -1,0 +1,24 @@
+# Example inventory for the "prod" environment.
+# Deliberately smaller than dev.yaml to show that the same converter code
+# handles differently-shaped inventories - the sections that are missing
+# simply produce no commands.
+
+address_pools:
+  network:
+    prod_pool:
+      cidr: "172.16.0.0/24"
+
+users:
+  - name: ops
+    role: admin
+
+servers:
+  - name: web-prod-01
+    tags: [web, prod]
+  - name: web-prod-02
+    tags: [web, prod]
+
+network_interfaces:
+  - server: web-prod-01
+    name: eth0
+    address: "172.16.0.10/24"

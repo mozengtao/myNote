@@ -447,7 +447,7 @@ awk 'FNR == 1 {print "--- New file:", FILENAME}'
 |  MISTAKE 3: Not setting FS in BEGIN                              |
 |  ----------------------------------                              |
 |  WRONG:  awk '{FS=":"} {print $1}' /etc/passwd                   |
-|          (First line already split before FS takes effect!)     |
+|          (First line already split before FS takes effect!)      |
 |                                                                  |
 |  RIGHT:  awk 'BEGIN{FS=":"} {print $1}' /etc/passwd              |
 |          (FS set before any line is read)                        |

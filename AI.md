@@ -4,7 +4,7 @@
 [RAG](rag.md)  
 [Context Engineering](ContextEngineering.md)  
 [MCP](mcp.md)  
-[]()  
+[**mattpocock skills**](https://github.com/mattpocock/skills)  
 []()  
 [OpenCode中文实战课](https://learnopencode.com/)  
 
@@ -176,7 +176,7 @@ ConfD 配置事务 (commit)
         │
         ▼
 ┌─────────────────────────────────────────┐
-│  Work 结构体 (工作列表)                  │
+│  Work 结构体 (工作列表)                   │
 │  ┌─────────┐                            │
 │  │ w->list │──► Witem ──► Witem ──► nil │
 │  └─────────┘    (变更1)   (变更2)        │

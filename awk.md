@@ -15,10 +15,10 @@
 [AWK Anchor → Boundary → Extract 示例](awk/awk-anchor-boundary-extract-example.md)  
 
 
-- [AWK 系统化掌握手册](./awk/awk_mastery.md)
-- [AWK 编程语言参考指南](./awk/awk_ref.md)
-- [AWK 常用内置函数与复杂逻辑配方](./awk/awk_functions.md)
-- [AWK "Buffer-and-Judge" 模式](./awk/Buffer-and-Judge.md)
+- [AWK 系统化掌握手册](awk/awk_mastery.md)
+- [AWK 编程语言参考指南](awk/awk_ref.md)
+- [AWK 常用内置函数与复杂逻辑配方](awk/awk_functions.md)
+- [AWK "Buffer-and-Judge" 模式](awk/Buffer-and-Judge.md)
 
 
 [sed & awk](https://docstore.mik.ua/orelly/unix/sedawk/index.htm)  
@@ -29,14 +29,14 @@
 [Understanding Regular Expressions in Awk](https://tecadmin.net/awk-regular-expressions/)  
 
 awk/awk-tutorial/
-├── [part1-core-mental-model.md](./awk/awk-tutorial/part1-core-mental-model.md)  
-├── [part2-pattern-matching.md](./awk/awk-tutorial/part2-pattern-matching.md)  
-├── [part3-core-actions.md](./awk/awk-tutorial/part3-core-actions.md)  
-├── [part4-programming-language.md](./awk/awk-tutorial/part4-programming-language.md)  
-├── [part5-daily-use-cases.md](./awk/awk-tutorial/part5-daily-use-cases.md)  
-├── [part6-functions.md](./awk/awk-tutorial/part6-functions.md)  
-├── [part7-professional-style.md](./awk/awk-tutorial/part7-professional-style.md)  
-└── [part8-tool-choice-checklist.md](./awk/awk-tutorial/part8-tool-choice-checklist.md)  
+├── [part1-core-mental-model.md](awk/awk-tutorial/part1-core-mental-model.md)  
+├── [part2-pattern-matching.md](awk/awk-tutorial/part2-pattern-matching.md)  
+├── [part3-core-actions.md](awk/awk-tutorial/part3-core-actions.md)  
+├── [part4-programming-language.md](awk/awk-tutorial/part4-programming-language.md)  
+├── [part5-daily-use-cases.md](awk/awk-tutorial/part5-daily-use-cases.md)  
+├── [part6-functions.md](awk/awk-tutorial/part6-functions.md)  
+├── [part7-professional-style.md](awk/awk-tutorial/part7-professional-style.md)  
+└── [part8-tool-choice-checklist.md](awk/awk-tutorial/part8-tool-choice-checklist.md)  
 
 ```bash
 # awk 的心智模型
@@ -45,61 +45,6 @@ for each line {
         action
     }
 }
-
-# 提取日志中 匹配内容(例如total_events) 及其后面所有内容
-awk -v key="total_events" 'match($0, key "=.*") {print substr($0, RSTART)}' file.log
-# 提取任意 K=V 的值
-# 新版本 awk 支持高级正则捕获组 match(..., m) 语法
-awk -v key="total_events" 'match($0, key"=([0-9]+)", m) {print m[1]}' file.log
-# 通用版本
-# Shell 将单引号内 ' ... ' 的内容 当成一整块字符串，原封不动传给 awk, 换行在引号内 = 普通字符
-awk -v key="total_events" '
-{
-    if (match($0, key"=[0-9]+")) {
-        s = substr($0, RSTART + length(key) + 1)
-        if (match(s, /^[0-9]+/)) {
-            print substr(s, 1, RLENGTH)
-        }
-    }
-}' vmc.stdout.0
-
-# 指定多个分隔符
-awk -F'[=,]' '{print $2}' file.log
-
-# 阈值过滤
-awk -v thresh=10 '
-{
-    line = $0
-    # 精准提取 total_events=数字
-    if (match(line, /total_events=[0-9]+/)) {
-        val = substr(line, RSTART, RLENGTH)
-        # 提取纯数字
-        sub(/.*=/, "", val)
-
-        # 只输出大于阈值的行
-        if (val + 0 > thresh) {
-            print line
-        }
-    }
-}
-' vmc.stdout.0
-
-# 打印match行之后的所有行
-nomad job status node-exporter | awk '/Allocations/{found=1} found'
-
-nomad job status node-exporter | awk '/Allocations/{match=1} {if(match) print}'
-
-nomad job status node-exporter | awk '
-    /Allocations/ { match=1 }
-    match { print }
-'
-
-nomad job status node-exporter | sed -n '/Allocations/,$p'
-
-# 匹配包含"Allocations"的行，然后向下数到第三行（即数据行），并打印该行的第一个字段（即ID）
-nomad job status snmp-evc-dentist-1 | awk '/Allocations/{c=3} c&&!--c{print $1}'
-
-```
 
 # 经典模式
 - 状态开关模式 (The State Machine / Toggle)
@@ -156,62 +101,21 @@ BEGIN { RS = "" ; FS = "\n" }
 }
 ```
 
-- 多种模式组合起来解决更复杂的问题
-```bash
-实战场景：智能日志分析
-需求：
-1. 有一个 whitelist.txt（白名单），记录了需要关注的 用户 ID。
-2. 有一个巨大的 app.log，日志以 BEGIN TRANSACTION 开始，END TRANSACTION 结束。
-3. 任务： 统计白名单用户在日志中触发了多少次 ERROR，并按用户汇总。
+- The "Buffer-and-Judge" Logic
 
-awk '
-  # 模式 1: 多文件关联 (NR==FNR)
-  # 先把白名单读入内存
-  NR == FNR {
-      whitelist[$1] = 1
-      next
-  }
+It’s particularly useful for configuration files (like HCL, JSON, or YAML) where you need to act on a multi-line block based on a specific value found somewhere inside it.
 
-  # 模式 2: 状态开关 (State Machine)
-  # 识别日志块的开始
-  /BEGIN TRANSACTION/ {
-      in_block = 1
-      current_user = ""
-      has_error = 0
-      next
-  }
+When awk processes a file line-by-line, it doesn't naturally know what's coming next. To handle a block based on its internal content, you follow these four logical stages:
 
-  # 在块内部进行逻辑判断
-  in_block {
-      # 提取用户 ID (假设格式为 User: 123)
-      if ($0 ~ /User:/) { current_user = $2 }
-
-      # 标记错误状态
-      if ($0 ~ /ERROR/) { has_error = 1 }
-
-      # 模式 3: 块结束处理 (类似 Buffer-and-Judge 的逻辑)
-      if (/END TRANSACTION/) {
-          # 组合逻辑：是白名单用户 且 块内有错误
-          if ((current_user in whitelist) && has_error) {
-              # 模式 4: 数组聚合 (Aggregation)
-              error_count[current_user]++
-          }
-          in_block = 0
-      }
-  }
-
-  # 模式 5: 最终汇总输出 (END block)
-  END {
-      print "User_ID", "Error_Frequency"
-      for (u in error_count) {
-          print u, error_count[u]
-      }
-  }
-' whitelist.txt app.log
-```
+1. Detection (Start): Use a regex to identify the start of the block. Once found, set a "state flag" (e.g., in_block = 1) and clear any previous temporary storage.
+2. Buffering (Accumulation): While the flag is active, instead of printing lines immediately, save them into an array (e.g., buffer[]). This puts the lines in "waiting" while you scan for the criteria.
+3. Identification (The Target): As you buffer each line, check if it contains the specific "trigger" pattern. If it does, set a "target flag" (e.g., target_block = 1).
+4. Action (End/Flush): When you hit the closing brace (}), the block is complete. You now look at your "target flag":
+    If the flag is true: Loop through the buffer and modify the lines.
+    If the flag is false: Loop through the buffer and print the lines as-is.
+    Reset: Clear the flags and the buffer for the next potential block.
 
 
-## "Buffer-and-Judge" pattern
 ```Awk
 /START_PATTERN/ { in_block=1; found=0; i=0 }
 
@@ -236,1063 +140,129 @@ in_block {
 { print } # Print everything outside of blocks
 ```
 
-- The "Buffer-and-Judge" Logic
-
-It’s particularly useful for configuration files (like HCL, JSON, or YAML) where you need to act on a multi-line block based on a specific value found somewhere inside it.
-
-When awk processes a file line-by-line, it doesn't naturally know what's coming next. To handle a block based on its internal content, you follow these four logical stages:
-
-1. Detection (Start): Use a regex to identify the start of the block. Once found, set a "state flag" (e.g., in_block = 1) and clear any previous temporary storage.
-2. Buffering (Accumulation): While the flag is active, instead of printing lines immediately, save them into an array (e.g., buffer[]). This puts the lines in "waiting" while you scan for the criteria.
-3. Identification (The Target): As you buffer each line, check if it contains the specific "trigger" pattern. If it does, set a "target flag" (e.g., target_block = 1).
-4. Action (End/Flush): When you hit the closing brace (}), the block is complete. You now look at your "target flag":
-    If the flag is true: Loop through the buffer and modify the lines.
-    If the flag is false: Loop through the buffer and print the lines as-is.
-    Reset: Clear the flags and the buffer for the next potential block.
-
-- Examples
-
-- Remove an entire storage block from a Kubernetes-style config, but only if it uses type = "nfs"
-```Awk
-/storage \{/ { in_block=1; is_nfs=0; i=0 }
-
-in_block {
-    buffer[++i] = $0
-    if ($0 ~ /type = "nfs"/) { is_nfs=1 }
-    if (/^\s*\}/) {
-        if (!is_nfs) { # Only print if it IS NOT the target
-            for (j=1; j<=i; j++) print buffer[j]
-        }
-        in_block=0; next
-    }
-    next
-}
-
-{ print }
-```
-
-- In an SSH config or similar file, find a specific Host block and ensure PasswordAuthentication is set to no, regardless of what it was before.
-```Awk
-/^Host internal-api/ { in_block=1; i=0 }
-
-in_block {
-    buffer[++i] = $0
-    if (/^\s*PasswordAuthentication/) { 
-        buffer[i] = "    PasswordAuthentication no" 
-    }
-    if (/^$/ || eof) { # End on blank line
-        for (j=1; j<=i; j++) print buffer[j]
-        in_block=0; next
-    }
-    next
-}
-
-{ print }
-```
-
-- You previously commented out a service block in a Nomad/Consul file. Now you want to "flip the switch" and uncomment it based on the service name.
-```Awk
-/^[[:space:]]*#[[:space:]]*service[[:space:]]*\{/ { in_block=1; target=0; i=0 }
-
-in_block {
-    buffer[++i] = $0
-    if ($0 ~ /name = "auth-svc"/) { target=1 }
-    if (/^[[:space:]]*#[[:space:]]*\}/) {
-        for (j=1; j<=i; j++) {
-            if (target) {
-                sub(/^[[:space:]]*#[[:space:]]*/, "", buffer[j]) # Strip the #
-                print buffer[j]
-            } else { print buffer[j] }
-        }
-        in_block=0; next
-    }
-    next
-}
-
-{ print }
-```
-
-- Extract full JSON log objects (which span multiple lines) but only if they contain "level":"error". This is great for filtering huge files.
-```Awk
-/^\{/ { in_block=1; has_error=0; i=0 }
-
-in_block {
-    buffer[++i] = $0
-    if ($0 ~ /"level":"error"/) { has_error=1 }
-    if (/^\}/) {
-        if (has_error) {
-            for (j=1; j<=i; j++) print buffer[j]
-        }
-        in_block=0; next
-    }
-    next
-}
-# Note: No '{ print }' here because we ONLY want the errors
-```
-
-- Find a <connector> tag in a Tomcat server.xml and add secure="true" only if the port is 8443.
-```Awk
-/<Connector/ { in_block=1; is_ssl=0; i=0 }
-
-in_block {
-    buffer[++i] = $0
-    if ($0 ~ /port="8443"/) { is_ssl=1 }
-    if (/\/>/ || /<\/Connector>/) {
-        for (j=1; j<=i; j++) {
-            if (is_ssl && buffer[j] ~ /<Connector/) {
-                sub(/>/, " secure=\"true\">", buffer[j])
-            }
-            print buffer[j]
-        }
-        in_block=0; next
-    }
-    next
-}
-
-{ print }
-```
-
 
 ```bash
-# range match pattern + action (prserve spaces)
-awk '
-  /^volume "persistent_evc_db" {/,/^}/ {
-    # Modified sub() with capture groups to preserve original spaces
-    sub(/(^\s*per_alloc\s*=\s*)(true)(\s*$)/, "\\1false\\3")
-  }
-  1
-' your_job_file.hcl
+# length([s]) --- 获取字符串长度，若省略参数s则默认处理整行$0
+awk '{print length($0)}' <<< "Hello World"
+# 输出：11 (空格算作1个字符)
 
-# comment out the entire volume_mount block for persistent_evc_db
-# INPUT TEXT
-    task "evc" {
-      driver = "docker"
+# index(s, t) --- 查找子串t在源字符串s中首次出现的位置（从1开始计数），未找到则返回0
+awk '{print index($0, "World")}' <<< "Hello World"
+# 输出：7 (因为'W'位于第7个字符)
 
-      volume_mount {
-        volume      = "persistent_evc_db"
-        destination = var.ncs_mount_path
-          read_only = false
-      }
+# substr(s, i [, n]) --- 从源字符串s的第i个位置开始截取，若指定n则截取n个字符，否则截取至末尾
+awk '{print substr($0, 7, 5)}' <<< "Hello World"
+# 输出：World (从第7位开始取5个字符)
 
-      volume_mount {
-        volume      = "persistent_shared"
-        destination = var.evc_shared_path
-          read_only = false
-      }
-    }
-
-# COMMAND
-awk '
-  # Step 1: Detect start of volume_mount block, begin buffering
-  /^[[:space:]]*volume_mount[[:space:]]*\{/ {
-    in_block = 1
-    target_block = 0
-    buffer_len = 0
-  }
-
-  # Step 2: While in block, buffer lines and check for target
-  in_block {
-    buffer[++buffer_len] = $0
-
-    if (/^[[:space:]]*volume[[:space:]]*=[[:space:]]*"persistent_evc_db"/) {
-      target_block = 1
-    }
-
-    # Step 3: At closing brace, flush buffer (commented if target)
-    if (/^[[:space:]]*\}/) {
-      for (i = 1; i <= buffer_len; i++) {
-        if (target_block) {
-          print "#" buffer[i]
-        } else {
-          print buffer[i]
-        }
-      }
-      in_block = 0
-      buffer_len = 0
-    }
-    next
-  }
-
-  # Step 4: Print non-block lines unchanged
-  { print }
-' your_job_file.hcl > temp.hcl && mv temp.hcl your_job_file.hcl
-```
-
-## extract sections
-```bash
-# input.txt:
-collectd_us_ofdma_partial_reason_count{us_ofdma="port->0;pchidx->12;reason->low-snr",instance="docsis_mac_320ca5a1"} 2 1762848325000
-collectd_us_ofdma_partial_reason_count{us_ofdma="port->0;pchidx->12;reason->reg-ack-tccerr",instance="docsis_mac_320ca5a1"} 1 1762848325000
-
-# process.sh:
-awk '{
-  pch = ""; reason = "";
-  if (match($0, /pchidx->([0-9]+)/, a)) pch = a[1];
-  if (match($0, /reason->([^";,}]+)/, b)) reason = b[1];
-  value = $2;
-  print pch, reason, value
-}' input.txt
-
-# process.sh:
-# for busybox awk, it does not support the GNU awk extension of match(string, regex, array)
-# it only supports match(string, regex)
-awk '{
-  pch = ""; reason = "";
-  if (match($0, /pchidx->[0-9]+/)) {
-    tmp = substr($0, RSTART, RLENGTH);
-    sub(/^.*->/, "", tmp);
-    pch = tmp;
-  }
-  if (match($0, /reason->[^";,}]+/)) {
-    tmp = substr($0, RSTART, RLENGTH);
-    sub(/^reason->/, "", tmp);
-    reason = tmp;
-  }
-  value = $2;
-  print pch, reason, value
-}' input.txt
-
-# OUTPUT:
-12 low-snr 2
-12 reg-ack-tccerr 1
-
-# input.txt
-morris-dentist_md1_0  90:58:51:5c:9c:5c  0/13  0  0  0  0  2  1  0  1  0  0  0
-                                         0/12  0  0  0  0  2  1  0  1  0  0  0
-                      0c:b9:37:a2:14:40  0/13  0  0  0  0  0  0  0  1  0  0  1
-                                         0/12  0  0  0  0  0  0  0  1  0  0  1
-
-# process.sh:
-awk '
+# 查定位+截取
+echo "[INFO] Code: 200" | awk '
 {
-  ucid_field = 0
-  for (i = 1; i <= NF; i++) {
-    if ($i ~ /^[0-9]+\/[0-9]+$/) {
-      ucid = $i
-      ucid_field = i
-      break
-    }
-  }
-  if (ucid_field > 0) {
-    for (i = ucid_field + 1; i <= NF; i++) {
-      col = i - ucid_field + 1
-      sum[ucid, col] += $i
-      if (col > max_col) max_col = col
-    }
-    ucid_list[ucid] = 1
-  }
-}
-END {
-  for (ucid in ucid_list) {
-    printf "%s", ucid
-    for (i = 2; i <= max_col; i++)
-      printf " %d", sum[ucid, i] + 0
-    printf "\n"
-  }
-}' input.txt | sort -V
-
-# some explanation
-if (i > max_col) max_col = i    # keep track of the maximum number of columns seen
-sum[ucid, i] + 0                # forces numeric output (avoids printing nothing if unset)
-ucid_list[ucid] = 1             # clean, independent list of UCIDs to iterate later
-sort -V                         # sort output for deterministic order
-
-# OUTPUT:
-0/12 0 0 0 0 2 1 0 2 0 0 1
-0/13 0 0 0 0 2 1 0 2 0 0 1
-
-
-```
-
-
-## array
-```bash
-# 1
-awk 'BEGIN {
-    arr["apple"] = 3
-    arr["banana"] = 5
-    arr[10] = "ten"
-    print arr["apple"]
-    print arr[10]
-}'
-
-# 2
-awk 'BEGIN {
-    fruits["apple"] = 3
-    fruits["banana"] = 5
-
-    # odrder is arbitary
-    for (k in fruits) {
-        print k, fruits[k]
+    pos = index($0, ":")
+    if (pos > 0) {
+        code = substr($0, pos + 2)
+        print "提取编号: " code
     }
 }'
+# 输出：提取编号: 200
 
-# 3
-awk 'BEGIN {
-    fruits["apple"] = 3
-    fruits["banana"] = 5
+# split(s, a [, r]) --- 按分隔符r将字符串s分割并存入数组a，返回数组元素个数；若省略r则默认以FS（字段分隔符）分割
+awk '{n = split($0, a, ","); print a[2]}' <<< "apple,banana,orange"
+# 输出：banana (分割后数组第2个元素)
 
-    delete fruits["banana"]
-    for (k in fruits) {
-        print k, fruits[k]
-    }
-}'
+# match(s, r [, a]) --- 在字符串s中匹配正则表达式r，匹配成功时设置内置变量RSTART（起始位置）和RLENGTH（匹配长度），返回匹配起始位置，否则返回0
+awk '{if(match($0, /[0-9]+/)) print substr($0, RSTART, RLENGTH)}' <<< "id:12345"
+# 输出：12345 (提取出连续的数字部分)
 
-# 5
-awk 'BEGIN {
-    fruits["apple"] = 3
-    
-    if ("apple" in fruits)
-        print "apple exists"
-    
-    if(!("banana" in fruits))
-        print "banana missing"
-}'
+# sub(r, s [, t]) --- 在目标字符串t（默认为$0）中，用s替换第一次出现的正则表达式r，返回替换成功的次数（0或1）
+awk '{sub(/o/, "0"); print}' <<< "Hello World"
+# 输出：Hell0 World (仅替换了第一个字母'o')
 
-# 6
-awk 'BEGIN {
-    fruits["apple"] = 3
-    fruits["banana"] = 5
+# gsub(r, s [, t]) --- 在目标字符串t（默认为$0）中，用s全局替换所有匹配正则表达式r的内容，返回替换的总次数
+awk '{gsub(/o/, "0"); print}' <<< "Hello World"
+# 输出：Hell0 W0rld (替换了全部的字母'o')
 
-    print length(fruits)
-}'
+awk '{count = gsub(/l/, "l", $0); print "字母l出现了 " count " 次"}' <<< "Hello World"
+# 输出：字母l出现了 3 次
 
-# 7
-awk 'BEGIN {
-    n = split("read,green,blue", colors, ",")
-    for(i = 1; i <= n; i++)
-        print i, colors[i]
-}'
+# tolower(s) --- 将字符串s中的所有大写字母转换为小写，并返回转换后的新字符串
+awk '{print tolower($0)}' <<< "Hello World"
+# 输出：hello world
 
-# 8 (gawk only)
-awk 'BEGIN {
-    arr[1, "x"] = 10
-    arr[2, "y"] = 20
+# toupper(s) --- 将字符串s中的所有小写字母转换为大写，并返回转换后的新字符串
+awk '{print toupper($0)}' <<< "Hello World"
+# 输出：HELLO WORLD
 
-    print arr[1, "x"], arr[2, "y"]
-}'
+# printf(format, expr-list) --- 按 format 字符串格式化表达式并输出到标准输出（不自动换行，需显式添加 \n）
+awk '{printf "Name: %-8s | Age: %03d | Score: %.1f\n", $1, $2, $3}' <<< "Alice 7 88.75"
+# 输出：Name: Alice    | Age: 007 | Score: 88.8
 
-# example
-awk '
-/^NSI_BOND/ {
-    bond["NSI","RxB"]=$3; bond["NSI","TxB"]=$4
-    bond["NSI","RxP"]=$5; bond["NSI","TxP"]=$6
-}
-/^NSI_SLAVE/ {
-    slave["NSI","RxB"]+=$3; slave["NSI","TxB"]+=$4
-    slave["NSI","RxP"]+=$5; slave["NSI","TxP"]+=$6
-}
-/^SSI_BOND/ {
-    bond["SSI","RxB"]=$3; bond["SSI","TxB"]=$4
-    bond["SSI","RxP"]=$5; bond["SSI","TxP"]=$6
-}
-/^SSI_SLAVE/ {
-    slave["SSI","RxB"]+=$3; slave["SSI","TxB"]+=$4
-    slave["SSI","RxP"]+=$5; slave["SSI","TxP"]+=$6
-}
-END {
-    for (b in bond) {
-        split(b, k, SUBSEP)
-        iface=k[1]; metric=k[2]
-        printf "%s %s: bond=%s slavesum=%s -> %s\n",
-            iface, metric, bond[b], slave[b],
-            (bond[b]==slave[b] ? "OK" : "MISMATCH")
-    }
-}' interfaces.txt
+# sprintf(fmt, expr-list) --- 按格式化字符串fmt的规则，将表达式列表expr-list进行格式化，返回格式化后的字符串（不直接打印）
+awk '{result = sprintf("%s-%d", $1, length($1)); print result}' <<< "File"
+# 输出：File-4 (将单词与长度拼接成固定格式)
 
-# or
+# printf 与 sprintf 的联合使用（先构造再输出）
+awk '{msg = sprintf("Time: %02d:%02d", $1, $2); printf "[INFO] %s\n", msg}' <<< "9 5"
+# 输出：[INFO] Time: 09:05
 
-awk '
-# Bond interfaces
-/^NSI_BOND/ {
-    bond["NSI"]["RxB"]=$3; bond["NSI"]["TxB"]=$4
-    bond["NSI"]["RxP"]=$5; bond["NSI"]["TxP"]=$6
-}
-/^SSI_BOND/ {
-    bond["SSI"]["RxB"]=$3; bond["SSI"]["TxB"]=$4
-    bond["SSI"]["RxP"]=$5; bond["SSI"]["TxP"]=$6
-}
+# strtonum(s) --- 将字符串s转换为十进制数字，支持识别十六进制（0x开头）和八进制（0开头）
+awk '{print strtonum($0)}' <<< "0xFF"
+# 输出：255 (十六进制FF转为十进制255)
 
-# Slave interfaces
-/^NSI_SLAVE/ {
-    slave["NSI"]["RxB"]+=$3; slave["NSI"]["TxB"]+=$4
-    slave["NSI"]["RxP"]+=$5; slave["NSI"]["TxP"]+=$6
-}
-/^SSI_SLAVE/ {
-    slave["SSI"]["RxB"]+=$3; slave["SSI"]["TxB"]+=$4
-    slave["SSI"]["RxP"]+=$5; slave["SSI"]["TxP"]+=$6
-}
+# 基于行号的偏移：提取匹配行的相邻行
+# 场景：从日志文件中，找出包含“Begin final coordinates”的行，并提取其后的第4行到第8行
+# 示例数据 (data.txt)
+Line 1
+Line 2
+Begin final coordinates
+Line 4
+Line 5
+Line 6
+Line 7
+Line 8
+Line 9
+Line 10
 
-END {
-    for (iface in bond) {
-        for (metric in bond[iface]) {
-            printf "%s %s: bond=%s slavesum=%s -> %s\n",
-                iface, metric,
-                bond[iface][metric], slave[iface][metric],
-                (bond[iface][metric]==slave[iface][metric] ? "OK" : "MISMATCH")
+awk '/Begin final coordinates/ {n=NR+4; m=NR+8} (n < NR) && (NR < m)' data.txt
+
+# 基于字段位置的偏移：提取锚点字段附近的字段
+# 场景：处理一个用 * 或 ~ 分隔的数据文件，找到字段值为 N4 的位置，并输出其后的第2个字段
+# 示例数据 (data.csv)
+N4*WALTER*WHITE~DMG*D8*19630625~N4*CORA*PA*15108~
+
+identifier="N4"
+position=2
+awk -F '[*~]' -v id="$identifier" -v pos="$position" '
+{
+    for (i=1; i<=NF; i++) {
+        if ($i == id) {
+            if (i+pos <= NF)
+                print $(i+pos)
+            else
+                print "invalid position"
         }
     }
-}' interfaces.txt
+}' data.csv
 
-# or
-awk '
-# Match bond interfaces (anything ending with _BOND)
-$1 ~ /_BOND$/ {
-    prefix = substr($1, 1, length($1)-5)   # remove "_BOND"
-    bond[prefix]["RxB"]=$3; bond[prefix]["TxB"]=$4
-    bond[prefix]["RxP"]=$5; bond[prefix]["TxP"]=$6
-}
+# 基于字符位置的偏移：提取锚点字符周围的子串
+# 场景：从一个字符串中，提取以第6个字符为中心，左右各延伸5个字符的子串
+# 示例数据
+str="54321#123456789"
 
-# Match slave interfaces (anything starting with same prefix + "_SLAVE")
-$1 ~ /_SLAVE[0-9]*$/ {
-    n = index($1, "_SLAVE")
-    prefix = substr($1, 1, n-1)            # get prefix before "_SLAVE"
-    slave[prefix]["RxB"]+=$3; slave[prefix]["TxB"]+=$4
-    slave[prefix]["RxP"]+=$5; slave[prefix]["TxP"]+=$6
-}
-
-END {
-    for (iface in bond) {
-        for (metric in bond[iface]) {
-            printf "%s %s: bond=%s slavesum=%s -> %s\n",
-                iface, metric,
-                bond[iface][metric], slave[iface][metric],
-                (bond[iface][metric]==slave[iface][metric] ? "OK" : "MISMATCH")
-        }
-    }
-}' interfaces.txt
-
-
-```
-
-## Tips
-```bash
-
-echo "DOCS-IF3-MIB::docsIf3CmtsSignalQualityExtCNIR.569 = INTEGER: .0" | awk -F'[:.]' '{print $3}'
-#docsIf3CmtsSignalQualityExtCNIR
-
-
-# Rule of Thumb
-Use sed for simple edits (substitution, deletion, insertion).
-Use awk when you need to process fields, add conditions, or compute.
-
-
-By default every variable inside a function is global in awk, to avoid name conflicts and bugs, for awk function, we declare them as extra params, this is a standard awk idiom for creating local variables, so the paramters are 2 parts:
-1. the real parameters (you pass them when calling)
-2. the local scratch variables (only used inside the function)
-
-for example:
-function msplit(str, arr, seps, joinstr, tmp, raw, i, n, c) {
-    ...
-}
-str, arr, seps, joinstr are intended parameters you pass when calling
-tmp, raw, i, n, c are local variables
-
-# substitue
-echo '[ 64.150.80.45 2001:64:150:100:80::3a ]' \
-| awk '{ gsub(/^\[ *| *\]$/, ""); print }'
-
-echo "3c:c4:4f:21:00:88" \
-| awk '/^[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){5}$/ {print}'
-
-# write to multiple files based on conditions
-awk '
+awk -v i=6 -v o=5 '
 {
-    mac = $1
-    status = $4
+    start = (i - o > 0) ? i - o : 1
+    length = 2 * o + (i - o > 0 ? 1 : (i - 1))
+    print substr($0, start, length)
+}' <<< "$str"
 
-    # Write full line to status-specific file
-    if (status == "operational") {
-        print $0 >> "operational.txt"
-    } else if (status == "offline") {
-        print $0 >> "offline.txt"
-    }
-
-    # Always write summary to a separate file
-    print mac, status >> "summary.txt"
-
-    # Optional: close files to avoid too many open files
-    close("operational.txt")
-    close("offline.txt")
-    close("summary.txt")
-}
-' input.txt
-
-# how to execute external cmd
-# read one line of output from cmd
-awk 'BEGIN {
-	cmd = "date +%Y-%m-%d"
-	cmd | getline result
-	close(cmd)					# always close the pipe
-	print "Today is:", result
-}'
-
-# just execute cmd, ignore output
-awk 'BEGIN { system("echo hello from system") }'
-
-# capture multiple lines into an array
-awk 'BEGIN {
-    cmd = "ls /etc | head -3"
-
-    n = 0
-    # getline returns >0 while there are lines
-    while ((cmd | getline line) > 0) {
-        files[++n] = line
-    }
-    close(cmd)
-}
+# 动态循环偏移：查找并输出所有匹配位置
+# 场景：在文件中，找出所有单词 "to" 出现的位置（行号和列号）
+awk -v str='to' '
 {
-    print $1, " | Sample file:", files[(NR % n) + 1]
-}' /etc/passwd
-
-# send awk output to external cmd
-awk '{ print $0 | "wc -c" }' /etc/passwd
-
-# read multiple files inw awk simultaneously
-# 2 files
-awk 'FNR==NR {			# while reading first file
-	a[$1] = $2			# store 1st col as key, 2nd col as value in array a
-	next				# skip to next line
-}
-{
-	if ($1 in a) {		# while reading second file, check if 1st col exists in array a
-		print $0, a[$1]	# if exists, print the whole line and the corresponding value from array a
-	}
-}' file1.txt file2.txt
-
-# 3 files
-awk '
-# file1
-FNR==NR {
-	arr1[$1]=$2
-	next
-}
-# file2
-FNR!=NR && NR<=FNR+NR1 {
-	arr2[$1]=$2
-	next
-}
-# file3
-{
-	print $1, arr1[$1], arr2[$1], $2
-}
-' file1 file2 file3
-
-# 3 files
-awk '
-# first file
-ARGIND==1 {
-	arr1[$1]=$2
-	next
-}
-# second file
-ARGIND==2 {
-	arr2[$1]=$2
-	next
-}
-# third file
-ARGIND==3 {
-	print $1, arr1[$1], arr2[$1], $2
-}
-' file1.txt file2.txt file3.txt
-
-# match
-# how match works
-match(string, regex, array) # array is optional
-1. Looks in string for the first substring matching regex.
-2. If found:
-    Returns the position (1-based) of the match.
-    Sets special variables:
-        RSTART → position of the match.
-        RLENGTH → length of the match.
-    If array is provided, fills it with captured groups.
-3. If no match:
-    Returns 0
-    RSTART = 0, RLENGTH = -1
-
-# Find first match
-echo "hello world" | awk '{
-    if (match($0, /world/)) {
-        print "Found at:", RSTART, "length:", RLENGTH
+    off = 0
+    while (pos = index(substr($0, off + 1), str)) {
+        printf("%d: %d\n", NR, pos + off)
+        off += length(str) + pos
     }
-}'
-
-# Extract substring using RSTART and RLENGTH
-echo "user=alice,uid=1001" | awk '{
-    if (match($0, /uid=[0-9]+/)) {
-        print substr($0, RSTART, RLENGTH)
-    }
-}'
-
-# Use array to capture groups
-echo "2025-09-20" | awk '{
-    if (match($0, /([0-9]{4})-([0-9]{2})-([0-9]{2})/, m)) {
-        print "Year:", m[1], "Month:", m[2], "Day:", m[3]
-    }
-}'
-
-# Multiple matches with a loop
-echo "cat dog cat dog" | awk '{
-    str=$0
-    while (match(str, /cat/)) {
-        print "Found cat at:", RSTART
-        str = substr(str, RSTART + RLENGTH)  # move past match
-    }
-}'
-
-# find all matches
-{
-    text = $0
-    start = 1
-    while ((start = match(text, /[0-9]+/)) > 0) {
-        found = substr(text, start, RLENGTH)
-        print "Found number:", found
-        text = substr(text, start + RLENGTH)
-    }
-}
-
-# match Search a string with a regex
-# index Find literal substring, no regex.
-# gsub Replace all matches of regex with replacement
-
-# example match + index + gsub
-echo "user=alice uid=1001" | awk '{
-    # match: extract the uid
-    if (match($0, /uid=[0-9]+/))
-        print "match() →", substr($0, RSTART, RLENGTH)
-
-    # index: check where "alice" starts
-    print "index() →", index($0, "alice")
-
-    # gsub: replace alice with bob
-    s=$0
-    gsub(/alice/, "bob", s)
-    print "gsub() →", s
-}'
-
-#
-echo '90:58:51:5c:9c:5c   [ 64.150.41.18 2001:64:150:100::ff:a ]  operational(oA)' \
-| awk '{
-    if (match($0, /\[[^]]*\]/)) {
-        ipblock = substr($0, RSTART+1, RLENGTH-2)  # contents inside [ ]
-        n = split(ipblock, arr, " ")
-
-        ipv4=""; ipv6=""
-        for (i=1; i<=n; i++) {
-            if (arr[i] ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) {
-                ipv4 = arr[i]
-            } else if (arr[i] ~ /:/) {
-                ipv6 = arr[i]
-            }
-        }
-
-        if (ipv4 != "") print "IPv4: " ipv4
-        if (ipv6 != "") print "IPv6: " ipv6
-    }
-}'
-
-
-# split
-awk '{
-    n = split($0, parts, /[:\-,]/)
-    for (i = 1; i <= n; i++) print parts[i]
-}' <<< "aa:bb-cc,dd"
-
-awk '{
-    n = split($0, parts, /[[:space:],]+/)
-    for (i=1; i<=n; i++) print parts[i]
-}' <<< "one, two   three"
-
-# gsub changes the text in place
-echo "apple banana apple" | awk '{ gsub("apple", "orange"); print }'
-echo "1:2:3" | awk -F: '{ gsub("2","20",$2); print $2 }'
-echo "cat bat mat" | awk '{ gsub(/[bm]at/, "xxx"); print }'
-echo "hello hello world" | awk '{
-    n = gsub(/hello/, "hi")
-    print $0, "→ replaced", n, "times"
-}'
-echo "foo" | awk '{ gsub(/foo/, "[&]"); print }'
-
-# gsub + split (multiple seperators -> one delimiter, then split)
-echo "apple,banana;cherry" | awk '{
-    gsub(/[;,]/, " ", $0)
-    n = split($0, arr, " ")
-    for (i=1; i<=n; i++) print arr[i]
-}'
-
-echo "a   b\t\tc" | awk '{
-    gsub(/[ \t]+/, " ")
-    n = split($0, arr, " ")
-    for (i=1; i<=n; i++) print arr[i]
-}'
-
-echo "k1=v1;k2=v2" | awk '{
-    gsub(";", " ", $0)          # turn ; into spaces
-    n = split($0, pairs, " ")
-    for (i=1; i<=n; i++) {
-        split(pairs[i], kv, "=")
-        print kv[1] " → " kv[2]
-    }
-}'
-
-# use a function for gsub + split
-# Trim helper
-function trim(s) {
-    sub(/^[ \t\r\n]+/, "", s)
-    sub(/[ \t\r\n]+$/, "", s)
-    return s
-}
-
-# msplit:
-#   str      → input string
-#   arr      → output array
-#   seps     → regex for separators
-#   joinstr  → optional join separator (if non-empty returns joined string)
-#
-#   (tmp, raw, i, n, c are locals)
-function msplit(str, arr, seps, joinstr,
-                tmp, raw, i, n, c, joined) {
-
-    tmp = str
-    gsub(seps, " ", tmp)            # replace all separators with space
-    n = split(tmp, raw, " ")
-
-    c = 0
-    for (i = 1; i <= n; i++) {
-        raw[i] = trim(raw[i])
-        if (raw[i] != "") {
-            c++
-            arr[c] = raw[i]
-        }
-    }
-
-    if (joinstr != "") {            # if join requested
-        joined = arr[1]
-        for (i = 2; i <= c; i++) joined = joined joinstr arr[i]
-        return joined
-    }
-
-    return c                         # otherwise return count
-}
-
-echo "apple ;; banana ||| cherry ,, pear" | awk '
-# include msplit & trim here
-{
-    n = msplit($0, parts, "[;|,]")
-    for (i = 1; i <= n; i++) print parts[i]
-}'
-
-echo "apple ;; banana ||| cherry ,, pear" | awk '
-# include msplit & trim here
-{
-    result = msplit($0, parts, "[;|,]", "|")
-    print result
-}'
-
-
-
-
-# convert hex str to dec str
-echo "00:11:80:68:48:ee" | awk -F: '{for(i=1;i<=NF;i++){printf "%d%s", strtonum("0x"$i), (i<NF?".":"\n")}}'
-Output:0.17.128.104.72.238
-# script version
-BEGIN {
-	FS = ":"
-}
-
-{
-	for(i = 1; i <= NF; i++) {
-		printf "%d%s", strtonum("0x"$i), (i == NF ? "\n" : ".")
-	}
-}
-
-# structured according to awk’s definition of a program: condition { actions }
-awk '{if ($0 ~ /pattern/) print $0}'	# not idiomatic for awk, so not recommended
-awk '$0 ~ /pattern/ {print $0}'			# condition { actions }
-awk '/pattern/ {print $0}'				# implicitly applies to $0
-awk '/pattern/ {print}'					# print alone, by default, prints $0
-awk '/pattern/'							# the default action is print
-
-awk '(NR%2 && /pattern/) || (!(NR%2) && /anotherpattern/)'
-awk '{sub(/pattern/, "foobar")} 1'		# the same as "sed 's/pattern/foobar/'"
-
-awk 'NR % 6'            # prints all lines except lines 6,12,18...
-awk 'NR > 5'            # prints from line 6 onwards (like tail -n +6, or sed '1,5d')
-awk '$2 == "foo"'       # prints lines where the second field is "foo"
-awk 'NF >= 6'           # prints lines with 6 or more fields
-awk '/foo/ && /bar/'    # prints lines that match /foo/ and /bar/, in any order
-awk '/foo/ && !/bar/'   # prints lines that match /foo/ but not /bar/
-awk '/foo/ || /bar/'    # prints lines that match /foo/ or /bar/ (like grep -e 'foo' -e 'bar')
-awk '/foo/,/bar/'       # prints from line matching /foo/ to line matching /bar/, inclusive
-awk 'NF'                # prints only nonempty lines (or: do not print empty lines, where NF==0)
-awk 'NF--'              # removes last field and prints the line
-awk '$0 = NR" "$0'      # prepends line numbers (assignments are valid in conditions)
-awk '!a[$0]++'          # suppresses duplicated lines! (figure out how it works)
-
-seq 1 30 | awk 'ORS = NR % 5 ? FS : RS'
-
-# Self-assignments
-awk -v FS=';' -v OFS=',' 1   # doesn't work!,  awk does not rebuild $0 (that is, replacing FS with OFS) until some field is modified
-awk -v FS=';' -v OFS=',' '$1=$1'
-awk '$1=$1' FS=\; OFS=,		 # any argument that has a "=" in it is treated as a variable assignment instead of a file to read
-
-# Build strings with separators
-string = string ";" somedata				# not expected
-string = string sep somedata; sep = ";"		# right way to Build strings with separators
-
-$ cat matrix.txt
-a1;a2;a3;a4;a5
-b1;b2;b3;b4;b5
-c1;c2;c3;c4;c5
-
-awk -F\; '{
-for(i=1;i<=NF;i++)
-	r[i]=r[i] sep $i;
-	sep=FS
-}
-END {
-	for(i=1;i<=NF;i++)
-		print r[i]
-}' matrix.txt
-
-# Two-file processing
-awk 'NR == FNR { # some actions; next} # other condition {# other actions}' file1.txt file2.txt
-
-# prints lines that are both in file1.txt and file2.txt (intersection)
-awk 'NR == FNR{a[$0];next} $0 in a' file1.txt file2.txt
-# prints lines that are only in file1.txt and not in file2.txt
-awk 'NR == FNR{a[$0];next} !($0 in a)' file2.txt file1.txt
-# prints lines that are only in fil2.txt and not in file1.txt
-awk 'NR == FNR{a[$0];next} !($0 in a)' file1.txt file2.txt
-
-cat data.txt
-20081010 1123 xxx
-20081011 1234 def
-20081012 0933 xyz
-
-cat map.txt
-def payment
-xyz deposit
-xxx balance
-
-# use information from a map file to modify a data file
-awk 'NR == FNR{a[$1]=$2;next} {$3=a[$3]}1' map.txt data.txt
-
-# replace each number with its difference from the maximum
-awk 'NR == FNR{if($0 > max) max = $0;next} {$0 = max - $0}1' file.txt file.txt
-
-
-# 打印进程的环境变量
-awk '{print $0}' FS="=" RS="\000" /proc/1648/environ
-
-# gawk 支持 正则RS (传统的 awk 不支持 正则RS)
-data.txt:
-Name:Alice,Age:30;Name:Bob,Age:25
-awk 'BEGIN { RS = "[,;]"; FS=":" } { print "Record:", NR, "-> Name:", $2, "Age:", $4 }' data.txt
-
-# 函数调用的一般规则​ (除 getline 函数外，所有函数调用建议始终加括号)
-1. 对于内置函数的调用，推荐始终加括号​​ 以增强可读性和兼容性
-2. 对于自定义函数的调用，必须加括号
-3. 对于数学函数的调用，必须加括号
-4. getline 函数语法特殊，不需要加括号
-
-sub(/old/, "new", $0)
-gsub(/[0-9]/, "#", $0)
-
-x = sqrt(100)
-y = sin(3.14)
-
-n = length($0)
-
-while (getline line < "file.txt") { ... }
-
-# AWK 是弱类型语言，会根据上下文自动转换数据类型
-1. 字符串转数字​​：如果字符串以数字开头（如 "123"），会转换为对应的数字；否则转换为 0
-​2. ​数字转字符串​​：在需要字符串的上下文中，数字会自动转为字符串形式
-
-awk 'BEGIN {print "123abc" + 0}				# 123
-awk 'BEGIN {print "" + 0}'					# 0
-awk 'BEGIN {if ("hello") print "true"}'		# true
-
-awk '{total += $1 + 0} END {print total}' data.txt				# 处理可能含非数字的字段
-awk '{if ($1 + 0 == $1) print "Valid number:", $1}' data.txt	# 过滤非数字数据
-```
-
-## sed 和 awk
-```bash
-## sed 的适用场景: 以 行 为单位的快速文本转换
-1.简单替换
-sed -i 's/foo/bar/g' file.txt		# 替换所有 "foo" 为 "bar"，直接修改文件
-2.删除/保留特定行
-sed '/^$/d' file.txt				# 删除空行
-sed -n '5,10p' file.txt				# 保留第5到10行
-3.插入/追加文本
-sed '3i Hello' file.txt				# 在第3行前插入一行 "Hello"
-sed '/end/a World' file.txt			# 在匹配 "end" 的行后追加一行 "World"
-4.批量行级操作
-sed = file.txt | sed 'N; s/\n/ /'	# 为每行添加行号
-
-
-## awk 的适用场景: 结构化数据处理, 基于 列 的逻辑处理，支持数学运算、条件判断、自定义变量等复杂操作
-1. 按列提取/处理数据
-awk '{sum += $3; print $1, $3} END {print "Total:", sum}' data.txt		# 提取第1列和第3列，并计算总和
-2. 条件过滤与统计
-awk '$2 > 100 {count++} END {print count}' data.txt			# 统计第2列大于100的行数
-3. 字段重组与格式化
-awk 'BEGIN {FS=","; OFS="\t"; print "Name\tAge\tScore"} {print $1, $2, $3}' data.csv	# 将逗号分隔转为制表符分隔，并添加表头
-4. 关联数据处理
-awk 'NR==FNR {a[$1]=$2; next} $1 in a {print $0, a[$1]}' file1.txt file2.txt	# 合并两个文件（按第1列匹配）
-5. 复杂文本生成
-awk '{printf "INSERT INTO table VALUES (\"%s\", %d);\n", $1, $2}' data.txt		# 生成SQL插入语句
-
-```
-
-## 传递 shell 变量
-```bash
-# -v 选项
-awk -v today="$(date)" -v weekday="Friday" 'BEGIN { print today " is " weekday}'
-
-# 命令行参数
-awk 'BEGIN { print ARGV[1] " " ARGV[2]}' $arg1 $arg2
-seq 3 | awk '{ print var }' var="hello"
-
-# shell环境变量
-awk 'BEGIN { print ENVIRON["HOME"] }
-```
-## 注释
-```bash
-## 单行注释
-print("Hello Comments!"); # 单行注释
-## 多行注释
-# 1
-0 {
-	use me 4 comment in head
-	but only in English 
-	no awk keyword can appear in there
-}
-# 2
-{
-	if(0) {
-			# ...
-			print("不会被执行");
-	}
-	print("会被执行");
-}
-```
-## 使用外部的 shell 命令
-```bash
-echo "Test string" | awk '{ cmd=sprintf("echo %s", $0); system(cmd); }'
-```
-
-## 正则表达式作为域分隔符
-```bash
-echo "xxAA xxBxx C" | awk -F '(^x+)|( x)' '{ for(i = 1; i <= NF; i++) printf "-->%s<--\n", $i }'
-```
-
-## 打印两个pattern之间的行
-```bash
-# 包含 BEGIN 和 END pattern的边界
-awk '/DATA BEGIN/, /DATA END/' input.txt
-
-# 只包含 BEGIN 边界
-awk '/DATA BEGIN/{ flag = 1 } /DATA END/{ flag = 0 } flag' input.txt
-
-# 只包含 END 边界
-awk 'flag; /DATA BEGIN/{ flag = 1 } /DATA END/{ flag = 0 }' input.txt
-
-# 不包含 BEGIN 和 END pattern 的边界
-awk '/DATA BEGIN/{ flag = 1; next } /DATA END/{ flag = 0 } flag' input.txt
-# 
-```
-## getline
-```bash
-getline 				读取下一条记录保存到`$0`，同时更新 NF, NR, FNR, RT
-getline var 			读取下一条记录保存到var，同时更新 NR, FNR, RT
-getline <file			从文件读取下一条记录保存到$0，同时更新NF，RT
-getline var <file 		从文件读取下一条记录保存到var，同时更新  RT
-command | getline 		运行命令并将管道的输出保存到 $0
-command | getline var	运行命令并将管道的输出保存到 var
-
-# 1
-BEGIN {
-		command = "date"
-		if ((command | getline date_now) < 0) {
-			print "Can't get system date" > "/dev/stderr"
-			exit 1
-		}
-		close(command)
-		print "current date is", date_now
-}
-```
-## 正则匹配
-```bash
-Metacharacter	Description
-.				匹配 单个字符
-[]				匹配 [] 中的任意字符
-^				匹配 行起始位置
-$				匹配 行结束位置
-*				匹配 0个或多个字符
-+				匹配 1个或多个字符
-?				匹配 0个或1个字符
-
-# match 匹配
-if (match($0, /\.com$/)) {
-	print $0
-}
-# replace 替换
-sub(/555/, "666", $0)
-
-# Backreferences 后向引用
-sub(/\((\d{3})\) (\d{3})-(\d{4})/, "\1-\2-\3", $0)
-
-# Grouping 匹配分组
-if (match($0, /^(\w+)\s+(\d+)$/)) {
-	name = substr($0, RSTART, RLENGTH)
-	salary = substr($0, RSTART+length(name)+1, length($0)-RSTART-length(name))
-	print name
-	print salary
-}
-
-# Lookahead and Lookbehind
-if (match($0, /(?<=http:\/\/)[^\/]+/)) {
-	print substr($0, RSTART, RLENGTH)
-}
-# we use lookahead (?<=) to match the regular expression "/(?<=http://)[^/]+/" (which matches any characters that come after "http://" and before the next "/" character) and extract the domain name
-
-# Negated character classes
-if (match($0, /^[^@]+@example\.com$/)) {
-	print $0
-}
-# we use a negated character class ([^@]+) to match any characters that are not "@" and extract the username, and then match the literal string "@example.com" to ensure that the address belongs to the specified domain
-
-
-# Alternation
-if (match($0, /\((\d{3})\) (\d{3})-(\d{4})|(\d{3})-(\d{3})-(\d{4})/)) {
-	print substr($0, RSTART, RLENGTH)
-}
-# we use alternation (|) to match either the regular expression "/(\d3)(\d3) (\d{3})-(\d{4})/" (which matches a phone number in the format (XXX) XXX-XXXX) or the regular expression "/(\d{3})-(\d{3})-(\d{4})/" (which matches a phone number in the format XXX-XXX-XXXX)
-```
-## 字符串操作
-```bash
-length(string)
-substr(string, start)
-substr(string, start, length)
-index(string, substring)
-split(string, array, separator)
-split(string, array, regexp)
-# split(str, arr, ","); for (i in arr) print arr[i]
-sub(regexp, replacement, string)	# first occurrence substitution
-gsub(regexp, replacement, string)	# global substitution
-tolower(string)
-toupper(string)
-
-match(string, regexp)
-match(string, regexp, array)	# string: 待搜索的字符串, regexp: 字符串或者/pattern/, array: 用于保存匹配结果的数组(仅GNU awk等支持)
-# 关键特性
-1. RSTART: 匹配的起始位置(等同于返回值)
-2. RLENGTH: 匹配的子串长度(未匹配时为-1)
-# 数组捕获分组（仅部分支持，如GNU awk）
-array[0]:
-array[1], array[2], ... : 正则表达式中括号对应的子串
-
+}' file.txt
 ```

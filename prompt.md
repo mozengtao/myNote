@@ -1,5 +1,6 @@
 [Prompt Engineering with OKR 框架](./ai/Prompt_Engineering_with_OKR.md)  
 [AI 提示词参考指南](./ai/prompt_reference_guide.md)  
+[AI 学习提示词模板](ai/learn_anything_template.md)  
 []()  
 
 ```
