@@ -6,7 +6,7 @@
   The MTD enables embedded system developers to rely on a uniform set of common
   capabilities among various technologies, rather than use tools and methods specific to
   that type of device.
-- ![image.png](./assets/image_1675232269406_0.png)
+- ![image.png](assets/image_1675232269406_0.png)
 - MTD字符设备
   collapsed:: true
 	- MTD字符设备驱动程序允许直接访问falsh器件，通常用来在flash上创建文件系统，也可以用来直接访问不频繁修改的是数据

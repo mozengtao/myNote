@@ -10,7 +10,7 @@
 	- SNMP agent
 	- 包含 XML 配置数据库
 
-![Pasted image 20221025102733.png](./assets/Pasted_image_20221025102733_1669105864579_0.png)
+![Pasted image 20221025102733.png](assets/Pasted_image_20221025102733_1669105864579_0.png)
 
 - **Management Agents**: NETCONF, SNMP, CLI and Web modules, 提供针对特定协议的管理接口.  other Agents使用 **Management Agent API** (MAAPI) 接口与Management Backplane进行通信
 - **Management Backplane**: 通过Management Agent API提供配置和状态等统计数据的层级视图。

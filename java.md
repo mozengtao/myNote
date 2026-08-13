@@ -36,13 +36,13 @@
 2. Java EE: Enterprise Edition
 3. Java ME: Micro Edition
 
-![Java Editions](./assets/JavaEditions.png)  
+![Java Editions](assets/JavaEditions.png)  
 
 ## Java Concepts
 1. JDK: Java Development Kit
 2. JRE: Jave Runtime Environment
 
-![JDK and JRE](./assets/JDK_JRE.png)
+![JDK and JRE](assets/JDK_JRE.png)
 
 - JDK binary commands
 	- java

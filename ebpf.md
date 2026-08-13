@@ -1,4 +1,4 @@
-![eBPF architecture](./assets/ebpf_components.png)  
+![eBPF architecture](assets/ebpf_components.png)  
 - eBPF programs
     These are the programs that are written in a subset of the C programming language and compiled into a bytecode format. eBPF programs can be attached to various points in the kernel, such as packet filters, system calls, or trace points.
 
@@ -47,9 +47,9 @@
 [eBPF Major Applications](https://ebpf.io/applications/)  
 
 
-![Learning eBPF](./assets/Learning_eBPF.pdf) #pdf  
+![Learning eBPF](assets/Learning_eBPF.pdf) #pdf  
 [learning-ebpf](https://github.com/lizrice/learning-ebpf/tree/main) #github  
-![Buzzing-across-space-illustrated-childrens-guide-to-ebpf](./assets/buzzing-across-space-illustrated-childrens-guide-to-ebpf.pdf) #pdf  
+![Buzzing-across-space-illustrated-childrens-guide-to-ebpf](assets/buzzing-across-space-illustrated-childrens-guide-to-ebpf.pdf) #pdf  
 
 [eBPF Docs](https://docs.ebpf.io/)  
 [**eBPF Documentation**](https://ebpf.io/what-is-ebpf/)  

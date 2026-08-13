@@ -16,8 +16,8 @@
 [Effective Modern C++中文版](https://cntransgroup.github.io/EffectiveModernCppChinese/) #online
 
 [DevTut C++](https://devtut.github.io/cpp/)  
-![Object-Oriented Programming in C++](./assets/Object-Oriented%20Programming%20in%20C++.pdf)  
-![Programming Abstractions in C++](./assets/Programming%20Abstractions%20in%20C++.pdf)  
+![Object-Oriented Programming in C++](assets/Object-Oriented%20Programming%20in%20C++.pdf)  
+![Programming Abstractions in C++](assets/Programming%20Abstractions%20in%20C++.pdf)  
 
 Computer Programming with C++
 
@@ -306,7 +306,7 @@ Cursor学习规则配置
 ## C++标准库参考
 [C++ reference](https://en.cppreference.com/w)  
 [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)  
-![The C++ Standard Library: A Tutorial and Reference](./assets/TheCPlusPlusStandardLibrary.pdf)  
+![The C++ Standard Library: A Tutorial and Reference](assets/TheCPlusPlusStandardLibrary.pdf)  
 [The C++ Standard Library - A Tutorial and Reference source code](http://www.cppstdlib.com/)  
 
 ## API
@@ -349,7 +349,7 @@ std::scoped_lock
 []()  
 
 ## POP, OOP
-![Procedure Oriented Programming](./assets/POP.png)  
+![Procedure Oriented Programming](assets/POP.png)  
 Characteristics of procedure oriented programming:
 	1. Emphasis is on doing things(algorithm)
 	2. Large programs are divided into smaller programs known as functions.
@@ -358,7 +358,7 @@ Characteristics of procedure oriented programming:
 	5. Function transforms data from one form to another.
 	6. Employs top-down approach in program design 
 
-![Object Oriented Programing](./assets/OOP.png)  
+![Object Oriented Programing](assets/OOP.png)  
 Features of the Object Oriented programming
 	1. Emphasis is on doing rather than procedure.
 	2. programs are divided into what are known as objects.
@@ -394,12 +394,12 @@ Features of the Object Oriented programming
 [modern-cpp-features](https://github.com/AnthonyCalandra/modern-cpp-features) #github  
 
 [C++ Templates The Complete Guide, 2nd Edition](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%20Templates%20The%20Complete%20Guide%2C%202nd%20Edition%20%5BBooxRack%5D.pdf) #pdf  
-![C++ Templates: The Complete Guide](./assets/CPlusPlusTemplatesTheCompleteGuide2ndEdition.pdf) #pdf  
+![C++ Templates: The Complete Guide](assets/CPlusPlusTemplatesTheCompleteGuide2ndEdition.pdf) #pdf  
 [C++ Templates - The Complete Guide souce code](http://www.tmplbook.com/)  
 [C+++Templates+完全导引](https://github.com/xuchen-tech/Books/blob/main/C%2B%2B%2BTemplates%2B%E5%AE%8C%E5%85%A8%E5%AF%BC%E5%BC%95.pdf) #pdf  
 [Modern C++ Design: Generic Programming and Design Patterns Applied](https://github.com/lighthousand/books/blob/master/Modern%20C%2B%2B%20Design--Generic%20Programming%20and%20Design%20Patterns%20Applied.pdf) #pdf  
-![Programming Abstractions in C++](./assets/Programming%20Abstractions%20in%20C++.pdf) #pdf  
-![A Complete Guide to Programming in C++](./assets/A%20Complete%20Guide%20to%20Programming%20in%20C++.pdf) #pdf  
+![Programming Abstractions in C++](assets/Programming%20Abstractions%20in%20C++.pdf) #pdf  
+![A Complete Guide to Programming in C++](assets/A%20Complete%20Guide%20to%20Programming%20in%20C++.pdf) #pdf  
 
 [深度探索C++对象模型](https://github.com/xuchen-tech/Books/blob/main/%E6%B7%B1%E5%BA%A6%E6%8E%A2%E7%B4%A2C%2B%2B%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B(jb51.net).pdf) #pdf  
 
@@ -3927,8 +3927,8 @@ std::cout << msg.str();
 
 [OOPS Guidebook](https://github.com/MadhavBahl/OOPS/tree/master) #github
 
-![Object Oriented Programming Using C++](./assets/ObjectOrientedProgrammingUsingCPlusPlus.pdf) #pdf
-![OOB Demystified](./assets/OOP_Demystified.pdf) #pdf
+![Object Oriented Programming Using C++](assets/ObjectOrientedProgrammingUsingCPlusPlus.pdf) #pdf
+![OOB Demystified](assets/OOP_Demystified.pdf) #pdf
 
 [Demystified Object Oriented Programming with CPP](https://github.com/PacktPublishing/Demystified-Object-Oriented-Programming-with-CPP) #github
 

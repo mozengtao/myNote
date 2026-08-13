@@ -12,7 +12,7 @@
 ## Clean Architecture
 [The Clean Architecture I Wish Someone Had Explained to Me](https://medium.com/@rafael-22/the-clean-architecture-i-wish-someone-had-explained-to-me-dcc1572dbeac)  
 
-[The Clean Architecture](./assets/TheCleanArchitecture.png)  
+[The Clean Architecture](assets/TheCleanArchitecture.png)  
 
 [linux clean architecture analysis](./linux/clean_architecture_analysis.md)  
 [linux clean architecture reference](./linux/clean_architecture_reference.md)  
@@ -31,7 +31,7 @@ Dependency direction: the higher you are in the software stack, the more prone t
 execution flow ≠ dependency flow:
 The execution path can run through all the layers, but code dependencies must always point inward, toward the domain. The inner layers can call the outer ones — but they must not depend on them.
 
-[execution flow ≠ dependency flow](./assets/ExecutionFlow_vs_DependencyFlow.png)  
+[execution flow ≠ dependency flow](assets/ExecutionFlow_vs_DependencyFlow.png)  
 
 > "High-level modules should not depend on low-level implementations. Both should depend on abstractions."
 

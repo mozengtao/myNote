@@ -39,7 +39,7 @@ http_requests_total{status="200", method="GET"}  1234  1623456789000
 [Prometheus](https://prometheus.io/docs/concepts/data_model/)  
 [EXPOSITION FORMATS](https://prometheus.io/docs/instrumenting/exposition_formats/)  
 
-[Prometheus system architecture](./assets/Prometheus_system_architecture.svg)  
+[Prometheus system architecture](assets/Prometheus_system_architecture.svg)  
 
 ## 测试
 ### PromLens

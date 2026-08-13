@@ -1685,7 +1685,7 @@ Level1 = {
     -------------------------------------------
     map = {
         textureAssetId = mapTextureAssetId,
-        file = "./assets/tilemaps/jungle.map",
+        file = "assets/tilemaps/jungle.map",
         scale = 2,
         tileSize = 32,
         mapSizeX = 25,

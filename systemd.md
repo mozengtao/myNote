@@ -11,9 +11,9 @@
 
 [Understanding Systemd Units and Unit Files](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)  
 
-![understanding-systemd](./assets/understanding-systemd.pdf)  
-![systemd-basics](./assets/systemd-basics.pdf)  
-![systemd-management](./assets/systemd-management.pdf)  
+![understanding-systemd](assets/understanding-systemd.pdf)  
+![systemd-basics](assets/systemd-basics.pdf)  
+![systemd-management](assets/systemd-management.pdf)  
 
 ![Systemd System Extension (Sysext)](./systemd/systemd-sysext-architecture.md)  
 ![]()  
@@ -217,7 +217,7 @@ unit file 存放路径：
 [How do I properly install a systemd timer and service](https://askubuntu.com/questions/1083537/how-do-i-properly-install-a-systemd-timer-and-service)  
 [**systemd Documentation**](https://0pointer.de/blog/projects/systemd-docs.html)  
 [**systemd* help doc**](https://www.freedesktop.org/software/systemd/man/latest/)  
-![LinuxServiceManagementMadeEasyWithSystemd.pdf](./assets/LinuxServiceManagementMadeEasyWithSystemd.pdf)  
+![LinuxServiceManagementMadeEasyWithSystemd.pdf](assets/LinuxServiceManagementMadeEasyWithSystemd.pdf)  
 [systemd doc](http://0pointer.de/blog/projects/systemd-docs.html)  
 [man systemd](https://man7.org/linux/man-pages/man1/init.1.html)  
 [man systemctl](https://man7.org/linux/man-pages/man1/systemctl.1.html)  

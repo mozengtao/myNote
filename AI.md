@@ -117,7 +117,7 @@ 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
 []()  
 
 
-![Prompt engineering vs Context engineering](./assets/prompt_engineering_vs_context_engineering.png)  
+![Prompt engineering vs Context engineering](assets/prompt_engineering_vs_context_engineering.png)  
 
 
 
@@ -139,7 +139,7 @@ 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
 [面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook/#/)  
 
 ## Prompt
-[ChatGPT Prompts](./assets/ChatGPT_Prompts.pdf)  
+[ChatGPT Prompts](assets/ChatGPT_Prompts.pdf)  
 [writing assistant](./prompt/writing_assistant.md)  
 [AI Prompt Optimization Specialist](./prompt/better_prompt.md)  
 [explain a topic](./prompt/explain_topic.md)  

@@ -8,13 +8,13 @@ unsigned int val;
 val = *p;   // read
 ```
 
-![memory controller](./assets/memory_controller.png)  
+![memory controller](assets/memory_controller.png)  
 
 CPU 发出 addr 到达内存控制器，内存控制器会根据 addr 确定该地址属于哪个设备的地址范围，例如该地址属于 FLash 的地址访问，内存控制器会发出片选信号选中该 Flash，其他设备的片选信号不会被选中，因此 ADDR, DATA, R/W 信号只会对选中的设备例如 Flash 起作用。
 
 通常在芯片手册中列出了各种外设的地址范围，例如  
 
-![memory map](./assets/memory_map.png)
+![memory map](assets/memory_map.png)
 
 CPU 发出 addr1 属于 CPU 的地址空间, EMMC 控制器发出的 addr2 属于 EMMC 的地址空间，即 CPU 发出 addr 和 EMMC 控制器发出的 addr 属于不同的地址空间
 ```
@@ -50,24 +50,24 @@ CPU会 "读出" PCI设备需要多大的PCI配置空间例如1M，在CPU的地�
 	  个通道传输速率为2.5 Gbps（PCIe 1.0/1.1）或每个通道传输速率为8.0 Gbps（PCIe 3.0）或更高
 	  ```
 	- PCIe slots
-		- ![Pasted image 20221028091505.png](./assets/Pasted_image_20221028091505_1679559896747_0.png)
+		- ![Pasted image 20221028091505.png](assets/Pasted_image_20221028091505_1679559896747_0.png)
 		- x之后的数字代表PCIe slot有多少lane可以用来通信，它决定了数据的传输速率。
 			- PCIex1 有一个lane，在一个时钟周期只能传输一个比特的数据
 			- PCIex2 有两个lane，在一个时钟周期只能传输两个比特的数据
 	- PCIe Links and Lanes
-		- ![Pasted image 20221028091448.png](./assets/Pasted_image_20221028091448_1679560012633_0.png)
+		- ![Pasted image 20221028091448.png](assets/Pasted_image_20221028091448_1679560012633_0.png)
 	- Lane
-		- ![Image 2.png](./assets/Image_2_1679560079893_0.png)
+		- ![Image 2.png](assets/Image_2_1679560079893_0.png)
 	- Link
-		- ![Image 3.png](./assets/Image_3_1679560124488_0.png)
+		- ![Image 3.png](assets/Image_3_1679560124488_0.png)
 - 在软件层面，PCI和PCIe是兼容的
 - 传统的内容访问方式（RAM-like）
 	- `int a = 1`
-	- ![image.png](./assets/image_1691138055505_0.png)
+	- ![image.png](assets/image_1691138055505_0.png)
 		- CPU在地址总线上发出访问地址，访问地址先到达内存控制器
 		- 内存控制器判断地址属于哪个器件地址范围，例如：如果地址属于RAM的地址，则内存控制器发出片选信号选中RAM器件（同时只能有1个器件被选中）
 		- 操作被选中的设备
-		- ![image.png](./assets/image_1691138474455_0.png)
+		- ![image.png](assets/image_1691138474455_0.png)
 - PCIe设备有自己独立的地址空间，该空间不同于CPU发出的地址空间，因此访问PCIe设备需要对地址进行空间转换
 - 类比如下
 	- CPU要访问I2C设备，必须先通过CPU地址空间的地址访问I2C控制器的寄存器，I2C设备控制器会根据寄存器来操作I2C设备（如发出I2C Slave地址，发送读写命令等操作）

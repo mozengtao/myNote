@@ -27,7 +27,7 @@
 		- [RFC5424](https://www.rfc-editor.org/rfc/rfc5424)
 	- syslog message: 格式化过的syslog消息
 - syslog 消息的发送过程
-	- ![Pasted image 20221101094724.png](./assets/Pasted_image_20221101094724_1668152773169_0.png)
+	- ![Pasted image 20221101094724.png](assets/Pasted_image_20221101094724_1668152773169_0.png)
 	- 客户端发送log到指定的source，source通常指具体的文件路径，如`/var/log/apache`
 	- 客户端的syslog client从指定的source如`/var/log/apache`读取日志
 	- 客户端的syslog client处理包含指定source如`/var/log/apache`的第一条日志

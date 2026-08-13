@@ -5,7 +5,7 @@
 [sed 匹配引用技巧总结](sed_match.md)  
 
 ## sed 是如何工作的
-![how sed works](./assets/how_sed_works.png)  
+![how sed works](assets/how_sed_works.png)  
 
   Read --> Execute --> Print
    |                     |

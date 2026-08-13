@@ -5,8 +5,8 @@
 []()  
 
 [Building an Interpreter Series](https://www.iamtk.co/series/building-an-interpreter)  
-![Writing An Interpreter In Go](./assets/writing_an_INTERPRETER_in_go.pdf) #pdf  
-![Writing An Interpreter In Go(code)](./assets/waiig_code_1.0.zip) #code  
+![Writing An Interpreter In Go](assets/writing_an_INTERPRETER_in_go.pdf) #pdf  
+![Writing An Interpreter In Go(code)](assets/waiig_code_1.0.zip) #code  
 
 [Scoping: Variables, Environments, and Blocks](https://www.iamtk.co/series/essentials-of-interpretation/variables-environments-and-blocks)  
 [The Programming Language & Self-Evaluating Expressions](https://www.iamtk.co/series/essentials-of-interpretation/the-programming-language-and-self-evaluating-expressions)  

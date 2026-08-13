@@ -1,5 +1,5 @@
 - 树（逻辑结构）
-	- ![image.png](./assets/image_1686368778349_0.png)
+	- ![image.png](assets/image_1686368778349_0.png)
 - 基本概念
 	- 树
 		- ^^有层次关系^^的N个节点有限集合
@@ -79,7 +79,7 @@
 		- 缺点
 			- 只能根据子节点查找父节点，如果需要根据父节点来查找子节点，需要遍历整个数组，开销大
 		- 示例
-			- ![image.png](./assets/image_1686382070665_0.png)
+			- ![image.png](assets/image_1686382070665_0.png)
 			- ```c
 			  parent: -1  0  0  0  1  1  2  3  3  3  4  4  8
 			  data:    A  B  C  D  E  F  G  H  I  J  K  O  P
@@ -103,7 +103,7 @@
 		  } CTree;
 		  ```
 		- 示例
-			- ![image.png](./assets/image_1686382070665_0.png)
+			- ![image.png](assets/image_1686382070665_0.png)
 			- ```c
 			  index  data  child
 			  0       A      -> B -> C -> D -> null
@@ -134,12 +134,12 @@
 		  } CBNode;
 		  ```
 		- 示例
-			- ![image.png](./assets/image_1686385602213_0.png)
-			- ![image.png](./assets/image_1686385627139_0.png)
+			- ![image.png](assets/image_1686385602213_0.png)
+			- ![image.png](assets/image_1686385627139_0.png)
 	- 森林
 	  collapsed:: true
 		- 森林是m(m>=0)棵互不相交的树的集合，既可以顺序存储，也可以链式存储
-		- ![image.png](./assets/image_1686385948854_0.png)
+		- ![image.png](assets/image_1686385948854_0.png)
 - 二叉树
 	- 节点的^^度<=2的有序树^^
 	- 二叉树的性质
@@ -160,10 +160,10 @@
 		- 常用于元素的排序，搜索
 		- 示例：插入新元素12
 			- 从根节点出发进行比较，直到找到合适的位置
-			- ![image.png](./assets/image_1686387084281_0.png)
+			- ![image.png](assets/image_1686387084281_0.png)
 	- 平衡二叉树
 	  collapsed:: true
 		- 任意节点的左右子树深度差不超过1
 		- 插入或删除元素后，动态调整树的结构，以便于提高下次搜索效率
-		- ![image.png](./assets/image_1686387282871_0.png)
+		- ![image.png](assets/image_1686387282871_0.png)
 		- 如何将普通树调整为平衡二叉树 ？

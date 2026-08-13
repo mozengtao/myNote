@@ -65,7 +65,7 @@ struct cmsghdr {
 	unsigned char cmsg_data[]; */
 };
 ```
-![ Ancillary data containing two ancillary data objects](./assets/ancillaryData.png)
+![ Ancillary data containing two ancillary data objects](assets/ancillaryData.png)
 
 ```bash
 Example:

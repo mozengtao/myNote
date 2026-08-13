@@ -1,4 +1,4 @@
-- ![Image.png](./assets/Image_1670244075280_0.png)
+- ![Image.png](assets/Image_1670244075280_0.png)
 - [[virsh]]
 - 参考文档
 	- [[qemu]]

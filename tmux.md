@@ -1,4 +1,4 @@
-![Image 4.png](./assets/Image_4_1670374694509_0.png)  
+![Image 4.png](assets/Image_4_1670374694509_0.png)  
 
 [tmux(1)](https://www.mankier.com/1/tmux)  
 []()  

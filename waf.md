@@ -9,10 +9,10 @@
 		- 多个build任务可以同时执行，每个build任务执行相关的动作以及更新相关的结果，waf分析源文件依赖并利用依赖自动执行相关任务
 	- 环境对象
 		- waf使用环境对象(environment objects)来管理与build阶段相关的路径，设置以及参数，这些环境对象继承自父对象
-			- ![image.png](./assets/image_1678168349336_0.png)
+			- ![image.png](assets/image_1678168349336_0.png)
 			- 需要注意的是，根环境对象
 		- 通常基于waf的构建系统在configure阶段产生环境对象，但是Hilscher的实现与标准waf不同，它只在配置阶段进行基本的环境准备，大部分的环境对象是在build阶段来配置
-			- ![image.png](./assets/image_1678168639971_0.png)
+			- ![image.png](assets/image_1678168639971_0.png)
 - 参考文档
 	- [The Waf Book](https://waf.io/book/)
 	- [waflib Python Module Index](https://waf.io/apidocs/py-modindex.html)

@@ -1,9 +1,9 @@
 - 什么是云服务
-  ![Image 1.png](./assets/Image_1_1668170140575_0.png)
+  ![Image 1.png](assets/Image_1_1668170140575_0.png)
 -
 -
 - 不同云服务的类比
-  ![Image.jpg](./assets/Image_1668170182087_0.jpg)
+  ![Image.jpg](assets/Image_1668170182087_0.jpg)
 	- #### On Premises
 		- 类似==买了一辆车==，自己负责维护、升级、安全等......
 	- #### IaaS(Infrastructure)

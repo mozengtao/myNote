@@ -151,10 +151,10 @@
 ## 综合学习资源
 
 - [Operating Systems Principles & Practice (Volume 1, 2, 3)](https://www.kea.nu/files/textbooks/ospp/)
-- ![Operating Systems Principles & Practice, Volume 1: Kernels and Processes](./assets/osppv1.pdf)
-- ![Operating Systems Principles & Practice, Volume 2: Concurrency](./assets/osppv2.pdf)
-- ![Operating Systems Principles & Practice, Volume 3: Memory Management](./assets/osppv3.pdf)
-- ![Operating Systems Principles & Practice, Volume 4: Persistent Storage](./assets/osppv4.pdf)
+- ![Operating Systems Principles & Practice, Volume 1: Kernels and Processes](assets/osppv1.pdf)
+- ![Operating Systems Principles & Practice, Volume 2: Concurrency](assets/osppv2.pdf)
+- ![Operating Systems Principles & Practice, Volume 3: Memory Management](assets/osppv3.pdf)
+- ![Operating Systems Principles & Practice, Volume 4: Persistent Storage](assets/osppv4.pdf)
 - [code2flow](https://app.code2flow.com/)
 - [xmind](https://xmind.works/) #mindmap  思维导图
 - [Mindmap Gallery](https://xmind.app/share/)

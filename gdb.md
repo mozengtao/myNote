@@ -40,7 +40,7 @@ enable, en				使能断点
 - [Basic Assembler Debugging with GDB](http://dbp-consulting.com/tutorials/debugging/basicAsmDebuggingGDB.html)
 - [**Programming From The Ground Up**](http://savannah.nongnu.org/projects/pgubook/) #pdf
 
-![Programming From The Ground Up](./assets/ProgrammingGroundUp.pdf)
+![Programming From The Ground Up](assets/ProgrammingGroundUp.pdf)
 
 - [onlinegdb](https://www.onlinegdb.com/)
 

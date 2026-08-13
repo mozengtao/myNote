@@ -182,7 +182,7 @@ IO设备内部都有专用微控制器芯片(device controller)，CPU不直接�
 #### Socket 编程指南
 [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/index-wide.html)  
 [Linux Socket Programming](https://theexuberantindian.wordpress.com/2017/04/12/linux-socket-programming/)  
-![TCP IP Sockets in C](./assets/TCP%20IP%20Sockets%20in%20C.pdf)  
+![TCP IP Sockets in C](assets/TCP%20IP%20Sockets%20in%20C.pdf)  
 [**libc.pdf**](https://www.gnu.org/software/libc/manual/pdf/)  
 [Sockets](https://www.gnu.org/software/libc/manual/html_node/Sockets.html)  
 [**C and Linux Socket Topics**](https://www.tenouk.com/cnlinuxsockettutorials.html)  

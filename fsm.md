@@ -76,8 +76,8 @@ Macro-Based DSL	X-macro generates code from spec
 	2.每次做都可能会产生2个以上的结果
 
 `extern bool serial_out(uint8_t chByte);`
-![image.png](./assets/fsm_serial_out1.png)
-![image.png](./assets/fsm_serial_out2.png)
+![image.png](assets/fsm_serial_out1.png)
+![image.png](assets/fsm_serial_out2.png)
 
 - Concepts
 	- 状态(所有的箭头我们都称之为“跃迁”，即从当前状态跳转到箭头所指向的目标状态)
@@ -90,7 +90,7 @@ Macro-Based DSL	X-macro generates code from spec
 
 2. 如何只是单纯的在等待某一个事情发生，或者等待某一个结果，这个结果由2个以上的返回值组成等等，那么这个等待行为可以单独作为一个状态
 `int32_t get_sensor_voltage(void);`
-![image.png](./assets/fsm_get_sensor_voltage.png)
+![image.png](assets/fsm_get_sensor_voltage.png)
 
 
 ### 状态的跃迁
@@ -101,10 +101,10 @@ Macro-Based DSL	X-macro generates code from spec
 	2. 所有的跃迁必须能覆盖一个状态机所有可能的情况——绝不允许出现漏网之鱼，否则一旦没有被覆盖的情况出现就有可能导致整个状态机的行为存在“不确定性”
 	3. 跃迁是个瞬间的行为，你只能认为当条件满足时跃迁的行为就像白驹过隙一样一下就做完了
 
-![image.png](./assets/fsm_delay1.png)
+![image.png](assets/fsm_delay1.png)
 
 - 状态机的起点和终点
-![image.png](./assets/fsm_delay2.png)
+![image.png](assets/fsm_delay2.png)
 
 一个状态机可以没有终点，但一定有一个起点，我们称之为 start (习惯用一个黑色的实心小圆点来表示)，start 不仅是状态机的起点，由一个跃迁来连接它和第一个状态；start 还是“兼任” 这一跃迁的条件
 
@@ -112,14 +112,14 @@ Macro-Based DSL	X-macro generates code from spec
 
 ### 示例
 `serial_out("hello")`
-![image.png](./assets/fsm_serial_out_hello1.png)  
-![image.png](./assets/fsm_serial_out_hello2.png)  
+![image.png](assets/fsm_serial_out_hello1.png)  
+![image.png](assets/fsm_serial_out_hello2.png)  
 
 ### 状态机调用子状态机
-![image.png](./assets/fsm_sub_serial_out1.png)  
+![image.png](assets/fsm_sub_serial_out1.png)  
 
 - 通过对已有的状态机进行“搭积木”的方式构建新的状态机 (考虑到任何一个状态机其实都可以在未来被其它状态机调用，我们实际操作上会把每一个状态机都按照子状态机的格式进行绘制)
-![image.png](./assets/fsm_call_fsm1.png)
+![image.png](assets/fsm_call_fsm1.png)
 
 
 ## 关于状态机的几个注意点
@@ -129,7 +129,7 @@ Macro-Based DSL	X-macro generates code from spec
 
 ## 状态机的翻译
 - 示例1
-![image.png](./assets/image_1678325225609_0.png)
+![image.png](assets/image_1678325225609_0.png)
 ### 实现方式1(阻塞)
 ```c
 #include <stdbool.h>

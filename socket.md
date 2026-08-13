@@ -205,7 +205,7 @@ MAC：
 		- getsockopt
 			- `int r = getsockopt(sockid, level, optName, optVal, optLen)`
 - Packet queueing in the Linux network stack
-	- ![image.png](./assets/image_1676467816421_0.png)
+	- ![image.png](assets/image_1676467816421_0.png)
 - [packet(7)](https://linux.die.net/man/7/packet)
 	- ```bash
 	  # packet - packet interface on device level
@@ -258,7 +258,7 @@ MAC：
 	- [Linux Network Stack Walkthrough (2.4.20)](https://jsevy.com/network/Linux_network_stack_walkthrough.html)
 	- [Networking](https://www.kernel.org/doc/html/latest/networking/)
 	- [Queueing in the Linux Network Stack](https://www.coverfire.com/articles/queueing-in-the-linux-network-stack/)
-	- ![理解了实现再谈网络性能.pdf](./assets/理解了实现再谈网络性能.pdf)
+	- ![理解了实现再谈网络性能.pdf](assets/理解了实现再谈网络性能.pdf)
 	- [[bpf]]
 	- [The Linux Socket Filter: Sniffing Bytes over the Network](https://www.linuxjournal.com/article/4659)
 	- [Inside the Linux Packet Filter](https://www.linuxjournal.com/article/4852)
@@ -279,7 +279,7 @@ MAC：
 	- [**PcapPlusPlus Example Applications**](https://pcapplusplus.github.io/v1912/docs/examples)
 	- [raw - Linux IPv4 raw sockets](https://manpages.ubuntu.com/manpages/jammy/man7/raw.7.html)
 	- [**Introduction to RAW-sockets**](https://tuprints.ulb.tu-darmstadt.de/6243/1/TR-18.pdf)
-	- ![Introduction to RAW-sockets](./assets/introRawSocket.pdf)
+	- ![Introduction to RAW-sockets](assets/introRawSocket.pdf)
 	- [**network programming**](https://www.tenouk.com/Module42a.html)
 	- [Network Programming Guide](https://techpubs.jurassic.nl/library/manuals/0000/007-0810-050/sgi_html/index.html)
 	- [What Are Raw Sockets?](https://www.baeldung.com/cs/raw-sockets)

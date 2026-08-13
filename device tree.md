@@ -5,25 +5,25 @@
 		- `.dtsi`文件包含SoC级(SoC-level)信息的定义
 		- `.dts`文件包含板级(board-level)信息的定义
 		  collapsed:: true
-			- ![image.png](./assets/image_1678412070637_0.png)
-			- ![image.png](./assets/image_1678412088811_0.png)
+			- ![image.png](assets/image_1678412070637_0.png)
+			- ![image.png](assets/image_1678412088811_0.png)
 	- 设备节点
 	  collapsed:: true
-		- ![image.png](./assets/image_1678412122656_0.png)
+		- ![image.png](assets/image_1678412122656_0.png)
 - bindings
   collapsed:: true
 	- bindings描述了特定类型或者特定类别的设备在设备树中如何表示
 	- bindings参考文档`Documentation/devicetree/bindings`
 - 示例
   collapsed:: true
-	- ![image.png](./assets/image_1678413064498_0.png)
+	- ![image.png](assets/image_1678413064498_0.png)
 	  collapsed:: true
 		- `tegra20.dtsi`
 		  collapsed:: true
-			- ![image.png](./assets/image_1678413167939_0.png)
+			- ![image.png](assets/image_1678413167939_0.png)
 		- `tegra20-harmony.dts`
 		  collapsed:: true
-			- ![image.png](./assets/image_1678413188657_0.png)
+			- ![image.png](assets/image_1678413188657_0.png)
 - 设备树目录
   collapsed:: true
 	- `arch/arm/boot/dts`
@@ -379,7 +379,7 @@
 						  ```
 		- 设备树中断实例
 		  collapsed:: true
-			- ![image.png](./assets/image_1681004937027_0.png)
+			- ![image.png](assets/image_1681004937027_0.png)
 			- ```c
 			  /dts-v1/;
 			  

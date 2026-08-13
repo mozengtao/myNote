@@ -47,7 +47,7 @@
 	- [i2c dev interface](https://www.kernel.org/doc/Documentation/i2c/dev-interface)
 	- [How to instantiate I2C devices](https://docs.kernel.org/i2c/instantiating-devices.html)
 	- [I2C Guide](https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt433/guides/files/I2CGuide.pdf)
-	- ![AT24C256C-Datasheet.pdf](./assets/AT24C256C-Datasheet_1678341329919_0.pdf)
+	- ![AT24C256C-Datasheet.pdf](assets/AT24C256C-Datasheet_1678341329919_0.pdf)
 	- [linux 串行通信接口驱动框架](https://www.cnblogs.com/downey-blog/p/10491953.html)
 	- [Linux-kernel中的i2c-dev驱动](https://mshrimp.github.io/2020/04/12/Linux-kernel%E4%B8%AD%E7%9A%84i2c-dev%E9%A9%B1%E5%8A%A8/)
 	- [Introduction to I2C and SMBus](https://docs.kernel.org/i2c/summary.html#introduction-to-i2c-and-smbus)

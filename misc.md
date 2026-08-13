@@ -205,7 +205,7 @@ https://martinfowler.com/
 []()  
 []()  
 [31 Days of Refactoring](https://lostechies.com/seanchambers/2009/07/31/31-days-of-refactoring/)  
-![Patterns of Enterprise Application Architecture](./assets/Patterns%20of%20Enterprise%20Application%20Architecture.pdf)  
+![Patterns of Enterprise Application Architecture](assets/Patterns%20of%20Enterprise%20Application%20Architecture.pdf)  
 [The Twelve-Factor App](https://12factor.net/)  
 []()  
 []()  
@@ -289,7 +289,7 @@ https://martinfowler.com/
 [Multithreaded Programming Guide](http://ccfit.nsu.ru/~fat/pthreads/816-5137.pdf) #pdf  
 [Introduction to RAW-sockets](https://tuprints.ulb.tu-darmstadt.de/6243/1/TR-18.pdf) #pdf  
 [深入理解计算机系统（Computer Systems A Programmer’s Perspective）](https://hansimov.gitbook.io/csapp/) #online  
-![Computer Systems A Programmer’s Perspective](./assets/CSAPP_3rd.pdf)  
+![Computer Systems A Programmer’s Perspective](assets/CSAPP_3rd.pdf)  
 [Linux 内核揭密](https://www.cntofu.com/book/114/index.html)  
 [操作系统思考](https://www.cntofu.com/book/31/index.html)  
 [程序员杂谈](https://www.cntofu.com/book/142/free-programming-books-zh.md#%E7%A8%8B%E5%BA%8F%E5%91%98%E6%9D%82%E8%B0%88)  

@@ -68,7 +68,7 @@ kafka本质上是典型的**MQ**(Message Queue)系统，典型的MQ有3大功能
 - kafka 是一套基于 [[Pub_Sub]] 的消息分发系统
 -
 - kafka的基本架构
-	- ![Pasted image 20221014143426.png](./assets/Pasted_image_20221014143426_1669107036306_0.png)
+	- ![Pasted image 20221014143426.png](assets/Pasted_image_20221014143426_1669107036306_0.png)
 -
 - kafka 基本概念
 	- 生产者

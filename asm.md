@@ -1,4 +1,4 @@
-![PC Assembly Language](./assets/PC_Assembly_Language.pdf)
+![PC Assembly Language](assets/PC_Assembly_Language.pdf)
 
 
 
@@ -6,10 +6,10 @@
 - [Linux Assembly Tutorial Step-by-Step Guide](https://web.archive.org/web/20120822144129/http://www.cin.ufpe.br/%7Eif817/arquivos/asmtut/index.html)
 - [**Assembly Basics**](https://cs61.seas.harvard.edu/site/2018/Asm1/) #harvard cs61
 
-- ![x86 Assembly, 32 bit](./assets/x86-32bit-asm.pdf)
-- ![The 32 bit x86 C Calling Convention](./assets/x86-32bit-calling-convention.pdf)
-- ![x86 Assembly, 64 bit](./assets/x86-64bit-asm.pdf)
-- ![The 64 bit x86 C Calling Convention](./assets/x86-64bit-calling-convention.pdf)
+- ![x86 Assembly, 32 bit](assets/x86-32bit-asm.pdf)
+- ![The 32 bit x86 C Calling Convention](assets/x86-32bit-calling-convention.pdf)
+- ![x86 Assembly, 64 bit](assets/x86-64bit-asm.pdf)
+- ![The 64 bit x86 C Calling Convention](assets/x86-64bit-calling-convention.pdf)
 - [Program and Data Representation](https://aaronbloomfield.github.io/pdr/readme.html) #pdf
 
 - [X86-64 Architecture Guide](http://6.s081.scripts.mit.edu/sp18/x86-64-architecture-guide.html) #online
@@ -235,8 +235,8 @@
 ```
 
 - [TheArtOfAssemblyLanguage](https://github.com/media-lib/prog_lib/blob/master/general/Randall%20Hyde%20-%20The%20Art%20of%20Assembly%20Language%2C%202nd%20Edition.pdf) #github
-- ![TheArtOfAssemblyLanguage](./assets/TheArtOfAssemblyLanguage.pdf)
-- ![ReverseEngineeringforBeginners](./assets/ReverseEngineeringforBeginners.pdf)
+- ![TheArtOfAssemblyLanguage](assets/TheArtOfAssemblyLanguage.pdf)
+- ![ReverseEngineeringforBeginners](assets/ReverseEngineeringforBeginners.pdf)
 
 - [**Reverse Engineering For Everyone**](https://0xinfection.github.io/reversing/) #online
 - [Reversing: Secrets of Reverse Engineering](https://github.com/media-lib/prog_lib/blob/master/general/Eldad%20Eilam%20-%20Reversing%20-%20Secrets%20of%20Reverse%20Engineering.pdf) #github
@@ -293,7 +293,7 @@ Powerpc ASM
 	- [64-bit PowerPC ELF Application Binary Interface Supplement](https://refspecs.linuxfoundation.org/ELF/ppc64/PPC-elf64abi-1.7.1.html)
 	- [gcc PowerPC Assembly Quick Reference](https://www.cs.uaf.edu/2011/fall/cs301/lecture/11_21_PowerPC.html)
 	- [PowerPC User-Level Instruction Set Quick Reference Card](http://www.tentech.ca/downloads/other/PPC_Quick_Ref_Card-Rev1_Oct12_2010.pdf)
-	- ![PowerPC Microprocessor Family:The Programming Environments for 32-Bit Microprocessors](./assets/PowerPC_TheProgrammingEnvironments.pdf)
+	- ![PowerPC Microprocessor Family:The Programming Environments for 32-Bit Microprocessors](assets/PowerPC_TheProgrammingEnvironments.pdf)
 
 - [Writing x86_64 assembly language for Linux](https://www.cs.fsu.edu/~langley/CNT5605/2017-Summer/assembly-example/assembly.html)
 - [**Linux System Call Table**](https://faculty.nps.edu/cseagle/assembly/sys_call.html)
