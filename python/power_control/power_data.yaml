@@ -1,0 +1,31 @@
+rpds:
+  - name: "astatine"
+    power:
+      - address: 192.168.244.171
+        user: ast
+        password: ast
+        modem_outlets:
+          - 1
+          - 2
+          - 4
+          - 5
+  - name: "barium"
+    power:
+      - address: 192.168.244.177
+        user: bar
+        password: bar
+        modem_outlets:
+          - 1
+          - 2
+          - 3
+          - 5
+  - name: "bohrium"
+    power:
+      - address: 192.168.244.190
+        user: bohr
+        password: bohr
+        modem_outlets:
+          - 1
+          - 2
+          - 4
+          - 5

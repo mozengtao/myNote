@@ -1,6 +1,9 @@
 [**Practical UML Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 [**Practical Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 
+[**fsm thinking training**](fsm/fsm-thinking-training/README.md)
+[]()
+[]()
 
 ![01 when fsm needed](./fsm/01_when_fsm_needed.md)  
 ![02 what core concepts](./fsm/02_what_core_concepts.md)  

@@ -7,5 +7,7 @@
 - [An Introduction to Jinja2 for Network Automation](https://www.packetcoders.io/an-introduction-to-jinja2-for-network-automation/)
 - [Jinja2 Tutorial](https://ttl255.com/jinja2-tutorial-part-1-introduction-and-variable-substitution/)
 - [**yaml_to_cli_demo** README](jinja/yaml_to_cli_demo/README.md)
+- [Jinja2 核心功能详解](jinja/key_functions.md)
+- []()
 - []()
 - []()

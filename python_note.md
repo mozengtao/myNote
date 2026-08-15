@@ -1,43 +1,46 @@
-[uv](uv.md)  
-[FastAPI](FastAPI.md)  
-[FastAPI](Flask.md)  
-[FastAPI](FastAPI.md)  
-[Jinja](Jinja.md)  
-[**Learn Python Concurrency Super Fast**](https://superfastpython.com/)  
-[Decorator](python/decorator.md)  
-[pydantic](python/pydantic.md)  
-[Python Data Model 心智模型：Protocol（协议）+ Duck Typing（鸭子类型）](python/data_model.md)  
-[yield 关键字](python/yield.md)  
-[Data model](https://docs.python.org/3/reference/datamodel.html)  
-[Python Data Model 全部 Protocol 总结（Mental Model + Usage）](python/data_model_protocol.md)  
-[Python Tutor: **Visualize code execution**](https://pythontutor.com/index.html)  
-[Python Generator、yield 与 PyFrameObject 心智模型](python/how_yield_works.md)  
-[AST Explorer](https://astexplorer.net/)  
-[VSCode Python Debug 核心快捷键速查表](python/vscode_debug_shortcuts.md)  
-[Collect batch metrics example](python/collect_batch_metrics/docs/ARCHITECTURE.md)  
-[Python `match-case` 核心心智模型（Structural Pattern Matching）](python/match_case.md)  
-[Python `json` Module 完整指南 —— 工作原理、典型示例、最佳实践与心智模式](python/json_guide.md)  
-[Python YAML 解析完全指南 —— 工作原理、典型用法与心智模型](python/yaml_guide.md)  
-[Python `async` / `await` 完全指南](python/async_await_guide.md)  
-[Python 并发处理（Concurrent Processing）全景总结](python/concurrent_process.md)  
-[Python 可迭代对象 Packing 与 Unpacking（Iterable Packing / Unpacking）](python/iter_pack_unpack.md)  
-[Foundations of Python Network Programming](https://github.com/nguyenkools/Python/tree/master)  
-[socket](https://docs.python.org/3/library/socket.html)  
-[Python 解析 CLI / Log / Table 文本的通用心智模式](python/cli_parser_guide.md)  
-[Python 常见数据对象承载方式（Normalized Python Object）](python/normalized_object.md)  
-[Python List Construction：构造 List 的完整心智模式](python/list_construction.md)  
-[Python 可迭代对象（Iterable）、迭代器（Iterator）、生成器（Generator）完整理解](python/iterable_iterator_generator.md)  
-[Python 文件读取（File Reading）完整总结：方法、应用场景、最佳实践与心智模式](python/read_file.md)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- [uv](uv.md)
+- [FastAPI](FastAPI.md)
+- [FastAPI](Flask.md)
+- [FastAPI](FastAPI.md)
+- [Jinja](Jinja.md)
+- [**Learn Python Concurrency Super Fast**](https://superfastpython.com/)
+- [Decorator](python/decorator.md)
+- [pydantic](python/pydantic.md)
+- [Python Data Model 心智模型：Protocol（协议）+ Duck Typing（鸭子类型）](python/data_model.md)
+- [yield 关键字](python/yield.md)
+- [Data model](https://docs.python.org/3/reference/datamodel.html)
+- [Python Data Model 全部 Protocol 总结（Mental Model + Usage）](python/data_model_protocol.md)
+- [Python Tutor: **Visualize code execution**](https://pythontutor.com/index.html)
+- [Python Generator、yield 与 PyFrameObject 心智模型](python/how_yield_works.md)
+- [AST Explorer](https://astexplorer.net/)
+- [VSCode Python Debug 核心快捷键速查表](python/vscode_debug_shortcuts.md)
+- [Collect batch metrics example](python/collect_batch_metrics/docs/ARCHITECTURE.md)
+- [Python `match-case` 核心心智模型（Structural Pattern Matching）](python/match_case.md)
+- [Python `json` Module 完整指南 —— 工作原理、典型示例、最佳实践与心智模式](python/json_guide.md)
+- [Python YAML 解析完全指南 —— 工作原理、典型用法与心智模型](python/yaml_guide.md)
+- [Python `async` / `await` 完全指南](python/async_await_guide.md)
+- [Python 并发处理（Concurrent Processing）全景总结](python/concurrent_process.md)
+- [Python 可迭代对象 Packing 与 Unpacking（Iterable Packing / Unpacking）](python/iter_pack_unpack.md)
+- [Foundations of Python Network Programming](https://github.com/nguyenkools/Python/tree/master)
+- [socket](https://docs.python.org/3/library/socket.html)
+- [Python 解析 CLI / Log / Table 文本的通用心智模式](python/cli_parser_guide.md)
+- [Python 常见数据对象承载方式（Normalized Python Object）](python/normalized_object.md)
+- [Python List Construction：构造 List 的完整心智模式](python/list_construction.md)
+- [Python 可迭代对象（Iterable）、迭代器（Iterator）、生成器（Generator）完整理解](python/iterable_iterator_generator.md)
+- [Python 文件读取（File Reading）完整总结：方法、应用场景、最佳实践与心智模式](python/read_file.md)
+- []()
+- []()
+- []()
+- []()
+- []()
+
+## Examples
+- [power control](python/power_control/README.md)
+
 
 - David Beazley
-- [Practical Python Programming](https://github.com/dabeaz-course/practical-python)  
-- [Advanced Python Mastery](https://github.com/dabeaz-course/python-mastery)  
+- [Practical Python Programming](https://github.com/dabeaz-course/practical-python)
+- [Advanced Python Mastery](https://github.com/dabeaz-course/python-mastery)
 
 - Books
 - [Domain Modeling Made Functional]()
@@ -110,119 +113,119 @@
 - []()
 
 - 执行 Bash Script 或者 Command
-[execute bash script or command](python/ShellExecutor.py)  
+- [execute bash script or command](python/ShellExecutor.py)
 
 - Bash 环境变量 Validation
-[validate bash environments](python/EnvironmentConfig.py)  
+- [validate bash environments](python/EnvironmentConfig.py)
 
 - wraps the response to provide high-level utility methods, like checking for specific errors or parsing JSON
-[wrap the response to provide high-level utility methods](python/CommandResult.py)  
+- [wrap the response to provide high-level utility methods](python/CommandResult.py)
 
 > SSH 连接
-[SSH connection](python/SSHConnection.py)  
+- [SSH connection](python/SSHConnection.py)
 
 - The Full Integrated System
-[The Full Integrated System](python/full_example.py)  
+- [The Full Integrated System](python/full_example.py)
 
 - Jupyter Notebook
-[Google Colab(Online Jupyter Notebook)](https://colab.research.google.com/)  
-[Jupyter Documentation](https://docs.jupyter.org/en/latest/)  
-[How to Use Jupyter Notebook: A Beginner’s Tutorial](https://www.dataquest.io/blog/jupyter-notebook-tutorial/)  
-[]()  
+- [Google Colab(Online Jupyter Notebook)](https://colab.research.google.com/)
+- [Jupyter Documentation](https://docs.jupyter.org/en/latest/)
+- [How to Use Jupyter Notebook: A Beginner’s Tutorial](https://www.dataquest.io/blog/jupyter-notebook-tutorial/)
+- []()
 
 - 经典 python 开源项目
-[TheAlgorithms](https://github.com/TheAlgorithms/Python)  
-[requests](https://github.com/psf/requests)  
-[flask](https://github.com/pallets/flask)  
-[python-patterns](https://github.com/faif/python-patterns)  
+- [TheAlgorithms](https://github.com/TheAlgorithms/Python)
+- [requests](https://github.com/psf/requests)
+- [flask](https://github.com/pallets/flask)
+- [python-patterns](https://github.com/faif/python-patterns)
 
 
 ## Modules
 - requests
 > Requests is an elegant and simple HTTP library for Python, built for human beings.
-[requests](https://mimo.org/glossary/python/requests-library)  
-[Requests: HTTP for Humans](https://requests.readthedocs.io/en/latest/#)  
-[]()  
-[]()  
-[]()  
+- [requests](https://mimo.org/glossary/python/requests-library)
+- [Requests: HTTP for Humans](https://requests.readthedocs.io/en/latest/#)
+- []()
+- []()
+- []()
 
 
 
-[**python-course.eu**](https://python-course.eu/)  
-[Python-100-Days](https://github.com/jackfrued/Python-100-Days/tree/master)  
-[100-days-of-code-python](https://github.com/phillipai/100-days-of-code-python/tree/main)  
-[100DaysOfCode](https://github.com/b-tomi/100DaysOfCode/tree/master)  
-[]()  
-[**betterpython**](https://github.com/ArjanCodes/betterpython)  
-[**examples**](https://github.com/ArjanCodes/examples/tree/main)  
-[]()  
-[]()  
+- [**python-course.eu**](https://python-course.eu/)
+- [Python-100-Days](https://github.com/jackfrued/Python-100-Days/tree/master)
+- [100-days-of-code-python](https://github.com/phillipai/100-days-of-code-python/tree/main)
+- [100DaysOfCode](https://github.com/b-tomi/100DaysOfCode/tree/master)
+- []()
+- [**betterpython**](https://github.com/ArjanCodes/betterpython)
+- [**examples**](https://github.com/ArjanCodes/examples/tree/main)
+- []()
+- []()
 
-[Python Tips](https://book.pythontips.com/en/latest/index.html)  
-[**14 Advanced Python Features**](https://blog.edward-li.com/tech/advanced-python-features/)  
-[python beginner guide](https://dagster.io/blog/python-type-hinting)  
-[]()  
-[]()  
-[Python Like You Mean It](https://www.pythonlikeyoumeanit.com/index.html)  
-[Python Tutorial | Learn Python Language](https://www.wscubetech.com/resources/python)  
-[How to Learn Python (Step-by-Step)](https://www.dataquest.io/blog/learn-python-the-right-way/)  
-[Python 101](https://python101.pythonlibrary.org/index.html)  
-[**Learn Python Programming**](https://www.programiz.com/python-programming)  
-[]()  
-[]()  
+- [Python Tips](https://book.pythontips.com/en/latest/index.html)
+- [**14 Advanced Python Features**](https://blog.edward-li.com/tech/advanced-python-features/)
+- [python beginner guide](https://dagster.io/blog/python-type-hinting)
+- []()
+- []()
+- [Python Like You Mean It](https://www.pythonlikeyoumeanit.com/index.html)
+- [Python Tutorial | Learn Python Language](https://www.wscubetech.com/resources/python)
+- [How to Learn Python (Step-by-Step)](https://www.dataquest.io/blog/learn-python-the-right-way/)
+- [Python 101](https://python101.pythonlibrary.org/index.html)
+- [**Learn Python Programming**](https://www.programiz.com/python-programming)
+- []()
+- []()
 [**Python Formatter**](https://codebeautify.org/python-formatter-beautifier) #online  
-[]()  
-[Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)  
-[Python Standard Library](https://realpython.com/ref/stdlib/)  
-[Python's property(): Add Managed Attributes to Your Classes](https://realpython.com/python-property/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[10 Advanced Concepts In Python](https://medium.com/@alensabu12xtz/10-advanced-concepts-in-python-553ee3df9127)  
-[Python's asyncio: A Hands-On Walkthrough](https://realpython.com/async-io-python/)  
-[]()  
-[]()  
-[]()  
-[The contextmanager decorator](https://www.pythonmorsels.com/contextmanager-decorator/)  
-[Python Tips](https://book.pythontips.com/en/latest/#)  
-[Mastering Context Managers with Python's contextlib Module](https://leapcell.io/blog/mastering-context-managers-with-python-s-contextlib-module)  
-[Python Runtime Services](https://pydoc-zh.readthedocs.io/en/latest/library/python.html)  
-[Python 3 标准库实例教程](https://learnku.com/docs/pymotw)  
-[contextlib](https://liaoxuefeng.com/books/python/built-in-modules/contextlib/index.html)  
-[I/O multiplexing](https://myapollo.com.tw/blog/python-socket-io-multiplexing/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- []()
+- [Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)
+- [Python Standard Library](https://realpython.com/ref/stdlib/)
+- [Python's property(): Add Managed Attributes to Your Classes](https://realpython.com/python-property/)
+- []()
+- []()
+- []()
+- []()
+- []()
+- [10 Advanced Concepts In Python](https://medium.com/@alensabu12xtz/10-advanced-concepts-in-python-553ee3df9127)
+- [Python's asyncio: A Hands-On Walkthrough](https://realpython.com/async-io-python/)
+- []()
+- []()
+- []()
+- [The contextmanager decorator](https://www.pythonmorsels.com/contextmanager-decorator/)
+- [Python Tips](https://book.pythontips.com/en/latest/#)
+- [Mastering Context Managers with Python's contextlib Module](https://leapcell.io/blog/- mastering-context-managers-with-python-s-contextlib-module)
+- [Python Runtime Services](https://pydoc-zh.readthedocs.io/en/latest/library/python.html)
+- [Python 3 标准库实例教程](https://learnku.com/docs/pymotw)
+- [contextlib](https://liaoxuefeng.com/books/python/built-in-modules/contextlib/index.html)
+- [I/O multiplexing](https://myapollo.com.tw/blog/python-socket-io-multiplexing/)
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
 
 
 
 - requests: a simple, yet elegant, HTTP library
-[requests](https://github.com/psf/requests)  
-![Learn Architecture & Patterns in psf/requests](python/requests_ARCHITECTURE_ANALYSIS.md)  
+- [requests](https://github.com/psf/requests)
+- ![Learn Architecture & Patterns in psf/requests](python/requests_ARCHITECTURE_ANALYSIS.md)
 
 - click: a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary
-[click](https://github.com/pallets/click)  
-![Learn Architecture & Patterns in click](python/click_ARCHITECTURE_ANALYSIS.md)  
+- [click](https://github.com/pallets/click)
+- ![Learn Architecture & Patterns in click](python/click_ARCHITECTURE_ANALYSIS.md)
 
 - attrs: the Python package that will bring back the joy of writing classes by relieving you from the drudgery of implementing object protocols (aka dunder methods).
-[attrs](https://github.com/python-attrs/attrs)  
-![Learn Architecture & Patterns in attrs](python/attrs_ARCHITECTURE_ANALYSIS.md)  
+- [attrs](https://github.com/python-attrs/attrs)
+- ![Learn Architecture & Patterns in attrs](python/attrs_ARCHITECTURE_ANALYSIS.md)
 
 - flask: is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications.
-[flask](https://github.com/pallets/flask)  
-![Learn Architecture & Patterns in flask](python/flask_ARCHITECTURE_ANALYSIS.md)  
+- [flask](https://github.com/pallets/flask)
+- ![Learn Architecture & Patterns in flask](python/flask_ARCHITECTURE_ANALYSIS.md)
 
 ## global
-[Using and Creating Global Variables in Your Python Functions](https://realpython.com/python-use-global-variable-in-function/)  
+[Using and Creating Global Variables in Your Python Functions](https://realpython.com/- python-use-global-variable-in-function/)
 
 - Python can look for variables in four different scopes
 1. The local, or function-level, scope, which exists inside functions
@@ -247,22 +250,22 @@ local scope -> non-local scope -> global scope -> built-in scope
 
 ## psutil
 `git clone https://github.com/giampaolo/psutil.git`
-![项目架构分析文档](./psutil/ARCHITECTURE_ANALYSIS.md)  
-![API 设计模式分析](./psutil/TASK1_API_DESIGN_PATTERNS.md)  
-![数据类型设计分析](./psutil/TASK2_DATA_TYPE_DESIGN.md)  
-![Linux 平台实现深入分析](./psutil/TASK3_LINUX_IMPLEMENTATION.md)  
-![Windows 平台实现分析](./psutil/TASK4_WINDOWS_IMPLEMENTATION.md)  
-![平台抽象层设计分析](./psutil/TASK5_PLATFORM_ABSTRACTION.md)  
-![C 扩展实现深入分析](./psutil/TASK6_C_EXTENSION.md)  
-![性能优化技术分析](./psutil/TASK7_PERFORMANCE_OPTIMIZATION.md)  
-![测试体系分析](./psutil/TASK8_TESTING_SYSTEM.md)  
+- ![项目架构分析文档](./psutil/ARCHITECTURE_ANALYSIS.md)
+- ![API 设计模式分析](./psutil/TASK1_API_DESIGN_PATTERNS.md)
+- ![数据类型设计分析](./psutil/TASK2_DATA_TYPE_DESIGN.md)
+- ![Linux 平台实现深入分析](./psutil/TASK3_LINUX_IMPLEMENTATION.md)
+- ![Windows 平台实现分析](./psutil/TASK4_WINDOWS_IMPLEMENTATION.md)
+- ![平台抽象层设计分析](./psutil/TASK5_PLATFORM_ABSTRACTION.md)
+- ![C 扩展实现深入分析](./psutil/TASK6_C_EXTENSION.md)
+- ![性能优化技术分析](./psutil/TASK7_PERFORMANCE_OPTIMIZATION.md)
+- ![测试体系分析](./psutil/TASK8_TESTING_SYSTEM.md)
 
 ## uv
-[uv](https://github.com/astral-sh/uv)  
-[uv document](https://docs.astral.sh/uv/)  
-[markitdown](https://github.com/microsoft/markitdown)  
-[]()  
-[]()  
+- [uv](https://github.com/astral-sh/uv)
+- [uv document](https://docs.astral.sh/uv/)
+- [markitdown](https://github.com/microsoft/markitdown)
+- []()
+- []()
 
 - markitdown
 
@@ -433,7 +436,7 @@ my_var = 'hello world'
 
 ## guard clause pattern
 ```python
-# 传统嵌套写法 (不推荐)   - 深层嵌套
+- # 传统嵌套写法 (不推荐) - 深层嵌套
 def process_order_old(amount, customer_type, inventory):
     if amount > 0:
         if customer_type in ["regular", "vip"]:
@@ -449,7 +452,7 @@ def process_order_old(amount, customer_type, inventory):
     else:
         return "金额必须大于0"
 
-# Guard Clause 写法(推荐)  - 扁平结构
+- # Guard Clause 写法(推荐)- 扁平结构
 def process_order(amount, customer_type, inventory):
     # Guard Clauses - 前置条件检查
     if amount <= 0:
@@ -535,7 +538,7 @@ class Container:
         return self.items[key]
 
 def process_container(container):
-    size = len(container)  # Calls __len__
+    - size = len(container)# Calls __len__
     first = container[0]   # Calls __getitem__
     return size, first
 
@@ -990,44 +993,44 @@ Meow
 
 
 ## list, set, dict, tuple
-[Python Data Structures: Lists, Dictionaries, Sets, Tuples](https://www.dataquest.io/blog/data-structures-in-python/)  
-[]()  
-[]()  
-[Sets in Python](https://realpython.com/python-sets/)  
-[]()  
-[]()  
-[**Dictionaries in Python**](https://realpython.com/python-dicts/)  
-[Python Dictionary Comprehensions: How and When to Use Them](https://realpython.com/python-dictionary-comprehension/)  
-[Python Dictionaries: A Comprehensive Tutorial](https://www.dataquest.io/blog/python-dictionaries/)  
-[]()  
-[]()  
-[Python's tuple Data Type: A Deep Dive With Examples](https://realpython.com/python-tuple/)  
-[Python Tuples: A Step-by-Step Tutorial](https://www.dataquest.io/blog/python-tuples/)  
-[]()  
-[]()  
-[]()  
-[Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)  
-[Python List Tutorial: Lists, Loops, and More!](https://www.dataquest.io/blog/python-list-tutorial/)  
-[Tutorial: Demystifying Python Lists](https://www.dataquest.io/blog/tutorial-demystifying-python-lists/)  
-[]()  
-[]()  
-[Lists vs Tuples in Python](https://realpython.com/python-lists-tuples/)  
-[]()  
-[]()  
-[How to Copy Objects in Python: Shallow vs Deep Copy Explained](https://realpython.com/python-copy/)  
-[]()  
-[]()  
+- [Python Data Structures: Lists, Dictionaries, Sets, Tuples](https://www.dataquest.io/blog/data-structures-in-python/)
+- []()
+- []()
+- [Sets in Python](https://realpython.com/python-sets/)
+- []()
+- []()
+- [**Dictionaries in Python**](https://realpython.com/python-dicts/)
+- [Python Dictionary Comprehensions: How and When to Use Them](https://realpython.com/python-dictionary-comprehension/)
+- [Python Dictionaries: A Comprehensive Tutorial](https://www.dataquest.io/blog/python-dictionaries/)
+- []()
+- []()
+- [Python's tuple Data Type: A Deep Dive With Examples](https://realpython.com/python-tuple/)
+- [Python Tuples: A Step-by-Step Tutorial](https://www.dataquest.io/blog/python-tuples/)
+- []()
+- []()
+- []()
+- [Python's list Data Type: A Deep Dive With Examples](https://realpython.com/python-list/)
+- [Python List Tutorial: Lists, Loops, and More!](https://www.dataquest.io/blog/python-list-tutorial/)
+- [Tutorial: Demystifying Python Lists](https://www.dataquest.io/blog/tutorial-demystifying-python-lists/)
+- []()
+- []()
+- [Lists vs Tuples in Python](https://realpython.com/python-lists-tuples/)
+- []()
+- []()
+- [How to Copy Objects in Python: Shallow vs Deep Copy Explained](https://realpython.com/python-copy/)
+- []()
+- []()
 
 ## Enum
-[Build Enumerations of Constants With Python's Enum](https://realpython.com/python-enum/)  
-[enum — Support for enumerations](https://docs.python.org/3/library/enum.html)  
-[Python Enums: Effective Constant Management Techniques](https://arjancodes.com/blog/python-enum-classes-for-managing-constants/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- [Build Enumerations of Constants With Python's Enum](https://realpython.com/python-enum/)
+- [enum — Support for enumerations](https://docs.python.org/3/library/enum.html)
+[Python Enums: Effective Constant Management Techniques](https://arjancodes.com/blog/- python-enum-classes-for-managing-constants/)
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
 ```python
 from enum import Enum, auto, unique
 
@@ -1099,37 +1102,37 @@ print(list(Job))
 ```
 
 ## typing
-[Python Type Checking (Guide)](https://realpython.com/python-type-checking/)  
-[Python Union Types: Guide to New & Old Syntax with Examples](https://www.python.digibeatrix.com/en/functions-classes/python-union-type-complete-guide/)  
-[Type Hinting in Python](https://dagster.io/blog/python-type-hinting)  
-[]()  
-[]()  
+- [Python Type Checking (Guide)](https://realpython.com/python-type-checking/)
+[Python Union Types: Guide to New & Old Syntax with Examples](https://www.python.digibeatrix.com/en/- functions-classes/python-union-type-complete-guide/)
+- [Type Hinting in Python](https://dagster.io/blog/python-type-hinting)
+- []()
+- []()
 
 
 ## metaclass
-[Metaprogramming with Metaclasses in Python](https://www.geeksforgeeks.org/python/metaprogramming-metaclasses-python/)  
-[]()  
-[]()  
-[]()  
+[Metaprogramming with Metaclasses in Python](https://www.geeksforgeeks.org/python/- metaprogramming-metaclasses-python/)
+- []()
+- []()
+- []()
 
 
 ## descriptors
-[Python Descriptors: An Introduction](https://realpython.com/python-descriptors/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- [Python Descriptors: An Introduction](https://realpython.com/python-descriptors/)
+- []()
+- []()
+- []()
+- []()
+- []()
+- []()
 
 
 ## protocols
-[Python Protocols: Leveraging Structural Subtyping](https://realpython.com/python-protocol/)  
-[Building Implicit Interfaces in Python with Protocol Classes](https://andrewbrookins.com/technology/building-implicit-interfaces-in-python-with-protocol-classes/)  
-[Protocols in Python](https://til.simonwillison.net/python/protocols)  
-[Protocols: Default Methods, Inheritance, and More](https://www.turingtaco.com/protocols-default-methods-inheritance-and-more/)  
-[]()  
-[]()  
+- [Python Protocols: Leveraging Structural Subtyping](https://realpython.com/python-protocol/)
+[Building Implicit Interfaces in Python with Protocol Classes](https://andrewbrookins.com/technology/- building-implicit-interfaces-in-python-with-protocol-classes/)
+- [Protocols in Python](https://til.simonwillison.net/python/protocols)
+[Protocols: Default Methods, Inheritance, and More](https://www.turingtaco.com/- protocols-default-methods-inheritance-and-more/)
+- []()
+- []()
 ```python
 # 1
 """
@@ -1268,23 +1271,23 @@ if __name__ == '__main__':
 ```
 
 ## function overloading
-[The Correct Way to Overload Functions in Python](https://martinheinz.dev/blog/50)  
-[Method Overloading in Python With Practical Examples](https://www.ccbp.in/blog/articles/method-overloading-in-python)  
-[How Python’s Multiple Dispatch Works](https://medium.com/@AlexanderObregon/how-pythons-multiple-dispatch-works-8c69e24c45a6)  
-[Method Overloading in Python: Explained With Examples](https://www.wscubetech.com/resources/python/method-overloading)  
-[Python type hints: how to use @overload](https://adamj.eu/tech/2021/05/29/python-type-hints-how-to-use-overload/)  
-[functools — Higher-order functions and operations on callable objects](https://docs.python.org/3/library/functools.html)  
-[]()  
-[]()  
-[]()  
+- [The Correct Way to Overload Functions in Python](https://martinheinz.dev/blog/50)
+[Method Overloading in Python With Practical Examples](https://www.ccbp.in/blog/articles/- method-overloading-in-python)
+[How Python’s Multiple Dispatch Works](https://medium.com/@AlexanderObregon/- how-pythons-multiple-dispatch-works-8c69e24c45a6)
+[Method Overloading in Python: Explained With Examples](https://www.wscubetech.com/resources/python/- method-overloading)
+- [Python type hints: how to use @overload](https://adamj.eu/tech/2021/05/29/python-type-hints-how-to-use-overload/)
+[functools — Higher-order functions and operations on callable objects](https://docs.python.org/3/library/functools.- html)
+- []()
+- []()
+- []()
 
 
 ## shlex
-[shlex — Parse Shell-style Syntaxes](https://pymotw.com/3/shlex/)  
-[Python 3 Module of the Week](https://pymotw.com/3/index.html#)  
-[shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)  
-[The Python Standard Library](https://docs.python.org/3/library/)  
-[]()  
+- [shlex — Parse Shell-style Syntaxes](https://pymotw.com/3/shlex/)
+- [Python 3 Module of the Week](https://pymotw.com/3/index.html#)
+- [shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)
+- [The Python Standard Library](https://docs.python.org/3/library/)
+- []()
 ```python
 # safely and securely use the subprocess Python module
 subprocess.run(f"mycommand {user} {argument}", shell=True, check=True) # Dangerous
@@ -1304,88 +1307,88 @@ def count_lines(website):
 ```
 
 ## blogs
-[**Programming Tutorials**](https://krython.com/tutorials/category/python/)  
-[]()  
-[**Guides library**](https://betterstack.com/community/guides/logging/)  
-[Get Started with Job Scheduling in Python](https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/)  
-[https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/](https://betterstack.com/community/guides/logging/python/python-logging-best-practices/)  
-[A Complete Guide to Pytest Fixtures](https://betterstack.com/community/guides/testing/pytest-fixtures-guide/)  
-[A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)  
-[15 Common Errors in Python and How to Fix Them](https://betterstack.com/community/guides/scaling-python/python-errors/)  
-[A Deep Dive into UV: The Fast Python Package Manager](https://betterstack.com/community/guides/scaling-python/uv-explained/)  
-[A Complete Guide to Timeouts in Python](https://betterstack.com/community/guides/scaling-python/python-timeouts/)  
-[https://betterstack.com/community/guides/scaling-python/python-timeouts/](https://betterstack.com/community/guides/scaling-python/python-debugging/)  
-[A Comprehensive Guide to Profiling in Python](https://betterstack.com/community/guides/scaling-python/profiling-in-python/)  
-[DuckDB for Python: A beginner's guide](https://betterstack.com/community/guides/scaling-python/duckdb-python/)  
-[How To Color Python Logging Output?](https://betterstack.com/community/questions/how-to-color-python-logging-output/)  
-[An Introduction to Python Subprocess](https://betterstack.com/community/guides/scaling-python/python-subprocess/)  
-[Getting Started with Pylint](https://betterstack.com/community/guides/scaling-python/pylint-explained/)  
-[A Complete Guide to Python Type Hints](https://betterstack.com/community/guides/scaling-python/python-type-hints/)  
-[A Comprehensive Guide to Python Logging with Structlog](https://betterstack.com/community/guides/logging/structlog/)  
-[A Comprehensive Guide to Logging in Python](https://betterstack.com/community/guides/logging/how-to-start-logging-with-python/)  
-[Working with YAML Files in Python](https://betterstack.com/community/guides/scaling-python/yaml-files-in-python/)  
-[Working with CSV Files in Python](https://betterstack.com/community/guides/scaling-python/csv-files-in-python/)  
-[Working With JSON Data in Python](https://betterstack.com/community/guides/scaling-nodejs/json-data-in-python/)  
-[Dependency Injection in Python](https://betterstack.com/community/guides/scaling-python/python-dependency-injection/)  
-[Practical Guide to Asynchronous Programming in Python](https://betterstack.com/community/guides/scaling-python/python-async-programming/)  
-[Introduction to Python Generators](https://betterstack.com/community/guides/scaling-python/python-generators/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- [**Programming Tutorials**](https://krython.com/tutorials/category/python/)
+- []()
+- [**Guides library**](https://betterstack.com/community/guides/logging/)
+[Get Started with Job Scheduling in Python](https://betterstack.com/community/guides/scaling-python/- python-scheduled-tasks/)
+[https://betterstack.com/community/guides/scaling-python/python-scheduled-tasks/](https://betterstack.com/community/- guides/logging/python/python-logging-best-practices/)
+- [A Complete Guide to Pytest Fixtures](https://betterstack.com/community/guides/testing/pytest-fixtures-guide/)
+- [A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)
+[15 Common Errors in Python and How to Fix Them](https://betterstack.com/community/guides/scaling-python/- python-errors/)
+[A Deep Dive into UV: The Fast Python Package Manager](https://betterstack.com/community/guides/scaling-python/- uv-explained/)
+- [A Complete Guide to Timeouts in Python](https://betterstack.com/community/guides/scaling-python/python-timeouts/)
+[https://betterstack.com/community/guides/scaling-python/python-timeouts/](https://betterstack.com/community/guides/- scaling-python/python-debugging/)
+[A Comprehensive Guide to Profiling in Python](https://betterstack.com/community/guides/scaling-python/- profiling-in-python/)
+- [DuckDB for Python: A beginner's guide](https://betterstack.com/community/guides/scaling-python/duckdb-python/)
+[How To Color Python Logging Output?](https://betterstack.com/community/questions/- how-to-color-python-logging-output/)
+- [An Introduction to Python Subprocess](https://betterstack.com/community/guides/scaling-python/python-subprocess/)
+- [Getting Started with Pylint](https://betterstack.com/community/guides/scaling-python/pylint-explained/)
+- [A Complete Guide to Python Type Hints](https://betterstack.com/community/guides/scaling-python/python-type-hints/)
+- [A Comprehensive Guide to Python Logging with Structlog](https://betterstack.com/community/guides/logging/structlog/)
+[A Comprehensive Guide to Logging in Python](https://betterstack.com/community/guides/logging/- how-to-start-logging-with-python/)
+- [Working with YAML Files in Python](https://betterstack.com/community/guides/scaling-python/yaml-files-in-python/)
+- [Working with CSV Files in Python](https://betterstack.com/community/guides/scaling-python/csv-files-in-python/)
+- [Working With JSON Data in Python](https://betterstack.com/community/guides/scaling-nodejs/json-data-in-python/)
+[Dependency Injection in Python](https://betterstack.com/community/guides/scaling-python/- python-dependency-injection/)
+[Practical Guide to Asynchronous Programming in Python](https://betterstack.com/community/guides/scaling-python/- python-async-programming/)
+- [Introduction to Python Generators](https://betterstack.com/community/guides/scaling-python/python-generators/)
+- []()
+- []()
+- []()
+- []()
+- []()
 
 
 
 ## pytest
-[pytest](https://docs.pytest.org/en/stable/)  
-[Effective Python Testing With pytest](https://realpython.com/pytest-python-testing/)  
-[A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)  
-[]()  
-[]()  
+- [pytest](https://docs.pytest.org/en/stable/)
+- [Effective Python Testing With pytest](https://realpython.com/pytest-python-testing/)
+- [A Beginner's Guide to Unit Testing with Pytest](https://betterstack.com/community/guides/testing/pytest-guide/)
+- []()
+- []()
 
 ## match ... case
-[Structural Pattern Matching in Python](https://realpython.com/structural-pattern-matching/)  
-[Structural pattern matching in Python 3.10](https://benhoyt.com/writings/python-pattern-matching/)  
-[]()  
-[]()  
+- [Structural Pattern Matching in Python](https://realpython.com/structural-pattern-matching/)
+- [Structural pattern matching in Python 3.10](https://benhoyt.com/writings/python-pattern-matching/)
+- []()
+- []()
 
 ## dataclass
-[Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)  
-[dataclasses](https://docs.python.org/3/library/dataclasses.html)  
-[Python Data Classes: A Comprehensive Tutorial](https://www.datacamp.com/tutorial/python-data-classes)  
-[How to Use Python Data Classes (A Beginner’s Guide)](https://www.dataquest.io/blog/how-to-use-python-data-classes/)  
-[dataclasses](https://realpython.com/ref/stdlib/dataclasses/)  
-[Let's Learn More About Python Data Classes](https://earthly.dev/blog/more-on-python-data-classes/)  
-[Customizing dataclass initialization](https://www.pythonmorsels.com/customizing-dataclass-initialization/)  
-[python dataclass 教学：轻松定义资料类别](https://haosquare.com/python-dataclass/)  
-[什么是dataclass](https://www.maxlist.xyz/2022/04/30/python-dataclasses/)  
-[Python Module Tutorial - dataclasses](https://myapollo.com.tw/en/blog/python-dataclasses/)  
-[]()  
-[]()  
-[]()  
-[]()  
+- [Data Classes in Python 3.7+ (Guide)](https://realpython.com/python-data-classes/)
+- [dataclasses](https://docs.python.org/3/library/dataclasses.html)
+- [Python Data Classes: A Comprehensive Tutorial](https://www.datacamp.com/tutorial/python-data-classes)
+- [How to Use Python Data Classes (A Beginner’s Guide)](https://www.dataquest.io/blog/how-to-use-python-data-classes/)
+- [dataclasses](https://realpython.com/ref/stdlib/dataclasses/)
+- [Let's Learn More About Python Data Classes](https://earthly.dev/blog/more-on-python-data-classes/)
+- [Customizing dataclass initialization](https://www.pythonmorsels.com/customizing-dataclass-initialization/)
+- [python dataclass 教学：轻松定义资料类别](https://haosquare.com/python-dataclass/)
+- [什么是dataclass](https://www.maxlist.xyz/2022/04/30/python-dataclasses/)
+- [Python Module Tutorial - dataclasses](https://myapollo.com.tw/en/blog/python-dataclasses/)
+- []()
+- []()
+- []()
+- []()
 
 ## pathlib
-[Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)  
-[Working With Files in Python](https://realpython.com/working-with-files-in-python/)  
-[pathlib — Object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)  
-[How to Get a List of All Files in a Directory With Python](https://realpython.com/get-all-files-in-directory-python/)  
-[Python's pathlib module](https://www.pythonmorsels.com/pathlib-module/)  
-[A Comprehensive Guide to Using pathlib in Python For File System Manipulation](https://www.datacamp.com/tutorial/comprehensive-tutorial-on-using-pathlib-in-python-for-file-system-manipulation)  
-[]()  
-[]()  
-[]()  
-[]()  
+- [Python's pathlib Module: Taming the File System](https://realpython.com/python-pathlib/)
+- [Working With Files in Python](https://realpython.com/working-with-files-in-python/)
+- [pathlib — Object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)
+[How to Get a List of All Files in a Directory With Python](https://realpython.com/- get-all-files-in-directory-python/)
+- [Python's pathlib module](https://www.pythonmorsels.com/pathlib-module/)
+[A Comprehensive Guide to Using pathlib in Python For File System Manipulation](https://www.datacamp.com/tutorial/- comprehensive-tutorial-on-using-pathlib-in-python-for-file-system-manipulation)
+- []()
+- []()
+- []()
+- []()
 
 
 ## OOP
-[Python OOP](https://www.pythontutorial.net/python-oop/)  
-[]()  
-[]()  
-[]()  
-[]()  
-[]()  
+- [Python OOP](https://www.pythontutorial.net/python-oop/)
+- []()
+- []()
+- []()
+- []()
+- []()
 OOP is a paradigm that provides a means of structuring programs so that properties and behaviors are bundled into individual objects.
 1.**encapsulation**:bundle data (attributes) and behaviors (methods) within a class to create a cohesive unit, it helps maintain data integrity and promotes modular, secure code
 2.**inheritance**: allows a class to inherit properties and behaviors from another class, it helps reduce code duplication and promotes code reuse
@@ -1397,7 +1400,7 @@ polymorphism: allows objects of different classes to be treated as if they were 
 ```
             |   List  |  Tuple |   Set
 ------------|---------|--------|--------
-Syntax      |   [ ]   |   ( )  |   { }
+- Syntax      |   [ ]   |   ( )|   { }
 ------------|---------|--------|--------
 Duplicates? |   Yes   |   Yes  |   No
 ------------|---------|--------|--------
@@ -1442,23 +1445,23 @@ python -m black mymodule.py
 ```
 
 ## time
-[A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)  
-[time — Time access and conversions](https://docs.python.org/3/library/time.html)  
-[Python Datetime Tutorial: Manipulate Times, Dates, and Time Spans](https://www.dataquest.io/blog/python-datetime-tutorial/)  
-[]()  
-[]()  
-[]()  
+- [A Beginner’s Guide to the Python time Module](https://realpython.com/python-time-module/)
+- [time — Time access and conversions](https://docs.python.org/3/library/time.html)
+[Python Datetime Tutorial: Manipulate Times, Dates, and Time Spans](https://www.dataquest.io/blog/- python-datetime-tutorial/)
+- []()
+- []()
+- []()
 
 
 ## subprocess
-[The subprocess Module: Wrapping Programs With Python](https://realpython.com/python-subprocess/)  
-[A Guide to Python Subprocess](https://stackify.com/a-guide-to-python-subprocess/)  
-[subprocess — Subprocess management](https://docs.python.org/3/library/subprocess.html)  
-[shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)  
-[How to Use Python's Subprocess Module](https://earthly.dev/blog/python-subprocess/)  
-[python-and-pipes](https://lyceum-allotments.github.io/series/)  
-[Working with Python subprocess - Shells, Processes, Streams, Pipes, Redirects and More](https://jimmyg.org/blog/2009/working-with-python-subprocess.html)  
-[]()  
+- [The subprocess Module: Wrapping Programs With Python](https://realpython.com/python-subprocess/)
+- [A Guide to Python Subprocess](https://stackify.com/a-guide-to-python-subprocess/)
+- [subprocess — Subprocess management](https://docs.python.org/3/library/subprocess.html)
+- [shlex — Simple lexical analysis](https://docs.python.org/3/library/shlex.html)
+- [How to Use Python's Subprocess Module](https://earthly.dev/blog/python-subprocess/)
+- [python-and-pipes](https://lyceum-allotments.github.io/series/)
+[Working with Python subprocess - Shells, Processes, Streams, Pipes, Redirects and More](https://jimmyg.org/blog/- 2009/working-with-python-subprocess.html)
+- []()
 ```python
 """
 When to use shell=True (and when not to)
@@ -1475,30 +1478,30 @@ When to use shell=True (and when not to)
 """
 
 ## re
-[Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)  
-[Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)  
-[re — Regular expression operations](https://docs.python.org/3/library/re.html)  
-[pythex](https://pythex.org/)  
-[Regular Expression HOWTO](https://docs.python.org/3/howto/regex.html)  
-[]()  
-[]()  
-[]()  
+- [Regular Expressions: Regexes in Python (Part 1)](https://realpython.com/regex-python/)
+- [Regular Expressions: Regexes in Python (Part 2)](https://realpython.com/regex-python-part-2/)
+- [re — Regular expression operations](https://docs.python.org/3/library/re.html)
+- [pythex](https://pythex.org/)
+- [Regular Expression HOWTO](https://docs.python.org/3/howto/regex.html)
+- []()
+- []()
+- []()
 
 
 ## generator
-[Python 3: Using "yield from" in Generators - Part 1](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-1.html)  
-[Python 3: Using "yield from" in Generators - Part 2](http://simeonvisser.com/posts/python-3-using-yield-from-in-generators-part-2.html)  
-[Python Generators](https://www.dataquest.io/blog/python-generators-tutorial/)  
-[How to Use Python Generators – Explained With Code Examples](https://www.freecodecamp.org/news/how-to-use-python-generators/)  
-[]()  
+[Python 3: Using "yield from" in Generators - Part 1](http://simeonvisser.com/posts/- python-3-using-yield-from-in-generators-part-1.html)
+[Python 3: Using "yield from" in Generators - Part 2](http://simeonvisser.com/posts/- python-3-using-yield-from-in-generators-part-2.html)
+- [Python Generators](https://www.dataquest.io/blog/python-generators-tutorial/)
+[How to Use Python Generators – Explained With Code Examples](https://www.freecodecamp.org/news/- how-to-use-python-generators/)
+- []()
 
 
 ## idomatic python
-[Idiomatic Python. Coding the smart way](https://medium.com/the-andela-way/idiomatic-python-coding-the-smart-way-cc560fa5f1d6)  
-[Intermediate and Advanced Software Carpentry](https://intermediate-and-advanced-software-carpentry.readthedocs.io/en/latest/index.html)  
-[Writing Idiomatic Python](https://github.com/xx299x/ebooks/tree/master/favorite)  
-[]()  
-[]()  
+[Idiomatic Python. Coding the smart way](https://medium.com/the-andela-way/- idiomatic-python-coding-the-smart-way-cc560fa5f1d6)
+[Intermediate and Advanced Software Carpentry](https://intermediate-and-advanced-software-carpentry.readthedocs.io/- en/latest/index.html)
+- [Writing Idiomatic Python](https://github.com/xx299x/ebooks/tree/master/favorite)
+- []()
+- []()
 ```python
 # Chained comparison operators
 if x <= y <= z:
@@ -1611,8 +1614,8 @@ for key in d:
 
 # 判断对象是否为可迭代对象
 from collections.abc import Iterable
-isinstance('abc', Iterable)     # True
-isinstance(123, Iterable)       # False
+- isinstance('abc', Iterable)   # True
+- isinstance(123, Iterable)     # False
 
 # 利用 enumerate 函数把一个 list 转换为 索引-元素对
 for i, v in enumerate(['a', 'b', 'c']):
@@ -1651,14 +1654,14 @@ l = ['Hello', 'World', 'IBM', 'Apple']
 
 # 创建 generator
 l = [x for x in range(10)]  # 列表生成式
-g = (x for x in range(10))  # 生成器
+- g = (x for x in range(10))# 生成器
 
-next(g)     # 0
-next(g)     # 1
-next(g)     # 2
+- next(g)   # 0
+- next(g)   # 1
+- next(g)   # 2
 ...
-next(g)     # 9
-next(g)     # StopIteration
+- next(g)   # 9
+- next(g)   # StopIteration
 
 # generator 是可迭代对象，可以通过 for ... in 进行迭代
 for n in (i for i in range(10)):
@@ -1687,15 +1690,15 @@ def odd():
     yield 5
 
 o = odd()
-next(o)     # 1
-next(o)     # 3
-next(o)     # 5
-next(o)     # StopIteration
+- next(o)   # 1
+- next(o)   # 3
+- next(o)   # 5
+- next(o)   # StopIteration
 
 注意: 调用 generator 函数会创建一个 generator 对象，多次调用 generator 函数会创建多个相互独立的 generator 对象
-nex(odd())  # 1
-nex(odd())  # 1
-nex(odd())  # 1
+- nex(odd())# 1
+- nex(odd())# 1
+- nex(odd())# 1
 
 因此，正确的写法是创建一个 generator 对象，之后不断对这个 generator 对象调用 next()
 g = odd()
@@ -1729,24 +1732,24 @@ generator: 生成器，带 yield 的 generator 函数
 可以直接作用于 for 循环的对象统称为可迭代对象: Iterable
 判断一个对象是否是 Iterable 对象
 from collections.abc import Iterable
-isinstance([], Iterable)    # True
-isinstance({}, Iterable)    # True
+- isinstance([], Iterable)  # True
+- isinstance({}, Iterable)  # True
 isinstance('abc', Iterable) # True
-isinstance(123, Iterable)   # False
+- isinstance(123, Iterable) # False
 
 生成器不但可以作用于for循环，还可以被next()函数不断调用并返回下一个值，直到最后抛出StopIteration错误表示无法继续返回下一个值
 可以被 next() 函数调用并不断返回下一个值的对象称为迭代器: Iterator
 判断一个对象是否是 Iterator 对象
 from collections.abc import Iterator
-isinstance((x for x in range(10)), Iterator)    # True
-isinstance([], Iterator)    # False
-isinstance({}, Iterator)    # False
+- isinstance((x for x in range(10)), Iterator)  # True
+- isinstance([], Iterator)  # False
+- isinstance({}, Iterator)  # False
 isinstance('abc', Iterator) # False
 
 生成器都是Iterator对象，但list, dict, str虽然是Iterable，却不是Iterator
 把list、dict、str等Iterable变成Iterator可以使用iter()函数
-isinstance(iter([]), Iterator)      # True
-isinstance(iter('abc'), Iterator)   # True
+- isinstance(iter([]), Iterator)    # True
+- isinstance(iter('abc'), Iterator) # True
 
 Python 的 Iterator 对象 表示的是一个数据流，可以被 next() 函数调用并不断返回下一个数据，直到没有数据时抛出 StopIteration 错误
 可以把这个数据流看做一个有序序列，但是却不能提前知道序列的长度，只能不断通过 next() 获取下一个数据，所以 Iterator 的计算是惰性的，只有在需要返回下一个数据时才会计算
@@ -1761,16 +1764,16 @@ Python不是纯函数式编程语言，只对函数式编程提供部分支持
 abs     # <built-in function abs>
 f = abs
 f       # <built-in function abs>
-f(-1)   # 1
+- f(-1) # 1
 
 abs = 10    # abs这个变量已经不指向求绝对值函数而是指向一个整数10
-abs(-10)    # TypeError: 'int' object is not callable
+- abs(-10)  # TypeError: 'int' object is not callable
 
 # 如果一个函数就可以接收另一个函数作为参数，该函数就称为高阶函数，高阶函数的作用就是让函数的参数能够接收别的函数
 def myadd(x, y, f):
     return f(x) + f(y)
 
-myadd(1, -1, abs)     # 2
+- myadd(1, -1, abs)   # 2
 
 ## map
 map 接收两个参数，一个是函数，一个是 Iterable，map 将传入的函数一次作用到序列的每个元素，并把结果作为新的 Iterator 返回
@@ -1778,10 +1781,10 @@ def f(x):
     return x * x
 
 g = map(f, [1, 2, 3])
-list(g)                 # [1, 4, 9]
+- list(g)               # [1, 4, 9]
 # Iterator 是惰性序列，通过 list() 函数生成整个序列
 
-list(map(str, [1, 2, 3]))   # ['1', '2', '3']
+- list(map(str, [1, 2, 3])) # ['1', '2', '3']
 
 ## reduce
 reduce把一个函数作用在一个序列[x1, x2, x3, ...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算
@@ -1792,7 +1795,7 @@ from functools import reduce
 def add(x, y):
     return x + y
 
-reduce(add, [1, 2, 3 ,4, 5])    # 15
+- reduce(add, [1, 2, 3 ,4, 5])  # 15
 
 # 2
 from functools import reduce
@@ -1804,7 +1807,7 @@ def char2num(c):
     digits = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
     return digits[c]
 
-reduce(fn, map(char2num, '13579'))  # 13579
+- reduce(fn, map(char2num, '13579'))# 13579
 
 # 3
 from functools import reduce
@@ -1817,7 +1820,7 @@ def char2num(c):
 def str2int(s):
     return reduce(fn, map(char2num, s))
 
-str2int("123")      # 123
+- str2int("123")    # 123
 
 ## filter
 filter() 接收一个函数和一个序列，把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素
@@ -1826,13 +1829,13 @@ filter()函数返回的是一个Iterator，也就是一个惰性序列
 def not_empty(s):
     return s and s.strip()
 
-list(filter(not_empty, ['A', '', 'B', 'C', '  ']))      # ['A', 'B', 'C']
+- list(filter(not_empty, ['A', '', 'B', 'C', '  ']))    # ['A', 'B', 'C']
 
 ## sorted
 sorted() 用于对 list 进行排序
-sorted(['bob', 'about', 'Zoo', 'Credit'])   # ['Credit', 'Zoo', 'about', 'bob']
-sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower)    # ['about', 'bob', 'Credit', 'Zoo']
-sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower, reverse=True)  # ['Zoo', 'Credit', 'bob', 'about']
+- sorted(['bob', 'about', 'Zoo', 'Credit']) # ['Credit', 'Zoo', 'about', 'bob']
+- sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower)  # ['about', 'bob', 'Credit', 'Zoo']
+- sorted(['bob', 'about', 'Zoo', 'Credit'], key=str.lower, reverse=True)# ['Zoo', 'Credit', 'bob', 'about']
 
 ## 返回函数
 高阶函数除了可以接受函数作为参数外，还可以把函数作为结果值返回，通常用于不需要立即返回计算结果而是在后面的代码中根据需要再计算结果
@@ -1868,9 +1871,9 @@ def count():
     return fs
 
 f1, f2, f3 = count()
-f1()    # 9
-f2()    # 9
-f3()    # 9
+- f1()  # 9
+- f2()  # 9
+- f3()  # 9
 
 返回闭包时牢记一点：返回函数不要引用任何循环变量，或者后续会发生变化的变量
 
@@ -1886,9 +1889,9 @@ def count():
     return fs
 
 f1, f2, f3 = count()
-f1()    # 1
-f2()    # 4
-f3()    # 9
+- f1()  # 1
+- f2()  # 4
+- f3()  # 9
 
 缺点是代码较长，可利用lambda函数缩短代码
 
@@ -1901,8 +1904,8 @@ def inc():
     return fn
 
 f = inc()
-print(f())  # 1
-print(f())  # 1
+- print(f())# 1
+- print(f())# 1
 
 如果对外层变量赋值，由于Python解释器会把x当作函数fn()的局部变量，会报错
 def inc():
@@ -1913,7 +1916,7 @@ def inc():
     return fn
 
 f = inc()
-print(f())  # UnboundLocalError: local variable 'x' referenced before assignment
+- print(f())# UnboundLocalError: local variable 'x' referenced before assignment
 
 # 需要在fn()函数内部加一个nonlocal x的声明，加上这个声明后，解释器把fn()的x看作外层函数的局部变量，它已经被初始化了，可以正确计算x+1
 def inc():
@@ -1942,7 +1945,7 @@ def f(x):
 
 # 匿名函数也是一个函数对象，也可以把匿名函数赋值给一个变量，再利用变量来调用该函数
 f = lambda x: x * x
-f(2)    # 4
+- f(2)  # 4
 
 # 匿名函数可以作为返回值返回
 def build(x, y):
@@ -1953,7 +1956,7 @@ def build(x, y):
 
 def log(func):
     def wrapper(*args, **kw):
-        print('call %s()' % func.__name__)  # 函数对象有一个 __name__ 属性，用于返回函数的名称
+        - print('call %s()' % func.__name__)# 函数对象有一个 __name__ 属性，用于返回函数的名称
         return func(*args, **kw)
     return wrapper
 
@@ -1961,7 +1964,7 @@ def log(func):
 def now():
     print('2025-1-1')
 
-now()   # call now()\n2025-1-1
+- now() # call now()\n2025-1-1
 
 # 如果 decorator 本身需要传入参数，此时需要编写一个返回 decorator 的高级函数
 def log(text):
@@ -1977,7 +1980,7 @@ def log(text):
 def now():
     print('2025-1-1')
 
-now()   # execute now()\n2025-1-1
+- now() # execute now()\n2025-1-1
 
 # 因为返回的那个wrapper()函数名字就是'wrapper'，所以，需要把原始函数的__name__等属性复制到wrapper()函数中，否则，有些依赖函数签名的代码执行就会出错
 now.__name__    # 'wrapper'
@@ -2019,9 +2022,9 @@ functools.partial 用于创建偏函数，而不需要自己定义类似 int2 �
 
 import functools
 int2 = functools.partial(int, base=2)
-int2('1000')    # 8
+- int2('1000')  # 8
 # 新的int2函数，仅仅是把base参数重新设定默认值为2，但也可以在函数调用时传入其他值
-int2('1000', base=10)   # 1000
+- int2('1000', base=10) # 1000
 
 创建偏函数时，实际上可以接收函数对象、*args和**kw这3个参数
 
@@ -2149,8 +2152,8 @@ lisa.print_score()
 
 # 获取对象信息
 # 1 判断对象类型
-type(123)   # <class 'int'>
-type(abc)   # <class 'builtin_function_or_method'>
+- type(123) # <class 'int'>
+- type(abc) # <class 'builtin_function_or_method'>
 
 type() 函数返回的类型是什么？返回的是对应的 Class 类型
 
@@ -2172,15 +2175,15 @@ a = Animal()
 d = Dog()
 h = Husky()
 
-isinstance(h, Husky)    # True
-isinstance(h, Dog)      # True
-isinstance(h, Animal)   # True
+- isinstance(h, Husky)  # True
+- isinstance(h, Dog)    # True
+- isinstance(h, Animal) # True
 
-isinstance('a', str)    # True
+- isinstance('a', str)  # True
 isinstance(b'a', bytes) # True
 
-isinstance([1, 2, 3], (list, tuple))    # True
-isinstance((1, 2, 3), (list, tuple))    # True
+- isinstance([1, 2, 3], (list, tuple))  # True
+- isinstance((1, 2, 3), (list, tuple))  # True
 
 提示：总是优先使用isinstance()判断类型，可以将指定类型及其子类“一网打尽”
 
@@ -2191,9 +2194,9 @@ dir('ABC')
 
 类似__xxx__的属性和方法在Python中都是有特殊用途的，比如__len__方法返回长度
 调用len()函数试图获取一个对象的长度，实际上，在len()函数内部，它自动去调用该对象的__len__()方法
-len('ABC')  # 3
+- len('ABC')# 3
 等价于
-'ABC'__len__()  # 3
+- 'ABC'__len__()# 3
 
 对于自定义类，也可以实现 __len__ 方法
 class MyDog(object):
@@ -2201,7 +2204,7 @@ class MyDog(object):
         return 100
 
 dog = MyDog()
-len(dog)    # 100
+- len(dog)  # 100
 
 # getattr(), setattr(), hasattr()
 操作对象的状态
@@ -2212,21 +2215,21 @@ class MyObject(object):
         return self.x * self.x
 
 obj = MyObject()
-hasattr(obj, 'x')   # True
-hasattr(obj, 'y')   # False
+- hasattr(obj, 'x') # True
+- hasattr(obj, 'y') # False
 setattr(obj, 'y', 10)
-hasattr(obj, 'y')   # True
-getattr(obj, 'y')   # 10
+- hasattr(obj, 'y') # True
+- getattr(obj, 'y') # 10
 obj.y               # 10
-getattr(obj, 'z')   # AttributeError: 'MyObject' object has no attribute 'z'
-getattr(obj, 'z', 404)  # 404
+- getattr(obj, 'z') # AttributeError: 'MyObject' object has no attribute 'z'
+- getattr(obj, 'z', 404)# 404
 
 获取对象的方法
-hasattr(obj, 'power')   # True
-getattr(obj, 'power')   # <bound method MyObject.power of <t1.MyObject object at 0x7f84c9aaf520>>
+- hasattr(obj, 'power') # True
+- getattr(obj, 'power') # <bound method MyObject.power of <t1.MyObject object at 0x7f84c9aaf520>>
 fn = getattr(obj, 'power')
 fn                      # <bound method MyObject.power of <t1.MyObject object at 0x7f84c9aaf520>>
-fn()                    # 81
+- fn()                  # 81
 
 注意：只有在不知道对象信息的时候，我们才会去获取对象信息
 可以写
@@ -2250,13 +2253,13 @@ class Student(object):
     name = 'Student'            # 类属性 name
 
 s = Student()
-print(s.name)   # Student 因为实例没有 name 属性，所以会打印类的 name 属性
+- print(s.name) # Student 因为实例没有 name 属性，所以会打印类的 name 属性
 print(Student.name) # Student 打印类的属性
 s.name = 'Michael'  # 给实例绑定 name 属性
-print(s.name)       # Michael 实例属性的优先级比类属性高，所以会打印实例的 name 属性
+- print(s.name)     # Michael 实例属性的优先级比类属性高，所以会打印实例的 name 属性
 print(Student.name) # Student 打印类的属性
 del s.name          # 删除实例的 name 属性
-print(s.name)       # Student 因为实例没有 name 属性，所以会打印类的 name 属性
+- print(s.name)     # Student 因为实例没有 name 属性，所以会打印类的 name 属性
 
 注意：千万不要对实例属性和类属性使用相同的名字，因为相同名称的实例属性将屏蔽掉类属性，但是当你删除实例属性后，再使用相同的名称，访问到的将是类属性
 
@@ -2280,7 +2283,7 @@ def set_age(self, age):
     self.age = age
 
 from types import MethodType
-s.set_age = MethodType(set_age, s)  # 给实例绑定一个方法，对另一个实例是不起作用的
+- s.set_age = MethodType(set_age, s)# 给实例绑定一个方法，对另一个实例是不起作用的
 s.set_age(25)
 s.age           # 25
 
@@ -2415,7 +2418,7 @@ class Student(object):
     def __init__(self, name):
         self.name = name
 
-print(Student('Michael'))   # <__main__.Student object at 0x109afb190>
+- print(Student('Michael')) # <__main__.Student object at 0x109afb190>
 
 # 
 class Student(object):
@@ -2424,7 +2427,7 @@ class Student(object):
     def __str__(self):
         return 'Student object (name: %s)' % self.name
 
-print(Student('Michael'))   # Student object (name: Michael)
+- print(Student('Michael')) # Student object (name: Michael)
 
 s = Student('Michael')
 s                           # <__main__.Student object at 0x109afb190>
@@ -2514,8 +2517,8 @@ class Student(object):
         self.name = 'Michael'
 
 s = Student()
-print(s.name)   # Michael
-print(s.score)  # AttributeError: 'Student' object has no attribute 'score'
+- print(s.name) # Michael
+- print(s.score)# AttributeError: 'Student' object has no attribute 'score'
 
 __getattr__() 方法用来动态的返回一个属性，从而避免上述错误
 
@@ -2527,8 +2530,8 @@ class Student(object):
         if attr == 'score':
             return 99
 
-print(s.name)   # Michael
-print(s.score)  # 99
+- print(s.name) # Michael
+- print(s.score)# 99
 # 当调用不存在的属性时，Python 解释器会试图调用 __getattr__ 来尝试获得属性
 
 __getattr__() 方法也可以返回函数
@@ -2539,7 +2542,7 @@ class Student(object):
             return labmda: 25
 
 s = Student()
-s.age()     # 25 
+- s.age()   # 25 
 
 注意：只有在没有找到属性的情况下，才会调用 __getattr__
 
@@ -2588,9 +2591,9 @@ s() # My name is Michael.
 对实例进行直接调用就好比对一个函数进行调用一样，所以完全可以把对象看成函数，因为这两者之间没有根本的区别
 
 # 判断一个对象是否能被调用，即是否是一个 Callable 对象
-callable(Student())     # True
-callable(max)           # True
-callable([1, 2, 3])     # False
+- callable(Student())   # True
+- callable(max)         # True
+- callable([1, 2, 3])   # False
 
 ## 枚举类
 
@@ -2603,7 +2606,7 @@ Month.Jan   # 应用枚举类的常量
 
 # 枚举枚举类的所有成员
 for name, memeber in Month.__members__.items():
-    print(name, '=>', member, ',', member.value)    # value属性自动赋给成员的int常量，默认从1开始计数
+    - print(name, '=>', member, ',', member.value)  # value属性自动赋给成员的int常量，默认从1开始计数
 
 # 从 Enum 派生出自定义类，精确地控制枚举类型
 from enum import Enum, unique
@@ -2620,16 +2623,16 @@ class Weekday(Enum):
 
 # 访问枚举类型
 day1 = Weekday.Mon
-print(day1)             # Weekday.Mon
-print(Weekday.Tue)      # Weekday.Tue
-print(Weekday['Tue'])           # Weekday.Tue
-print(Weekday.Tue.value)        # 2
-print(day1 == Weekday.Mon)      # True
-print(day1 == Weekday.Tue)      # False
-print(Weekday(1))               # Weekday.Mon
-print(day1 == Weekday(1))       # True
-Weekday(7)                      # ValueError: 7 is not a valid Weekday
-Weekday(1)                  # <Weekday.Mon: 1>
+- print(day1)           # Weekday.Mon
+- print(Weekday.Tue)    # Weekday.Tue
+- print(Weekday['Tue'])         # Weekday.Tue
+- print(Weekday.Tue.value)      # 2
+- print(day1 == Weekday.Mon)    # True
+- print(day1 == Weekday.Tue)    # False
+- print(Weekday(1))             # Weekday.Mon
+- print(day1 == Weekday(1))     # True
+- Weekday(7)                    # ValueError: 7 is not a valid Weekday
+- Weekday(1)                # <Weekday.Mon: 1>
 
 for name, member in Weekday.__members__.items():
     print(name, '=>', member)
@@ -2647,14 +2650,14 @@ class Hello(object):
     def hello(self, name='world'):
         print('Hello, %s.' % name)
 
-print(type(Hello))  # <class 'type'>，说明 Hello 是一个 class，它的类型是 type
+- print(type(Hello))# <class 'type'>，说明 Hello 是一个 class，它的类型是 type
 
 # type() 既可以返回一个对象的类型，也可以创建新的类型
 
 def fn(self, name='world'):
     print('Hello, %s.' % name)
 
-Hello = type('Hello', (object,), dict(hello=fn))    # 创建 Hello class
+- Hello = type('Hello', (object,), dict(hello=fn))  # 创建 Hello class
 
 # metaclass
 metaclass 用来控制类的创建行为
@@ -2670,7 +2673,7 @@ class MyList(list, metaclass=ListMetaclass):    # 关键字参数 metaclass 指�
     pass
 
 L = MyList()
-L.add(1)        # [1]
+- L.add(1)      # [1]
 
 # 应用实例
 ORM全称“Object Relational Mapping”，即对象-关系映射，就是把关系数据库的一行映射为一个对象，也就是一个类对应一个表，这样，写代码更简单，不用直接操作SQL语句
@@ -2932,9 +2935,9 @@ with open('/path/to/file', 'r') as f:
     print(f.read())
 
 
-f.read(size)    # 每次最多读取size个字节的内容
-f.readline()    # 每次读取一行
-f.readlines()   # 一次读取所有内容并按行返回list
+- f.read(size)  # 每次最多读取size个字节的内容
+- f.readline()  # 每次读取一行
+- f.readlines() # 一次读取所有内容并按行返回list
 
 # file-like Object
 # 二进制文件
@@ -2972,12 +2975,12 @@ from io import BytesIO
 
 f = BytesIO()
 f.write('中文'.encode('utf-8')) # 写入的不是str，而是经过UTF-8编码的bytes
-print(f.getvalue())             # b'\xe4\xb8\xad\xe6\x96\x87'
+- print(f.getvalue())           # b'\xe4\xb8\xad\xe6\x96\x87'
 
 # read
 from io import BytesIO
 f = BytesIO(b'\xe4\xb8\xad\xe6\x96\x87')
-f.read()                                    # b'\xe4\xb8\xad\xe6\x96\x87'
+- f.read()                                  # b'\xe4\xb8\xad\xe6\x96\x87'
 
 # 操作文件和目录
 import os
@@ -2989,8 +2992,8 @@ os.path.abspath('.')
 os.path.join('/Users/michael', 'testdir')
 os.mkdir('/Users/michael/testdir')
 os.rmdir('/Users/michael/testdir')
-os.path.split('/Users/michael/testdir/file.txt')    # ('/Users/michael/testdir', 'file.txt')
-os.path.splitext('/path/to/file.txt')               # ('/path/to/file', '.txt')
+- os.path.split('/Users/michael/testdir/file.txt')  # ('/Users/michael/testdir', 'file.txt')
+- os.path.splitext('/path/to/file.txt')             # ('/path/to/file', '.txt')
 os.rename('test.txt', 'test.py')
 os.remove('test.py')
 
@@ -3036,7 +3039,7 @@ json.dumps(d)
 
 # unpickling
 json_str = '{"age": 20, "score": 88, "name": "Bob"}'
-json.loads(json_str)    # {'age': 20, 'score': 88, 'name': 'Bob'}
+- json.loads(json_str)  # {'age': 20, 'score': 88, 'name': 'Bob'}
 JSON标准规定JSON编码是UTF-8
 
 # JSON 进阶
@@ -3049,7 +3052,7 @@ class Student(object):
         self.score = score
 
 s = Student('Bob', 20, 88)
-print(json.dumps(s))            # TypeError: <__main__.Student object at 0x10603cc50> is not JSON serializable
+- print(json.dumps(s))          # TypeError: <__main__.Student object at 0x10603cc50> is not JSON serializable
 
 
 可选参数default就是把任意一个对象变成一个可序列为JSON的对象
@@ -3060,7 +3063,7 @@ def student2dict(std):
         'score': std.score
     }
 
-print(json.dumps(s, default=student2dict))  # {"age": 20, "name": "Bob", "score": 88}
+- print(json.dumps(s, default=student2dict))# {"age": 20, "name": "Bob", "score": 88}
 
 # 把任意class的实例变为dict
 print(json.dumps(s, default=lambda obj: obj.__dict__))
@@ -3070,7 +3073,7 @@ def dict2student(d):
     return Student(d['name'], d['age'], d['score'])
 
 json_str = '{"age": 20, "score": 88, "name": "Bob"}'
-print(json.loads(json_str, object_hook=dict2student))   # <__main__.Student object at 0x10cd3c190>，打印出的是反序列化的Student实例对象
+- print(json.loads(json_str, object_hook=dict2student)) # <__main__.Student object at 0x10cd3c190>，打印出的是反序列化的Student实例对象
 ```
 
 ## 常用内建模块
@@ -3088,19 +3091,19 @@ dt.timestamp() # 把datetime转换为timestamp
 注意：Python的 timestamp 是一个浮点数，整数位表示秒
 
 t = 1429417200.0
-print(datetime.fromtimestamp(t))    # timestamp转换为datetime (本地时间)
+- print(datetime.fromtimestamp(t))  # timestamp转换为datetime (本地时间)
 print(datetime.utcfromtimestamp(t)) # UTC时间
 
-cday = datetime.strptime('2015-6-1 18:19:59', '%Y-%m-%d %H:%M:%S')  # str转换为datetime，'%Y-%m-%d %H:%M:%S'规定了日期和时间部分的格式
+- cday = datetime.strptime('2015-6-1 18:19:59', '%Y-%m-%d %H:%M:%S')# str转换为datetime，'%Y-%m-%d %H:%M:%S'规定了日期和时间部分的格式
 
 now = datetime.now()
-print(now.strftime('%a, %b %d %H:%M'))  # datetime转换为str
+- print(now.strftime('%a, %b %d %H:%M'))# datetime转换为str
 
 from datetime import datetime, timedelta
 now = datetime.now()
 now + timedelta(hours=10)
 now - timedelta(days=1)
-now + timedelta(days=2, hours=12)   # datetime加减
+- now + timedelta(days=2, hours=12) # datetime加减
 
 # 本地时间转换为UTC时间
 一个datetime类型有一个时区属性tzinfo，但是默认为None，所以无法区分这个datetime到底是哪个时区，除非强行给datetime设置一个时区
@@ -3115,9 +3118,9 @@ utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc) # 拿到UTC时间，并�
 
 bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8))) # astimezone()将转换时区为北京时间
 
-tokyo_dt = utc_dt.astimezone(timezone(timedelta(hours=9)))  # astimezone()将转换时区为东京时间
+- tokyo_dt = utc_dt.astimezone(timezone(timedelta(hours=9)))# astimezone()将转换时区为东京时间
 
-tokyo_dt2 = bj_dt.astimezone(timezone(timedelta(hours=9)))  # astimezone()将bj_dt转换时区为东京时间
+- tokyo_dt2 = bj_dt.astimezone(timezone(timedelta(hours=9)))# astimezone()将bj_dt转换时区为东京时间
 
 datetime表示的时间需要时区信息才能确定一个特定的时间，否则只能视为本地时间
 如果要存储datetime，最佳方法是将其转换为timestamp再存储，因为timestamp的值与时区完全无关
@@ -3131,7 +3134,7 @@ p = Point(1, 2)
 p.x     # 1
 p.y     # 2
 
-Circle = namedtuple('Circle', ['x', 'y', 'r'])  # namedtuple('名称', [属性list])
+- Circle = namedtuple('Circle', ['x', 'y', 'r'])# namedtuple('名称', [属性list])
 namedtuple是一个函数，它用来创建一个自定义的tuple对象，并且规定了tuple元素的个数，并可以用属性而不是索引来引用tuple的某个元素
 用namedtuple可以很方便地定义一种数据类型，它具备tuple的不变性，又可以根据属性来引用，使用十分方便
 
@@ -3148,7 +3151,7 @@ q                   # deque(['y', 'a', 'b', 'c', 'x'])
 # defaultdict
 使用dict时，如果引用的Key不存在，就会抛出KeyError。如果希望key不存在时，返回一个默认值，就可以用defaultdict
 from collections import defaultdict
-dd = defaultdict(lambda: 'N/A')         # 默认值是调用函数返回的，而函数在创建defaultdict对象时传入
+- dd = defaultdict(lambda: 'N/A')       # 默认值是调用函数返回的，而函数在创建defaultdict对象时传入
 dd['key1'] = 'abc'
 dd['key1']      # 'abc'
 dd['key2']      # 'N/A'
@@ -3251,13 +3254,13 @@ Base64是一种用64个字符来表示任意二进制数据的方法，常用于
 
 base64可以直接进行base64的编解码
 import base64
-base64.b64encode(b'binary\x00string')       # b'YmluYXJ5AHN0cmluZw=='
-base64.b64decode(b'YmluYXJ5AHN0cmluZw==')   # b'binary\x00string'
+- base64.b64encode(b'binary\x00string')     # b'YmluYXJ5AHN0cmluZw=='
+- base64.b64decode(b'YmluYXJ5AHN0cmluZw==') # b'binary\x00string'
 
 标准的Base64编码后可能出现字符+和/，在URL中就不能直接作为参数，所以又有一种"url safe"的base64编码，其实就是把字符+和/分别变成-和_
-base64.b64encode(b'i\xb7\x1d\xfb\xef\xff')              # b'abcd++//'
-base64.urlsafe_b64encode(b'i\xb7\x1d\xfb\xef\xff')      # b'abcd--__'
-base64.urlsafe_b64decode('abcd--__')                    # b'i\xb7\x1d\xfb\xef\xff'
+- base64.b64encode(b'i\xb7\x1d\xfb\xef\xff')            # b'abcd++//'
+- base64.urlsafe_b64encode(b'i\xb7\x1d\xfb\xef\xff')    # b'abcd--__'
+- base64.urlsafe_b64decode('abcd--__')                  # b'i\xb7\x1d\xfb\xef\xff'
 
 由于=字符也可能出现在Base64编码中，但=用在URL、Cookie里面会造成歧义，所以，很多Base64编码后会把=去掉
 # 标准Base64:
@@ -3271,9 +3274,9 @@ struct模块解决bytes和其他二进制数据类型的转换
 
 import struct
 # pack函数把任意数据类型变成bytes
-struct.pack('>I', 10240099)     # b'\x00\x9c@c'
+- struct.pack('>I', 10240099)   # b'\x00\x9c@c'
 # unpack把bytes变成相应的数据类型
-struct.unpack('>IH', b'\xf0\xf0\xf0\xf0\x80\x80')   # (4042322160, 32896)
+- struct.unpack('>IH', b'\xf0\xf0\xf0\xf0\x80\x80') # (4042322160, 32896)
 
 # hashlib
 哈希算法就是通过哈希函数hash(data)对任意长度的数据data计算出固定长度的哈希digest，目的是为了发现原始数据是否被人篡改过
@@ -3307,7 +3310,7 @@ import hmac
 message = b'Hello, world!'
 key = b'secret'             # key和message都是bytes类型
 h = hmac.new(key, message, digestmod='MD5') # 如果消息很长，可以多次调用h.update(msg)
-h.hexdigest()                               # 'fa4ee7d173f2d97ee79022d1a7355bcf'
+- h.hexdigest()                             # 'fa4ee7d173f2d97ee79022d1a7355bcf'
 
 # itertools
 itertools提供了非常有用的用于操作迭代对象的函数
@@ -3341,7 +3344,7 @@ Ouput:
 ...
 
 # repeat
-ns = itertools.repeat('A', 3)   # 如果提供第二个参数就可以限定重复次数
+- ns = itertools.repeat('A', 3) # 如果提供第二个参数就可以限定重复次数
 for n in ns:
     print(n)
 
@@ -3353,7 +3356,7 @@ A
 # takewhile()等函数根据条件判断来截取出一个有限的序列
 natuals = itertools.count(1)
 ns = itertools.takewhile(lambda x: x <= 10, natuals)
-list(ns)    # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+- list(ns)  # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 # chain
 chain()把一组迭代对象串联起来，形成一个更大的迭代器
@@ -3606,7 +3609,7 @@ from hello import application
 httpd = make_server('', 8000, application)
 print('Serving HTTP on port 8000...')
 
-httpd.serve_forever()   # 开始监听HTTP请求
+- httpd.serve_forever() # 开始监听HTTP请求
 ```
 
 -  Web框架
@@ -3743,7 +3746,7 @@ Cheetah
 Django
 
 ## 异步IO
-[async](python/async.md)  
-[]()  
-[]()  
-[]()  
+- [async](python/async.md)
+- []()
+- []()
+- []()

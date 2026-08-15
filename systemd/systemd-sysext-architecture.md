@@ -162,36 +162,36 @@ Sysext 核心架构包含三个主要层次：
 |   gdb-debug.sysext.squashfs                                                |
 |   ========================                                                 |
 |                                                                            |
-|   +--------------------------------------------------------------------+  |
-|   | SQUASHFS CONTAINER (compressed, read-only)                         |  |
-|   |                                                                     |  |
-|   |   /                                                                 |  |
-|   |   └── usr/                                                          |  |
-|   |       ├── bin/                                                      |  |
-|   |       │   ├── gdb                    (executable)                   |  |
-|   |       │   ├── gdbserver               (executable)                   |  |
-|   |       │   └── gcore                   (executable)                   |  |
-|   |       │                                                             |  |
-|   |       ├── lib/                                                      |  |
-|   |       │   ├── libgdb.so              (shared library)               |  |
-|   |       │   └── gdb/                                                  |  |
-|   |       │       └── python/            (GDB python scripts)           |  |
-|   |       │                                                             |  |
-|   |       ├── share/                                                    |  |
-|   |       │   └── gdb/                                                  |  |
-|   |       │       └── syscalls/          (syscall definitions)          |  |
-|   |       │                                                             |  |
-|   |       └── lib/                                                      |  |
-|   |           └── extension-release.d/                                  |  |
-|   |               └── extension-release.gdb-debug   (REQUIRED!)         |  |
-|   |                                                                     |  |
-|   +--------------------------------------------------------------------+  |
+|   +--------------------------------------------------------------------+   |
+|   | SQUASHFS CONTAINER (compressed, read-only)                         |   |
+|   |                                                                    |   |
+|   |   /                                                                |   |
+|   |   └── usr/                                                         |   |
+|   |       ├── bin/                                                     |   |
+|   |       │   ├── gdb                    (executable)                  |   |
+|   |       │   ├── gdbserver               (executable)                 |   |
+|   |       │   └── gcore                   (executable)                 |   |
+|   |       │                                                            |   |
+|   |       ├── lib/                                                     |   |
+|   |       │   ├── libgdb.so              (shared library)              |   |
+|   |       │   └── gdb/                                                 |   |
+|   |       │       └── python/            (GDB python scripts)          |   |
+|   |       │                                                            |   |
+|   |       ├── share/                                                   |   |
+|   |       │   └── gdb/                                                 |   |
+|   |       │       └── syscalls/          (syscall definitions)         |   |
+|   |       │                                                            |   |
+|   |       └── lib/                                                     |   |
+|   |           └── extension-release.d/                                 |   |
+|   |               └── extension-release.gdb-debug   (REQUIRED!)        |   |
+|   |                                                                    |   |
+|   +--------------------------------------------------------------------+   |
 |                                                                            |
 |   EXTENSION-RELEASE FILE CONTENTS:                                         |
 |   =================================                                        |
 |                                                                            |
-|   +--------------------------------------------------------------------+  |
-|   | # /usr/lib/extension-release.d/extension-release.gdb-debug         |  |
+|   +--------------------------------------------------------------------+   |
+|   | # /usr/lib/extension-release.d/extension-release.gdb-debug          |  |
 |   |                                                                     |  |
 |   | ID=_any                      # Compatible with any distro           |  |
 |   | # OR                                                                |  |
@@ -201,7 +201,7 @@ Sysext 核心架构包含三个主要层次：
 |   | SYSEXT_LEVEL=1.0             # Extension API level                  |  |
 |   | SYSEXT_SCOPE=system          # system, portable, or initrd          |  |
 |   | ARCHITECTURE=x86-64          # Target architecture                  |  |
-|   +--------------------------------------------------------------------+  |
+|   +--------------------------------------------------------------------+   |
 |                                                                            |
 |   NAMING CONVENTION:                                                       |
 |   ==================                                                       |
