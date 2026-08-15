@@ -2,6 +2,8 @@
 [**Practical Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 
 [**fsm thinking training**](fsm/fsm-thinking-training/README.md)
+[FSM 的核心心智模式：FSM 的主要工作就是「判定（Decision）」](fsm/decision.md)
+[]()
 []()
 []()
 
