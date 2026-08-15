@@ -1,17 +1,15 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 // ---------------------------------------------------------------------------
 // 1. Types
 // ---------------------------------------------------------------------------
 
 type State int
-type Event int
-type Action int
+type EventKind int
+type ActionKind int
+type Dir int
 
 const (
 	StateClosed State = iota
@@ -21,27 +19,47 @@ const (
 )
 
 const (
-	EventPerson Event = iota
+	EventPerson EventKind = iota
 	EventTimeout
 )
 
 const (
-	ActionMotorOpen Action = iota
-	ActionMotorClose
-	ActionLatchOpen
-	ActionLatchClosed
+	ActionMotorRun ActionKind = iota
+	ActionLatchSet
+)
+
+const (
+	DirOpen Dir = iota
+	DirClose
 )
 
 func (s State) String() string {
 	return [...]string{"CLOSED", "OPENING", "OPEN", "CLOSING"}[s]
 }
 
-func (e Event) String() string {
+func (e EventKind) String() string {
 	return [...]string{"PERSON", "TIMEOUT"}[e]
 }
 
-func (a Action) String() string {
-	return [...]string{"MOTOR_OPEN", "MOTOR_CLOSE", "LATCH_OPEN", "LATCH_CLOSED"}[a]
+func (d Dir) String() string {
+	return [...]string{"OPEN", "CLOSE"}[d]
+}
+
+type Event struct {
+	Kind      EventKind
+	SensorID  int
+	ElapsedMs uint
+}
+
+type Action struct {
+	Kind      ActionKind
+	Direction Dir
+	Duty      int
+	Open      int
+}
+
+type Ctx struct {
+	State State
 }
 
 type Decision struct {
@@ -51,60 +69,66 @@ type Decision struct {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Table  (State, Event) -> (NextState, ActionList)
+// 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 // ---------------------------------------------------------------------------
 
 type transKey struct {
 	s State
-	e Event
+	e EventKind
 }
 
 type transVal struct {
-	next    State
-	actions []Action
+	next  State
+	kinds []ActionKind
 }
 
 var table = map[transKey]transVal{
-	{StateClosed, EventPerson}:   {StateOpening, []Action{ActionMotorOpen}},
-	{StateOpening, EventTimeout}: {StateOpen, []Action{ActionLatchOpen}},
-	{StateOpen, EventPerson}:     {StateOpen, []Action{}},
-	{StateOpen, EventTimeout}:    {StateClosing, []Action{ActionMotorClose}},
-	{StateClosing, EventPerson}:  {StateOpening, []Action{ActionMotorOpen}},
-	{StateClosing, EventTimeout}: {StateClosed, []Action{ActionLatchClosed}},
+	{StateClosed, EventPerson}:   {StateOpening, []ActionKind{ActionMotorRun}},
+	{StateOpening, EventTimeout}: {StateOpen, []ActionKind{ActionLatchSet}},
+	{StateOpen, EventPerson}:     {StateOpen, []ActionKind{}},
+	{StateOpen, EventTimeout}:    {StateClosing, []ActionKind{ActionMotorRun}},
+	{StateClosing, EventPerson}:  {StateOpening, []ActionKind{ActionMotorRun}},
+	{StateClosing, EventTimeout}: {StateClosed, []ActionKind{ActionLatchSet}},
 }
 
 // ---------------------------------------------------------------------------
-// 3. Engine  -- table lookup only, zero side effects
+// 3. Engine  -- table lookup + bind args; zero side effects
 // ---------------------------------------------------------------------------
 
-func fsmDecide(state State, event Event) Decision {
-	hit, ok := table[transKey{state, event}]
+func fsmDecide(ctx Ctx, ev Event) Decision {
+	hit, ok := table[transKey{ctx.State, ev.Kind}]
 	if !ok {
-		return Decision{Accepted: false, NextState: state}
+		return Decision{Accepted: false, NextState: ctx.State}
 	}
-	return Decision{Accepted: true, NextState: hit.next, Actions: hit.actions}
+	actions := make([]Action, 0, len(hit.kinds))
+	for _, kind := range hit.kinds {
+		if kind == ActionMotorRun {
+			dir := DirClose
+			if hit.next == StateOpening {
+				dir = DirOpen
+			}
+			actions = append(actions, Action{Kind: kind, Direction: dir, Duty: 80})
+			continue
+		}
+		open := 0
+		if hit.next == StateOpen {
+			open = 1
+		}
+		actions = append(actions, Action{Kind: kind, Open: open})
+	}
+	return Decision{Accepted: true, NextState: hit.next, Actions: actions}
 }
 
 // ---------------------------------------------------------------------------
-// 4. Workers  -- execution; workers do not know current state
+// 4. Workers  -- parameterized functions; no FSM state
 // ---------------------------------------------------------------------------
 
-func workerMotor(action Action) {
-	switch action {
-	case ActionMotorOpen:
-		fmt.Println("[EXEC] motor -> OPEN")
-	case ActionMotorClose:
-		fmt.Println("[EXEC] motor -> CLOSE")
-	}
+func motorRun(direction Dir, duty int) {
+	fmt.Printf("[EXEC] motor_run(%s, %d)\n", direction, duty)
 }
 
-func workerLatch(action Action) {
-	switch action {
-	case ActionLatchOpen:
-		fmt.Println("[EXEC] latch -> OPEN")
-	case ActionLatchClosed:
-		fmt.Println("[EXEC] latch -> CLOSED")
-	}
+func latchSet(open int) {
+	fmt.Printf("[EXEC] latch_set(%d)\n", open)
 }
 
 // ---------------------------------------------------------------------------
@@ -112,40 +136,40 @@ func workerLatch(action Action) {
 // ---------------------------------------------------------------------------
 
 func dispatch(actions []Action) {
-	for _, action := range actions {
-		fmt.Printf("[DISPATCH] %s\n", action)
-		switch action {
-		case ActionMotorOpen, ActionMotorClose:
-			workerMotor(action)
-		default:
-			workerLatch(action)
+	for _, a := range actions {
+		switch a.Kind {
+		case ActionMotorRun:
+			fmt.Printf("[DISPATCH] MOTOR_RUN(dir=%s, duty=%d)\n", a.Direction, a.Duty)
+			motorRun(a.Direction, a.Duty)
+		case ActionLatchSet:
+			fmt.Printf("[DISPATCH] LATCH_SET(open=%d)\n", a.Open)
+			latchSet(a.Open)
 		}
 	}
 }
 
 // ---------------------------------------------------------------------------
-// 6. Apply  -- commit next state, then dispatch
+// 6. Apply  -- commit ctx, then dispatch
 // ---------------------------------------------------------------------------
 
-func formatActions(actions []Action) string {
-	names := make([]string, len(actions))
-	for i, a := range actions {
-		names[i] = a.String()
+func formatEvent(ev Event) string {
+	if ev.Kind == EventPerson {
+		return fmt.Sprintf("PERSON(sensor_id=%d)", ev.SensorID)
 	}
-	return strings.Join(names, ", ")
+	return fmt.Sprintf("TIMEOUT(elapsed_ms=%d)", ev.ElapsedMs)
 }
 
-func apply(state State, event Event) State {
-	fmt.Printf("[EVENT] %s | state=%s\n", event, state)
-	d := fsmDecide(state, event)
+func apply(ctx *Ctx, ev Event) {
+	fmt.Printf("[EVENT] %s | state=%s\n", formatEvent(ev), ctx.State)
+	d := fsmDecide(*ctx, ev)
 	if !d.Accepted {
-		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n", state, event)
-		return state
+		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
+			ctx.State, ev.Kind)
+		return
 	}
-	fmt.Printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-		state, event, d.NextState, formatActions(d.Actions))
+	fmt.Printf("[DECISION] %s + %s -> %s\n", ctx.State, ev.Kind, d.NextState)
+	ctx.State = d.NextState
 	dispatch(d.Actions)
-	return d.NextState
 }
 
 // ---------------------------------------------------------------------------
@@ -153,21 +177,21 @@ func apply(state State, event Event) State {
 // ---------------------------------------------------------------------------
 
 func main() {
-	state := StateClosed
-	fmt.Printf("[INIT] state=%s\n\n", state)
+	ctx := Ctx{State: StateClosed}
+	fmt.Printf("[INIT] state=%s\n\n", ctx.State)
 	events := []Event{
-		EventTimeout,
-		EventPerson,
-		EventTimeout,
-		EventPerson,
-		EventTimeout,
-		EventPerson,
-		EventTimeout,
-		EventTimeout,
-		EventTimeout,
+		{Kind: EventTimeout, ElapsedMs: 500},
+		{Kind: EventPerson, SensorID: 1},
+		{Kind: EventTimeout, ElapsedMs: 2000},
+		{Kind: EventPerson, SensorID: 1},
+		{Kind: EventTimeout, ElapsedMs: 5000},
+		{Kind: EventPerson, SensorID: 2},
+		{Kind: EventTimeout, ElapsedMs: 2000},
+		{Kind: EventTimeout, ElapsedMs: 5000},
+		{Kind: EventTimeout, ElapsedMs: 2000},
 	}
-	for _, event := range events {
-		state = apply(state, event)
+	for _, ev := range events {
+		apply(&ctx, ev)
 		fmt.Println()
 	}
 }

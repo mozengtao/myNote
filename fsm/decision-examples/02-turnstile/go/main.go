@@ -1,17 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 // ---------------------------------------------------------------------------
 // 1. Types
 // ---------------------------------------------------------------------------
 
 type State int
-type Event int
-type Action int
+type EventKind int
+type ActionKind int
 
 const (
 	StateLocked State = iota
@@ -19,25 +16,36 @@ const (
 )
 
 const (
-	EventCoin Event = iota
+	EventCoin EventKind = iota
 	EventPush
 )
 
 const (
-	ActionUnlock Action = iota
-	ActionLock
+	ActionCreditBox ActionKind = iota
+	ActionSetMechanism
 )
 
 func (s State) String() string {
 	return [...]string{"LOCKED", "UNLOCKED"}[s]
 }
 
-func (e Event) String() string {
+func (e EventKind) String() string {
 	return [...]string{"COIN", "PUSH"}[e]
 }
 
-func (a Action) String() string {
-	return [...]string{"UNLOCK", "LOCK"}[a]
+type Event struct {
+	Kind  EventKind
+	Cents int
+}
+
+type Action struct {
+	Kind   ActionKind
+	Cents  int
+	Locked int
+}
+
+type Ctx struct {
+	State State
 }
 
 type Decision struct {
@@ -47,47 +55,64 @@ type Decision struct {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Table  (State, Event) -> (NextState, ActionList)
+// 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 // ---------------------------------------------------------------------------
 
 type transKey struct {
 	s State
-	e Event
+	e EventKind
 }
 
 type transVal struct {
-	next    State
-	actions []Action
+	next  State
+	kinds []ActionKind
 }
 
 var table = map[transKey]transVal{
-	{StateLocked, EventCoin}:   {StateUnlocked, []Action{ActionUnlock}},
-	{StateUnlocked, EventPush}: {StateLocked, []Action{ActionLock}},
+	{StateLocked, EventCoin}: {
+		StateUnlocked,
+		[]ActionKind{ActionCreditBox, ActionSetMechanism},
+	},
+	{StateUnlocked, EventPush}: {
+		StateLocked,
+		[]ActionKind{ActionSetMechanism},
+	},
 }
 
 // ---------------------------------------------------------------------------
-// 3. Engine  -- table lookup only, zero side effects
+// 3. Engine  -- table lookup + bind args; zero side effects
 // ---------------------------------------------------------------------------
 
-func fsmDecide(state State, event Event) Decision {
-	hit, ok := table[transKey{state, event}]
+func fsmDecide(ctx Ctx, ev Event) Decision {
+	hit, ok := table[transKey{ctx.State, ev.Kind}]
 	if !ok {
-		return Decision{Accepted: false, NextState: state}
+		return Decision{Accepted: false, NextState: ctx.State}
 	}
-	return Decision{Accepted: true, NextState: hit.next, Actions: hit.actions}
+	actions := make([]Action, 0, len(hit.kinds))
+	for _, kind := range hit.kinds {
+		if kind == ActionCreditBox {
+			actions = append(actions, Action{Kind: kind, Cents: ev.Cents})
+			continue
+		}
+		locked := 1
+		if hit.next == StateUnlocked {
+			locked = 0
+		}
+		actions = append(actions, Action{Kind: kind, Locked: locked})
+	}
+	return Decision{Accepted: true, NextState: hit.next, Actions: actions}
 }
 
 // ---------------------------------------------------------------------------
-// 4. Workers  -- execution; workers do not know current state
+// 4. Workers  -- parameterized functions; no FSM state
 // ---------------------------------------------------------------------------
 
-func workerMechanism(action Action) {
-	switch action {
-	case ActionUnlock:
-		fmt.Println("[EXEC] mechanism -> UNLOCK")
-	case ActionLock:
-		fmt.Println("[EXEC] mechanism -> LOCK")
-	}
+func coinBoxCredit(cents int) {
+	fmt.Printf("[EXEC] coin_box_credit(%d)\n", cents)
+}
+
+func mechanismSet(locked int) {
+	fmt.Printf("[EXEC] mechanism_set(%d)\n", locked)
 }
 
 // ---------------------------------------------------------------------------
@@ -95,35 +120,40 @@ func workerMechanism(action Action) {
 // ---------------------------------------------------------------------------
 
 func dispatch(actions []Action) {
-	for _, action := range actions {
-		fmt.Printf("[DISPATCH] %s\n", action)
-		workerMechanism(action)
+	for _, a := range actions {
+		switch a.Kind {
+		case ActionCreditBox:
+			fmt.Printf("[DISPATCH] CREDIT_BOX(cents=%d)\n", a.Cents)
+			coinBoxCredit(a.Cents)
+		case ActionSetMechanism:
+			fmt.Printf("[DISPATCH] SET_MECHANISM(locked=%d)\n", a.Locked)
+			mechanismSet(a.Locked)
+		}
 	}
 }
 
 // ---------------------------------------------------------------------------
-// 6. Apply  -- commit next state, then dispatch
+// 6. Apply  -- commit ctx, then dispatch
 // ---------------------------------------------------------------------------
 
-func formatActions(actions []Action) string {
-	names := make([]string, len(actions))
-	for i, a := range actions {
-		names[i] = a.String()
+func formatEvent(ev Event) string {
+	if ev.Kind == EventCoin {
+		return fmt.Sprintf("COIN(cents=%d)", ev.Cents)
 	}
-	return strings.Join(names, ", ")
+	return "PUSH"
 }
 
-func apply(state State, event Event) State {
-	fmt.Printf("[EVENT] %s | state=%s\n", event, state)
-	d := fsmDecide(state, event)
+func apply(ctx *Ctx, ev Event) {
+	fmt.Printf("[EVENT] %s | state=%s\n", formatEvent(ev), ctx.State)
+	d := fsmDecide(*ctx, ev)
 	if !d.Accepted {
-		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n", state, event)
-		return state
+		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
+			ctx.State, ev.Kind)
+		return
 	}
-	fmt.Printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-		state, event, d.NextState, formatActions(d.Actions))
+	fmt.Printf("[DECISION] %s + %s -> %s\n", ctx.State, ev.Kind, d.NextState)
+	ctx.State = d.NextState
 	dispatch(d.Actions)
-	return d.NextState
 }
 
 // ---------------------------------------------------------------------------
@@ -131,13 +161,18 @@ func apply(state State, event Event) State {
 // ---------------------------------------------------------------------------
 
 func main() {
-	state := StateLocked
-	fmt.Printf("[INIT] state=%s\n\n", state)
+	ctx := Ctx{State: StateLocked}
+	fmt.Printf("[INIT] state=%s\n\n", ctx.State)
 	events := []Event{
-		EventCoin, EventPush, EventPush, EventCoin, EventCoin, EventPush,
+		{Kind: EventCoin, Cents: 100},
+		{Kind: EventPush},
+		{Kind: EventPush},
+		{Kind: EventCoin, Cents: 100},
+		{Kind: EventCoin, Cents: 50},
+		{Kind: EventPush},
 	}
-	for _, event := range events {
-		state = apply(state, event)
+	for _, ev := range events {
+		apply(&ctx, ev)
 		fmt.Println()
 	}
 }

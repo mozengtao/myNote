@@ -1,27 +1,28 @@
 # 01 交通灯：同一事件，不同状态，不同意义
 
-> **钉死的心智：** `TICK` 本身没有意义。真正有意义的是 `State + Event`。
+> **钉死的心智：** `TICK` 本身没有颜色。颜色是 Decision 选出来的，再作为参数交给 `lamp_set(color)`。
 
-交通灯只有一个外部事件：定时器到期 `TICK`。红灯时它表示「该变绿」，绿灯时它表示「该变黄」，黄灯时它表示「该变红」。FSM 判定下一盏灯该亮哪一色；灯具 Worker 才去改物理灯光。
+交通灯只有一种事件 kind：`TICK`。事件带着时刻 `now_ms`，但灯该亮哪一色不在 TICK 里——红灯到期变绿，绿灯到期变黄。FSM 查表判定下一状态，并把对应颜色填进 Action；灯具 Worker 只调用 `lamp_set(color)`，不知道当前是红灯还是绿灯。
 
 ## 状态 / 事件 / 动作
 
 ```
-State:   RED, GREEN, YELLOW
-Event:   TICK
-Action:  LIGHT_RED, LIGHT_GREEN, LIGHT_YELLOW
+State:      RED, GREEN, YELLOW
+Event:      TICK(now_ms)
+Action:     SET_LAMP(color)  ->  lamp_set(color)
+Ctx:        state
 ```
 
-转移表：
+转移表只存 kind；颜色在 `fsm_decide` 里按 **下一状态** 绑定：
 
 ```
-+--------+-------+------------+----------------+
-| State  | Event | Next State | Actions        |
-+--------+-------+------------+----------------+
-| RED    | TICK  | GREEN      | LIGHT_GREEN    |
-| GREEN  | TICK  | YELLOW     | LIGHT_YELLOW   |
-| YELLOW | TICK  | RED        | LIGHT_RED      |
-+--------+-------+------------+----------------+
++--------+------+------------+----------------------+
+| State  | kind | Next State | Worker call          |
++--------+------+------------+----------------------+
+| RED    | TICK | GREEN      | lamp_set(GREEN)      |
+| GREEN  | TICK | YELLOW     | lamp_set(YELLOW)     |
+| YELLOW | TICK | RED        | lamp_set(RED)        |
++--------+------+------------+----------------------+
 ```
 
 状态图：
@@ -36,28 +37,28 @@ Action:  LIGHT_RED, LIGHT_GREEN, LIGHT_YELLOW
 
 ## 一次事件的三层走查
 
-当前 `RED`，收到 `TICK`：
+当前 `RED`，收到 `TICK(now_ms=1000)`：
 
 ```
-[EVENT]    TICK | state=RED
-[DECISION] RED + TICK -> GREEN  actions=[LIGHT_GREEN]
-[DISPATCH] LIGHT_GREEN
-[EXEC]     lamp -> GREEN
+[EVENT]    TICK(now_ms=1000) | state=RED
+[DECISION] RED + TICK -> GREEN
+[DISPATCH] SET_LAMP(color=GREEN)
+[EXEC]     lamp_set(GREEN)
 ```
 
-- Decision：查表，得到下一状态 `GREEN` 和动作 `LIGHT_GREEN`。
-- Dispatch：把动作交给灯具 Worker。
-- Execution：Worker 把灯改成绿色。FSM 没有碰灯。
+- Decision：查表得到 `GREEN`，参数 `color=GREEN` **来自判定**，不是来自 TICK。
+- Dispatch：解包后调用 `lamp_set(GREEN)`。
+- Execution：Worker 改灯。FSM 没有碰 GPIO。
 
 ## 如果把执行写进 FSM
 
 ```
-if state == RED and event == TICK:
-    set_gpio_green()     # FSM 里直接改硬件
+if state == RED and event.kind == TICK:
+    gpio_write(GREEN_PIN)     # FSM 里直接改硬件
     state = GREEN
 ```
 
-判定和 IO 缠在一起：单测要接 GPIO，换灯具协议要改状态机。正确拆法是 FSM 只返回 `LIGHT_GREEN`，GPIO 留在 Worker。
+判定和 IO 缠在一起。正确拆法：FSM 构造 `SET_LAMP(color=GREEN)`，GPIO 留在 `lamp_set`。
 
 ## 怎么跑
 
@@ -67,4 +68,4 @@ gcc -o /tmp/fsm-demo c/main.c && /tmp/fsm-demo
 (cd go && go run main.go)
 ```
 
-脚本化事件：`TICK, TICK, TICK, TICK`，初始状态 `RED`。三种语言输出应完全一致。
+脚本化事件：`TICK(1000), TICK(2000), TICK(3000), TICK(4000)`，初始状态 `RED`。三种语言输出应完全一致。

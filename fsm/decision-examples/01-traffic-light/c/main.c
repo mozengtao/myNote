@@ -10,20 +10,41 @@
 typedef enum {
 	ST_RED = 0,
 	ST_GREEN,
-	ST_YELLOW,
-	NSTATE
+	ST_YELLOW
 } State;
 
 typedef enum {
-	EV_TICK = 0,
-	NEVENT
-} Event;
+	EV_TICK = 0
+} EventKind;
 
 typedef enum {
-	ACT_LIGHT_RED = 0,
-	ACT_LIGHT_GREEN,
-	ACT_LIGHT_YELLOW
+	ACT_SET_LAMP = 0
+} ActionKind;
+
+typedef enum {
+	COLOR_RED = 0,
+	COLOR_GREEN,
+	COLOR_YELLOW
+} Color;
+
+typedef struct {详细解释如下python代码
+@dataclass(frozen=True)
+class Decision:
+    accepted: bool
+    next_state: State
+    actions: Tuple[Action, ...]
+	EventKind kind;
+	unsigned now_ms;
+} Event;
+
+typedef struct {
+	ActionKind kind;
+	Color color;
 } Action;
+
+typedef struct {
+	State state;
+} Ctx;
 
 typedef struct {
 	int accepted;
@@ -34,50 +55,67 @@ typedef struct {
 
 typedef struct {
 	State from;
-	Event event;
+	EventKind event;
 	State to;
 	int n_actions;
-	Action actions[MAX_ACTIONS];
+	ActionKind action_kinds[MAX_ACTIONS];
 } TransRule;
 
 /* ---------------------------------------------------------------------------
- * 2. Table  (State, Event) -> (NextState, ActionList)
+ * 2. Table  (State, EventKind) -> (NextState, ActionKind list)
  * --------------------------------------------------------------------------- */
 
 static const TransRule table[] = {
-	{ ST_RED,    EV_TICK, ST_GREEN,  1, { ACT_LIGHT_GREEN  } },
-	{ ST_GREEN,  EV_TICK, ST_YELLOW, 1, { ACT_LIGHT_YELLOW } },
-	{ ST_YELLOW, EV_TICK, ST_RED,    1, { ACT_LIGHT_RED    } },
+	{ ST_RED,    EV_TICK, ST_GREEN,  1, { ACT_SET_LAMP } },
+	{ ST_GREEN,  EV_TICK, ST_YELLOW, 1, { ACT_SET_LAMP } },
+	{ ST_YELLOW, EV_TICK, ST_RED,    1, { ACT_SET_LAMP } },
 };
 
 static const char *state_names[] = { "RED", "GREEN", "YELLOW" };
 static const char *event_names[] = { "TICK" };
-static const char *action_names[] = { "LIGHT_RED", "LIGHT_GREEN", "LIGHT_YELLOW" };
+static const char *color_names[] = { "RED", "GREEN", "YELLOW" };
+
+/*
+ * map next state to the lamp color the decision chose
+ */
+static Color
+color_of(State st)
+{
+	switch (st) {
+	case ST_GREEN:
+		return COLOR_GREEN;
+	case ST_YELLOW:
+		return COLOR_YELLOW;
+	case ST_RED:
+	default:
+		return COLOR_RED;
+	}
+}
 
 /* ---------------------------------------------------------------------------
- * 3. Engine  -- table lookup only, zero side effects
+ * 3. Engine  -- table lookup + bind args; zero side effects
  * --------------------------------------------------------------------------- */
 
 /*
- * fsm decide: lookup (state, event); never IO, never call workers
+ * fsm decide: lookup by kind, then fill lamp color from next state
  */
 static Decision
-fsm_decide(State state, Event event)
+fsm_decide(const Ctx *ctx, const Event *ev)
 {
 	Decision d;
 	unsigned i;
 
 	memset(&d, 0, sizeof(d));
 	d.accepted = 0;
-	d.next_state = state;
+	d.next_state = ctx->state;
 
 	for (i = 0; i < sizeof(table) / sizeof(table[0]); i++) {
-		if (table[i].from == state && table[i].event == event) {
+		if (table[i].from == ctx->state && table[i].event == ev->kind) {
 			d.accepted = 1;
 			d.next_state = table[i].to;
 			d.n_actions = table[i].n_actions;
-			memcpy(d.actions, table[i].actions,
-			       sizeof(Action) * (unsigned)table[i].n_actions);
+			d.actions[0].kind = ACT_SET_LAMP;
+			d.actions[0].color = color_of(d.next_state);
 			return d;
 		}
 	}
@@ -85,26 +123,16 @@ fsm_decide(State state, Event event)
 }
 
 /* ---------------------------------------------------------------------------
- * 4. Workers  -- execution; workers do not know current state
+ * 4. Workers  -- parameterized functions; no FSM state
  * --------------------------------------------------------------------------- */
 
 /*
- * lamp worker: change the physical light
+ * lamp_set: drive the physical lamp to a color
  */
 static void
-worker_lamp(Action a)
+lamp_set(Color color)
 {
-	switch (a) {
-	case ACT_LIGHT_RED:
-		printf("[EXEC] lamp -> RED\n");
-		break;
-	case ACT_LIGHT_GREEN:
-		printf("[EXEC] lamp -> GREEN\n");
-		break;
-	case ACT_LIGHT_YELLOW:
-		printf("[EXEC] lamp -> YELLOW\n");
-		break;
-	}
+	printf("[EXEC] lamp_set(%s)\n", color_names[color]);
 }
 
 /* ---------------------------------------------------------------------------
@@ -112,63 +140,56 @@ worker_lamp(Action a)
  * --------------------------------------------------------------------------- */
 
 /*
- * route each action to a worker
+ * unpack SET_LAMP and call lamp_set(color)
  */
 static void
 dispatch(const Decision *d)
 {
 	int i;
+	const Action *a;
 
 	for (i = 0; i < d->n_actions; i++) {
-		printf("[DISPATCH] %s\n", action_names[d->actions[i]]);
-		worker_lamp(d->actions[i]);
+		a = &d->actions[i];
+		printf("[DISPATCH] SET_LAMP(color=%s)\n", color_names[a->color]);
+		lamp_set(a->color);
 	}
 }
 
 /* ---------------------------------------------------------------------------
- * 6. Apply  -- commit next state, then dispatch
+ * 6. Apply  -- commit ctx, then dispatch
  * --------------------------------------------------------------------------- */
 
 /*
- * format action names into "A, B"
+ * format TICK payload
  */
 static void
-format_actions(const Decision *d, char *buf, int buflen)
+format_event(const Event *ev, char *buf, int buflen)
 {
-	int i, n;
-
-	buf[0] = '\0';
-	n = 0;
-	for (i = 0; i < d->n_actions; i++) {
-		if (i)
-			n += snprintf(buf + n, (size_t)(buflen - n), ", ");
-		n += snprintf(buf + n, (size_t)(buflen - n), "%s",
-			      action_names[d->actions[i]]);
-	}
+	snprintf(buf, (size_t)buflen, "TICK(now_ms=%u)", ev->now_ms);
 }
 
 /*
  * handle one event: decide, maybe reject, else commit + dispatch
  */
-static State
-apply(State state, Event event)
+static void
+apply(Ctx *ctx, const Event *ev)
 {
 	Decision d;
-	char acts[128];
+	char evbuf[64];
 
-	printf("[EVENT] %s | state=%s\n", event_names[event], state_names[state]);
-	d = fsm_decide(state, event);
+	format_event(ev, evbuf, (int)sizeof(evbuf));
+	printf("[EVENT] %s | state=%s\n", evbuf, state_names[ctx->state]);
+	d = fsm_decide(ctx, ev);
 	if (!d.accepted) {
 		printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
-		       state_names[state], event_names[event]);
-		return state;
+		       state_names[ctx->state], event_names[ev->kind]);
+		return;
 	}
-	format_actions(&d, acts, (int)sizeof(acts));
-	printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-	       state_names[state], event_names[event],
-	       state_names[d.next_state], acts);
+	printf("[DECISION] %s + %s -> %s\n",
+	       state_names[ctx->state], event_names[ev->kind],
+	       state_names[d.next_state]);
+	ctx->state = d.next_state;
 	dispatch(&d);
-	return d.next_state;
 }
 
 /* ---------------------------------------------------------------------------
@@ -178,14 +199,20 @@ apply(State state, Event event)
 int
 main(void)
 {
-	State state;
-	Event seq[] = { EV_TICK, EV_TICK, EV_TICK, EV_TICK };
+	Ctx ctx;
+	Event seq[] = {
+		{ EV_TICK, 1000 },
+		{ EV_TICK, 2000 },
+		{ EV_TICK, 3000 },
+		{ EV_TICK, 4000 }
+	};
 	unsigned i;
 
-	state = ST_RED;
-	printf("[INIT] state=%s\n\n", state_names[state]);
+	memset(&ctx, 0, sizeof(ctx));
+	ctx.state = ST_RED;
+	printf("[INIT] state=%s\n\n", state_names[ctx.state]);
 	for (i = 0; i < sizeof(seq) / sizeof(seq[0]); i++) {
-		state = apply(state, seq[i]);
+		apply(&ctx, &seq[i]);
 		printf("\n");
 	}
 	return 0;

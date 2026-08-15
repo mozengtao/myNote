@@ -18,7 +18,7 @@ typedef enum {
 	EV_PAY_SUCCESS = 0,
 	EV_SHIP,
 	EV_CANCEL
-} Event;
+} EventKind;
 
 typedef enum {
 	ACT_DEDUCT_STOCK = 0,
@@ -26,7 +26,35 @@ typedef enum {
 	ACT_ADD_POINTS,
 	ACT_SEND_SMS,
 	ACT_RELEASE_STOCK
+} ActionKind;
+
+typedef struct {
+	EventKind kind;
+	int order_id;
+	const char *sku;
+	int qty;
+	int amount;
+	const char *phone;
+} Event;
+
+typedef struct {
+	ActionKind kind;
+	const char *sku;
+	int qty;
+	int order_id;
+	int amount;
+	const char *phone;
+	const char *msg;
 } Action;
+
+typedef struct {
+	State state;
+	int order_id;
+	const char *sku;
+	int qty;
+	int amount;
+	const char *phone;
+} Ctx;
 
 typedef struct {
 	int accepted;
@@ -37,14 +65,14 @@ typedef struct {
 
 typedef struct {
 	State from;
-	Event event;
+	EventKind event;
 	State to;
 	int n_actions;
-	Action actions[MAX_ACTIONS];
+	ActionKind action_kinds[MAX_ACTIONS];
 } TransRule;
 
 /* ---------------------------------------------------------------------------
- * 2. Table  (State, Event) -> (NextState, ActionList)
+ * 2. Table  (State, EventKind) -> (NextState, ActionKind list)
  * --------------------------------------------------------------------------- */
 
 static const TransRule table[] = {
@@ -71,92 +99,124 @@ static const char *state_names[] = {
 static const char *event_names[] = {
 	"PAY_SUCCESS", "SHIP", "CANCEL"
 };
-static const char *action_names[] = {
-	"DEDUCT_STOCK", "NOTIFY_LOGISTICS", "ADD_POINTS",
-	"SEND_SMS", "RELEASE_STOCK"
-};
+
+static const char *sms_msg[] = { "paid", "shipped", "cancelled" };
 
 /* ---------------------------------------------------------------------------
- * 3. Engine  -- table lookup only, zero side effects
+ * 3. Engine  -- table lookup + bind args from Event or Ctx
  * --------------------------------------------------------------------------- */
 
 /*
- * fsm decide: lookup (state, event); never IO, never call workers
+ * fsm decide: kind selects workers; order fields come from event or ctx
  */
 static Decision
-fsm_decide(State state, Event event)
+fsm_decide(const Ctx *ctx, const Event *ev)
 {
 	Decision d;
 	unsigned i;
+	int k;
+	int order_id, qty, amount;
+	const char *sku, *phone;
+	Action *a;
 
 	memset(&d, 0, sizeof(d));
 	d.accepted = 0;
-	d.next_state = state;
+	d.next_state = ctx->state;
 
 	for (i = 0; i < sizeof(table) / sizeof(table[0]); i++) {
-		if (table[i].from == state && table[i].event == event) {
-			d.accepted = 1;
-			d.next_state = table[i].to;
-			d.n_actions = table[i].n_actions;
-			if (d.n_actions > 0)
-				memcpy(d.actions, table[i].actions,
-				       sizeof(Action) * (unsigned)d.n_actions);
-			return d;
+		if (table[i].from != ctx->state || table[i].event != ev->kind)
+			continue;
+		d.accepted = 1;
+		d.next_state = table[i].to;
+		d.n_actions = table[i].n_actions;
+		if (ev->kind == EV_PAY_SUCCESS) {
+			order_id = ev->order_id;
+			sku = ev->sku;
+			qty = ev->qty;
+			amount = ev->amount;
+			phone = ev->phone;
+		} else {
+			order_id = ctx->order_id;
+			sku = ctx->sku;
+			qty = ctx->qty;
+			amount = ctx->amount;
+			phone = ctx->phone;
 		}
+		for (k = 0; k < d.n_actions; k++) {
+			a = &d.actions[k];
+			a->kind = table[i].action_kinds[k];
+			switch (a->kind) {
+			case ACT_DEDUCT_STOCK:
+			case ACT_RELEASE_STOCK:
+				a->sku = sku;
+				a->qty = qty;
+				break;
+			case ACT_NOTIFY_LOGISTICS:
+				a->order_id = order_id;
+				a->sku = sku;
+				break;
+			case ACT_ADD_POINTS:
+				a->order_id = order_id;
+				a->amount = amount;
+				break;
+			case ACT_SEND_SMS:
+				a->phone = phone;
+				a->msg = sms_msg[ev->kind];
+				break;
+			}
+		}
+		return d;
 	}
 	return d;
 }
 
 /* ---------------------------------------------------------------------------
- * 4. Workers  -- execution; workers do not know current state
+ * 4. Workers  -- parameterized functions; no FSM state
  * --------------------------------------------------------------------------- */
 
 /*
- * inventory worker: deduct or release stock
+ * inventory_deduct: take qty units of sku out of stock
  */
 static void
-worker_inventory(Action a)
+inventory_deduct(const char *sku, int qty)
 {
-	switch (a) {
-	case ACT_DEDUCT_STOCK:
-		printf("[EXEC] inventory -> DEDUCT\n");
-		break;
-	case ACT_RELEASE_STOCK:
-		printf("[EXEC] inventory -> RELEASE\n");
-		break;
-	default:
-		break;
-	}
+	printf("[EXEC] inventory_deduct(\"%s\", %d)\n", sku, qty);
 }
 
 /*
- * logistics worker: create a shipment
+ * inventory_release: put qty units of sku back
  */
 static void
-worker_logistics(Action a)
+inventory_release(const char *sku, int qty)
 {
-	if (a == ACT_NOTIFY_LOGISTICS)
-		printf("[EXEC] logistics -> CREATE_SHIPMENT\n");
+	printf("[EXEC] inventory_release(\"%s\", %d)\n", sku, qty);
 }
 
 /*
- * points worker: credit loyalty points
+ * logistics_create: open a shipment for this order
  */
 static void
-worker_points(Action a)
+logistics_create(int order_id, const char *sku)
 {
-	if (a == ACT_ADD_POINTS)
-		printf("[EXEC] points -> ADD\n");
+	printf("[EXEC] logistics_create(%d, \"%s\")\n", order_id, sku);
 }
 
 /*
- * sms worker: send a notification
+ * points_add: credit loyalty points from the paid amount
  */
 static void
-worker_sms(Action a)
+points_add(int order_id, int amount)
 {
-	if (a == ACT_SEND_SMS)
-		printf("[EXEC] sms -> SEND\n");
+	printf("[EXEC] points_add(%d, %d)\n", order_id, amount);
+}
+
+/*
+ * sms_send: notify the customer
+ */
+static void
+sms_send(const char *phone, const char *msg)
+{
+	printf("[EXEC] sms_send(\"%s\", \"%s\")\n", phone, msg);
 }
 
 /* ---------------------------------------------------------------------------
@@ -164,79 +224,108 @@ worker_sms(Action a)
  * --------------------------------------------------------------------------- */
 
 /*
- * route each action to the matching worker
+ * unpack each action and call the matching worker with args
  */
 static void
 dispatch(const Decision *d)
 {
 	int i;
-	Action a;
+	const Action *a;
 
 	for (i = 0; i < d->n_actions; i++) {
-		a = d->actions[i];
-		printf("[DISPATCH] %s\n", action_names[a]);
-		switch (a) {
+		a = &d->actions[i];
+		switch (a->kind) {
 		case ACT_DEDUCT_STOCK:
-		case ACT_RELEASE_STOCK:
-			worker_inventory(a);
+			printf("[DISPATCH] DEDUCT_STOCK(sku=%s, qty=%d)\n",
+			       a->sku, a->qty);
+			inventory_deduct(a->sku, a->qty);
 			break;
 		case ACT_NOTIFY_LOGISTICS:
-			worker_logistics(a);
+			printf("[DISPATCH] NOTIFY_LOGISTICS(order_id=%d, sku=%s)\n",
+			       a->order_id, a->sku);
+			logistics_create(a->order_id, a->sku);
 			break;
 		case ACT_ADD_POINTS:
-			worker_points(a);
+			printf("[DISPATCH] ADD_POINTS(order_id=%d, amount=%d)\n",
+			       a->order_id, a->amount);
+			points_add(a->order_id, a->amount);
 			break;
 		case ACT_SEND_SMS:
-			worker_sms(a);
+			printf("[DISPATCH] SEND_SMS(phone=%s, msg=%s)\n",
+			       a->phone, a->msg);
+			sms_send(a->phone, a->msg);
+			break;
+		case ACT_RELEASE_STOCK:
+			printf("[DISPATCH] RELEASE_STOCK(sku=%s, qty=%d)\n",
+			       a->sku, a->qty);
+			inventory_release(a->sku, a->qty);
 			break;
 		}
 	}
 }
 
 /* ---------------------------------------------------------------------------
- * 6. Apply  -- commit next state, then dispatch
+ * 6. Apply  -- commit ctx, then dispatch
  * --------------------------------------------------------------------------- */
 
 /*
- * format action names into "A, B"
+ * format PAY_SUCCESS payload; SHIP/CANCEL have no fields
  */
 static void
-format_actions(const Decision *d, char *buf, int buflen)
+format_event(const Event *ev, char *buf, int buflen)
 {
-	int i, n;
-
-	buf[0] = '\0';
-	n = 0;
-	for (i = 0; i < d->n_actions; i++) {
-		if (i)
-			n += snprintf(buf + n, (size_t)(buflen - n), ", ");
-		n += snprintf(buf + n, (size_t)(buflen - n), "%s",
-			      action_names[d->actions[i]]);
-	}
+	if (ev->kind == EV_PAY_SUCCESS)
+		snprintf(buf, (size_t)buflen,
+			 "PAY_SUCCESS(order_id=%d, sku=%s, qty=%d, amount=%d, phone=%s)",
+			 ev->order_id, ev->sku, ev->qty, ev->amount, ev->phone);
+	else
+		snprintf(buf, (size_t)buflen, "%s", event_names[ev->kind]);
 }
 
 /*
  * handle one event: decide, maybe reject, else commit + dispatch
  */
-static State
-apply(State state, Event event)
+static void
+apply(Ctx *ctx, const Event *ev)
 {
 	Decision d;
-	char acts[256];
+	char evbuf[160];
 
-	printf("[EVENT] %s | state=%s\n", event_names[event], state_names[state]);
-	d = fsm_decide(state, event);
+	format_event(ev, evbuf, (int)sizeof(evbuf));
+	printf("[EVENT] %s | state=%s\n", evbuf, state_names[ctx->state]);
+	d = fsm_decide(ctx, ev);
 	if (!d.accepted) {
 		printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
-		       state_names[state], event_names[event]);
-		return state;
+		       state_names[ctx->state], event_names[ev->kind]);
+		return;
 	}
-	format_actions(&d, acts, (int)sizeof(acts));
-	printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-	       state_names[state], event_names[event],
-	       state_names[d.next_state], acts);
+	printf("[DECISION] %s + %s -> %s\n",
+	       state_names[ctx->state], event_names[ev->kind],
+	       state_names[d.next_state]);
+	ctx->state = d.next_state;
+	if (ev->kind == EV_PAY_SUCCESS) {
+		ctx->order_id = ev->order_id;
+		ctx->sku = ev->sku;
+		ctx->qty = ev->qty;
+		ctx->amount = ev->amount;
+		ctx->phone = ev->phone;
+	}
 	dispatch(&d);
-	return d.next_state;
+}
+
+/*
+ * seed an order in CREATED; later SHIP/CANCEL read these fields from ctx
+ */
+static void
+new_order(Ctx *ctx)
+{
+	memset(ctx, 0, sizeof(*ctx));
+	ctx->state = ST_CREATED;
+	ctx->order_id = 1001;
+	ctx->sku = "SKU-7";
+	ctx->qty = 2;
+	ctx->amount = 99;
+	ctx->phone = "13800001111";
 }
 
 /*
@@ -245,14 +334,16 @@ apply(State state, Event event)
 static void
 run_scenario(const char *title, const Event *events, unsigned n)
 {
-	State state;
+	Ctx ctx;
 	unsigned i;
 
-	state = ST_CREATED;
+	new_order(&ctx);
 	printf("=== scenario: %s ===\n", title);
-	printf("[INIT] state=%s\n\n", state_names[state]);
+	printf("[INIT] state=%s order_id=%d sku=%s qty=%d amount=%d phone=%s\n\n",
+	       state_names[ctx.state], ctx.order_id, ctx.sku, ctx.qty,
+	       ctx.amount, ctx.phone);
 	for (i = 0; i < n; i++) {
-		state = apply(state, events[i]);
+		apply(&ctx, &events[i]);
 		printf("\n");
 	}
 }
@@ -265,13 +356,20 @@ int
 main(void)
 {
 	Event happy[] = {
-		EV_SHIP, EV_PAY_SUCCESS, EV_SHIP, EV_CANCEL
+		{ EV_SHIP, 0, NULL, 0, 0, NULL },
+		{ EV_PAY_SUCCESS, 1001, "SKU-7", 2, 99, "13800001111" },
+		{ EV_SHIP, 0, NULL, 0, 0, NULL },
+		{ EV_CANCEL, 0, NULL, 0, 0, NULL }
 	};
-	Event cancel_created[] = { EV_CANCEL };
-	Event cancel_paid[] = { EV_PAY_SUCCESS, EV_CANCEL };
+	Event cancel_created[] = {
+		{ EV_CANCEL, 0, NULL, 0, 0, NULL }
+	};
+	Event cancel_paid[] = {
+		{ EV_PAY_SUCCESS, 1001, "SKU-7", 2, 99, "13800001111" },
+		{ EV_CANCEL, 0, NULL, 0, 0, NULL }
+	};
 
-	run_scenario("happy-path", happy,
-		     sizeof(happy) / sizeof(happy[0]));
+	run_scenario("happy-path", happy, sizeof(happy) / sizeof(happy[0]));
 	run_scenario("cancel-created", cancel_created,
 		     sizeof(cancel_created) / sizeof(cancel_created[0]));
 	run_scenario("cancel-paid", cancel_paid,

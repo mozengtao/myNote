@@ -969,6 +969,8 @@ Execution
 (State, Event) -> fsm_decide() -> (NextState, ActionList) -> Dispatcher -> Worker
 ```
 
+Event / Action 都是 **kind + 数据**：转移表按 kind 判定，Worker 是带参函数（例如 `lamp_set(color)`、`inventory_deduct(sku, qty)`）。跨事件数据放在 Ctx，不塞进 State 枚举。细节见 [总览里的 kind 与数据](decision-examples/README.md)。
+
 五个由浅入深的场景，每种都有 Python / C / Go 三份可运行实现，trace 格式统一，方便对照：
 
 - [FSM Decision 可运行对照示例（总览）](decision-examples/README.md)

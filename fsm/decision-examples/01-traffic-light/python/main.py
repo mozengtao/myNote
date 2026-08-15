@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Traffic light: same event, different meaning per state."""
+"""Traffic light: TICK carries time; lamp_set(color) is chosen by Decision."""
 
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -16,14 +16,35 @@ class State(Enum):
     YELLOW = auto()
 
 
-class Event(Enum):
+class EventKind(Enum):
     TICK = auto()
 
 
-class Action(Enum):
-    LIGHT_RED = auto()
-    LIGHT_GREEN = auto()
-    LIGHT_YELLOW = auto()
+class ActionKind(Enum):
+    SET_LAMP = auto()
+
+
+class Color(Enum):
+    RED = auto()
+    GREEN = auto()
+    YELLOW = auto()
+
+
+@dataclass(frozen=True)
+class Event:
+    kind: EventKind
+    now_ms: int = 0
+
+
+@dataclass(frozen=True)
+class Action:
+    kind: ActionKind
+    color: Color
+
+
+@dataclass
+class Ctx:
+    state: State
 
 
 @dataclass(frozen=True)
@@ -34,39 +55,44 @@ class Decision:
 
 
 # ---------------------------------------------------------------------------
-# 2. Table  (State, Event) -> (NextState, ActionList)
+# 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 # ---------------------------------------------------------------------------
 
-TABLE: Dict[Tuple[State, Event], Tuple[State, List[Action]]] = {
-    (State.RED, Event.TICK): (State.GREEN, [Action.LIGHT_GREEN]),
-    (State.GREEN, Event.TICK): (State.YELLOW, [Action.LIGHT_YELLOW]),
-    (State.YELLOW, Event.TICK): (State.RED, [Action.LIGHT_RED]),
+TABLE: Dict[Tuple[State, EventKind], Tuple[State, List[ActionKind]]] = {
+    (State.RED, EventKind.TICK): (State.GREEN, [ActionKind.SET_LAMP]),
+    (State.GREEN, EventKind.TICK): (State.YELLOW, [ActionKind.SET_LAMP]),
+    (State.YELLOW, EventKind.TICK): (State.RED, [ActionKind.SET_LAMP]),
+}
+
+COLOR_OF = {
+    State.RED: Color.RED,
+    State.GREEN: Color.GREEN,
+    State.YELLOW: Color.YELLOW,
 }
 
 
 # ---------------------------------------------------------------------------
-# 3. Engine  -- table lookup only, zero side effects
+# 3. Engine  -- table lookup + bind args; zero side effects
 # ---------------------------------------------------------------------------
 
-def fsm_decide(state: State, event: Event) -> Decision:
-    hit = TABLE.get((state, event))
+def fsm_decide(ctx: Ctx, event: Event) -> Decision:
+    hit = TABLE.get((ctx.state, event.kind))
     if hit is None:
-        return Decision(False, state, ())
-    next_state, actions = hit
-    return Decision(True, next_state, tuple(actions))
+        return Decision(False, ctx.state, ())
+    next_state, kinds = hit
+    actions = tuple(
+        Action(kind=ActionKind.SET_LAMP, color=COLOR_OF[next_state])
+        for _ in kinds
+    )
+    return Decision(True, next_state, actions)
 
 
 # ---------------------------------------------------------------------------
-# 4. Workers  -- execution; workers do not know current state
+# 4. Workers  -- parameterized functions; no FSM state
 # ---------------------------------------------------------------------------
 
-def worker_lamp(action: Action) -> None:
-    if action is Action.LIGHT_RED:
-        print("[EXEC] lamp -> RED")
-    elif action is Action.LIGHT_GREEN:
-        print("[EXEC] lamp -> GREEN")
-    elif action is Action.LIGHT_YELLOW:
-        print("[EXEC] lamp -> YELLOW")
+def lamp_set(color: Color) -> None:
+    print(f"[EXEC] lamp_set({color.name})")
 
 
 # ---------------------------------------------------------------------------
@@ -75,30 +101,33 @@ def worker_lamp(action: Action) -> None:
 
 def dispatch(actions: Tuple[Action, ...]) -> None:
     for action in actions:
-        print(f"[DISPATCH] {action.name}")
-        worker_lamp(action)
+        print(f"[DISPATCH] SET_LAMP(color={action.color.name})")
+        lamp_set(action.color)
 
 
 # ---------------------------------------------------------------------------
-# 6. Apply  -- commit next state, then dispatch
+# 6. Apply  -- commit ctx, then dispatch
 # ---------------------------------------------------------------------------
 
-def apply(state: State, event: Event) -> State:
-    print(f"[EVENT] {event.name} | state={state.name}")
-    decision = fsm_decide(state, event)
+def format_event(event: Event) -> str:
+    return f"TICK(now_ms={event.now_ms})"
+
+
+def apply(ctx: Ctx, event: Event) -> None:
+    print(f"[EVENT] {format_event(event)} | state={ctx.state.name}")
+    decision = fsm_decide(ctx, event)
     if not decision.accepted:
         print(
-            f"[DECISION] REJECT {state.name} + {event.name}  "
+            f"[DECISION] REJECT {ctx.state.name} + {event.kind.name}  "
             "(state unchanged)"
         )
-        return state
-    names = ", ".join(a.name for a in decision.actions)
+        return
     print(
-        f"[DECISION] {state.name} + {event.name} -> "
-        f"{decision.next_state.name}  actions=[{names}]"
+        f"[DECISION] {ctx.state.name} + {event.kind.name} -> "
+        f"{decision.next_state.name}"
     )
+    ctx.state = decision.next_state
     dispatch(decision.actions)
-    return decision.next_state
 
 
 # ---------------------------------------------------------------------------
@@ -106,11 +135,11 @@ def apply(state: State, event: Event) -> State:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    state = State.RED
-    print(f"[INIT] state={state.name}")
+    ctx = Ctx(state=State.RED)
+    print(f"[INIT] state={ctx.state.name}")
     print()
-    for event in (Event.TICK, Event.TICK, Event.TICK, Event.TICK):
-        state = apply(state, event)
+    for now_ms in (1000, 2000, 3000, 4000):
+        apply(ctx, Event(EventKind.TICK, now_ms=now_ms))
         print()
 
 

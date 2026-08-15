@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""TCP 3-way handshake: SEND_* is an action; the NIC worker transmits."""
+"""TCP handshake: nic_send(flags, seq, ack); sequence numbers live in Ctx."""
 
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -18,7 +18,7 @@ class State(Enum):
     ESTABLISHED = auto()
 
 
-class Event(Enum):
+class EventKind(Enum):
     PASSIVE_OPEN = auto()
     ACTIVE_OPEN = auto()
     SYN = auto()
@@ -26,55 +26,89 @@ class Event(Enum):
     ACK = auto()
 
 
-class Action(Enum):
-    SEND_SYN = auto()
-    SEND_SYNACK = auto()
-    SEND_ACK = auto()
+class ActionKind(Enum):
+    NIC_SEND = auto()
+
+
+@dataclass(frozen=True)
+class Event:
+    kind: EventKind
+    seq: int = 0
+    ack: int = 0
+
+
+@dataclass(frozen=True)
+class Action:
+    kind: ActionKind
+    flags: str
+    seq: int
+    ack: int
+
+
+@dataclass
+class Ctx:
+    state: State
+    local_seq: int
+    remote_seq: int
 
 
 @dataclass(frozen=True)
 class Decision:
     accepted: bool
     next_state: State
+    local_seq: int
+    remote_seq: int
     actions: Tuple[Action, ...]
 
 
 # ---------------------------------------------------------------------------
-# 2. Table  (State, Event) -> (NextState, ActionList)
+# 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 # ---------------------------------------------------------------------------
 
-TABLE: Dict[Tuple[State, Event], Tuple[State, List[Action]]] = {
-    (State.CLOSED, Event.PASSIVE_OPEN): (State.LISTEN, []),
-    (State.LISTEN, Event.SYN): (State.SYN_RCVD, [Action.SEND_SYNACK]),
-    (State.SYN_RCVD, Event.ACK): (State.ESTABLISHED, []),
-    (State.CLOSED, Event.ACTIVE_OPEN): (State.SYN_SENT, [Action.SEND_SYN]),
-    (State.SYN_SENT, Event.SYNACK): (State.ESTABLISHED, [Action.SEND_ACK]),
+TABLE: Dict[Tuple[State, EventKind], Tuple[State, List[ActionKind]]] = {
+    (State.CLOSED, EventKind.PASSIVE_OPEN): (State.LISTEN, []),
+    (State.LISTEN, EventKind.SYN): (State.SYN_RCVD, [ActionKind.NIC_SEND]),
+    (State.SYN_RCVD, EventKind.ACK): (State.ESTABLISHED, []),
+    (State.CLOSED, EventKind.ACTIVE_OPEN): (State.SYN_SENT, [ActionKind.NIC_SEND]),
+    (State.SYN_SENT, EventKind.SYNACK): (State.ESTABLISHED, [ActionKind.NIC_SEND]),
 }
 
 
 # ---------------------------------------------------------------------------
-# 3. Engine  -- table lookup only, zero side effects
+# 3. Engine  -- table lookup + bind seq/ack from Ctx and Event
 # ---------------------------------------------------------------------------
 
-def fsm_decide(state: State, event: Event) -> Decision:
-    hit = TABLE.get((state, event))
+def fsm_decide(ctx: Ctx, event: Event) -> Decision:
+    hit = TABLE.get((ctx.state, event.kind))
     if hit is None:
-        return Decision(False, state, ())
-    next_state, actions = hit
-    return Decision(True, next_state, tuple(actions))
+        return Decision(False, ctx.state, ctx.local_seq, ctx.remote_seq, ())
+    next_state, kinds = hit
+    local_seq = ctx.local_seq
+    remote_seq = ctx.remote_seq
+    actions: List[Action] = []
+    if ActionKind.NIC_SEND in kinds:
+        if event.kind is EventKind.SYN:
+            remote_seq = event.seq
+            actions.append(
+                Action(ActionKind.NIC_SEND, "SYN+ACK", local_seq, event.seq + 1)
+            )
+        elif event.kind is EventKind.ACTIVE_OPEN:
+            actions.append(Action(ActionKind.NIC_SEND, "SYN", local_seq, 0))
+        elif event.kind is EventKind.SYNACK:
+            remote_seq = event.seq
+            local_seq = ctx.local_seq + 1
+            actions.append(
+                Action(ActionKind.NIC_SEND, "ACK", local_seq, event.seq + 1)
+            )
+    return Decision(True, next_state, local_seq, remote_seq, tuple(actions))
 
 
 # ---------------------------------------------------------------------------
-# 4. Workers  -- execution; workers do not know current state
+# 4. Workers  -- parameterized functions; no FSM state
 # ---------------------------------------------------------------------------
 
-def worker_nic(action: Action) -> None:
-    if action is Action.SEND_SYN:
-        print("[EXEC] nic -> SEND SYN")
-    elif action is Action.SEND_SYNACK:
-        print("[EXEC] nic -> SEND SYN+ACK")
-    elif action is Action.SEND_ACK:
-        print("[EXEC] nic -> SEND ACK")
+def nic_send(flags: str, seq: int, ack: int) -> None:
+    print(f"[EXEC] nic_send({flags}, {seq}, {ack})")
 
 
 # ---------------------------------------------------------------------------
@@ -83,39 +117,52 @@ def worker_nic(action: Action) -> None:
 
 def dispatch(actions: Tuple[Action, ...]) -> None:
     for action in actions:
-        print(f"[DISPATCH] {action.name}")
-        worker_nic(action)
+        print(
+            f"[DISPATCH] NIC_SEND(flags={action.flags}, "
+            f"seq={action.seq}, ack={action.ack})"
+        )
+        nic_send(action.flags, action.seq, action.ack)
 
 
 # ---------------------------------------------------------------------------
-# 6. Apply  -- commit next state, then dispatch
+# 6. Apply  -- commit ctx (including seq), then dispatch
 # ---------------------------------------------------------------------------
 
-def apply(state: State, event: Event) -> State:
-    print(f"[EVENT] {event.name} | state={state.name}")
-    decision = fsm_decide(state, event)
+def format_event(event: Event) -> str:
+    if event.kind in (EventKind.SYN, EventKind.SYNACK, EventKind.ACK):
+        return f"{event.kind.name}(seq={event.seq}, ack={event.ack})"
+    return event.kind.name
+
+
+def apply(ctx: Ctx, event: Event) -> None:
+    print(f"[EVENT] {format_event(event)} | state={ctx.state.name}")
+    decision = fsm_decide(ctx, event)
     if not decision.accepted:
         print(
-            f"[DECISION] REJECT {state.name} + {event.name}  "
+            f"[DECISION] REJECT {ctx.state.name} + {event.kind.name}  "
             "(state unchanged)"
         )
-        return state
-    names = ", ".join(a.name for a in decision.actions)
+        return
     print(
-        f"[DECISION] {state.name} + {event.name} -> "
-        f"{decision.next_state.name}  actions=[{names}]"
+        f"[DECISION] {ctx.state.name} + {event.kind.name} -> "
+        f"{decision.next_state.name}"
     )
+    ctx.state = decision.next_state
+    ctx.local_seq = decision.local_seq
+    ctx.remote_seq = decision.remote_seq
     dispatch(decision.actions)
-    return decision.next_state
 
 
-def run_scenario(title: str, events: Sequence[Event]) -> None:
-    state = State.CLOSED
+def run_scenario(title: str, local_seq: int, events: Sequence[Event]) -> None:
+    ctx = Ctx(state=State.CLOSED, local_seq=local_seq, remote_seq=0)
     print(f"=== scenario: {title} ===")
-    print(f"[INIT] state={state.name}")
+    print(
+        f"[INIT] state={ctx.state.name} "
+        f"local_seq={ctx.local_seq} remote_seq={ctx.remote_seq}"
+    )
     print()
     for event in events:
-        state = apply(state, event)
+        apply(ctx, event)
         print()
 
 
@@ -126,11 +173,22 @@ def run_scenario(title: str, events: Sequence[Event]) -> None:
 def main() -> None:
     run_scenario(
         "server",
-        (Event.PASSIVE_OPEN, Event.SYN, Event.ACK, Event.SYN),
+        1000,
+        (
+            Event(EventKind.PASSIVE_OPEN),
+            Event(EventKind.SYN, seq=2000, ack=0),
+            Event(EventKind.ACK, seq=2001, ack=1001),
+            Event(EventKind.SYN, seq=2002, ack=1001),
+        ),
     )
     run_scenario(
         "client",
-        (Event.ACTIVE_OPEN, Event.SYNACK, Event.ACK),
+        5000,
+        (
+            Event(EventKind.ACTIVE_OPEN),
+            Event(EventKind.SYNACK, seq=8000, ack=5001),
+            Event(EventKind.ACK, seq=8001, ack=5001),
+        ),
     )
 
 

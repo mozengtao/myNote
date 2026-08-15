@@ -1,33 +1,37 @@
-# 03 自动门：FSM 决定「该开门」，电机才开门
+# 03 自动门：FSM 发出 `motor_run(dir, duty)`，电机才转
 
-> **钉死的心智：** `OPENING` / `CLOSING` 是过程态。FSM 只发出 `MOTOR_*`；真正移动门扇的是电机 Worker。
+> **钉死的心智：** `OPENING` / `CLOSING` 是过程态。FSM 只构造带参命令 `motor_run(OPEN, 80)`；真正转门的是电机函数。
 
-有人靠近时，关闭的门不会瞬间变成打开。FSM 先判定「现在应该开门」，发 `MOTOR_OPEN` 进入 `OPENING`。电机跑完、行程开关超时，才进入 `OPEN` 并闩住。关门同理。关门途中又来人，FSM 判定「反向开门」，再次发 `MOTOR_OPEN`。
+有人靠近时，关闭的门不会瞬间变成打开。`PERSON` 带着 `sensor_id`，`TIMEOUT` 带着 `elapsed_ms`。判定层用 kind 决定下一状态和电机方向；Worker 只看见方向和占空比，不看见 FSM 状态。
 
 ## 状态 / 事件 / 动作
 
 ```
-State:   CLOSED, OPENING, OPEN, CLOSING
-Event:   PERSON, TIMEOUT
-Action:  MOTOR_OPEN, MOTOR_CLOSE, LATCH_OPEN, LATCH_CLOSED
+State:      CLOSED, OPENING, OPEN, CLOSING
+Event:      PERSON(sensor_id), TIMEOUT(elapsed_ms)
+Action:     MOTOR_RUN(dir, duty) -> motor_run(dir, duty)
+            LATCH_SET(open)      -> latch_set(open)      # 1=开闩, 0=关闩
+Ctx:        state
 ```
 
 转移表（未列出的组合一律 REJECT）：
 
 ```
-+---------+---------+------------+--------------+
-| State   | Event   | Next State | Actions      |
-+---------+---------+------------+--------------+
-| CLOSED  | PERSON  | OPENING    | MOTOR_OPEN   |
-| OPENING | TIMEOUT | OPEN       | LATCH_OPEN   |
-| OPEN    | PERSON  | OPEN       | (none)       |
-| OPEN    | TIMEOUT | CLOSING    | MOTOR_CLOSE  |
-| CLOSING | PERSON  | OPENING    | MOTOR_OPEN   |
-| CLOSING | TIMEOUT | CLOSED     | LATCH_CLOSED |
-| CLOSED  | TIMEOUT | REJECT     | -            |
-| OPENING | PERSON  | REJECT     | -            |
-+---------+---------+------------+--------------+
++---------+---------+------------+------------------------+
+| State   | kind    | Next State | Worker call            |
++---------+---------+------------+------------------------+
+| CLOSED  | PERSON  | OPENING    | motor_run(OPEN, 80)    |
+| OPENING | TIMEOUT | OPEN       | latch_set(1)           |
+| OPEN    | PERSON  | OPEN       | (none)                 |
+| OPEN    | TIMEOUT | CLOSING    | motor_run(CLOSE, 80)   |
+| CLOSING | PERSON  | OPENING    | motor_run(OPEN, 80)    |
+| CLOSING | TIMEOUT | CLOSED     | latch_set(0)           |
+| CLOSED  | TIMEOUT | REJECT     | -                      |
+| OPENING | PERSON  | REJECT     | -                      |
++---------+---------+------------+------------------------+
 ```
+
+`dir` / `open` 来自判定（下一状态）；`sensor_id` / `elapsed_ms` 留在 Event 上，供日志和真实驱动使用，不进入转移表。
 
 状态图：
 
@@ -40,42 +44,38 @@ Action:  MOTOR_OPEN, MOTOR_CLOSE, LATCH_OPEN, LATCH_CLOSED
      +------------------------------ TIMEOUT -----------------+
 ```
 
-`OPEN + PERSON` 是自环：门已开，只需保持，不发电机指令。
-
 ## 一次事件的三层走查
 
-当前 `CLOSED`，收到 `PERSON`：
+当前 `CLOSED`，收到 `PERSON(sensor_id=1)`：
 
 ```
-[EVENT]    PERSON | state=CLOSED
-[DECISION] CLOSED + PERSON -> OPENING  actions=[MOTOR_OPEN]
-[DISPATCH] MOTOR_OPEN
-[EXEC]     motor -> OPEN
+[EVENT]    PERSON(sensor_id=1) | state=CLOSED
+[DECISION] CLOSED + PERSON -> OPENING
+[DISPATCH] MOTOR_RUN(dir=OPEN, duty=80)
+[EXEC]     motor_run(OPEN, 80)
 ```
 
-FSM 没有驱动电机。它只判定：现在应该开门。电机 Worker 才执行。
-
-关门途中来人：
+关门途中另一传感器触发：
 
 ```
-[EVENT]    PERSON | state=CLOSING
-[DECISION] CLOSING + PERSON -> OPENING  actions=[MOTOR_OPEN]
-[DISPATCH] MOTOR_OPEN
-[EXEC]     motor -> OPEN
+[EVENT]    PERSON(sensor_id=2) | state=CLOSING
+[DECISION] CLOSING + PERSON -> OPENING
+[DISPATCH] MOTOR_RUN(dir=OPEN, duty=80)
+[EXEC]     motor_run(OPEN, 80)
 ```
 
-同一事件 `PERSON`：关闭时表示「开始开门」，开门保持时表示「继续开着」（空 Action），关闭途中表示「反向」。
+同一 kind `PERSON`：关闭时表示「开始开门」，已开时表示「保持」（空 Action），关闭途中表示「反向」。
 
 ## 如果把执行写进 FSM
 
 ```
-if state == CLOSED and event == PERSON:
-    pwm_set_duty(80)     # FSM 里直接拧电机
+if state == CLOSED and event.kind == PERSON:
+    pwm_set_duty(80)
     sleep(2)
     state = OPEN
 ```
 
-判定被阻塞在 IO 和延时上，障碍物、反向、超时全搅进一张 if。正确拆法：FSM 瞬间返回 `MOTOR_OPEN`，行程结束作为 `TIMEOUT` 事件再进来判定。
+判定被阻塞在 IO 和延时上。正确拆法：FSM 瞬间返回 `motor_run(OPEN, 80)`，行程结束作为 `TIMEOUT(elapsed_ms=...)` 再进来判定。
 
 ## 怎么跑
 
@@ -85,4 +85,4 @@ gcc -o /tmp/fsm-demo c/main.c && /tmp/fsm-demo
 (cd go && go run main.go)
 ```
 
-脚本化事件：`TIMEOUT, PERSON, TIMEOUT, PERSON, TIMEOUT, PERSON, TIMEOUT, TIMEOUT, TIMEOUT`，初始状态 `CLOSED`。第一个 `TIMEOUT` 应被 REJECT；中间的 `PERSON` 会在开门保持和关门反向两条路上出现。
+脚本化事件：`TIMEOUT(500), PERSON(1), TIMEOUT(2000), PERSON(1), TIMEOUT(5000), PERSON(2), TIMEOUT(2000), TIMEOUT(5000), TIMEOUT(2000)`，初始 `CLOSED`。

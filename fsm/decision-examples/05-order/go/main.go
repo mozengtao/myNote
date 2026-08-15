@@ -1,17 +1,14 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 // ---------------------------------------------------------------------------
 // 1. Types
 // ---------------------------------------------------------------------------
 
 type State int
-type Event int
-type Action int
+type EventKind int
+type ActionKind int
 
 const (
 	StateCreated State = iota
@@ -21,13 +18,13 @@ const (
 )
 
 const (
-	EventPaySuccess Event = iota
+	EventPaySuccess EventKind = iota
 	EventShip
 	EventCancel
 )
 
 const (
-	ActionDeductStock Action = iota
+	ActionDeductStock ActionKind = iota
 	ActionNotifyLogistics
 	ActionAddPoints
 	ActionSendSms
@@ -38,15 +35,36 @@ func (s State) String() string {
 	return [...]string{"CREATED", "PAID", "SHIPPED", "CANCELLED"}[s]
 }
 
-func (e Event) String() string {
+func (e EventKind) String() string {
 	return [...]string{"PAY_SUCCESS", "SHIP", "CANCEL"}[e]
 }
 
-func (a Action) String() string {
-	return [...]string{
-		"DEDUCT_STOCK", "NOTIFY_LOGISTICS", "ADD_POINTS",
-		"SEND_SMS", "RELEASE_STOCK",
-	}[a]
+type Event struct {
+	Kind    EventKind
+	OrderID int
+	SKU     string
+	Qty     int
+	Amount  int
+	Phone   string
+}
+
+type Action struct {
+	Kind    ActionKind
+	SKU     string
+	Qty     int
+	OrderID int
+	Amount  int
+	Phone   string
+	Msg     string
+}
+
+type Ctx struct {
+	State   State
+	OrderID int
+	SKU     string
+	Qty     int
+	Amount  int
+	Phone   string
 }
 
 type Decision struct {
@@ -56,78 +74,96 @@ type Decision struct {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Table  (State, Event) -> (NextState, ActionList)
+// 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 // ---------------------------------------------------------------------------
 
 type transKey struct {
 	s State
-	e Event
+	e EventKind
 }
 
 type transVal struct {
-	next    State
-	actions []Action
+	next  State
+	kinds []ActionKind
 }
 
 var table = map[transKey]transVal{
 	{StateCreated, EventPaySuccess}: {
 		StatePaid,
-		[]Action{
+		[]ActionKind{
 			ActionDeductStock,
 			ActionNotifyLogistics,
 			ActionAddPoints,
 			ActionSendSms,
 		},
 	},
-	{StatePaid, EventShip}:      {StateShipped, []Action{ActionSendSms}},
-	{StateCreated, EventCancel}: {StateCancelled, []Action{ActionSendSms}},
+	{StatePaid, EventShip}:      {StateShipped, []ActionKind{ActionSendSms}},
+	{StateCreated, EventCancel}: {StateCancelled, []ActionKind{ActionSendSms}},
 	{StatePaid, EventCancel}: {
 		StateCancelled,
-		[]Action{ActionReleaseStock, ActionSendSms},
+		[]ActionKind{ActionReleaseStock, ActionSendSms},
 	},
 }
 
+var smsMsg = map[EventKind]string{
+	EventPaySuccess: "paid",
+	EventShip:       "shipped",
+	EventCancel:     "cancelled",
+}
+
 // ---------------------------------------------------------------------------
-// 3. Engine  -- table lookup only, zero side effects
+// 3. Engine  -- table lookup + bind args from Event or Ctx
 // ---------------------------------------------------------------------------
 
-func fsmDecide(state State, event Event) Decision {
-	hit, ok := table[transKey{state, event}]
+func fsmDecide(ctx Ctx, ev Event) Decision {
+	hit, ok := table[transKey{ctx.State, ev.Kind}]
 	if !ok {
-		return Decision{Accepted: false, NextState: state}
+		return Decision{Accepted: false, NextState: ctx.State}
 	}
-	return Decision{Accepted: true, NextState: hit.next, Actions: hit.actions}
+	orderID, sku, qty, amount, phone := ctx.OrderID, ctx.SKU, ctx.Qty, ctx.Amount, ctx.Phone
+	if ev.Kind == EventPaySuccess {
+		orderID, sku, qty, amount, phone = ev.OrderID, ev.SKU, ev.Qty, ev.Amount, ev.Phone
+	}
+	actions := make([]Action, 0, len(hit.kinds))
+	for _, kind := range hit.kinds {
+		switch kind {
+		case ActionDeductStock:
+			actions = append(actions, Action{Kind: kind, SKU: sku, Qty: qty})
+		case ActionNotifyLogistics:
+			actions = append(actions, Action{Kind: kind, OrderID: orderID, SKU: sku})
+		case ActionAddPoints:
+			actions = append(actions, Action{Kind: kind, OrderID: orderID, Amount: amount})
+		case ActionSendSms:
+			actions = append(actions, Action{Kind: kind, Phone: phone, Msg: smsMsg[ev.Kind]})
+		case ActionReleaseStock:
+			actions = append(actions, Action{Kind: kind, SKU: sku, Qty: qty})
+		}
+	}
+	return Decision{Accepted: true, NextState: hit.next, Actions: actions}
 }
 
 // ---------------------------------------------------------------------------
-// 4. Workers  -- execution; workers do not know current state
+// 4. Workers  -- parameterized functions; no FSM state
 // ---------------------------------------------------------------------------
 
-func workerInventory(action Action) {
-	switch action {
-	case ActionDeductStock:
-		fmt.Println("[EXEC] inventory -> DEDUCT")
-	case ActionReleaseStock:
-		fmt.Println("[EXEC] inventory -> RELEASE")
-	}
+func inventoryDeduct(sku string, qty int) {
+	fmt.Printf("[EXEC] inventory_deduct(\"%s\", %d)\n", sku, qty)
 }
 
-func workerLogistics(action Action) {
-	if action == ActionNotifyLogistics {
-		fmt.Println("[EXEC] logistics -> CREATE_SHIPMENT")
-	}
+func inventoryRelease(sku string, qty int) {
+	fmt.Printf("[EXEC] inventory_release(\"%s\", %d)\n", sku, qty)
 }
 
-func workerPoints(action Action) {
-	if action == ActionAddPoints {
-		fmt.Println("[EXEC] points -> ADD")
-	}
+func logisticsCreate(orderID int, sku string) {
+	fmt.Printf("[EXEC] logistics_create(%d, \"%s\")\n", orderID, sku)
 }
 
-func workerSms(action Action) {
-	if action == ActionSendSms {
-		fmt.Println("[EXEC] sms -> SEND")
-	}
+func pointsAdd(orderID, amount int) {
+	fmt.Printf("[EXEC] points_add(%d, %d)\n", orderID, amount)
+}
+
+func smsSend(phone, msg string) {
+	fmt.Printf("[EXEC] sms_send(\"%s\", \"%s\")\n", phone, msg)
 }
 
 // ---------------------------------------------------------------------------
@@ -135,52 +171,79 @@ func workerSms(action Action) {
 // ---------------------------------------------------------------------------
 
 func dispatch(actions []Action) {
-	for _, action := range actions {
-		fmt.Printf("[DISPATCH] %s\n", action)
-		switch action {
-		case ActionDeductStock, ActionReleaseStock:
-			workerInventory(action)
+	for _, a := range actions {
+		switch a.Kind {
+		case ActionDeductStock:
+			fmt.Printf("[DISPATCH] DEDUCT_STOCK(sku=%s, qty=%d)\n", a.SKU, a.Qty)
+			inventoryDeduct(a.SKU, a.Qty)
 		case ActionNotifyLogistics:
-			workerLogistics(action)
+			fmt.Printf("[DISPATCH] NOTIFY_LOGISTICS(order_id=%d, sku=%s)\n", a.OrderID, a.SKU)
+			logisticsCreate(a.OrderID, a.SKU)
 		case ActionAddPoints:
-			workerPoints(action)
+			fmt.Printf("[DISPATCH] ADD_POINTS(order_id=%d, amount=%d)\n", a.OrderID, a.Amount)
+			pointsAdd(a.OrderID, a.Amount)
 		case ActionSendSms:
-			workerSms(action)
+			fmt.Printf("[DISPATCH] SEND_SMS(phone=%s, msg=%s)\n", a.Phone, a.Msg)
+			smsSend(a.Phone, a.Msg)
+		case ActionReleaseStock:
+			fmt.Printf("[DISPATCH] RELEASE_STOCK(sku=%s, qty=%d)\n", a.SKU, a.Qty)
+			inventoryRelease(a.SKU, a.Qty)
 		}
 	}
 }
 
 // ---------------------------------------------------------------------------
-// 6. Apply  -- commit next state, then dispatch
+// 6. Apply  -- commit ctx, then dispatch
 // ---------------------------------------------------------------------------
 
-func formatActions(actions []Action) string {
-	names := make([]string, len(actions))
-	for i, a := range actions {
-		names[i] = a.String()
+func formatEvent(ev Event) string {
+	if ev.Kind == EventPaySuccess {
+		return fmt.Sprintf(
+			"PAY_SUCCESS(order_id=%d, sku=%s, qty=%d, amount=%d, phone=%s)",
+			ev.OrderID, ev.SKU, ev.Qty, ev.Amount, ev.Phone,
+		)
 	}
-	return strings.Join(names, ", ")
+	return ev.Kind.String()
 }
 
-func apply(state State, event Event) State {
-	fmt.Printf("[EVENT] %s | state=%s\n", event, state)
-	d := fsmDecide(state, event)
+func apply(ctx *Ctx, ev Event) {
+	fmt.Printf("[EVENT] %s | state=%s\n", formatEvent(ev), ctx.State)
+	d := fsmDecide(*ctx, ev)
 	if !d.Accepted {
-		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n", state, event)
-		return state
+		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
+			ctx.State, ev.Kind)
+		return
 	}
-	fmt.Printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-		state, event, d.NextState, formatActions(d.Actions))
+	fmt.Printf("[DECISION] %s + %s -> %s\n", ctx.State, ev.Kind, d.NextState)
+	ctx.State = d.NextState
+	if ev.Kind == EventPaySuccess {
+		ctx.OrderID = ev.OrderID
+		ctx.SKU = ev.SKU
+		ctx.Qty = ev.Qty
+		ctx.Amount = ev.Amount
+		ctx.Phone = ev.Phone
+	}
 	dispatch(d.Actions)
-	return d.NextState
+}
+
+func newOrder() Ctx {
+	return Ctx{
+		State:   StateCreated,
+		OrderID: 1001,
+		SKU:     "SKU-7",
+		Qty:     2,
+		Amount:  99,
+		Phone:   "13800001111",
+	}
 }
 
 func runScenario(title string, events []Event) {
-	state := StateCreated
+	ctx := newOrder()
 	fmt.Printf("=== scenario: %s ===\n", title)
-	fmt.Printf("[INIT] state=%s\n\n", state)
-	for _, event := range events {
-		state = apply(state, event)
+	fmt.Printf("[INIT] state=%s order_id=%d sku=%s qty=%d amount=%d phone=%s\n\n",
+		ctx.State, ctx.OrderID, ctx.SKU, ctx.Qty, ctx.Amount, ctx.Phone)
+	for _, ev := range events {
+		apply(&ctx, ev)
 		fmt.Println()
 	}
 }
@@ -190,9 +253,13 @@ func runScenario(title string, events []Event) {
 // ---------------------------------------------------------------------------
 
 func main() {
+	pay := Event{
+		Kind: EventPaySuccess, OrderID: 1001, SKU: "SKU-7",
+		Qty: 2, Amount: 99, Phone: "13800001111",
+	}
 	runScenario("happy-path", []Event{
-		EventShip, EventPaySuccess, EventShip, EventCancel,
+		{Kind: EventShip}, pay, {Kind: EventShip}, {Kind: EventCancel},
 	})
-	runScenario("cancel-created", []Event{EventCancel})
-	runScenario("cancel-paid", []Event{EventPaySuccess, EventCancel})
+	runScenario("cancel-created", []Event{{Kind: EventCancel}})
+	runScenario("cancel-paid", []Event{pay, {Kind: EventCancel}})
 }

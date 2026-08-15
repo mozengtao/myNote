@@ -1,30 +1,34 @@
-# 04 TCP 三次握手：SEND 是 Action，NIC 才发包
+# 04 TCP 三次握手：`nic_send(flags, seq, ack)`，序号活在 Ctx
 
-> **钉死的心智：** 协议 FSM 决定「现在该发 SYN+ACK」；真正把比特送上网卡的是 Network Worker。
+> **钉死的心智：** 协议 FSM 决定「现在该发什么」；真正把比特送上网卡的是 `nic_send(flags, seq, ack)`。序号是 **扩展状态**，放在 Ctx（TCB），不是 Worker 的私货，也不是 State 枚举的一部分。
 
-这是 RFC 793 三次握手的最小切片，只保留 5 个状态。服务端 `PASSIVE_OPEN` 进入 `LISTEN`（无发包）；收到 `SYN` 后判定应回复 `SYN+ACK`。客户端 `ACTIVE_OPEN` 判定应发 `SYN`；收到 `SYNACK` 后判定应发 `ACK`。已建立后再来 `SYN`/`ACK` 一律 REJECT。
+这是 RFC 793 三次握手的最小切片。转移表仍按 kind 查。发送参数从 Ctx 的 `local_seq` 和 Event 的 `seq` 填出来：`ack = event.seq + 1`。
 
 ## 状态 / 事件 / 动作
 
 ```
-State:   CLOSED, LISTEN, SYN_SENT, SYN_RCVD, ESTABLISHED
-Event:   PASSIVE_OPEN, ACTIVE_OPEN, SYN, SYNACK, ACK
-Action:  SEND_SYN, SEND_SYNACK, SEND_ACK
+State:      CLOSED, LISTEN, SYN_SENT, SYN_RCVD, ESTABLISHED
+Event:      PASSIVE_OPEN, ACTIVE_OPEN
+            SYN(seq, ack), SYNACK(seq, ack), ACK(seq, ack)
+Action:     NIC_SEND(flags, seq, ack) -> nic_send(flags, seq, ack)
+Ctx:        state, local_seq, remote_seq
 ```
 
 转移表（未列出的组合一律 REJECT）：
 
 ```
-+------------+--------------+-------------+-------------+
-| State      | Event        | Next State  | Actions     |
-+------------+--------------+-------------+-------------+
-| CLOSED     | PASSIVE_OPEN | LISTEN      | (none)      |
-| LISTEN     | SYN          | SYN_RCVD    | SEND_SYNACK |
-| SYN_RCVD   | ACK          | ESTABLISHED | (none)      |
-| CLOSED     | ACTIVE_OPEN  | SYN_SENT    | SEND_SYN    |
-| SYN_SENT   | SYNACK       | ESTABLISHED | SEND_ACK    |
-+------------+--------------+-------------+-------------+
++------------+--------------+-------------+----------------------------------+
+| State      | kind         | Next State  | Worker call                      |
++------------+--------------+-------------+----------------------------------+
+| CLOSED     | PASSIVE_OPEN | LISTEN      | (none)                           |
+| LISTEN     | SYN          | SYN_RCVD    | nic_send(SYN+ACK, local, seq+1)  |
+| SYN_RCVD   | ACK          | ESTABLISHED | (none)                           |
+| CLOSED     | ACTIVE_OPEN  | SYN_SENT    | nic_send(SYN, local, 0)          |
+| SYN_SENT   | SYNACK       | ESTABLISHED | nic_send(ACK, local+1, seq+1)    |
++------------+--------------+-------------+----------------------------------+
 ```
+
+`apply` 在接受后把 Decision 里的 `local_seq` / `remote_seq` 写回 Ctx。NIC Worker 只拿到三个参数，不知道自己在 LISTEN 还是 SYN_SENT。
 
 状态图：
 
@@ -34,34 +38,32 @@ Action:  SEND_SYN, SEND_SYNACK, SEND_ACK
   CLOSED --ACTIVE_OPEN--> SYN_SENT --SYNACK--> ESTABLISHED
 ```
 
-`PASSIVE_OPEN` 和 `SYN_RCVD + ACK` 的 Action 为空：判定「进入下一状态」本身不需要发包。
-
 ## 一次事件的三层走查
 
-服务端当前 `LISTEN`，收到 `SYN`：
+服务端 Ctx `local_seq=1000`，当前 `LISTEN`，收到 `SYN(seq=2000, ack=0)`：
 
 ```
-[EVENT]    SYN | state=LISTEN
-[DECISION] LISTEN + SYN -> SYN_RCVD  actions=[SEND_SYNACK]
-[DISPATCH] SEND_SYNACK
-[EXEC]     nic -> SEND SYN+ACK
+[EVENT]    SYN(seq=2000, ack=0) | state=LISTEN
+[DECISION] LISTEN + SYN -> SYN_RCVD
+[DISPATCH] NIC_SEND(flags=SYN+ACK, seq=1000, ack=2001)
+[EXEC]     nic_send(SYN+ACK, 1000, 2001)
 ```
 
-- Decision：查表，决定下一状态和「该发 SYN+ACK」。
-- Dispatch：把 `SEND_SYNACK` 交给 NIC Worker。
-- Execution：`tcp_transmit` / 驱动 / 网卡。FSM 没有写 socket。
+- Decision：查表；`flags` 来自判定，`seq` 来自 Ctx，`ack` 来自 Event.seq+1。
+- Dispatch：调用 `nic_send(SYN+ACK, 1000, 2001)`。
+- Execution：驱动 / 网卡。FSM 没有写 socket。
 
 ## 如果把执行写进 FSM
 
 ```
-if state == LISTEN and event == SYN:
-    build_synack_skb()
+if state == LISTEN and event.kind == SYN:
+    build_synack_skb(seq, ack)
     ip_output()
     dma_kick()
     state = SYN_RCVD
 ```
 
-协议判定和发包路径缠死。真实内核里 TCP 状态机只决定「发什么」；`tcp_transmit_skb()` 才执行。本例用 `worker_nic` 扮演那一层。
+协议判定和发包路径缠死。真实内核里 TCP 状态机填好序号，再调用 `tcp_transmit_skb()`。本例用 `nic_send` 扮演那一层。
 
 ## 怎么跑
 
@@ -71,7 +73,7 @@ gcc -o /tmp/fsm-demo c/main.c && /tmp/fsm-demo
 (cd go && go run main.go)
 ```
 
-两个脚本化场景，都从 `CLOSED` 开始：
+两个脚本化场景：
 
-- `server`: `PASSIVE_OPEN, SYN, ACK, SYN`（最后一个 `SYN` 应 REJECT）
-- `client`: `ACTIVE_OPEN, SYNACK, ACK`（已建立后再 `ACK` 应 REJECT）
+- `server` `local_seq=1000`: `PASSIVE_OPEN, SYN(2000,0), ACK(2001,1001), SYN(2002,1001)`
+- `client` `local_seq=5000`: `ACTIVE_OPEN, SYNACK(8000,5001), ACK(8001,5001)`

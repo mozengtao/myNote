@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Automatic door: FSM decides motor commands; the motor actually moves."""
+"""Automatic door: PERSON/TIMEOUT carry data; motor_run(dir, duty) moves the door."""
 
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -17,16 +17,39 @@ class State(Enum):
     CLOSING = auto()
 
 
-class Event(Enum):
+class EventKind(Enum):
     PERSON = auto()
     TIMEOUT = auto()
 
 
-class Action(Enum):
-    MOTOR_OPEN = auto()
-    MOTOR_CLOSE = auto()
-    LATCH_OPEN = auto()
-    LATCH_CLOSED = auto()
+class ActionKind(Enum):
+    MOTOR_RUN = auto()
+    LATCH_SET = auto()
+
+
+class Dir(Enum):
+    OPEN = auto()
+    CLOSE = auto()
+
+
+@dataclass(frozen=True)
+class Event:
+    kind: EventKind
+    sensor_id: int = 0
+    elapsed_ms: int = 0
+
+
+@dataclass(frozen=True)
+class Action:
+    kind: ActionKind
+    direction: Dir = Dir.OPEN
+    duty: int = 0
+    open: int = 0
+
+
+@dataclass
+class Ctx:
+    state: State
 
 
 @dataclass(frozen=True)
@@ -37,47 +60,51 @@ class Decision:
 
 
 # ---------------------------------------------------------------------------
-# 2. Table  (State, Event) -> (NextState, ActionList)
+# 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 # ---------------------------------------------------------------------------
 
-TABLE: Dict[Tuple[State, Event], Tuple[State, List[Action]]] = {
-    (State.CLOSED, Event.PERSON): (State.OPENING, [Action.MOTOR_OPEN]),
-    (State.OPENING, Event.TIMEOUT): (State.OPEN, [Action.LATCH_OPEN]),
-    (State.OPEN, Event.PERSON): (State.OPEN, []),
-    (State.OPEN, Event.TIMEOUT): (State.CLOSING, [Action.MOTOR_CLOSE]),
-    (State.CLOSING, Event.PERSON): (State.OPENING, [Action.MOTOR_OPEN]),
-    (State.CLOSING, Event.TIMEOUT): (State.CLOSED, [Action.LATCH_CLOSED]),
+TABLE: Dict[Tuple[State, EventKind], Tuple[State, List[ActionKind]]] = {
+    (State.CLOSED, EventKind.PERSON): (State.OPENING, [ActionKind.MOTOR_RUN]),
+    (State.OPENING, EventKind.TIMEOUT): (State.OPEN, [ActionKind.LATCH_SET]),
+    (State.OPEN, EventKind.PERSON): (State.OPEN, []),
+    (State.OPEN, EventKind.TIMEOUT): (State.CLOSING, [ActionKind.MOTOR_RUN]),
+    (State.CLOSING, EventKind.PERSON): (State.OPENING, [ActionKind.MOTOR_RUN]),
+    (State.CLOSING, EventKind.TIMEOUT): (State.CLOSED, [ActionKind.LATCH_SET]),
 }
 
 
 # ---------------------------------------------------------------------------
-# 3. Engine  -- table lookup only, zero side effects
+# 3. Engine  -- table lookup + bind args; zero side effects
 # ---------------------------------------------------------------------------
 
-def fsm_decide(state: State, event: Event) -> Decision:
-    hit = TABLE.get((state, event))
+def fsm_decide(ctx: Ctx, event: Event) -> Decision:
+    hit = TABLE.get((ctx.state, event.kind))
     if hit is None:
-        return Decision(False, state, ())
-    next_state, actions = hit
+        return Decision(False, ctx.state, ())
+    next_state, kinds = hit
+    actions = []
+    for kind in kinds:
+        if kind is ActionKind.MOTOR_RUN:
+            if next_state is State.OPENING:
+                actions.append(Action(kind=kind, direction=Dir.OPEN, duty=80))
+            else:
+                actions.append(Action(kind=kind, direction=Dir.CLOSE, duty=80))
+        else:
+            opened = 1 if next_state is State.OPEN else 0
+            actions.append(Action(kind=kind, open=opened))
     return Decision(True, next_state, tuple(actions))
 
 
 # ---------------------------------------------------------------------------
-# 4. Workers  -- execution; workers do not know current state
+# 4. Workers  -- parameterized functions; no FSM state
 # ---------------------------------------------------------------------------
 
-def worker_motor(action: Action) -> None:
-    if action is Action.MOTOR_OPEN:
-        print("[EXEC] motor -> OPEN")
-    elif action is Action.MOTOR_CLOSE:
-        print("[EXEC] motor -> CLOSE")
+def motor_run(direction: Dir, duty: int) -> None:
+    print(f"[EXEC] motor_run({direction.name}, {duty})")
 
 
-def worker_latch(action: Action) -> None:
-    if action is Action.LATCH_OPEN:
-        print("[EXEC] latch -> OPEN")
-    elif action is Action.LATCH_CLOSED:
-        print("[EXEC] latch -> CLOSED")
+def latch_set(open_flag: int) -> None:
+    print(f"[EXEC] latch_set({open_flag})")
 
 
 # ---------------------------------------------------------------------------
@@ -86,33 +113,42 @@ def worker_latch(action: Action) -> None:
 
 def dispatch(actions: Tuple[Action, ...]) -> None:
     for action in actions:
-        print(f"[DISPATCH] {action.name}")
-        if action in (Action.MOTOR_OPEN, Action.MOTOR_CLOSE):
-            worker_motor(action)
+        if action.kind is ActionKind.MOTOR_RUN:
+            print(
+                f"[DISPATCH] MOTOR_RUN(dir={action.direction.name}, "
+                f"duty={action.duty})"
+            )
+            motor_run(action.direction, action.duty)
         else:
-            worker_latch(action)
+            print(f"[DISPATCH] LATCH_SET(open={action.open})")
+            latch_set(action.open)
 
 
 # ---------------------------------------------------------------------------
-# 6. Apply  -- commit next state, then dispatch
+# 6. Apply  -- commit ctx, then dispatch
 # ---------------------------------------------------------------------------
 
-def apply(state: State, event: Event) -> State:
-    print(f"[EVENT] {event.name} | state={state.name}")
-    decision = fsm_decide(state, event)
+def format_event(event: Event) -> str:
+    if event.kind is EventKind.PERSON:
+        return f"PERSON(sensor_id={event.sensor_id})"
+    return f"TIMEOUT(elapsed_ms={event.elapsed_ms})"
+
+
+def apply(ctx: Ctx, event: Event) -> None:
+    print(f"[EVENT] {format_event(event)} | state={ctx.state.name}")
+    decision = fsm_decide(ctx, event)
     if not decision.accepted:
         print(
-            f"[DECISION] REJECT {state.name} + {event.name}  "
+            f"[DECISION] REJECT {ctx.state.name} + {event.kind.name}  "
             "(state unchanged)"
         )
-        return state
-    names = ", ".join(a.name for a in decision.actions)
+        return
     print(
-        f"[DECISION] {state.name} + {event.name} -> "
-        f"{decision.next_state.name}  actions=[{names}]"
+        f"[DECISION] {ctx.state.name} + {event.kind.name} -> "
+        f"{decision.next_state.name}"
     )
+    ctx.state = decision.next_state
     dispatch(decision.actions)
-    return decision.next_state
 
 
 # ---------------------------------------------------------------------------
@@ -120,22 +156,22 @@ def apply(state: State, event: Event) -> State:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    state = State.CLOSED
-    print(f"[INIT] state={state.name}")
+    ctx = Ctx(state=State.CLOSED)
+    print(f"[INIT] state={ctx.state.name}")
     print()
     events = (
-        Event.TIMEOUT,
-        Event.PERSON,
-        Event.TIMEOUT,
-        Event.PERSON,
-        Event.TIMEOUT,
-        Event.PERSON,
-        Event.TIMEOUT,
-        Event.TIMEOUT,
-        Event.TIMEOUT,
+        Event(EventKind.TIMEOUT, elapsed_ms=500),
+        Event(EventKind.PERSON, sensor_id=1),
+        Event(EventKind.TIMEOUT, elapsed_ms=2000),
+        Event(EventKind.PERSON, sensor_id=1),
+        Event(EventKind.TIMEOUT, elapsed_ms=5000),
+        Event(EventKind.PERSON, sensor_id=2),
+        Event(EventKind.TIMEOUT, elapsed_ms=2000),
+        Event(EventKind.TIMEOUT, elapsed_ms=5000),
+        Event(EventKind.TIMEOUT, elapsed_ms=2000),
     )
     for event in events:
-        state = apply(state, event)
+        apply(ctx, event)
         print()
 
 

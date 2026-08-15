@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Turnstile: same event means the opposite thing in the other state."""
+"""Turnstile: COIN carries cents; workers are coin_box_credit and mechanism_set."""
 
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -15,14 +15,32 @@ class State(Enum):
     UNLOCKED = auto()
 
 
-class Event(Enum):
+class EventKind(Enum):
     COIN = auto()
     PUSH = auto()
 
 
-class Action(Enum):
-    UNLOCK = auto()
-    LOCK = auto()
+class ActionKind(Enum):
+    CREDIT_BOX = auto()
+    SET_MECHANISM = auto()
+
+
+@dataclass(frozen=True)
+class Event:
+    kind: EventKind
+    cents: int = 0
+
+
+@dataclass(frozen=True)
+class Action:
+    kind: ActionKind
+    cents: int = 0
+    locked: int = 0
+
+
+@dataclass
+class Ctx:
+    state: State
 
 
 @dataclass(frozen=True)
@@ -33,36 +51,50 @@ class Decision:
 
 
 # ---------------------------------------------------------------------------
-# 2. Table  (State, Event) -> (NextState, ActionList)
+# 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 # ---------------------------------------------------------------------------
 
-TABLE: Dict[Tuple[State, Event], Tuple[State, List[Action]]] = {
-    (State.LOCKED, Event.COIN): (State.UNLOCKED, [Action.UNLOCK]),
-    (State.UNLOCKED, Event.PUSH): (State.LOCKED, [Action.LOCK]),
+TABLE: Dict[Tuple[State, EventKind], Tuple[State, List[ActionKind]]] = {
+    (State.LOCKED, EventKind.COIN): (
+        State.UNLOCKED,
+        [ActionKind.CREDIT_BOX, ActionKind.SET_MECHANISM],
+    ),
+    (State.UNLOCKED, EventKind.PUSH): (
+        State.LOCKED,
+        [ActionKind.SET_MECHANISM],
+    ),
 }
 
 
 # ---------------------------------------------------------------------------
-# 3. Engine  -- table lookup only, zero side effects
+# 3. Engine  -- table lookup + bind args; zero side effects
 # ---------------------------------------------------------------------------
 
-def fsm_decide(state: State, event: Event) -> Decision:
-    hit = TABLE.get((state, event))
+def fsm_decide(ctx: Ctx, event: Event) -> Decision:
+    hit = TABLE.get((ctx.state, event.kind))
     if hit is None:
-        return Decision(False, state, ())
-    next_state, actions = hit
+        return Decision(False, ctx.state, ())
+    next_state, kinds = hit
+    actions = []
+    for kind in kinds:
+        if kind is ActionKind.CREDIT_BOX:
+            actions.append(Action(kind=kind, cents=event.cents))
+        else:
+            locked = 0 if next_state is State.UNLOCKED else 1
+            actions.append(Action(kind=kind, locked=locked))
     return Decision(True, next_state, tuple(actions))
 
 
 # ---------------------------------------------------------------------------
-# 4. Workers  -- execution; workers do not know current state
+# 4. Workers  -- parameterized functions; no FSM state
 # ---------------------------------------------------------------------------
 
-def worker_mechanism(action: Action) -> None:
-    if action is Action.UNLOCK:
-        print("[EXEC] mechanism -> UNLOCK")
-    elif action is Action.LOCK:
-        print("[EXEC] mechanism -> LOCK")
+def coin_box_credit(cents: int) -> None:
+    print(f"[EXEC] coin_box_credit({cents})")
+
+
+def mechanism_set(locked: int) -> None:
+    print(f"[EXEC] mechanism_set({locked})")
 
 
 # ---------------------------------------------------------------------------
@@ -71,30 +103,39 @@ def worker_mechanism(action: Action) -> None:
 
 def dispatch(actions: Tuple[Action, ...]) -> None:
     for action in actions:
-        print(f"[DISPATCH] {action.name}")
-        worker_mechanism(action)
+        if action.kind is ActionKind.CREDIT_BOX:
+            print(f"[DISPATCH] CREDIT_BOX(cents={action.cents})")
+            coin_box_credit(action.cents)
+        elif action.kind is ActionKind.SET_MECHANISM:
+            print(f"[DISPATCH] SET_MECHANISM(locked={action.locked})")
+            mechanism_set(action.locked)
 
 
 # ---------------------------------------------------------------------------
-# 6. Apply  -- commit next state, then dispatch
+# 6. Apply  -- commit ctx, then dispatch
 # ---------------------------------------------------------------------------
 
-def apply(state: State, event: Event) -> State:
-    print(f"[EVENT] {event.name} | state={state.name}")
-    decision = fsm_decide(state, event)
+def format_event(event: Event) -> str:
+    if event.kind is EventKind.COIN:
+        return f"COIN(cents={event.cents})"
+    return "PUSH"
+
+
+def apply(ctx: Ctx, event: Event) -> None:
+    print(f"[EVENT] {format_event(event)} | state={ctx.state.name}")
+    decision = fsm_decide(ctx, event)
     if not decision.accepted:
         print(
-            f"[DECISION] REJECT {state.name} + {event.name}  "
+            f"[DECISION] REJECT {ctx.state.name} + {event.kind.name}  "
             "(state unchanged)"
         )
-        return state
-    names = ", ".join(a.name for a in decision.actions)
+        return
     print(
-        f"[DECISION] {state.name} + {event.name} -> "
-        f"{decision.next_state.name}  actions=[{names}]"
+        f"[DECISION] {ctx.state.name} + {event.kind.name} -> "
+        f"{decision.next_state.name}"
     )
+    ctx.state = decision.next_state
     dispatch(decision.actions)
-    return decision.next_state
 
 
 # ---------------------------------------------------------------------------
@@ -102,19 +143,19 @@ def apply(state: State, event: Event) -> State:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    state = State.LOCKED
-    print(f"[INIT] state={state.name}")
+    ctx = Ctx(state=State.LOCKED)
+    print(f"[INIT] state={ctx.state.name}")
     print()
     events = (
-        Event.COIN,
-        Event.PUSH,
-        Event.PUSH,
-        Event.COIN,
-        Event.COIN,
-        Event.PUSH,
+        Event(EventKind.COIN, cents=100),
+        Event(EventKind.PUSH),
+        Event(EventKind.PUSH),
+        Event(EventKind.COIN, cents=100),
+        Event(EventKind.COIN, cents=50),
+        Event(EventKind.PUSH),
     )
     for event in events:
-        state = apply(state, event)
+        apply(ctx, event)
         print()
 
 

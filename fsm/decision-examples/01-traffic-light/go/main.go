@@ -1,17 +1,15 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 // ---------------------------------------------------------------------------
 // 1. Types
 // ---------------------------------------------------------------------------
 
 type State int
-type Event int
-type Action int
+type EventKind int
+type ActionKind int
+type Color int
 
 const (
 	StateRed State = iota
@@ -20,25 +18,43 @@ const (
 )
 
 const (
-	EventTick Event = iota
+	EventTick EventKind = iota
 )
 
 const (
-	ActionLightRed Action = iota
-	ActionLightGreen
-	ActionLightYellow
+	ActionSetLamp ActionKind = iota
+)
+
+const (
+	ColorRed Color = iota
+	ColorGreen
+	ColorYellow
 )
 
 func (s State) String() string {
 	return [...]string{"RED", "GREEN", "YELLOW"}[s]
 }
 
-func (e Event) String() string {
+func (e EventKind) String() string {
 	return [...]string{"TICK"}[e]
 }
 
-func (a Action) String() string {
-	return [...]string{"LIGHT_RED", "LIGHT_GREEN", "LIGHT_YELLOW"}[a]
+func (c Color) String() string {
+	return [...]string{"RED", "GREEN", "YELLOW"}[c]
+}
+
+type Event struct {
+	Kind  EventKind
+	NowMs uint
+}
+
+type Action struct {
+	Kind  ActionKind
+	Color Color
+}
+
+type Ctx struct {
+	State State
 }
 
 type Decision struct {
@@ -48,50 +64,61 @@ type Decision struct {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Table  (State, Event) -> (NextState, ActionList)
+// 2. Table  (State, EventKind) -> (NextState, ActionKind list)
 // ---------------------------------------------------------------------------
 
 type transKey struct {
 	s State
-	e Event
+	e EventKind
 }
 
 type transVal struct {
-	next    State
-	actions []Action
+	next  State
+	kinds []ActionKind
 }
 
 var table = map[transKey]transVal{
-	{StateRed, EventTick}:    {StateGreen, []Action{ActionLightGreen}},
-	{StateGreen, EventTick}:  {StateYellow, []Action{ActionLightYellow}},
-	{StateYellow, EventTick}: {StateRed, []Action{ActionLightRed}},
+	{StateRed, EventTick}:    {StateGreen, []ActionKind{ActionSetLamp}},
+	{StateGreen, EventTick}:  {StateYellow, []ActionKind{ActionSetLamp}},
+	{StateYellow, EventTick}: {StateRed, []ActionKind{ActionSetLamp}},
+}
+
+func colorOf(st State) Color {
+	switch st {
+	case StateGreen:
+		return ColorGreen
+	case StateYellow:
+		return ColorYellow
+	default:
+		return ColorRed
+	}
 }
 
 // ---------------------------------------------------------------------------
-// 3. Engine  -- table lookup only, zero side effects
+// 3. Engine  -- table lookup + bind args; zero side effects
 // ---------------------------------------------------------------------------
 
-func fsmDecide(state State, event Event) Decision {
-	hit, ok := table[transKey{state, event}]
+func fsmDecide(ctx Ctx, ev Event) Decision {
+	hit, ok := table[transKey{ctx.State, ev.Kind}]
 	if !ok {
-		return Decision{Accepted: false, NextState: state}
+		return Decision{Accepted: false, NextState: ctx.State}
 	}
-	return Decision{Accepted: true, NextState: hit.next, Actions: hit.actions}
+	return Decision{
+		Accepted:  true,
+		NextState: hit.next,
+		Actions: []Action{{
+			Kind:  ActionSetLamp,
+			Color: colorOf(hit.next),
+		}},
+	}
 }
 
 // ---------------------------------------------------------------------------
-// 4. Workers  -- execution; workers do not know current state
+// 4. Workers  -- parameterized functions; no FSM state
 // ---------------------------------------------------------------------------
 
-func workerLamp(action Action) {
-	switch action {
-	case ActionLightRed:
-		fmt.Println("[EXEC] lamp -> RED")
-	case ActionLightGreen:
-		fmt.Println("[EXEC] lamp -> GREEN")
-	case ActionLightYellow:
-		fmt.Println("[EXEC] lamp -> YELLOW")
-	}
+func lampSet(color Color) {
+	fmt.Printf("[EXEC] lamp_set(%s)\n", color)
 }
 
 // ---------------------------------------------------------------------------
@@ -99,35 +126,31 @@ func workerLamp(action Action) {
 // ---------------------------------------------------------------------------
 
 func dispatch(actions []Action) {
-	for _, action := range actions {
-		fmt.Printf("[DISPATCH] %s\n", action)
-		workerLamp(action)
+	for _, a := range actions {
+		fmt.Printf("[DISPATCH] SET_LAMP(color=%s)\n", a.Color)
+		lampSet(a.Color)
 	}
 }
 
 // ---------------------------------------------------------------------------
-// 6. Apply  -- commit next state, then dispatch
+// 6. Apply  -- commit ctx, then dispatch
 // ---------------------------------------------------------------------------
 
-func formatActions(actions []Action) string {
-	names := make([]string, len(actions))
-	for i, a := range actions {
-		names[i] = a.String()
-	}
-	return strings.Join(names, ", ")
+func formatEvent(ev Event) string {
+	return fmt.Sprintf("TICK(now_ms=%d)", ev.NowMs)
 }
 
-func apply(state State, event Event) State {
-	fmt.Printf("[EVENT] %s | state=%s\n", event, state)
-	d := fsmDecide(state, event)
+func apply(ctx *Ctx, ev Event) {
+	fmt.Printf("[EVENT] %s | state=%s\n", formatEvent(ev), ctx.State)
+	d := fsmDecide(*ctx, ev)
 	if !d.Accepted {
-		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n", state, event)
-		return state
+		fmt.Printf("[DECISION] REJECT %s + %s  (state unchanged)\n",
+			ctx.State, ev.Kind)
+		return
 	}
-	fmt.Printf("[DECISION] %s + %s -> %s  actions=[%s]\n",
-		state, event, d.NextState, formatActions(d.Actions))
+	fmt.Printf("[DECISION] %s + %s -> %s\n", ctx.State, ev.Kind, d.NextState)
+	ctx.State = d.NextState
 	dispatch(d.Actions)
-	return d.NextState
 }
 
 // ---------------------------------------------------------------------------
@@ -135,10 +158,10 @@ func apply(state State, event Event) State {
 // ---------------------------------------------------------------------------
 
 func main() {
-	state := StateRed
-	fmt.Printf("[INIT] state=%s\n\n", state)
-	for _, event := range []Event{EventTick, EventTick, EventTick, EventTick} {
-		state = apply(state, event)
+	ctx := Ctx{State: StateRed}
+	fmt.Printf("[INIT] state=%s\n\n", ctx.State)
+	for _, nowMs := range []uint{1000, 2000, 3000, 4000} {
+		apply(&ctx, Event{Kind: EventTick, NowMs: nowMs})
 		fmt.Println()
 	}
 }
