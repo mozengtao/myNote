@@ -5,6 +5,9 @@
 [TTP Parser](https://tools.packetcoders.io/ttp-parser/)
 [A Beginner's Guide to TextFSM for Network Automation](https://www.packetcoders.io/a-beginners-guide-to-textfsm-for-network-automation/)
 [JMESPath Examples](https://jmespath.org/examples.html)
+[Conversion](https://fastminify.com/en/tools#cat-conversion)
+[CSV,JSON,YAML转换器](https://devformatlab.com/zh/convert/csv-to-yaml)
+[transform](https://transform.tools/json-to-yaml)
 []()
 []()
 

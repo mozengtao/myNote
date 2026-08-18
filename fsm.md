@@ -1,11 +1,26 @@
 [**Practical UML Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 [**Practical Statecharts in C/C++**](https://www.state-machine.com/category/books)  
 
-[**fsm thinking training**](fsm/fsm-thinking-training/README.md)
 [FSM 的核心心智模式：FSM 的主要工作就是「判定（Decision）」](fsm/decision.md)
+[**fsm thinking training**](fsm/fsm-thinking-training/README.md)
+[**fsm mastery**](fsm/fsm-mastery/README.md)
+[Important Programming Concepts: State Machines](https://www.embeddedrelated.com/showarticle/723.php)
 []()
 []()
 []()
+
+- FSM Design
+[Introducing Stately Sketch](https://stately.ai/blog/2026-03-26-introducing-stately-sketch)
+[Stately Sketch](https://sketch.stately.ai/)
+[]()
+[Finite State Machine Designer](https://madebyevan.com/fsm/)
+[Finite State Machine Designer](https://abpaudel.com/fsm-designer/)
+[FSM Engine](https://fsm-engine-v3.vercel.app/)
+[]()
+[]()
+[PlantUML Editor](https://plantuml-editor.kkeisuke.dev/)
+[]()
+
 
 ![01 when fsm needed](./fsm/01_when_fsm_needed.md)  
 ![02 what core concepts](./fsm/02_what_core_concepts.md)  
