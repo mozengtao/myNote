@@ -1,3 +1,6 @@
+[ZeroMQ（ZMQ）通信核心概念、用法与心智模式（C语言）](zmq_mental_model.md)
+[ZMA Patterns Example](zmq_patterns_examples/README.md)
+
 [ZeroMQ入门](https://91hello.com/index.php/2024/06/11/zeromq%E5%85%A5%E9%97%A8-1-zeromq%E7%AE%80%E4%BB%8B/)  
 
 - [ZMQ 指南](https://wizardforcel.gitbooks.io/zmq-guide/content/chapter1.html)

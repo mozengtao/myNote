@@ -12,7 +12,9 @@
 - FSM Design
 [Introducing Stately Sketch](https://stately.ai/blog/2026-03-26-introducing-stately-sketch)
 [Stately Sketch](https://sketch.stately.ai/)
-[]()
+[Stately Cheatsheet](https://stately.ai/docs/cheatsheet)
+[**XState v5实现状态机**](fsm/xstate-v5-fsm-course/README.md)
+[XState v5 FSM 常用关键字完整心智模型](fsm/xstate_fsm_mental_model.md)
 [Finite State Machine Designer](https://madebyevan.com/fsm/)
 [Finite State Machine Designer](https://abpaudel.com/fsm-designer/)
 [FSM Engine](https://fsm-engine-v3.vercel.app/)
