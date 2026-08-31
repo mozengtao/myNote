@@ -1,0 +1,26 @@
+=== Step7: info 文件内容（volume 的核心配置）===
+type=0
+count=3
+status=1
+sub_count=0
+replica_count=1
+disperse_count=0
+redundancy_count=0
+version=2
+transport-type=0
+volume-id=b8c09893-49bc-42cf-b8f0-4882904c06e0
+username=8ecb76ec-8304-46fe-b024-351587f34fa2
+password=77f0f621-b9cd-48cd-85f8-434fa278314d
+op-version=40000
+client-op-version=2
+quota-version=0
+tier-enabled=0
+parent_volname=N/A
+restored_from_snap=00000000-0000-0000-0000-000000000000
+snap-max-hard-limit=256
+storage.fips-mode-rchecksum=on
+transport.address-family=inet
+nfs.disable=on
+brick-0=node1:-data-brick1
+brick-1=node2:-data-brick1
+brick-2=node3:-data-brick1

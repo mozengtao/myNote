@@ -1,0 +1,19 @@
+=== Step2: 通过 client 挂载点，批量写入 15 个不同文件名的文件 ===
+total 16
+drwxr-xr-x 3 root root 4096 Aug 29 05:36 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:27 ..
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-01.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-02.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-03.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-04.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-05.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-06.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-07.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-08.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-09.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-10.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-11.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-12.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-13.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-14.txt
+-rw-r--r-- 1 root root   19 Aug 29 05:36 file-15.txt

@@ -1,0 +1,15 @@
+=== node1 ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.6  0.2 265016 16764 ?        SLsl 03:28   0:00 /usr/sbin/glusterd -N --log-level INFO
+root          54  0.0  0.0   7072  2984 ?        Rs   03:29   0:00 ps aux
+
+=== node2 ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.7  0.2 265016 17000 ?        SLsl 03:29   0:00 /usr/sbin/glusterd -N --log-level INFO
+root          47  0.0  0.0   7072  3096 ?        Rs   03:29   0:00 ps aux
+
+=== node3 ===
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  1.0  0.2 265016 17068 ?        SLsl 03:29   0:00 /usr/sbin/glusterd -N --log-level INFO
+root          48  3.0  0.0   7072  3088 ?        Rs   03:29   0:00 ps aux
+

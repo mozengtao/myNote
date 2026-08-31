@@ -1,0 +1,96 @@
+volume gv-dist-client-0
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 77f0f621-b9cd-48cd-85f8-434fa278314d
+    option username 8ecb76ec-8304-46fe-b024-351587f34fa2
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick1
+    option remote-host node1
+    option ping-timeout 42
+end-volume
+
+volume gv-dist-client-1
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 77f0f621-b9cd-48cd-85f8-434fa278314d
+    option username 8ecb76ec-8304-46fe-b024-351587f34fa2
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick1
+    option remote-host node2
+    option ping-timeout 42
+end-volume
+
+volume gv-dist-client-2
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 77f0f621-b9cd-48cd-85f8-434fa278314d
+    option username 8ecb76ec-8304-46fe-b024-351587f34fa2
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick1
+    option remote-host node3
+    option ping-timeout 42
+end-volume
+
+volume gv-dist-dht
+    type cluster/distribute
+    option force-migration off
+    option lock-migration off
+    subvolumes gv-dist-client-0 gv-dist-client-1 gv-dist-client-2
+end-volume
+
+volume gv-dist-utime
+    type features/utime
+    option noatime on
+    subvolumes gv-dist-dht
+end-volume
+
+volume gv-dist-open-behind
+    type performance/open-behind
+    subvolumes gv-dist-utime
+end-volume
+
+volume gv-dist-quick-read
+    type performance/quick-read
+    subvolumes gv-dist-open-behind
+end-volume
+
+volume gv-dist-md-cache
+    type performance/md-cache
+    subvolumes gv-dist-quick-read
+end-volume
+
+volume gv-dist-io-threads
+    type performance/io-threads
+    subvolumes gv-dist-md-cache
+end-volume
+
+volume gv-dist
+    type debug/io-stats
+    option global-threading off
+    option count-fop-hits off
+    option latency-measurement off
+    option threads 16
+    option log-level INFO
+    subvolumes gv-dist-io-threads
+end-volume

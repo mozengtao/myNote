@@ -1,0 +1,25 @@
+=== Step2: brick 目录所在的文件系统类型（证明没有专门格式化）===
+--- node1 ---
+  File: "/data/brick1"
+    ID: afbc62996122e7cc Namelen: 255     Type: overlayfs
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 263940717  Free: 249288962  Available: 235863094
+Inodes: Total: 67108864   Free: 66320321
+Filesystem     Type     1K-blocks     Used Available Use% Mounted on
+overlay        overlay 1055762868 58607020 943452376   6% /
+--- node2 ---
+  File: "/data/brick1"
+    ID: c6b0a50be2c6632b Namelen: 255     Type: overlayfs
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 263940717  Free: 249288962  Available: 235863094
+Inodes: Total: 67108864   Free: 66320321
+Filesystem     Type     1K-blocks     Used Available Use% Mounted on
+overlay        overlay 1055762868 58607020 943452376   6% /
+--- node3 ---
+  File: "/data/brick1"
+    ID: 181ad78754e02041 Namelen: 255     Type: overlayfs
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 263940717  Free: 249288962  Available: 235863094
+Inodes: Total: 67108864   Free: 66320321
+Filesystem     Type     1K-blocks     Used Available Use% Mounted on
+overlay        overlay 1055762868 58607020 943452376   6% /

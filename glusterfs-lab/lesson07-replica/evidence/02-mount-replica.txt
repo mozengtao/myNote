@@ -1,0 +1,3 @@
+=== Step2: 挂载到 client 的另一个挂载点 ===
+Filesystem      Size  Used Avail Use% Mounted on
+node1:/gv-rep  1007G   66G  900G   7% /mnt/gluster-rep

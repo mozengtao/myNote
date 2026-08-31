@@ -1,0 +1,180 @@
+volume gv-final-client-0
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick3
+    option remote-host node1
+    option ping-timeout 42
+end-volume
+
+volume gv-final-client-1
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick3
+    option remote-host node2
+    option ping-timeout 42
+end-volume
+
+volume gv-final-client-2
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick4
+    option remote-host node2
+    option ping-timeout 42
+end-volume
+
+volume gv-final-client-3
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick4
+    option remote-host node3
+    option ping-timeout 42
+end-volume
+
+volume gv-final-client-4
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick3
+    option remote-host node3
+    option ping-timeout 42
+end-volume
+
+volume gv-final-client-5
+    type protocol/client
+    option send-gids true
+    option strict-locks off
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.tcp-user-timeout 0
+    option transport.socket.ssl-enabled off
+    option password 124ac0f1-23ce-41fc-a701-261a9278b39d
+    option username fcbe377e-98e7-4c9e-8fb7-90376463be0b
+    option transport.address-family inet
+    option transport-type tcp
+    option remote-subvolume /data/brick4
+    option remote-host node1
+    option ping-timeout 42
+end-volume
+
+volume gv-final-replicate-0
+    type cluster/replicate
+    option use-anonymous-inode yes
+    option use-compound-fops off
+    option granular-entry-heal on
+    option volume-id 52185c60-538b-497c-8393-0a6d10c456ac
+    option afr-pending-xattr gv-final-client-0,gv-final-client-1
+    subvolumes gv-final-client-0 gv-final-client-1
+end-volume
+
+volume gv-final-replicate-1
+    type cluster/replicate
+    option use-anonymous-inode yes
+    option use-compound-fops off
+    option granular-entry-heal on
+    option volume-id 52185c60-538b-497c-8393-0a6d10c456ac
+    option afr-pending-xattr gv-final-client-2,gv-final-client-3
+    subvolumes gv-final-client-2 gv-final-client-3
+end-volume
+
+volume gv-final-replicate-2
+    type cluster/replicate
+    option use-anonymous-inode yes
+    option use-compound-fops off
+    option granular-entry-heal on
+    option volume-id 52185c60-538b-497c-8393-0a6d10c456ac
+    option afr-pending-xattr gv-final-client-4,gv-final-client-5
+    subvolumes gv-final-client-4 gv-final-client-5
+end-volume
+
+volume gv-final-dht
+    type cluster/distribute
+    option force-migration off
+    option lock-migration off
+    subvolumes gv-final-replicate-0 gv-final-replicate-1 gv-final-replicate-2
+end-volume
+
+volume gv-final-utime
+    type features/utime
+    option noatime on
+    subvolumes gv-final-dht
+end-volume
+
+volume gv-final-write-behind
+    type performance/write-behind
+    subvolumes gv-final-utime
+end-volume
+
+volume gv-final-open-behind
+    type performance/open-behind
+    subvolumes gv-final-write-behind
+end-volume
+
+volume gv-final-quick-read
+    type performance/quick-read
+    subvolumes gv-final-open-behind
+end-volume
+
+volume gv-final-md-cache
+    type performance/md-cache
+    subvolumes gv-final-quick-read
+end-volume
+
+volume gv-final
+    type debug/io-stats
+    option global-threading off
+    option count-fop-hits off
+    option latency-measurement off
+    option threads 16
+    option log-level INFO
+    subvolumes gv-final-md-cache
+end-volume

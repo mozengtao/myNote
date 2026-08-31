@@ -1,0 +1,15 @@
+=== Step5: 解除屏蔽，验证恢复正常 ===
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+Status of volume: gv-rep
+Gluster process                             TCP Port  RDMA Port  Online  Pid
+------------------------------------------------------------------------------
+Brick node1:/data/brick2                    52052     0          Y       339  
+Brick node3:/data/brick2                    49933     0          Y       54   
+Self-heal Daemon on localhost               N/A       N/A        Y       356  
+Self-heal Daemon on node3                   N/A       N/A        Y       71   
+ 
+Task Status of Volume gv-rep
+------------------------------------------------------------------------------
+There are no active volume tasks
+ 

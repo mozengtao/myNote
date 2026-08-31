@@ -1,0 +1,4 @@
+=== Step2: client 已经建立的到 node2 Brick 数据端口(58508)的连接，还能不能正常写文件？ ===
+written while node2 mgmt port blocked
+written while node2 mgmt port blocked
+written while node2 mgmt port blocked

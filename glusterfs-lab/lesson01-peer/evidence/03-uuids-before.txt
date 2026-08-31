@@ -1,0 +1,7 @@
+=== node1 UUID before probing (from glusterd.info) ===
+--- node1 ---
+cat: /var/lib/glusterd/glusterd.info: No such file or directory
+--- node2 ---
+cat: /var/lib/glusterd/glusterd.info: No such file or directory
+--- node3 ---
+cat: /var/lib/glusterd/glusterd.info: No such file or directory

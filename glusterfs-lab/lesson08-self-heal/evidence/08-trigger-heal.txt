@@ -1,0 +1,15 @@
+=== 换 node2 发起 heal（node1 的 status 视图暂时滞后，node2 视图是新鲜的）===
+Launching heal operation to perform index self heal on volume gv-rep has been successful 
+Use heal info commands to check status.
+Brick node1:/data/brick2
+Status: Connected
+Number of entries: 0
+
+Brick node2:/data/brick2
+Status: Connected
+Number of entries: 0
+
+Brick node3:/data/brick2
+Status: Connected
+Number of entries: 0
+

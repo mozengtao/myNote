@@ -1,0 +1,25 @@
+=== Step1: 每个 Brick 根目录上的 DHT layout xattr（哈希区间分配）===
+--- node1 ---
+getfattr: Removing leading '/' from absolute path names
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.dht=0x0000000100000000aaaaaaaaffffffff
+trusted.glusterfs.mdata=0x010000000000000000000000006a926dcb000000002760896d000000006a926d030000000000e34322000000006a926c770000000039333a7e
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+
+--- node2 ---
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.dht=0x00000001000000000000000055555554
+trusted.glusterfs.mdata=0x010000000000000000000000006a926dcb000000002760896d000000006a926d030000000000e34322000000006a926c770000000039333a7e
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+
+getfattr: Removing leading '/' from absolute path names
+--- node3 ---
+getfattr: Removing leading '/' from absolute path names
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.dht=0x000000010000000055555555aaaaaaa9
+trusted.glusterfs.mdata=0x010000000000000000000000006a926fb700000000298b8571000000006a926fb700000000298b8571000000006a926c770000000039333a7e
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+

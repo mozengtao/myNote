@@ -1,0 +1,7 @@
+=== BEFORE probe: peer status on all 3 nodes ===
+--- node1 ---
+Number of Peers: 0
+--- node2 ---
+Number of Peers: 0
+--- node3 ---
+Number of Peers: 0

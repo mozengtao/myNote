@@ -1,0 +1,19 @@
+=== 实验：重启 node1 容器（等价于重启 glusterd），验证 peer 关系是否持久化 ===
+node1
+--- 重启后 node1 上 gluster peer status ---
+Number of Peers: 2
+
+Hostname: node3
+Uuid: 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+State: Peer in Cluster (Connected)
+
+Hostname: node2
+Uuid: 468ef93d-2fc3-4226-a10c-26b4f12c0648
+State: Peer in Cluster (Connected)
+--- 重启后 node1 上 /var/lib/glusterd/peers/ ---
+total 24
+drwxr-xr-x 2 root root 4096 Aug 29 03:30 .
+drwxr-xr-x 1 root root 4096 Aug 29 03:30 ..
+-rw------- 1 root root   66 Aug 29 03:30 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+-rw------- 1 root root   66 Aug 29 03:30 09483fe3-0d93-4205-9659-6d2a0b8e30bd.tmp
+-rw------- 1 root root   66 Aug 29 03:30 468ef93d-2fc3-4226-a10c-26b4f12c0648

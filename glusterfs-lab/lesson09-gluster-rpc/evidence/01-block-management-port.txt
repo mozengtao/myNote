@@ -1,0 +1,4 @@
+=== Step1: 在 node2 上用 iptables 屏蔽 24007（管理面）端口的入站流量，不动 Brick 数据端口 ===
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+DROP       tcp  --  0.0.0.0/0            0.0.0.0/0            tcp dpt:24007

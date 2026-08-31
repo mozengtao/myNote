@@ -1,0 +1,2 @@
+=== Step3: 通过 client 挂载点写一个文件 ===
+written via fuse client

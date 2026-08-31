@@ -1,0 +1,5 @@
+=== 写一个文件，用 pathinfo 验证：只落在一个副本组(2个brick)，而不是全部6个 ===
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster-final/capstone.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-final-dht> (<REPLICATE:gv-final-replicate-1> <POSIX(/data/brick4):node3:/data/brick4/capstone.txt> <POSIX(/data/brick4):node2:/data/brick4/capstone.txt>))"
+

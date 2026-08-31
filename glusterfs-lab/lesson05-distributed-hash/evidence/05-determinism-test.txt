@@ -1,0 +1,5 @@
+=== Step5: 确定性验证——删除 file-01.txt 再重新创建，看是否还落在同一个 Brick（node3）===
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-01.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-01.txt>)"
+

@@ -1,0 +1,10 @@
+=== Step4: 在加入 volume 之前，getfattr 看看有没有 gluster 专属扩展属性 ===
+--- node1 : brick1 目录本身 ---
+--- node1 : brick1/hello.txt 文件 ---
+(空输出表示没有任何扩展属性)
+--- node2 : brick1 目录本身 ---
+--- node2 : brick1/hello.txt 文件 ---
+(空输出表示没有任何扩展属性)
+--- node3 : brick1 目录本身 ---
+--- node3 : brick1/hello.txt 文件 ---
+(空输出表示没有任何扩展属性)

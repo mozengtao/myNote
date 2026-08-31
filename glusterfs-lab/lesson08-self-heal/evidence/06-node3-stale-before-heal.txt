@@ -1,0 +1,9 @@
+=== Step6: node3 刚起来时，它自己磁盘上的内容是不是还是旧的？===
+replica payload content
+total 36
+drwxr-xr-x   4 root root 4096 Aug 29 05:54 .
+drwxr-xr-x   4 root root 4096 Aug 29 05:53 ..
+drw------- 262 root root 4096 Aug 29 05:54 .glusterfs
+drwxr-xr-x   2 root root 4096 Aug 29 05:53 .glusterfs-anonymous-inode-848e4034-b5b9-4f2b-8ae1-82cc479abe4e
+-rw-r--r--   2 root root   24 Aug 29 05:53 rep-test.txt
+-rw-r--r--   2 root root 4096 Aug 29 05:54 rep-write-test.bin

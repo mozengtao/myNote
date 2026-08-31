@@ -1,0 +1,14 @@
+=== Step1: 停掉 node3，模拟一个副本节点下线 ===
+node3
+Status of volume: gv-rep
+Gluster process                             TCP Port  RDMA Port  Online  Pid
+------------------------------------------------------------------------------
+Brick node1:/data/brick2                    52052     0          Y       339  
+Brick node2:/data/brick2                    58508     0          Y       452  
+Self-heal Daemon on localhost               N/A       N/A        Y       356  
+Self-heal Daemon on node2                   N/A       N/A        Y       469  
+ 
+Task Status of Volume gv-rep
+------------------------------------------------------------------------------
+There are no active volume tasks
+ 

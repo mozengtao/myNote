@@ -1,0 +1,13 @@
+=== Step0: 健康基线——heal info 应该显示无需修复 ===
+Brick node1:/data/brick2
+Status: Connected
+Number of entries: 0
+
+Brick node2:/data/brick2
+Status: Connected
+Number of entries: 0
+
+Brick node3:/data/brick2
+Status: Connected
+Number of entries: 0
+

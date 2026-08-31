@@ -1,0 +1,8 @@
+glusterfs 10.1
+Repository revision: git://git.gluster.org/glusterfs.git
+Copyright (c) 2006-2016 Red Hat, Inc. <https://www.gluster.org/>
+GlusterFS comes with ABSOLUTELY NO WARRANTY.
+It is licensed to you under your choice of the GNU Lesser
+General Public License, version 3 or any later version (LGPLv3
+or later), or the GNU General Public License, version 2 (GPLv2),
+in all cases as published by the Free Software Foundation.

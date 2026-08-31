@@ -1,0 +1,9 @@
+补充说明：Step7 中 mount 命令本身立刻返回成功（挂载/volfile拉取很快），
+但随后的 'ls /mnt/gluster' 卡了大约 3 分钟才返回结果。
+原因：这个 Volume 是 Distribute 类型，DHT 需要聚合所有 3 个子卷（3 个 Brick 连接）
+的目录项才能返回完整的 ls 结果；其中 node1 对应的那个 protocol/client 子卷
+一直在尝试重连一个已经宕机的节点，直到连接超时放弃，ls 才能返回。
+这个现象直接说明：control-plane 的入口节点（挂载点）可以随便换、任意存活节点都行，
+但 Volume 本身对所有 Brick 的依赖是真实存在的——少了一个节点，
+没有 Replica 的 Distribute 卷在访问受影响目录时会出现明显的可用性下降（卡顿甚至超时），
+这就是 Lesson 7 (Replica) 要解决的问题的动机。

@@ -1,0 +1,10 @@
+=== AFTER probe: glusterd.info (自身 UUID) on all 3 nodes ===
+--- node1 ---
+UUID=b64688a7-838c-41a3-bdd0-5d5f62780af4
+operating-version=100000
+--- node2 ---
+UUID=468ef93d-2fc3-4226-a10c-26b4f12c0648
+operating-version=100000
+--- node3 ---
+UUID=09483fe3-0d93-4205-9659-6d2a0b8e30bd
+operating-version=100000

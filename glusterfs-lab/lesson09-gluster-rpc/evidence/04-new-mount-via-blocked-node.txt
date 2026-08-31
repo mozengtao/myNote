@@ -1,0 +1,6 @@
+=== Step4: 尝试用 node2 作为挂载入口做新挂载（同样需要 24007，预期失败/超时）===
+ERROR: Mount point does not exist
+Please specify a mount point
+Usage:
+man 8 /sbin/mount.glusterfs
+退出码: 124

@@ -1,0 +1,16 @@
+=== gluster pool list（三个节点分别执行）===
+--- node1 ---
+UUID					Hostname 	State
+468ef93d-2fc3-4226-a10c-26b4f12c0648	node2    	Connected 
+09483fe3-0d93-4205-9659-6d2a0b8e30bd	node3    	Connected 
+b64688a7-838c-41a3-bdd0-5d5f62780af4	localhost	Connected 
+--- node2 ---
+UUID					Hostname            	State
+b64688a7-838c-41a3-bdd0-5d5f62780af4	node1.glusterlab-net	Connected 
+09483fe3-0d93-4205-9659-6d2a0b8e30bd	node3               	Connected 
+468ef93d-2fc3-4226-a10c-26b4f12c0648	localhost           	Connected 
+--- node3 ---
+UUID					Hostname            	State
+b64688a7-838c-41a3-bdd0-5d5f62780af4	node1.glusterlab-net	Connected 
+468ef93d-2fc3-4226-a10c-26b4f12c0648	node2               	Connected 
+09483fe3-0d93-4205-9659-6d2a0b8e30bd	localhost           	Connected 

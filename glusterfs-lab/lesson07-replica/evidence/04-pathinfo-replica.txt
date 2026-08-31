@@ -1,0 +1,5 @@
+=== Step4: pathinfo 权威查询（AFR 应该显示三份，而不是 DHT 的一份）===
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster-rep/rep-test.txt
+trusted.glusterfs.pathinfo="(<REPLICATE:gv-rep-replicate-0> <POSIX(/data/brick2):node2:/data/brick2/rep-test.txt> <POSIX(/data/brick2):node3:/data/brick2/rep-test.txt> <POSIX(/data/brick2):node1:/data/brick2/rep-test.txt>)"
+

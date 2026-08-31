@@ -1,0 +1,3 @@
+=== Step2: node3 下线期间，通过 client 修改已有文件 + 新建一个文件 ===
+MODIFIED while node3 was down
+created while node3 was down

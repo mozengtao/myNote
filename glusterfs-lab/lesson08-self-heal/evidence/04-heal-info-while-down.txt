@@ -1,0 +1,19 @@
+=== Step4: node3 还在下线状态时，heal info 显示什么 ===
+Brick node1:/data/brick2
+/created-during-outage.txt 
+/ 
+/rep-test.txt 
+Status: Connected
+Number of entries: 3
+
+Brick node2:/data/brick2
+/created-during-outage.txt 
+/ 
+/rep-test.txt 
+Status: Connected
+Number of entries: 3
+
+Brick node3:/data/brick2
+Status: Transport endpoint is not connected
+Number of entries: -
+

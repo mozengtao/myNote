@@ -1,0 +1,64 @@
+[
+    {
+        "Name": "glusterlab-net",
+        "Id": "3aabb62f5a7726667ad065ae4a86161caea2cfc1d08d5c3b0e94af81018b7e84",
+        "Created": "2026-08-29T11:26:54.621867728+08:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.28.0.0/24",
+                    "IPRange": "",
+                    "Gateway": "172.28.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Options": {},
+        "Labels": {},
+        "Containers": {
+            "2a90ab30f55ea06b82bcb6954f51be61be3e602d9bf107a0fc67a38fe6d67db1": {
+                "Name": "node1",
+                "EndpointID": "071c21d5204012b4aa0927533ac0cf57c7240af6213ba15d436b0096026fe0e8",
+                "MacAddress": "b2:30:81:24:d8:7d",
+                "IPv4Address": "172.28.0.11/24",
+                "IPv6Address": ""
+            },
+            "2c025530befa33c85a4e6db6ea9e9ce2041fece61f333707de33538f80b22246": {
+                "Name": "node2",
+                "EndpointID": "0f9689c017d091c3be5f91f51e3e827fd159f2fdb698f4b79db791fa79fdadaf",
+                "MacAddress": "16:3f:42:7e:c6:13",
+                "IPv4Address": "172.28.0.12/24",
+                "IPv6Address": ""
+            },
+            "d3da67c86b2c9f20d6e1e50568d78371a37e49a895d98e05e34c089f714574f6": {
+                "Name": "node3",
+                "EndpointID": "782e613180aaaae1594d5caa88f38c2ab41c4fe744379093de60122279c1037a",
+                "MacAddress": "a6:23:8f:1e:55:11",
+                "IPv4Address": "172.28.0.13/24",
+                "IPv6Address": ""
+            }
+        },
+        "Status": {
+            "IPAM": {
+                "Subnets": {
+                    "172.28.0.0/24": {
+                        "IPsInUse": 6,
+                        "DynamicIPsAvailable": 250
+                    }
+                }
+            }
+        }
+    }
+]

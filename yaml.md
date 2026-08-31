@@ -5,7 +5,7 @@
 [Learn X in Y minutes](https://learnxinyminutes.com/yaml/)  
 [How to Work with YAML in Python](https://earthly.dev/blog/yaml-in-python/)  
 [YAML: The Missing Battery in Python](https://realpython.com/python-yaml/)  
-[]()  
+[YAML 核心语法总结](yaml_grammar.md)  
 []()  
 
 ## A complete example

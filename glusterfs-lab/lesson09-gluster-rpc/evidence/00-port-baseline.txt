@@ -1,0 +1,30 @@
+=== Step0: 回顾 Volume 状态里的端口划分——管理面固定在 24007，每个 Brick 各有独立的动态端口 ===
+Status of volume: gv-rep
+Gluster process                             TCP Port  RDMA Port  Online  Pid
+------------------------------------------------------------------------------
+Brick node1:/data/brick2                    52052     0          Y       339  
+Brick node2:/data/brick2                    58508     0          Y       452  
+Brick node3:/data/brick2                    49933     0          Y       54   
+Self-heal Daemon on localhost               N/A       N/A        Y       356  
+Self-heal Daemon on node3                   N/A       N/A        Y       71   
+Self-heal Daemon on node2                   N/A       N/A        Y       469  
+ 
+Task Status of Volume gv-rep
+------------------------------------------------------------------------------
+There are no active volume tasks
+ 
+Status of volume: gv-dist
+Gluster process                             TCP Port  RDMA Port  Online  Pid
+------------------------------------------------------------------------------
+Brick node1:/data/brick1                    52943     0          Y       67   
+Brick node2:/data/brick1                    60832     0          Y       206  
+Brick node3:/data/brick1                    57971     0          Y       43   
+ 
+Task Status of Volume gv-dist
+------------------------------------------------------------------------------
+There are no active volume tasks
+ 
+--- 三个节点上 24007 (glusterd 管理面) 都在监听 ---
+LISTEN 0      1024         0.0.0.0:24007      0.0.0.0:*    users:(("glusterd",pid=1,fd=7))    
+LISTEN 0      1024         0.0.0.0:24007      0.0.0.0:*    users:(("glusterd",pid=1,fd=7))     
+LISTEN 0      1024         0.0.0.0:24007      0.0.0.0:*    users:(("glusterd",pid=1,fd=7))    

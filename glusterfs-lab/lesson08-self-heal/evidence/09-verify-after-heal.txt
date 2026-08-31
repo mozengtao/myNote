@@ -1,0 +1,11 @@
+=== Step9: heal 之后，验证 node3 数据已经追平 ===
+MODIFIED while node3 was down
+created while node3 was down
+total 44
+drwxr-xr-x   4 root root 4096 Aug 29 06:07 .
+drwxr-xr-x   4 root root 4096 Aug 29 05:53 ..
+drw------- 262 root root 4096 Aug 29 05:54 .glusterfs
+drwxr-xr-x   2 root root 4096 Aug 29 05:53 .glusterfs-anonymous-inode-848e4034-b5b9-4f2b-8ae1-82cc479abe4e
+-rw-r--r--   2 root root   29 Aug 29 06:07 created-during-outage.txt
+-rw-r--r--   2 root root   30 Aug 29 06:07 rep-test.txt
+-rw-r--r--   2 root root 4096 Aug 29 05:54 rep-write-test.bin

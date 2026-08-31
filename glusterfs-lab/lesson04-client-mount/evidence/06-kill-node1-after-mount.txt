@@ -1,0 +1,17 @@
+=== Step5: 停掉 node1（挂载时联系的第一个节点），验证已挂载的 client 是否还能正常写文件 ===
+node1
+--- node1 状态 ---
+CONTAINER ID   IMAGE                  COMMAND                  CREATED        STATUS                      PORTS     NAMES
+2a90ab30f55e   glusterlab:10.1        "/usr/local/bin/entr…"   2 hours ago    Exited (15) 4 seconds ago             node1
+b9ba8db89d31   ansible-test-node:v1   "/usr/sbin/sshd -D"      6 months ago   Exited (0) 6 months ago               ansible-node1
+--- 在已挂载的 client 上写新文件 ---
+written after node1 is down
+--- ls 整个挂载目录，确认之前写的文件还能访问（即便它在 node1 上也应该可见，除非文件恰好落在 node1）---
+total 10
+drwxr-xr-x 3 root root 4096 Aug 29 05:29 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:27 ..
+-rw-r--r-- 1 root root   28 Aug 29 05:29 after-node1-down.txt
+-rw-r--r-- 1 root root   17 Aug 29 05:21 hello.txt
+-rw-r--r-- 1 root root   17 Aug 29 05:21 hello.txt
+-rw-r--r-- 1 root root   24 Aug 29 05:28 testfile.txt
+written via fuse client

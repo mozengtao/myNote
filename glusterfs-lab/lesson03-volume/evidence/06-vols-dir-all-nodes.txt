@@ -1,0 +1,52 @@
+=== Step6: /var/lib/glusterd/vols/gv-dist/ 在三个节点上是否一致（证明配置也是复制的，不是中心存的）===
+--- node1 ---
+total 60
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 .
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:24 bricks
+-rw------- 1 root root   16 Aug 29 05:24 cksum
+-rw------- 1 root root 2196 Aug 29 05:24 gv-dist-rebalance.vol
+-rw------- 1 root root 3416 Aug 29 05:24 gv-dist.gfproxyd.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node1.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node2.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node3.data-brick1.vol
+-rw------- 1 root root 2563 Aug 29 05:24 gv-dist.tcp-fuse.vol
+-rw------- 1 root root  578 Aug 29 05:24 info
+-rw------- 1 root root  168 Aug 29 05:24 node_state.info
+-rw------- 1 root root   13 Aug 29 05:24 snapd.info
+-rw------- 1 root root 2905 Aug 29 05:24 trusted-gv-dist.tcp-fuse.vol
+-rw------- 1 root root 1146 Aug 29 05:24 trusted-gv-dist.tcp-gfproxy-fuse.vol
+--- node2 ---
+total 60
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 .
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:24 bricks
+-rw------- 1 root root   16 Aug 29 05:24 cksum
+-rw------- 1 root root 2196 Aug 29 05:24 gv-dist-rebalance.vol
+-rw------- 1 root root 3416 Aug 29 05:24 gv-dist.gfproxyd.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node1.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node2.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node3.data-brick1.vol
+-rw------- 1 root root 2563 Aug 29 05:24 gv-dist.tcp-fuse.vol
+-rw------- 1 root root  578 Aug 29 05:24 info
+-rw------- 1 root root  168 Aug 29 05:24 node_state.info
+-rw------- 1 root root   13 Aug 29 05:24 snapd.info
+-rw------- 1 root root 2905 Aug 29 05:24 trusted-gv-dist.tcp-fuse.vol
+-rw------- 1 root root 1146 Aug 29 05:24 trusted-gv-dist.tcp-gfproxy-fuse.vol
+--- node3 ---
+total 60
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 .
+drwxr-xr-x 3 root root 4096 Aug 29 05:24 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:24 bricks
+-rw------- 1 root root   16 Aug 29 05:24 cksum
+-rw------- 1 root root 2196 Aug 29 05:24 gv-dist-rebalance.vol
+-rw------- 1 root root 3416 Aug 29 05:24 gv-dist.gfproxyd.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node1.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node2.data-brick1.vol
+-rw------- 1 root root 3744 Aug 29 05:24 gv-dist.node3.data-brick1.vol
+-rw------- 1 root root 2563 Aug 29 05:24 gv-dist.tcp-fuse.vol
+-rw------- 1 root root  578 Aug 29 05:24 info
+-rw------- 1 root root  168 Aug 29 05:24 node_state.info
+-rw------- 1 root root   13 Aug 29 05:24 snapd.info
+-rw------- 1 root root 2905 Aug 29 05:24 trusted-gv-dist.tcp-fuse.vol
+-rw------- 1 root root 1146 Aug 29 05:24 trusted-gv-dist.tcp-gfproxy-fuse.vol

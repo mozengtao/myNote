@@ -19,6 +19,8 @@
 - [epoll](c/epoll.md)
 - [共享内存环形缓冲区（SHM Ring Buffer）设计与使用说明](c/shm-ring-buffer-demo/docs/SHM_RING_BUFFER.md)
 - [基于 hash 的 alloc/free/lookup实现套路](c/hash-alloc-patterns/README.md)  
+- [高性能 Shared Memory 的常用典型设计](c/share_memory_design.md)  
+- [工程实践中的排序算法：最佳实践与心智模式](sorting_mental_model.md)  
 - []()  
 - []()  
 - []()  

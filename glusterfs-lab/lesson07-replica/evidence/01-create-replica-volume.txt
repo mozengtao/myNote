@@ -1,0 +1,21 @@
+=== Step1: 创建新的 brick2 目录，建一个 Replica 3 的卷 ===
+volume create: gv-rep: success: please start the volume to access data
+volume start: gv-rep: success
+ 
+Volume Name: gv-rep
+Type: Replicate
+Volume ID: 848e4034-b5b9-4f2b-8ae1-82cc479abe4e
+Status: Started
+Snapshot Count: 0
+Number of Bricks: 1 x 3 = 3
+Transport-type: tcp
+Bricks:
+Brick1: node1:/data/brick2
+Brick2: node2:/data/brick2
+Brick3: node3:/data/brick2
+Options Reconfigured:
+cluster.granular-entry-heal: on
+storage.fips-mode-rchecksum: on
+transport.address-family: inet
+nfs.disable: on
+performance.client-io-threads: off

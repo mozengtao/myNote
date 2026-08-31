@@ -1,0 +1,5 @@
+=== Step4: 这个文件到底落在哪个/哪些 Brick 上？===
+--- node1 : /data/brick1 ---
+--- node2 : /data/brick1 ---
+--- node3 : /data/brick1 ---
+-rw-r--r-- 2 root root 24 Aug 29 05:28 /data/brick1/testfile.txt

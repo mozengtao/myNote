@@ -1,0 +1,24 @@
+=== 综合实验: 创建一个 Distribute-Replicate 卷(3组 x 2副本=6 Brick)，一次性观察完整的 DHT+AFR 叠加栈 ===
+volume create: gv-final: success: please start the volume to access data
+volume start: gv-final: success
+ 
+Volume Name: gv-final
+Type: Distributed-Replicate
+Volume ID: 52185c60-538b-497c-8393-0a6d10c456ac
+Status: Started
+Snapshot Count: 0
+Number of Bricks: 3 x 2 = 6
+Transport-type: tcp
+Bricks:
+Brick1: node1:/data/brick3
+Brick2: node2:/data/brick3
+Brick3: node2:/data/brick4
+Brick4: node3:/data/brick4
+Brick5: node3:/data/brick3
+Brick6: node1:/data/brick4
+Options Reconfigured:
+cluster.granular-entry-heal: on
+storage.fips-mode-rchecksum: on
+transport.address-family: inet
+nfs.disable: on
+performance.client-io-threads: off

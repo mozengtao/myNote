@@ -1,0 +1,10 @@
+=== Step3: 写一个文件，检查它是否出现在全部 3 个 Brick 上 ===
+--- node1 ---
+-rw-r--r-- 2 root root 24 Aug 29 05:53 /data/brick2/rep-test.txt
+replica payload content
+--- node2 ---
+-rw-r--r-- 2 root root 24 Aug 29 05:53 /data/brick2/rep-test.txt
+replica payload content
+--- node3 ---
+-rw-r--r-- 2 root root 24 Aug 29 05:53 /data/brick2/rep-test.txt
+replica payload content

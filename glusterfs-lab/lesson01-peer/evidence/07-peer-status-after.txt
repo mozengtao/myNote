@@ -1,0 +1,31 @@
+=== gluster peer status（三个节点分别执行）===
+--- node1 ---
+Number of Peers: 2
+
+Hostname: node2
+Uuid: 468ef93d-2fc3-4226-a10c-26b4f12c0648
+State: Peer in Cluster (Connected)
+
+Hostname: node3
+Uuid: 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+State: Peer in Cluster (Connected)
+--- node2 ---
+Number of Peers: 2
+
+Hostname: node1.glusterlab-net
+Uuid: b64688a7-838c-41a3-bdd0-5d5f62780af4
+State: Peer in Cluster (Connected)
+
+Hostname: node3
+Uuid: 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+State: Peer in Cluster (Connected)
+--- node3 ---
+Number of Peers: 2
+
+Hostname: node1.glusterlab-net
+Uuid: b64688a7-838c-41a3-bdd0-5d5f62780af4
+State: Peer in Cluster (Connected)
+
+Hostname: node2
+Uuid: 468ef93d-2fc3-4226-a10c-26b4f12c0648
+State: Peer in Cluster (Connected)

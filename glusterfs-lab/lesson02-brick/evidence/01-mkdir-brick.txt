@@ -1,0 +1,16 @@
+=== Step1: 在三个节点上创建 brick 目录 ===
+--- node1 ---
+total 12
+drwxr-xr-x 3 root root 4096 Aug 29 05:21 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:21 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:21 brick1
+--- node2 ---
+total 12
+drwxr-xr-x 3 root root 4096 Aug 29 05:21 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:21 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:21 brick1
+--- node3 ---
+total 12
+drwxr-xr-x 3 root root 4096 Aug 29 05:21 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:21 ..
+drwxr-xr-x 2 root root 4096 Aug 29 05:21 brick1

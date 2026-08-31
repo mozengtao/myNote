@@ -1,0 +1,144 @@
+=== Step10: brick 端 volfile (glusterfsd 进程用的，以 node1 的 brick1 为例) ===
+volume gv-dist-posix
+    type storage/posix
+    option shared-brick-count 1
+    option fips-mode-rchecksum on
+    option volume-id b8c09893-49bc-42cf-b8f0-4882904c06e0
+    option directory /data/brick1
+end-volume
+
+volume gv-dist-trash
+    type features/trash
+    option trash-internal-op off
+    option brick-path /data/brick1
+    option trash-dir .trashcan
+    subvolumes gv-dist-posix
+end-volume
+
+volume gv-dist-changelog
+    type features/changelog
+    option changelog-barrier-timeout 120
+    option changelog-notification off
+    option changelog-dir /data/brick1/.glusterfs/changelogs
+    option changelog-brick /data/brick1
+    subvolumes gv-dist-trash
+end-volume
+
+volume gv-dist-bitrot-stub
+    type features/bitrot-stub
+    option bitrot disable
+    option export /data/brick1
+    subvolumes gv-dist-changelog
+end-volume
+
+volume gv-dist-access-control
+    type features/access-control
+    subvolumes gv-dist-bitrot-stub
+end-volume
+
+volume gv-dist-locks
+    type features/locks
+    option enforce-mandatory-lock off
+    subvolumes gv-dist-access-control
+end-volume
+
+volume gv-dist-worm
+    type features/worm
+    option worm-files-deletable on
+    option worm-file-level off
+    option worm off
+    subvolumes gv-dist-locks
+end-volume
+
+volume gv-dist-read-only
+    type features/read-only
+    option read-only off
+    subvolumes gv-dist-worm
+end-volume
+
+volume gv-dist-leases
+    type features/leases
+    option leases off
+    subvolumes gv-dist-read-only
+end-volume
+
+volume gv-dist-upcall
+    type features/upcall
+    option cache-invalidation off
+    subvolumes gv-dist-leases
+end-volume
+
+volume gv-dist-io-threads
+    type performance/io-threads
+    subvolumes gv-dist-upcall
+end-volume
+
+volume gv-dist-selinux
+    type features/selinux
+    option selinux on
+    subvolumes gv-dist-io-threads
+end-volume
+
+volume gv-dist-marker
+    type features/marker
+    option inode-quota off
+    option quota off
+    option gsync-force-xtime off
+    option xtime off
+    option quota-version 0
+    option timestamp-file /var/lib/glusterd/vols/gv-dist/marker.tstamp
+    option volume-uuid b8c09893-49bc-42cf-b8f0-4882904c06e0
+    subvolumes gv-dist-selinux
+end-volume
+
+volume gv-dist-barrier
+    type features/barrier
+    option barrier-timeout 120
+    option barrier disable
+    subvolumes gv-dist-marker
+end-volume
+
+volume gv-dist-index
+    type features/index
+    option xattrop-pending-watchlist trusted.afr.gv-dist-
+    option xattrop-dirty-watchlist trusted.afr.dirty
+    option index-base /data/brick1/.glusterfs/indices
+    subvolumes gv-dist-barrier
+end-volume
+
+volume gv-dist-quota
+    type features/quota
+    option deem-statfs off
+    option server-quota off
+    option volume-uuid gv-dist
+    subvolumes gv-dist-index
+end-volume
+
+volume /data/brick1
+    type debug/io-stats
+    option global-threading off
+    option count-fop-hits off
+    option latency-measurement off
+    option threads 16
+    option log-level INFO
+    option volume-id b8c09893-49bc-42cf-b8f0-4882904c06e0
+    option unique-id /data/brick1
+    subvolumes gv-dist-quota
+end-volume
+
+volume gv-dist-server
+    type protocol/server
+    option transport.listen-backlog 1024
+    option transport.socket.keepalive-count 9
+    option transport.socket.keepalive-interval 2
+    option transport.socket.keepalive-time 20
+    option transport.socket.ssl-enabled off
+    option transport.socket.keepalive 1
+    option auth.addr./data/brick1.allow *
+    option auth-path /data/brick1
+    option auth.login.8ecb76ec-8304-46fe-b024-351587f34fa2.password 77f0f621-b9cd-48cd-85f8-434fa278314d
+    option auth.login./data/brick1.allow 8ecb76ec-8304-46fe-b024-351587f34fa2
+    option transport.address-family inet
+    option transport-type tcp
+    subvolumes /data/brick1
+end-volume

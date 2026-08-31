@@ -1,0 +1,2 @@
+=== Step1: mount 之前，client 容器上还没有任何到 gluster 节点的连接 ===
+State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess

@@ -1,0 +1,10 @@
+=== Step7: 换成用 node2 作为入口挂载（证明任意存活节点都能当入口，不只是 node1）===
+退出码: 0
+node2:/gv-dist on /mnt/gluster type fuse.glusterfs (rw,relatime,user_id=0,group_id=0,default_permissions,allow_other,max_read=131072)
+total 10
+drwxr-xr-x 3 root root 4096 Aug 29 05:29 .
+drwxr-xr-x 1 root root 4096 Aug 29 05:27 ..
+-rw-r--r-- 1 root root   28 Aug 29 05:29 after-node1-down.txt
+-rw-r--r-- 1 root root   17 Aug 29 05:21 hello.txt
+-rw-r--r-- 1 root root   17 Aug 29 05:21 hello.txt
+-rw-r--r-- 1 root root   24 Aug 29 05:28 testfile.txt

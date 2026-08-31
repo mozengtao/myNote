@@ -1,0 +1,6 @@
+=== Step5: brick 可以是任意路径 —— 再建一个完全不同位置的目录证明它也一样能当 brick（这里只证明只是目录，Lesson3 才会真正用它建 volume）===
+/srv/whatever
+/srv/whatever/deep
+/srv/whatever/deep/nested
+/srv/whatever/deep/nested/mybrick
+/srv/whatever/deep/nested/mybrick/probe.txt

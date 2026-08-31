@@ -1,0 +1,4 @@
+NAMES     IMAGE             STATUS
+node3     glusterlab:10.1   Up 16 seconds
+node2     glusterlab:10.1   Up 17 seconds
+node1     glusterlab:10.1   Up 17 seconds

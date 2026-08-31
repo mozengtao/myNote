@@ -1,0 +1,19 @@
+=== Step5: 现在再看 Brick 目录的 xattr —— 和 Lesson2 加入之前的空白对比 ===
+--- node1 : /data/brick1 ---
+getfattr: Removing leading '/' from absolute path names
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+
+--- node2 : /data/brick1 ---
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+
+getfattr: Removing leading '/' from absolute path names
+--- node3 : /data/brick1 ---
+getfattr: Removing leading '/' from absolute path names
+# file: data/brick1
+trusted.gfid=0x00000000000000000000000000000001
+trusted.glusterfs.volume-id=0xb8c0989349bc42cfb8f04882904c06e0
+

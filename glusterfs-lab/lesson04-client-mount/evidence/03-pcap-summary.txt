@@ -1,0 +1,24 @@
+=== tcpdump 抓包摘要：mount 过程中，client 与哪些 IP:端口 建立了连接 ===
+reading from file /tmp/mount.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+05:27:39.561006 IP 172.28.0.20.49151 > 172.28.0.11.24007: Flags [S], seq 266206740, win 64240, options [mss 1460,sackOK,TS val 1648585167 ecr 0,nop,wscale 10], length 0
+05:27:39.613847 IP 172.28.0.20.49150 > 172.28.0.11.24007: Flags [S], seq 2439628868, win 64240, options [mss 1460,sackOK,TS val 2108373255 ecr 0,nop,wscale 10], length 0
+05:27:39.617627 IP 172.28.0.20.49149 > 172.28.0.12.24007: Flags [S], seq 4043456900, win 64240, options [mss 1460,sackOK,TS val 3480918393 ecr 0,nop,wscale 10], length 0
+05:27:39.620261 IP 172.28.0.20.49148 > 172.28.0.11.53176: Flags [S], seq 2877927826, win 64240, options [mss 1460,sackOK,TS val 82387446 ecr 0,nop,wscale 10], length 0
+05:27:39.621206 IP 172.28.0.20.49147 > 172.28.0.13.24007: Flags [S], seq 1772473376, win 64240, options [mss 1460,sackOK,TS val 1530654249 ecr 0,nop,wscale 10], length 0
+05:27:39.634616 IP 172.28.0.20.49146 > 172.28.0.12.60832: Flags [S], seq 258916192, win 64240, options [mss 1460,sackOK,TS val 2570782480 ecr 0,nop,wscale 10], length 0
+05:27:39.635711 IP 172.28.0.20.49145 > 172.28.0.13.60791: Flags [S], seq 2251679361, win 64240, options [mss 1460,sackOK,TS val 740434561 ecr 0,nop,wscale 10], length 0
+
+--- 所有出现过的 (ip, port) 对 ---
+172.28.0.11.24007
+172.28.0.11.53176
+172.28.0.12.24007
+172.28.0.12.60832
+172.28.0.13.24007
+172.28.0.13.60791
+172.28.0.20.49145
+172.28.0.20.49146
+172.28.0.20.49147
+172.28.0.20.49148
+172.28.0.20.49149
+172.28.0.20.49150
+172.28.0.20.49151

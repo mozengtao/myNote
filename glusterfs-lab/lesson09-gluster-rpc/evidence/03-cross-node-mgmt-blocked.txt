@@ -1,0 +1,2 @@
+=== Step3: 从 node1 查询 volume status（需要跨节点问 node2 的 glusterd，应该受影响）===
+退出码: 124

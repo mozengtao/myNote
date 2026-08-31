@@ -1,0 +1,2 @@
+=== Step1: 尝试直接用非空目录创建 Volume（预期会被拒绝或警告）===
+volume create: gv-dist: failed: The brick node1:/data/brick1 is being created in the root partition. It is recommended that you don't use the system's root partition for storage backend. Or use 'force' at the end of the command if you want to override this behavior.

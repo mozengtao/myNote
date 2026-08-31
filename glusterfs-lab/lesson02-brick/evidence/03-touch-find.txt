@@ -1,0 +1,13 @@
+=== Step3: touch 文件、写内容、find、cat 验证 ===
+--- node1 ---
+/data/brick1
+/data/brick1/hello.txt
+hello from node1
+--- node2 ---
+/data/brick1
+/data/brick1/hello.txt
+hello from node2
+--- node3 ---
+/data/brick1
+/data/brick1/hello.txt
+hello from node3

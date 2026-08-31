@@ -1,0 +1,29 @@
+=== Step4: volume info / status ===
+ 
+Volume Name: gv-dist
+Type: Distribute
+Volume ID: b8c09893-49bc-42cf-b8f0-4882904c06e0
+Status: Started
+Snapshot Count: 0
+Number of Bricks: 3
+Transport-type: tcp
+Bricks:
+Brick1: node1:/data/brick1
+Brick2: node2:/data/brick1
+Brick3: node3:/data/brick1
+Options Reconfigured:
+storage.fips-mode-rchecksum: on
+transport.address-family: inet
+nfs.disable: on
+---status---
+Status of volume: gv-dist
+Gluster process                             TCP Port  RDMA Port  Online  Pid
+------------------------------------------------------------------------------
+Brick node1:/data/brick1                    53176     0          Y       187  
+Brick node2:/data/brick1                    60832     0          Y       206  
+Brick node3:/data/brick1                    60791     0          Y       207  
+ 
+Task Status of Volume gv-dist
+------------------------------------------------------------------------------
+There are no active volume tasks
+ 

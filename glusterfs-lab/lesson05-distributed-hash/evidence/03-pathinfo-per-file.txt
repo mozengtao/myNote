@@ -1,0 +1,76 @@
+=== Step3: 用 getfattr trusted.glusterfs.pathinfo 权威查询每个文件实际落在哪个 Brick ===
+--- file-01.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-01.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-01.txt>)"
+
+--- file-02.txt ---
+# file: mnt/gluster/file-02.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-02.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-03.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-03.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-03.txt>)"
+
+--- file-04.txt ---
+# file: mnt/gluster/file-04.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node1:/data/brick1/file-04.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-05.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-05.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-05.txt>)"
+
+--- file-06.txt ---
+# file: mnt/gluster/file-06.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-06.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-07.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-07.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node1:/data/brick1/file-07.txt>)"
+
+--- file-08.txt ---
+# file: mnt/gluster/file-08.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-08.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-09.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-09.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-09.txt>)"
+
+--- file-10.txt ---
+# file: mnt/gluster/file-10.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node1:/data/brick1/file-10.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-11.txt ---
+# file: mnt/gluster/file-11.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-11.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-12.txt ---
+# file: mnt/gluster/file-12.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-12.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-13.txt ---
+# file: mnt/gluster/file-13.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node1:/data/brick1/file-13.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-14.txt ---
+# file: mnt/gluster/file-14.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node2:/data/brick1/file-14.txt>)"
+
+getfattr: Removing leading '/' from absolute path names
+--- file-15.txt ---
+getfattr: Removing leading '/' from absolute path names
+# file: mnt/gluster/file-15.txt
+trusted.glusterfs.pathinfo="(<DISTRIBUTE:gv-dist-dht> <POSIX(/data/brick1):node3:/data/brick1/file-15.txt>)"
+

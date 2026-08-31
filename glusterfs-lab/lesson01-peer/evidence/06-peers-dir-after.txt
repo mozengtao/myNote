@@ -1,0 +1,43 @@
+=== AFTER probe: /var/lib/glusterd/peers/ 目录内容 ===
+--- node1 : ls ---
+total 20
+drwxr-xr-x 2 root root 4096 Aug 29 03:30 .
+drwxr-xr-x 1 root root 4096 Aug 29 03:30 ..
+-rw------- 1 root root   66 Aug 29 03:30 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+-rw------- 1 root root   66 Aug 29 03:30 468ef93d-2fc3-4226-a10c-26b4f12c0648
+  -- node1 : peers/09483fe3-0d93-4205-9659-6d2a0b8e30bd --
+uuid=09483fe3-0d93-4205-9659-6d2a0b8e30bd
+state=3
+hostname1=node3
+  -- node1 : peers/468ef93d-2fc3-4226-a10c-26b4f12c0648 --
+uuid=468ef93d-2fc3-4226-a10c-26b4f12c0648
+state=3
+hostname1=node2
+--- node2 : ls ---
+total 20
+drwxr-xr-x 2 root root 4096 Aug 29 03:30 .
+drwxr-xr-x 1 root root 4096 Aug 29 03:30 ..
+-rw------- 1 root root   66 Aug 29 03:30 09483fe3-0d93-4205-9659-6d2a0b8e30bd
+-rw------- 1 root root   81 Aug 29 03:30 b64688a7-838c-41a3-bdd0-5d5f62780af4
+  -- node2 : peers/09483fe3-0d93-4205-9659-6d2a0b8e30bd --
+uuid=09483fe3-0d93-4205-9659-6d2a0b8e30bd
+state=3
+hostname1=node3
+  -- node2 : peers/b64688a7-838c-41a3-bdd0-5d5f62780af4 --
+uuid=b64688a7-838c-41a3-bdd0-5d5f62780af4
+state=3
+hostname1=node1.glusterlab-net
+--- node3 : ls ---
+total 20
+drwxr-xr-x 2 root root 4096 Aug 29 03:30 .
+drwxr-xr-x 1 root root 4096 Aug 29 03:30 ..
+-rw------- 1 root root   66 Aug 29 03:30 468ef93d-2fc3-4226-a10c-26b4f12c0648
+-rw------- 1 root root   81 Aug 29 03:30 b64688a7-838c-41a3-bdd0-5d5f62780af4
+  -- node3 : peers/468ef93d-2fc3-4226-a10c-26b4f12c0648 --
+uuid=468ef93d-2fc3-4226-a10c-26b4f12c0648
+state=3
+hostname1=node2
+  -- node3 : peers/b64688a7-838c-41a3-bdd0-5d5f62780af4 --
+uuid=b64688a7-838c-41a3-bdd0-5d5f62780af4
+state=3
+hostname1=node1.glusterlab-net

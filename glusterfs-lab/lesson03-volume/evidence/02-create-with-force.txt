@@ -1,0 +1,2 @@
+=== Step2: 用 force 创建 Volume（因为实验环境里 brick 就在容器根分区上）===
+volume create: gv-dist: success: please start the volume to access data

@@ -1,0 +1,2 @@
+=== Step4: 交叉验证 pathinfo 的权威性——直接去 node3 的后端目录找 file-01.txt ===
+content of file-01

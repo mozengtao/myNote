@@ -1,0 +1,3 @@
+=== Step6: 卸载后，尝试用已经宕机的 node1 作为挂载入口（新挂载，验证是否失败）===
+Mounting glusterfs on /mnt/gluster failed.
+退出码: 1
