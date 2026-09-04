@@ -1,0 +1,16 @@
+images:
+  vmc:
+    path: artifactory.cn.vecima.com/docker/jenkins/vmc/nightly
+    version: latest
+
+  router:
+    path: artifactory.cn.vecima.com/docker/jenkins/router/nightly
+    version: latest
+
+  pcore:
+    path: artifactory.cn.vecima.com/docker/jenkins/pcore/nightly
+    version: latest
+
+  snmp:
+    path: artifactory.cn.vecima.com/docker/jenkins/snmp/nightly
+    version: latest

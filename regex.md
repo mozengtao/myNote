@@ -3,9 +3,36 @@
 [Regular Expression HOWTO](https://docs.python.org/3/howto/regex.html)  
 [Regex Cheat Sheet](https://techearl.com/regex-cheat-sheet)  
 [Regular-Expressions.info](https://www.regular-expressions.info/)  
+[TextFSM](https://github.com/google/textfsm/wiki/TextFSM)  
+[RegexOne](https://regexone.com/)  
+[Regular Expressions Quick Reference](https://www.regular-expressions.info/refquick.html)  
+[regex101](https://regex101.com/)  
+[re — Regular expression operations](https://docs.python.org/3/library/re.html)  
 []()  
-[]()  
-[]()  
+
+| Regex      | 名称     | 含义                   | 示例                     | 匹配示例                 |               |
+| ---------- | ------ | -------------------- | ---------------------- | -------------------- | ------------- |
+| `.`        | 任意字符   | 匹配除 `\n` 外任意一个字符     | `a.c`                  | `abc`、`axc`          |               |
+| `*`        | 零次或多次  | 前一个表达式重复 **0~N** 次   | `ab*`                  | `a`、`ab`、`abbb`      |               |
+| `+`        | 一次或多次  | 前一个表达式重复 **1~N** 次   | `ab+`                  | `ab`、`abbbb`         |               |
+| `?`        | 零次或一次  | 前一个表达式重复 **0 或 1** 次 | `ab?`                  | `a`、`ab`             |               |
+| `{n}`      | 固定次数   | 恰好重复 n 次             | `\d{4}`                | `2025`               |               |
+| `{m,n}`    | 范围次数   | 重复 m~n 次             | `\d{1,3}`              | `1`、`12`、`123`       |               |
+| `[]`       | 字符集合   | 匹配集合中的任意一个字符         | `[A-Z]`                | `A`、`F`              |               |
+| `[^...]`   | 否定字符集合 | 匹配**不属于**集合中的任意一个字符  | `[^ ]+`                | `Ethernet0/0`        |               |
+| `()`       | 捕获组    | 分组，并保存匹配内容           | `(GigabitEthernet\d+)` | `GigabitEthernet0`   |               |
+| `(?:...)`  | 非捕获组   | 分组，但**不保存**匹配内容      | `(?:up\|down)`         | `up`、`down`          |               |
+| `\|`（正则为 ` | `）     | 或                    | 左右表达式二选一               | `up\|down`           | `up` 或 `down` |
+| `^`        | 行首     | 匹配一行开始               | `^Interface`           | `Interface Gi0/0`    |               |
+| `$`        | 行尾     | 匹配一行结束               | `state$`               | `line state`         |               |
+| `\d`       | 数字     | 等价 `[0-9]`           | `\d+`                  | `123`                |               |
+| `\D`       | 非数字    | 等价 `[^0-9]`          | `\D+`                  | `abc`                |               |
+| `\w`       | 单词字符   | 字母、数字、下划线            | `\w+`                  | `eth0`               |               |
+| `\W`       | 非单词字符  | 非 `\w`               | `\W+`                  | `:/-`                |               |
+| `\s`       | 空白字符   | 空格、Tab、换行等           | `\s+`                  | `"   "`              |               |
+| `\S`       | 非空白字符  | 非空白字符                | `\S+`                  | `GigabitEthernet0/1` |               |
+
+
 
 ## 正则表达式在线编辑器
 [regexr](https://regexr.com/)  

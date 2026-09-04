@@ -2,6 +2,13 @@
 [**ssh_config**](https://www.mankier.com/5/ssh_config)  
 [sshd_config](https://www.mankier.com/5/sshd_config)  
 
+[SSHFS 使用指南（从心智模型到实践）](sshfs.md)
+[SSHFS 使用 FUSE 的完整操作流程](sshfs_fuse.md)
+[FUSE（Filesystem in Userspace）详解](fuse.md)
+[FUSE (filesystem in user space)](https://georgesims21.github.io/posts/fuse/)
+[FUSE: Filesystem in Userspace Explained](https://www.abhik.ai/concepts/systems/fuse-filesystem)
+[]()
+
 [Restricting and Locking Down SSH Users](https://www.jamieweb.net/blog/restricting-and-locking-down-ssh-users/)  
 [Managing Your SSH known_hosts Using Git](https://www.jamieweb.net/blog/managing-your-ssh-known_hosts-using-git/)  
 [Introduction to BGP Routing and Security](https://www.jamieweb.net/blog/bgp-routing-security-prelude-connecting-to-the-dn42-overlay-network/)  

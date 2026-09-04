@@ -21,6 +21,9 @@
 - [基于 hash 的 alloc/free/lookup实现套路](c/hash-alloc-patterns/README.md)  
 - [高性能 Shared Memory 的常用典型设计](c/share_memory_design.md)  
 - [工程实践中的排序算法：最佳实践与心智模式](sorting_mental_model.md)  
+- [C 语言共享内存 Seqlock 机制](c/seqlock_mastery/seqlock_guide.md)  
+- [**Linux Kernel Object Model Cookbook**](c/linux-kernel-oop-cookbook/README.md)  
+- []()  
 - []()  
 - []()  
 - []()  
@@ -28,7 +31,7 @@
 - jansson
     - [jansson github](https://github.com/akheron/jansson)  
     - [Jansson Documentation](https://jansson.readthedocs.io/en/latest/)  
-    - [Jansson JSON Library 心智模型与 API 总结](./c/jansson_guide.md)
+    - [Jansson JSON Library 心智模型与 API 总结](c/jansson_guide.md)
 
 ## 学习资源
 
@@ -97,35 +100,35 @@
 ## 数据结构
 
 ### 系列一：基础数据结构
-- [索引](./c/data_structure/00-index.md) - 数据结构索引
-- [动态数组](./c/data_structure/01-dynamic-array.md) - 动态数组实现
-- [链表](./c/data_structure/02-linked-list.md) - 链表详解
-- [哈希表](./c/data_structure/03-hash-table.md) - 哈希表实现
-- [红黑树](./c/data_structure/04-red-black-tree.md) - 红黑树算法
-- [B+树](./c/data_structure/05-bplus-tree.md) - B+树实现
-- [栈和队列](./c/data_structure/06-stack-queue.md) - 栈和队列
-- [环形缓冲区](./c/data_structure/07-ring-buffer.md) - 环形缓冲区
+- [索引](c/data_structure/00-index.md) - 数据结构索引
+- [动态数组](c/data_structure/01-dynamic-array.md) - 动态数组实现
+- [链表](c/data_structure/02-linked-list.md) - 链表详解
+- [哈希表](c/data_structure/03-hash-table.md) - 哈希表实现
+- [红黑树](c/data_structure/04-red-black-tree.md) - 红黑树算法
+- [B+树](c/data_structure/05-bplus-tree.md) - B+树实现
+- [栈和队列](c/data_structure/06-stack-queue.md) - 栈和队列
+- [环形缓冲区](c/data_structure/07-ring-buffer.md) - 环形缓冲区
 
 ### 系列二：详细实现
-- [数组](./c/data_structures/ds_01_array.md) - 数组操作
-- [单向链表](./c/data_structures/ds_02_singly_linked_list.md) - 单向链表
-- [双向链表](./c/data_structures/ds_03_doubly_linked_list.md) - 双向链表
-- [侵入式链表](./c/data_structures/ds_04_intrusive_linked_list.md) - 侵入式链表
-- [栈](./c/data_structures/ds_05_stack.md) - 栈的实现
-- [队列](./c/data_structures/ds_06_queue.md) - 队列的实现
-- [环形缓冲区](./c/data_structures/ds_07_ring_buffer.md) - 环形缓冲区详解
-- [二叉树](./c/data_structures/ds_08_binary_tree.md) - 二叉树操作
-- [二叉搜索树](./c/data_structures/ds_09_binary_search_tree.md) - BST算法
-- [平衡树](./c/data_structures/ds_10_balanced_trees.md) - 平衡树系列
-- [哈希表](./c/data_structures/ds_11_hash_table.md) - 哈希表详解
-- [高级数据结构](./c/data_structures/ds_12_advanced_structures.md) - 高级结构
+- [数组](c/data_structures/ds_01_array.md) - 数组操作
+- [单向链表](c/data_structures/ds_02_singly_linked_list.md) - 单向链表
+- [双向链表](c/data_structures/ds_03_doubly_linked_list.md) - 双向链表
+- [侵入式链表](c/data_structures/ds_04_intrusive_linked_list.md) - 侵入式链表
+- [栈](c/data_structures/ds_05_stack.md) - 栈的实现
+- [队列](c/data_structures/ds_06_queue.md) - 队列的实现
+- [环形缓冲区](c/data_structures/ds_07_ring_buffer.md) - 环形缓冲区详解
+- [二叉树](c/data_structures/ds_08_binary_tree.md) - 二叉树操作
+- [二叉搜索树](c/data_structures/ds_09_binary_search_tree.md) - BST算法
+- [平衡树](c/data_structures/ds_10_balanced_trees.md) - 平衡树系列
+- [哈希表](c/data_structures/ds_11_hash_table.md) - 哈希表详解
+- [高级数据结构](c/data_structures/ds_12_advanced_structures.md) - 高级结构
 
 ### 专项实现
 
 #### 定时器模块
-- [main.c](./c/timer/main.c) - 定时器主程序
-- [timer.c](./c/timer/timer.c) - 定时器实现
-- [timer.h](./c/timer/timer.h) - 定时器头文件
+- [main.c](c/timer/main.c) - 定时器主程序
+- [timer.c](c/timer/timer.c) - 定时器实现
+- [timer.h](c/timer/timer.h) - 定时器头文件
 
 - timer2
 [Makefile](c/timer2/Makefile)
@@ -139,12 +142,12 @@
 
 #### 内存池系统
 - [nginx内存池参考](https://github.com/nginx/nginx) - Nginx内存池实现参考
-- [为什么需要内存池](./c/mempool/01-WHY.md) - 内存池的必要性
-- [如何实现内存池](./c/mempool/02-HOW.md) - 内存池实现方法
-- [内存池是什么](./c/mempool/03-WHAT.md) - 内存池概念
-- [内存池应用场景](./c/mempool/04-WHERE.md) - 使用场景分析
-- [内存池陷阱](./c/mempool/05-PITFALLS.md) - 常见问题
-- [内存池最佳实践](./c/mempool/06-TRANSFER.md) - 实践经验
+- [为什么需要内存池](c/mempool/01-WHY.md) - 内存池的必要性
+- [如何实现内存池](c/mempool/02-HOW.md) - 内存池实现方法
+- [内存池是什么](c/mempool/03-WHAT.md) - 内存池概念
+- [内存池应用场景](c/mempool/04-WHERE.md) - 使用场景分析
+- [内存池陷阱](c/mempool/05-PITFALLS.md) - 常见问题
+- [内存池最佳实践](c/mempool/06-TRANSFER.md) - 实践经验
 
 #### 链表专题
 - [单向链表](./link_list/singly_linked_list.md) - 单向链表详解
@@ -154,64 +157,64 @@
 - [树形数据结构](./tree/tree_data_structures.md) - 树结构总览
 
 ### C语言分层架构
-- [嵌入式C可复用技巧](./c_tips/embedded_c_reusability.md) - 可复用代码技巧
-- [C语言软件分层架构（第一部分）](./c_tips/c_layer_interaction_part1.md) - 分层架构基础
-- [C语言软件分层架构（第二部分）](./c_tips/c_layer_interaction_part2.md) - 分层架构进阶
+- [嵌入式C可复用技巧](c_tips/embedded_c_reusability.md) - 可复用代码技巧
+- [C语言软件分层架构（第一部分）](c_tips/c_layer_interaction_part1.md) - 分层架构基础
+- [C语言软件分层架构（第二部分）](c_tips/c_layer_interaction_part2.md) - 分层架构进阶
 
 ## 设计模式
 
 ### 创建型模式
-- [单例模式](./c_tips/patterns/singleton.md) - 单例模式实现
-- [工厂模式](./c_tips/patterns/factory.md) - 工厂模式应用
-- [对象池模式](./c_tips/patterns/object_pool.md) - 对象池管理
+- [单例模式](c_tips/patterns/singleton.md) - 单例模式实现
+- [工厂模式](c_tips/patterns/factory.md) - 工厂模式应用
+- [对象池模式](c_tips/patterns/object_pool.md) - 对象池管理
 
 ### 结构型模式
-- [装饰器模式](./c_tips/patterns/decorator.md) - 装饰器模式
-- [适配器模式](./c_tips/patterns/adapter.md) - 适配器模式
+- [装饰器模式](c_tips/patterns/decorator.md) - 装饰器模式
+- [适配器模式](c_tips/patterns/adapter.md) - 适配器模式
 
 ### 行为型模式
-- [观察者模式](./c_tips/patterns/observer.md) - 观察者模式
-- [状态机模式](./c_tips/patterns/state_machine.md) - 状态机设计
-- [命令模式](./c_tips/patterns/command.md) - 命令模式
-- [责任链模式](./c_tips/patterns/chain_of_responsibility.md) - 责任链模式
-- [模板方法模式](./c_tips/patterns/template_method.md) - 模板方法模式
-- [策略模式](./c_tips/patterns/strategy.md) - 策略模式
+- [观察者模式](c_tips/patterns/observer.md) - 观察者模式
+- [状态机模式](c_tips/patterns/state_machine.md) - 状态机设计
+- [命令模式](c_tips/patterns/command.md) - 命令模式
+- [责任链模式](c_tips/patterns/chain_of_responsibility.md) - 责任链模式
+- [模板方法模式](c_tips/patterns/template_method.md) - 模板方法模式
+- [策略模式](c_tips/patterns/strategy.md) - 策略模式
 
 ### 高级模式和组合
-- [服务定位器模式](./c_tips/patterns/service_locator.md) - 服务定位器
-- [依赖注入模式](./c_tips/patterns/dependency_injection.md) - 依赖注入
-- [依赖注入 + 服务定位器 + 策略模式](./c_tips/patterns/DI_ServiceLoader_Strategy.md) - 综合应用
+- [服务定位器模式](c_tips/patterns/service_locator.md) - 服务定位器
+- [依赖注入模式](c_tips/patterns/dependency_injection.md) - 依赖注入
+- [依赖注入 + 服务定位器 + 策略模式](c_tips/patterns/DI_ServiceLoader_Strategy.md) - 综合应用
 
 ## C工程技巧
 
 ### 设计模式在C中的实现
-- [单例模式](./c_tips/01_单例模式_Singleton.md) - 单例模式基础
-- [单例模式进阶](./c_tips/01_单例模式_Singleton_Pattern.md) - 单例模式高级应用
-- [工厂模式](./c_tips/02_工厂模式_Factory.md) - 工厂模式实现
-- [适配器模式](./c_tips/03_适配器模式_Adapter.md) - 适配器模式应用
-- [观察者模式](./c_tips/04_观察者模式_Observer.md) - 观察者模式设计
-- [策略模式](./c_tips/05_策略模式_Strategy.md) - 策略模式实现
-- [状态模式](./c_tips/06_状态模式_State.md) - 状态模式设计
-- [回调模式](./c_tips/07_回调模式_Callback.md) - 回调机制实现
+- [单例模式](c_tips/01_单例模式_Singleton.md) - 单例模式基础
+- [单例模式进阶](c_tips/01_单例模式_Singleton_Pattern.md) - 单例模式高级应用
+- [工厂模式](c_tips/02_工厂模式_Factory.md) - 工厂模式实现
+- [适配器模式](c_tips/03_适配器模式_Adapter.md) - 适配器模式应用
+- [观察者模式](c_tips/04_观察者模式_Observer.md) - 观察者模式设计
+- [策略模式](c_tips/05_策略模式_Strategy.md) - 策略模式实现
+- [状态模式](c_tips/06_状态模式_State.md) - 状态模式设计
+- [回调模式](c_tips/07_回调模式_Callback.md) - 回调机制实现
 
 ### 软件工程实践
-- [C语言软件工程技巧](./c_tips/08_C语言软件工程技巧.md) - 软件工程最佳实践
-- [不透明指针](./c_tips/09_不透明指针_Opaque_Pointer.md) - 封装技术
-- [X-Macro技术](./c_tips/10_X-Macro技术.md) - 高级宏技术
+- [C语言软件工程技巧](c_tips/08_C语言软件工程技巧.md) - 软件工程最佳实践
+- [不透明指针](c_tips/09_不透明指针_Opaque_Pointer.md) - 封装技术
+- [X-Macro技术](c_tips/10_X-Macro技术.md) - 高级宏技术
 
 ### 内存管理和性能优化
-- [内存池](./c_tips/11_内存池_Memory_Pool.md) - 内存池设计
-- [侵入式数据结构](./c_tips/14_侵入式数据结构_Intrusive.md) - 高效数据结构
+- [内存池](c_tips/11_内存池_Memory_Pool.md) - 内存池设计
+- [侵入式数据结构](c_tips/14_侵入式数据结构_Intrusive.md) - 高效数据结构
 
 ### 错误处理和调试
-- [错误处理策略](./c_tips/12_错误处理策略_Error_Handling.md) - 异常处理机制
-- [契约式编程](./c_tips/13_契约式编程_Design_by_Contract.md) - 防御性编程
-- [编译时断言](./c_tips/15_编译时断言_Static_Assert.md) - 编译期检查
-- [防御式编程](./c_tips/18_防御式编程_Defensive.md) - 安全编程实践
+- [错误处理策略](c_tips/12_错误处理策略_Error_Handling.md) - 异常处理机制
+- [契约式编程](c_tips/13_契约式编程_Design_by_Contract.md) - 防御性编程
+- [编译时断言](c_tips/15_编译时断言_Static_Assert.md) - 编译期检查
+- [防御式编程](c_tips/18_防御式编程_Defensive.md) - 安全编程实践
 
 ### 高级编程技巧
-- [属性清理](./c_tips/16_属性清理_RAII_Cleanup.md) - 资源管理
-- [泛型宏编程](./c_tips/17_泛型宏编程_Generic.md) - 泛型编程
+- [属性清理](c_tips/16_属性清理_RAII_Cleanup.md) - 资源管理
+- [泛型宏编程](c_tips/17_泛型宏编程_Generic.md) - 泛型编程
 
 
 ## 模块化开发
@@ -256,17 +259,17 @@
 
 
 ### 编程规范和指南
-- [C系统编程指南](./c/c_systems_programming_guidelines.md) - C语言系统编程最佳实践
+- [C系统编程指南](c/c_systems_programming_guidelines.md) - C语言系统编程最佳实践
 
 ### 架构学习案例
 
 #### Raylib架构分析
 - [Raylib项目](https://github.com/raysan5/raylib) - 清洁的C库分层子系统设计
-- [从Raylib学习架构](./c/raylib_ARCHITECTURE_CASE_STUDY.md) - 游戏引擎架构案例研究
+- [从Raylib学习架构](c/raylib_ARCHITECTURE_CASE_STUDY.md) - 游戏引擎架构案例研究
 
 #### SQLite架构分析  
-- [SQLite分层架构分析](./c/sqlite_LAYERED_ARCHITECTURE_ANALYSIS.md) - 数据库引擎架构分析
-- [C架构中的边界和契约](./c/sqlite_boundaries_and_contracts_in_c.md) - 从SQLite学习边界设计
+- [SQLite分层架构分析](c/sqlite_LAYERED_ARCHITECTURE_ANALYSIS.md) - 数据库引擎架构分析
+- [C架构中的边界和契约](c/sqlite_boundaries_and_contracts_in_c.md) - 从SQLite学习边界设计
 
 ## 系统编程
 
@@ -350,7 +353,7 @@
 [GNU C Language Manual](https://www.gnu.org/software/c-intro-and-ref/manual/html_node/index.html#SEC_Contents)  
 [Online Python to C Converter](https://www.codeconvert.ai/python-to-c-converter)  
 [The GNU C Reference Manual](https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html)  
-[C Operator Precedence](https://en.cppreference.com/w/c/language/operator_precedence)  
+[C Operator Precedence](https://en.cppreference.com/c/language/operator_precedence)  
 [**The GNU C Library**](https://www.gnu.org/software/libc/manual/html_node/index.html#SEC_Contents) #online  
 [**The GNU C Library**](http://herbert.the-little-red-haired-girl.org/html/glibc/libc_toc.html)  
 [**The GNU C Library (glibc) manual**](https://sourceware.org/glibc/manual/)  
@@ -365,8 +368,8 @@
 [Notes for C and C++ Programming](https://www.codeinsideout.com/blog/c-cpp/notes/)  
 [c for dummies](https://c-for-dummies.com/)  
 [C and C++ Projects](https://www.codewithc.com/c-projects-with-source-code/)  
-[How to split/tokenize a string? (strtok() string tokenizer)](https://www.equestionanswers.com/c/c-strtok.php)  
-[declaring a flexible array member](https://wiki.sei.cmu.edu/confluence/display/c/DCL38-C.+Use+the+correct+syntax+when+declaring+a+flexible+array+member)  
+[How to split/tokenize a string? (strtok() string tokenizer)](https://www.equestionanswers.coc/c-strtok.php)  
+[declaring a flexible array member](https://wiki.sei.cmu.edu/confluence/displac/DCL38-C.+Use+the+correct+syntax+when+declaring+a+flexible+array+member)  
 [How to interpret complex C/C++ declarations](https://www.codeproject.com/Articles/7042/How-to-interpret-complex-C-C-declarations)  
 [Reading C type declarations](http://unixwiz.net/techtips/reading-cdecl.html)  
 [cdecl.org](https://cdecl.org/)  
@@ -392,7 +395,7 @@
 - [How to Use typeof, Statement Expressions and Block-Scope Label Names](https://www.oracle.com/solaris/technologies/c-type.html) - typeof和语句表达式
 
 ### 学习资源和教程
-- [**Programming in C**](https://users.cs.cf.ac.uk/dave/C/) - C语言编程教程
+- [**Programming in C**](https://users.cs.cf.ac.uk/davC/) - C语言编程教程
 - [The Unofficial C For Dummies Website](https://c-for-dummies.com/) - C语言学习网站
 
 ### 工具和实用程序
@@ -404,4 +407,4 @@
 ### 项目和资源集合
 - [Awesome C](https://github.com/oz123/awesome-c?tab=readme-ov-file#awesome-c) - 优秀C语言资源集合
 - [C Projects Repository](https://github.com/marcotrosi/C) - C语言项目集合
-- [C program to implement linked list](https://www.programmingsimplified.com/c/data-structures) - 数据结构实现示例  
+- [C program to implement linked list](https://www.programmingsimplified.coc/data-structures) - 数据结构实现示例  

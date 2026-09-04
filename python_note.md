@@ -28,7 +28,7 @@
 - [Python List Construction：构造 List 的完整心智模式](python/list_construction.md)
 - [Python 可迭代对象（Iterable）、迭代器（Iterator）、生成器（Generator）完整理解](python/iterable_iterator_generator.md)
 - [Python 文件读取（File Reading）完整总结：方法、应用场景、最佳实践与心智模式](python/read_file.md)
-- []()
+- [python 虚拟环境](python/venv.md)
 - []()
 - []()
 - []()
