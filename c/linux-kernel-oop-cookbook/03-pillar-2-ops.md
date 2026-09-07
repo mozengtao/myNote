@@ -378,17 +378,17 @@ int object_start(struct object *self, int arg)
 
 ```mermaid
 flowchart TD
-    A[Caller: vfs_read / framework API] --> B{object pointer valid?}
+    A["Caller: vfs_read / framework API"] --> B{"object pointer valid?"}
     B -->|no| Z1[return error]
-    B -->|yes| C[Load ops = obj->ops / file->f_op]
-    C --> D{ops non-NULL?}
-    D -->|no| Z2[return error / BUG policy]
-    D -->|yes| E[Select slot: ops->read]
-    E --> F{slot non-NULL?}
-    F -->|no| Z3[fallback or -EOPNOTSUPP]
-    F -->|yes| G[Indirect call: slot(obj, args)]
+    B -->|yes| C["Load ops = obj->ops / file->f_op"]
+    C --> D{"ops non-NULL?"}
+    D -->|no| Z2["return error / BUG policy"]
+    D -->|yes| E["Select slot: ops->read"]
+    E --> F{"slot non-NULL?"}
+    F -->|no| Z3["fallback or -EOPNOTSUPP"]
+    F -->|yes| G["Indirect call: slot(obj, args)"]
     G --> H[Concrete implementation runs]
-    H --> I[May use private_data or container_of]
+    H --> I["May use private_data or container_of"]
     I --> J[Return result to framework]
 ```
 

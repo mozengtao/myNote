@@ -132,7 +132,7 @@ flowchart TD
 
 ```
 +----------------+  netdev_ops  +---------------------+
-| struct net_device|----------->| net_device_ops        |
+| struct net_device|----------->| net_device_ops      |
 |  name / mtu    |              | .ndo_start_xmit     |
 |  features      |              | .ndo_open / .stop   |
 |  *priv ------+ |              | .ndo_set_mac_address|

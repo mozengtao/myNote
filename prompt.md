@@ -2,7 +2,7 @@
 [AI 提示词参考指南](./ai/prompt_reference_guide.md)  
 [AI 学习提示词模板](ai/learn_anything_template.md)  
 [学习模板](ai/learning_template.md)  
-[]()  
+[复杂系统认知 Prompt（Complex System Cognition Prompt）](ai/complex_system_prompt.md)  
 []()  
 []()  
 
