@@ -27,6 +27,7 @@
 | JavaScript | 事件（Event） | [javascript.md](javascript.md) |
 | Haskell | 变换（Transformation） | [haskell.md](haskell.md) |
 | SQL | 声明（Declaration） | [sql.md](sql.md) |
+| Lua | 关联与原型（Associative Prototype） | [lua.md](lua.md) |
 
 ## 每篇文档的统一结构
 

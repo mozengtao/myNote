@@ -1,3 +1,6 @@
+[Creating a Wireshark dissector in Lua](https://mika-s.github.io/wireshark/lua/dissector/2017/11/04/creating-a-wireshark-dissector-in-lua-1.html)
+[Creating a Wireshark USB dissector in Lua](https://mika-s.github.io/wireshark/lua/dissector/usb/2019/07/23/creating-a-wireshark-usb-dissector-in-lua-1.html)
+
 [Wireshark 解析 Packet 的通用流程与心智模型](wireshark_parser_flow.md)
 [PacketLife captures](https://packetlife.net/captures/)  
 [SampleCaptures](https://wiki.wireshark.org/SampleCaptures#sample-captures)  

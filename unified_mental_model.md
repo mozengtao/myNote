@@ -22,6 +22,7 @@
 | **JavaScript** | 事件（Event） | 程序由事件驱动，而不是顺序执行 | Event Loop、Promise、Async/Await |
 | **Haskell** | 变换（Transformation） | 程序就是纯函数之间的组合 | Pure Function、Composition |
 | **SQL** | 声明（Declaration） | 描述"要什么"，而不是"怎么做" | Set、Projection、Selection |
+| **Lua** | 关联与原型（Associative Prototype） | 极简机制构建的原型胶水语言 | Value、Table、Function、Metatable |
 
 ---
 
