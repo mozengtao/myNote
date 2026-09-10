@@ -35,7 +35,7 @@
 - [Linux Kernel Module 查看方式总结](linux/howto_check_kernel_module.md)
 - [Linux Kernel Architecture: How Your OS Actually Works](https://www.abhik.ai/concepts/systems/kernel-architecture)
 - [Kernel subsystem documentation](https://www.kernel.org/doc/html/next/subsystem-apis.html#core-subsystems)
-- []()
+- [**Kernel Dependency Injection Mental Model 教程**](linux/kernel-di-tutorial/README.md)
 - []()
 - []()
 
