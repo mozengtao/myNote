@@ -1,5 +1,9 @@
 [**Lua Documentation**](https://www.lua.org/docs.html)  
 
+[**lua module patterns**](lua-module-patterns-mastery/README.md)
+[**lua patterns**](lua-patterns-mastery/README.md)
+[]()
+
 [Lua in Wireshark](https://wiki.wireshark.org/Lua/)
 [Lua Sample Code](http://lua-users.org/wiki/SampleCode)
 
