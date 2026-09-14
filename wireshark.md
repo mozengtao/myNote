@@ -9,7 +9,17 @@
 [**Wireshark Developer’s Guide**](https://www.wireshark.org/docs/wsdg_html_chunked/)  
 [**Wireshark’s Lua API Reference Manual**](https://www.wireshark.org/docs/wsdg_html_chunked/wsluarm_modules.html)
 
+[Wireshark Lua Dissector 三大核心对象：Tvb、Pinfo、TreeItem](wireshark_dissector.md)
+
 [Wireshark 解析 Packet 的通用流程与心智模型](wireshark_parser_flow.md)
+
+
+[Lua in Wireshark](https://wiki.wireshark.org/Lua/)
+[Lua Sample Code](http://lua-users.org/wiki/SampleCode)
+[]()
+[]()
+
+
 [PacketLife captures](https://packetlife.net/captures/)  
 [SampleCaptures](https://wiki.wireshark.org/SampleCaptures#sample-captures)  
 [Tshark LUA SCRIPTS](https://tshark.dev/packetcraft/scripting/lua_scripts/)  

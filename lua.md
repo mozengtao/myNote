@@ -1,5 +1,8 @@
 [**Lua Documentation**](https://www.lua.org/docs.html)  
 
+[Lua in Wireshark](https://wiki.wireshark.org/Lua/)
+[Lua Sample Code](http://lua-users.org/wiki/SampleCode)
+
 [**Lua 5.4 Reference Manual**](https://www.lua.org/manual/5.4/)  
 
 [The Standard Libraries](https://www.lua.org/manual/5.4/manual.html#6)  
