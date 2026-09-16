@@ -23,7 +23,7 @@
 - [工程实践中的排序算法：最佳实践与心智模式](sorting_mental_model.md)  
 - [C 语言共享内存 Seqlock 机制](c/seqlock_mastery/seqlock_guide.md)  
 - [**Linux Kernel Object Model Cookbook**](c/linux-kernel-oop-cookbook/README.md)  
-- []()  
+- [GCC / Clang `__atomic_*` 原子内建函数总结](c/atomic_operations.md)  
 - []()  
 - []()  
 - []()  
