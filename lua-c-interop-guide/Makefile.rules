@@ -1,0 +1,38 @@
+# Makefile.rules
+#
+# 与 Makefile.common 搭配使用的统一构建规则。
+#
+# 约定（贯穿全书，所有 chapters/*/code 和 projects/* 都遵守）：
+#   每个示例是一个「宿主程序」（host program）：
+#     1. main() 创建 lua_State*，luaL_openlibs()
+#     2. 注册本章要讲的 C 函数 / C Object 构造器（作为 Lua 全局变量或 table）
+#     3. luaL_dofile() 运行同目录下的 .lua 脚本，脚本里既有"调用 C"的部分，
+#        也可能反过来被 C 通过 lua_pcall 调用
+#     4. 打印结果，返回 0 表示成功、非 0 表示脚本或 C 侧出错
+#
+# 这样每个示例都是一个可以直接 `make run` 的独立可执行文件，
+# 不需要处理 .so / package.cpath 之类的动态加载细节，
+# 但仍然覆盖 Lua<->C 双向调用的全部知识点。
+#
+# 用法：
+#   TARGET := xxx_demo
+#   SRCS   := xxx_demo.c
+#   include $(GUIDE_ROOT)/Makefile.rules
+
+OBJS := $(SRCS:.c=.o)
+
+.PHONY: all run clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+run: all
+	./$(TARGET)
+
+clean:
+	rm -f $(OBJS) $(TARGET)

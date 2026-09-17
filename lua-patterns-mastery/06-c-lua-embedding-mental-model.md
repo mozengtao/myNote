@@ -1,5 +1,7 @@
 # 06 · C ↔ Lua Embedding Mental Model
 
+> 栈协议（谁 push / 谁 pop、正负索引、两个方向的对偶）见 [lua-c-stack-mental-model.md](../lua-c-stack-mental-model.md)。本文接着讲五种 Pattern 各自调用哪些 C API、回调如何长期持有。
+>
 > 前置阅读：[00-mental-model-overview.md](00-mental-model-overview.md)。本文不再讲某一个具体 Pattern，而是回到最底层——Lua 是怎么被"嵌"进 C 程序里的。01~05 五个 Pattern 目录里的所有示例，本质上都只是在下面这几组 C API 之上，用不同的方式组织调用时机和返回值用法。读完本文，你应该能一眼看出任意一个 Pattern 示例代码里，哪一行属于"C 调 Lua"、哪一行属于"Lua 调 C"、哪一行属于"错误边界"。
 
 面向读者：熟悉 C/C++，第一次系统看 Lua embedding API，不需要重新解释 Lua 语言语法本身。

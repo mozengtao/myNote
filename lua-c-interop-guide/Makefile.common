@@ -1,0 +1,32 @@
+# Makefile.common
+#
+# 被 chapters/*/code/Makefile 和 projects/*/Makefile 引入的公共构建配置。
+# 所有示例都链接本仓库 vendor/ 下本地构建的 Lua 5.4.7 静态库，
+# 不依赖系统 liblua-dev / sudo。
+#
+# 用法（在具体示例目录下的 Makefile 里）：
+#
+#   GUIDE_ROOT := $(abspath ../../..)      # chapters/xx/code/ 到 guide 根目录是 3 层
+#                                          # projects/xx/ 到 guide 根目录是 2 层，用 $(abspath ../..)
+#   include $(GUIDE_ROOT)/Makefile.common
+#
+#   TARGET := demo
+#   SRCS   := demo.c
+#   include $(GUIDE_ROOT)/Makefile.rules   # 提供统一的 build/run/clean 规则
+#
+GUIDE_ROOT ?= $(abspath .)
+
+LUA_VERSION := 5.4.7
+LUA_HOME    := $(GUIDE_ROOT)/vendor/lua-$(LUA_VERSION)
+LUA_INC     := $(LUA_HOME)/include
+LUA_LIB     := $(LUA_HOME)/lib
+LUA_BIN     := $(LUA_HOME)/bin/lua
+
+CC      := gcc
+CFLAGS  += -std=gnu99 -Wall -Wextra -g -O0 -I$(LUA_INC)
+LDFLAGS += -L$(LUA_LIB)
+LDLIBS  += -llua -lm -ldl
+
+# 大多数示例的宿主程序（内嵌 Lua 解释器）都需要下面这几个库：
+# -lm   数学库（Lua math 标准库）
+# -ldl  动态加载（Lua loadlib 标准库，即便示例不用也无害）
