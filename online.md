@@ -74,6 +74,9 @@
 ### text compare
 
 - [Text Compare](https://textcompare.io/)
+- [Compare text](https://www.diffchecker.com/)
+- [Text Compare](https://text-compare.com/)
+- []()
 
 ### hex edit
 

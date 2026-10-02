@@ -36,6 +36,9 @@
 - [Linux Kernel Architecture: How Your OS Actually Works](https://www.abhik.ai/concepts/systems/kernel-architecture)
 - [Kernel subsystem documentation](https://www.kernel.org/doc/html/next/subsystem-apis.html#core-subsystems)
 - [**Kernel Dependency Injection Mental Model 教程**](linux/kernel-di-tutorial/README.md)
+- [BIND DNS Zone 管理命令与 Mental Model](linux/dns_service.md)
+- []()
+- []()
 - []()
 - []()
 

@@ -1,4 +1,5 @@
 [Android emulator](https://www.myandroid.org/)  
+[scrcpy：Windows 11 控制 Android 手机的完整心智模型](adb_scrcpy.md)
 
 [Android Basics with Compose](https://developer.android.com/courses/android-basics-compose/course)  
 [Architecture overview](https://source.android.com/docs/core/architecture/)  

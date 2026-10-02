@@ -213,7 +213,123 @@ umount ~/remote/dev5
 
 ---
 
-## 4）查看是否已经挂载
+## 4）使用 findmnt 查看挂载信息
+
+`findmnt` 用于查看 Linux 当前的挂载点。相比 `mount`，它可以按挂载目标、文件系统类型等条件过滤，并以表格形式显示挂载源、挂载点和挂载参数。
+
+查看所有挂载：
+
+```bash
+findmnt
+```
+
+查看指定目录对应的挂载信息：
+
+```bash
+findmnt ~/remote/dev5
+```
+
+也可以使用 `-T` 明确指定挂载目标：
+
+```bash
+findmnt -T ~/remote/dev5
+```
+
+只查看 SSHFS 挂载：
+
+```bash
+findmnt -t fuse.sshfs
+```
+
+查看常用字段：
+
+```bash
+findmnt -T ~/remote/dev5 \
+-o TARGET,SOURCE,FSTYPE,OPTIONS
+```
+
+输出示例：
+
+```text
+TARGET          SOURCE                              FSTYPE      OPTIONS
+/home/admin/... dev5:/mnt/DATA/morrism/testbed      fuse.sshfs   rw,...
+```
+
+其中：
+
+- `TARGET`：本地挂载目录
+- `SOURCE`：远程主机和远程目录
+- `FSTYPE`：文件系统类型，SSHFS 通常为 `fuse.sshfs`
+- `OPTIONS`：挂载时使用的参数
+
+因此，排查“目录是否挂载”“挂载到了哪个远程目录”或“实际使用了哪些参数”时，可以优先使用：
+
+```bash
+findmnt -T ~/remote/dev5
+```
+
+---
+
+## 5）使用 fusermount 卸载 FUSE 文件系统
+
+`fusermount` 是 FUSE 文件系统的挂载辅助工具。对于 SSHFS，最常用的作用是卸载挂载点。
+
+正常卸载：
+
+```bash
+fusermount -u ~/remote/dev5
+```
+
+`-u` 表示 `unmount`。普通用户通常可以卸载自己挂载的 SSHFS 文件系统，不需要 `sudo`。
+
+某些发行版使用 `fusermount3`，用法相同：
+
+```bash
+fusermount3 -u ~/remote/dev5
+```
+
+如果挂载点暂时无法正常卸载，可以使用懒卸载：
+
+```bash
+fusermount -uz ~/remote/dev5
+```
+
+其中：
+
+- `-u`：卸载文件系统
+- `-z`：懒卸载，先从目录树中移除挂载点，待正在使用的文件或进程结束后再完成清理
+
+懒卸载不应作为日常首选，因为它可能隐藏仍在使用挂载点的进程。建议先检查挂载状态：
+
+```bash
+findmnt -T ~/remote/dev5
+```
+
+卸载后没有输出，通常表示该目录已经不是挂载点。
+
+如果出现：
+
+```text
+Transport endpoint is not connected
+```
+
+可以先尝试：
+
+```bash
+fusermount -u ~/remote/dev5
+```
+
+如果仍然失败，再使用：
+
+```bash
+fusermount -uz ~/remote/dev5
+```
+
+卸载完成后，再重新执行 `sshfs` 挂载命令。
+
+---
+
+## 6）查看是否已经挂载
 
 ```bash
 mount | grep sshfs
@@ -235,7 +351,7 @@ admin@dev5:/mnt/DATA
 
 ---
 
-## 5）重新连接
+## 7）重新连接
 
 SSH断开以后：
 

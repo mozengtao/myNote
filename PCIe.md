@@ -1,5 +1,8 @@
 - peripheral component interconnect express 是一个用来连接高速器件的接口标准  
 
+[PCIe学习路线](pcie_learn_path.md)
+[PCIe Linux Kernel Driver 学习课程](pcie-driver-course/README.md)
+
 `ram-like`接口的设备的访问  
 ```c
 volatile unsigned int *p = ADDR;
