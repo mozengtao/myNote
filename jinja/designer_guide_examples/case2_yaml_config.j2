@@ -1,0 +1,14 @@
+hostname: {{ hostname }}
+services:
+{% for service in services %}
+  - name: {{ service.name }}
+    port: {{ service.port | default('N/A') }}
+{% if service.tags %}
+    tags:
+{% for tag in service.tags %}
+      - {{ tag }}
+{% endfor %}
+{% else %}
+    tags: []
+{% endif %}
+{% endfor %}

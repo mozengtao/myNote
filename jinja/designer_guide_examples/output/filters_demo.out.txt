@@ -1,0 +1,214 @@
+### default_basic_undefined
+N/A
+### END default_basic_undefined
+
+### default_basic_empty_string
+
+### END default_basic_empty_string
+
+### default_basic_zero
+0
+### END default_basic_zero
+
+### default_basic_false
+False
+### END default_basic_false
+
+### default_boolean_true_undefined
+N/A
+### END default_boolean_true_undefined
+
+### default_boolean_true_empty_string
+N/A
+### END default_boolean_true_empty_string
+
+### default_boolean_true_zero
+N/A
+### END default_boolean_true_zero
+
+### default_boolean_true_false
+N/A
+### END default_boolean_true_false
+
+### trim
+[router-01]
+### END trim
+
+### upper
+ROUTER-01
+### END upper
+
+### lower
+router-01
+### END lower
+
+### capitalize
+Hello world
+### END capitalize
+
+### title
+Hello World
+### END title
+
+### replace
+_etc_network_interfaces
+### END replace
+
+### join_basic
+eth0, eth1, eth2
+### END join_basic
+
+### join_attribute
+sw1, sw2, sw3
+### END join_attribute
+
+### length_list
+3
+### END length_list
+
+### length_string
+9
+### END length_string
+
+### first
+eth0
+### END first
+
+### last
+eth2
+### END last
+
+### sort_default
+22, 80, 443, 8080
+### END sort_default
+
+### sort_reverse
+8080, 443, 80, 22
+### END sort_reverse
+
+### sort_attribute
+sw1, sw2, sw3
+### END sort_attribute
+
+### unique
+[10, 20, 30]
+### END unique
+
+### reverse_list
+['eth2', 'eth1', 'eth0']
+### END reverse_list
+
+### reverse_string
+retuor
+### END reverse_string
+
+### int_from_str
+1500
+### END int_from_str
+
+### int_invalid_default
+0
+### END int_invalid_default
+
+### float_filter
+12.5
+### END float_filter
+
+### string_filter
+100-tag
+### END string_filter
+
+### round_default
+12.35
+### END round_default
+
+### round_ceil
+13.0
+### END round_ceil
+
+### abs_filter
+8
+### END abs_filter
+
+### list_from_string
+['a', 'b', 'c']
+### END list_from_string
+
+### list_materialize_map
+[1, 2, 3]
+### END list_materialize_map
+
+### dictsort_filter
+enabled=True mtu=1500 name=eth0 
+### END dictsort_filter
+
+### items_filter
+name=eth0 mtu=1500 
+### END items_filter
+
+### map_attribute
+['sw1', 'sw2']
+### END map_attribute
+
+### map_filter_name
+['ETH0', 'ETH1']
+### END map_filter_name
+
+### select_test
+[1, 3, 5]
+### END select_test
+
+### reject_test
+[2, 4, 6]
+### END reject_test
+
+### selectattr_basic
+eth0 eth2 
+### END selectattr_basic
+
+### rejectattr_basic
+eth1 
+### END rejectattr_basic
+
+### selectattr_with_test
+['eth0']
+### END selectattr_with_test
+
+### tojson_filter
+{"enabled": true, "mtu": 1500, "name": "eth0"}
+### END tojson_filter
+
+### escape_filter
+&lt;b&gt;eth0&lt;/b&gt;
+### END escape_filter
+
+### e_alias_filter
+&lt;b&gt;eth0&lt;/b&gt;
+### END e_alias_filter
+
+### autoescape_on_default
+&lt;b&gt;eth0&lt;/b&gt;
+### END autoescape_on_default
+
+### safe_filter_bypasses_autoescape
+<b>eth0</b>
+### END safe_filter_bypasses_autoescape
+
+### case_A_string_cleanup
+router-01
+### END case_A_string_cleanup
+
+### case_B_list_formatting
+eth0, eth1, eth2
+### END case_B_list_formatting
+
+### case_C_object_filter
+eth0
+eth2
+
+### END case_C_object_filter
+
+### case_D_missing_field_default
+No description
+### END case_D_missing_field_default
+

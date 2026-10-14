@@ -1,0 +1,8 @@
+Device Summary Report
+======================
+Total devices: {{ devices | length }}
+Online devices: {{ devices | selectattr('status', 'equalto', 'online') | list | length }}
+Offline devices: {{ devices | rejectattr('status', 'equalto', 'online') | list | length }}
+
+Online device names: {{ devices | selectattr('status', 'equalto', 'online') | map(attribute='name') | join(', ') }}
+Offline device names: {{ devices | rejectattr('status', 'equalto', 'online') | map(attribute='name') | join(', ') }}

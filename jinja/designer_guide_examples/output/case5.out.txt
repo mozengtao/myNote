@@ -1,0 +1,31 @@
+### case5_access_switch_output
+hostname access-sw-01
+!
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+interface GigabitEthernet0/2
+ switchport mode access
+ switchport access vlan 10
+!
+! no routing protocol configured
+!
+end
+### END case5_access_switch_output
+
+### case5_core_router_output
+hostname core-rt-01
+!
+interface GigabitEthernet0/0
+ no switchport
+ ip address 10.0.0.1 255.255.255.0
+interface GigabitEthernet0/1
+ no switchport
+ ip address 10.0.1.1 255.255.255.0
+!
+router ospf 1
+ network 10.0.0.1 0.0.0.255 area 0
+ network 10.0.1.1 0.0.0.255 area 0
+!
+end
+### END case5_core_router_output

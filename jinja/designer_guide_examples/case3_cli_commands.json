@@ -1,0 +1,7 @@
+{
+    "users": [
+        {"name": "alice", "uid": 1001, "shell": "/bin/bash"},
+        {"name": "bob", "shell": "/bin/zsh"},
+        {"name": "carol"}
+    ]
+}

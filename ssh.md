@@ -31,6 +31,10 @@ ssh -t dhcpdentist "ssh tier3support@65.100.0.92"
 
 # 强制使用 SSH 密钥连接 GitHub，输出详细调试日志
 ssh -vT git@github.com
+
+# -G      Causes ssh to print its configuration after evaluating Host and Match blocks and exit.
+# 用于检查配置
+ssh -G coolserver
 ```
 
 ## 常见问题

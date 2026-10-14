@@ -1,0 +1,8 @@
+# 运行时依赖：app.py 以及 examples/*.py 实际会 import 的唯一第三方包。
+nicegui==3.18.0
+
+# 开发 / 测试依赖。models/、services/、infrastructure/、tests/ 下的任何
+# 模块都不会 import 它——这几个包刻意保持纯标准库，因此即使没有安装
+# nicegui，也可以直接运行 `pytest -q`。这里把 pytest 一并列出，只是为了让
+# `pip install -r requirements.txt` 一次性装好运行本项目测试所需的一切。
+pytest>=7.4

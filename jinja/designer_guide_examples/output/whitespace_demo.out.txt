@@ -1,0 +1,51 @@
+### plain_loop_default_env (raw render)
+interfaces:
+
+  - name: eth0
+
+  - name: eth1
+
+  - name: eth2
+### END plain_loop_default_env (raw render)
+### plain_loop_default_env (repr)
+'interfaces:\n\n  - name: eth0\n\n  - name: eth1\n\n  - name: eth2\n'
+### END plain_loop_default_env (repr)
+
+### ws_control_loop_default_env (raw render)
+interfaces:
+  - name: eth0
+  - name: eth1
+  - name: eth2### END ws_control_loop_default_env (raw render)
+### ws_control_loop_default_env (repr)
+'interfaces:\n  - name: eth0\n  - name: eth1\n  - name: eth2'
+### END ws_control_loop_default_env (repr)
+
+### plain_loop_trim_lstrip_env (raw render)
+interfaces:
+  - name: eth0
+  - name: eth1
+  - name: eth2
+### END plain_loop_trim_lstrip_env (raw render)
+### plain_loop_trim_lstrip_env (repr)
+'interfaces:\n  - name: eth0\n  - name: eth1\n  - name: eth2\n'
+### END plain_loop_trim_lstrip_env (repr)
+
+### keep_trailing_newline_false (raw render)
+Hello, Morris!### END keep_trailing_newline_false (raw render)
+### keep_trailing_newline_false (repr)
+'Hello, Morris!'
+### END keep_trailing_newline_false (repr)
+
+### keep_trailing_newline_true (raw render)
+Hello, Morris!
+### END keep_trailing_newline_true (raw render)
+### keep_trailing_newline_true (repr)
+'Hello, Morris!\n'
+### END keep_trailing_newline_true (repr)
+
+### expr_whitespace_control (raw render)
+A BC### END expr_whitespace_control (raw render)
+### expr_whitespace_control (repr)
+'A BC'
+### END expr_whitespace_control (repr)
+

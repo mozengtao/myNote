@@ -8,6 +8,10 @@
 [Neovim Plugins](https://mvolkmann.github.io/blog/neovim-plugins/)  
 [Neovim Lua: Env Variables, vim.api & init.lua](https://env.dev/guides/neovim-lua)  
 [Neovim `vim.*` Namespaces 日常开发速查与 Mental Model](neovim_vim_namespaces.md)  
+[**vis editor**](https://martanne.github.io/vis/)  
+[Vis Editor API Documentation](https://vis.readthedocs.io/en/master/index.html)  
+[Vis: The Editor That Combines Vim with Structural Regex](https://www.freetechlearner.com/blog/linux/vis-structural-editor-guide)  
+[vis-plugins](https://erf.github.io/vis-plugins/)  
 []()  
 []()  
 

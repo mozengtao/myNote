@@ -1,0 +1,14 @@
+{% extends "base_device.j2" %}
+{% block interfaces %}
+{% for interface in interfaces %}
+interface {{ interface }}
+ no switchport
+ ip address {{ ip_addresses[interface] }} 255.255.255.0
+{% endfor %}
+{%- endblock %}
+{% block routing %}
+router ospf 1
+{% for interface in interfaces %}
+ network {{ ip_addresses[interface] }} 0.0.0.255 area 0
+{% endfor %}
+{%- endblock %}

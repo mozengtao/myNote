@@ -1,0 +1,83 @@
+### err1_typo_variable_name
+hostname=[]
+### END err1_typo_variable_name
+
+### err2_missing_nested_field
+mtu=[]
+### END err2_missing_nested_field
+
+### err3_python_syntax_confusion
+UndefinedError: 'len' is undefined
+### END err3_python_syntax_confusion
+
+### err3_correct_jinja_filter
+3
+### END err3_correct_jinja_filter
+
+### err4_filter_test_confusion
+TemplateAssertionError: No test named 'length'.
+### END err4_filter_test_confusion
+
+### err4_correct_filter_usage
+True
+### END err4_correct_filter_usage
+
+### err5_default_on_zero_wrong_expectation
+retries=[0]
+### END err5_default_on_zero_wrong_expectation
+
+### err5_default_on_zero_with_boolean_true
+retries=[3]
+### END err5_default_on_zero_with_boolean_true
+
+### err6_loop_scope_minimal
+found=[False] (WRONG: still false)
+### END err6_loop_scope_minimal
+
+### err7_import_without_context
+hostname=(not visible without context)
+### END err7_import_without_context
+
+### err8_extra_blank_lines_problem
+'line1\n\nline2\n\nline3'
+### END err8_extra_blank_lines_problem
+
+### err8_fixed_with_trim_lstrip_blocks
+'line1\nline2\nline3'
+### END err8_fixed_with_trim_lstrip_blocks
+
+### err9_yaml_missing_dash_silently_loses_data
+hostname: router-01
+interfaces:
+name: eth0
+name: eth1
+parsed = {'hostname': 'router-01', 'interfaces': None, 'name': 'eth1'}
+### END err9_yaml_missing_dash_silently_loses_data
+
+### err9_yaml_properly_nested
+hostname: router-01
+interfaces:
+  - name: eth0
+  - name: eth1
+parsed = {'hostname': 'router-01', 'interfaces': [{'name': 'eth0'}, {'name': 'eth1'}]}
+### END err9_yaml_properly_nested
+
+### err10_html_no_autoescape_xss_risk
+<p><script>alert(1)</script></p>
+### END err10_html_no_autoescape_xss_risk
+
+### err10_html_with_autoescape_safe
+<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>
+### END err10_html_with_autoescape_safe
+
+### err11_business_logic_in_template
+A
+### END err11_business_logic_in_template
+
+### err11_business_logic_in_python
+A
+### END err11_business_logic_in_python
+
+### err12_strict_undefined_catches_bad_attribute
+UndefinedError: 'dict object' has no attribute 'ip_address'
+### END err12_strict_undefined_catches_bad_attribute

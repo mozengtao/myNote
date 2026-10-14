@@ -1,0 +1,6 @@
+hostname: {{ hostname }}
+interfaces:
+{% for interface in interfaces %}
+  - name: {{ interface.name }}
+    enabled: {{ interface.enabled }}
+{% endfor %}

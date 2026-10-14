@@ -1,0 +1,37 @@
+### from_string_output
+device=router-01, port=8080
+### END from_string_output
+
+### filesystemloader_output
+hostname: router-01
+model: ISR4451### END filesystemloader_output
+
+### render_to_yaml_written_content
+hostname: router-01
+interfaces:
+  - name: eth0
+    enabled: True
+  - name: eth1
+    enabled: False
+### END render_to_yaml_written_content
+
+### default_undefined_typo_renders_empty
+hostname=[]
+### END default_undefined_typo_renders_empty
+
+### strict_undefined_typo_raises
+UndefinedError: 'hostnmae' is undefined
+### END strict_undefined_typo_raises
+
+### autoescape_true_html_output
+<p>Comment: &lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</p>
+### END autoescape_true_html_output
+
+### autoescape_false_html_output_unsafe
+<p>Comment: <script>alert('xss')</script></p>
+### END autoescape_false_html_output_unsafe
+
+### autoescape_false_plain_text_output
+hostname=router-01
+### END autoescape_false_plain_text_output
+

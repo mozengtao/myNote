@@ -1,0 +1,7 @@
+{
+    "hostname": "router-01",
+    "interfaces": [
+        {"name": "eth0", "enabled": true, "mtu": 1500},
+        {"name": "eth1", "enabled": false, "mtu": 9000}
+    ]
+}

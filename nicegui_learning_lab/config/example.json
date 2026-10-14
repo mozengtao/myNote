@@ -1,0 +1,8 @@
+{
+  "name": "edge-lab-01",
+  "host": "192.168.1.50",
+  "port": 22,
+  "environment": "staging",
+  "timeout_seconds": 10,
+  "retries": 3
+}

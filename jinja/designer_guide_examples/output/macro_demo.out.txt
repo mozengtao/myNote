@@ -1,0 +1,22 @@
+### use_import_output
+# Managed by Jinja - do not edit manually
+  - name: eth0
+    enabled: True
+  - name: eth1
+    enabled: True
+    mtu: 1500
+  - name: eth2
+    enabled: False
+    mtu: 9000
+hostname: (no context)
+### END use_import_output
+
+### use_from_import_output
+# Managed by Jinja - do not edit manually
+  - name: eth0
+    enabled: True
+### END use_from_import_output
+
+### use_import_with_context_output
+hostname: router-01
+### END use_import_with_context_output

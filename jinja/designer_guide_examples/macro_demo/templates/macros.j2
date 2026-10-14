@@ -1,0 +1,18 @@
+{% macro banner() %}
+# Managed by Jinja - do not edit manually
+{%- endmacro %}
+
+{% macro interface_line(name, enabled) %}
+  - name: {{ name }}
+    enabled: {{ enabled }}
+{%- endmacro %}
+
+{% macro interface_line_with_default(name, enabled=True, mtu=1500) %}
+  - name: {{ name }}
+    enabled: {{ enabled }}
+    mtu: {{ mtu }}
+{%- endmacro %}
+
+{% macro hostname_line() %}
+hostname: {{ hostname | default('(no context)') }}
+{%- endmacro %}

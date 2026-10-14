@@ -1,0 +1,8 @@
+hostname {{ hostname }}
+{% for interface in interfaces %}
+{% if interface.enabled %}
+interface {{ interface.name }}
+ mtu {{ interface.mtu | default(1500) }}
+ no shutdown
+{% endif %}
+{% endfor %}

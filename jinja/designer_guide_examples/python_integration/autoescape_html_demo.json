@@ -1,0 +1,4 @@
+{
+    "comment": "<script>alert('xss')</script>",
+    "hostname": "router-01"
+}

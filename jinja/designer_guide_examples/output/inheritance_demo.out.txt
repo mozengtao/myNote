@@ -1,0 +1,21 @@
+### child_access_switch_output
+device:
+  hostname: access-sw-01
+  interfaces:
+    - eth0
+    - eth1
+  services:
+    - ssh### END child_access_switch_output
+
+### child_core_router_output
+device:
+  hostname: core-rt-01
+  interfaces:
+    - eth0
+    - eth1
+    - eth2
+  services:
+    - ssh
+    - bgp
+    - ospf
+### END child_core_router_output

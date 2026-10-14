@@ -1,0 +1,6 @@
+{% include "banner.j2" %}
+interfaces:
+{% for interface in interfaces %}
+  - name: {{ interface.name }}
+    enabled: {{ interface.enabled }}
+{% endfor %}

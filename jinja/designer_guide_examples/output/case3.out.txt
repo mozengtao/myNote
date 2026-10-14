@@ -1,0 +1,12 @@
+### case3_output
+useradd alice -u 1001 -s /bin/bash
+useradd bob -s /bin/zsh
+useradd carol
+### END case3_output
+
+### case3_readability_check
+total_lines=3
+1: 'useradd alice -u 1001 -s /bin/bash'
+2: 'useradd bob -s /bin/zsh'
+3: 'useradd carol'
+### END case3_readability_check

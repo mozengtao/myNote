@@ -1,0 +1,15 @@
+{
+    "switch": {
+        "hostname": "access-sw-01",
+        "interfaces": ["GigabitEthernet0/1", "GigabitEthernet0/2"],
+        "vlan": 10
+    },
+    "router": {
+        "hostname": "core-rt-01",
+        "interfaces": ["GigabitEthernet0/0", "GigabitEthernet0/1"],
+        "ip_addresses": {
+            "GigabitEthernet0/0": "10.0.0.1",
+            "GigabitEthernet0/1": "10.0.1.1"
+        }
+    }
+}

@@ -1,0 +1,6 @@
+hostname: router-01
+interfaces:
+  - name: eth0
+    enabled: True
+  - name: eth1
+    enabled: False

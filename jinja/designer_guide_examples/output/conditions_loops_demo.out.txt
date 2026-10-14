@@ -1,0 +1,98 @@
+### if_elif_else_error
+[ERROR] disk full
+### END if_elif_else_error
+
+### if_elif_else_warning
+[WARN] disk 80% full
+### END if_elif_else_warning
+
+### if_elif_else_info
+[INFO] backup done
+### END if_elif_else_info
+
+### if_multi_condition
+OK
+### END if_multi_condition
+
+### if_multi_condition_skip
+SKIP
+### END if_multi_condition_skip
+
+### if_is_defined
+no port
+### END if_is_defined
+
+### if_is_none
+port is None
+### END if_is_none
+
+### if_list_empty
+no interfaces
+### END if_list_empty
+
+### if_list_nonempty
+has interfaces
+### END if_list_nonempty
+
+### yaml_conditional_fields_full
+name: eth0
+description: uplink
+vlan: 10
+### END yaml_conditional_fields_full
+
+### yaml_conditional_fields_minimal
+name: eth1
+### END yaml_conditional_fields_minimal
+
+### for_basic_list
+eth0 eth1 eth2 
+### END for_basic_list
+
+### for_dict_items
+mtu=1500 enabled=True 
+### END for_dict_items
+
+### for_object_list
+sw1(up) sw2(down) 
+### END for_object_list
+
+### for_nested_loop
+sw1.eth0 sw1.eth1 sw2.eth0 
+### END for_nested_loop
+
+### for_with_inner_if
+eth0 
+### END for_with_inner_if
+
+### for_with_filter_condition
+eth0 eth2 
+### END for_with_filter_condition
+
+### for_else_empty
+no devices
+### END for_else_empty
+
+### for_else_filtered_empty
+no enabled devices
+### END for_else_filtered_empty
+
+### for_else_nonempty
+eth0 
+### END for_else_nonempty
+
+### loop_index_vs_index0
+1:0:eth0 2:1:eth1 3:2:eth2 
+### END loop_index_vs_index0
+
+### loop_first_last
+[FIRST]eth0 eth1 eth2[LAST] 
+### END loop_first_last
+
+### loop_length
+1/3 2/3 3/3 
+### END loop_length
+
+### loop_cycle
+odd:eth0 even:eth1 odd:eth2 even:eth3 
+### END loop_cycle
+

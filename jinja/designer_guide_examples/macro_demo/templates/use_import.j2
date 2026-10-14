@@ -1,0 +1,6 @@
+{% import "macros.j2" as m %}
+{{ m.banner() }}
+{{ m.interface_line('eth0', true) }}
+{{ m.interface_line_with_default('eth1') }}
+{{ m.interface_line_with_default('eth2', enabled=false, mtu=9000) }}
+{{ m.hostname_line() }}

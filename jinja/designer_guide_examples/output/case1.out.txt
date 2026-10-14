@@ -1,0 +1,6 @@
+### case1_output
+hostname router-01
+interface eth0
+ mtu 1500
+ no shutdown
+### END case1_output

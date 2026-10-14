@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# NiceGUI 在不使用 Redis 时，app.storage.general / app.storage.user 的
+# 磁盘持久化目录（详见 docs/mental_models.md）。
+.nicegui/

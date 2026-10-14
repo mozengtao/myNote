@@ -1,0 +1,10 @@
+{% for user in users %}
+{% set cmd = 'useradd ' ~ user.name %}
+{% if user.uid is defined %}
+{% set cmd = cmd ~ ' -u ' ~ user.uid %}
+{% endif %}
+{% if user.shell is defined %}
+{% set cmd = cmd ~ ' -s ' ~ user.shell %}
+{% endif %}
+{{ cmd }}
+{% endfor %}

@@ -1,0 +1,12 @@
+{% extends "base.j2" %}
+{% block interfaces %}
+  interfaces:
+{% for interface in interfaces %}
+    - {{ interface }}
+{% endfor %}
+{% endblock %}
+{% block services %}
+{{ super() }}
+    - bgp
+    - ospf
+{% endblock %}

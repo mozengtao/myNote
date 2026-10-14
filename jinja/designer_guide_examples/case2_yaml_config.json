@@ -1,0 +1,13 @@
+{
+    "with_services": {
+        "hostname": "app-server-01",
+        "services": [
+            {"name": "web", "port": 443, "tags": ["frontend", "public"]},
+            {"name": "worker", "tags": []}
+        ]
+    },
+    "no_services": {
+        "hostname": "app-server-02",
+        "services": []
+    }
+}

@@ -1,0 +1,152 @@
+### var_simple
+Hello, Morris!
+### END var_simple
+
+### attr_access_dict_as_attr
+Alice
+### END attr_access_dict_as_attr
+
+### index_access_dict_key
+Alice
+### END index_access_dict_key
+
+### index_access_list
+eth0
+### END index_access_list
+
+### nested_access
+eth0
+### END nested_access
+
+### nested_list_in_dict
+eth1
+### END nested_list_in_dict
+
+### missing_top_level_var
+[]
+### END missing_top_level_var
+
+### missing_attribute
+[]
+### END missing_attribute
+
+### attr_vs_item_dot_syntax
+ATTRIBUTE-VALUE
+### END attr_vs_item_dot_syntax
+
+### attr_vs_item_bracket_syntax
+DICT-KEY-VALUE
+### END attr_vs_item_bracket_syntax
+
+### concat_tilde
+vlan-100
+### END concat_tilde
+
+### arith_add
+15
+### END arith_add
+
+### arith_sub
+5
+### END arith_sub
+
+### arith_mul
+50
+### END arith_mul
+
+### arith_div
+2.5
+### END arith_div
+
+### arith_floordiv
+2
+### END arith_floordiv
+
+### arith_mod
+2
+### END arith_mod
+
+### cmp_eq
+True
+### END cmp_eq
+
+### cmp_ne
+True
+### END cmp_ne
+
+### cmp_gt
+True
+### END cmp_gt
+
+### cmp_lt
+True
+### END cmp_lt
+
+### logic_and
+True
+### END logic_and
+
+### logic_or
+True
+### END logic_or
+
+### logic_not
+True
+### END logic_not
+
+### membership_in_list
+True
+### END membership_in_list
+
+### membership_not_in
+True
+### END membership_not_in
+
+### ternary_expr
+UP
+### END ternary_expr
+
+### ternary_expr_false
+DOWN
+### END ternary_expr_false
+
+### func_call_builtin
+[0, 1, 2]
+### END func_call_builtin
+
+### func_call_custom_global
+MTU=1500
+### END func_call_custom_global
+
+### attr_and_index_combo
+eth1
+### END attr_and_index_combo
+
+### set_basic
+Hello, Morris!
+### END set_basic
+
+### set_expression
+8
+### END set_expression
+
+### set_multi_unpack
+a=1, b=2
+### END set_multi_unpack
+
+### set_precompute
+Enabled interfaces: 2
+### END set_precompute
+
+### set_loop_scope_pitfall
+total (WRONG, still 0) = 0
+### END set_loop_scope_pitfall
+
+### set_namespace_correct
+total (namespace) = 60
+### END set_namespace_correct
+
+### set_precomputed_in_python
+total (computed in Python) = 60
+### END set_precomputed_in_python
+

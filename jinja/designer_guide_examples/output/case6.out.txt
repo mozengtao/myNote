@@ -1,0 +1,23 @@
+### case6_default_undefined_silent
+[description: ]
+### END case6_default_undefined_silent
+
+### case6_default_undefined_typo_silent
+[hostname: ]
+### END case6_default_undefined_typo_silent
+
+### case6_strict_undefined_raises
+UndefinedError: 'dict object' has no attribute 'description'
+### END case6_strict_undefined_raises
+
+### case6_is_defined_guard
+# description not provided
+### END case6_is_defined_guard
+
+### case6_default_filter_fallback
+description: No description provided
+### END case6_default_filter_fallback
+
+### case6_ci_precheck_pattern
+ok=False, result='dict object' has no attribute 'hostnmae'
+### END case6_ci_precheck_pattern

@@ -1,0 +1,9 @@
+device:
+  hostname: {{ hostname }}
+{% block interfaces %}
+  interfaces: []
+{% endblock %}
+{% block services %}
+  services:
+    - ssh
+{%- endblock %}

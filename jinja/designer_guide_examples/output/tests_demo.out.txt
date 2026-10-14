@@ -1,0 +1,107 @@
+### port_missing (未传入 port)
+# port is not configured
+
+### END port_missing
+
+### port_none (port=None)
+# port is not configured
+
+### END port_none
+
+### port_valid (port=8080)
+port: 8080
+
+### END port_valid
+
+### is_defined_true
+True
+### END is_defined_true
+
+### is_defined_false
+False
+### END is_defined_false
+
+### is_undefined_true
+True
+### END is_undefined_true
+
+### is_none_true
+True
+### END is_none_true
+
+### is_none_false
+False
+### END is_none_false
+
+### is_string
+True
+### END is_string
+
+### is_number_int
+True
+### END is_number_int
+
+### is_integer
+True
+### END is_integer
+
+### is_float
+True
+### END is_float
+
+### is_boolean
+True
+### END is_boolean
+
+### is_mapping
+True
+### END is_mapping
+
+### is_sequence
+True
+### END is_sequence
+
+### is_iterable
+True
+### END is_iterable
+
+### is_odd
+True
+### END is_odd
+
+### is_even
+True
+### END is_even
+
+### is_divisibleby
+True
+### END is_divisibleby
+
+### is_divisibleby_false
+False
+### END is_divisibleby_false
+
+### is_sameas_true_identity
+True
+### END is_sameas_true_identity
+
+### is_sameas_one_is_not_true
+False
+### END is_sameas_one_is_not_true
+
+### filter_vs_test_filter
+ETH0
+### END filter_vs_test_filter
+
+### filter_vs_test_test
+True
+### END filter_vs_test_test
+
+### default_filter_on_missing
+1500
+### END default_filter_on_missing
+
+### defined_test_on_missing
+False
+### END defined_test_on_missing
+

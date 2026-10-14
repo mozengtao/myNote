@@ -1,0 +1,10 @@
+### case4_output
+Device Summary Report
+======================
+Total devices: 4
+Online devices: 2
+Offline devices: 2
+
+Online device names: router-01, router-03
+Offline device names: switch-02, ap-04
+### END case4_output

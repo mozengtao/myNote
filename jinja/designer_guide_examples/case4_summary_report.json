@@ -1,0 +1,8 @@
+{
+    "devices": [
+        {"name": "router-01", "status": "online"},
+        {"name": "switch-02", "status": "offline"},
+        {"name": "router-03", "status": "online"},
+        {"name": "ap-04", "status": "offline"}
+    ]
+}

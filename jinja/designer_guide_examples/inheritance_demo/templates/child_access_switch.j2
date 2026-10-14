@@ -1,0 +1,7 @@
+{% extends "base.j2" %}
+{% block interfaces %}
+  interfaces:
+{% for interface in interfaces %}
+    - {{ interface }}
+{% endfor %}
+{% endblock %}
